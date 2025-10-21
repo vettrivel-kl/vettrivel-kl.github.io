@@ -1,5 +1,0 @@
----
-
----
-
-Welcome to this blog.

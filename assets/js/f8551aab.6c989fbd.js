@@ -1,0 +1,1 @@
+"use strict";(globalThis.webpackChunkvettrivel_com=globalThis.webpackChunkvettrivel_com||[]).push([[224],{1976:(e,a,c)=>{c.r(a),c.d(a,{default:()=>t});c(6540);var i=c(1656),s=c(4848);function t(){return(0,s.jsxs)(i.A,{children:[(0,s.jsx)("h1",{children:"My React page"}),(0,s.jsx)("p",{children:"This is a React page"})]})}}}]);
