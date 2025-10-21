@@ -111,7 +111,7 @@ const config = {
           'sql',
           'docker',
           'nginx',
-          'xml',
+          'markup',
           'toml',
           'ini',
           'diff',
