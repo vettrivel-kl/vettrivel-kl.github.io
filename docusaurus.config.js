@@ -20,16 +20,11 @@ const config = {
   },
 
   // Set the production url of your site here
-  url: 'https://your-docusaurus-site.example.com',
-  // Set the /<baseUrl>/ pathname under which your site is served
-  // For GitHub pages deployment, it is often '/<projectName>/'
+  url: 'https://vettrivel-kl.github.io',
   baseUrl: '/',
-
-  // GitHub pages deployment config.
-  // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'facebook', // Usually your GitHub org/user name.
-  projectName: 'docusaurus', // Usually your repo name.
-
+  organizationName: 'vettrivel-kl', // Usually your GitHub org/user name.
+  projectName: 'vettrivel-kl.github.io', // Usually your repo name.
+  trailingSlash: false,
   onBrokenLinks: 'throw',
 
   // Even if you don't use internationalization, you can use this field to set
@@ -106,7 +101,8 @@ const config = {
       },
       prism: {
         theme: prismThemes.github,
-        darkTheme: prismThemes.dracula,
+        darkTheme: prismThemes.oneDark,
+        additionalLanguages: ['java'],
       },
     }),
 };
