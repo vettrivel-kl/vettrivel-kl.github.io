@@ -1,0 +1,753 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-Data-Science/Machine-Learning/foundations/applications-and-techniques" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Applications and Major Techniques | Vettrivel&#x27;s Notes</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://vettrivel-kl.github.io/img/vettri/vettri-384x384.png"><meta data-rh="true" name="twitter:image" content="https://vettrivel-kl.github.io/img/vettri/vettri-384x384.png"><meta data-rh="true" property="og:url" content="https://vettrivel-kl.github.io/docs/Data-Science/Machine-Learning/foundations/applications-and-techniques"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Applications and Major Techniques | Vettrivel&#x27;s Notes"><meta data-rh="true" name="description" content="The eight major machine learning techniques, the question each one answers, and how to read a real problem statement and work out which technique it is."><meta data-rh="true" property="og:description" content="The eight major machine learning techniques, the question each one answers, and how to read a real problem statement and work out which technique it is."><link data-rh="true" rel="icon" href="/img/vettri/favicon.ico"><link data-rh="true" rel="canonical" href="https://vettrivel-kl.github.io/docs/Data-Science/Machine-Learning/foundations/applications-and-techniques"><link data-rh="true" rel="alternate" href="https://vettrivel-kl.github.io/docs/Data-Science/Machine-Learning/foundations/applications-and-techniques" hreflang="en"><link data-rh="true" rel="alternate" href="https://vettrivel-kl.github.io/docs/Data-Science/Machine-Learning/foundations/applications-and-techniques" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Data Science","item":"https://vettrivel-kl.github.io/docs/category/data-science"},{"@type":"ListItem","position":2,"name":"Machine Learning","item":"https://vettrivel-kl.github.io/docs/category/machine-learning"},{"@type":"ListItem","position":3,"name":"1 · Foundations","item":"https://vettrivel-kl.github.io/docs/category/1--foundations"},{"@type":"ListItem","position":4,"name":"Applications and Major Techniques","item":"https://vettrivel-kl.github.io/docs/Data-Science/Machine-Learning/foundations/applications-and-techniques"}]}</script><link rel="alternate" type="application/rss+xml" href="/blog/rss.xml" title="Vettrivel&#39;s Notes RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/blog/atom.xml" title="Vettrivel&#39;s Notes Atom Feed"><link rel="stylesheet" href="/assets/css/styles.ef456819.css">
+<script src="/assets/js/runtime~main.80d4d423.js" defer="defer"></script>
+<script src="/assets/js/main.eb5d0481.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/img/vettri/vettri-384x384.png"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/"><div class="navbar__logo"><img src="/img/vettri/vettri-384x384.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/img/vettri/vettri-384x384.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Vettrivel&#x27;s Notes</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/docs/Python">Notes </a><a class="navbar__item navbar__link" href="/blog">Blog</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" href="/docs/Python"><span title="Python" class="categoryLinkLabel_W154">Python</span></a><button aria-label="Expand sidebar category &#x27;Python&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href="/docs/category/data-science"><span title="Data Science" class="categoryLinkLabel_W154">Data Science</span></a><button aria-label="Collapse sidebar category &#x27;Data Science&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex="0" href="/docs/category/machine-learning"><span title="Machine Learning" class="categoryLinkLabel_W154">Machine Learning</span></a><button aria-label="Collapse sidebar category &#x27;Machine Learning&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex="0" href="/docs/category/1--foundations"><span title="1 · Foundations" class="categoryLinkLabel_W154">1 · Foundations</span></a><button aria-label="Collapse sidebar category &#x27;1 · Foundations&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Data-Science/Machine-Learning/foundations/what-is-machine-learning"><span title="What is Machine Learning?" class="linkLabel_WmDU">What is Machine Learning?</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/docs/Data-Science/Machine-Learning/foundations/applications-and-techniques"><span title="Applications and Major Techniques" class="linkLabel_WmDU">Applications and Major Techniques</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Data-Science/Machine-Learning/foundations/types-of-learning"><span title="Types of Learning" class="linkLabel_WmDU">Types of Learning</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Data-Science/Machine-Learning/foundations/reinforcement-learning"><span title="Reinforcement Learning" class="linkLabel_WmDU">Reinforcement Learning</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Data-Science/Machine-Learning/foundations/toolkit-and-pipeline"><span title="The Toolkit and the Pipeline" class="linkLabel_WmDU">The Toolkit and the Pipeline</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/2--data-preprocessing"><span title="2 · Data Preprocessing" class="categoryLinkLabel_W154">2 · Data Preprocessing</span></a><button aria-label="Expand sidebar category &#x27;2 · Data Preprocessing&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/3--linear-regression"><span title="3 · Linear Regression" class="categoryLinkLabel_W154">3 · Linear Regression</span></a><button aria-label="Expand sidebar category &#x27;3 · Linear Regression&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/4--optimisation"><span title="4 · Optimisation" class="categoryLinkLabel_W154">4 · Optimisation</span></a><button aria-label="Expand sidebar category &#x27;4 · Optimisation&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li></ul></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/docs/category/data-science"><span>Data Science</span></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/docs/category/machine-learning"><span>Machine Learning</span></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/docs/category/1--foundations"><span>1 · Foundations</span></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Applications and Major Techniques</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Applications and Major Techniques</h1></header>
+<blockquote>
+<p><strong>Topic —</strong> There are only about <strong>eight</strong> things machine learning does. Every application you&#x27;ve
+heard of is one of them, or a few of them stacked. This page names all eight, and — more usefully
+— teaches you to look at a sentence like <em>&quot;we want to know which customers will leave&quot;</em> and
+immediately say <strong>classification</strong>.</p>
+</blockquote>
+<p>That translation step is the actual skill. Choosing an algorithm is easy once the technique is
+named; naming it wrong means every later decision is wrong.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="the-eight-techniques-at-a-glance">The eight techniques at a glance<a href="#the-eight-techniques-at-a-glance" class="hash-link" aria-label="Direct link to The eight techniques at a glance" title="Direct link to The eight techniques at a glance" translate="no">​</a></h2>
+<p>The fastest way to identify a technique is to ask <strong>what shape the answer is</strong>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>#</th><th>Technique</th><th>The question it answers</th><th>Output shape</th><th>Canonical example</th></tr></thead><tbody><tr><td>1</td><td><strong>Regression / Estimation</strong></td><td><em>How much? How many?</em></td><td>A <strong>continuous number</strong></td><td>Predicting a house&#x27;s price</td></tr><tr><td>2</td><td><strong>Classification</strong></td><td><em>Which category?</em></td><td>A <strong>label</strong> from a fixed set</td><td>Churn — yes or no</td></tr><tr><td>3</td><td><strong>Clustering</strong></td><td><em>What natural groups exist?</em></td><td>A <strong>group id</strong> per row</td><td>Grouping customers with similar buying habits</td></tr><tr><td>4</td><td><strong>Association</strong></td><td><em>What co-occurs?</em></td><td><strong>Rules</strong> — if A then B</td><td>Market basket analysis</td></tr><tr><td>5</td><td><strong>Anomaly detection</strong></td><td><em>What doesn&#x27;t belong?</em></td><td><strong>Normal / outlier</strong></td><td>Credit-card fraud detection</td></tr><tr><td>6</td><td><strong>Sequence mining</strong></td><td><em>What comes next?</em></td><td>The <strong>next item</strong> in an order</td><td>Click-stream — the next page a user visits</td></tr><tr><td>7</td><td><strong>Dimensionality reduction</strong></td><td><em>Can I say this with fewer columns?</em></td><td><strong>Fewer features</strong>, same information</td><td>PCA</td></tr><tr><td>8</td><td><strong>Recommendation systems</strong></td><td><em>What else would this person like?</em></td><td>A <strong>ranked list</strong> of items</td><td>Suggesting books or movies</td></tr></tbody></table>
+<div class="theme-admonition theme-admonition-tip admonition_xJq3 alert alert--success"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 12 16"><path fill-rule="evenodd" d="M6.5 0C3.48 0 1 2.19 1 5c0 .92.55 2.25 1 3 1.34 2.25 1.78 2.78 2 4v1h5v-1c.22-1.22.66-1.75 2-4 .45-.75 1-2.08 1-3 0-2.81-2.48-5-5.5-5zm3.64 7.48c-.25.44-.47.8-.67 1.11-.86 1.41-1.25 2.06-1.45 3.23-.02.05-.02.11-.02.17H5c0-.06 0-.13-.02-.17-.2-1.17-.59-1.83-1.45-3.23-.2-.31-.42-.67-.67-1.11C2.44 6.78 2 5.65 2 5c0-2.2 2.02-4 4.5-4 1.22 0 2.36.42 3.22 1.19C10.55 2.94 11 3.94 11 5c0 .66-.44 1.78-.86 2.48zM4 14h5c-.23 1.14-1.3 2-2.5 2s-2.27-.86-2.5-2z"></path></svg></span>The two-question shortcut</div><div class="admonitionContent_BuS1"><p><strong>Q1 — Do you have the answers already (labels)?</strong> If yes, you&#x27;re in 1, 2 or 6. If no, you&#x27;re in
+3, 4, 5, 7 or 8.</p><p><strong>Q2 — Is the answer a number or a name?</strong> Number → <strong>regression</strong>. Name → <strong>classification</strong>.</p><p>Those two questions resolve the majority of real problems. The rest of this page is the detail
+behind them.</p></div></div>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="1-regression--estimation">1. Regression / Estimation<a href="#1-regression--estimation" class="hash-link" aria-label="Direct link to 1. Regression / Estimation" title="Direct link to 1. Regression / Estimation" translate="no">​</a></h2>
+<p><strong>Predicting continuous values.</strong></p>
+<p>The defining property is that the output is a <em>number on a scale</em>, where being close counts.
+Predicting ₹52 lakh for a ₹50 lakh house is a good answer; predicting &quot;cat&quot; when the truth is
+&quot;dog&quot; is not partially right.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td><strong>Application</strong></td><td>Predicting a house&#x27;s price from size, location, number of bedrooms</td></tr><tr><td><strong>Also</strong></td><td>Share-market analysis and prediction; forecasting revenue; estimating delivery time</td></tr><tr><td><strong>Needs labels?</strong></td><td>Yes — you need past houses <em>with</em> their prices</td></tr></tbody></table>
+<p>How to recognise it: the question starts with <strong>how much</strong>, <strong>how many</strong>, <strong>how long</strong>, or <strong>what
+value</strong>.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="2-classification">2. Classification<a href="#2-classification" class="hash-link" aria-label="Direct link to 2. Classification" title="Direct link to 2. Classification" translate="no">​</a></h2>
+<p><strong>Predicting the item or category of a case.</strong></p>
+<p>The output is one of a fixed, known set of labels. Two labels is <strong>binary</strong> classification; more is
+<strong>multiclass</strong>.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td><strong>Application</strong></td><td>Churn prediction — will this customer leave, yes or no</td></tr><tr><td><strong>Also</strong></td><td>Predicting a disease from symptoms; spam or not spam; approving or refusing a loan</td></tr><tr><td><strong>Needs labels?</strong></td><td>Yes — you need past cases <em>with</em> their correct category</td></tr></tbody></table>
+<p>How to recognise it: the answer is a <strong>noun or a yes/no</strong>, and you could write out the complete list
+of possible answers in advance.</p>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>Same data, different technique</div><div class="admonitionContent_BuS1"><p>A bank predicting <strong>the probability</strong> a loan defaults (<code>0.83</code>) looks like regression, but it&#x27;s
+classification — the <em>decision</em> is approve/refuse. Probability is how classifiers express
+confidence, not evidence that the task is regression. The giveaway is that the truth in your data is
+a category (<code>defaulted</code> / <code>did not</code>), never a number.</p></div></div>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="3-clustering">3. Clustering<a href="#3-clustering" class="hash-link" aria-label="Direct link to 3. Clustering" title="Direct link to 3. Clustering" translate="no">​</a></h2>
+<p><strong>Finding the structure of data; summarisation.</strong></p>
+<p>Clustering groups data points that are somehow similar. Crucially, <strong>nobody says what the groups
+should be</strong> — this is unsupervised, and the algorithm proposes the groups itself.</p>
+<p>Three distinct uses:</p>
+<ul>
+<li class=""><strong>Discovering structure</strong> — what kinds of customer do we actually have?</li>
+<li class=""><strong>Summarisation</strong> — describing 100,000 rows as six representative groups</li>
+<li class=""><strong>Anomaly detection</strong> — points that fit no cluster well are suspicious</li>
+</ul>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td><strong>Application</strong></td><td>Grouping customers with similar buying habits</td></tr><tr><td><strong>Also</strong></td><td>A bank segmenting customers by characteristics; organising documents by subject</td></tr><tr><td><strong>Needs labels?</strong></td><td><strong>No</strong></td></tr></tbody></table>
+<p>How to recognise it: you want groups but <strong>cannot name them in advance</strong>. If you could name them,
+it&#x27;s classification.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="4-association">4. Association<a href="#4-association" class="hash-link" aria-label="Direct link to 4. Association" title="Direct link to 4. Association" translate="no">​</a></h2>
+<p><strong>Associating frequently co-occurring items or events.</strong></p>
+<p>The output is a <em>rule</em>: <strong>if</strong> a basket contains bread and butter, <strong>then</strong> it likely contains jam.
+Notice this predicts nothing about a person — it describes a relationship between items.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td><strong>Application</strong></td><td>Market basket analysis</td></tr><tr><td><strong>Also</strong></td><td>&quot;Frequently bought together&quot;; which symptoms appear jointly; page pairs visited in one session</td></tr><tr><td><strong>Needs labels?</strong></td><td><strong>No</strong></td></tr></tbody></table>
+<p>How to recognise it: the question is about <strong>items appearing together</strong>, not about predicting an
+outcome for a row.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="5-anomaly-detection">5. Anomaly detection<a href="#5-anomaly-detection" class="hash-link" aria-label="Direct link to 5. Anomaly detection" title="Direct link to 5. Anomaly detection" translate="no">​</a></h2>
+<p><strong>Discovering abnormal and unusual cases.</strong></p>
+<p>You are looking for the rare thing. This matters because the interesting class is often a fraction
+of a percent of the data, which breaks the usual approach — a model that says &quot;not fraud&quot; every time
+is 99.9% accurate and completely useless.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td><strong>Application</strong></td><td>Credit-card fraud detection</td></tr><tr><td><strong>Also</strong></td><td>Network intrusion; manufacturing defects; a sensor reading that can&#x27;t be physically real</td></tr><tr><td><strong>Needs labels?</strong></td><td>Often <strong>no</strong> — that&#x27;s the point</td></tr></tbody></table>
+<p>How to recognise it: you want the <strong>rare, unexpected</strong> cases, and you may have few or no examples
+of them.</p>
+<div class="theme-admonition theme-admonition-warning admonition_xJq3 alert alert--warning"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path></svg></span>Anomaly detection or classification?</div><div class="admonitionContent_BuS1"><p>If you have a good number of confirmed fraud examples, treat it as <strong>classification</strong> — supervised
+learning is more accurate when labels exist. Use anomaly detection when fraud is unlabelled, or
+when tomorrow&#x27;s fraud won&#x27;t look like yesterday&#x27;s. The choice is about <strong>your labels</strong>, not about
+the word &quot;fraud&quot;.</p></div></div>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="6-sequence-mining">6. Sequence mining<a href="#6-sequence-mining" class="hash-link" aria-label="Direct link to 6. Sequence mining" title="Direct link to 6. Sequence mining" translate="no">​</a></h2>
+<p><strong>Predicting the next item in an ordered sequence.</strong></p>
+<p>What makes this its own technique is that <strong>order carries the information</strong>. Shuffle the rows and
+you destroy the signal — which is not true of the techniques above.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td><strong>Application</strong></td><td>Click-stream analysis — predicting the next page a user will visit from previous clicks</td></tr><tr><td><strong>Also</strong></td><td>Predicting the next word (autocomplete); next likely purchase; genome sequences</td></tr><tr><td><strong>Needs labels?</strong></td><td>Implicitly — the next item <em>is</em> the label</td></tr></tbody></table>
+<p>How to recognise it: the words <strong>next</strong>, <strong>after</strong>, or <strong>then</strong>, and reordering the data would break
+the problem.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="7-dimensionality-reduction">7. Dimensionality reduction<a href="#7-dimensionality-reduction" class="hash-link" aria-label="Direct link to 7. Dimensionality reduction" title="Direct link to 7. Dimensionality reduction" translate="no">​</a></h2>
+<p><strong>Reducing the size of the data.</strong></p>
+<p>Techniques like <strong>PCA</strong> (Principal Component Analysis) reduce the number of features or variables
+while <strong>retaining as much relevant information as possible</strong>.</p>
+<p>Note this is usually not the goal in itself — it&#x27;s a step that makes another technique work better,
+faster, or possible at all. It also enables plotting: you cannot look at 50 dimensions, but you can
+look at 2.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td><strong>Application</strong></td><td>PCA on a wide dataset before clustering or classification</td></tr><tr><td><strong>Also</strong></td><td>Compressing images; visualising high-dimensional data in 2-D</td></tr><tr><td><strong>Needs labels?</strong></td><td><strong>No</strong></td></tr></tbody></table>
+<p>How to recognise it: you have <strong>too many columns</strong>, and you suspect they overlap.</p>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="8-recommendation-systems">8. Recommendation systems<a href="#8-recommendation-systems" class="hash-link" aria-label="Direct link to 8. Recommendation systems" title="Direct link to 8. Recommendation systems" translate="no">​</a></h2>
+<p><strong>Associating people&#x27;s preferences with others who have similar tastes, and recommending new items
+to them</strong> — such as books or movies.</p>
+<p>The output is a <em>ranked list personalised per user</em>, which is what separates it from classification.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th></th></tr></thead><tbody><tr><td><strong>Application</strong></td><td>Netflix and Amazon recommending videos, movies and TV shows</td></tr><tr><td><strong>Also</strong></td><td>Suggested products; &quot;people you may know&quot;; a music discovery playlist</td></tr><tr><td><strong>Needs labels?</strong></td><td>No labels, but it needs <strong>interaction history</strong></td></tr></tbody></table>
+<p>How to recognise it: the answer differs <strong>per person</strong>, and it&#x27;s a list rather than one value.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="reading-a-problem-statement">Reading a problem statement<a href="#reading-a-problem-statement" class="hash-link" aria-label="Direct link to Reading a problem statement" title="Direct link to Reading a problem statement" translate="no">​</a></h2>
+<p>Given a sentence, work down this path:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">What shape is the answer?</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">├─ a number on a scale ─────────────────► REGRESSION</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">├─ one of a fixed set of names</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│   ├─ do you have labelled examples? ──► CLASSIFICATION</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│   └─ no labels, rare cases ───────────► ANOMALY DETECTION</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">├─ a group id, groups not named up front ► CLUSTERING</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">├─ the next thing in an order ───────────► SEQUENCE MINING</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">├─ &quot;if A then B&quot; about items ────────────► ASSOCIATION</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">├─ a ranked list, different per person ──► RECOMMENDATION</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">│</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">└─ the same rows with fewer columns ─────► DIMENSIONALITY REDUCTION</span><br></span></code></pre></div></div>
+<p>Worked examples:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Problem statement</th><th>Answer shape</th><th>Technique</th></tr></thead><tbody><tr><td>&quot;How many units will we sell next month?&quot;</td><td>a number</td><td>Regression</td></tr><tr><td>&quot;Which of these transactions should we block?&quot;</td><td>yes/no, labelled history</td><td>Classification</td></tr><tr><td>&quot;Which transactions look nothing like normal?&quot;</td><td>rare/unusual, no labels</td><td>Anomaly detection</td></tr><tr><td>&quot;What types of user does our app have?&quot;</td><td>unnamed groups</td><td>Clustering</td></tr><tr><td>&quot;What do people buy alongside coffee?&quot;</td><td>item rules</td><td>Association</td></tr><tr><td>&quot;What will they search for next?&quot;</td><td>next in order</td><td>Sequence mining</td></tr><tr><td>&quot;We have 200 columns and a slow model&quot;</td><td>fewer columns</td><td>Dimensionality reduction</td></tr><tr><td>&quot;What should we put on their home page?&quot;</td><td>ranked, per person</td><td>Recommendation</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="applications-you-use-every-day">Applications you use every day<a href="#applications-you-use-every-day" class="hash-link" aria-label="Direct link to Applications you use every day" title="Direct link to Applications you use every day" translate="no">​</a></h2>
+<p>Real systems are rarely one technique. These are the standard examples, with the techniques each
+one actually leans on.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="recommendation--netflix-and-amazon">Recommendation — Netflix and Amazon<a href="#recommendation--netflix-and-amazon" class="hash-link" aria-label="Direct link to Recommendation — Netflix and Amazon" title="Direct link to Recommendation — Netflix and Amazon" translate="no">​</a></h3>
+<p>How do Netflix and Amazon recommend videos, movies and TV shows? They use machine learning to
+produce <strong>suggestions you might enjoy</strong> — associating your preferences with people of similar taste.
+→ <em>Recommendation systems</em>, usually with <em>clustering</em> behind it.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="banking--loan-approval">Banking — loan approval<a href="#banking--loan-approval" class="hash-link" aria-label="Direct link to Banking — loan approval" title="Direct link to Banking — loan approval" translate="no">​</a></h3>
+<p>How does a bank decide when approving a loan application? It uses machine learning to <strong>predict the
+probability of default</strong> for each applicant, then approves or refuses based on that probability.
+→ <em>Classification</em>.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="telecommunications--segmentation-and-churn">Telecommunications — segmentation and churn<a href="#telecommunications--segmentation-and-churn" class="hash-link" aria-label="Direct link to Telecommunications — segmentation and churn" title="Direct link to Telecommunications — segmentation and churn" translate="no">​</a></h3>
+<p>Telecom companies analyse customers&#x27; demographic data to:</p>
+<ul>
+<li class="">categorise them into <strong>distinct groups</strong> → <em>clustering</em> (segmentation)</li>
+<li class="">forecast which customers are likely to <strong>cancel their service</strong> → <em>classification</em> (churn)</li>
+</ul>
+<p>Two different techniques on one dataset, answering two different questions. This pairing is worth
+remembering — it&#x27;s the clearest illustration that the <em>question</em>, not the data, picks the technique.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="healthcare-diagnostics">Healthcare diagnostics<a href="#healthcare-diagnostics" class="hash-link" aria-label="Direct link to Healthcare diagnostics" title="Direct link to Healthcare diagnostics" translate="no">​</a></h3>
+<p>Models analyse medical images — <strong>X-rays</strong> and <strong>MRIs</strong> — to assist in diagnosing diseases, roughly
+a thousand times faster than a human. Also personalising treatment, drug discovery, and clinical
+trial research.
+→ <em>Classification</em> on images, with <em>deep learning</em> doing the feature extraction.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="financial-trading">Financial trading<a href="#financial-trading" class="hash-link" aria-label="Direct link to Financial trading" title="Direct link to Financial trading" translate="no">​</a></h3>
+<p>Machine learning analyses market data and trends to inform trading strategies, detect <strong>market
+shifts</strong>, assess <strong>risk</strong>, and <strong>predict stock prices</strong>.
+→ <em>Regression</em> for prices, <em>classification</em> for risk bands, <em>anomaly detection</em> for unusual activity.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="autonomous-vehicles">Autonomous vehicles<a href="#autonomous-vehicles" class="hash-link" aria-label="Direct link to Autonomous vehicles" title="Direct link to Autonomous vehicles" translate="no">​</a></h3>
+<p>Self-driving cars use machine learning to <strong>interpret sensor data</strong>, <strong>recognise objects</strong>, make
+<strong>real-time decisions</strong>, and navigate safely.
+→ <em>Classification</em> for object recognition, plus <em>reinforcement learning</em> for the driving policy.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="and-the-rest">And the rest<a href="#and-the-rest" class="hash-link" aria-label="Direct link to And the rest" title="Direct link to And the rest" translate="no">​</a></h3>
+<p>Chatbots; unlocking your phone; computer games using <strong>face recognition</strong>. Each uses different
+machine learning techniques and algorithms — there is no single &quot;the&quot; ML method behind everyday
+software.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="where-the-techniques-overlap">Where the techniques overlap<a href="#where-the-techniques-overlap" class="hash-link" aria-label="Direct link to Where the techniques overlap" title="Direct link to Where the techniques overlap" translate="no">​</a></h2>
+<p>This is the part that trips people up, and it&#x27;s worth being precise about.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Situation</th><th>It looks like</th><th>It&#x27;s actually</th><th>Why</th></tr></thead><tbody><tr><td>Predicting default <strong>probability</strong></td><td>Regression (output <code>0.83</code>)</td><td><strong>Classification</strong></td><td>Truth in the data is a category</td></tr><tr><td>Fraud <strong>with</strong> labelled examples</td><td>Anomaly detection</td><td><strong>Classification</strong></td><td>Use labels when you have them</td></tr><tr><td>Fraud <strong>without</strong> labels</td><td>Classification</td><td><strong>Anomaly detection</strong></td><td>Nothing to learn from</td></tr><tr><td>Customer segmentation</td><td>Classification</td><td><strong>Clustering</strong></td><td>Groups aren&#x27;t named in advance</td></tr><tr><td>Churn prediction</td><td>Clustering</td><td><strong>Classification</strong></td><td>The label already exists</td></tr><tr><td>&quot;Frequently bought together&quot;</td><td>Recommendation</td><td><strong>Association</strong></td><td>About items, not people</td></tr><tr><td>Personalised home page</td><td>Association</td><td><strong>Recommendation</strong></td><td>About a person, ranked</td></tr><tr><td>Predicting the next page</td><td>Classification</td><td><strong>Sequence mining</strong></td><td>Order carries the signal</td></tr></tbody></table>
+<div class="theme-admonition theme-admonition-danger admonition_xJq3 alert alert--danger"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 12 16"><path fill-rule="evenodd" d="M5.05.31c.81 2.17.41 3.38-.52 4.31C3.55 5.67 1.98 6.45.9 7.98c-1.45 2.05-1.7 6.53 3.53 7.7-2.2-1.16-2.67-4.52-.3-6.61-.61 2.03.53 3.33 1.94 2.86 1.39-.47 2.3.53 2.27 1.67-.02.78-.31 1.44-1.13 1.81 3.42-.59 4.78-3.42 4.78-5.56 0-2.84-2.53-3.22-1.25-5.61-1.52.13-2.03 1.13-1.89 2.75.09 1.08-1.02 1.8-1.86 1.33-.67-.41-.66-1.19-.06-1.78C8.18 5.31 8.68 2.45 5.05.32L5.03.3l.02.01z"></path></svg></span>The distinction that actually matters</div><div class="admonitionContent_BuS1"><p>Notice how often the answer turns on <strong>whether you have labels</strong> — not on the subject matter. &quot;Fraud
+detection&quot; is two different techniques depending on your data. Before naming a technique, check what
+you actually have. This is the same divide as
+<a class="" href="/docs/Data-Science/Machine-Learning/foundations/types-of-learning">supervised versus unsupervised learning</a>.</p></div></div>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="common-mistakes">Common Mistakes<a href="#common-mistakes" class="hash-link" aria-label="Direct link to Common Mistakes" title="Direct link to Common Mistakes" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>#</th><th>Mistake</th><th>Wrong</th><th>Right</th></tr></thead><tbody><tr><td>1</td><td>Picking the technique from the subject</td><td>&quot;fraud → anomaly detection&quot;</td><td>Check whether labels exist</td></tr><tr><td>2</td><td>Treating probability output as regression</td><td><code>0.83</code> means a number</td><td>Truth is a category → classification</td></tr><tr><td>3</td><td>Confusing clustering and classification</td><td>Both &quot;make groups&quot;</td><td>Named groups → classification</td></tr><tr><td>4</td><td>Confusing association and recommendation</td><td>Both &quot;suggest things&quot;</td><td>Items → association; people → recommendation</td></tr><tr><td>5</td><td>Shuffling rows in a sequence problem</td><td>Order is just row order</td><td>Order <strong>is</strong> the signal</td></tr><tr><td>6</td><td>Treating dimensionality reduction as the goal</td><td>&quot;we did PCA&quot;</td><td>It&#x27;s a step that serves another technique</td></tr><tr><td>7</td><td>Using accuracy on rare events</td><td>99.9% &quot;not fraud&quot;</td><td>Rare classes need other measures</td></tr><tr><td>8</td><td>Assuming one application = one technique</td><td>&quot;Netflix = recommendation&quot;</td><td>Real systems stack several</td></tr><tr><td>9</td><td>Naming the algorithm before the technique</td><td>&quot;let&#x27;s use a random forest&quot;</td><td>Name the technique, then choose</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="summary">Summary<a href="#summary" class="hash-link" aria-label="Direct link to Summary" title="Direct link to Summary" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Ask</th><th>Technique</th></tr></thead><tbody><tr><td>How much / how many?</td><td><strong>Regression</strong></td></tr><tr><td>Which category? (labels exist)</td><td><strong>Classification</strong></td></tr><tr><td>What groups exist? (no labels)</td><td><strong>Clustering</strong></td></tr><tr><td>What co-occurs with what?</td><td><strong>Association</strong></td></tr><tr><td>What doesn&#x27;t belong?</td><td><strong>Anomaly detection</strong></td></tr><tr><td>What comes next?</td><td><strong>Sequence mining</strong></td></tr><tr><td>Can this be fewer columns?</td><td><strong>Dimensionality reduction</strong></td></tr><tr><td>What else would they like?</td><td><strong>Recommendation systems</strong></td></tr></tbody></table>
+<p><strong>Key takeaways</strong></p>
+<ul>
+<li class="">Identify the technique by the <strong>shape of the answer</strong>, not the subject matter</li>
+<li class="">Two questions resolve most cases: <em>do I have labels?</em> and <em>is the answer a number or a name?</em></li>
+<li class="">Regression outputs a number where <strong>closeness counts</strong>; classification outputs one of a fixed set</li>
+<li class="">A predicted <strong>probability</strong> does not make a task regression — check what the truth values are</li>
+<li class="">Clustering vs classification is decided by whether you can <strong>name the groups in advance</strong></li>
+<li class="">&quot;Fraud detection&quot; is classification <strong>with</strong> labels and anomaly detection <strong>without</strong> them</li>
+<li class="">Association describes <strong>items</strong>; recommendation ranks for <strong>a person</strong></li>
+<li class="">Sequence mining is the technique where <strong>shuffling the rows destroys the problem</strong></li>
+<li class="">Dimensionality reduction is almost always a <strong>means</strong>, not an end</li>
+<li class="">Telecom does segmentation (<em>clustering</em>) and churn (<em>classification</em>) on the same data — the
+question picks the technique</li>
+<li class="">Real applications stack several techniques; autonomous driving uses classification <em>and</em>
+reinforcement learning</li>
+</ul>
+<p><strong>Next in this section:</strong> <a class="" href="/docs/Data-Science/Machine-Learning/foundations/types-of-learning">Types of Learning</a> — the labels-or-not divide
+these techniques keep turning on · <a class="" href="/docs/Data-Science/Machine-Learning/foundations/reinforcement-learning">Reinforcement Learning</a> ·
+<a class="" href="/docs/Data-Science/Machine-Learning/foundations/toolkit-and-pipeline">The Toolkit and the Pipeline</a></p>
+<p><strong>See also:</strong> <a class="" href="/docs/Data-Science/Machine-Learning/foundations/what-is-machine-learning">What is Machine Learning?</a> for why any of this
+beats hand-written rules</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="run-it-yourself">Run It Yourself<a href="#run-it-yourself" class="hash-link" aria-label="Direct link to Run It Yourself" title="Direct link to Run It Yourself" translate="no">​</a></h2>
+<p>Five techniques, <strong>one dataset</strong>. Nothing about the data changes between them — only the question.</p>
+<div class="language-python codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockTitle_OeMC">one_dataset_five_techniques.py</div><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-python codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token triple-quoted-string string" style="color:#e3116c">&quot;&quot;&quot;One dataset, five techniques — the question you ask decides the technique.&quot;&quot;&quot;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> numpy </span><span class="token keyword" style="color:#00009f">as</span><span class="token plain"> np</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> pandas </span><span class="token keyword" style="color:#00009f">as</span><span class="token plain"> pd</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">from</span><span class="token plain"> sklearn</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">cluster </span><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> KMeans</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">from</span><span class="token plain"> sklearn</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">decomposition </span><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> PCA</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">from</span><span class="token plain"> sklearn</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">ensemble </span><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> IsolationForest</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">from</span><span class="token plain"> sklearn</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">linear_model </span><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> LinearRegression</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> LogisticRegression</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">from</span><span class="token plain"> sklearn</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">preprocessing </span><span class="token keyword" style="color:#00009f">import</span><span class="token plain"> StandardScaler</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">df </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> pd</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">DataFrame</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">{</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token string" style="color:#e3116c">&quot;tenure_months&quot;</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">4</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">5</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">8</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">10</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">12</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">15</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">18</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">20</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">24</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">30</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">  </span><span class="token number" style="color:#36acaa">6</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">36</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token string" style="color:#e3116c">&quot;monthly_spend&quot;</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain">  </span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">20</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">25</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">22</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">30</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">40</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">45</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">50</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">55</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">62</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">65</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">70</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">80</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">95</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">140</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token string" style="color:#e3116c">&quot;support_tickets&quot;</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">5</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">4</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">6</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">  </span><span class="token number" style="color:#36acaa">8</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">  </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">    </span><span class="token string" style="color:#e3116c">&quot;churned&quot;</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">  </span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain">  </span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">X </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> df</span><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">&quot;tenure_months&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;monthly_spend&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;support_tickets&quot;</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;THE DATA — 14 customers, 3 features, 1 label&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">df</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">to_string</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">index</span><span class="token operator" style="color:#393A34">=</span><span class="token boolean" style="color:#36acaa">False</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;\n&quot;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">+</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;=&quot;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">*</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">62</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&#x27;1. REGRESSION  — &quot;how much will this customer spend?&quot;  -&gt; a number&#x27;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">reg </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> LinearRegression</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">fit</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">df</span><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">&quot;tenure_months&quot;</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> df</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">&quot;monthly_spend&quot;</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string-interpolation string" style="color:#e3116c">f&quot;   spend = </span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">{</span><span class="token string-interpolation interpolation">reg</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">.</span><span class="token string-interpolation interpolation">coef_</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">[</span><span class="token string-interpolation interpolation number" style="color:#36acaa">0</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">]</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">:</span><span class="token string-interpolation interpolation format-spec">.2f</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">}</span><span class="token string-interpolation string" style="color:#e3116c"> x tenure + </span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">{</span><span class="token string-interpolation interpolation">reg</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">.</span><span class="token string-interpolation interpolation">intercept_</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">:</span><span class="token string-interpolation interpolation format-spec">.2f</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">}</span><span class="token string-interpolation string" style="color:#e3116c">&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string-interpolation string" style="color:#e3116c">f&quot;   R^2 on training data          </span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">{</span><span class="token string-interpolation interpolation">reg</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">.</span><span class="token string-interpolation interpolation">score</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">(</span><span class="token string-interpolation interpolation">df</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">[</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">[</span><span class="token string-interpolation interpolation string" style="color:#e3116c">&#x27;tenure_months&#x27;</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">]</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">]</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">,</span><span class="token string-interpolation interpolation"> df</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">[</span><span class="token string-interpolation interpolation string" style="color:#e3116c">&#x27;monthly_spend&#x27;</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">]</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">)</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">:</span><span class="token string-interpolation interpolation format-spec">.3f</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">}</span><span class="token string-interpolation string" style="color:#e3116c">&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">at_14 </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> pd</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">DataFrame</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">{</span><span class="token string" style="color:#e3116c">&quot;tenure_months&quot;</span><span class="token punctuation" style="color:#393A34">:</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">14</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">}</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string-interpolation string" style="color:#e3116c">f&quot;   predicted spend at 14 months  </span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">{</span><span class="token string-interpolation interpolation">reg</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">.</span><span class="token string-interpolation interpolation">predict</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">(</span><span class="token string-interpolation interpolation">at_14</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">)</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">[</span><span class="token string-interpolation interpolation number" style="color:#36acaa">0</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">]</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">:</span><span class="token string-interpolation interpolation format-spec">.2f</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">}</span><span class="token string-interpolation string" style="color:#e3116c">&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;\n&quot;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">+</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;=&quot;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">*</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">62</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&#x27;2. CLASSIFICATION — &quot;will this customer churn?&quot;  -&gt; a category&#x27;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">clf </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> LogisticRegression</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">max_iter</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">1000</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">fit</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">X</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> df</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">&quot;churned&quot;</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string-interpolation string" style="color:#e3116c">f&quot;   training accuracy             </span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">{</span><span class="token string-interpolation interpolation">clf</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">.</span><span class="token string-interpolation interpolation">score</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">(</span><span class="token string-interpolation interpolation">X</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">,</span><span class="token string-interpolation interpolation"> df</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">[</span><span class="token string-interpolation interpolation string" style="color:#e3116c">&#x27;churned&#x27;</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">]</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">)</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">:</span><span class="token string-interpolation interpolation format-spec">.3f</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">}</span><span class="token string-interpolation string" style="color:#e3116c">&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">new </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> pd</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">DataFrame</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">[</span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">24</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">5</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> columns</span><span class="token operator" style="color:#393A34">=</span><span class="token plain">X</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">columns</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string-interpolation string" style="color:#e3116c">f&quot;   new customer (3mo, $24, 5 tickets) -&gt; &quot;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token string-interpolation string" style="color:#e3116c">f&quot;</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">{</span><span class="token string-interpolation interpolation string" style="color:#e3116c">&#x27;CHURN&#x27;</span><span class="token string-interpolation interpolation"> </span><span class="token string-interpolation interpolation keyword" style="color:#00009f">if</span><span class="token string-interpolation interpolation"> clf</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">.</span><span class="token string-interpolation interpolation">predict</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">(</span><span class="token string-interpolation interpolation">new</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">)</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">[</span><span class="token string-interpolation interpolation number" style="color:#36acaa">0</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">]</span><span class="token string-interpolation interpolation"> </span><span class="token string-interpolation interpolation keyword" style="color:#00009f">else</span><span class="token string-interpolation interpolation"> </span><span class="token string-interpolation interpolation string" style="color:#e3116c">&#x27;STAY&#x27;</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">}</span><span class="token string-interpolation string" style="color:#e3116c"> &quot;</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      </span><span class="token string-interpolation string" style="color:#e3116c">f&quot;(p=</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">{</span><span class="token string-interpolation interpolation">clf</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">.</span><span class="token string-interpolation interpolation">predict_proba</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">(</span><span class="token string-interpolation interpolation">new</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">)</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">[</span><span class="token string-interpolation interpolation number" style="color:#36acaa">0</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">]</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">[</span><span class="token string-interpolation interpolation number" style="color:#36acaa">1</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">]</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">:</span><span class="token string-interpolation interpolation format-spec">.2f</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">}</span><span class="token string-interpolation string" style="color:#e3116c">)&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;\n&quot;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">+</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;=&quot;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">*</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">62</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&#x27;3. CLUSTERING — &quot;what kinds of customer do we have?&quot;  -&gt; groups, no labels used&#x27;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Xs </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> StandardScaler</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">fit_transform</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">X</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">km </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> KMeans</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">n_clusters</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">3</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> random_state</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> n_init</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">10</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">fit</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">Xs</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">df</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">&quot;segment&quot;</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> km</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">labels_</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">df</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">groupby</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;segment&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">[</span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">&quot;tenure_months&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;monthly_spend&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;support_tickets&quot;</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">        </span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">mean</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">.</span><span class="token builtin">round</span><span class="token punctuation" style="color:#393A34">(</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">to_string</span><span class="token punctuation" style="color:#393A34">(</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;   note: &#x27;churned&#x27; was never shown to KMeans&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;\n&quot;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">+</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;=&quot;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">*</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">62</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&#x27;4. ANOMALY DETECTION — &quot;who does not belong?&quot;  -&gt; normal / outlier&#x27;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">iso </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> IsolationForest</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">contamination</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">0.15</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> random_state</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">0</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">fit</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">X</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">flags </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> iso</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">predict</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">X</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">out </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> df</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">loc</span><span class="token punctuation" style="color:#393A34">[</span><span class="token plain">flags </span><span class="token operator" style="color:#393A34">==</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">-</span><span class="token number" style="color:#36acaa">1</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token punctuation" style="color:#393A34">[</span><span class="token string" style="color:#e3116c">&quot;tenure_months&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;monthly_spend&quot;</span><span class="token punctuation" style="color:#393A34">,</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;support_tickets&quot;</span><span class="token punctuation" style="color:#393A34">]</span><span class="token punctuation" style="color:#393A34">]</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string-interpolation string" style="color:#e3116c">f&quot;   flagged </span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">{</span><span class="token string-interpolation interpolation builtin">len</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">(</span><span class="token string-interpolation interpolation">out</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">)</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">}</span><span class="token string-interpolation string" style="color:#e3116c"> of </span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">{</span><span class="token string-interpolation interpolation builtin">len</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">(</span><span class="token string-interpolation interpolation">df</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">)</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">}</span><span class="token string-interpolation string" style="color:#e3116c"> as unusual:&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">out</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">to_string</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">index</span><span class="token operator" style="color:#393A34">=</span><span class="token boolean" style="color:#36acaa">False</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&quot;\n&quot;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">+</span><span class="token plain"> </span><span class="token string" style="color:#e3116c">&quot;=&quot;</span><span class="token plain"> </span><span class="token operator" style="color:#393A34">*</span><span class="token plain"> </span><span class="token number" style="color:#36acaa">62</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string" style="color:#e3116c">&#x27;5. DIMENSIONALITY REDUCTION — &quot;can 3 features become 2?&quot;  -&gt; fewer columns&#x27;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">pca </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> PCA</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">n_components</span><span class="token operator" style="color:#393A34">=</span><span class="token number" style="color:#36acaa">2</span><span class="token punctuation" style="color:#393A34">)</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">fit</span><span class="token punctuation" style="color:#393A34">(</span><span class="token plain">Xs</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">ratios </span><span class="token operator" style="color:#393A34">=</span><span class="token plain"> pca</span><span class="token punctuation" style="color:#393A34">.</span><span class="token plain">explained_variance_ratio_</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string-interpolation string" style="color:#e3116c">f&quot;   variance kept by component 1  </span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">{</span><span class="token string-interpolation interpolation">ratios</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">[</span><span class="token string-interpolation interpolation number" style="color:#36acaa">0</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">]</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">:</span><span class="token string-interpolation interpolation format-spec">.1%</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">}</span><span class="token string-interpolation string" style="color:#e3116c">&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string-interpolation string" style="color:#e3116c">f&quot;   variance kept by component 2  </span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">{</span><span class="token string-interpolation interpolation">ratios</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">[</span><span class="token string-interpolation interpolation number" style="color:#36acaa">1</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">]</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">:</span><span class="token string-interpolation interpolation format-spec">.1%</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">}</span><span class="token string-interpolation string" style="color:#e3116c">&quot;</span><span class="token punctuation" style="color:#393A34">)</span><span class="token plain"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"></span><span class="token keyword" style="color:#00009f">print</span><span class="token punctuation" style="color:#393A34">(</span><span class="token string-interpolation string" style="color:#e3116c">f&quot;   two components retain         </span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">{</span><span class="token string-interpolation interpolation">ratios</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">.</span><span class="token string-interpolation interpolation builtin">sum</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">(</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">)</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">:</span><span class="token string-interpolation interpolation format-spec">.1%</span><span class="token string-interpolation interpolation punctuation" style="color:#393A34">}</span><span class="token string-interpolation string" style="color:#e3116c"> of the original information&quot;</span><span class="token punctuation" style="color:#393A34">)</span><br></span></code></pre></div></div>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockTitle_OeMC">Output</div><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">THE DATA — 14 customers, 3 features, 1 label</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> tenure_months  monthly_spend  support_tickets  churned</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">             2             20                5        1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">             3             25                4        1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">             4             22                6        1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">             5             30                3        1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">             8             40                2        0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            10             45                1        0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            12             50                2        0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            15             55                1        0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            18             62                0        0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            20             65                1        0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            24             70                0        0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            30             80                1        0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">             6             95                8        1</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            36            140                0        0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">==============================================================</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">1. REGRESSION  — &quot;how much will this customer spend?&quot;  -&gt; a number</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   spend = 2.50 x tenure + 22.67</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   R^2 on training data          0.651</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   predicted spend at 14 months  57.61</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">==============================================================</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">2. CLASSIFICATION — &quot;will this customer churn?&quot;  -&gt; a category</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   training accuracy             1.000</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   new customer (3mo, $24, 5 tickets) -&gt; CHURN (p=0.99)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">==============================================================</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">3. CLUSTERING — &quot;what kinds of customer do we have?&quot;  -&gt; groups, no labels used</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">         tenure_months  monthly_spend  support_tickets</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">segment</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">0                  4.0           38.4              5.2</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">1                 15.3           55.3              1.0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">2                 33.0          110.0              0.5</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   note: &#x27;churned&#x27; was never shown to KMeans</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">==============================================================</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">4. ANOMALY DETECTION — &quot;who does not belong?&quot;  -&gt; normal / outlier</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   flagged 2 of 14 as unusual:</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> tenure_months  monthly_spend  support_tickets</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">             6             95                8</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">            36            140                0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">==============================================================</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">5. DIMENSIONALITY REDUCTION — &quot;can 3 features become 2?&quot;  -&gt; fewer columns</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   variance kept by component 1  75.0%</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   variance kept by component 2  22.9%</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">   two components retain         97.9% of the original information</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="what-to-notice-in-that-output">What to notice in that output<a href="#what-to-notice-in-that-output" class="hash-link" aria-label="Direct link to What to notice in that output" title="Direct link to What to notice in that output" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>The <code>churned</code> column was used by exactly one of the five.</strong> Classification consumed it;
+regression used a different column as its target; clustering, anomaly detection and PCA never saw
+a label at all. That single fact is the supervised/unsupervised divide.</li>
+<li class=""><strong>Clustering rediscovered the churners without being told.</strong> Segment <code>0</code> averages 4 months tenure
+and 5.2 support tickets — every churner in the data. Nobody handed KMeans the answer; the
+structure was already in the features.</li>
+<li class=""><strong>Regression scored <code>R² = 0.651</code>, which is mediocre</strong>, and that&#x27;s honest. The two unusual
+customers — the 6-month/$95 spender and the 36-month/$140 whale — pull the line off. The same two
+rows are what anomaly detection flagged. <strong>One technique&#x27;s noise is another technique&#x27;s answer.</strong></li>
+<li class=""><strong>Classification hit 100%</strong>, which you should distrust immediately. That&#x27;s accuracy on the same 14
+rows it learned from, and it means nothing about new customers — the problem that
+train/test splitting and cross-validation exist to solve.</li>
+<li class=""><strong>Three features compressed to two kept 97.9%</strong> of the variation, because tenure and spend
+largely say the same thing.</li>
+</ul>
+<p><strong>Things worth trying:</strong></p>
+<ol>
+<li class="">Change <code>n_clusters</code> to 2 and then 4. There is no &quot;correct&quot; answer — which is precisely why
+clustering is harder to evaluate than classification.</li>
+<li class="">Drop the last two rows (the anomalies) and refit the regression. Watch <code>R²</code> jump.</li>
+<li class="">Swap <code>LogisticRegression</code> for <code>DecisionTreeClassifier</code>. The technique is unchanged — only the
+algorithm. Naming the technique first is what makes that swap trivial.</li>
+</ol>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="practice-questions">Practice Questions<a href="#practice-questions" class="hash-link" aria-label="Direct link to Practice Questions" title="Direct link to Practice Questions" translate="no">​</a></h2>
+<p><em>Work each one out on paper first, then check it by running the code — everything you need is on
+this page. <strong>No answers are included, deliberately.</strong></em></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Tag</th><th>Means</th></tr></thead><tbody><tr><td><strong>[THEORY]</strong></td><td><em>Explain in words.</em> Definitions, reasons, comparisons.</td></tr><tr><td><strong>[PROG]</strong></td><td><em>Write the program.</em> Complete, runnable code.</td></tr><tr><td><strong>[OUT]</strong></td><td><em>Read the output.</em> Interpret given results exactly as printed.</td></tr><tr><td><strong>[ANALYZE]</strong></td><td><em>Argue a position.</em> Weigh a claim, diagnose a failure, justify a trade-off.</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="naming-the-technique">Naming the technique<a href="#naming-the-technique" class="hash-link" aria-label="Direct link to Naming the technique" title="Direct link to Naming the technique" translate="no">​</a></h3>
+<p><strong>T1. [THEORY]</strong> List the eight major machine learning techniques, and for each give the question it
+answers in one phrase.</p>
+<p><strong>T2. [THEORY]</strong> For each of the following, name the technique and justify it in one sentence:
+predicting a house&#x27;s price · churn yes/no · grouping customers with similar buying habits · market
+basket analysis · credit-card fraud · the next page a user visits · reducing 200 columns to 10 ·
+suggesting a film.</p>
+<p><strong>T3. [THEORY]</strong> State the two questions that resolve most technique choices, and explain what each
+one rules out.</p>
+<p><strong>T4. [THEORY]</strong> Which technique becomes impossible if you shuffle the order of your rows? Why?</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="the-tricky-distinctions">The tricky distinctions<a href="#the-tricky-distinctions" class="hash-link" aria-label="Direct link to The tricky distinctions" title="Direct link to The tricky distinctions" translate="no">​</a></h3>
+<p><strong>D1. [ANALYZE]</strong> A bank&#x27;s model outputs <code>0.83</code> for a loan applicant. A colleague says this is
+regression because the output is a number. Explain why they are wrong, and state what you&#x27;d inspect
+to settle it.</p>
+<p><strong>D2. [ANALYZE]</strong> &quot;Fraud detection is anomaly detection.&quot; Under what circumstances is this correct,
+and under what circumstances should you use classification instead? What does the choice depend on?</p>
+<p><strong>D3. [THEORY]</strong> Distinguish clustering from classification using a single test question.</p>
+<p><strong>D4. [THEORY]</strong> Distinguish association from recommendation. Which is about items and which is
+about people?</p>
+<p><strong>D5. [ANALYZE]</strong> A telecom company runs both segmentation and churn prediction on one customer
+dataset. Name the technique for each, and explain what this shows about the relationship between
+data and technique.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="reading-the-output">Reading the output<a href="#reading-the-output" class="hash-link" aria-label="Direct link to Reading the output" title="Direct link to Reading the output" translate="no">​</a></h3>
+<p><strong>O1. [OUT]</strong> In the worked demo, the <code>churned</code> column was used by only one of the five techniques.
+Which one, and what does that fact illustrate?</p>
+<p><strong>O2. [OUT]</strong> KMeans produced this summary, having never seen the <code>churned</code> column:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">         tenure_months  monthly_spend  support_tickets</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">segment</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">0                  4.0           38.4              5.2</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">1                 15.3           55.3              1.0</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">2                 33.0          110.0              0.5</span><br></span></code></pre></div></div>
+<p>Describe each segment in business terms, and explain what it means that segment <code>0</code> corresponds to
+the churners.</p>
+<p><strong>O3. [ANALYZE]</strong> Regression scored <code>R² = 0.651</code> while anomaly detection flagged exactly two rows.
+Explain the connection between those two results.</p>
+<p><strong>O4. [ANALYZE]</strong> The classifier reported <strong>100%</strong> training accuracy. Give two reasons this number
+should not reassure you.</p>
+<p><strong>O5. [OUT]</strong> PCA reported <code>75.0%</code> and <code>22.9%</code> for its two components. What does the sum mean, and
+what has been given up in exchange?</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="applying-it">Applying it<a href="#applying-it" class="hash-link" aria-label="Direct link to Applying it" title="Direct link to Applying it" translate="no">​</a></h3>
+<p><strong>P1. [PROG]</strong> Using the demo dataset, fit a <code>KMeans</code> model with <code>n_clusters=2</code> and print the mean
+of each feature per cluster.</p>
+<p><strong>P2. [PROG]</strong> Write code that fits a regression predicting <code>monthly_spend</code> from <strong>both</strong>
+<code>tenure_months</code> and <code>support_tickets</code>, and print the two coefficients.</p>
+<p><strong>P3. [PROG]</strong> Use <code>IsolationForest</code> with <code>contamination=0.3</code> and print how many rows are flagged.
+Explain what <code>contamination</code> controls.</p>
+<p><strong>P4. [ANALYZE]</strong> You&#x27;re asked: <em>&quot;Which of our 50,000 products should we show on the home page?&quot;</em>
+The data is a log of every purchase, with no labels. Name the technique, say what you&#x27;d need, and
+name one other technique that could support it.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="quick-self-check">Quick self-check<a href="#quick-self-check" class="hash-link" aria-label="Direct link to Quick self-check" title="Direct link to Quick self-check" translate="no">​</a></h3>
+<ol>
+<li class="">Name the eight major techniques.</li>
+<li class="">What shape is a regression output? A classification output?</li>
+<li class="">Which two questions identify most techniques?</li>
+<li class="">What separates clustering from classification?</li>
+<li class="">When is fraud detection <em>not</em> anomaly detection?</li>
+<li class="">Which technique depends on the order of the data?</li>
+<li class="">Is dimensionality reduction usually a goal or a step?</li>
+<li class="">What does association describe that recommendation doesn&#x27;t?</li>
+<li class="">Why did clustering find the churners without being given labels?</li>
+<li class="">Why is 100% training accuracy not good news?</li>
+</ol></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-tags-row"><div class="col"><b>Tags:</b><ul class="tags_jXut padding--none margin-left--sm"><li class="tag_QGVx"><a rel="tag" title="Algorithms, evaluation, and the reasoning behind them." class="tag_zVej tagRegular_sFm0" href="/docs/tags/machine-learning">Machine Learning</a></li><li class="tag_QGVx"><a rel="tag" title="What machine learning is, the types of learning, and the toolkit that implements them." class="tag_zVej tagRegular_sFm0" href="/docs/tags/foundations">Foundations</a></li></ul></div></div><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/vettrivel-kl/vettrivel-kl.github.io/tree/master/docs/Data-Science/Machine-Learning/01-foundations/02-applications-and-techniques.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/Data-Science/Machine-Learning/foundations/what-is-machine-learning"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">What is Machine Learning?</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/Data-Science/Machine-Learning/foundations/types-of-learning"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Types of Learning</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#the-eight-techniques-at-a-glance" class="table-of-contents__link toc-highlight">The eight techniques at a glance</a></li><li><a href="#1-regression--estimation" class="table-of-contents__link toc-highlight">1. Regression / Estimation</a></li><li><a href="#2-classification" class="table-of-contents__link toc-highlight">2. Classification</a></li><li><a href="#3-clustering" class="table-of-contents__link toc-highlight">3. Clustering</a></li><li><a href="#4-association" class="table-of-contents__link toc-highlight">4. Association</a></li><li><a href="#5-anomaly-detection" class="table-of-contents__link toc-highlight">5. Anomaly detection</a></li><li><a href="#6-sequence-mining" class="table-of-contents__link toc-highlight">6. Sequence mining</a></li><li><a href="#7-dimensionality-reduction" class="table-of-contents__link toc-highlight">7. Dimensionality reduction</a></li><li><a href="#8-recommendation-systems" class="table-of-contents__link toc-highlight">8. Recommendation systems</a></li><li><a href="#reading-a-problem-statement" class="table-of-contents__link toc-highlight">Reading a problem statement</a></li><li><a href="#applications-you-use-every-day" class="table-of-contents__link toc-highlight">Applications you use every day</a><ul><li><a href="#recommendation--netflix-and-amazon" class="table-of-contents__link toc-highlight">Recommendation — Netflix and Amazon</a></li><li><a href="#banking--loan-approval" class="table-of-contents__link toc-highlight">Banking — loan approval</a></li><li><a href="#telecommunications--segmentation-and-churn" class="table-of-contents__link toc-highlight">Telecommunications — segmentation and churn</a></li><li><a href="#healthcare-diagnostics" class="table-of-contents__link toc-highlight">Healthcare diagnostics</a></li><li><a href="#financial-trading" class="table-of-contents__link toc-highlight">Financial trading</a></li><li><a href="#autonomous-vehicles" class="table-of-contents__link toc-highlight">Autonomous vehicles</a></li><li><a href="#and-the-rest" class="table-of-contents__link toc-highlight">And the rest</a></li></ul></li><li><a href="#where-the-techniques-overlap" class="table-of-contents__link toc-highlight">Where the techniques overlap</a></li><li><a href="#common-mistakes" class="table-of-contents__link toc-highlight">Common Mistakes</a></li><li><a href="#summary" class="table-of-contents__link toc-highlight">Summary</a></li><li><a href="#run-it-yourself" class="table-of-contents__link toc-highlight">Run It Yourself</a><ul><li><a href="#what-to-notice-in-that-output" class="table-of-contents__link toc-highlight">What to notice in that output</a></li></ul></li><li><a href="#practice-questions" class="table-of-contents__link toc-highlight">Practice Questions</a><ul><li><a href="#naming-the-technique" class="table-of-contents__link toc-highlight">Naming the technique</a></li><li><a href="#the-tricky-distinctions" class="table-of-contents__link toc-highlight">The tricky distinctions</a></li><li><a href="#reading-the-output" class="table-of-contents__link toc-highlight">Reading the output</a></li><li><a href="#applying-it" class="table-of-contents__link toc-highlight">Applying it</a></li><li><a href="#quick-self-check" class="table-of-contents__link toc-highlight">Quick self-check</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 vettrivel.com</div></div></div></footer></div>
+</body>
+</html>

@@ -1,0 +1,380 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-Python/visualization/choosing-a-chart" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Choosing a Chart | Vettrivel&#x27;s Notes</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://vettrivel-kl.github.io/img/vettri/vettri-384x384.png"><meta data-rh="true" name="twitter:image" content="https://vettrivel-kl.github.io/img/vettri/vettri-384x384.png"><meta data-rh="true" property="og:url" content="https://vettrivel-kl.github.io/docs/Python/visualization/choosing-a-chart"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Choosing a Chart | Vettrivel&#x27;s Notes"><meta data-rh="true" name="description" content="Every chart type answers one specific question — pick the chart by starting from the question."><meta data-rh="true" property="og:description" content="Every chart type answers one specific question — pick the chart by starting from the question."><link data-rh="true" rel="icon" href="/img/vettri/favicon.ico"><link data-rh="true" rel="canonical" href="https://vettrivel-kl.github.io/docs/Python/visualization/choosing-a-chart"><link data-rh="true" rel="alternate" href="https://vettrivel-kl.github.io/docs/Python/visualization/choosing-a-chart" hreflang="en"><link data-rh="true" rel="alternate" href="https://vettrivel-kl.github.io/docs/Python/visualization/choosing-a-chart" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Python","item":"https://vettrivel-kl.github.io/docs/Python/"},{"@type":"ListItem","position":2,"name":"7 · Visualization","item":"https://vettrivel-kl.github.io/docs/category/7--visualization"},{"@type":"ListItem","position":3,"name":"Choosing a Chart","item":"https://vettrivel-kl.github.io/docs/Python/visualization/choosing-a-chart"}]}</script><link rel="alternate" type="application/rss+xml" href="/blog/rss.xml" title="Vettrivel&#39;s Notes RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/blog/atom.xml" title="Vettrivel&#39;s Notes Atom Feed"><link rel="stylesheet" href="/assets/css/styles.ef456819.css">
+<script src="/assets/js/runtime~main.80d4d423.js" defer="defer"></script>
+<script src="/assets/js/main.eb5d0481.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/img/vettri/vettri-384x384.png"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/"><div class="navbar__logo"><img src="/img/vettri/vettri-384x384.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/img/vettri/vettri-384x384.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Vettrivel&#x27;s Notes</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/docs/Python">Notes </a><a class="navbar__item navbar__link" href="/blog">Blog</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href="/docs/Python"><span title="Python" class="categoryLinkLabel_W154">Python</span></a><button aria-label="Collapse sidebar category &#x27;Python&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/1--basics"><span title="1 · Basics" class="categoryLinkLabel_W154">1 · Basics</span></a><button aria-label="Expand sidebar category &#x27;1 · Basics&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/2--control-flow"><span title="2 · Control Flow" class="categoryLinkLabel_W154">2 · Control Flow</span></a><button aria-label="Expand sidebar category &#x27;2 · Control Flow&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/3--collections"><span title="3 · Collections" class="categoryLinkLabel_W154">3 · Collections</span></a><button aria-label="Expand sidebar category &#x27;3 · Collections&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/4--numpy"><span title="4 · NumPy" class="categoryLinkLabel_W154">4 · NumPy</span></a><button aria-label="Expand sidebar category &#x27;4 · NumPy&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/5--pandas"><span title="5 · Pandas" class="categoryLinkLabel_W154">5 · Pandas</span></a><button aria-label="Expand sidebar category &#x27;5 · Pandas&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/6--statistics--eda"><span title="6 · Statistics &amp; EDA" class="categoryLinkLabel_W154">6 · Statistics &amp; EDA</span></a><button aria-label="Expand sidebar category &#x27;6 · Statistics &amp; EDA&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex="0" href="/docs/category/7--visualization"><span title="7 · Visualization" class="categoryLinkLabel_W154">7 · Visualization</span></a><button aria-label="Collapse sidebar category &#x27;7 · Visualization&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/docs/Python/visualization/choosing-a-chart"><span title="Choosing a Chart" class="linkLabel_WmDU">Choosing a Chart</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Python/visualization/matplotlib"><span title="Matplotlib" class="linkLabel_WmDU">Matplotlib</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Python/visualization/seaborn"><span title="Seaborn" class="linkLabel_WmDU">Seaborn</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Python/visualization/plotly"><span title="Plotly" class="linkLabel_WmDU">Plotly</span></a></li></ul></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" href="/docs/category/data-science"><span title="Data Science" class="categoryLinkLabel_W154">Data Science</span></a><button aria-label="Expand sidebar category &#x27;Data Science&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/docs/Python"><span>Python</span></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/docs/category/7--visualization"><span>7 · Visualization</span></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Choosing a Chart</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Choosing a Chart</h1></header>
+<blockquote>
+<p><strong>Topic —</strong> Which plot to draw. Start from the <strong>question</strong>, not from the chart you feel like
+making.</p>
+</blockquote>
+<p>Every chart type answers one kind of question well and everything else badly. Get this
+backwards — pick a chart first, then look for something to say — and you end up with a
+technically correct plot that communicates nothing.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="the-cheat-sheet">The cheat sheet<a href="#the-cheat-sheet" class="hash-link" aria-label="Direct link to The cheat sheet" title="Direct link to The cheat sheet" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Plot</th><th>Ask this question</th></tr></thead><tbody><tr><td><strong>Line</strong></td><td>How does something change?</td></tr><tr><td><strong>Multiple line</strong></td><td>How do multiple things change compared with each other?</td></tr><tr><td><strong>Scatter</strong></td><td>Are two numerical variables related?</td></tr><tr><td><strong>Multiple scatter</strong></td><td>How do multiple numerical relationships compare?</td></tr><tr><td><strong>Bar</strong></td><td>Which category has more or less?</td></tr><tr><td><strong>Horizontal bar</strong></td><td>Same as bar, but for long category labels</td></tr><tr><td><strong>Multiple bar</strong></td><td>How do multiple values compare for each category?</td></tr><tr><td><strong>Stacked bar</strong></td><td>What parts make up each total?</td></tr><tr><td><strong>Pie</strong></td><td>What percentage of the whole does each category represent?</td></tr><tr><td><strong>Exploded pie</strong></td><td>Which slice do I want to highlight?</td></tr><tr><td><strong>Donut</strong></td><td>Same as pie, different appearance</td></tr><tr><td><strong>Histogram</strong></td><td>How are numerical values distributed?</td></tr><tr><td><strong>Multiple histogram</strong></td><td>How do multiple distributions compare?</td></tr><tr><td><strong>Box plot</strong></td><td>What is the centre, spread and possible outliers?</td></tr><tr><td><strong>Box plot with labels</strong></td><td>What are the five-number summary values?</td></tr><tr><td><strong>Multiple box plot</strong></td><td>How do several numerical distributions compare?</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="grouped-by-what-youre-asking">Grouped by what you&#x27;re asking<a href="#grouped-by-what-youre-asking" class="hash-link" aria-label="Direct link to Grouped by what you&#x27;re asking" title="Direct link to Grouped by what you&#x27;re asking" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-does-it-change--line">&quot;How does it change?&quot; → line<a href="#how-does-it-change--line" class="hash-link" aria-label="Direct link to &quot;How does it change?&quot; → line" title="Direct link to &quot;How does it change?&quot; → line" translate="no">​</a></h3>
+<p>A line implies a <strong>connection</strong> between consecutive points, so the x-axis needs a natural
+order — time, most often. Days, months, epochs, trial numbers.</p>
+<div class="theme-admonition theme-admonition-warning admonition_xJq3 alert alert--warning"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8.893 1.5c-.183-.31-.52-.5-.887-.5s-.703.19-.886.5L.138 13.499a.98.98 0 0 0 0 1.001c.193.31.53.501.886.501h13.964c.367 0 .704-.19.877-.5a1.03 1.03 0 0 0 .01-1.002L8.893 1.5zm.133 11.497H6.987v-2.003h2.039v2.003zm0-3.004H6.987V5.987h2.039v4.006z"></path></svg></span>A line over unordered categories is misleading</div><div class="admonitionContent_BuS1"><p>Plotting marks against student names with a line, as
+<a class="" href="/docs/Python/visualization/matplotlib#line-plot">the matplotlib page does</a>, draws a line between Arun and Bala —
+implying Arun <em>becomes</em> Bala. There&#x27;s no such relationship. Alphabetical order is not an axis.</p><p>It&#x27;s a fine first exercise for learning the syntax. Just don&#x27;t ship it.</p></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="which-is-bigger--bar">&quot;Which is bigger?&quot; → bar<a href="#which-is-bigger--bar" class="hash-link" aria-label="Direct link to &quot;Which is bigger?&quot; → bar" title="Direct link to &quot;Which is bigger?&quot; → bar" translate="no">​</a></h3>
+<p>Bars compare magnitudes across categories. The comparison is by <strong>length</strong>, which the eye reads
+accurately.</p>
+<p>Bars must start at <strong>zero</strong>. Truncating the axis makes a 5% difference look like a 5× one, and
+it&#x27;s the most common way charts mislead.</p>
+<p>Use horizontal bars when labels are long — rotated text is hard to read.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="are-these-two-related--scatter">&quot;Are these two related?&quot; → scatter<a href="#are-these-two-related--scatter" class="hash-link" aria-label="Direct link to &quot;Are these two related?&quot; → scatter" title="Direct link to &quot;Are these two related?&quot; → scatter" translate="no">​</a></h3>
+<p>One point per observation, two numeric axes. This is the chart that shows the <em>shape</em> of a
+relationship, and it&#x27;s why
+<a class="" href="/docs/Python/statistics/correlation-and-covariance#it-only-sees-straight-lines">correlation alone isn&#x27;t enough</a> —
+a scatter plot would show the <code>y = x²</code> parabola that correlation reports as <code>0.0</code>.</p>
+<p>Add a third variable through <strong>colour</strong>, a fourth through <strong>size</strong> (a bubble chart). Beyond that
+it stops being readable.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-is-this-spread-out--histogram">&quot;How is this spread out?&quot; → histogram<a href="#how-is-this-spread-out--histogram" class="hash-link" aria-label="Direct link to &quot;How is this spread out?&quot; → histogram" title="Direct link to &quot;How is this spread out?&quot; → histogram" translate="no">​</a></h3>
+<p>Bins one numeric column and counts how many values fall in each. This shows the <em>distribution</em> —
+where values cluster, whether it&#x27;s symmetric, whether there are two peaks.</p>
+<p>A histogram is not a bar chart. Bars compare <strong>categories</strong>; a histogram shows the shape of
+<strong>one numeric column</strong>, and its x-axis is a continuous number line with no gaps between bars.</p>
+<div class="theme-admonition theme-admonition-note admonition_xJq3 alert alert--secondary"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 14 16"><path fill-rule="evenodd" d="M6.3 5.69a.942.942 0 0 1-.28-.7c0-.28.09-.52.28-.7.19-.18.42-.28.7-.28.28 0 .52.09.7.28.18.19.28.42.28.7 0 .28-.09.52-.28.7a1 1 0 0 1-.7.3c-.28 0-.52-.11-.7-.3zM8 7.99c-.02-.25-.11-.48-.31-.69-.2-.19-.42-.3-.69-.31H6c-.27.02-.48.13-.69.31-.2.2-.3.44-.31.69h1v3c.02.27.11.5.31.69.2.2.42.31.69.31h1c.27 0 .48-.11.69-.31.2-.19.3-.42.31-.69H8V7.98v.01zM7 2.3c-3.14 0-5.7 2.54-5.7 5.68 0 3.14 2.56 5.7 5.7 5.7s5.7-2.55 5.7-5.7c0-3.15-2.56-5.69-5.7-5.69v.01zM7 .98c3.86 0 7 3.14 7 7s-3.14 7-7 7-7-3.12-7-7 3.14-7 7-7z"></path></svg></span>Bin count changes the story</div><div class="admonitionContent_BuS1"><p>Too few bins hides structure; too many turns it into noise. With ten values, <code>bins=5</code> is about
+right. Always try a couple of values before believing what you see.</p></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="whats-the-centre-spread-and-outliers--box-plot">&quot;What&#x27;s the centre, spread and outliers?&quot; → box plot<a href="#whats-the-centre-spread-and-outliers--box-plot" class="hash-link" aria-label="Direct link to &quot;What&#x27;s the centre, spread and outliers?&quot; → box plot" title="Direct link to &quot;What&#x27;s the centre, spread and outliers?&quot; → box plot" translate="no">​</a></h3>
+<p>The densest summary available. One box encodes five numbers plus outliers:</p>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">      ┌─────┬───────┐</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  ├───┤     │       ├───┤        ○</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      └─────┴───────┘</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">  │   │     │       │   │        │</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain"> min  Q1  median   Q3  max    outlier</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      └── IQR ─────┘</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">      whisker = 1.5 x IQR</span><br></span></code></pre></div></div>
+<p>Exactly the <a class="" href="/docs/Python/statistics/descriptive-statistics#quartiles">quartiles and IQR fence</a>
+from the statistics notes, drawn. Side by side, box plots compare several distributions at once —
+which is what makes them the best chart for &quot;do these groups differ?&quot;.</p>
+<p>A <strong>violin plot</strong> is a box plot with the distribution&#x27;s shape drawn as width. It shows things a
+box hides, like two separate clusters.</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="what-share-of-the-total--pie">&quot;What share of the total?&quot; → pie<a href="#what-share-of-the-total--pie" class="hash-link" aria-label="Direct link to &quot;What share of the total?&quot; → pie" title="Direct link to &quot;What share of the total?&quot; → pie" translate="no">​</a></h3>
+<p>Pie charts answer exactly one question: what fraction of the whole is each part?</p>
+<div class="theme-admonition theme-admonition-danger admonition_xJq3 alert alert--danger"><div class="admonitionHeading_Gvgb"><span class="admonitionIcon_Rf37"><svg viewBox="0 0 12 16"><path fill-rule="evenodd" d="M5.05.31c.81 2.17.41 3.38-.52 4.31C3.55 5.67 1.98 6.45.9 7.98c-1.45 2.05-1.7 6.53 3.53 7.7-2.2-1.16-2.67-4.52-.3-6.61-.61 2.03.53 3.33 1.94 2.86 1.39-.47 2.3.53 2.27 1.67-.02.78-.31 1.44-1.13 1.81 3.42-.59 4.78-3.42 4.78-5.56 0-2.84-2.53-3.22-1.25-5.61-1.52.13-2.03 1.13-1.89 2.75.09 1.08-1.02 1.8-1.86 1.33-.67-.41-.66-1.19-.06-1.78C8.18 5.31 8.68 2.45 5.05.32L5.03.3l.02.01z"></path></svg></span>Pie charts are usually the wrong choice</div><div class="admonitionContent_BuS1"><p>The eye compares <strong>angles</strong> badly and <strong>lengths</strong> well, so a bar chart is easier to read for
+almost any comparison. Pies also need parts that sum to a meaningful whole — percentages of a
+single total.</p><p>Use one when there are 2–5 categories, they sum to 100%, and &quot;share of total&quot; is genuinely the
+point. Otherwise use bars.</p></div></div>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="chart-by-data-shape">Chart by data shape<a href="#chart-by-data-shape" class="hash-link" aria-label="Direct link to Chart by data shape" title="Direct link to Chart by data shape" translate="no">​</a></h2>
+<p>Work from what you have, not what looks good:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>You have</th><th>Ask</th><th>Chart</th></tr></thead><tbody><tr><td>1 numeric column</td><td>how is it distributed?</td><td>histogram, box plot</td></tr><tr><td>1 categorical column</td><td>how many of each?</td><td>bar (count plot)</td></tr><tr><td>1 categorical + 1 numeric</td><td>which category is higher?</td><td>bar</td></tr><tr><td>1 categorical + 1 numeric</td><td>how does each group&#x27;s spread compare?</td><td>box, violin</td></tr><tr><td>2 numeric columns</td><td>are they related?</td><td>scatter</td></tr><tr><td>2 numeric, one ordered</td><td>how does it change?</td><td>line</td></tr><tr><td>3+ numeric columns</td><td>what correlates with what?</td><td>heatmap, pair plot</td></tr><tr><td>categories summing to a whole</td><td>what share is each?</td><td>pie (or bars)</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="which-library">Which library?<a href="#which-library" class="hash-link" aria-label="Direct link to Which library?" title="Direct link to Which library?" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th></th><th>Matplotlib</th><th>Seaborn</th><th>Plotly</th></tr></thead><tbody><tr><td>Level</td><td>low — you draw it</td><td>high — you describe it</td><td>high, interactive</td></tr><tr><td>Statistical charts</td><td>manual</td><td><strong>built in</strong></td><td>built in</td></tr><tr><td>Works with DataFrames</td><td>column by column</td><td><code>data=df, x=, y=</code></td><td><code>df, x=, y=</code></td></tr><tr><td>Interactive</td><td>❌</td><td>❌</td><td>✅ hover, zoom, pan</td></tr><tr><td>Output</td><td>image</td><td>image</td><td>HTML</td></tr><tr><td>Default appearance</td><td>plain</td><td>good</td><td>polished</td></tr><tr><td>Control</td><td>total</td><td>good, escapes to matplotlib</td><td>good</td></tr></tbody></table>
+<p><strong>Seaborn is built on Matplotlib</strong> — <code>sns.boxplot()</code> returns matplotlib axes, and you style it
+with <code>plt.title()</code>. They&#x27;re one system, not two. Learn matplotlib&#x27;s vocabulary and seaborn&#x27;s
+shortcuts.</p>
+<p><strong>Plotly is separate</strong>, and produces HTML rather than an image. That&#x27;s the point — hover, zoom
+and pan — and also the catch, since it can&#x27;t be pasted into a document as-is.</p>
+<p><strong>In practice:</strong> Seaborn for statistical charts, Matplotlib underneath for control, Plotly when
+someone needs to explore rather than just read.</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="common-mistakes">Common Mistakes<a href="#common-mistakes" class="hash-link" aria-label="Direct link to Common Mistakes" title="Direct link to Common Mistakes" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>#</th><th>Mistake</th><th>Why it&#x27;s wrong</th></tr></thead><tbody><tr><td>1</td><td>Line plot over unordered categories</td><td>implies a progression that doesn&#x27;t exist</td></tr><tr><td>2</td><td>Bar chart not starting at zero</td><td>exaggerates small differences</td></tr><tr><td>3</td><td>Pie chart with many slices</td><td>angles are hard to compare</td></tr><tr><td>4</td><td>Pie chart of parts that don&#x27;t sum to a whole</td><td>the fractions mean nothing</td></tr><tr><td>5</td><td>Histogram where a bar chart belongs</td><td>histograms are for one numeric column</td></tr><tr><td>6</td><td>Ignoring bin count</td><td>changes the apparent shape</td></tr><tr><td>7</td><td>No axis labels or title</td><td>the reader can&#x27;t know what they&#x27;re seeing</td></tr><tr><td>8</td><td>3-D charts for 2-D data</td><td>perspective distorts the values</td></tr><tr><td>9</td><td>Colour as the only distinction</td><td>fails for colour-blind readers and in print</td></tr><tr><td>10</td><td>Plotting before EDA</td><td>you don&#x27;t yet know what&#x27;s worth showing</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="summary">Summary<a href="#summary" class="hash-link" aria-label="Direct link to Summary" title="Direct link to Summary" translate="no">​</a></h2>
+<p><strong>The question → the chart</strong></p>
+<ul>
+<li class="">change over an ordered axis → <strong>line</strong></li>
+<li class="">compare categories → <strong>bar</strong></li>
+<li class="">relationship between two numbers → <strong>scatter</strong></li>
+<li class="">distribution of one number → <strong>histogram</strong></li>
+<li class="">centre, spread, outliers → <strong>box</strong> (or <strong>violin</strong>)</li>
+<li class="">share of a whole → <strong>pie</strong>, reluctantly</li>
+<li class="">what correlates with what → <strong>heatmap</strong></li>
+</ul>
+<p><strong>Key takeaways</strong></p>
+<ul>
+<li class="">Start from the question; the chart follows</li>
+<li class="">A line needs an ordered x-axis — names in alphabetical order aren&#x27;t one</li>
+<li class="">Bars start at zero, always</li>
+<li class="">Histograms are for one numeric column; bars are for categories</li>
+<li class="">A box plot draws the five-number summary and the <code>1.5 × IQR</code> fence</li>
+<li class="">Pie charts answer only &quot;what share of the total&quot;, and bars usually answer it better</li>
+<li class="">Seaborn sits on top of Matplotlib — same system, shorter syntax</li>
+<li class="">Plotly gives interactivity at the cost of being HTML rather than an image</li>
+</ul>
+<p><strong>See also:</strong> <a class="" href="/docs/Python/visualization/matplotlib">Matplotlib</a> · <a class="" href="/docs/Python/visualization/seaborn">Seaborn</a> ·
+<a class="" href="/docs/Python/visualization/plotly">Plotly</a> ·
+<a class="" href="/docs/Python/statistics/exploratory-data-analysis">Exploratory Data Analysis</a> for what to look
+at before plotting</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="practice-questions">Practice Questions<a href="#practice-questions" class="hash-link" aria-label="Direct link to Practice Questions" title="Direct link to Practice Questions" translate="no">​</a></h2>
+<p><em>From the Unit 2 question bank. Tags and marks are explained on the
+<a class="" href="/docs/Python#practice-questions">Python index</a>.</em></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="unit-2--n--choosing-the-right-chart">Unit 2 § N — Choosing the Right Chart<a href="#unit-2--n--choosing-the-right-chart" class="hash-link" aria-label="Direct link to Unit 2 § N — Choosing the Right Chart" title="Direct link to Unit 2 § N — Choosing the Right Chart" translate="no">​</a></h3>
+<p>For each question, name the <strong>single best</strong> plot. One mark each — <code>[14]</code> total.</p>
+<ol>
+<li class="">How did our sales change over the last 12 months?</li>
+<li class="">How do the sales of four different companies compare over the same 12 months?</li>
+<li class="">Are study hours related to marks?</li>
+<li class="">Which department has the most students?</li>
+<li class="">What percentage of our students is in each department?</li>
+<li class="">How are marks distributed across the class?</li>
+<li class="">What is the median, spread and are there any outliers in the marks?</li>
+<li class="">How do the marks distributions of CSE, IT and ECE compare?</li>
+<li class="">Which pairs of numeric columns in my dataset are correlated?</li>
+<li class="">What parts make up each department&#x27;s total headcount?</li>
+<li class="">I want the same comparison as a bar chart, but the category names are long.</li>
+<li class="">Every possible pairwise relationship between all my numeric columns at once.</li>
+<li class="">The distribution of marks per department, showing each individual student as a point.</li>
+<li class="">I want to highlight one specific slice of a proportional breakdown.</li>
+</ol>
+<p><strong>N15. [THEORY]</strong> You have one <strong>categorical</strong> column and one <strong>numerical</strong> column. Name three
+plots that suit this pair, and say what each emphasises. <code>[3]</code></p>
+<p><strong>N16. [THEORY]</strong> Why is a pie chart a poor choice when there are 12 categories? Name a better
+alternative. <code>[3]</code></p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="viva">Viva<a href="#viva" class="hash-link" aria-label="Direct link to Viva" title="Direct link to Viva" translate="no">​</a></h3>
+<ol>
+<li class="">What is the difference between a histogram and a bar chart?</li>
+<li class="">Which plot answers &quot;are these two numerical variables related?&quot;</li>
+</ol></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-tags-row"><div class="col"><b>Tags:</b><ul class="tags_jXut padding--none margin-left--sm"><li class="tag_QGVx"><a rel="tag" title="Python language notes." class="tag_zVej tagRegular_sFm0" href="/docs/tags/python">Python</a></li><li class="tag_QGVx"><a rel="tag" title="Charts and plots — Matplotlib, Seaborn, and Plotly." class="tag_zVej tagRegular_sFm0" href="/docs/tags/visualization">Visualization</a></li></ul></div></div><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/vettrivel-kl/vettrivel-kl.github.io/tree/master/docs/Python/07-visualization/01-choosing-a-chart.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/category/7--visualization"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">7 · Visualization</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/Python/visualization/matplotlib"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Matplotlib</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#the-cheat-sheet" class="table-of-contents__link toc-highlight">The cheat sheet</a></li><li><a href="#grouped-by-what-youre-asking" class="table-of-contents__link toc-highlight">Grouped by what you&#39;re asking</a><ul><li><a href="#how-does-it-change--line" class="table-of-contents__link toc-highlight">&quot;How does it change?&quot; → line</a></li><li><a href="#which-is-bigger--bar" class="table-of-contents__link toc-highlight">&quot;Which is bigger?&quot; → bar</a></li><li><a href="#are-these-two-related--scatter" class="table-of-contents__link toc-highlight">&quot;Are these two related?&quot; → scatter</a></li><li><a href="#how-is-this-spread-out--histogram" class="table-of-contents__link toc-highlight">&quot;How is this spread out?&quot; → histogram</a></li><li><a href="#whats-the-centre-spread-and-outliers--box-plot" class="table-of-contents__link toc-highlight">&quot;What&#39;s the centre, spread and outliers?&quot; → box plot</a></li><li><a href="#what-share-of-the-total--pie" class="table-of-contents__link toc-highlight">&quot;What share of the total?&quot; → pie</a></li></ul></li><li><a href="#chart-by-data-shape" class="table-of-contents__link toc-highlight">Chart by data shape</a></li><li><a href="#which-library" class="table-of-contents__link toc-highlight">Which library?</a></li><li><a href="#common-mistakes" class="table-of-contents__link toc-highlight">Common Mistakes</a></li><li><a href="#summary" class="table-of-contents__link toc-highlight">Summary</a></li><li><a href="#practice-questions" class="table-of-contents__link toc-highlight">Practice Questions</a><ul><li><a href="#unit-2--n--choosing-the-right-chart" class="table-of-contents__link toc-highlight">Unit 2 § N — Choosing the Right Chart</a></li><li><a href="#viva" class="table-of-contents__link toc-highlight">Viva</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 vettrivel.com</div></div></div></footer></div>
+</body>
+</html>
