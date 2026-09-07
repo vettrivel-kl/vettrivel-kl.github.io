@@ -11,7 +11,7 @@ import {themes as prismThemes} from 'prism-react-renderer';
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: "Vettrivel's Notes",
-  tagline: 'Java, Spring Boot, React, and beyond — one note at a time.',
+  tagline: 'one note at a time',
   favicon: 'img/vettri/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
