@@ -1,0 +1,62 @@
+.categories {
+  padding: 3rem 0;
+}
+
+.subject + .subject {
+  margin-top: 3rem;
+}
+
+.subjectTitle {
+  font-size: 1.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.subjectTitle a {
+  color: var(--ifm-heading-color);
+  text-decoration: none;
+}
+
+.subjectTitle a:hover {
+  color: var(--ifm-color-primary);
+}
+
+/* The whole card is the link, so it gets the padding and the hover state
+   rather than the text inside it. */
+.card {
+  display: block;
+  height: 100%;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: var(--ifm-card-border-radius, 8px);
+  background: var(--ifm-card-background-color, var(--ifm-background-surface-color));
+  text-decoration: none;
+  transition: border-color 200ms ease, box-shadow 200ms ease, transform 200ms ease;
+}
+
+.card:hover {
+  border-color: var(--ifm-color-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-decoration: none;
+  transform: translateY(-2px);
+}
+
+.cardTitle {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+  color: var(--ifm-color-primary);
+}
+
+.cardDescription {
+  margin-bottom: 0;
+  font-size: 0.9rem;
+  color: var(--ifm-font-color-base);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .card:hover {
+    transition: none;
+    transform: none;
+  }
+}
