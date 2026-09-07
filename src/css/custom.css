@@ -28,3 +28,18 @@
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* Chart PNGs have white backgrounds. Give them a light card so they read as
+   deliberate in dark mode rather than as bright rectangles.
+   Docusaurus runs markdown images through webpack, so the built src is
+   /assets/images/... — matching on the source path would never fire. */
+.markdown img[src*='/assets/images/'] {
+  background: #fff;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 6px;
+  padding: 6px;
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto 1.2rem;
+}

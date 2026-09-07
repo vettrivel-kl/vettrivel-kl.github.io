@@ -35,6 +35,13 @@ const config = {
     locales: ['en'],
   },
 
+  // Parse .md as CommonMark and only .mdx as MDX. Without this, MDX v3 treats
+  // `{` and `<` in plain .md as JSX and the build fails on things like
+  // <class 'int'> or {value:spec} outside a code fence.
+  markdown: {
+    format: 'detect',
+  },
+
   presets: [
     [
       'classic',
@@ -42,10 +49,8 @@ const config = {
       ({
         docs: {
           sidebarPath: './sidebars.js',
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/vettrivel-kl/vettrivel-kl.github.io/tree/master/',
         },
         blog: {
           showReadingTime: true,
@@ -53,10 +58,8 @@ const config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          // Please change this to your repo.
-          // Remove this to remove the "edit this page" links.
           editUrl:
-            'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
+            'https://github.com/vettrivel-kl/vettrivel-kl.github.io/tree/master/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',

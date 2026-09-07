@@ -1,0 +1,748 @@
+---
+sidebar_position: 4
+title: Expressions and Operators
+description: Arithmetic operators, PEMDAS precedence, and five ways to structure the same answer.
+tags: [python, basics, operators]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
+# Expressions and Operators
+
+> **Exercise —** Evaluate these five expressions: `15 + 25`, `30 / 5`, `10 * 6`,
+> `25 % 4`, `2 ** 5`.
+
+---
+
+## What is an Expression?
+
+An expression is a combination of:
+
+- **values** — numbers, strings, etc.
+- **operators** — symbols like `+`, `-`, `*`, `/`
+- **variables** — names that hold values
+
+When Python evaluates an expression, it produces a **result**.
+
+| Expression | Result |
+|---|---|
+| `15 + 25` | `40` |
+| `30 / 5` | `6.0` |
+| `10 * 6` | `60` |
+| `25 % 4` | `1` |
+| `2 ** 5` | `32` |
+
+---
+
+## Arithmetic Operators
+
+| Operator | Name | Example | Result | Use case |
+|---|---|---|---|---|
+| `+` | Addition | `15 + 25` | `40` | Sum, total |
+| `-` | Subtraction | `30 - 10` | `20` | Difference |
+| `*` | Multiplication | `10 * 6` | `60` | Product |
+| `/` | Division | `30 / 5` | `6.0` | Quotient (**always float**) |
+| `//` | Floor division | `23 // 5` | `4` | Whole number only |
+| `%` | Modulo | `25 % 4` | `1` | Remainder |
+| `**` | Exponentiation | `2 ** 5` | `32` | Power |
+
+---
+
+## Each Operator in Detail
+
+### `+` Addition
+
+Combines numbers together.
+
+```python
+print(15 + 25)        # → 40
+print(5 + 3 + 2)      # → 10   can chain multiple
+```
+
+### `-` Subtraction
+
+Finds the difference.
+
+```python
+print(30 - 10)        # → 20
+```
+
+### `*` Multiplication
+
+Repeated addition, or scaling.
+
+```python
+print(10 * 6)         # → 60   like adding 10 six times
+```
+
+### `/` Division
+
+Splits into parts. **Always returns a `float`**, even when the division is exact.
+
+```python
+print(30 / 5)         # → 6.0   note the .0
+print(10 / 2)         # → 5.0   not 5!
+print(type(10 / 2))   # → <class 'float'>
+```
+
+### `//` Floor division
+
+Divides and keeps only the whole-number part.
+
+```python
+print(23 // 5)        # → 4     ignores the decimal
+print(23 / 5)         # → 4.6   compare
+print(type(23 // 5))  # → <class 'int'>
+```
+
+:::warning
+
+`//` **floors** (rounds toward negative infinity), it does not truncate. For negatives
+this surprises people:
+
+```python
+print(-23 // 5)   # → -5, not -4
+```
+
+:::
+
+### `%` Modulo
+
+Returns the **remainder** after division.
+
+```python
+print(25 % 4)         # → 1
+```
+
+How: 4 goes into 25 exactly 6 times (`4 × 6 = 24`), with `1` left over (`25 - 24 = 1`).
+
+That relationship always holds:
+
+```text
+25 = 4 × 6 + 1
+dividend = divisor × quotient + remainder
+```
+
+Common uses:
+
+```python
+print(10 % 2)     # → 0   remainder 0 means EVEN
+print(11 % 2)     # → 1   remainder 1 means ODD
+print(17 % 5)     # → 2   plain remainder
+print(14 % 12)    # → 2   cycling — 14:00 is 2 o'clock
+```
+
+### `**` Exponentiation
+
+Raises to a power.
+
+```python
+print(2 ** 5)     # → 32    = 2 × 2 × 2 × 2 × 2
+```
+
+The powers of 2 are worth knowing — they turn up constantly in computing:
+
+| Expression | Result | Expression | Result |
+|---|---|---|---|
+| `2 ** 1` | `2` | `2 ** 6` | `64` |
+| `2 ** 2` | `4` | `2 ** 8` | `256` |
+| `2 ** 3` | `8` | `2 ** 10` | `1024` |
+| `2 ** 4` | `16` | `3 ** 3` | `27` |
+| `2 ** 5` | `32` | `10 ** 3` | `1000` |
+
+---
+
+## Operator Precedence
+
+Python follows **PEMDAS**, same as maths:
+
+| Order | Operator | Notes |
+|---|---|---|
+| 1 | `()` Parentheses | evaluated first |
+| 2 | `**` Exponentiation | **right to left** |
+| 3 | `*` `/` `//` `%` | left to right |
+| 4 | `+` `-` | left to right |
+
+### Worked examples
+
+**`2 + 3 * 4`**
+
+```text
+Step 1: multiply    3 * 4 = 12
+Step 2: add         2 + 12 = 14
+```
+
+```python
+print(2 + 3 * 4)      # → 14
+```
+
+**`(2 + 3) * 4`** — parentheses change everything
+
+```text
+Step 1: parentheses  2 + 3 = 5
+Step 2: multiply     5 * 4 = 20
+```
+
+```python
+print((2 + 3) * 4)    # → 20
+```
+
+**`10 + 2 * 3 - 4`**
+
+```text
+Step 1: multiply     2 * 3 = 6
+Step 2: add          10 + 6 = 16
+Step 3: subtract     16 - 4 = 12
+```
+
+```python
+print(10 + 2 * 3 - 4)   # → 12
+```
+
+**`2 ** 3 + 4 * 5 - 2`**
+
+```text
+Step 1: exponent     2 ** 3 = 8
+Step 2: multiply     4 * 5 = 20
+Step 3: add          8 + 20 = 28
+Step 4: subtract     28 - 2 = 26
+```
+
+```python
+print(2 ** 3 + 4 * 5 - 2)   # → 26
+```
+
+:::danger `**` groups right to left
+
+Unlike every other arithmetic operator:
+
+```python
+print(2 ** 3 ** 2)      # → 512   because 3 ** 2 = 9, then 2 ** 9
+print((2 ** 3) ** 2)    # → 64    if you wanted left to right
+```
+
+This is the one exception worth memorising.
+
+:::
+
+---
+
+## Storing Results in Variables
+
+```python
+sum_result  = 15 + 25     # → 40
+div_result  = 30 / 5      # → 6.0
+mult_result = 10 * 6      # → 60
+mod_result  = 25 % 4      # → 1
+exp_result  = 2 ** 5      # → 32
+```
+
+The expression is evaluated **once**, at assignment time. The variable then holds the
+*result*, not the expression.
+
+---
+
+## Complex Expressions
+
+```python
+a, b, c = 10, 20, 5
+print((a + b) * c)        # → 150     (10 + 20) * 5 = 30 * 5
+```
+
+```python
+x, y = 15, 3
+print(x ** 2 + y ** 2)    # → 234     225 + 9
+```
+
+```python
+radius = 5
+area = 3.14159 * radius ** 2
+print(f"{area:.2f}")      # → 78.54
+```
+
+Note the precedence in that last one: `radius ** 2` happens **before** the multiplication,
+so no parentheses are needed.
+
+---
+
+## Type Conversion in Expressions
+
+**Mixing `int` and `float` gives a `float`:**
+
+```python
+print(10 + 5.5)          # → 15.5
+print(type(10 + 5.5))    # → <class 'float'>
+```
+
+**Division always gives a `float`:**
+
+```python
+print(10 / 2)            # → 5.0
+print(type(10 / 2))      # → <class 'float'>
+```
+
+**Floor division of two ints gives an `int`:**
+
+```python
+print(10 // 2)           # → 5
+print(type(10 // 2))     # → <class 'int'>
+```
+
+| Expression | Result | Type |
+|---|---|---|
+| `10 + 5` | `15` | `int` |
+| `10 + 5.5` | `15.5` | `float` |
+| `10 / 2` | `5.0` | `float` |
+| `10 // 2` | `5` | `int` |
+| `10.0 // 3` | `3.0` | `float` — still a float! |
+
+---
+
+## Five ways to structure the same answer
+
+The maths is fixed; how you *shape* the code is a separate choice. Same five expressions,
+five structures.
+
+<Tabs groupId="expression-shape">
+
+<TabItem value="direct" label="1 · Direct print" default>
+
+Simplest. Compute inside the f-string, print immediately, store nothing.
+
+```python
+print(f"15 + 25 = {15 + 25}")
+print(f"30 / 5 = {30 / 5}")
+print(f"10 * 6 = {10 * 6}")
+print(f"25 % 4 = {25 % 4}")
+print(f"2 ** 5 = {2 ** 5}")
+```
+
+```text title="Output"
+15 + 25 = 40
+30 / 5 = 6.0
+10 * 6 = 60
+25 % 4 = 1
+2 ** 5 = 32
+```
+
+**Trade-off:** shortest to write, but the results are thrown away — you can't reuse them,
+and the expression is duplicated between the label and the calculation.
+
+</TabItem>
+
+<TabItem value="variables" label="2 · Variables">
+
+```python
+addition       = 15 + 25
+division       = 30 / 5
+multiplication = 10 * 6
+modulo         = 25 % 4
+exponentiation = 2 ** 5
+
+print(f"Addition (15 + 25) = {addition}")
+print(f"Division (30 / 5) = {division}")
+print(f"Multiplication (10 * 6) = {multiplication}")
+print(f"Modulo (25 % 4) = {modulo}")
+print(f"Exponentiation (2 ** 5) = {exponentiation}")
+```
+
+```text title="Output"
+Addition (15 + 25) = 40
+Division (30 / 5) = 6.0
+Multiplication (10 * 6) = 60
+Modulo (25 % 4) = 1
+Exponentiation (2 ** 5) = 32
+```
+
+**Trade-off:** results are reusable and each has a meaningful name. But it's five
+near-identical `print` lines — repetitive if the list grows.
+
+</TabItem>
+
+<TabItem value="dict" label="3 · Dictionary">
+
+Pair each expression *as text* with its computed result.
+
+```python
+expressions = {
+    "15 + 25": 15 + 25,
+    "30 / 5":  30 / 5,
+    "10 * 6":  10 * 6,
+    "25 % 4":  25 % 4,
+    "2 ** 5":  2 ** 5,
+}
+
+for expression, result in expressions.items():
+    print(f"{expression} = {result}")
+```
+
+```text title="Output"
+15 + 25 = 40
+30 / 5 = 6.0
+10 * 6 = 60
+25 % 4 = 1
+2 ** 5 = 32
+```
+
+**Trade-off:** data separated from logic — adding a sixth expression means adding one
+line, not two. You can also look up a single result by name: `expressions["25 % 4"]`.
+
+:::warning
+
+Dictionary **keys must be unique**. If two expressions had the same text, the second would
+silently overwrite the first. The list-of-tuples shape avoids this.
+
+:::
+
+</TabItem>
+
+<TabItem value="tuples" label="4 · List of tuples">
+
+```python
+operations = [
+    ("15 + 25", 15 + 25),
+    ("30 / 5",  30 / 5),
+    ("10 * 6",  10 * 6),
+    ("25 % 4",  25 % 4),
+    ("2 ** 5",  2 ** 5),
+]
+
+for operation, result in operations:
+    print(f"{operation} = {result}")
+```
+
+```text title="Output"
+15 + 25 = 40
+30 / 5 = 6.0
+10 * 6 = 60
+25 % 4 = 1
+2 ** 5 = 32
+```
+
+**Trade-off:** like the dictionary, but **duplicates are allowed** and order is
+guaranteed. This is the most common shape in real code, and it extends naturally to three
+or more columns — which is exactly what the summary tables in these notes use.
+
+</TabItem>
+
+<TabItem value="submission" label="5 · Submission-ready">
+
+The bare, printable version — banner headings, numbered comments, one result per line.
+
+```python title="expressions.py"
+# Python Program - Expressions
+# Evaluate mathematical operations
+
+print("=" * 50)
+print("MATHEMATICAL EXPRESSIONS")
+print("=" * 50)
+
+# 1. Addition
+result1 = 15 + 25
+print(f"15 + 25 = {result1}")
+
+# 2. Division
+result2 = 30 / 5
+print(f"30 / 5 = {result2}")
+
+# 3. Multiplication
+result3 = 10 * 6
+print(f"10 * 6 = {result3}")
+
+# 4. Modulo (Remainder)
+result4 = 25 % 4
+print(f"25 % 4 = {result4}")
+
+# 5. Exponentiation (Power)
+result5 = 2 ** 5
+print(f"2 ** 5 = {result5}")
+
+print("=" * 50)
+```
+
+```text title="Output"
+==================================================
+MATHEMATICAL EXPRESSIONS
+==================================================
+15 + 25 = 40
+30 / 5 = 6.0
+10 * 6 = 60
+25 % 4 = 1
+2 ** 5 = 32
+==================================================
+```
+
+**Trade-off:** verbose and repetitive, but explicit and easy to mark. Fine for a lab
+submission, not what you'd write in production.
+
+</TabItem>
+
+</Tabs>
+
+### Which shape should you use?
+
+| Shape | Best when | Avoid when |
+|---|---|---|
+| 1 — Direct | one-off throwaway output | you need the results later |
+| 2 — Variables | each result has a distinct meaning and gets reused | you have many similar items |
+| 3 — Dictionary | you need lookup by name | labels might repeat |
+| 4 — List of tuples | **general default** — ordered, duplicates fine, extends to more columns | you need name-based lookup |
+| 5 — Submission | teaching, documenting, marking | production code — too verbose |
+
+**Rule of thumb:** reach for **shape 4**. It's the one that scales.
+
+---
+
+## Real-World Uses
+
+### Geometry — area of a rectangle
+
+```python
+length, width = 12, 8
+print(length * width)     # → 96
+```
+
+### Finance — total with discount
+
+```python
+unit_price = 25.50
+quantity = 4
+discount = 0.1                                    # 10%
+total = unit_price * quantity * (1 - discount)
+print(f"{total:.2f}")     # → 91.80
+```
+
+### Statistics — average
+
+```python
+scores = [85, 90, 78, 92, 88]
+average = sum(scores) / len(scores)
+print(f"{average:.2f}")   # → 86.60
+```
+
+The parentheses are **required** when you inline the sum — without them, only the last
+score would be divided:
+
+```python
+score1, score2, score3 = 85, 90, 92
+average = (score1 + score2 + score3) / 3
+print(f"{average:.2f}")   # → 89.00
+```
+
+### Percentage
+
+```python
+correct, total = 30, 40
+print((correct / total) * 100)   # → 75.0
+```
+
+### Time — minutes to hours
+
+This is the classic `//` and `%` pairing:
+
+```python
+total_minutes = 127
+hours = total_minutes // 60      # → 2
+minutes = total_minutes % 60     # → 7
+print(f"{total_minutes} minutes = {hours} hour(s) and {minutes} minute(s)")
+# → 127 minutes = 2 hour(s) and 7 minute(s)
+```
+
+### Even or odd
+
+```python
+num = 25
+if num % 2 == 0:
+    print(f"{num} is EVEN")
+else:
+    print(f"{num} is ODD")
+# → 25 is ODD
+```
+
+### Compound interest
+
+```python
+principal, rate, years = 1000, 5, 2
+amount = principal * (1 + rate / 100) ** years
+print(f"{amount:.2f}")          # → 1102.50
+```
+
+Precedence at work: `rate / 100` → `1 + 0.05` → `1.05 ** 2` → multiplied by `1000`.
+
+### Physics — velocity
+
+```python
+distance, time = 100, 5
+print(distance / time)    # → 20.0 m/s
+```
+
+---
+
+## Common Mistakes
+
+| # | Mistake | Wrong | Right |
+|---|---|---|---|
+| 1 | Ignoring precedence | `2 + 3 * 4` is not `20` | it's `14` — `3*4` first |
+| 2 | Mixing `/` and `//` | `10 / 3` → `3.333...` | `10 // 3` → `3` |
+| 3 | Misreading `%` | `25 % 4` is not `0.25` | it's `1` — a *remainder*, not a percentage |
+| 4 | Assuming `//` gives an int | `10.0 // 3` → `3.0`, still a float | `int(10.0 // 3)` → `3` |
+| 5 | Forgetting parentheses | `a + b * c` multiplies first | `(a + b) * c` to add first |
+| 6 | Assuming `**` is left-assoc | `2 ** 3 ** 2` is not `64` | it's `512` — right to left |
+
+Verified proof:
+
+```python
+print(2 + 3 * 4)        # → 14
+print((2 + 3) * 4)      # → 20      different results!
+print(10 / 3)           # → 3.3333333333333335
+print(10 // 3)          # → 3
+print(25 % 4)           # → 1
+print(10.0 // 3)        # → 3.0
+print(2 ** 3 ** 2)      # → 512
+```
+
+---
+
+## Summary
+
+| # | Expression | Operation | Result | Type |
+|---|---|---|---|---|
+| 1 | `15 + 25` | Addition | `40` | `int` |
+| 2 | `30 / 5` | Division | `6.0` | `float` |
+| 3 | `10 * 6` | Multiplication | `60` | `int` |
+| 4 | `25 % 4` | Modulo | `1` | `int` |
+| 5 | `2 ** 5` | Exponentiation | `32` | `int` |
+
+**Key takeaways**
+
+- `/` always produces a `float`; `//` keeps ints as ints
+- `%` gives a remainder — nothing to do with percentages
+- `**` associates **right to left**; everything else goes left to right
+- Parentheses are free — use them whenever precedence isn't obvious
+- `//` and `%` together split a quantity into units and leftovers
+- Wrap sums in parentheses before dividing: `(a + b + c) / 3`
+
+**See also:** [Values and Types](./01-values-and-types.md) for why `/` returns a float ·
+[F-Strings](./05-f-strings.md) for the formatting used throughout
+
+---
+
+## Run It Yourself
+
+```python title="expressions.py"
+operations = [
+    ("15 + 25", "Addition",         15 + 25),
+    ("30 / 5",  "Division",         30 / 5),
+    ("10 * 6",  "Multiplication",   10 * 6),
+    ("25 % 4",  "Modulo/Remainder", 25 % 4),
+    ("2 ** 5",  "Exponentiation",   2 ** 5),
+]
+
+print(f"{'Expression':<12} {'Operation':<18} {'Result':<8} Type")
+print("-" * 48)
+for expr, op, result in operations:
+    print(f"{expr:<12} {op:<18} {result:<8} {type(result).__name__}")
+```
+
+```text title="Output"
+Expression   Operation          Result   Type
+------------------------------------------------
+15 + 25      Addition           40       int
+30 / 5       Division           6.0      float
+10 * 6       Multiplication     60       int
+25 % 4       Modulo/Remainder   1        int
+2 ** 5       Exponentiation     32       int
+```
+
+---
+
+## Practice Questions
+
+*From the Unit 1 question bank. Tags and marks are explained on the
+[Python index](../index.md#practice-questions).*
+
+### Unit 1 § B — Expressions & Operators
+
+**B1. [PROG]** Write a program that evaluates and displays each of these: `15 + 25`, `30 / 5`,
+`10 * 6`, `25 % 4`, `2 ** 5`. Label each result. `[5]`
+
+**B2. [OUT]** Work out the precedence by hand. `[2]`
+
+```python
+print(2 + 3 * 4 ** 2 - 6 / 3)
+```
+
+**B3. [OUT]** The two negative cases are the interesting ones. `[5]`
+
+```python
+print(10 / 3)
+print(10 // 3)
+print(-10 // 3)
+print(10 % 3)
+print(-10 % 3)
+```
+
+**B4. [OUT]** Is `**` left- or right-associative? `[2]`
+
+```python
+print(2 ** 3 ** 2)
+print((2 ** 3) ** 2)
+```
+
+**B5. [OUT]** `[3]`
+
+```python
+print(True + True + False)
+print(True * 10)
+print(int(True), int(False))
+```
+
+**B6. [OUT]** `[4]`
+
+```python
+print("5" + "5")
+print(5 + 5)
+print("5" * 3)
+print(5 * 3)
+```
+
+**B7. [OUT]** Name the error and explain why it happens. `[2]`
+
+```python
+print("5" + 5)
+```
+
+**B8. [OUT]** `[4]`
+
+```python
+print(5 > 3 and 2 > 4)
+print(5 > 3 or 2 > 4)
+print(not (5 > 3))
+print(5 > 3 and 2 > 4 or not False)
+```
+
+**B9. [OUT]** Trace the augmented assignments. `[4]`
+
+```python
+x = 10
+x += 5
+print(x)
+x -= 3
+print(x)
+x *= 2
+print(x)
+x //= 7
+print(x)
+x **= 2
+print(x)
+```
+
+**B10. [THEORY]** What is the difference between `=`, `==`, and `is`? Give a one-line code
+example of each. `[3]`
+
+### Viva
+
+1. What is the difference between `/` and `//`?
+2. Why does `print(type(7/2))` show `float` even though the numbers are integers?
