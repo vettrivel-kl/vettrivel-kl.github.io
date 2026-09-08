@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-Machine-Learning/CT-Exam/module-2/overview" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">Module 2 Overview | Vettrivel&#x27;s Notes</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://vettrivel-kl.github.io/img/vettri/vettri-384x384.png"><meta data-rh="true" name="twitter:image" content="https://vettrivel-kl.github.io/img/vettri/vettri-384x384.png"><meta data-rh="true" property="og:url" content="https://vettrivel-kl.github.io/docs/Machine-Learning/CT-Exam/module-2/overview"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="Module 2 Overview | Vettrivel&#x27;s Notes"><meta data-rh="true" name="description" content="Quick navigation hub for Classification &amp; Evaluation topics covering CV, Logistic Regression, Classification Metrics, Model Comparison, and Decision Boundaries"><meta data-rh="true" property="og:description" content="Quick navigation hub for Classification &amp; Evaluation topics covering CV, Logistic Regression, Classification Metrics, Model Comparison, and Decision Boundaries"><link data-rh="true" rel="icon" href="/img/vettri/favicon.ico"><link data-rh="true" rel="canonical" href="https://vettrivel-kl.github.io/docs/Machine-Learning/CT-Exam/module-2/overview"><link data-rh="true" rel="alternate" href="https://vettrivel-kl.github.io/docs/Machine-Learning/CT-Exam/module-2/overview" hreflang="en"><link data-rh="true" rel="alternate" href="https://vettrivel-kl.github.io/docs/Machine-Learning/CT-Exam/module-2/overview" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"CT Exam Prep","item":"https://vettrivel-kl.github.io/docs/category/ct-exam-prep"},{"@type":"ListItem","position":2,"name":"Module 2: Classification & Evaluation","item":"https://vettrivel-kl.github.io/docs/category/module-2-classification--evaluation"},{"@type":"ListItem","position":3,"name":"Module 2 Overview","item":"https://vettrivel-kl.github.io/docs/Machine-Learning/CT-Exam/module-2/overview"}]}</script><link rel="alternate" type="application/rss+xml" href="/blog/rss.xml" title="Vettrivel&#39;s Notes RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/blog/atom.xml" title="Vettrivel&#39;s Notes Atom Feed"><link rel="stylesheet" href="/assets/css/styles.d2a4c3af.css">
+<script src="/assets/js/runtime~main.799855c0.js" defer="defer"></script>
+<script src="/assets/js/main.07a0e24a.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/img/vettri/vettri-384x384.png"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/"><div class="navbar__logo"><img src="/img/vettri/vettri-384x384.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/img/vettri/vettri-384x384.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Vettrivel&#x27;s Notes</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/docs/Python">Notes </a><a class="navbar__item navbar__link" href="/blog">Blog</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" href="/docs/Python"><span title="Python" class="categoryLinkLabel_W154">Python</span></a><button aria-label="Expand sidebar category &#x27;Python&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" href="/docs/category/data-science"><span title="Data Science" class="categoryLinkLabel_W154">Data Science</span></a><button aria-label="Expand sidebar category &#x27;Data Science&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret menu__link--active" role="button" aria-expanded="true" href="/docs/category/ct-exam-prep"><span title="Machine-Learning" class="categoryLinkLabel_W154">Machine-Learning</span></a></div><ul class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex="0" href="/docs/category/ct-exam-prep"><span title="CT Exam Prep" class="categoryLinkLabel_W154">CT Exam Prep</span></a><button aria-label="Collapse sidebar category &#x27;CT Exam Prep&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-3 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Machine-Learning/CT-Exam/overview"><span title="CT Exam Overview" class="linkLabel_WmDU">CT Exam Overview</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/module-1-foundations"><span title="Module 1: Foundations" class="categoryLinkLabel_W154">Module 1: Foundations</span></a><button aria-label="Expand sidebar category &#x27;Module 1: Foundations&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex="0" href="/docs/category/module-2-classification--evaluation"><span title="Module 2: Classification &amp; Evaluation" class="categoryLinkLabel_W154">Module 2: Classification &amp; Evaluation</span></a><button aria-label="Collapse sidebar category &#x27;Module 2: Classification &amp; Evaluation&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/docs/Machine-Learning/CT-Exam/module-2/overview"><span title="Module 2 Overview" class="linkLabel_WmDU">Module 2 Overview</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Machine-Learning/CT-Exam/module-2/cross-validation"><span title="Cross-Validation" class="linkLabel_WmDU">Cross-Validation</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Machine-Learning/CT-Exam/module-2/logistic-regression"><span title="Logistic Regression" class="linkLabel_WmDU">Logistic Regression</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Machine-Learning/CT-Exam/module-2/classification-advanced"><span title="Classification Advanced - Metrics &amp; ROC Curves" class="linkLabel_WmDU">Classification Advanced - Metrics &amp; ROC Curves</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Machine-Learning/CT-Exam/module-2/model-comparison"><span title="Model Comparison &amp; Selection" class="linkLabel_WmDU">Model Comparison &amp; Selection</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Machine-Learning/CT-Exam/module-2/decision-boundaries"><span title="Decision Boundaries" class="linkLabel_WmDU">Decision Boundaries</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/practice-problems"><span title="Practice Problems" class="categoryLinkLabel_W154">Practice Problems</span></a><button aria-label="Expand sidebar category &#x27;Practice Problems&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/python-implementation-guide"><span title="Python Implementation Guide" class="categoryLinkLabel_W154">Python Implementation Guide</span></a><button aria-label="Expand sidebar category &#x27;Python Implementation Guide&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/common-mistakes-reference"><span title="Common Mistakes Reference" class="categoryLinkLabel_W154">Common Mistakes Reference</span></a><button aria-label="Expand sidebar category &#x27;Common Mistakes Reference&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li></ul></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><span class="breadcrumbs__link">Machine-Learning</span></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/docs/category/ct-exam-prep"><span>CT Exam Prep</span></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/docs/category/module-2-classification--evaluation"><span>Module 2: Classification &amp; Evaluation</span></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">Module 2 Overview</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>Module 2: Classification &amp; Evaluation</h1></header>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="quick-navigation">Quick Navigation<a href="#quick-navigation" class="hash-link" aria-label="Direct link to Quick Navigation" title="Direct link to Quick Navigation" translate="no">​</a></h2>
+<p><strong>Module 2 covers the complete classification pipeline: how to evaluate models reliably, implement logistic regression, interpret predictions, and select the best algorithm.</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Topic</th><th>Page</th><th>Key Concepts</th><th>Est. Study Time</th></tr></thead><tbody><tr><td><strong><a class="" href="/docs/Machine-Learning/CT-Exam/module-2/cross-validation">Cross-Validation</a></strong></td><td>1️⃣</td><td>K-Fold, LOOCV, Stratified CV, Hyperparameter selection</td><td>45 min</td></tr><tr><td><strong><a class="" href="/docs/Machine-Learning/CT-Exam/module-2/logistic-regression">Logistic Regression</a></strong></td><td>2️⃣</td><td>Sigmoid, Binary classification, Multi-class (OvR/OvO/Softmax), Coefficient interpretation</td><td>60 min</td></tr><tr><td><strong><a class="" href="/docs/Machine-Learning/CT-Exam/module-2/classification-advanced">Classification Advanced</a></strong></td><td>3️⃣</td><td>ROC curves, AUC, Precision-Recall, Decision thresholds, Multi-class metrics</td><td>60 min</td></tr><tr><td><strong><a class="" href="/docs/Machine-Learning/CT-Exam/module-2/model-comparison">Model Comparison</a></strong></td><td>4️⃣</td><td>Algorithm selection framework, Bias-variance across models, Cost-benefit analysis</td><td>60 min</td></tr><tr><td><strong><a class="" href="/docs/Machine-Learning/CT-Exam/module-2/decision-boundaries">Decision Boundaries</a></strong></td><td>5️⃣</td><td>2D boundary visualization, Overfitting vs underfitting, Model interpretability</td><td>45 min</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="learning-objectives">Learning Objectives<a href="#learning-objectives" class="hash-link" aria-label="Direct link to Learning Objectives" title="Direct link to Learning Objectives" translate="no">​</a></h2>
+<p>By the end of Module 2, you should understand:</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-evaluation--validation">✅ Evaluation &amp; Validation<a href="#-evaluation--validation" class="hash-link" aria-label="Direct link to ✅ Evaluation &amp; Validation" title="Direct link to ✅ Evaluation &amp; Validation" translate="no">​</a></h3>
+<ul>
+<li class="">Why single train/test splits are unreliable</li>
+<li class="">How K-fold CV provides stable error estimates</li>
+<li class="">When to use LOOCV, stratified CV, or time-series CV</li>
+<li class="">Hyperparameter selection using cross-validation</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-logistic-regression">✅ Logistic Regression<a href="#-logistic-regression" class="hash-link" aria-label="Direct link to ✅ Logistic Regression" title="Direct link to ✅ Logistic Regression" translate="no">​</a></h3>
+<ul>
+<li class="">How logistic regression differs from linear regression</li>
+<li class="">The sigmoid function and its properties</li>
+<li class="">Binary classification and multi-class approaches</li>
+<li class="">Coefficient interpretation and odds/log-odds</li>
+<li class="">When logistic regression is the right choice</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-classification-metrics">✅ Classification Metrics<a href="#-classification-metrics" class="hash-link" aria-label="Direct link to ✅ Classification Metrics" title="Direct link to ✅ Classification Metrics" translate="no">​</a></h3>
+<ul>
+<li class="">Confusion matrix and its components</li>
+<li class="">Precision, Recall, F1, Accuracy trade-offs</li>
+<li class="">ROC curves and AUC calculation</li>
+<li class="">Precision-Recall curves</li>
+<li class="">When each metric matters (medical vs banking vs recommenders)</li>
+<li class="">Decision threshold tuning with cost analysis</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-model-comparison">✅ Model Comparison<a href="#-model-comparison" class="hash-link" aria-label="Direct link to ✅ Model Comparison" title="Direct link to ✅ Model Comparison" translate="no">​</a></h3>
+<ul>
+<li class="">Decision framework for algorithm selection</li>
+<li class="">Bias-variance characteristics across algorithms</li>
+<li class="">Performance vs interpretability tradeoff</li>
+<li class="">Data size impact on model choice</li>
+<li class="">Real-world constraints (speed, cost, explainability)</li>
+<li class="">Cost-benefit analysis for production models</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-decision-boundaries">✅ Decision Boundaries<a href="#-decision-boundaries" class="hash-link" aria-label="Direct link to ✅ Decision Boundaries" title="Direct link to ✅ Decision Boundaries" translate="no">​</a></h3>
+<ul>
+<li class="">How classification models create decision boundaries</li>
+<li class="">Boundary shape for different algorithms</li>
+<li class="">Overfitting through boundary perspective</li>
+<li class="">Underfitting through boundary perspective</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="study-roadmap">Study Roadmap<a href="#study-roadmap" class="hash-link" aria-label="Direct link to Study Roadmap" title="Direct link to Study Roadmap" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-for-quick-review-30-minutes">🎯 For Quick Review (30 minutes)<a href="#-for-quick-review-30-minutes" class="hash-link" aria-label="Direct link to 🎯 For Quick Review (30 minutes)" title="Direct link to 🎯 For Quick Review (30 minutes)" translate="no">​</a></h3>
+<ol>
+<li class="">Read this overview</li>
+<li class="">Skim the key takeaways section of each page</li>
+<li class="">Review exam question titles (not full solutions)</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-for-thorough-preparation-4-5-hours">📚 For Thorough Preparation (4-5 hours)<a href="#-for-thorough-preparation-4-5-hours" class="hash-link" aria-label="Direct link to 📚 For Thorough Preparation (4-5 hours)" title="Direct link to 📚 For Thorough Preparation (4-5 hours)" translate="no">​</a></h3>
+<ol>
+<li class="">
+<p><strong>Cross-Validation (45 min):</strong></p>
+<ul>
+<li class="">Understand why CV is necessary</li>
+<li class="">Work through the house price example</li>
+<li class="">Learn when to use each CV variant</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Logistic Regression (60 min):</strong></p>
+<ul>
+<li class="">Learn sigmoid function and probability interpretation</li>
+<li class="">Work through email spam classification example</li>
+<li class="">Understand multi-class approaches</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Classification Advanced (60 min):</strong></p>
+<ul>
+<li class="">Learn to construct ROC curves from scratch</li>
+<li class="">Understand AUC as probability metric</li>
+<li class="">Practice threshold tuning with costs</li>
+<li class="">Learn multi-class metric averaging</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Model Comparison (60 min):</strong></p>
+<ul>
+<li class="">Study algorithm selection framework</li>
+<li class="">Compare models on different dimensions</li>
+<li class="">Work through churn prediction example</li>
+<li class="">Understand bias-variance for each algorithm</li>
+</ul>
+</li>
+<li class="">
+<p><strong>Decision Boundaries (45 min):</strong></p>
+<ul>
+<li class="">Visualize how different models create boundaries</li>
+<li class="">See how overfitting looks graphically</li>
+<li class="">Understand underfitting from boundary perspective</li>
+</ul>
+</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-for-exam-preparation-6-7-hours">🧪 For Exam Preparation (6-7 hours)<a href="#-for-exam-preparation-6-7-hours" class="hash-link" aria-label="Direct link to 🧪 For Exam Preparation (6-7 hours)" title="Direct link to 🧪 For Exam Preparation (6-7 hours)" translate="no">​</a></h3>
+<ul>
+<li class="">Do all of the above (4-5 hours)</li>
+<li class="">Solve all practice problems (2 hours)</li>
+<li class="">Answer exam questions without solutions (30 min)</li>
+<li class="">Review solutions and identify weak areas (30 min)</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="key-formulas">Key Formulas<a href="#key-formulas" class="hash-link" aria-label="Direct link to Key Formulas" title="Direct link to Key Formulas" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="cross-validation">Cross-Validation<a href="#cross-validation" class="hash-link" aria-label="Direct link to Cross-Validation" title="Direct link to Cross-Validation" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">CV Error = (e₁ + e₂ + ... + eₖ) / k</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">CV Std Dev = √[ Σ(eᵢ - CV Error)² / k ]</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="logistic-regression">Logistic Regression<a href="#logistic-regression" class="hash-link" aria-label="Direct link to Logistic Regression" title="Direct link to Logistic Regression" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Sigmoid: σ(z) = 1 / (1 + e^(-z))</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Probability: P(y=1|x) = σ(b₀ + b₁x₁ + b₂x₂ + ... + bₙxₙ)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Odds: odds = P(y=1) / P(y=0)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Log-odds: ln(odds) = b₀ + b₁x₁ + b₂x₂ + ... + bₙxₙ</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="classification-metrics">Classification Metrics<a href="#classification-metrics" class="hash-link" aria-label="Direct link to Classification Metrics" title="Direct link to Classification Metrics" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Accuracy = (TP + TN) / (TP + TN + FP + FN)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Precision = TP / (TP + FP)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Recall = TP / (TP + FN)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">F1 = 2 × (Precision × Recall) / (Precision + Recall)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">AUC = Area under ROC curve (0 to 1)</span><br></span></code></pre></div></div>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="algorithm-selection">Algorithm Selection<a href="#algorithm-selection" class="hash-link" aria-label="Direct link to Algorithm Selection" title="Direct link to Algorithm Selection" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Trade-off: Performance ↔ Interpretability</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Complexity: Low ← Logistic, Tree → High ← Neural Network</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain" style="display:inline-block"></span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Speed: Slow ← Gradient Boost → Fast ← Logistic</span><br></span></code></pre></div></div>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="exam-question-types">Exam Question Types<a href="#exam-question-types" class="hash-link" aria-label="Direct link to Exam Question Types" title="Direct link to Exam Question Types" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="type-1-concept-understanding">Type 1: Concept Understanding<a href="#type-1-concept-understanding" class="hash-link" aria-label="Direct link to Type 1: Concept Understanding" title="Direct link to Type 1: Concept Understanding" translate="no">​</a></h3>
+<p>&quot;Why use K-fold CV instead of single train/test split?&quot;<br>
+&quot;What does high standard deviation in CV results indicate?&quot;</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="type-2-calculation">Type 2: Calculation<a href="#type-2-calculation" class="hash-link" aria-label="Direct link to Type 2: Calculation" title="Direct link to Type 2: Calculation" translate="no">​</a></h3>
+<p>&quot;Calculate CV error and std dev from fold results.&quot;<br>
+&quot;Calculate precision, recall, F1 from confusion matrix.&quot;<br>
+&quot;Calculate AUC from threshold probabilities.&quot;</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="type-3-interpretation">Type 3: Interpretation<a href="#type-3-interpretation" class="hash-link" aria-label="Direct link to Type 3: Interpretation" title="Direct link to Type 3: Interpretation" translate="no">​</a></h3>
+<p>&quot;Model A has low training error but high CV error. Diagnose the issue.&quot;<br>
+&quot;Compare two models using CV results. Which generalizes better?&quot;</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="type-4-application">Type 4: Application<a href="#type-4-application" class="hash-link" aria-label="Direct link to Type 4: Application" title="Direct link to Type 4: Application" translate="no">​</a></h3>
+<p>&quot;Choose the best algorithm for a given problem. Justify.&quot;<br>
+&quot;Given a cost matrix, find the optimal decision threshold.&quot;<br>
+&quot;Explain why a model has this decision boundary shape.&quot;</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="type-5-end-to-end-analysis">Type 5: End-to-End Analysis<a href="#type-5-end-to-end-analysis" class="hash-link" aria-label="Direct link to Type 5: End-to-End Analysis" title="Direct link to Type 5: End-to-End Analysis" translate="no">​</a></h3>
+<p>&quot;Given data and problem constraints, propose a complete classification solution.&quot;<br>
+&quot;Compare multiple models on multiple metrics and recommend for production.&quot;</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="common-mistakes-to-avoid">Common Mistakes to Avoid<a href="#common-mistakes-to-avoid" class="hash-link" aria-label="Direct link to Common Mistakes to Avoid" title="Direct link to Common Mistakes to Avoid" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-evaluation-mistakes">❌ Evaluation Mistakes<a href="#-evaluation-mistakes" class="hash-link" aria-label="Direct link to ❌ Evaluation Mistakes" title="Direct link to ❌ Evaluation Mistakes" translate="no">​</a></h3>
+<ul>
+<li class="">Using single train/test split for model selection</li>
+<li class="">Not reporting CV standard deviation</li>
+<li class="">Ignoring class imbalance in cross-validation</li>
+<li class="">Using test data to tune hyperparameters</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-logistic-regression-mistakes">❌ Logistic Regression Mistakes<a href="#-logistic-regression-mistakes" class="hash-link" aria-label="Direct link to ❌ Logistic Regression Mistakes" title="Direct link to ❌ Logistic Regression Mistakes" translate="no">​</a></h3>
+<ul>
+<li class="">Treating logistic regression output as continuous instead of probability</li>
+<li class="">Misinterpreting coefficients (e.g., b₁ = 0.5 means +0.5 change in probability, which is WRONG)</li>
+<li class="">Confusing binary classification with multi-class extension</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-classification-metric-mistakes">❌ Classification Metric Mistakes<a href="#-classification-metric-mistakes" class="hash-link" aria-label="Direct link to ❌ Classification Metric Mistakes" title="Direct link to ❌ Classification Metric Mistakes" translate="no">​</a></h3>
+<ul>
+<li class="">Optimizing only for accuracy in imbalanced problems</li>
+<li class="">Using the same threshold for all problems</li>
+<li class="">Not considering business costs when choosing threshold</li>
+<li class="">Averaging metrics incorrectly (macro vs micro vs weighted)</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-model-selection-mistakes">❌ Model Selection Mistakes<a href="#-model-selection-mistakes" class="hash-link" aria-label="Direct link to ❌ Model Selection Mistakes" title="Direct link to ❌ Model Selection Mistakes" translate="no">​</a></h3>
+<ul>
+<li class="">Choosing highest accuracy without considering complexity</li>
+<li class="">Ignoring training time or interpretability requirements</li>
+<li class="">Not stratifying folds for imbalanced classification</li>
+<li class="">Assuming more complex models are always better</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="tips-for-success">Tips for Success<a href="#tips-for-success" class="hash-link" aria-label="Direct link to Tips for Success" title="Direct link to Tips for Success" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-study-tips">📌 Study Tips<a href="#-study-tips" class="hash-link" aria-label="Direct link to 📌 Study Tips" title="Direct link to 📌 Study Tips" translate="no">​</a></h3>
+<ol>
+<li class=""><strong>Work through examples:</strong> Don&#x27;t just read—calculate by hand</li>
+<li class=""><strong>Use visualizations:</strong> Draw confusion matrices, ROC curves, boundaries</li>
+<li class=""><strong>Connect concepts:</strong> Understand how CV → Logistic → Metrics → Comparison → Boundaries form a pipeline</li>
+<li class=""><strong>Solve practice problems:</strong> Do both guided examples and independent problems</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-exam-tips">💡 Exam Tips<a href="#-exam-tips" class="hash-link" aria-label="Direct link to 💡 Exam Tips" title="Direct link to 💡 Exam Tips" translate="no">​</a></h3>
+<ol>
+<li class=""><strong>Show all steps:</strong> Partial credit for method even if answer is slightly off</li>
+<li class=""><strong>Define terms:</strong> When asked to interpret, define what metrics mean</li>
+<li class=""><strong>Use tables:</strong> For comparisons (algorithms, models, metrics), use tables for clarity</li>
+<li class=""><strong>Justify choices:</strong> When recommending an algorithm, explain the tradeoff</li>
+<li class=""><strong>Check reasonableness:</strong> If a probability is &gt; 1 or &lt; 0, you made an error</li>
+</ol>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-time-management">⚡ Time Management<a href="#-time-management" class="hash-link" aria-label="Direct link to ⚡ Time Management" title="Direct link to ⚡ Time Management" translate="no">​</a></h3>
+<ul>
+<li class=""><strong>Calculator tip:</strong> Know how to compute log, sqrt, division by hand</li>
+<li class=""><strong>Rough calculations:</strong> OK to round for intermediate steps (e.g., 0.9842 ≈ 0.98)</li>
+<li class=""><strong>Standard formulas:</strong> Memorize CV, Logistic sigmoid, Precision/Recall/F1</li>
+<li class=""><strong>Boundary shapes:</strong> Memorize 2-3 example boundary shapes (linear, nonlinear, overfitted)</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="connection-to-module-1">Connection to Module 1<a href="#connection-to-module-1" class="hash-link" aria-label="Direct link to Connection to Module 1" title="Direct link to Connection to Module 1" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="module-1-regression-foundations">Module 1 (Regression Foundations)<a href="#module-1-regression-foundations" class="hash-link" aria-label="Direct link to Module 1 (Regression Foundations)" title="Direct link to Module 1 (Regression Foundations)" translate="no">​</a></h3>
+<ul>
+<li class="">Bias-variance tradeoff: Now apply to classification algorithms</li>
+<li class="">Feature scaling: Important for logistic regression</li>
+<li class="">Cross-validation: Introduced there, applied heavily in Module 2</li>
+<li class="">Model evaluation: Extended from regression error metrics to classification metrics</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="progression">Progression<a href="#progression" class="hash-link" aria-label="Direct link to Progression" title="Direct link to Progression" translate="no">​</a></h3>
+<div class="language-text codeBlockContainer_Ckt0 theme-code-block" style="--prism-color:#393A34;--prism-background-color:#f6f8fa"><div class="codeBlockContent_QJqH"><pre tabindex="0" class="prism-code language-text codeBlock_bY9V thin-scrollbar" style="color:#393A34;background-color:#f6f8fa"><code class="codeBlockLines_e6Vv"><span class="token-line" style="color:#393A34"><span class="token plain">Module 1: Simple → Multiple Regression</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">         ↓ (Understand: features, training, evaluation)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">         </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">Module 2: Logistic Regression (Extend to classification)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">         ↓ (Add: probability, multiple classes)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">         </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">         Evaluate Classification (Metrics beyond accuracy)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">         ↓ (Add: precision, recall, ROC, cost)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">         </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">         Select Best Model (For classification problems)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">         ↓ (Apply: all concepts + constraints)</span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">         </span><br></span><span class="token-line" style="color:#393A34"><span class="token plain">         Visualize Decisions (Understand what model learned)</span><br></span></code></pre></div></div>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="next-steps-after-module-2">Next Steps After Module 2<a href="#next-steps-after-module-2" class="hash-link" aria-label="Direct link to Next Steps After Module 2" title="Direct link to Next Steps After Module 2" translate="no">​</a></h2>
+<p>With Module 2 mastered, you&#x27;re ready for:</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-advanced-topics-not-in-ct">🚀 Advanced Topics (Not in CT)<a href="#-advanced-topics-not-in-ct" class="hash-link" aria-label="Direct link to 🚀 Advanced Topics (Not in CT)" title="Direct link to 🚀 Advanced Topics (Not in CT)" translate="no">​</a></h3>
+<ul>
+<li class="">Tree-based models (Decision Trees, Random Forests, Gradient Boosting)</li>
+<li class="">Unsupervised learning (Clustering, PCA, Dimensionality reduction)</li>
+<li class="">Neural networks and deep learning</li>
+<li class="">Model interpretability and explainability (SHAP, LIME)</li>
+</ul>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-real-world-application">📊 Real-World Application<a href="#-real-world-application" class="hash-link" aria-label="Direct link to 📊 Real-World Application" title="Direct link to 📊 Real-World Application" translate="no">​</a></h3>
+<ul>
+<li class="">Build end-to-end classification pipelines</li>
+<li class="">Handle imbalanced data with proper techniques</li>
+<li class="">Deploy models with production safeguards</li>
+<li class="">Monitor model performance over time</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="quick-reference">Quick Reference<a href="#quick-reference" class="hash-link" aria-label="Direct link to Quick Reference" title="Direct link to Quick Reference" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="when-to-use-each-algorithm">When to Use Each Algorithm<a href="#when-to-use-each-algorithm" class="hash-link" aria-label="Direct link to When to Use Each Algorithm" title="Direct link to When to Use Each Algorithm" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Problem</th><th>Algorithm</th><th>Why</th></tr></thead><tbody><tr><td>Linearly separable</td><td>Logistic Regression</td><td>Fast, interpretable</td></tr><tr><td>Many features</td><td>Ridge/Lasso Logistic</td><td>Regularization prevents overfitting</td></tr><tr><td>Non-linear boundary</td><td>Decision Tree</td><td>Captures interactions</td></tr><tr><td>Complex patterns</td><td>Random Forest</td><td>Ensemble reduces overfitting</td></tr><tr><td>Real-time predictions</td><td>Logistic / KNN</td><td>Fast inference</td></tr><tr><td>Explainability critical</td><td>Logistic / Tree</td><td>Easy to interpret coefficients</td></tr><tr><td>Big data (1M+ samples)</td><td>Logistic / SGD</td><td>Scales well</td></tr><tr><td>Small data (&lt; 100)</td><td>Logistic / SVM</td><td>Low complexity, generalizes</td></tr></tbody></table>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="when-each-metric-matters">When Each Metric Matters<a href="#when-each-metric-matters" class="hash-link" aria-label="Direct link to When Each Metric Matters" title="Direct link to When Each Metric Matters" translate="no">​</a></h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Metric</th><th>Best For</th><th>Example</th></tr></thead><tbody><tr><td><strong>Accuracy</strong></td><td>Balanced data</td><td>General classification</td></tr><tr><td><strong>Precision</strong></td><td>False positives costly</td><td>Spam filtering, legal</td></tr><tr><td><strong>Recall</strong></td><td>False negatives costly</td><td>Medical diagnosis, security</td></tr><tr><td><strong>F1</strong></td><td>Balance precision &amp; recall</td><td>Product search ranking</td></tr><tr><td><strong>ROC/AUC</strong></td><td>Comparing models</td><td>Model selection</td></tr><tr><td><strong>PR-AUC</strong></td><td>Imbalanced data</td><td>Rare disease detection</td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="resources-in-module-2">Resources in Module 2<a href="#resources-in-module-2" class="hash-link" aria-label="Direct link to Resources in Module 2" title="Direct link to Resources in Module 2" translate="no">​</a></h2>
+<p>Each page includes:</p>
+<ul>
+<li class="">✅ <strong>Conceptual explanation</strong> (why it matters)</li>
+<li class="">✅ <strong>Worked examples</strong> (step-by-step calculation)</li>
+<li class="">✅ <strong>Complete inference</strong> (interpretation of results)</li>
+<li class="">✅ <strong>Exam questions</strong> (5-6 questions with full solutions)</li>
+<li class="">✅ <strong>Practice problems</strong> (2-3 problems to try yourself)</li>
+<li class="">✅ <strong>Key takeaways</strong> (summary for review)</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="how-to-use-this-module">How to Use This Module<a href="#how-to-use-this-module" class="hash-link" aria-label="Direct link to How to Use This Module" title="Direct link to How to Use This Module" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-if-you-have-1-hour">🎯 If You Have 1 Hour<a href="#-if-you-have-1-hour" class="hash-link" aria-label="Direct link to 🎯 If You Have 1 Hour" title="Direct link to 🎯 If You Have 1 Hour" translate="no">​</a></h3>
+<p>→ Read pages 1-2 (Cross-Validation, Logistic Regression)<br>
+→ Look at key takeaways on all pages</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-if-you-have-3-hours">🎯 If You Have 3 Hours<a href="#-if-you-have-3-hours" class="hash-link" aria-label="Direct link to 🎯 If You Have 3 Hours" title="Direct link to 🎯 If You Have 3 Hours" translate="no">​</a></h3>
+<p>→ Read all pages completely<br>
+→ Work through all worked examples<br>
+→ Attempt 1-2 practice problems</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-if-you-have-5-hours">🎯 If You Have 5+ Hours<a href="#-if-you-have-5-hours" class="hash-link" aria-label="Direct link to 🎯 If You Have 5+ Hours" title="Direct link to 🎯 If You Have 5+ Hours" translate="no">​</a></h3>
+<p>→ Complete full study roadmap above<br>
+→ Solve all exam questions (without looking at solutions)<br>
+→ Compare your answers to solutions<br>
+→ Review weak areas</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="-right-before-exam">🎯 Right Before Exam<a href="#-right-before-exam" class="hash-link" aria-label="Direct link to 🎯 Right Before Exam" title="Direct link to 🎯 Right Before Exam" translate="no">​</a></h3>
+<p>→ Review key formulas<br>
+→ Review algorithm selection framework<br>
+→ Review exam question titles (quick memory refresh)</p>
+<hr>
+<p><strong>Ready to dive in? Start with <a class="" href="/docs/Machine-Learning/CT-Exam/module-2/cross-validation">Cross-Validation</a></strong> →</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-tags-row"><div class="col"><b>Tags:</b><ul class="tags_jXut padding--none margin-left--sm"><li class="tag_QGVx"><a rel="tag" class="tag_zVej tagRegular_sFm0" href="/docs/tags/module-overview">module-overview</a></li><li class="tag_QGVx"><a rel="tag" class="tag_zVej tagRegular_sFm0" href="/docs/tags/classification">classification</a></li><li class="tag_QGVx"><a rel="tag" class="tag_zVej tagRegular_sFm0" href="/docs/tags/evaluation">evaluation</a></li></ul></div></div><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/vettrivel-kl/vettrivel-kl.github.io/tree/master/docs/Machine-Learning/CT-Exam/02-module-2/00-overview.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/category/module-2-classification--evaluation"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">Module 2: Classification &amp; Evaluation</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/Machine-Learning/CT-Exam/module-2/cross-validation"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Cross-Validation</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#quick-navigation" class="table-of-contents__link toc-highlight">Quick Navigation</a></li><li><a href="#learning-objectives" class="table-of-contents__link toc-highlight">Learning Objectives</a><ul><li><a href="#-evaluation--validation" class="table-of-contents__link toc-highlight">✅ Evaluation &amp; Validation</a></li><li><a href="#-logistic-regression" class="table-of-contents__link toc-highlight">✅ Logistic Regression</a></li><li><a href="#-classification-metrics" class="table-of-contents__link toc-highlight">✅ Classification Metrics</a></li><li><a href="#-model-comparison" class="table-of-contents__link toc-highlight">✅ Model Comparison</a></li><li><a href="#-decision-boundaries" class="table-of-contents__link toc-highlight">✅ Decision Boundaries</a></li></ul></li><li><a href="#study-roadmap" class="table-of-contents__link toc-highlight">Study Roadmap</a><ul><li><a href="#-for-quick-review-30-minutes" class="table-of-contents__link toc-highlight">🎯 For Quick Review (30 minutes)</a></li><li><a href="#-for-thorough-preparation-4-5-hours" class="table-of-contents__link toc-highlight">📚 For Thorough Preparation (4-5 hours)</a></li><li><a href="#-for-exam-preparation-6-7-hours" class="table-of-contents__link toc-highlight">🧪 For Exam Preparation (6-7 hours)</a></li></ul></li><li><a href="#key-formulas" class="table-of-contents__link toc-highlight">Key Formulas</a><ul><li><a href="#cross-validation" class="table-of-contents__link toc-highlight">Cross-Validation</a></li><li><a href="#logistic-regression" class="table-of-contents__link toc-highlight">Logistic Regression</a></li><li><a href="#classification-metrics" class="table-of-contents__link toc-highlight">Classification Metrics</a></li><li><a href="#algorithm-selection" class="table-of-contents__link toc-highlight">Algorithm Selection</a></li></ul></li><li><a href="#exam-question-types" class="table-of-contents__link toc-highlight">Exam Question Types</a><ul><li><a href="#type-1-concept-understanding" class="table-of-contents__link toc-highlight">Type 1: Concept Understanding</a></li><li><a href="#type-2-calculation" class="table-of-contents__link toc-highlight">Type 2: Calculation</a></li><li><a href="#type-3-interpretation" class="table-of-contents__link toc-highlight">Type 3: Interpretation</a></li><li><a href="#type-4-application" class="table-of-contents__link toc-highlight">Type 4: Application</a></li><li><a href="#type-5-end-to-end-analysis" class="table-of-contents__link toc-highlight">Type 5: End-to-End Analysis</a></li></ul></li><li><a href="#common-mistakes-to-avoid" class="table-of-contents__link toc-highlight">Common Mistakes to Avoid</a><ul><li><a href="#-evaluation-mistakes" class="table-of-contents__link toc-highlight">❌ Evaluation Mistakes</a></li><li><a href="#-logistic-regression-mistakes" class="table-of-contents__link toc-highlight">❌ Logistic Regression Mistakes</a></li><li><a href="#-classification-metric-mistakes" class="table-of-contents__link toc-highlight">❌ Classification Metric Mistakes</a></li><li><a href="#-model-selection-mistakes" class="table-of-contents__link toc-highlight">❌ Model Selection Mistakes</a></li></ul></li><li><a href="#tips-for-success" class="table-of-contents__link toc-highlight">Tips for Success</a><ul><li><a href="#-study-tips" class="table-of-contents__link toc-highlight">📌 Study Tips</a></li><li><a href="#-exam-tips" class="table-of-contents__link toc-highlight">💡 Exam Tips</a></li><li><a href="#-time-management" class="table-of-contents__link toc-highlight">⚡ Time Management</a></li></ul></li><li><a href="#connection-to-module-1" class="table-of-contents__link toc-highlight">Connection to Module 1</a><ul><li><a href="#module-1-regression-foundations" class="table-of-contents__link toc-highlight">Module 1 (Regression Foundations)</a></li><li><a href="#progression" class="table-of-contents__link toc-highlight">Progression</a></li></ul></li><li><a href="#next-steps-after-module-2" class="table-of-contents__link toc-highlight">Next Steps After Module 2</a><ul><li><a href="#-advanced-topics-not-in-ct" class="table-of-contents__link toc-highlight">🚀 Advanced Topics (Not in CT)</a></li><li><a href="#-real-world-application" class="table-of-contents__link toc-highlight">📊 Real-World Application</a></li></ul></li><li><a href="#quick-reference" class="table-of-contents__link toc-highlight">Quick Reference</a><ul><li><a href="#when-to-use-each-algorithm" class="table-of-contents__link toc-highlight">When to Use Each Algorithm</a></li><li><a href="#when-each-metric-matters" class="table-of-contents__link toc-highlight">When Each Metric Matters</a></li></ul></li><li><a href="#resources-in-module-2" class="table-of-contents__link toc-highlight">Resources in Module 2</a></li><li><a href="#how-to-use-this-module" class="table-of-contents__link toc-highlight">How to Use This Module</a><ul><li><a href="#-if-you-have-1-hour" class="table-of-contents__link toc-highlight">🎯 If You Have 1 Hour</a></li><li><a href="#-if-you-have-3-hours" class="table-of-contents__link toc-highlight">🎯 If You Have 3 Hours</a></li><li><a href="#-if-you-have-5-hours" class="table-of-contents__link toc-highlight">🎯 If You Have 5+ Hours</a></li><li><a href="#-right-before-exam" class="table-of-contents__link toc-highlight">🎯 Right Before Exam</a></li></ul></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 vettrivel.com</div></div></div></footer></div>
+</body>
+</html>
