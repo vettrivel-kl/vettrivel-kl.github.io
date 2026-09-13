@@ -832,7 +832,7 @@ d) What do you recommend?
 
 ## Next Topics
 
-→ [Logistic Regression](./02-logistic-regression.md)  
-→ [Classification Advanced](./03-classification-advanced.md)  
-→ [Model Comparison](./04-model-comparison.md)
+→ [Logistic Regression](02-logistic-regression.md)  
+→ [Classification Advanced](03-classification-advanced.md)  
+→ [Model Comparison](04-model-comparison.md)
 

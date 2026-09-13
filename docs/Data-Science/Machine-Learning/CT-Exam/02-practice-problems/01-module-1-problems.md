@@ -7,7 +7,7 @@ tags: [practice-problems, linear-regression, bias-variance, metrics]
 
 # Module 1 Practice Problems
 
-Complete these 30 problems to master regression fundamentals. Solutions available in the [Solutions Guide](./04-solutions-guide.md).
+Complete these 30 problems to master regression fundamentals. Solutions available in the [Solutions Guide](04-solutions-guide.md).
 
 ---
 
@@ -719,9 +719,9 @@ e) What would you recommend doing next?
 
 ✓ If mostly Easy: Move to Medium and review concept pages for weak areas  
 ✓ If mostly Medium: Try Hard problems and reference solutions  
-✓ If all problems complete: Move to [Module 2 Problems](./02-module-2-problems.md)  
+✓ If all problems complete: Move to [Module 2 Problems](02-module-2-problems.md)  
 
-**Need solutions?** See [Solutions Guide](./04-solutions-guide.md)
+**Need solutions?** See [Solutions Guide](04-solutions-guide.md)
 
-**Ready for Module 2?** → [Module 2 Practice Problems](./02-module-2-problems.md)
+**Ready for Module 2?** → [Module 2 Practice Problems](02-module-2-problems.md)
 

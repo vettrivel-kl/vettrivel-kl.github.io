@@ -13,11 +13,11 @@ tags: [module-overview, classification, evaluation]
 
 | Topic | Page | Key Concepts | Est. Study Time |
 |-------|------|--------------|-----------------|
-| **[Cross-Validation](./01-cross-validation.md)** | 1️⃣ | K-Fold, LOOCV, Stratified CV, Hyperparameter selection | 45 min |
-| **[Logistic Regression](./02-logistic-regression.md)** | 2️⃣ | Sigmoid, Binary classification, Multi-class (OvR/OvO/Softmax), Coefficient interpretation | 60 min |
-| **[Classification Advanced](./03-classification-advanced.md)** | 3️⃣ | ROC curves, AUC, Precision-Recall, Decision thresholds, Multi-class metrics | 60 min |
-| **[Model Comparison](./04-model-comparison.md)** | 4️⃣ | Algorithm selection framework, Bias-variance across models, Cost-benefit analysis | 60 min |
-| **[Decision Boundaries](./05-decision-boundaries.md)** | 5️⃣ | 2D boundary visualization, Overfitting vs underfitting, Model interpretability | 45 min |
+| **[Cross-Validation](01-cross-validation.md)** | 1️⃣ | K-Fold, LOOCV, Stratified CV, Hyperparameter selection | 45 min |
+| **[Logistic Regression](02-logistic-regression.md)** | 2️⃣ | Sigmoid, Binary classification, Multi-class (OvR/OvO/Softmax), Coefficient interpretation | 60 min |
+| **[Classification Advanced](03-classification-advanced.md)** | 3️⃣ | ROC curves, AUC, Precision-Recall, Decision thresholds, Multi-class metrics | 60 min |
+| **[Model Comparison](04-model-comparison.md)** | 4️⃣ | Algorithm selection framework, Bias-variance across models, Cost-benefit analysis | 60 min |
+| **[Decision Boundaries](05-decision-boundaries.md)** | 5️⃣ | 2D boundary visualization, Overfitting vs underfitting, Model interpretability | 45 min |
 
 ---
 
@@ -332,5 +332,5 @@ Each page includes:
 
 ---
 
-**Ready to dive in? Start with [Cross-Validation](./01-cross-validation.md)** →
+**Ready to dive in? Start with [Cross-Validation](01-cross-validation.md)** →
 

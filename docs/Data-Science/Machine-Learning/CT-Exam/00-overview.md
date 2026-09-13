@@ -56,8 +56,8 @@ Work through materials systematically in order
 - [Logistic Regression](./02-module-2/04-logistic-regression)
 
 **Practice & Review:**
-- [Practice Problems (22 total)](./02-practice-problems)
-- [Python Code Guide](./03-python-code)
+- [Practice Problems (22 total)](02-practice-problems)
+- [Python Code Guide](03-python-code)
 - [Common Mistakes](./03-common-mistakes)
 - [Exam Checklist](./04-study-schedule)
 
@@ -116,7 +116,7 @@ After completing this package, you'll be able to:
 - 👉 [Start with Day 1 Tasks](./04-study-schedule/01-day-1)
 - 📖 [Read Module 1 Overview](./01-module-1/00-ml-basics)
 - 💪 [Jump to Practice Problems](./02-practice-problems/01-set-1-linear-regression)
-- 💻 [See Python Code Examples](./03-python-code)
+- 💻 [See Python Code Examples](03-python-code)
 
 ---
 
@@ -134,8 +134,8 @@ After completing this package, you'll be able to:
 ## 📞 Quick Links
 
 - [Search for a topic](../../../) - Use site search
-- [View all practice problems](./02-practice-problems) - 22 problems organized by difficulty
-- [Get Python code](./03-python-code) - Copy-paste ready implementations
+- [View all practice problems](02-practice-problems) - 22 problems organized by difficulty
+- [Get Python code](03-python-code) - Copy-paste ready implementations
 - [Check daily tasks](./04-study-schedule) - Track your progress
 
 ---

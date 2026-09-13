@@ -161,7 +161,7 @@ A:
 ## Next Steps
 
 - Move to [Linear Regression](./01-linear-regression) to learn the main Module 1 topic
-- Or review [Machine Learning Types](.) here first
+- Or review [Machine Learning Types]() here first
 - See [Practice Problem 6.1](../02-practice-problems/06-set-6-comprehensive#problem-61-full-regression-analysis) for a complete example
 
 ---

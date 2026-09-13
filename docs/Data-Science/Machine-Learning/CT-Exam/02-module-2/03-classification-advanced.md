@@ -991,7 +991,7 @@ d) Which metric best represents performance?
 
 ## Next Topics
 
-→ [Model Comparison](./04-model-comparison.md)  
-→ [Cross-Validation](./01-cross-validation.md) (Review for evaluation)  
-→ [Logistic Regression](./02-logistic-regression.md) (Review for classification)
+→ [Model Comparison](04-model-comparison.md)  
+→ [Cross-Validation](01-cross-validation.md) (Review for evaluation)  
+→ [Logistic Regression](02-logistic-regression.md) (Review for classification)
 

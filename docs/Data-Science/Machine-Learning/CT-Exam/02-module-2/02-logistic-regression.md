@@ -1047,7 +1047,7 @@ Mistake 5: Assuming probabilities sum to 1 in OvR
 
 ## Next Topics
 
-→ [Classification Advanced](./03-classification-advanced.md)  
-→ [Model Comparison](./04-model-comparison.md)  
-→ [Cross-Validation](./01-cross-validation.md) (review for evaluation)
+→ [Classification Advanced](03-classification-advanced.md)  
+→ [Model Comparison](04-model-comparison.md)  
+→ [Cross-Validation](01-cross-validation.md) (review for evaluation)
 

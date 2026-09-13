@@ -7,7 +7,7 @@ tags: [practice-problems, classification, cross-validation, logistic-regression,
 
 # Module 2 Practice Problems
 
-Complete these 40 problems to master classification and evaluation. Solutions available in the [Solutions Guide](./04-solutions-guide.md).
+Complete these 40 problems to master classification and evaluation. Solutions available in the [Solutions Guide](04-solutions-guide.md).
 
 ---
 
@@ -1027,9 +1027,9 @@ e) What boundary shape would you expect from random forest?
 
 ✓ If mostly Easy: Review Medium problems and revisit concept pages  
 ✓ If mostly Medium: Challenge yourself with Hard problems  
-✓ If all problems done: Try [Mixed & Real-World Problems](./03-mixed-problems.md)  
+✓ If all problems done: Try [Mixed & Real-World Problems](03-mixed-problems.md)  
 
-**Need solutions?** See [Solutions Guide](./04-solutions-guide.md)
+**Need solutions?** See [Solutions Guide](04-solutions-guide.md)
 
-**Ready for integrated problems?** → [Mixed & Real-World Problems](./03-mixed-problems.md)
+**Ready for integrated problems?** → [Mixed & Real-World Problems](03-mixed-problems.md)
 

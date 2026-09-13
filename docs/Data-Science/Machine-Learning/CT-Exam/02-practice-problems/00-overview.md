@@ -78,7 +78,7 @@ Hard (18-22 problems, 19-23%):
 
 ## Problem Organization
 
-### 📚 [Module 1 Problems](./01-module-1-problems.md) (30 problems, 4-5 hours)
+### 📚 [Module 1 Problems](01-module-1-problems.md) (30 problems, 4-5 hours)
 
 **Linear Regression (8 problems)**
 - Problem 1.1: Calculate slope and intercept
@@ -109,7 +109,7 @@ Hard (18-22 problems, 19-23%):
 
 ---
 
-### 🎯 [Module 2 Problems](./02-module-2-problems.md) (40 problems, 5-6 hours)
+### 🎯 [Module 2 Problems](02-module-2-problems.md) (40 problems, 5-6 hours)
 
 **Cross-Validation (8 problems)**
 - Problem 1.1-1.3: K-fold CV calculations
@@ -146,7 +146,7 @@ Hard (18-22 problems, 19-23%):
 
 ---
 
-### 🌟 [Mixed & Real-World Problems](./03-mixed-problems.md) (25 problems, 3-4 hours)
+### 🌟 [Mixed & Real-World Problems](03-mixed-problems.md) (25 problems, 3-4 hours)
 
 **Real-World Scenarios (10 problems)**
 - Customer Churn Prediction (Accuracy vs Recall tradeoff)
@@ -175,7 +175,7 @@ Hard (18-22 problems, 19-23%):
 
 ## Solutions Guide
 
-### 📖 [Complete Solutions](./04-solutions-guide.md)
+### 📖 [Complete Solutions](04-solutions-guide.md)
 
 All solutions include:
 - ✓ Step-by-step calculations
@@ -355,10 +355,10 @@ Each problem includes:
 
 ## Navigation
 
-→ **[Module 1 Problems](./01-module-1-problems.md)** (30 problems, 4-5 hours)  
-→ **[Module 2 Problems](./02-module-2-problems.md)** (40 problems, 5-6 hours)  
-→ **[Mixed & Real-World Problems](./03-mixed-problems.md)** (25 problems, 3-4 hours)  
-→ **[Complete Solutions Guide](./04-solutions-guide.md)** (All answers + explanations)  
+→ **[Module 1 Problems](01-module-1-problems.md)** (30 problems, 4-5 hours)  
+→ **[Module 2 Problems](02-module-2-problems.md)** (40 problems, 5-6 hours)  
+→ **[Mixed & Real-World Problems](03-mixed-problems.md)** (25 problems, 3-4 hours)  
+→ **[Complete Solutions Guide](04-solutions-guide.md)** (All answers + explanations)  
 
 ---
 

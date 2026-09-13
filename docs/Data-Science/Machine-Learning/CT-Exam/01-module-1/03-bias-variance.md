@@ -1009,7 +1009,7 @@ Solution: Adjust decision threshold
 
 ## Next Topics
 
-→ [Performance Metrics](./04-metrics.md)  
+→ [Performance Metrics](04-metrics.md)  
 → [Gradient Descent](./05-gradient-descent.md)  
 → [Regularization](./06-regularization.md)
 

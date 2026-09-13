@@ -998,7 +998,7 @@ f) Design monitoring for long-term impact
 ✓ Ready for exam with confidence  
 ✓ Next: Timed practice test simulating actual exam conditions  
 
-**Need solutions?** See [Solutions Guide](./04-solutions-guide.md)
+**Need solutions?** See [Solutions Guide](04-solutions-guide.md)
 
 **Questions or stuck?** Review related [Concept Pages](../00-overview.md)
 

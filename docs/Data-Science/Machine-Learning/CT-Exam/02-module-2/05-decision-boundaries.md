@@ -1078,7 +1078,7 @@ Use Neural Network if:
 
 ## Next Steps
 
-→ [Back to Module 2 Overview](./00-overview.md)  
+→ [Back to Module 2 Overview](00-overview.md)  
 → [Practice Problems Solutions](#practice-problems)  
 → Ready for Module 3 (Advanced Topics)
 
