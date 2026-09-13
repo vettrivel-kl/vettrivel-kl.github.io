@@ -1237,6 +1237,6 @@ Application: Balance features, complexity, and data
 
 ## Next Topics
 
-→ [Bias-Variance Tradeoff](./02-bias-variance.md)  
-→ [Performance Metrics](./03-metrics.md)
+→ [Bias-Variance Tradeoff](./03-bias-variance.md)  
+→ [Performance Metrics](./04-metrics.md)
 

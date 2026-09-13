@@ -1017,7 +1017,7 @@ MULTI-CLASS:
 
 ## Next Topics
 
-→ [Regularization](./05-regularization.md)  
-→ [Gradient Descent](./06-gradient-descent.md)  
-→ [Cross-Validation](./07-cross-validation.md)
+→ Regularization  
+→ Gradient Descent  
+→ [Cross-Validation](../02-module-2/01-cross-validation.md)
 

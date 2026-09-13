@@ -799,4 +799,4 @@ Which is better? Why?
 | **Interpretation** | R² = 0.60 → explains 60% of variance |
 | **Assumption check** | Linearity, Independence, Homoscedasticity, Normality |
 
-**Next Topic:** → [Bias-Variance Tradeoff](./02-bias-variance.md)
+**Next Topic:** → [Bias-Variance Tradeoff](./03-bias-variance.md)

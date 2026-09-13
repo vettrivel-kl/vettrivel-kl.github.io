@@ -993,5 +993,5 @@ SIMPLICITY WINS:
 
 → [00-overview.md](./00-overview.md) - Module 2 navigation  
 → [05-decision-boundaries.md](./05-decision-boundaries.md) - Visual interpretation  
-→ [Build & Deploy](../DOCUSAURUS_SETUP.md) - Go live on GitHub Pages
+→ Build & Deploy - Go live on GitHub Pages
 

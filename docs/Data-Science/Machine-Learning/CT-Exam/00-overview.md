@@ -30,11 +30,11 @@ This comprehensive study package covers **Module 1** and **Module 2** of your Ma
 
 ### If you have 5 hours:
 1. Read [Linear Regression Basics](./01-module-1/01-linear-regression)
-2. Do [Practice Problems Set 1-2](./02-practice-problems/01-set-1-linear-regression)
-3. Review [Common Mistakes](./03-common-mistakes)
+2. Do [Practice Problems Set 1-2](./02-practice-problems/01-module-1-problems)
+3. Review Common Mistakes
 
 ### If you have 1 week:
-Follow the [Day-by-Day Study Plan](./04-study-schedule)
+Follow the Day-by-Day Study Plan
 
 ### If you have 2 weeks:
 Work through materials systematically in order
@@ -46,20 +46,20 @@ Work through materials systematically in order
 **Module 1 Topics:**
 - [Machine Learning Basics](./01-module-1/00-ml-basics)
 - [Linear Regression](./01-module-1/01-linear-regression)
-- [Bias-Variance Tradeoff](./01-module-1/02-bias-variance)
-- [Error Metrics](./01-module-1/03-metrics)
+- [Bias-Variance Tradeoff](./01-module-1/03-bias-variance)
+- [Error Metrics](./01-module-1/04-metrics)
 
 **Module 2 Topics:**
 - [Cross-Validation](./02-module-2/01-cross-validation)
-- [Classification Metrics](./02-module-2/02-classification-metrics)
-- [Multiple Regression](./02-module-2/03-multiple-regression)
-- [Logistic Regression](./02-module-2/04-logistic-regression)
+- Classification Metrics
+- [Multiple Regression](./01-module-1/02-multiple-regression)
+- [Logistic Regression](./02-module-2/02-logistic-regression)
 
 **Practice & Review:**
 - [Practice Problems (22 total)](02-practice-problems)
 - [Python Code Guide](03-python-code)
-- [Common Mistakes](./03-common-mistakes)
-- [Exam Checklist](./04-study-schedule)
+- Common Mistakes
+- Exam Checklist
 
 ---
 
@@ -113,9 +113,9 @@ After completing this package, you'll be able to:
 
 **Choose your path:**
 
-- 👉 [Start with Day 1 Tasks](./04-study-schedule/01-day-1)
+- 👉 Start with Day 1 Tasks
 - 📖 [Read Module 1 Overview](./01-module-1/00-ml-basics)
-- 💪 [Jump to Practice Problems](./02-practice-problems/01-set-1-linear-regression)
+- 💪 [Jump to Practice Problems](./02-practice-problems/01-module-1-problems)
 - 💻 [See Python Code Examples](03-python-code)
 
 ---
@@ -136,7 +136,7 @@ After completing this package, you'll be able to:
 - [Search for a topic](../../../) - Use site search
 - [View all practice problems](02-practice-problems) - 22 problems organized by difficulty
 - [Get Python code](03-python-code) - Copy-paste ready implementations
-- [Check daily tasks](./04-study-schedule) - Track your progress
+- Check daily tasks - Track your progress
 
 ---
 
