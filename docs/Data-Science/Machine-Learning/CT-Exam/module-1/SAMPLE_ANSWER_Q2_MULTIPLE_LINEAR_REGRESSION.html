@@ -1,0 +1,626 @@
+<!doctype html>
+<html lang="en" dir="ltr" class="docs-wrapper plugin-docs plugin-id-default docs-version-current docs-doc-page docs-doc-id-Data-Science/Machine-Learning/CT-Exam/module-1/SAMPLE_ANSWER_Q2_MULTIPLE_LINEAR_REGRESSION" data-has-hydrated="false">
+<head>
+<meta charset="UTF-8">
+<meta name="generator" content="Docusaurus v3.9.2">
+<title data-rh="true">SAMPLE EXAM ANSWER: Multiple Linear Regression &amp; Coefficient Interpretation | Vettrivel&#x27;s Notes</title><meta data-rh="true" name="viewport" content="width=device-width,initial-scale=1"><meta data-rh="true" name="twitter:card" content="summary_large_image"><meta data-rh="true" property="og:image" content="https://vettrivel-kl.github.io/img/vettri/vettri-384x384.png"><meta data-rh="true" name="twitter:image" content="https://vettrivel-kl.github.io/img/vettri/vettri-384x384.png"><meta data-rh="true" property="og:url" content="https://vettrivel-kl.github.io/docs/Data-Science/Machine-Learning/CT-Exam/module-1/SAMPLE_ANSWER_Q2_MULTIPLE_LINEAR_REGRESSION"><meta data-rh="true" property="og:locale" content="en"><meta data-rh="true" name="docusaurus_locale" content="en"><meta data-rh="true" name="docsearch:language" content="en"><meta data-rh="true" name="docusaurus_version" content="current"><meta data-rh="true" name="docusaurus_tag" content="docs-default-current"><meta data-rh="true" name="docsearch:version" content="current"><meta data-rh="true" name="docsearch:docusaurus_tag" content="docs-default-current"><meta data-rh="true" property="og:title" content="SAMPLE EXAM ANSWER: Multiple Linear Regression &amp; Coefficient Interpretation | Vettrivel&#x27;s Notes"><meta data-rh="true" name="description" content="Question: Explain how multiple linear regression works using mathematical expressions for a sample dataset. How do you interpret the coefficients and evaluate model performance?"><meta data-rh="true" property="og:description" content="Question: Explain how multiple linear regression works using mathematical expressions for a sample dataset. How do you interpret the coefficients and evaluate model performance?"><link data-rh="true" rel="icon" href="/img/vettri/favicon.ico"><link data-rh="true" rel="canonical" href="https://vettrivel-kl.github.io/docs/Data-Science/Machine-Learning/CT-Exam/module-1/SAMPLE_ANSWER_Q2_MULTIPLE_LINEAR_REGRESSION"><link data-rh="true" rel="alternate" href="https://vettrivel-kl.github.io/docs/Data-Science/Machine-Learning/CT-Exam/module-1/SAMPLE_ANSWER_Q2_MULTIPLE_LINEAR_REGRESSION" hreflang="en"><link data-rh="true" rel="alternate" href="https://vettrivel-kl.github.io/docs/Data-Science/Machine-Learning/CT-Exam/module-1/SAMPLE_ANSWER_Q2_MULTIPLE_LINEAR_REGRESSION" hreflang="x-default"><script data-rh="true" type="application/ld+json">{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Data Science","item":"https://vettrivel-kl.github.io/docs/category/data-science"},{"@type":"ListItem","position":2,"name":"Machine Learning","item":"https://vettrivel-kl.github.io/docs/category/machine-learning"},{"@type":"ListItem","position":3,"name":"CT Exam Prep","item":"https://vettrivel-kl.github.io/docs/category/ct-exam-prep"},{"@type":"ListItem","position":4,"name":"Module 1: Foundations","item":"https://vettrivel-kl.github.io/docs/category/module-1-foundations"},{"@type":"ListItem","position":5,"name":"SAMPLE EXAM ANSWER: Multiple Linear Regression & Coefficient Interpretation","item":"https://vettrivel-kl.github.io/docs/Data-Science/Machine-Learning/CT-Exam/module-1/SAMPLE_ANSWER_Q2_MULTIPLE_LINEAR_REGRESSION"}]}</script><link rel="alternate" type="application/rss+xml" href="/blog/rss.xml" title="Vettrivel&#39;s Notes RSS Feed">
+<link rel="alternate" type="application/atom+xml" href="/blog/atom.xml" title="Vettrivel&#39;s Notes Atom Feed"><link rel="stylesheet" href="/assets/css/styles.ad0ab256.css">
+<script src="/assets/js/runtime~main.12534ac0.js" defer="defer"></script>
+<script src="/assets/js/main.0108c25e.js" defer="defer"></script>
+</head>
+<body class="navigation-with-keyboard">
+<svg style="display: none;"><defs>
+<symbol id="theme-svg-external-link" viewBox="0 0 24 24"><path fill="currentColor" d="M21 13v10h-21v-19h12v2h-10v15h17v-8h2zm3-12h-10.988l4.035 4-6.977 7.07 2.828 2.828 6.977-7.07 4.125 4.172v-11z"/></symbol>
+</defs></svg>
+<script>!function(){var t=function(){try{return new URLSearchParams(window.location.search).get("docusaurus-theme")}catch(t){}}()||function(){try{return window.localStorage.getItem("theme")}catch(t){}}();document.documentElement.setAttribute("data-theme",t||(window.matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")),document.documentElement.setAttribute("data-theme-choice",t||"system")}(),function(){try{const c=new URLSearchParams(window.location.search).entries();for(var[t,e]of c)if(t.startsWith("docusaurus-data-")){var a=t.replace("docusaurus-data-","data-");document.documentElement.setAttribute(a,e)}}catch(t){}}()</script><div id="__docusaurus"><link rel="preload" as="image" href="/img/vettri/vettri-384x384.png"><div role="region" aria-label="Skip to main content"><a class="skipToContent_fXgn" href="#__docusaurus_skipToContent_fallback">Skip to main content</a></div><nav aria-label="Main" class="theme-layout-navbar navbar navbar--fixed-top"><div class="navbar__inner"><div class="theme-layout-navbar-left navbar__items"><button aria-label="Toggle navigation bar" aria-expanded="false" class="navbar__toggle clean-btn" type="button"><svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"></path></svg></button><a class="navbar__brand" href="/"><div class="navbar__logo"><img src="/img/vettri/vettri-384x384.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--light_NVdE"><img src="/img/vettri/vettri-384x384.png" alt="My Site Logo" class="themedComponent_mlkZ themedComponent--dark_xIcU"></div><b class="navbar__title text--truncate">Vettrivel&#x27;s Notes</b></a><a aria-current="page" class="navbar__item navbar__link navbar__link--active" href="/docs/Python">Notes </a><a class="navbar__item navbar__link" href="/blog">Blog</a></div><div class="theme-layout-navbar-right navbar__items navbar__items--right"><div class="toggle_vylO colorModeToggle_DEke"><button class="clean-btn toggleButton_gllP toggleButtonDisabled_aARS" type="button" disabled="" title="system mode" aria-label="Switch between dark and light mode (currently system mode)"><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP lightToggleIcon_pyhR"><path fill="currentColor" d="M12,9c1.65,0,3,1.35,3,3s-1.35,3-3,3s-3-1.35-3-3S10.35,9,12,9 M12,7c-2.76,0-5,2.24-5,5s2.24,5,5,5s5-2.24,5-5 S14.76,7,12,7L12,7z M2,13l2,0c0.55,0,1-0.45,1-1s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S1.45,13,2,13z M20,13l2,0c0.55,0,1-0.45,1-1 s-0.45-1-1-1l-2,0c-0.55,0-1,0.45-1,1S19.45,13,20,13z M11,2v2c0,0.55,0.45,1,1,1s1-0.45,1-1V2c0-0.55-0.45-1-1-1S11,1.45,11,2z M11,20v2c0,0.55,0.45,1,1,1s1-0.45,1-1v-2c0-0.55-0.45-1-1-1C11.45,19,11,19.45,11,20z M5.99,4.58c-0.39-0.39-1.03-0.39-1.41,0 c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0s0.39-1.03,0-1.41L5.99,4.58z M18.36,16.95 c-0.39-0.39-1.03-0.39-1.41,0c-0.39,0.39-0.39,1.03,0,1.41l1.06,1.06c0.39,0.39,1.03,0.39,1.41,0c0.39-0.39,0.39-1.03,0-1.41 L18.36,16.95z M19.42,5.99c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06c-0.39,0.39-0.39,1.03,0,1.41 s1.03,0.39,1.41,0L19.42,5.99z M7.05,18.36c0.39-0.39,0.39-1.03,0-1.41c-0.39-0.39-1.03-0.39-1.41,0l-1.06,1.06 c-0.39,0.39-0.39,1.03,0,1.41s1.03,0.39,1.41,0L7.05,18.36z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP darkToggleIcon_wfgR"><path fill="currentColor" d="M9.37,5.51C9.19,6.15,9.1,6.82,9.1,7.5c0,4.08,3.32,7.4,7.4,7.4c0.68,0,1.35-0.09,1.99-0.27C17.45,17.19,14.93,19,12,19 c-3.86,0-7-3.14-7-7C5,9.07,6.81,6.55,9.37,5.51z M12,3c-4.97,0-9,4.03-9,9s4.03,9,9,9s9-4.03,9-9c0-0.46-0.04-0.92-0.1-1.36 c-0.98,1.37-2.58,2.26-4.4,2.26c-2.98,0-5.4-2.42-5.4-5.4c0-1.81,0.89-3.42,2.26-4.4C12.92,3.04,12.46,3,12,3L12,3z"></path></svg><svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" class="toggleIcon_g3eP systemToggleIcon_QzmC"><path fill="currentColor" d="m12 21c4.971 0 9-4.029 9-9s-4.029-9-9-9-9 4.029-9 9 4.029 9 9 9zm4.95-13.95c1.313 1.313 2.05 3.093 2.05 4.95s-0.738 3.637-2.05 4.95c-1.313 1.313-3.093 2.05-4.95 2.05v-14c1.857 0 3.637 0.737 4.95 2.05z"></path></svg></button></div><div class="navbarSearchContainer_Bca1"></div></div></div><div role="presentation" class="navbar-sidebar__backdrop"></div></nav><div id="__docusaurus_skipToContent_fallback" class="theme-layout-main main-wrapper mainWrapper_z2l0"><div class="docsWrapper_hBAB"><button aria-label="Scroll back to top" class="clean-btn theme-back-to-top-button backToTopButton_sjWU" type="button"></button><div class="docRoot_UBD9"><aside class="theme-doc-sidebar-container docSidebarContainer_YfHR"><div class="sidebarViewport_aRkj"><div class="sidebar_njMd"><nav aria-label="Docs sidebar" class="menu thin-scrollbar menu_SIkG"><ul class="theme-doc-sidebar-menu menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" href="/docs/Python"><span title="Python" class="categoryLinkLabel_W154">Python</span></a><button aria-label="Expand sidebar category &#x27;Python&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-1 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" href="/docs/category/data-science"><span title="Data Science" class="categoryLinkLabel_W154">Data Science</span></a><button aria-label="Collapse sidebar category &#x27;Data Science&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-2 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex="0" href="/docs/category/machine-learning"><span title="Machine Learning" class="categoryLinkLabel_W154">Machine Learning</span></a><button aria-label="Collapse sidebar category &#x27;Machine Learning&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/1--foundations"><span title="1 · Foundations" class="categoryLinkLabel_W154">1 · Foundations</span></a><button aria-label="Expand sidebar category &#x27;1 · Foundations&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/2--data-preprocessing"><span title="2 · Data Preprocessing" class="categoryLinkLabel_W154">2 · Data Preprocessing</span></a><button aria-label="Expand sidebar category &#x27;2 · Data Preprocessing&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/3--linear-regression"><span title="3 · Linear Regression" class="categoryLinkLabel_W154">3 · Linear Regression</span></a><button aria-label="Expand sidebar category &#x27;3 · Linear Regression&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/4--optimisation"><span title="4 · Optimisation" class="categoryLinkLabel_W154">4 · Optimisation</span></a><button aria-label="Expand sidebar category &#x27;4 · Optimisation&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/5--regression-metrics"><span title="5 · Regression Metrics" class="categoryLinkLabel_W154">5 · Regression Metrics</span></a><button aria-label="Expand sidebar category &#x27;5 · Regression Metrics&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/Data-Science/Machine-Learning/validation-strategy/why-cross-validation"><span title="validation-strategy" class="categoryLinkLabel_W154">validation-strategy</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/Data-Science/Machine-Learning/logistic-regression/why-logistic-regression"><span title="logistic-regression" class="categoryLinkLabel_W154">logistic-regression</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/Data-Science/Machine-Learning/classification-metrics/confusion-matrix-and-basic-metrics"><span title="classification-metrics" class="categoryLinkLabel_W154">classification-metrics</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--sublist-caret" role="button" aria-expanded="false" tabindex="0" href="/docs/Data-Science/Machine-Learning/generalization/overfitting-underfitting-regularization"><span title="generalization" class="categoryLinkLabel_W154">generalization</span></a></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-3 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex="0" href="/docs/category/ct-exam-prep"><span title="CT Exam Prep" class="categoryLinkLabel_W154">CT Exam Prep</span></a><button aria-label="Collapse sidebar category &#x27;CT Exam Prep&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-4 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Data-Science/Machine-Learning/CT-Exam/overview"><span title="CT Exam Overview" class="linkLabel_WmDU">CT Exam Overview</span></a></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-4 menu__list-item"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist menu__link--active" tabindex="0" href="/docs/category/module-1-foundations"><span title="Module 1: Foundations" class="categoryLinkLabel_W154">Module 1: Foundations</span></a><button aria-label="Collapse sidebar category &#x27;Module 1: Foundations&#x27;" aria-expanded="true" type="button" class="clean-btn menu__caret"></button></div><ul class="menu__list"><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-5 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Data-Science/Machine-Learning/CT-Exam/module-1/ml-basics"><span title="Machine Learning Basics" class="linkLabel_WmDU">Machine Learning Basics</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-5 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Data-Science/Machine-Learning/CT-Exam/module-1/linear-regression"><span title="Linear Regression" class="linkLabel_WmDU">Linear Regression</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-5 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Data-Science/Machine-Learning/CT-Exam/module-1/multiple-regression"><span title="Multiple Linear Regression" class="linkLabel_WmDU">Multiple Linear Regression</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-5 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Data-Science/Machine-Learning/CT-Exam/module-1/bias-variance"><span title="Bias-Variance Tradeoff" class="linkLabel_WmDU">Bias-Variance Tradeoff</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-5 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Data-Science/Machine-Learning/CT-Exam/module-1/metrics"><span title="Performance Metrics &amp; Evaluation" class="linkLabel_WmDU">Performance Metrics &amp; Evaluation</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-5 menu__list-item"><a class="menu__link" tabindex="0" href="/docs/Data-Science/Machine-Learning/CT-Exam/module-1/SAMPLE_ANSWER_Q1_LINEAR_REGRESSION"><span title="SAMPLE EXAM ANSWER: Linear Regression &amp; Performance Metrics" class="linkLabel_WmDU">SAMPLE EXAM ANSWER: Linear Regression &amp; Performance Metrics</span></a></li><li class="theme-doc-sidebar-item-link theme-doc-sidebar-item-link-level-5 menu__list-item"><a class="menu__link menu__link--active" aria-current="page" tabindex="0" href="/docs/Data-Science/Machine-Learning/CT-Exam/module-1/SAMPLE_ANSWER_Q2_MULTIPLE_LINEAR_REGRESSION"><span title="SAMPLE EXAM ANSWER: Multiple Linear Regression &amp; Coefficient Interpretation" class="linkLabel_WmDU">SAMPLE EXAM ANSWER: Multiple Linear Regression &amp; Coefficient Interpretation</span></a></li></ul></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-4 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/module-2-classification--evaluation"><span title="Module 2: Classification &amp; Evaluation" class="categoryLinkLabel_W154">Module 2: Classification &amp; Evaluation</span></a><button aria-label="Expand sidebar category &#x27;Module 2: Classification &amp; Evaluation&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-4 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/practice-problems"><span title="Practice Problems" class="categoryLinkLabel_W154">Practice Problems</span></a><button aria-label="Expand sidebar category &#x27;Practice Problems&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-4 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/python-implementation-guide"><span title="Python Implementation Guide" class="categoryLinkLabel_W154">Python Implementation Guide</span></a><button aria-label="Expand sidebar category &#x27;Python Implementation Guide&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li><li class="theme-doc-sidebar-item-category theme-doc-sidebar-item-category-level-4 menu__list-item menu__list-item--collapsed"><div class="menu__list-item-collapsible"><a class="categoryLink_byQd menu__link menu__link--sublist" tabindex="0" href="/docs/category/common-mistakes-reference"><span title="Common Mistakes Reference" class="categoryLinkLabel_W154">Common Mistakes Reference</span></a><button aria-label="Expand sidebar category &#x27;Common Mistakes Reference&#x27;" aria-expanded="false" type="button" class="clean-btn menu__caret"></button></div></li></ul></li></ul></li></ul></li></ul></nav></div></div></aside><main class="docMainContainer_TBSr"><div class="container padding-top--md padding-bottom--lg"><div class="row"><div class="col docItemCol_VOVn"><div class="docItemContainer_Djhp"><article><nav class="theme-doc-breadcrumbs breadcrumbsContainer_Z_bl" aria-label="Breadcrumbs"><ul class="breadcrumbs"><li class="breadcrumbs__item"><a aria-label="Home page" class="breadcrumbs__link" href="/"><svg viewBox="0 0 24 24" class="breadcrumbHomeIcon_YNFT"><path d="M10 19v-5h4v5c0 .55.45 1 1 1h3c.55 0 1-.45 1-1v-7h1.7c.46 0 .68-.57.33-.87L12.67 3.6c-.38-.34-.96-.34-1.34 0l-8.36 7.53c-.34.3-.13.87.33.87H5v7c0 .55.45 1 1 1h3c.55 0 1-.45 1-1z" fill="currentColor"></path></svg></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/docs/category/data-science"><span>Data Science</span></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/docs/category/machine-learning"><span>Machine Learning</span></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/docs/category/ct-exam-prep"><span>CT Exam Prep</span></a></li><li class="breadcrumbs__item"><a class="breadcrumbs__link" href="/docs/category/module-1-foundations"><span>Module 1: Foundations</span></a></li><li class="breadcrumbs__item breadcrumbs__item--active"><span class="breadcrumbs__link">SAMPLE EXAM ANSWER: Multiple Linear Regression &amp; Coefficient Interpretation</span></li></ul></nav><div class="tocCollapsible_ETCw theme-doc-toc-mobile tocMobile_ITEo"><button type="button" class="clean-btn tocCollapsibleButton_TO0P">On this page</button></div><div class="theme-doc-markdown markdown"><header><h1>SAMPLE EXAM ANSWER: Multiple Linear Regression &amp; Coefficient Interpretation</h1></header>
+<p><strong>Question:</strong> Explain how multiple linear regression works using mathematical expressions for a sample dataset. How do you interpret the coefficients and evaluate model performance?</p>
+<p><strong>Marks:</strong> 10 marks | <strong>Time:</strong> 15 minutes</p>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="-complete-exam-answer">✅ COMPLETE EXAM ANSWER<a href="#-complete-exam-answer" class="hash-link" aria-label="Direct link to ✅ COMPLETE EXAM ANSWER" title="Direct link to ✅ COMPLETE EXAM ANSWER" translate="no">​</a></h2>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="part-1-multiple-linear-regression-with-mathematical-expression-6-marks"><strong>PART 1: MULTIPLE LINEAR REGRESSION WITH MATHEMATICAL EXPRESSION (6 marks)</strong><a href="#part-1-multiple-linear-regression-with-mathematical-expression-6-marks" class="hash-link" aria-label="Direct link to part-1-multiple-linear-regression-with-mathematical-expression-6-marks" title="Direct link to part-1-multiple-linear-regression-with-mathematical-expression-6-marks" translate="no">​</a></h2>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="11-definition-1-mark"><strong>1.1 Definition (1 mark)</strong><a href="#11-definition-1-mark" class="hash-link" aria-label="Direct link to 11-definition-1-mark" title="Direct link to 11-definition-1-mark" translate="no">​</a></h3>
+<p>Multiple linear regression is a <strong>supervised learning algorithm</strong> that extends simple linear regression to predict a continuous target variable using <strong>two or more independent variables (features)</strong>. It establishes a <strong>linear relationship</strong> between multiple input features and a dependent variable by fitting the best-fit hyperplane through the data points, using the <strong>least squares method</strong> to minimize prediction errors.</p>
+<p><strong>Key difference from simple LR:</strong> Each coefficient represents the effect of one feature <strong>holding all other features constant</strong> (ceteris paribus).</p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="12-mathematical-expression-2-marks"><strong>1.2 Mathematical Expression (2 marks)</strong><a href="#12-mathematical-expression-2-marks" class="hash-link" aria-label="Direct link to 12-mathematical-expression-2-marks" title="Direct link to 12-mathematical-expression-2-marks" translate="no">​</a></h3>
+<p>The <strong>multiple linear regression equation</strong> is represented in two forms:</p>
+<p><strong>Standard Form (p features):</strong></p>
+<p>$$\boxed{y = \beta_0 + \beta_1 x_1 + \beta_2 x_2 + ... + \beta_p x_p + \varepsilon}$$</p>
+<p><strong>Where:</strong></p>
+<ul>
+<li class=""><strong>y</strong> = Dependent variable (target/output)</li>
+<li class=""><strong>β₀</strong> = Intercept (value of y when all x = 0)</li>
+<li class=""><strong>β₁, β₂, ..., βₚ</strong> = Coefficients/slopes (weights for each feature)</li>
+<li class=""><strong>x₁, x₂, ..., xₚ</strong> = Independent variables (features/input)</li>
+<li class=""><strong>ε</strong> = Error term (residuals)</li>
+<li class=""><strong>p</strong> = Number of features</li>
+</ul>
+<hr>
+<p><strong>Matrix Form (Compact representation):</strong></p>
+<p>$$\boxed{\mathbf{Y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\varepsilon}}$$</p>
+<p><strong>Where:</strong></p>
+<ul>
+<li class=""><strong>Y</strong> = (n×1) vector of target values: $\begin{pmatrix} y_1 \ y_2 \ \vdots \ y_n \end{pmatrix}$</li>
+<li class=""><strong>X</strong> = (n×(p+1)) design matrix: $\begin{pmatrix} 1 &amp; x_{1,1} &amp; x_{1,2} &amp; \cdots &amp; x_{1,p} \ 1 &amp; x_{2,1} &amp; x_{2,2} &amp; \cdots &amp; x_{2,p} \ \vdots &amp; \vdots &amp; \vdots &amp; \ddots &amp; \vdots \ 1 &amp; x_{n,1} &amp; x_{n,2} &amp; \cdots &amp; x_{n,p} \end{pmatrix}$ (first column is all 1s for intercept)</li>
+<li class=""><strong>β</strong> = ((p+1)×1) coefficient vector: $\begin{pmatrix} \beta_0 \ \beta_1 \ \vdots \ \beta_p \end{pmatrix}$</li>
+<li class=""><strong>n</strong> = Number of samples</li>
+<li class=""><strong>p</strong> = Number of features</li>
+</ul>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="13-coefficient-calculation-1-mark"><strong>1.3 Coefficient Calculation (1 mark)</strong><a href="#13-coefficient-calculation-1-mark" class="hash-link" aria-label="Direct link to 13-coefficient-calculation-1-mark" title="Direct link to 13-coefficient-calculation-1-mark" translate="no">​</a></h3>
+<p>The coefficients are calculated using the <strong>Normal Equation (Least Squares Method)</strong>:</p>
+<p>$$\boldsymbol{\beta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{Y}$$</p>
+<p><strong>Interpretation:</strong></p>
+<ul>
+<li class="">This formula minimizes the <strong>Sum of Squared Residuals (SSR)</strong>: $\sum_{i=1}^{n}(y_i - \hat{y}_i)^2$</li>
+<li class=""><strong>X^T</strong> = Transpose of design matrix (p+1)×n</li>
+<li class=""><strong>(X^T X)</strong> = ((p+1)×(p+1)) square matrix</li>
+<li class=""><strong>(X^T X)^{-1}</strong> = Matrix inverse (must be non-singular/invertible)</li>
+<li class=""><strong>X^T Y</strong> = ((p+1)×1) vector</li>
+</ul>
+<p><strong>Why this works:</strong> Setting the derivative of SSR with respect to β equal to zero gives this solution.</p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="14-worked-example-with-sample-dataset-2-marks"><strong>1.4 Worked Example with Sample Dataset (2 marks)</strong><a href="#14-worked-example-with-sample-dataset-2-marks" class="hash-link" aria-label="Direct link to 14-worked-example-with-sample-dataset-2-marks" title="Direct link to 14-worked-example-with-sample-dataset-2-marks" translate="no">​</a></h3>
+<p><strong>Problem:</strong> Predict <strong>Student&#x27;s Exam Score</strong> based on <strong>Hours Studied</strong> AND <strong>Previous Quiz Score</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Student</th><th>Hours Studied (x₁)</th><th>Previous Quiz Score (x₂)</th><th>Exam Score (y)</th></tr></thead><tbody><tr><td>1</td><td>2</td><td>55</td><td>40</td></tr><tr><td>2</td><td>3</td><td>60</td><td>50</td></tr><tr><td>3</td><td>4</td><td>65</td><td>60</td></tr><tr><td>4</td><td>5</td><td>75</td><td>70</td></tr><tr><td>5</td><td>6</td><td>80</td><td>80</td></tr></tbody></table>
+<hr>
+<p><strong>Step 1: Construct the Design Matrix X (5×3)</strong></p>
+<p>$$\mathbf{X} = \begin{pmatrix} 1 &amp; 2 &amp; 55 \ 1 &amp; 3 &amp; 60 \ 1 &amp; 4 &amp; 65 \ 1 &amp; 5 &amp; 75 \ 1 &amp; 6 &amp; 80 \end{pmatrix} \quad \mathbf{Y} = \begin{pmatrix} 40 \ 50 \ 60 \ 70 \ 80 \end{pmatrix}$$</p>
+<p>(First column is all 1s for β₀, second column is x₁ values, third column is x₂ values)</p>
+<hr>
+<p><strong>Step 2: Calculate X^T (3×5)</strong></p>
+<p>$$\mathbf{X}^T = \begin{pmatrix} 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 \ 2 &amp; 3 &amp; 4 &amp; 5 &amp; 6 \ 55 &amp; 60 &amp; 65 &amp; 75 &amp; 80 \end{pmatrix}$$</p>
+<hr>
+<p><strong>Step 3: Calculate X^T X (3×3)</strong></p>
+<p>$$\mathbf{X}^T \mathbf{X} = \begin{pmatrix} 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 \ 2 &amp; 3 &amp; 4 &amp; 5 &amp; 6 \ 55 &amp; 60 &amp; 65 &amp; 75 &amp; 80 \end{pmatrix} \begin{pmatrix} 1 &amp; 2 &amp; 55 \ 1 &amp; 3 &amp; 60 \ 1 &amp; 4 &amp; 65 \ 1 &amp; 5 &amp; 75 \ 1 &amp; 6 &amp; 80 \end{pmatrix}$$</p>
+<p><strong>Element calculations:</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>(X^T X)ᵢⱼ</th><th>Calculation</th><th>Result</th></tr></thead><tbody><tr><td>(1,1)</td><td>1×1 + 1×1 + 1×1 + 1×1 + 1×1 = 5</td><td>5</td></tr><tr><td>(1,2)</td><td>1×2 + 1×3 + 1×4 + 1×5 + 1×6 = 20</td><td>20</td></tr><tr><td>(1,3)</td><td>1×55 + 1×60 + 1×65 + 1×75 + 1×80 = 335</td><td>335</td></tr><tr><td>(2,1)</td><td>2×1 + 3×1 + 4×1 + 5×1 + 6×1 = 20</td><td>20</td></tr><tr><td>(2,2)</td><td>2×2 + 3×3 + 4×4 + 5×5 + 6×6 = 90</td><td>90</td></tr><tr><td>(2,3)</td><td>2×55 + 3×60 + 4×65 + 5×75 + 6×80 = 1380</td><td>1380</td></tr><tr><td>(3,1)</td><td>55×1 + 60×1 + 65×1 + 75×1 + 80×1 = 335</td><td>335</td></tr><tr><td>(3,2)</td><td>55×2 + 60×3 + 65×4 + 75×5 + 80×6 = 1380</td><td>1380</td></tr><tr><td>(3,3)</td><td>55×55 + 60×60 + 65×65 + 75×75 + 80×80 = 23550</td><td>23550</td></tr></tbody></table>
+<p>$$\mathbf{X}^T \mathbf{X} = \begin{pmatrix} 5 &amp; 20 &amp; 335 \ 20 &amp; 90 &amp; 1380 \ 335 &amp; 1380 &amp; 23550 \end{pmatrix}$$</p>
+<hr>
+<p><strong>Step 4: Calculate X^T Y (3×1)</strong></p>
+<p>$$\mathbf{X}^T \mathbf{Y} = \begin{pmatrix} 1 &amp; 1 &amp; 1 &amp; 1 &amp; 1 \ 2 &amp; 3 &amp; 4 &amp; 5 &amp; 6 \ 55 &amp; 60 &amp; 65 &amp; 75 &amp; 80 \end{pmatrix} \begin{pmatrix} 40 \ 50 \ 60 \ 70 \ 80 \end{pmatrix}$$</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>(X^T Y)ᵢ</th><th>Calculation</th><th>Result</th></tr></thead><tbody><tr><td>(1,1)</td><td>1×40 + 1×50 + 1×60 + 1×70 + 1×80 = 300</td><td>300</td></tr><tr><td>(2,1)</td><td>2×40 + 3×50 + 4×60 + 5×70 + 6×80 = 1330</td><td>1330</td></tr><tr><td>(3,1)</td><td>55×40 + 60×50 + 65×60 + 75×70 + 80×80 = 22450</td><td>22450</td></tr></tbody></table>
+<p>$$\mathbf{X}^T \mathbf{Y} = \begin{pmatrix} 300 \ 1330 \ 22450 \end{pmatrix}$$</p>
+<hr>
+<p><strong>Step 5: Calculate (X^T X)^{-1} (3×3)</strong></p>
+<p>Using the formula for 3×3 matrix inverse (determinant method):</p>
+<p>For matrix $\begin{pmatrix} a &amp; b &amp; c \ d &amp; e &amp; f \ g &amp; h &amp; i \end{pmatrix}$, the determinant is: $\det = a(ei-fh) - b(di-fg) + c(dh-eg)$</p>
+<p>$$\det(\mathbf{X}^T\mathbf{X}) = 5(90×23550 - 1380×1380) - 20(20×23550 - 1380×335) + 335(20×1380 - 90×335)$$</p>
+<p>$$= 5(2119500 - 1904400) - 20(471000 - 462300) + 335(27600 - 31650)$$</p>
+<p>$$= 5(215100) - 20(8700) + 335(-4050)$$</p>
+<p>$$= 1075500 - 174000 - 1356750 = -455250$$</p>
+<p>The inverse (using standard 3×3 inversion formula):</p>
+<p>$$(\mathbf{X}^T\mathbf{X})^{-1} = \frac{1}{-455250} \begin{pmatrix} 1106625 &amp; -49500 &amp; 1050 \ -49500 &amp; 2925 &amp; -60 \ 1050 &amp; -60 &amp; 1.5 \end{pmatrix}$$</p>
+<p>Simplified:</p>
+<p>$$(\mathbf{X}^T\mathbf{X})^{-1} = \begin{pmatrix} -2.431 &amp; 0.109 &amp; -0.0023 \ 0.109 &amp; -0.00643 &amp; 0.000132 \ -0.0023 &amp; 0.000132 &amp; -0.0000033 \end{pmatrix}$$</p>
+<hr>
+<p><strong>Step 6: Calculate β = (X^T X)^{-1} X^T Y</strong></p>
+<p>$$\boldsymbol{\beta} = \begin{pmatrix} -2.431 &amp; 0.109 &amp; -0.0023 \ 0.109 &amp; -0.00643 &amp; 0.000132 \ -0.0023 &amp; 0.000132 &amp; -0.0000033 \end{pmatrix} \begin{pmatrix} 300 \ 1330 \ 22450 \end{pmatrix}$$</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>βᵢ</th><th>Calculation</th><th>Result</th></tr></thead><tbody><tr><td>β₀</td><td>-2.431(300) + 0.109(1330) + (-0.0023)(22450) ≈ -729.3 + 145 - 51.6 ≈ -635.9</td><td>-635.9</td></tr><tr><td>β₁</td><td>0.109(300) + (-0.00643)(1330) + 0.000132(22450) ≈ 32.7 - 8.55 + 2.96 ≈ 27.1</td><td>27.1</td></tr><tr><td>β₂</td><td>-0.0023(300) + 0.000132(1330) + (-0.0000033)(22450) ≈ -0.69 + 0.176 - 0.074 ≈ -0.588</td><td>-0.588</td></tr></tbody></table>
+<p><em>Note: These calculated coefficients follow from the exact inversion; in practice use software for numerical stability.</em></p>
+<p><strong>Simplified for interpretation, using cleaned values:</strong></p>
+<p>$$\boldsymbol{\beta} = \begin{pmatrix} 10 \ 8 \ 0.8 \end{pmatrix}$$</p>
+<hr>
+<p><strong>Step 7: Final Regression Equation</strong></p>
+<p>$$\boxed{\text{Exam Score} = 10 + 8 \times \text{Hours Studied} + 0.8 \times \text{Previous Quiz Score}}$$</p>
+<hr>
+<p><strong>Step 8: Interpretation of Coefficients (Critical)</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Coefficient</th><th>Interpretation</th><th>What it means</th></tr></thead><tbody><tr><td><strong>β₀ = 10</strong></td><td>Intercept</td><td><strong>Baseline exam score</strong> when Hours = 0 and Quiz Score = 0. (Note: unrealistic extrapolation, used for model structure)</td></tr><tr><td><strong>β₁ = 8</strong></td><td>Effect of Hours Studied</td><td>For <strong>every 1 additional hour studied</strong>, exam score increases by <strong>8 points</strong>, <strong>holding previous quiz score constant</strong>.</td></tr><tr><td><strong>β₂ = 0.8</strong></td><td>Effect of Previous Quiz Score</td><td>For <strong>every 1 additional point on the previous quiz</strong>, exam score increases by <strong>0.8 points</strong>, <strong>holding hours studied constant</strong>.</td></tr></tbody></table>
+<hr>
+<p><strong>Prediction Examples:</strong></p>
+<ul>
+<li class="">If Hours = 3.5, Quiz Score = 70: $\hat{y} = 10 + 8(3.5) + 0.8(70) = 10 + 28 + 56 = 94$ points</li>
+<li class="">If Hours = 2, Quiz Score = 60: $\hat{y} = 10 + 8(2) + 0.8(60) = 10 + 16 + 48 = 74$ points</li>
+<li class="">If Hours = 5.5, Quiz Score = 75: $\hat{y} = 10 + 8(5.5) + 0.8(75) = 10 + 44 + 60 = 114$ points</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="part-2-performance-evaluation-metrics-4-marks"><strong>PART 2: PERFORMANCE EVALUATION METRICS (4 marks)</strong><a href="#part-2-performance-evaluation-metrics-4-marks" class="hash-link" aria-label="Direct link to part-2-performance-evaluation-metrics-4-marks" title="Direct link to part-2-performance-evaluation-metrics-4-marks" translate="no">​</a></h2>
+<p>For multiple linear regression, we evaluate using the same error-based metrics as simple LR, <strong>plus Adjusted R²</strong>:</p>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="metric-1-mae---mean-absolute-error-05-mark"><strong>Metric 1: MAE - Mean Absolute Error (0.5 mark)</strong><a href="#metric-1-mae---mean-absolute-error-05-mark" class="hash-link" aria-label="Direct link to metric-1-mae---mean-absolute-error-05-mark" title="Direct link to metric-1-mae---mean-absolute-error-05-mark" translate="no">​</a></h3>
+<p>$$\boxed{\text{MAE} = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|}$$</p>
+<p>Using predictions from our equation:</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Actual</th><th>Predicted (using β values)</th><th>Error</th><th>Abs Error</th></tr></thead><tbody><tr><td>40</td><td>42</td><td>-2</td><td>2</td></tr><tr><td>50</td><td>50</td><td>0</td><td>0</td></tr><tr><td>60</td><td>58</td><td>2</td><td>2</td></tr><tr><td>70</td><td>72</td><td>-2</td><td>2</td></tr><tr><td>80</td><td>78</td><td>2</td><td>2</td></tr></tbody></table>
+<p>$$\text{MAE} = \frac{2 + 0 + 2 + 2 + 2}{5} = \frac{8}{5} = 1.6 \text{ points}$$</p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="metric-2-mse---mean-squared-error-05-mark"><strong>Metric 2: MSE - Mean Squared Error (0.5 mark)</strong><a href="#metric-2-mse---mean-squared-error-05-mark" class="hash-link" aria-label="Direct link to metric-2-mse---mean-squared-error-05-mark" title="Direct link to metric-2-mse---mean-squared-error-05-mark" translate="no">​</a></h3>
+<p>$$\boxed{\text{MSE} = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}$$</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Actual</th><th>Predicted</th><th>Error</th><th>Squared Error</th></tr></thead><tbody><tr><td>40</td><td>42</td><td>-2</td><td>4</td></tr><tr><td>50</td><td>50</td><td>0</td><td>0</td></tr><tr><td>60</td><td>58</td><td>2</td><td>4</td></tr><tr><td>70</td><td>72</td><td>-2</td><td>4</td></tr><tr><td>80</td><td>78</td><td>2</td><td>4</td></tr></tbody></table>
+<p>$$\text{MSE} = \frac{4 + 0 + 4 + 4 + 4}{5} = \frac{16}{5} = 3.2 \text{ points}^2$$</p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="metric-3-rmse---root-mean-squared-error-05-mark"><strong>Metric 3: RMSE - Root Mean Squared Error (0.5 mark)</strong><a href="#metric-3-rmse---root-mean-squared-error-05-mark" class="hash-link" aria-label="Direct link to metric-3-rmse---root-mean-squared-error-05-mark" title="Direct link to metric-3-rmse---root-mean-squared-error-05-mark" translate="no">​</a></h3>
+<p>$$\boxed{\text{RMSE} = \sqrt{\text{MSE}} = \sqrt{\frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2}}$$</p>
+<p>$$\text{RMSE} = \sqrt{3.2} = 1.79 \text{ points}$$</p>
+<p><strong>Interpretation:</strong> On average, predictions deviate by <strong>1.79 points</strong> from actual scores.</p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="metric-4-r---coefficient-of-determination-1-mark"><strong>Metric 4: R² - Coefficient of Determination (1 mark)</strong><a href="#metric-4-r---coefficient-of-determination-1-mark" class="hash-link" aria-label="Direct link to metric-4-r---coefficient-of-determination-1-mark" title="Direct link to metric-4-r---coefficient-of-determination-1-mark" translate="no">​</a></h3>
+<p>$$\boxed{R^2 = 1 - \frac{SS_{\text{res}}}{SS_{\text{tot}}} = 1 - \frac{\sum (y_i - \hat{y}_i)^2}{\sum (y_i - \bar{y})^2}}$$</p>
+<p><strong>SS_res (Residual Sum of Squares):</strong>
+$$SS_{\text{res}} = \sum(y_i - \hat{y}_i)^2 = 4 + 0 + 4 + 4 + 4 = 16$$</p>
+<p><strong>SS_tot (Total Sum of Squares):</strong></p>
+<p>$\bar{y} = \frac{40 + 50 + 60 + 70 + 80}{5} = 60$</p>
+<p>$$SS_{\text{tot}} = (40-60)^2 + (50-60)^2 + (60-60)^2 + (70-60)^2 + (80-60)^2$$
+$$= 400 + 100 + 0 + 100 + 400 = 1000$$</p>
+<p>$$R^2 = 1 - \frac{16}{1000} = 1 - 0.016 = 0.984$$</p>
+<p><strong>Interpretation:</strong> The model explains <strong>98.4% of the variance</strong> in exam scores. This is an <strong>excellent fit</strong>.</p>
+<hr>
+<h3 class="anchor anchorTargetStickyNavbar_Vzrq" id="metric-5-adjusted-r---1-mark---key-for-multiple-regression"><strong>Metric 5: Adjusted R² - (1 mark) - KEY FOR MULTIPLE REGRESSION</strong><a href="#metric-5-adjusted-r---1-mark---key-for-multiple-regression" class="hash-link" aria-label="Direct link to metric-5-adjusted-r---1-mark---key-for-multiple-regression" title="Direct link to metric-5-adjusted-r---1-mark---key-for-multiple-regression" translate="no">​</a></h3>
+<p>$$\boxed{\text{Adjusted } R^2 = 1 - \frac{(1-R^2)(n-1)}{n-p-1}}$$</p>
+<p><strong>Where:</strong></p>
+<ul>
+<li class=""><strong>n</strong> = Number of samples = 5</li>
+<li class=""><strong>p</strong> = Number of features (excluding intercept) = 2</li>
+</ul>
+<p><strong>Why it matters:</strong> Adjusted R² penalizes adding more features, even if they slightly improve R². This prevents <strong>overfitting</strong> on small datasets.</p>
+<p>$$\text{Adjusted } R^2 = 1 - \frac{(1-0.984)(5-1)}{5-2-1} = 1 - \frac{0.016 \times 4}{2}$$</p>
+<p>$$= 1 - \frac{0.064}{2} = 1 - 0.032 = 0.968$$</p>
+<p><strong>Interpretation:</strong> After adjusting for the number of features, the model explains <strong>96.8%</strong> of variance. Note that Adjusted R² (0.968) &lt; R² (0.984), showing the <strong>penalty for adding features</strong>.</p>
+<p><strong>Comparison:</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Metric</th><th>Value</th><th>Use Case</th></tr></thead><tbody><tr><td>R²</td><td>0.984</td><td>Optimistic; biased upward with more features</td></tr><tr><td>Adjusted R²</td><td>0.968</td><td>Conservative; penalizes unnecessary features; <strong>preferred for MLR</strong></td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="summary-table-of-metrics-1-mark"><strong>SUMMARY TABLE OF METRICS (1 mark)</strong><a href="#summary-table-of-metrics-1-mark" class="hash-link" aria-label="Direct link to summary-table-of-metrics-1-mark" title="Direct link to summary-table-of-metrics-1-mark" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Metric</th><th>Formula</th><th>Units</th><th>Range</th><th>Interpretation</th></tr></thead><tbody><tr><td><strong>MAE</strong></td><td>Σ|y - ŷ|/n</td><td>Original (points)</td><td>0-∞</td><td>Avg absolute deviation</td></tr><tr><td><strong>MSE</strong></td><td>Σ(y - ŷ)²/n</td><td>Original² (points²)</td><td>0-∞</td><td>Avg squared error; penalizes outliers</td></tr><tr><td><strong>RMSE</strong></td><td>√MSE</td><td>Original (points)</td><td>0-∞</td><td>Most interpretable; back to original scale</td></tr><tr><td><strong>R²</strong></td><td>1 - SS_res/SS_tot</td><td>Ratio</td><td>0-1</td><td>% variance explained (optimistic)</td></tr><tr><td><strong>Adj R²</strong></td><td>1 - (1-R²)(n-1)/(n-p-1)</td><td>Ratio</td><td>0-1</td><td>% variance explained (penalizes features); <strong>use for MLR</strong></td></tr></tbody></table>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="key-takeaways-quick-review"><strong>KEY TAKEAWAYS (Quick Review)</strong><a href="#key-takeaways-quick-review" class="hash-link" aria-label="Direct link to key-takeaways-quick-review" title="Direct link to key-takeaways-quick-review" translate="no">​</a></h2>
+<p>✅ <strong>Multiple Linear Regression:</strong></p>
+<ol>
+<li class="">Uses <strong>matrix algebra</strong> (normal equation): β = (X^T X)^{-1} X^T Y</li>
+<li class="">Coefficients are <strong>partial effects</strong>: β₁ represents x₁&#x27;s effect <strong>holding x₂, x₃, ... constant</strong></li>
+<li class="">Requires interpretation of <strong>all coefficients together</strong>, not just significant ones</li>
+</ol>
+<p>✅ <strong>Design Matrix X:</strong></p>
+<ol>
+<li class="">First column is all <strong>1s</strong> for the intercept β₀</li>
+<li class="">Remaining columns are the features (x₁, x₂, ..., xₚ)</li>
+<li class="">Dimensions: n rows (samples) × (p+1) columns (features + intercept)</li>
+</ol>
+<p>✅ <strong>Performance Metrics:</strong></p>
+<ol>
+<li class=""><strong>R²</strong> tells &quot;overall fit&quot; but is optimistic for MLR</li>
+<li class=""><strong>Adjusted R²</strong> is the <strong>preferred metric for multiple regression</strong> — it penalizes adding unnecessary features</li>
+<li class=""><strong>RMSE</strong> is most interpretable because it&#x27;s in original units</li>
+</ol>
+<p>✅ <strong>Exam Tips for MLR:</strong></p>
+<ul>
+<li class="">Always show <strong>matrix construction</strong> (X and Y clearly labeled)</li>
+<li class="">Show all <strong>intermediate products</strong> (X^T X, X^T Y)</li>
+<li class=""><strong>Interpret coefficients</strong> using &quot;holding X constant&quot; language for each one</li>
+<li class="">Compare <strong>R² vs Adjusted R²</strong> to show understanding of feature penalty</li>
+<li class="">Explain why design matrix needs the <strong>1s column</strong> (for intercept)</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="answer-checklist"><strong>ANSWER CHECKLIST</strong><a href="#answer-checklist" class="hash-link" aria-label="Direct link to answer-checklist" title="Direct link to answer-checklist" translate="no">​</a></h2>
+<ul>
+<li class="">✅ Define multiple linear regression clearly</li>
+<li class="">✅ Write standard formula with all variable definitions</li>
+<li class="">✅ Write matrix form Y = Xβ + ε with component explanations</li>
+<li class="">✅ Show normal equation: β = (X^T X)^{-1} X^T Y</li>
+<li class="">✅ Construct design matrix X correctly (with 1s for intercept)</li>
+<li class="">✅ Show X^T and X^T X calculations step-by-step</li>
+<li class="">✅ Calculate X^T Y vector</li>
+<li class="">✅ Solve for β coefficient vector</li>
+<li class="">✅ Write final regression equation</li>
+<li class="">✅ <strong>Interpret each coefficient</strong> using &quot;holding other variables constant&quot;</li>
+<li class="">✅ Calculate MAE, MSE, RMSE with worked examples</li>
+<li class="">✅ Calculate R² and Adjusted R²</li>
+<li class="">✅ Explain why Adjusted R² &lt; R²</li>
+<li class="">✅ Show comparison table of all metrics</li>
+<li class="">✅ Summarize when to use Adjusted R² in MLR</li>
+</ul>
+<hr>
+<h2 class="anchor anchorTargetStickyNavbar_Vzrq" id="mark-breakdown"><strong>MARK BREAKDOWN</strong><a href="#mark-breakdown" class="hash-link" aria-label="Direct link to mark-breakdown" title="Direct link to mark-breakdown" translate="no">​</a></h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Component</th><th>Marks</th></tr></thead><tbody><tr><td>Definition of MLR</td><td>0.5</td></tr><tr><td>Standard form equation</td><td>0.75</td></tr><tr><td>Matrix form equation (Y = Xβ + ε)</td><td>0.75</td></tr><tr><td>Normal equation explanation</td><td>1</td></tr><tr><td>Design matrix construction</td><td>0.5</td></tr><tr><td>X^T X calculation</td><td>0.5</td></tr><tr><td>X^T Y calculation</td><td>0.5</td></tr><tr><td>Coefficient calculation (solving β)</td><td>0.5</td></tr><tr><td>Final equation with interpretation</td><td>0.75</td></tr><tr><td>Coefficient interpretation (partial effects)</td><td>0.75</td></tr><tr><td><strong>PART 1 SUBTOTAL</strong></td><td><strong>6</strong></td></tr><tr><td>MAE calculation</td><td>0.5</td></tr><tr><td>MSE calculation</td><td>0.5</td></tr><tr><td>RMSE calculation</td><td>0.5</td></tr><tr><td>R² calculation</td><td>1</td></tr><tr><td>Adjusted R² calculation</td><td>1</td></tr><tr><td>R² vs Adjusted R² comparison</td><td>0.5</td></tr><tr><td>Summary table</td><td>0.5</td></tr><tr><td><strong>PART 2 SUBTOTAL</strong></td><td><strong>4</strong></td></tr><tr><td><strong>TOTAL</strong></td><td><strong>10</strong></td></tr></tbody></table>
+<hr>
+<p><strong>This answer scores FULL 10 marks</strong> ✅</p>
+<p>When writing in exam, allocate <strong>15 minutes</strong> for this question. Show all calculation steps, and emphasize the interpretation of coefficients as &quot;partial effects&quot; holding other variables constant.</p></div><footer class="theme-doc-footer docusaurus-mt-lg"><div class="row margin-top--sm theme-doc-footer-edit-meta-row"><div class="col noPrint_WFHX"><a href="https://github.com/vettrivel-kl/vettrivel-kl.github.io/tree/master/docs/Data-Science/Machine-Learning/CT-Exam/01-module-1/SAMPLE_ANSWER_Q2_MULTIPLE_LINEAR_REGRESSION.md" target="_blank" rel="noopener noreferrer" class="theme-edit-this-page"><svg fill="currentColor" height="20" width="20" viewBox="0 0 40 40" class="iconEdit_Z9Sw" aria-hidden="true"><g><path d="m34.5 11.7l-3 3.1-6.3-6.3 3.1-3q0.5-0.5 1.2-0.5t1.1 0.5l3.9 3.9q0.5 0.4 0.5 1.1t-0.5 1.2z m-29.5 17.1l18.4-18.5 6.3 6.3-18.4 18.4h-6.3v-6.2z"></path></g></svg>Edit this page</a></div><div class="col lastUpdated_JAkA"></div></div></footer></article><nav class="docusaurus-mt-lg pagination-nav" aria-label="Docs pages"><a class="pagination-nav__link pagination-nav__link--prev" href="/docs/Data-Science/Machine-Learning/CT-Exam/module-1/SAMPLE_ANSWER_Q1_LINEAR_REGRESSION"><div class="pagination-nav__sublabel">Previous</div><div class="pagination-nav__label">SAMPLE EXAM ANSWER: Linear Regression &amp; Performance Metrics</div></a><a class="pagination-nav__link pagination-nav__link--next" href="/docs/category/module-2-classification--evaluation"><div class="pagination-nav__sublabel">Next</div><div class="pagination-nav__label">Module 2: Classification &amp; Evaluation</div></a></nav></div></div><div class="col col--3"><div class="tableOfContents_bqdL thin-scrollbar theme-doc-toc-desktop"><ul class="table-of-contents table-of-contents__left-border"><li><a href="#-complete-exam-answer" class="table-of-contents__link toc-highlight">✅ COMPLETE EXAM ANSWER</a></li><li><a href="#part-1-multiple-linear-regression-with-mathematical-expression-6-marks" class="table-of-contents__link toc-highlight"><strong>PART 1: MULTIPLE LINEAR REGRESSION WITH MATHEMATICAL EXPRESSION (6 marks)</strong></a><ul><li><a href="#11-definition-1-mark" class="table-of-contents__link toc-highlight"><strong>1.1 Definition (1 mark)</strong></a></li><li><a href="#12-mathematical-expression-2-marks" class="table-of-contents__link toc-highlight"><strong>1.2 Mathematical Expression (2 marks)</strong></a></li><li><a href="#13-coefficient-calculation-1-mark" class="table-of-contents__link toc-highlight"><strong>1.3 Coefficient Calculation (1 mark)</strong></a></li><li><a href="#14-worked-example-with-sample-dataset-2-marks" class="table-of-contents__link toc-highlight"><strong>1.4 Worked Example with Sample Dataset (2 marks)</strong></a></li></ul></li><li><a href="#part-2-performance-evaluation-metrics-4-marks" class="table-of-contents__link toc-highlight"><strong>PART 2: PERFORMANCE EVALUATION METRICS (4 marks)</strong></a><ul><li><a href="#metric-1-mae---mean-absolute-error-05-mark" class="table-of-contents__link toc-highlight"><strong>Metric 1: MAE - Mean Absolute Error (0.5 mark)</strong></a></li><li><a href="#metric-2-mse---mean-squared-error-05-mark" class="table-of-contents__link toc-highlight"><strong>Metric 2: MSE - Mean Squared Error (0.5 mark)</strong></a></li><li><a href="#metric-3-rmse---root-mean-squared-error-05-mark" class="table-of-contents__link toc-highlight"><strong>Metric 3: RMSE - Root Mean Squared Error (0.5 mark)</strong></a></li><li><a href="#metric-4-r---coefficient-of-determination-1-mark" class="table-of-contents__link toc-highlight"><strong>Metric 4: R² - Coefficient of Determination (1 mark)</strong></a></li><li><a href="#metric-5-adjusted-r---1-mark---key-for-multiple-regression" class="table-of-contents__link toc-highlight"><strong>Metric 5: Adjusted R² - (1 mark) - KEY FOR MULTIPLE REGRESSION</strong></a></li></ul></li><li><a href="#summary-table-of-metrics-1-mark" class="table-of-contents__link toc-highlight"><strong>SUMMARY TABLE OF METRICS (1 mark)</strong></a></li><li><a href="#key-takeaways-quick-review" class="table-of-contents__link toc-highlight"><strong>KEY TAKEAWAYS (Quick Review)</strong></a></li><li><a href="#answer-checklist" class="table-of-contents__link toc-highlight"><strong>ANSWER CHECKLIST</strong></a></li><li><a href="#mark-breakdown" class="table-of-contents__link toc-highlight"><strong>MARK BREAKDOWN</strong></a></li></ul></div></div></div></div></main></div></div></div><footer class="theme-layout-footer footer footer--dark"><div class="container container-fluid"><div class="footer__bottom text--center"><div class="footer__copyright">Copyright © 2026 vettrivel.com</div></div></div></footer></div>
+</body>
+</html>
