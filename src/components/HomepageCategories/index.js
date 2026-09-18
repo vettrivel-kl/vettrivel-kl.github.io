@@ -85,6 +85,32 @@ const SUBJECTS = [
       },
     ],
   },
+  {
+    title: 'Inferential Statistics',
+    href: '/docs/category/inferential-statistics',
+    categories: [
+      {
+        label: 'Batch 1: Descriptive Stats',
+        href: '/docs/category/batch-1-descriptive-stats',
+        description: 'Descriptive statistics, covariance, and correlation.',
+      },
+      {
+        label: 'Batch 2: Fundamental Probability',
+        href: '/docs/category/batch-2-fundamental-probability',
+        description: 'Fundamental probability and the addition/multiplication rules.',
+      },
+      {
+        label: 'Batch 3: Probability Distributions',
+        href: '/docs/category/batch-3-probability-distributions',
+        description: 'Probability distributions and Bayes’ theorem.',
+      },
+      {
+        label: 'Batch 4: Theoretical Concepts',
+        href: '/docs/category/batch-4-theoretical-concepts',
+        description: 'Theoretical frameworks for sampling, probability, and metrics.',
+      },
+    ],
+  },
 ];
 
 function CategoryCard({label, href, description}) {
