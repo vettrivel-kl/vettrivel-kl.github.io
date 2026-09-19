@@ -53,6 +53,12 @@ const SUBJECTS = [
         description:
           'Choosing the right chart, then drawing it with Matplotlib, Seaborn or Plotly.',
       },
+      {
+        label: 'CT-1 · Class Test 1',
+        href: '/docs/category/ct-1--class-test-1',
+        description:
+          'Class Test 1 revision packages and practice sets, covering NumPy arrays, collections, Pandas, exploratory data analysis, and Matplotlib.',
+      },
     ],
   },
   {
