@@ -63,8 +63,6 @@ const config = {
           sidebarPath: './sidebars.js',
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
-          editUrl:
-            'https://github.com/vettrivel-kl/vettrivel-kl.github.io/tree/master/',
         },
         blog: {
           showReadingTime: true,
@@ -74,8 +72,6 @@ const config = {
             type: ['rss', 'atom'],
             xslt: true,
           },
-          editUrl:
-            'https://github.com/vettrivel-kl/vettrivel-kl.github.io/tree/master/',
           // Useful options to enforce blogging best practices
           onInlineTags: 'warn',
           onInlineAuthors: 'warn',
