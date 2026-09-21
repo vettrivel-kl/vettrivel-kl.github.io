@@ -64,19 +64,7 @@ const config = {
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
         },
-        blog: {
-          showReadingTime: true,
-          remarkPlugins: [remarkMath],
-          rehypePlugins: [rehypeKatex],
-          feedOptions: {
-            type: ['rss', 'atom'],
-            xslt: true,
-          },
-          // Useful options to enforce blogging best practices
-          onInlineTags: 'warn',
-          onInlineAuthors: 'warn',
-          onUntruncatedBlogPosts: 'warn',
-        },
+        blog: false,
         theme: {
           customCss: './src/css/custom.css',
         },
@@ -109,7 +97,6 @@ const config = {
             position: 'left',
             label: 'Notes ',
           },
-          {to: '/blog', label: 'Blog', position: 'left'},
         ],
       },
       footer: {
