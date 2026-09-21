@@ -254,7 +254,9 @@ Two findings, and both are useful:
 The near-zero was predictable from step 3: `Age` has a standard deviation of `1.03` across a
 20–23 range. There isn't enough variation for it to explain anything.
 
-:::note A zero correlation is a finding
+:::note
+
+**A zero correlation is a finding**
 
 Knowing `Age` is irrelevant means you can drop it from a model and stop wondering about it.
 Ruling variables out is as valuable as ruling them in.
@@ -402,7 +404,9 @@ What each step is really asking:
 EDA is where you find the problems. Doing it after modelling means discovering that a column was
 `object`, or that a group had two members, only once the results are already wrong.
 
-:::warning EDA doesn't replace plotting
+:::warning
+
+**EDA doesn't replace plotting**
 
 Every statistic on this page is a summary, and summaries discard information. The
 `y = x²` example on the [previous page](./02-correlation-and-covariance.md#it-only-sees-straight-lines)

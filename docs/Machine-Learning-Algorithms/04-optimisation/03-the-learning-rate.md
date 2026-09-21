@@ -70,7 +70,9 @@ Three practical consequences follow, and they are what to take away:
    Someone else's `α = 0.03` means nothing without their preprocessing, and rescaling one column can
    move the safe range by orders of magnitude.
 
-:::note If you are unsure what `λ` and `κ` are
+:::note
+
+**If you are unsure what `λ` and `κ` are**
 
 They were introduced on the [previous page](./02-gradient-descent.md#in-plain-words). Short version:
 `λ` (an **eigenvalue**) is how sharply the cost surface curves along one particular direction, `λ_max` is
@@ -112,7 +114,9 @@ On a standardised single feature:
    1/lambda_max = 0.500000 (monotone limit)   2/(lam_max+lam_min) = 0.500000 (fastest)   2/lambda_max = 1.000000 (divergence)
 ```
 
-:::tip You can compute a safe `α` instead of searching for one
+:::tip
+
+**You can compute a safe `α` instead of searching for one**
 
 `np.linalg.eigvalsh((2 / n) * X.T @ X).max()` costs microseconds and hands you the exact ceiling.
 Starting from `0.9 × 2/λ_max` and working down beats starting from `0.01` and working up, and it
@@ -159,7 +163,9 @@ converging.
 **`α = 1.2` — past the limit.** `|1 − 2.4| = 1.4`, so the error grows by 40% per step. Cost passed
 `1e10` at **iteration 26**.
 
-:::danger Overshooting is invisible in the cost curve on a well-conditioned problem
+:::danger
+
+**Overshooting is invisible in the cost curve on a well-conditioned problem**
 
 This is the trap in the standard "read the shape of your loss curve" advice. At `α = 0.8` the
 parameters alternate on every step — textbook overshoot — and the cost curve is a clean monotone
@@ -206,7 +212,9 @@ iteration 100 — the same order of magnitude as the starting `257.29`. It looks
 struggling, not one that is broken. It reaches `2.114e+09` by iteration 1000 and only passes `1e10` at
 **iteration 1098**.
 
-:::warning A first attempt at this measurement got the wrong answer, for an instructive reason
+:::warning
+
+**A first attempt at this measurement got the wrong answer, for an instructive reason**
 
 Bisecting on "did the cost exceed `1e10` within 1000 iterations" measured the threshold as
 **`1.00439616`** and reported a 0.44% error against theory, which looks like a tolerable experimental
@@ -291,7 +299,9 @@ these are the coefficients in standardised space. Undoing the transform gives `s
 `intercept = 5.2104` against the true `2.0` and `5.0` — recovered correctly, with the gap being noise
 in 200 samples rather than optimiser error.
 
-:::note This demo is deliberately constructed to be readable
+:::note
+
+**This demo is deliberately constructed to be readable**
 
 `n = 200`, a standardised single feature and `α = 0.3` were chosen so every column changes by a clean
 factor and the run finishes in a handful of rows. The next section removes the standardisation and the
@@ -365,7 +375,9 @@ direction to help the flattest one is a bad trade when the objective is cost.
 The last three rows show the resulting shape: `10870` at `1.9950`, `11007` at `1.9990`, then **`99672`
 at `1.9999`** — a 9× penalty for moving `α` by 0.02%.
 
-:::danger The optimum is a cliff on one side and a gentle slope on the other
+:::danger
+
+**The optimum is a cliff on one side and a gentle slope on the other**
 
 `α` between `1.5×` and `1.99×` the monotone limit all landed within 33% of the best result. Push to
 `1.9999×` and it costs **9×**. The cost of being too small is linear and forgiving; the cost of being
@@ -418,7 +430,9 @@ setting went `54 → 695` — nearly **13× more work** for having skipped one t
 That is a modest range. The [previous page's ravine ladder](./02-gradient-descent.md#the-bowl-is-usually-a-ravine)
 pushed `κ` to `929437.6` and the run never finished at all.
 
-:::tip This is the concrete reason to standardise before an iterative solver
+:::tip
+
+**This is the concrete reason to standardise before an iterative solver**
 
 [Feature scaling](../02-data-preprocessing/04-feature-scaling-and-transformation.md#which-models-actually-need-it)
 is usually justified by appeals to fairness between features. The sharper argument is arithmetic:

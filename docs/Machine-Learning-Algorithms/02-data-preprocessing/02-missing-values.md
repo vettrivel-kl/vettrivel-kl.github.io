@@ -58,7 +58,9 @@ true `3.851` — a **25% underestimate**. And imputing with the mean cannot help
 have available is *already* the wrong mean. You fill 600 gaps with `2.877` and every one is
 confidently, systematically too low.
 
-:::danger No imputer can fix MNAR
+:::danger
+
+**No imputer can fix MNAR**
 
 Look at the two MNAR rows: imputation left the mean at `2.877` and pushed the std *further* from the
 truth. Applying a more sophisticated imputer would not have helped — KNN and Iterative imputers
@@ -101,7 +103,9 @@ Consequences worth knowing:
 - **The distribution grows a spike** at the mean that does not exist in reality
 - The more you impute, the worse all three get — at 50% missing, half your column is one number
 
-:::note Mean imputation is a *point estimate* pretending to be data
+:::note
+
+**Mean imputation is a *point estimate* pretending to be data**
 
 `SimpleImputer` fills the single most likely value and discards all uncertainty. The model then
 treats an imputed `3.815` with exactly the same confidence as a measured `3.815`.
@@ -235,7 +239,9 @@ the mean** (`1.0566` vs `0.9840`). It averaged neighbours that were neighbours i
 adding noise. `IterativeImputer` scored `0.9840`, *identical* to the mean, because its regression
 found no usable signal and correctly fell back.
 
-:::tip Check the correlation before reaching for a fancy imputer
+:::tip
+
+**Check the correlation before reaching for a fancy imputer**
 
 ```python
 df.corr()[column_with_gaps].abs().sort_values(ascending=False)
@@ -326,7 +332,9 @@ The test row's `NaN`s became `32.5` and `72500` — the *training* means. That's
 whole point. If `transform` recomputed the mean from the test set, the test set would have influenced
 its own preparation, and its score would no longer estimate performance on unseen data.
 
-:::danger `fit_transform` on train, `transform` on test
+:::danger
+
+**`fit_transform` on train, `transform` on test**
 
 ```python
 X_train = imp.fit_transform(X_train)   # learn AND apply

@@ -71,11 +71,15 @@ treats those rows differently where MAE treats them identically.
 5. Why MAPE punishes over-prediction without limit but under-prediction by at most 100%, and why
    scikit-learn hands you `0.0296` where you expected `2.96`.
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
+
 R² compares your model against one specific rival: predicting the mean for every row. Everything
 strange about R² — negative values, rising when you add junk, changing when you re-split —
 follows from the fact that the rival changes too. Different rows, different mean, different `SST`,
 therefore a different R² for the *same* predictions.
+
 :::
 
 ---
@@ -106,9 +110,11 @@ the appeal, and also the danger: a unitless number is easy to quote without chec
 it was measured against.
 
 :::note
+
 R² is dimensionless but **not** portable across datasets — it depends on `SST`, which depends on how
 spread out `y` is in the rows you scored. Quote R² and RMSE together, or you have told half the
 story: [why the same RMSE is excellent or useless](./01-error-in-the-units-of-y.md#none-of-the-three-means-anything-without-the-spread-of-y).
+
 :::
 
 ---
@@ -168,10 +174,12 @@ be uncorrelated with the fitted values — that is exactly what setting the grad
 achieves. Our `ŷ` column was invented by hand, so no such guarantee applies.
 
 :::warning
+
 `R² = SSR/SST` and `SST = SSR + SSE` require predictions from an ordinary least-squares fit **with
 an intercept**. `R² = 1 − SSE/SST` requires nothing. Use the second form always: it is what
 `r2_score` computes, and the only one still correct for ridge, a tree, a neural network, or a
 number a colleague typed into a spreadsheet.
+
 :::
 
 ### The same numbers, from a real fit
@@ -243,10 +251,12 @@ metric doing its job.
 | A badly wrong constant, or a diverged fit | Predictions sit far from the data — see [the learning rate](../04-optimisation/03-the-learning-rate.md) if a fit diverged |
 
 :::danger
+
 `r2_score` is not symmetric. Swapping the arguments does not flip a sign; it computes
 `1 − SSE/Σ(ŷ − mean(ŷ))²` — right numerator, wrong denominator. The result looks plausible, which
 is why the bug survives review. `mean_squared_error` *is* symmetric, so the habit you built there
 does not transfer.
+
 :::
 
 The baseline is also computed from the rows **being scored**, not from training. Score identical
@@ -339,10 +349,12 @@ better model. Invert the arithmetic to see what Model B needed:
 Model B needed R² ≥ 0.8391 to justify seven features. It managed 0.835 — close, and losing.
 
 :::note
+
 Neither `r2_score` nor `LinearRegression.score()` gives you Adjusted R². scikit-learn does not
 implement it, because a scorer sees only `y_true` and `y_pred` and therefore cannot know `p`.
 Compute it from `r2_score`, `n` and `X.shape[1]`, or read it off a `statsmodels`
 `OLS(...).fit().summary()`, which prints both.
+
 :::
 
 ---
@@ -372,9 +384,11 @@ page runs that experiment and shows
 | Select features from a large pool | Too permissive. Cross-validate instead |
 
 :::tip
+
 The reliable version of the same question needs no formula: fit both models, score both on rows
 neither has seen, prefer the winner there. Adjusted R² is an in-sample approximation of that
 comparison, invented when refitting a model fifty times was expensive. It no longer is.
+
 :::
 
 ---
@@ -465,9 +479,11 @@ a percentage, WAPE gets you there without any of MAPE's pathologies — and it i
 demand-planning teams actually report.
 
 :::danger
+
 `mean_absolute_percentage_error` returns a **fraction**, not a percentage. For the table above it
 returns `0.0295965`, not `2.95965`. The name says "percentage" and the value does not. Multiply by
 100 yourself, and check every dashboard you inherit for a factor-of-100 error.
+
 :::
 
 ---

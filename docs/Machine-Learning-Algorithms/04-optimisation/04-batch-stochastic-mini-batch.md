@@ -108,7 +108,9 @@ Every comparison below is made against `J_min = 4.005043`, the closed-form
 "how close did it get" is measured against a real number rather than against wherever a run happened to
 stop.
 
-:::tip The stochastic gradient is unbiased, which is the whole justification
+:::tip
+
+**The stochastic gradient is unbiased, which is the whole justification**
 
 `E[∇J on one random row] = ∇J on all rows`. That is why a noisy gradient works at all: the errors
 cancel over many steps. What differs is the *variance*, which falls as `1/b`. So the choice of batch
@@ -166,7 +168,9 @@ computed on 2048 rows was, for this problem, just as good a direction as one com
 cost a tenth as much to compute. That is the real argument for mini-batching, and it is about *cost per
 update*, not about noise being helpful.
 
-:::danger "SGD converges faster" is a claim about a quantity nobody was measuring
+:::danger
+
+**"SGD converges faster" is a claim about a quantity nobody was measuring**
 
 The familiar ranking is usually defended by saying SGD makes progress after one row instead of waiting
 for `n`. That is true, and it concerns **progress per row seen**, which is measured in the
@@ -229,7 +233,9 @@ If the cloud radius is set by `α`, shrinking `α` over time should shrink the c
 **`1.0595e-01 → 5.1036e-06`.** The same SGD, the same two seconds, the same seed — a factor of about
 **20,700** closer to the minimum, purely from letting the step size decay.
 
-:::tip The plateau is a step-size artefact, not a limit of stochastic gradients
+:::tip
+
+**The plateau is a step-size artefact, not a limit of stochastic gradients**
 
 This is the single most useful thing on the page. A noisy gradient does not prevent convergence to the
 exact minimum; a *constant step size combined with* a noisy gradient does. Decay the rate and the floor
@@ -259,7 +265,9 @@ This is why every practical stochastic optimiser has a schedule, and why scikit-
 Note that the decayed run's variance, `1.5083e-06`, is *larger* than mini-batch 256's `2.759e-09` even
 though its mean cost is lower. It is still jittering; the jitter is simply centred much closer in.
 
-:::note These four numbers move between runs, the pattern does not
+:::note
+
+**These four numbers move between runs, the pattern does not**
 
 The budget is wall-clock, so a faster machine grants more epochs and each figure shifts — batch has
 been observed anywhere from `0.0000e+00` to `1.8e-15`, and SGD between about `8.5e-02` and `1.1e-01`.
@@ -302,7 +310,9 @@ The reason is arithmetic rather than subtle. In 7,936 rows, mini-batch 32 made *
 same 7,936 rows, batch made **zero** — it cannot update until it has seen all 200,000. By the time batch
 has made its first update, mini-batch 32 has made 6,250 and is already finished.
 
-:::tip This is the honest form of "stochastic descent is faster"
+:::tip
+
+**This is the honest form of "stochastic descent is faster"**
 
 It is about **progress per row read**, and in that unit small batches win by three orders of magnitude.
 It matters whenever a pass over the data is the expensive thing: data that does not fit in memory, data
@@ -349,7 +359,9 @@ learning rate it is *worse*, at `4.2844e-02` — 5.5× further away. The default
 `learning_rate='invscaling'`, a decaying schedule, and the two rows are the noise-floor result appearing
 in library code: the decaying default beats the hand-set constant.
 
-:::warning `SGDRegressor` is not a better `LinearRegression`
+:::warning
+
+**`SGDRegressor` is not a better `LinearRegression`**
 
 On 20,000 rows and 5 features it lands `7.8e-03` from an answer `LinearRegression` gets exactly, in less
 code. `SGDRegressor` exists for the cases where the closed form is not available — too many features for

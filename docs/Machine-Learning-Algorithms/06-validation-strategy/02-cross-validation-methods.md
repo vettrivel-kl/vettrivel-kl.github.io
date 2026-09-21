@@ -44,8 +44,12 @@ The page settles three confusions:
 | **CV score** | Average (or other aggregate) of fold scores. |
 | **Stratified CV** | CV that preserves class distribution per fold (important on imbalanced data). |
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
+
 K-Fold CV (typically K=5 or 10) is the practical standard. It's cheaper than LOO-CV (N folds) and more reliable than one train-test split. Average the K fold scores to get your final CV score.
+
 :::
 
 ---

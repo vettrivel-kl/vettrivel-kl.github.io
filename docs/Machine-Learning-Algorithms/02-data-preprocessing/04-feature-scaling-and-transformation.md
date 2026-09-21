@@ -121,7 +121,9 @@ So scaling, log transforms, and square roots are all invisible to it. This is a 
 property: it means you can skip scaling entirely for tree ensembles, and it explains why boosted trees
 are so forgiving of raw, messy features.
 
-:::tip Unsure? Scale anyway
+:::tip
+
+**Unsure? Scale anyway**
 
 Scaling costs nothing for models that don't need it — the RandomForest row proves that, at `+0.0000`.
 It's substantial for models that do. Inside a `Pipeline` it's one extra line.
@@ -166,7 +168,9 @@ should be.
 | `RobustScaler` | **median** | **IQR** | **Yes** |
 | `MaxAbsScaler` | none | max abs | No — but preserves sparsity |
 
-:::warning `MinMaxScaler` and outliers do not mix
+:::warning
+
+**`MinMaxScaler` and outliers do not mix**
 
 If a column might contain an extreme value, min–max is the wrong choice — one point defines your
 entire range. Use `RobustScaler`, or handle the outliers first — see
@@ -271,7 +275,9 @@ only their order.
 | `PowerTransformer` (Box-Cox) | No | No | Fitted per column |
 | `QuantileTransformer` | Yes | Yes | Forced — rank-based |
 
-:::note Transforming the target changes what you are optimising
+:::note
+
+**Transforming the target changes what you are optimising**
 
 Everything above concerns features. Log-transforming the **target** is a different decision: minimising
 squared error on `log(y)` minimises *relative* error on `y`, not absolute error.
@@ -327,7 +333,9 @@ The reason is what gets leaked. Target encoding leaks **the target itself, per r
 one mean and one standard deviation aggregated over hundreds of rows — a vanishing amount of
 information about any individual row.
 
-:::tip Keep the discipline anyway — for reasons other than fear
+:::tip
+
+**Keep the discipline anyway — for reasons other than fear**
 
 Fit on train only, but not because the numbers above are alarming. Because:
 

@@ -40,8 +40,12 @@ The page settles two confusions:
 | **Sparse** | Few non-zero values; or data points far apart. |
 | **PCA** | Principal Component Analysis. Finds directions of max variance. |
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
+
 More features = more parameters = higher overfitting risk without more data. Use feature selection (remove weak) or dimensionality reduction (PCA, compress). Rule: samples >> features. If p > N/10, consider reducing.
+
 :::
 
 ---

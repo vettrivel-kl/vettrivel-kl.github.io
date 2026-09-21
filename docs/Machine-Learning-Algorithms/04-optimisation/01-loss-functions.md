@@ -40,7 +40,9 @@ mistakes builds a staircase. Squared error and log loss build hillsides.
 The fix, used everywhere in machine learning, is to minimise a smooth stand-in (a **surrogate loss**)
 and report the count you actually cared about afterwards. That is the single most useful idea here.
 
-:::tip How to read this page
+:::tip
+
+**How to read this page**
 
 Every claim below is backed by a printed number, often to six or seven digits. On a first pass, read
 the **bold sentences and the section headings** and let the digits go past — they are there so you can
@@ -117,7 +119,9 @@ lift the line, and it does: the squared-error intercept moved `5.16 → 6.51`.
 squared error's slope goes `1.9490 → 2.6066`, a 34% error. Absolute error goes `1.9752 → 1.9752`.
 Huber, `1.9526 → 1.9581`.
 
-:::danger Testing outlier robustness with a low-leverage point measures nothing
+:::danger
+
+**Testing outlier robustness with a low-leverage point measures nothing**
 
 Both corruptions moved `y` by the same amount. One produced a `+0.0290` slope shift and the other
 `+0.6576`, from the same loss. The variable being tested was position, not the loss function.
@@ -174,7 +178,9 @@ The consequence is the strongest number on this page. Pushing that point to `200
 `2.6066`, `5.2260`, `188.5808`. One loss is indifferent to how wrong the outlier is; the other is
 approximately proportional to it.
 
-:::note This is also absolute error's weakness, stated honestly
+:::note
+
+**This is also absolute error's weakness, stated honestly**
 
 Ignoring magnitude is exactly what makes the median fit robust, and exactly what makes it *insensitive*
 — it discards real information when the large residual is genuine signal rather than corruption. A
@@ -221,7 +227,9 @@ its slope moved only `1.9526 → 1.9581`.
 | **Absolute** (L1) | `\|r\|` | The **median** | `sign(r)` — constant | Bounded, and magnitude-blind |
 | **Huber** | `½r²` or `δ(\|r\|−δ/2)` | Between the two | `r` then `δ·sign(r)` | Bounded beyond `δ` |
 
-:::tip Squared error fits the mean; absolute error fits the median
+:::tip
+
+**Squared error fits the mean; absolute error fits the median**
 
 This is the cleanest way to remember the difference. Minimising `Σ(y − c)²` over a constant `c` gives
 `c = ȳ`; minimising `Σ|y − c|` gives `c = median(y)`. The regression versions inherit exactly those
@@ -270,7 +278,9 @@ Running gradient descent on each confirms the consequence. From an identical, de
 - minimising 0/1 loss: **12/60** after 200 steps. It did not move. It cannot.
 - minimising log loss: **60/60**. Every row correct.
 
-:::danger You cannot optimise accuracy directly, and this is why
+:::danger
+
+**You cannot optimise accuracy directly, and this is why**
 
 Accuracy, precision, recall and F1 are all built from counts, so all of them are piecewise constant in
 the parameters. A gradient method has nothing to follow. This is not a limitation of gradient descent —
@@ -330,7 +340,9 @@ That asymmetry is the point. Log loss does not score whether you were right; it 
 probability you assigned to what actually happened. Being confidently wrong is punished without bound,
 which is what forces a model to produce calibrated probabilities rather than confident guesses.
 
-:::warning `log_loss` on a probability of exactly zero
+:::warning
+
+**`log_loss` on a probability of exactly zero**
 
 Because `−ln(0) = ∞`, any implementation must clip. scikit-learn's `log_loss` clips predictions away
 from `0` and `1` internally, so it returns a large finite number rather than `inf`. If you write the
@@ -402,7 +414,9 @@ columns, so this is a property of the losses rather than of how long the optimis
 both times, so the non-convergence did not cost it anything here — but a non-convergence warning
 sitting next to an accuracy comparison is a reason to check, not to publish.
 
-:::note An earlier version of this measurement produced a false finding
+:::note
+
+**An earlier version of this measurement produced a false finding**
 
 The first run of this comparison reported all five losses clustered at chance level and concluded that
 the choice of loss makes no difference to accuracy. The labels had accidentally been generated from a
@@ -473,7 +487,9 @@ the model is most confident. A confidently wrong prediction is therefore where s
 *slowest*. Cross-entropy's `−ln p` was constructed so that the `σ′` term cancels, leaving `p − y`: the
 gradient is the error itself.
 
-:::tip Cross-entropy is not "better", it is the loss whose gradient survives the sigmoid
+:::tip
+
+**Cross-entropy is not "better", it is the loss whose gradient survives the sigmoid**
 
 The cancellation is the design, not a happy accident. `−ln p` is chosen because its derivative is
 `−1/p` and `σ′ = p(1−p)`, so the product is `−(1−p)`, giving `p − y` overall. Any smooth loss paired

@@ -9,7 +9,9 @@ tags: [common-mistakes, debugging, pitfalls, reference]
 
 Learn what NOT to do by studying the most common errors students (and professionals!) make.
 
-:::tip Use This Guide
+:::tip
+
+**Use This Guide**
 
 1. **Before exam** - Review mistakes in weak areas
 2. **When stuck** - Check if you made a common error

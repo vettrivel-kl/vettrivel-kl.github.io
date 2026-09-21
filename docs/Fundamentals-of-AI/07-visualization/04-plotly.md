@@ -36,7 +36,9 @@ df = pd.DataFrame({
 })
 ```
 
-:::warning The images below are static snapshots
+:::warning
+
+**The images below are static snapshots**
 
 Every chart on this page is a PNG export, so the interactivity — the whole point of Plotly — isn't
 visible here. Run the code yourself to get the real thing: hover tooltips, box zoom, pan, and
@@ -273,7 +275,9 @@ pip install kaleido
 `scale=2` doubles the resolution, which matters for embedding. Every image on this page was
 produced this way.
 
-:::note Exporting to PNG discards the point
+:::note
+
+**Exporting to PNG discards the point**
 
 A static export loses hover, zoom, pan and the clickable legend. If the output has to be an image —
 a PDF, a printed report, a document — Matplotlib or Seaborn will give you a better-looking one with

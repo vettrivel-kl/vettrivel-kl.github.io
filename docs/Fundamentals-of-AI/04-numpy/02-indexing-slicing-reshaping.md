@@ -113,7 +113,9 @@ print(a[::2, ::2])    # every other row and column
  [7 9]]
 ```
 
-:::note Indexing a dimension drops it; slicing keeps it
+:::note
+
+**Indexing a dimension drops it; slicing keeps it**
 
 ```python
 print(a[:, 1].shape)      # → (3,)    1-D — the column dimension is gone
@@ -155,7 +157,9 @@ print(L)   # → [1, 2, 3, 4, 5]   untouched
 [1, 2, 3, 4, 5]
 ```
 
-:::danger This is the reverse of list behaviour
+:::danger
+
+**This is the reverse of list behaviour**
 
 On the [Lists page](../03-collections/02-lists.md#the-reference-trap), `lst[:]` is the
 idiomatic way to *copy* a list. On a NumPy array, `arr[:]` is a **view into the same
@@ -241,7 +245,9 @@ print((a > 20).sum())           # → 2
 | or | `\|` | `or` |
 | not | `~` | `not` |
 
-:::warning `and` / `or` / `not` don't work on arrays
+:::warning
+
+**`and` / `or` / `not` don't work on arrays**
 
 They ask for one `True`/`False`, and an array of many values can't answer. You get
 `ValueError: The truth value of an array with more than one element is ambiguous`. Use

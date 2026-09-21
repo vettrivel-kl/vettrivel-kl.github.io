@@ -211,14 +211,18 @@ print(keyword.iskeyword("class"))   # → True
 print(keyword.iskeyword("klass"))   # → False
 ```
 
-:::note Soft keywords
+:::note
+
+**Soft keywords**
 
 `match`, `case`, `type` and `_` are contextual. They're legal variable names, but avoid
 them — using `match` as a variable will confuse anyone reading your code.
 
 :::
 
-:::danger Built-ins are not keywords, but don't shadow them either
+:::danger
+
+**Built-ins are not keywords, but don't shadow them either**
 
 `list = [1,2,3]` is *legal* — no error — but now `list()` is broken for the rest of your
 program. Same for `str`, `dict`, `sum`, `type`, `id`, `input`. This is worse than a

@@ -44,8 +44,12 @@ The page settles three confusions:
 | **Threshold** | Cutoff for decision. Default: P ≥ 0.5 → predict positive. |
 | **Decision boundary** | The line/curve separating predicted positives from negatives. |
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
+
 Linear regression outputs any number; classification needs 0–1 probabilities. Sigmoid function solves this: σ(x) = 1 / (1 + e^(-x)) always outputs [0, 1]. Logistic regression replaces the line with the sigmoid.
+
 :::
 
 ---

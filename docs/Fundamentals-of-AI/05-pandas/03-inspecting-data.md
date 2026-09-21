@@ -188,7 +188,9 @@ memory usage: 324.0+ bytes
 **Read the `Non-Null Count` column against the row count.** `RangeIndex: 6 entries` and every
 column saying `6 non-null` means nothing is missing. Any column showing fewer than 6 has gaps.
 
-:::note `info()` prints — it doesn't return
+:::note
+
+**`info()` prints — it doesn't return**
 
 `df.info()`, not `print(df.info())`. Wrapping it in `print()` shows the output *and then*
 `None`, because the method's return value is `None`. It's the one inspection call that breaks
@@ -274,7 +276,9 @@ And **`count` is 5, not 6**, for both numeric columns. Six rows, one missing val
 five values were actually summarised. Every statistic here is computed on those five —
 `Marks` averages 77.0 from five numbers, not six.
 
-:::warning `count` is your missing-data alarm
+:::warning
+
+**`count` is your missing-data alarm**
 
 `len(c)` is 6 but `count` is 5. That gap is the fastest way to spot missing data without
 running anything else.

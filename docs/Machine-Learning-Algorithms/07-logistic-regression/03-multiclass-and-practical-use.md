@@ -43,8 +43,12 @@ The page settles three confusions:
 | **Odds** | Ratio of positive to negative: odds = P / (1−P). Relates to log-odds (linear part). |
 | **Log-odds** | Natural log of odds: log(P / (1−P)) = mx + b. Linear in x. |
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
+
 Multiclass logistic regression: one-vs-rest fits K classifiers (simple, practical), softmax fits one model (elegant, often better). Decision boundary is where max P(class i) changes. Use sklearn: LogisticRegression(..., multi_class='ovr' or 'multinomial').
+
 :::
 
 ---

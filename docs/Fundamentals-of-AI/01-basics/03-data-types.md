@@ -29,7 +29,9 @@ Python has four **scalar** types (single values) and four **collection** types
 | Dictionary | `dict` | `{"key": "value"}` | Key-value pairs | ✅ mutable |
 | Set | `set` | `{1, 2, 3}` | Unordered, unique values only | ✅ mutable |
 
-:::note On "immutable" for scalars
+:::note
+
+**On "immutable" for scalars**
 
 The *value* `28` cannot be changed in place, but you can always point the variable at a
 new value: `age = 28` then `age = 29` is fine. What you cannot do is mutate `28` itself.
@@ -197,7 +199,9 @@ print(True or False)     # → True
 print(not True)          # → False
 ```
 
-:::note `bool` is a subclass of `int`
+:::note
+
+**`bool` is a subclass of `int`**
 
 `True == 1` and `False == 0`, so `True + True` is `2`. This has real consequences — see
 [Values and Types](./01-values-and-types.md#bool-is-a-subclass-of-int).
@@ -269,7 +273,9 @@ nested_tuple = (1, (2, 3), (4, (5, 6)))
 empty_tuple = ()
 ```
 
-:::warning `(42)` is not a tuple
+:::warning
+
+**`(42)` is not a tuple**
 
 It's just the integer `42` in parentheses. The trailing comma in `(42,)` is what makes it
 a tuple.
@@ -302,7 +308,9 @@ coordinates.append(30)   # AttributeError: 'tuple' object has no attribute 'appe
 - Can be used as a **dictionary key** (lists cannot — they're unhashable)
 - Protects data from accidental modification
 
-:::danger The gotcha
+:::danger
+
+**The gotcha**
 
 A tuple containing a mutable object is only *shallowly* immutable. You can't swap out the
 list, but you can change what's inside it:
@@ -399,7 +407,9 @@ colors = {"red", "green", "blue", "yellow"}
 print(type(colors))   # → <class 'set'>
 ```
 
-:::warning Set print order is not stable
+:::warning
+
+**Set print order is not stable**
 
 Python randomises string hashing per process, so the same script prints sets in a
 *different order on every run*. Two real runs of this file:
@@ -425,7 +435,9 @@ print(set([1, 1, 2, 2, 3, 3]))   # → {1, 2, 3}
 print(len({1, 1, 2, 2, 3, 3}))   # → 3
 ```
 
-:::danger A surprise worth understanding
+:::danger
+
+**A surprise worth understanding**
 
 Because `True == 1`, a set treats them as the *same element*:
 

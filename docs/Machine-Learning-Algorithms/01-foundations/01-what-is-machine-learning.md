@@ -34,7 +34,9 @@ Three things must be nameable, or it isn't learning:
 | `E` | **Experience** | 10 already-labelled animals |
 | `P` | **Performance measure** | Fraction of *new* animals labelled correctly |
 
-:::tip Use this as a checklist
+:::tip
+
+**Use this as a checklist**
 
 If you can't name `T`, `E` and `P` for something, it is not a machine learning problem yet — and
 that is usually the real reason a project stalls. `P` is the one people skip, and it is the one
@@ -152,7 +154,9 @@ Points 1 and 2 combine into the fatal one. A rule set is only ever correct on th
 imagined. The world keeps producing cases nobody imagined. Since the program cannot revise itself,
 **every new animal is a new bug report** — and each fix risks breaking an earlier rule.
 
-:::danger The real cost isn't accuracy, it's maintenance
+:::danger
+
+**The real cost isn't accuracy, it's maintenance**
 
 A rule-based system's error rate doesn't just start high — it *grows* over time as the world drifts
 away from the dataset the rules were tuned on. The only repair is a human rewriting rules forever.
@@ -251,7 +255,9 @@ On four animals neither approach had seen:
 The two failures are exactly the Chihuahua and Maine Coon cases predicted above — the mid-size dog
 under the 10 kg line, and the heavy cat over it.
 
-:::note What this demo does and doesn't prove
+:::note
+
+**What this demo does and doesn't prove**
 
 It **does** show that an algorithm can identify a better feature than a human's first instinct, and
 that hand-tuned thresholds fail on new data.

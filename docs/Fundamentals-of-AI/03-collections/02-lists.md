@@ -167,7 +167,9 @@ print(d)   # → [1, 2, 3, 4]
 [1, 2, 3, 4]
 ```
 
-:::danger `b = a` does not copy the list
+:::danger
+
+**`b = a` does not copy the list**
 
 A variable holds a **reference** to an object, not the object itself. `b = a` copies the
 reference, so both names point at the **same list**. Mutating through either name is visible

@@ -96,7 +96,9 @@ b₀ = ȳ − b₁x̄₁ − b₂x̄₂  =  9.5 − 1.0476×2.5 − 1.3810×2.5 
 
 Against scikit-learn: `intercept_ = 3.4286`, `coef_ = [1.0476 1.3810]`. **Identical.**
 
-:::tip That determinant is the whole story of collinearity
+:::tip
+
+**That determinant is the whole story of collinearity**
 
 `det = S₁₁S₂₂ − S₁₂²` sits in the denominator of both coefficients. `S₁₂` is the coupling term, so as
 the two features become more alike, `S₁₂²` grows toward `S₁₁S₂₂` and **the determinant heads to zero**
@@ -149,7 +151,9 @@ Neither is wrong. They answer different questions. The solo fit answers *"if I s
 how much more does it cost?"* — which includes the extra rooms that come with it. The joint fit
 answers *"for two houses with the same number of rooms, how much does extra floor area add?"*
 
-:::danger A coefficient is not a property of a feature
+:::danger
+
+**A coefficient is not a property of a feature**
 
 It is a property of a feature **in a particular model**. Add or drop a correlated column and it
 changes — `3218.22` to `2921.04` here. Reporting "size is worth 3000 per unit" without stating what
@@ -197,7 +201,9 @@ to `0.9766`. One irrelevant column costs almost nothing.
 **Twenty noise columns raised train `R²` to `0.9838` while CV `R²` fell to `0.9732`.** Both numbers
 moved, in opposite directions, from the same change.
 
-:::danger Training `R²` never decreases when you add a feature
+:::danger
+
+**Training `R²` never decreases when you add a feature**
 
 Not "rarely" — **never**, as a mathematical fact. The model can always set a new coefficient to zero
 and do exactly as well as before, so the best achievable fit is at least as good as it was. Twenty
@@ -268,7 +274,9 @@ offsets it, because spurious columns inflate train `R²`: from `0.9782` to `0.99
 Multiply the two and you get roughly what you started with. The penalty is real, correctly
 implemented, and almost exactly cancelled by the overfitting it is meant to expose.
 
-:::danger Adjusted R² is not an overfitting guard
+:::danger
+
+**Adjusted R² is not an overfitting guard**
 
 At `n = 120` it failed to flag 100 columns of pure noise. It is a mild correction for the fact that
 `R²` cannot decrease — useful for comparing two models that differ by a feature or two, and no
@@ -347,7 +355,9 @@ since collinearity was never damaging the predictions, fixing collinearity canno
 ridge buys is **coefficients you can report and reproduce**. Whether that is worth a small bias
 depends entirely on whether anyone is going to read the coefficients.
 
-:::note Regularisation gets its own treatment later
+:::note
+
+**Regularisation gets its own treatment later**
 
 Ridge appears here only as the direct answer to collinearity. The penalty term, choosing its strength,
 and the different behaviour of **lasso** — which drives coefficients to exactly zero rather than

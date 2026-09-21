@@ -99,7 +99,9 @@ print(df["Marks"].mean())    # → 77.0
 77.0
 ```
 
-:::note Why mean for Age but median for Marks?
+:::note
+
+**Why mean for Age but median for Marks?**
 
 Both are valid; the difference is **outlier sensitivity**. The mean is pulled by extreme
 values, the median isn't. Ages cluster tightly, so the mean is safe. Marks spread from 65 to
@@ -110,7 +112,9 @@ column. The choice changes your data.
 
 :::
 
-:::warning `fillna` computes from the values that are present
+:::warning
+
+**`fillna` computes from the values that are present**
 
 `df["Age"].mean()` is the mean of the **five** non-missing ages, and `.mean()` skips `NaN`
 automatically — unlike NumPy, where you'd need
@@ -149,7 +153,9 @@ Using the raw data again:
 5    Bala         IT  21.0   72.0
 ```
 
-:::danger `fillna(0)` is usually wrong for measurements
+:::danger
+
+**`fillna(0)` is usually wrong for measurements**
 
 An Age of `0` and Marks of `0` are not "missing" — they're **false data**, and they'll drag
 every average down. Charan didn't score zero; we don't know what he scored. Only use `0` when
@@ -265,7 +271,9 @@ print(pd.read_csv("students.csv").drop_duplicates(keep="last"))
 
 Index `1` is **gone** — the labels have a hole in them.
 
-:::tip Add `.reset_index(drop=True)` after dropping rows
+:::tip
+
+**Add `.reset_index(drop=True)` after dropping rows**
 
 ```python
 df = pd.read_csv("students.csv").drop_duplicates().reset_index(drop=True)
@@ -331,7 +339,9 @@ dtype: object
 `20.0` reads as `20` now. `Marks` was left as `float64` — marks can legitimately be fractional,
 so there's no reason to force it.
 
-:::danger Order matters — this only works after filling
+:::danger
+
+**Order matters — this only works after filling**
 
 Try converting before the `NaN` is dealt with:
 
@@ -395,7 +405,9 @@ Cleaned Data:
 The order is deliberate: **inspect → fill → deduplicate → convert**. Each step depends on the
 one before.
 
-:::note One consequence worth noticing
+:::note
+
+**One consequence worth noticing**
 
 The duplicate Bala row was still present when the mean and median were computed, so it got a
 vote — twice. Deduplicating *before* filling would give slightly different fill values. Neither

@@ -113,7 +113,9 @@ age = 17
 print(f"Age {age}: {'Adult' if age >= 18 else 'Minor'}")   # → Age 17: Minor
 ```
 
-:::warning Watch your quotes
+:::warning
+
+**Watch your quotes**
 
 In Python 3.11 and earlier you cannot reuse the same quote character inside the braces.
 `f"{greet("Bob")}"` is a `SyntaxError` — use `f"{greet('Bob')}"`. Python 3.12+ relaxed this.
@@ -294,7 +296,9 @@ Age: 28
 | `!s` | `str()` first | `f"{'hi'!s}"` | `hi` |
 | `!r` | `repr()` — adds quotes | `f"{'hi'!r}"` | `'hi'` |
 
-:::warning Booleans under a width spec become `1` and `0`
+:::warning
+
+**Booleans under a width spec become `1` and `0`**
 
 `bool` is a subclass of `int`, so a numeric format spec formats it *as a number* — no
 error, just a value you didn't expect:

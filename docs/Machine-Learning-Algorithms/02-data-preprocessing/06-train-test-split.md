@@ -82,7 +82,9 @@ Three patterns, all worth internalising:
   averages over more examples
 - **The maximum is `1.000` in five of six rows.** A lucky seed always exists
 
-:::danger This is why single-split scores should not be trusted
+:::danger
+
+**This is why single-split scores should not be trusted**
 
 If you report `0.98` from one split, you have reported one draw from a distribution whose spread you
 never measured. Someone re-running with a different seed gets a different answer and neither of you is
@@ -135,7 +137,9 @@ construction.
 train_test_split(X, y, test_size=0.2, random_state=1, stratify=y)
 ```
 
-:::tip Pass `stratify=y` on every classification split
+:::tip
+
+**Pass `stratify=y` on every classification split**
 
 It costs nothing, it removes a source of variance, and on imbalanced data it prevents a test set that
 cannot measure the thing you care about.
@@ -239,7 +243,9 @@ train_idx, test_idx = next(GroupShuffleSplit(test_size=0.3, random_state=0)
                            .split(X, y, groups=patient_id))
 ```
 
-:::danger Ask "what is a row?" before every split
+:::danger
+
+**Ask "what is a row?" before every split**
 
 This is the most damaging failure on the page — a **42-point** overstatement — and the most common in
 practice. Clinical data, user analytics, sensor deployments and image datasets are all grouped by

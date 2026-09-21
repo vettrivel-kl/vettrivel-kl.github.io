@@ -40,8 +40,12 @@ The page settles three confusions:
 | **Nested CV** | Two CV loops: outer (generalisation), inner (hyperparameter tuning). |
 | **GridSearchCV** | Sklearn tool for hyperparameter tuning inside CV. Implements nested CV. |
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
+
 **Data leakage trap:** Fit scaler on all data, then split → test accuracy is inflated. **Prevention:** Use Pipeline or manually fit scaler only on train set per fold. **Nested CV:** Use GridSearchCV for hyperparameter tuning; it handles the two-loop logic.
+
 :::
 
 ---

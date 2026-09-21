@@ -60,13 +60,17 @@ The five things this page settles:
 4. Why `mean_squared_error` is positive but `scoring='neg_mean_squared_error'` is negative.
 5. Why every number on this page is meaningless until you know the spread of `y`.
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
+
 The three metrics are locked together by one exact identity:
 
 `RMSE² = MAE² + var(|r|)`
 
 The gap between RMSE and MAE is *precisely* the spread of the absolute errors. Equal-sized misses
 close the gap to zero. One dominating miss opens it as wide as it goes.
+
 :::
 
 ---
@@ -136,10 +140,14 @@ RMSE = √6.0   ≈ 2.4495       lakhs
 Three numbers, one set of predictions. **MAE `2.0` and RMSE `2.4495` are not a disagreement about
 accuracy** — they are answers to two different questions about the same five misses.
 
-:::note Two more that scikit-learn ships
+:::note
+
+**Two more that scikit-learn ships**
+
 `median_absolute_error` is the median of `|r|` — here the middle of `[0, 1, 2, 3, 4]`, so `2.0`. It
 ignores an outlier completely rather than merely down-weighting it. `max_error` is `max |r|`, here
 `4` — a worst-case guarantee, useful when one bad prediction is unacceptable.
+
 :::
 
 ---
@@ -207,12 +215,16 @@ low. Then `r̄ = 2`, `var(r) = 0`, and `MSE = 0 + 4 = 4.0`. All of its error is 
 scatter, which is the easiest kind of error to fix: subtract 2 from every prediction and MSE goes to
 zero.
 
-:::warning On training data with an intercept, `Σr = 0` automatically
+:::warning
+
+**On training data with an intercept, `Σr = 0` automatically**
+
 Least squares fitted with a constant column forces the residuals to sum to exactly zero — that is one
 of the normal equations, derived in
 [The Matrix Formulation](../03-linear-regression/03-the-matrix-formulation.md#the-column-of-ones). So
 on **training** data the bias term is always `0` and `MSE = var(r)`. On **test** data it is not, and a
 non-zero mean residual there is a real finding: the model is calibrated for the wrong level.
+
 :::
 
 ### RSS, MSE and the residual standard error
@@ -316,12 +328,16 @@ any regression, on any scale, without knowing anything about the target:
 | `1.4 – 2.0` | A minority of rows dominates the squared error | Sort by `abs(r)` and read the worst rows |
 | `Near √n` | Essentially one row is the error | Almost always a data problem, not a model problem |
 
-:::tip This is an outlier detector you already have
+:::tip
+
+**This is an outlier detector you already have**
+
 Every regression report contains MAE and RMSE. Dividing them costs nothing and points at the same
 rows a `y`-outlier scan would find — but it finds them in the *residuals*, which is where they matter,
 rather than in the raw column. Compare with the univariate rules in
 [Outliers and Feature Engineering](../02-data-preprocessing/05-outliers-and-feature-engineering.md#z-scores-and-why-outliers-hide-each-other),
 which can only see a value that is extreme in itself, not a value the model got badly wrong.
+
 :::
 
 The diagnosis is not automatically "delete the row". A high ratio says one of three things, and they
@@ -372,7 +388,10 @@ scores = cross_val_score(model, X, y, scoring='neg_root_mean_squared_error', cv=
 print(f"RMSE {-scores.mean():.4f} ± {scores.std():.4f}")   # negate once, at the end
 ```
 
-:::danger Three ways the sign trap actually bites
+:::danger
+
+**Three ways the sign trap actually bites**
+
 - **Reporting `best_score_` unchanged.** `GridSearchCV(...).best_score_` under a `neg_` scorer is
   negative. Printed as-is it reads like an impossible error.
 - **Applying `abs()` too early.** `abs(scores)` before averaging is harmless for a mean, but
@@ -380,6 +399,7 @@ print(f"RMSE {-scores.mean():.4f} ± {scores.std():.4f}")   # negate once, at th
 - **Writing your own scorer with the wrong flag.** `make_scorer(mean_squared_error)` defaults to
   `greater_is_better=True`, so the search happily selects the model with the **largest** error. It
   must be `make_scorer(mean_squared_error, greater_is_better=False)`, which negates for you.
+
 :::
 
 One API note: `root_mean_squared_error` was added in scikit-learn 1.4, and the older

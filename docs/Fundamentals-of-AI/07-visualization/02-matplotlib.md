@@ -49,7 +49,9 @@ plt.show()                            # 4. display it
 | `plt.title()` / `.xlabel()` / `.ylabel()` | labels |
 | `plt.show()` | renders and clears |
 
-:::warning `plt.figure()` matters more than it looks
+:::warning
+
+**`plt.figure()` matters more than it looks**
 
 Without it, every drawing call lands on the **same** figure, so your second chart is drawn on top
 of the first. `plt.show()` clears the current figure, so in a script where every block ends with
@@ -77,7 +79,9 @@ plt.show()
 `marker="o"` puts a dot at each data point. Without it you get a bare line and can't tell where
 the actual observations are.
 
-:::danger This chart is technically fine and analytically wrong
+:::danger
+
+**This chart is technically fine and analytically wrong**
 
 The x-axis is **student names in dataset order**. A line implies that consecutive points are
 connected — that Arun *becomes* Bala. There's no such progression.
@@ -222,7 +226,9 @@ Two things change when you use axes directly:
 
 `plt.tight_layout()` stops labels overlapping. `rotation=45` makes the ten student names readable.
 
-:::note Two interfaces, one library
+:::note
+
+**Two interfaces, one library**
 
 `plt.title()` is the **pyplot** interface — it acts on whatever figure is "current". `ax.set_title()`
 is the **object-oriented** interface, where you say explicitly which axis you mean.
@@ -247,7 +253,9 @@ plt.savefig("chart.png", dpi=150, bbox_inches="tight")
 | `dpi=150` | resolution — 150+ for anything printed or embedded |
 | `bbox_inches="tight"` | trims surrounding whitespace and stops labels being cut off |
 
-:::warning `savefig()` must come **before** `show()`
+:::warning
+
+**`savefig()` must come **before** `show()`**
 
 `show()` clears the figure, so calling `savefig()` afterwards writes a blank image. This is a
 frequent and confusing bug.

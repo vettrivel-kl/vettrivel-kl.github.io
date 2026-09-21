@@ -41,8 +41,12 @@ The page settles three specific confusions:
 | **Imbalanced data** | A dataset where one class vastly outnumbers the other (e.g., 1% positive, 99% negative). |
 | **Accuracy paradox** | On imbalanced data, a trivial classifier (always predict the majority class) achieves high accuracy. |
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
+
 A confusion matrix is a 2×2 table. Extract TP, TN, FP, FN from it. Accuracy is correct-count / total-count — intuitive but unreliable on imbalanced data. Always check class distribution first.
+
 :::
 
 ---

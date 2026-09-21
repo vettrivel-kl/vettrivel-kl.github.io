@@ -106,7 +106,9 @@ b₀ = 4 − 0.6 × 3 = 2.2
 Check it against scikit-learn — `coef_ = 0.6000`, `intercept_ = 2.2000`. **Identical.** There is no
 additional machinery inside `LinearRegression` for this case; it computes the same two numbers.
 
-:::tip Read the third row of the deviation table
+:::tip
+
+**Read the third row of the deviation table**
 
 At `x = 3`, `(x − x̄) = 0`, so that point contributes **nothing** to either sum — its `y` value cannot
 influence the slope at all. A point sitting at the mean of `x` has no leverage over the line's
@@ -165,7 +167,9 @@ penalty factor `(n−1)/(n−k−1) = 4/3` is severe. That severity is entirely 
 [the next page](./02-multiple-linear-regression.md#does-adjusted-r-actually-catch-the-noise) measures
 what it does with 120 rows and finds something unexpected.
 
-:::note Choosing between them is a separate question
+:::note
+
+**Choosing between them is a separate question**
 
 This page computes the five so the arithmetic is never mysterious. *Which* one to report — and the
 traps in each, including a genuine sign inversion in scikit-learn's cross-validation scoring —
@@ -201,7 +205,9 @@ in `s_y/s_x`, so it cancels. One less thing to get wrong.
 The first identity says a correlation becomes a slope once you rescale it by the spread of the two
 variables. The second is narrower than it looks:
 
-:::danger `R² = r²` holds only for simple regression
+:::danger
+
+**`R² = r²` holds only for simple regression**
 
 With one feature and an intercept, `R²` is the squared correlation between `x` and `y`. With **two or
 more** features it is not — there is no single `r` to square, and `R²` becomes the squared
@@ -247,7 +253,9 @@ The practical consequence is discouraging arithmetic: **halving the error costs 
 Going from `n = 50` to `n = 10000` — 200× the data — improved the slope estimate by about 14×, which
 is exactly `√200`.
 
-:::warning Testing this with one fit per sample size gives a false answer
+:::warning
+
+**Testing this with one fit per sample size gives a false answer**
 
 `|b̂₁ − 2.5|` is a random quantity, and `1/√n` describes how its *spread* scales, not how any single
 draw behaves. Draw once per `n` and the numbers bounce around enough to look like no law at all —
@@ -288,7 +296,9 @@ which is **linear in `b₀`, `b₁`, `b₂`** even though it draws a parabola. A
 reflecting that the true relationship is quadratic. A useless feature is often simply ignored rather
 than harmful.
 
-:::tip "Linear" is a statement about the coefficients, not the shape
+:::tip
+
+**"Linear" is a statement about the coefficients, not the shape**
 
 A model is linear if the prediction is a **weighted sum of its inputs** — whatever those inputs are.
 
@@ -380,7 +390,9 @@ because the thing that was drowning it is gone. And the slope fitted on what rem
 against a true `−800`. `door_colour` stays at `−0.0742`, still noise, because it never had an effect
 to reveal.
 
-:::tip This is what "holding all else constant" buys you
+:::tip
+
+**This is what "holding all else constant" buys you**
 
 A coefficient in a multiple regression is measured on exactly this basis — the variation left over
 once the other features have been accounted for. That is why a multiple regression can find an effect

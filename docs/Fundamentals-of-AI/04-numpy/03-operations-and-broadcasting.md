@@ -244,7 +244,9 @@ print(np.round(np.array([1.234, 5.678]), 1))         # → [1.2 5.7]
 | `np.round` / `np.floor` / `np.ceil` | rounding |
 | `np.power(a, b)` | same as `a ** b` |
 
-:::note `np.sin(np.pi)` isn't exactly zero
+:::note
+
+**`np.sin(np.pi)` isn't exactly zero**
 
 Unrounded, it's `1.2246467991473532e-16`. `np.pi` is a `float64` approximation of π, so the
 sine of it is approximately-but-not-exactly 0. The same float imprecision as
@@ -393,7 +395,9 @@ print(np.concatenate([m1, m2], axis=1))   # extend columns
 | `np.hstack` | columns (horizontally) — `axis=1` |
 | `np.concatenate([...], axis=n)` | whichever axis you name |
 
-:::warning Don't build arrays in a loop
+:::warning
+
+**Don't build arrays in a loop**
 
 `np.append(arr, x)` copies the entire array every call, so appending *n* times costs *n²*
 work. Collect into a Python list and call `np.array(lst)` once at the end.

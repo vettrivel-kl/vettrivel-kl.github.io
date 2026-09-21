@@ -35,8 +35,12 @@ The page settles three confusions:
 | **Binary cross-entropy** | Same as log loss. Standard name in deep learning. |
 | **Regularization** | Adding penalty to cost function to prevent overfitting. Touched briefly here, covered fully in Part I. |
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
+
 Logistic regression: P(positive | x) = σ(mx + b). Fit by minimising log loss: −Σ[y_i × log(ŷ_i) + (1−y_i) × log(1−ŷ_i)]. Log loss penalises confident wrong predictions.
+
 :::
 
 ---

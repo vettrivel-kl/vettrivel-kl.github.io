@@ -134,7 +134,9 @@ print(data.iloc[1])   # → 200   by position
 Both give `200` here, but they're asking different questions — one by **label**, one by
 **position**.
 
-:::danger `[]` on a Series looks up the label, not the position
+:::danger
+
+**`[]` on a Series looks up the label, not the position**
 
 With a default index the two coincide, which hides the difference. Give the Series an
 integer index that isn't in order and it bites:

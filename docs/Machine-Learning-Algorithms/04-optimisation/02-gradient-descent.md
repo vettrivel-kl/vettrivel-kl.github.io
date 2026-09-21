@@ -61,7 +61,9 @@ those names (Hessian, eigenvalue, condition number) are how everyone else talks 
 | **Contraction** | `0.8` means each step removes 20% of what remained. Small is fast |
 | **OLS** | The closed-form least-squares solution, used here as the known target to check against |
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
 
 `κ`, the condition number, is the number that decides whether gradient descent takes 40 steps or never
 finishes. It is set by your *data*, not by your optimiser — and standardising your features is what
@@ -126,7 +128,9 @@ function itself is halved. Meanwhile the middle column — the `1/2n` cost at th
 is a genuinely different, slower run: by iteration 3 it is at `7.87` where the others have effectively
 reached `7.86` and `3.93`.
 
-:::danger `α = 0.1` in one source is not `α = 0.1` in another
+:::danger
+
+**`α = 0.1` in one source is not `α = 0.1` in another**
 
 Halving the cost is arithmetically identical to halving the learning rate. So a learning rate copied
 from a source that uses the `1/2` convention into code that doesn't will be **twice as large as
@@ -178,7 +182,9 @@ decimal places**. Gradient descent found the exact answer the
 [normal equation](../03-linear-regression/03-the-matrix-formulation.md#the-normal-equation) gives in
 one algebraic step.
 
-:::tip Which plot you want depends on the question
+:::tip
+
+**Which plot you want depends on the question**
 
 Debugging the optimiser — diverging, crawling, oscillating — is a **cost curve** question, and the
 next page is entirely about reading them. Explaining the model to somebody is a **fitted-line**
@@ -257,7 +263,9 @@ every dataset, with no assumptions to check.
 Here the eigenvalues are `[2, 2]`: equal curvature in both directions, so the bowl is perfectly round
 and its contours are circles rather than stretched ellipses.
 
-:::warning A round bowl is a special case, not the general picture
+:::warning
+
+**A round bowl is a special case, not the general picture**
 
 `κ = 1.00` here is not a fact about gradient descent — it is what
 [standardising](../02-data-preprocessing/04-feature-scaling-and-transformation.md#standardisation-z-score-normalisation)
@@ -269,7 +277,9 @@ the [last section of this page](#the-bowl-is-usually-a-ravine) measures how much
 
 :::
 
-:::note The chord test is evidence, not proof
+:::note
+
+**The chord test is evidence, not proof**
 
 2000 samples finding no violation does not prove convexity — it fails to disprove it. The proof is
 the positive semi-definite Hessian. The test earns its place by being the thing that *catches*
@@ -375,7 +385,9 @@ The cumulative effect is stark: the first five iterations cover a parameter-spac
 **`3.638102`**, the last five of a hundred cover **`2.262e-09`**. A ratio of **`1.609e+09`** with `α`
 held constant the entire time.
 
-:::tip Convergence is geometric, so cost per extra digit is constant
+:::tip
+
+**Convergence is geometric, so cost per extra digit is constant**
 
 A contraction of `0.8` per step means roughly `log(10)/log(1/0.8) ≈ 10` iterations per decimal digit
 of accuracy, forever. This is why gradient descent gets *close* fast and *exact* slowly, and why a
@@ -422,7 +434,9 @@ tolerance, reported as `cap reached` rather than dressed up as a result.
 Notice also what happened to `2/lambda_max`, the largest usable learning rate: `0.82` down to
 `1.27e-06`. Rescaling one column by 1000 shrank the whole safe range for `α` by roughly a million.
 
-:::danger An unscaled feature can make gradient descent unusable, not just slow
+:::danger
+
+**An unscaled feature can make gradient descent unusable, not just slow**
 
 This is a far sharper consequence of feature scaling than the accuracy differences measured in
 [which models actually need it](../02-data-preprocessing/04-feature-scaling-and-transformation.md#which-models-actually-need-it).

@@ -45,7 +45,9 @@ The standard layout, which almost every dataset you meet will follow:
 The `X` / `y` naming is a near-universal convention in code, capital `X` because it's a matrix and
 lowercase `y` because it's a vector.
 
-:::tip The whole paradigm question in one sentence
+:::tip
+
+**The whole paradigm question in one sentence**
 
 **Do you have a `y` column?** If yes → supervised. If no → unsupervised. If you have one for only
 some rows → semi-supervised. Everything below is elaboration on that.
@@ -123,7 +125,9 @@ The convention is to pick the **rare and consequential** class, because everythi
 precision, recall, and the whole confusion matrix — is defined *relative to* the positive class. Flip
 the choice and every one of those numbers changes meaning.
 
-:::danger The default is frequently wrong
+:::danger
+
+**The default is frequently wrong**
 
 Tools pick a positive class for you, and their guess follows label order, not your intent. In
 scikit-learn's built-in breast cancer data, label `1` is **`benign`** — so out of the box, the
@@ -248,7 +252,9 @@ definition unusual — which is another route to anomaly detection.
 | Output | A prediction per new sample | A description of the data |
 | Techniques | Classification, regression | Clustering, dimensionality reduction, density estimation |
 
-:::note Why unsupervised learning is genuinely harder
+:::note
+
+**Why unsupervised learning is genuinely harder**
 
 Not harder to *run* — harder to **know if you succeeded**. A classifier is 94% accurate or it isn't.
 A clustering has no accuracy; you get groups, and deciding whether they're the right groups is a
@@ -295,7 +301,9 @@ The bet being made is the **cluster assumption**: points close together in featu
 share a label. When that holds, unlabelled data reveals the shape of the classes and helps. When it
 doesn't, step 3 injects confident mistakes and compounds them.
 
-:::warning Semi-supervised learning is not free accuracy
+:::warning
+
+**Semi-supervised learning is not free accuracy**
 
 In the worked demo below, 30 labels plus 396 unlabelled rows scored **0.921** against **0.918** for
 the same 30 labels alone — a gain of 0.003, essentially nothing.

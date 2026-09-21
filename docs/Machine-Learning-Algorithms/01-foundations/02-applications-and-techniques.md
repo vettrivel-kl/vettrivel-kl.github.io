@@ -33,7 +33,9 @@ The fastest way to identify a technique is to ask **what shape the answer is**.
 | 7 | **Dimensionality reduction** | *Can I say this with fewer columns?* | **Fewer features**, same information | PCA |
 | 8 | **Recommendation systems** | *What else would this person like?* | A **ranked list** of items | Suggesting books or movies |
 
-:::tip The two-question shortcut
+:::tip
+
+**The two-question shortcut**
 
 **Q1 — Do you have the answers already (labels)?** If yes, you're in 1, 2 or 6. If no, you're in
 3, 4, 5, 7 or 8.
@@ -80,7 +82,9 @@ The output is one of a fixed, known set of labels. Two labels is **binary** clas
 How to recognise it: the answer is a **noun or a yes/no**, and you could write out the complete list
 of possible answers in advance.
 
-:::note Same data, different technique
+:::note
+
+**Same data, different technique**
 
 A bank predicting **the probability** a loan defaults (`0.83`) looks like regression, but it's
 classification — the *decision* is approve/refuse. Probability is how classifiers express
@@ -144,7 +148,9 @@ is 99.9% accurate and completely useless.
 How to recognise it: you want the **rare, unexpected** cases, and you may have few or no examples
 of them.
 
-:::warning Anomaly detection or classification?
+:::warning
+
+**Anomaly detection or classification?**
 
 If you have a good number of confirmed fraud examples, treat it as **classification** — supervised
 learning is more accurate when labels exist. Use anomaly detection when fraud is unlabelled, or
@@ -313,7 +319,9 @@ This is the part that trips people up, and it's worth being precise about.
 | Personalised home page | Association | **Recommendation** | About a person, ranked |
 | Predicting the next page | Classification | **Sequence mining** | Order carries the signal |
 
-:::danger The distinction that actually matters
+:::danger
+
+**The distinction that actually matters**
 
 Notice how often the answer turns on **whether you have labels** — not on the subject matter. "Fraud
 detection" is two different techniques depending on your data. Before naming a technique, check what

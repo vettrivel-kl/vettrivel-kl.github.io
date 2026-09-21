@@ -105,7 +105,9 @@ receives one signal at the end and must apportion credit across all the moves th
 The row that matters most is the third. Reinforcement learning shares "no labels" with unsupervised
 learning, and people therefore lump them together — but this is wrong:
 
-:::note Reward is not a label, and it is not nothing
+:::note
+
+**Reward is not a label, and it is not nothing**
 
 **Supervised** learning is told *"the answer was `malignant`"*.
 **Unsupervised** learning is told nothing at all.
@@ -412,7 +414,9 @@ seed for the same 3,000 episodes. Only curiosity differs:
 `1.00 → 0.79 → 0.44 → −0.21 → −1.06 → −4.73 → −12.17`. That is the literal cost of curiosity. The
 `ε = 0` agent is the best-performing agent while learning and the worst policy at the end.
 
-:::tip Why this environment needs so much exploration
+:::tip
+
+**Why this environment needs so much exploration**
 
 `ε = 0.5` looks extreme. The reason is the trap: reaching the small prize **ends the episode** after
 two steps, so a greedy agent gets almost no opportunity per episode to see anything further away.

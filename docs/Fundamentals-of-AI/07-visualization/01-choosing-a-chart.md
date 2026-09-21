@@ -47,7 +47,9 @@ technically correct plot that communicates nothing.
 A line implies a **connection** between consecutive points, so the x-axis needs a natural
 order — time, most often. Days, months, epochs, trial numbers.
 
-:::warning A line over unordered categories is misleading
+:::warning
+
+**A line over unordered categories is misleading**
 
 Plotting marks against student names with a line, as
 [the matplotlib page does](./02-matplotlib.md#line-plot), draws a line between Arun and Bala —
@@ -85,7 +87,9 @@ where values cluster, whether it's symmetric, whether there are two peaks.
 A histogram is not a bar chart. Bars compare **categories**; a histogram shows the shape of
 **one numeric column**, and its x-axis is a continuous number line with no gaps between bars.
 
-:::note Bin count changes the story
+:::note
+
+**Bin count changes the story**
 
 Too few bins hides structure; too many turns it into noise. With ten values, `bins=5` is about
 right. Always try a couple of values before believing what you see.
@@ -117,7 +121,9 @@ box hides, like two separate clusters.
 
 Pie charts answer exactly one question: what fraction of the whole is each part?
 
-:::danger Pie charts are usually the wrong choice
+:::danger
+
+**Pie charts are usually the wrong choice**
 
 The eye compares **angles** badly and **lengths** well, so a bar chart is easier to read for
 almost any comparison. Pies also need parts that sum to a meaningful whole — percentages of a

@@ -27,7 +27,9 @@ differs completely.
 
 Only the first is a data-quality problem. The second and third are signal.
 
-:::danger "Outlier" is a statistical verdict, not a factual one
+:::danger
+
+**"Outlier" is a statistical verdict, not a factual one**
 
 Every method below identifies values that are **statistically unusual**. None can tell you *why*.
 Deleting rows because a formula flagged them means deleting genuine extremes and novelties along with
@@ -102,7 +104,9 @@ uniform data it flags **nothing**, because there are no tails at all.
 The rule is not measuring "wrongness". It is measuring "distance from the middle in IQR units", and
 that only corresponds to unusualness when the distribution is roughly symmetric.
 
-:::tip Fix the shape before hunting outliers
+:::tip
+
+**Fix the shape before hunting outliers**
 
 This is where the [previous page](./04-feature-scaling-and-transformation.md#transformations-changing-the-shape)
 pays off. `AveOccup` had skew `97.63`; the IQR rule on a column like that would condemn a large
@@ -192,7 +196,9 @@ Together they are impossible — a 155 cm person in this data typically weighs 5
 
 Every univariate method missed it completely.
 
-:::note The two multivariate methods disagreed — and that's instructive
+:::note
+
+**The two multivariate methods disagreed — and that's instructive**
 
 `EllipticEnvelope` caught it. `IsolationForest` **did not**.
 
@@ -277,7 +283,9 @@ no help at all for corrupted features.
 | **Keep + flag** | Yes | When extremeness is informative | Adds a column |
 | **Robust model** | Yes | Outliers in **`y`** | Useless for outliers in `X` |
 
-:::danger Never clean the test set
+:::danger
+
+**Never clean the test set**
 
 Removing outliers from training data is a legitimate choice about what the model learns from. Removing
 them from the **test** set is not — it makes your evaluation a report on a world that doesn't exist.
@@ -368,7 +376,9 @@ helps only when the relationship really is step-like or when you need interpreta
 **aggregates computed over the whole dataset leak**, exactly as target encoding did: a customer's
 "mean past spend" must be computed from data strictly before the row you're predicting.
 
-:::tip Ratios are the highest-value, lowest-effort feature
+:::tip
+
+**Ratios are the highest-value, lowest-effort feature**
 
 `debt / income` beats `debt` and `income` as separate columns in almost every credit model, because
 the *relationship* is what matters and a linear model can no more divide than multiply.

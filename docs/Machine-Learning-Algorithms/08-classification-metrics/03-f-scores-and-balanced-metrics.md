@@ -41,8 +41,12 @@ The page settles three confusions:
 | **Balanced accuracy** | (Recall + Specificity) / 2. Average of TPR and TNR; ignores FP/FN asymmetry. |
 | **MCC** | Correlation between predictions and actuals. Ranges −1 to +1. Handles imbalanced data well. |
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
+
 F1 = 2 × (P × R) / (P + R) balances precision and recall using the harmonic mean. Use it when both metrics matter equally. For imbalanced data, prefer balanced accuracy, MCC, or Cohen's Kappa.
+
 :::
 
 ---

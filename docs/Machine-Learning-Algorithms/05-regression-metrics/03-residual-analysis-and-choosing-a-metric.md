@@ -44,8 +44,12 @@ The page settles three confusions:
 | **Q-Q plot** | Quantile-Quantile: residuals vs normal quantiles. |
 | **Normality** | Residuals follow a normal distribution. |
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
+
 Good residuals: random scatter around zero, constant variance, normally distributed. Bad residuals show patterns (curve, funnel, clustering) → model is missing something. Plot residuals to diagnose. Choose a metric matching your goal: MAE for outlier robustness, RMSE for penalising large errors, R² for proportion of variance.
+
 :::
 
 ---

@@ -149,7 +149,9 @@ Name: Marks, dtype: int64
 frequent value, and here **every mark appears exactly once**, so all ten are tied for most
 frequent.
 
-:::warning `mode()` returns a Series, not a single number
+:::warning
+
+**`mode()` returns a Series, not a single number**
 
 Unlike `mean()` and `median()`, which return one number, `mode()` returns a **Series** —
 because a dataset can have several modes, or none meaningfully.
@@ -245,7 +247,9 @@ physically. Standard deviation is back in **marks**, so you can say "the typical
 about 9.7 marks from the average" — a sentence that makes sense. Variance is easier to do
 algebra with; standard deviation is easier to report.
 
-:::danger Pandas and NumPy give different answers
+:::danger
+
+**Pandas and NumPy give different answers**
 
 ```python
 import numpy as np
@@ -341,7 +345,9 @@ between 51.6 and 108.6.
 This is exactly what a box plot draws: the box spans Q1 to Q3, the line inside is the median,
 and the whiskers reach to `1.5 × IQR`. Points beyond are plotted individually.
 
-:::note An outlier is not automatically an error
+:::note
+
+**An outlier is not automatically an error**
 
 The `1.5 × IQR` rule finds *unusual* values, not *wrong* ones. A genuinely brilliant student
 is an outlier who belongs in the data. A mark of `800` is an outlier that doesn't. The rule

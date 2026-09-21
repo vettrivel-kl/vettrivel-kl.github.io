@@ -74,7 +74,9 @@ Now `b₀` multiplies a column that is `1` in every row, so it contributes `b₀
 prediction — exactly what an intercept does. The result is called the **design matrix**, and the
 intercept has become an ordinary coefficient.
 
-:::tip Why this trick matters
+:::tip
+
+**Why this trick matters**
 
 It is not cosmetic. Once the intercept is inside `β`, there is **no special case** — one matrix
 equation solves for the intercept and all the slopes simultaneously. Every formula below works
@@ -140,7 +142,9 @@ feature `i` with `j` equals that of `j` with `i`. That symmetry is what makes th
 Digit for digit. `LinearRegression` is not doing anything mysterious — it is solving this equation,
 and `np.allclose` confirms the agreement exactly.
 
-:::note What the model *is*
+:::note
+
+**What the model *is***
 
 After fitting, a linear regression is **three numbers**. `b₀ = 2.1333`, `b₁ = 1.2778`, `b₂ = 2.2778`.
 Prediction is one dot product.
@@ -196,7 +200,9 @@ And look at the last line. The true effect was `3.0`, and the pseudo-inverse spl
 `0.5991 + 2 × 1.1982 = 2.9954`. **The total is recovered exactly** even though the individual
 coefficients are arbitrary — precisely the invariant the previous page measured.
 
-:::warning No exception is not the same as no problem
+:::warning
+
+**No exception is not the same as no problem**
 
 `LinearRegression` will fit perfectly collinear data and report plausible-looking coefficients. Nothing
 warns you. The predictions are fine; the coefficients are one arbitrary choice from an infinite set,

@@ -73,7 +73,9 @@ dtype: object
 number. That's because `NaN` is a float, so a column containing one **cannot** be an integer
 column.
 
-:::warning This is why `Age` prints as `20.0` rather than `20`
+:::warning
+
+**This is why `Age` prints as `20.0` rather than `20`**
 
 Nothing is wrong with your data. Fill or drop the missing values and you can convert back
 with `.astype(int)` — see [Cleaning Data](./04-cleaning-data.md). Until then, the `.0` is
@@ -165,7 +167,9 @@ Identical result to the CSV. Excel support needs an extra package:
 pip install openpyxl
 ```
 
-:::warning That's a shell command, not Python
+:::warning
+
+**That's a shell command, not Python**
 
 `pip install openpyxl` belongs in your terminal. Putting it in a `.py` file is a
 `SyntaxError` — pandas can't install its own dependencies. In a Jupyter notebook you'd write
@@ -256,7 +260,9 @@ df.to_csv("students_with_index.csv")
 2,Charan,22,ECE,91
 ```
 
-:::danger Almost always pass `index=False`
+:::danger
+
+**Almost always pass `index=False`**
 
 Note the leading comma on the header line — a column with **no name**. Read that file back
 and you get a junk `Unnamed: 0` column. Do it a few times and you accumulate `Unnamed: 0`,

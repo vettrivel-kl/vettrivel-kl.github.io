@@ -9,7 +9,9 @@ tags: [solutions, answers, explanations, reference]
 
 This guide contains detailed solutions for all practice problems. Use this to check your work and understand problem-solving approaches.
 
-:::tip How to Use This Guide
+:::tip
+
+**How to Use This Guide**
 
 1. **Attempt problem first** - Don't peek at solutions
 2. **Self-grade** - Compare your answer

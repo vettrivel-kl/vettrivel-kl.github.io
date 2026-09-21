@@ -39,8 +39,12 @@ The page settles three confusions:
 | **Fold** | One train-test partition in cross-validation. K-fold CV has K folds. |
 | **Sealed test set** | Test set never seen during model development. Used only for final evaluation. |
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
+
 A single train-test split is unreliable (lottery). Use cross-validation (multiple splits, average results) for stable generalisation estimates. Always hold out a sealed test set for final evaluation.
+
 :::
 
 ---

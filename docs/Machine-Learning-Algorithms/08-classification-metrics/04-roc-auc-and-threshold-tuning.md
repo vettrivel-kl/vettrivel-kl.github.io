@@ -39,8 +39,12 @@ The page settles three confusions:
 | **Threshold** | Cutoff value. Scores ≥ threshold → positive. Default = 0.5 for probability outputs. |
 | **Youden's J** | Sensitivity + Specificity − 1 = TPR − FPR. Optimal threshold often maximises J. |
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
+
 The ROC curve plots TPR vs FPR as you vary the threshold. AUC is the area under it: 0.5 = random, 1.0 = perfect. To pick a threshold, maximise the metric that matters for your problem (recall for missed-case costs, precision for false-alarm costs).
+
 :::
 
 ---

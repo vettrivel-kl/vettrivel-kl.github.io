@@ -72,7 +72,9 @@ implicitly.
 The vertical line on each bar is a **95% confidence interval**, bootstrapped from the values in
 that group. Long bars mean high uncertainty — and with 3–4 students per group, they're long.
 
-:::warning `sns.barplot` shows the mean, not the total
+:::warning
+
+**`sns.barplot` shows the mean, not the total**
 
 `plt.bar` plots exactly the numbers you hand it. `sns.barplot` **aggregates**, defaulting to the
 mean. If you wanted sums you'd get averages without being told.
@@ -267,7 +269,9 @@ Three changes, each worth making a habit:
 | `vmin=-1, vmax=1` | fixes the scale to correlation's full range |
 | `fmt=".2f"` | two decimals instead of the default's long floats |
 
-:::warning Without `vmin`/`vmax`, the colour scale is relative
+:::warning
+
+**Without `vmin`/`vmax`, the colour scale is relative**
 
 By default seaborn scales colour to the values *present*. A matrix whose correlations run 0.95 to
 0.99 gets the full palette, making trivial differences look dramatic — and a correlation of 0.95
@@ -296,7 +300,9 @@ gives the whole picture, which makes it a good first move after
 This is where the near-linear relationships become undeniable — all three off-diagonal panels show
 essentially straight lines.
 
-:::note `pairplot` returns a figure, not axes
+:::note
+
+**`pairplot` returns a figure, not axes**
 
 Unlike the others, `sns.pairplot()` creates its own multi-panel figure. So `plt.figure()`
 beforehand does nothing, and `plt.title()` afterwards won't land where you expect. Use

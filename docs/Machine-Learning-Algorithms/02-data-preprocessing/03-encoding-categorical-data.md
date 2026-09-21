@@ -92,7 +92,9 @@ can split the integer axis repeatedly — `code ≤ 0.5`, then `1.5 < code ≤ 2
 reconstruct exactly the grouping one-hot would have handed it directly. The false ordering is still
 there; the model just has the capacity to work around it.
 
-:::tip The rule, stated properly
+:::tip
+
+**The rule, stated properly**
 
 Label encoding nominal data is **safe for unrestricted tree ensembles** and **damaging for linear
 models, distance-based models (kNN, SVM), and neural networks**.
@@ -181,7 +183,9 @@ X = ct.fit_transform(X)
 The default is `remainder="drop"`, which silently discards every column you didn't name — a common
 and confusing loss. `"passthrough"` is almost always what you want.
 
-:::note Prefer column names over positions
+:::note
+
+**Prefer column names over positions**
 
 `[0]` breaks the moment a column is inserted upstream. `make_column_transformer` with names, or
 `make_column_selector(dtype_include=object)`, expresses the intent instead of the position:
@@ -257,7 +261,9 @@ overwhelmingly zeros — exactly one `1` per row — so a sparse matrix stores o
 1,000 categories that's a **500× reduction**, and the memory doesn't grow with the number of
 categories at all.
 
-:::tip `sparse_output=True` is the default, and worth keeping
+:::tip
+
+**`sparse_output=True` is the default, and worth keeping**
 
 `OneHotEncoder` returns a sparse matrix unless you ask otherwise. The `sparse_output=False` in these
 examples is purely so the arrays print readably.
@@ -316,7 +322,9 @@ those 4 targets — so the "feature" is a lightly blurred version of `y`, smuggl
 
 Cross-validation did not catch it, because the leak happened **before** the split.
 
-:::danger This is the most dangerous encoding in common use
+:::danger
+
+**This is the most dangerous encoding in common use**
 
 The failure mode is the worst kind: your validation score goes **up**, so it looks like success.
 Production performance then collapses, because at predict time there is no target to leak from.
@@ -360,7 +368,9 @@ Three of five fail by default. The two that survive behave sensibly:
 `LabelEncoder` has **no** `handle_unknown` parameter at all — another reason it belongs on targets,
 where the label set is closed.
 
-:::warning Set `handle_unknown="ignore"` unless you want the crash
+:::warning
+
+**Set `handle_unknown="ignore"` unless you want the crash**
 
 Crashing is occasionally the right choice — if an unknown category means upstream corruption, failing
 loudly beats predicting quietly. But it should be a decision, not a default you discover in

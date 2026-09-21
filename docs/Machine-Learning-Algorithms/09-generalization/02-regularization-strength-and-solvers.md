@@ -44,8 +44,12 @@ The page settles two confusions:
 | **Convergence** | Algorithm stopped improving (found optimum). |
 | **Hyperparameter** | Parameter tuned before training (not learned by the algorithm). |
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
+
 Tune regularization strength λ via grid search: try [0.001, 0.01, 0.1, 1, 10, 100], pick best CV score. Use GridSearchCV. For L1, pick a solver that supports it (saga, liblinear on sklearn). Always standardise features first.
+
 :::
 
 ---

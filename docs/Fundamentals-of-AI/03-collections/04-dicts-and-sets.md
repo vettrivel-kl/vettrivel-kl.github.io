@@ -210,7 +210,9 @@ TypeError: cannot use 'list' as a dict key (unhashable type: 'list')
 | `3.14` | ✅ | `float` is immutable |
 | `[1, 2]` | ❌ | `list` is mutable → unhashable |
 
-:::note Why the rule exists
+:::note
+
+**Why the rule exists**
 
 A dict finds a value by computing a **hash** of the key and using it to pick a storage slot.
 If the key could change after insertion, its hash would change, and the value would be
@@ -250,7 +252,9 @@ print(sorted(set([3, 1, 2, 1])))   # → [1, 2, 3]
 
 This is the standard way to deduplicate a list — though it loses the original order.
 
-:::warning Set order is not something you can rely on
+:::warning
+
+**Set order is not something you can rely on**
 
 Sets of small integers often print in ascending order, which makes it *look* ordered. It
 isn't — that's a side effect of how ints hash. Sets of strings print in a different order on

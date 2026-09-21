@@ -43,8 +43,12 @@ The page settles three confusions:
 | **Class distribution** | The percentage of each class in the dataset (e.g., 80% class 0, 20% class 1). |
 | **Stratum** | Singular of strata. A layer or subset of data (one class in stratified split). |
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
+
 Choose K=5 or K=10 (standard). On imbalanced data, always use stratified K-fold—preserves class distribution per fold. For tiny imbalanced classes, use LOO-CV or careful resampling.
+
 :::
 
 ---

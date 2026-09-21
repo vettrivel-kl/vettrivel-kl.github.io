@@ -39,8 +39,12 @@ The page settles three confusions:
 | **Specificity** | TN / (TN + FP). Of actual negatives, how many did we correctly reject? |
 | **FPR** | False Positive Rate = 1 - Specificity = FP / (TN + FP). Fraction of negatives wrongly flagged. |
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
+
 Precision = TP / (TP + FP): of predictions marked positive, how many are right. Recall = TP / (TP + FN): of actual positives, how many did we find. They tradeoff—increasing one typically decreases the other.
+
 :::
 
 ---

@@ -275,7 +275,9 @@ print(mixed, mixed.dtype)
 `1` became `1.`. NumPy picks the narrowest type that holds everything, and `float` is wider
 than `int`.
 
-:::warning A string in the list turns everything into strings
+:::warning
+
+**A string in the list turns everything into strings**
 
 `np.array([1, 2, "x"]).dtype` is `<U21` — a 21-character Unicode string. The numbers are now
 text, and arithmetic on the array will fail. Anything that isn't numeric drags the whole
@@ -301,7 +303,9 @@ print(np.array([1, 0, 2]).astype(bool))
 
 `.astype()` returns a **new** array — it never converts in place.
 
-:::danger `.astype(int)` truncates
+:::danger
+
+**`.astype(int)` truncates**
 
 `1.9` becomes `1`, not `2`. Same behaviour as the built-in `int()` — see
 [Values and Types](../01-basics/01-values-and-types.md#type-conversion-casting). Use

@@ -71,7 +71,9 @@ These are what produce the `True`/`False` a condition needs:
 | `>=` | greater than or equal | `18 >= 18` | `True` |
 | `<=` | less than or equal | `16 <= 18` | `True` |
 
-:::danger `=` is assignment, `==` is comparison
+:::danger
+
+**`=` is assignment, `==` is comparison**
 
 `if age = 18:` is a `SyntaxError`. This is the most common beginner mistake, and Python
 deliberately refuses to guess what you meant.

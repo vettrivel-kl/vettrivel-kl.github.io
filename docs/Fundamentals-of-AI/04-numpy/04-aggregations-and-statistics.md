@@ -85,7 +85,9 @@ print(arr.sum(), arr.max(), arr.min(), arr.mean())
 150 50 10 30.0
 ```
 
-:::warning `median` has no method form
+:::warning
+
+**`median` has no method form**
 
 ```python
 print(hasattr(arr, "median"))   # → False
@@ -297,7 +299,9 @@ print(d[~np.isnan(d)])        # → [10. 20. 40.]
 `d[~np.isnan(d)]` is the standard "drop the missing values" idiom — a
 [boolean mask](./02-indexing-slicing-reshaping.md#boolean-masking) with `~` negating it.
 
-:::warning `nan == nan` is `False`
+:::warning
+
+**`nan == nan` is `False`**
 
 ```python
 print(np.nan == np.nan)   # → False
@@ -360,7 +364,9 @@ ndarray int64
 
 The column names and the index are **dropped** — `to_numpy()` gives you the raw values only.
 
-:::warning Mixed columns collapse to `object`
+:::warning
+
+**Mixed columns collapse to `object`**
 
 ```python
 df = pd.DataFrame({'A': [1, 2], 'B': ['x', 'y']})

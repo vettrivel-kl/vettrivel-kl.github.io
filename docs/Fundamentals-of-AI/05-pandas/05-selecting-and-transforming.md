@@ -70,7 +70,9 @@ print(df[["Name"]])
 4    Esha
 ```
 
-:::note One bracket or two changes the type
+:::note
+
+**One bracket or two changes the type**
 
 `df["Name"]` is a **Series**; `df[["Name"]]` is a **DataFrame** with one column. The inner
 brackets are a *list of columns*, so a one-item list still produces a table.
@@ -153,7 +155,9 @@ Same result here, because this DataFrame has a default `0`–`4` index where lab
 position. `df.iloc[2, 4]` means row 2, **column 4** — you have to count columns
 (`StudentID`=0, `Name`=1, `Department`=2, `Age`=3, `Marks`=4).
 
-:::warning `iloc` with numbers is fragile
+:::warning
+
+**`iloc` with numbers is fragile**
 
 `df.iloc[2, 4]` breaks silently the moment someone inserts a column. `df.loc[2, "Marks"]` keeps
 working. Prefer `.loc` with names unless you specifically want positional access.
@@ -184,7 +188,9 @@ print(df.iloc[1:3])   # positions 1, 2 — NOT 3
 2        103  Charan        CSE   20     91
 ```
 
-:::danger `.loc` slices are inclusive
+:::danger
+
+**`.loc` slices are inclusive**
 
 This is the exception to every other slice in Python. Lists, strings, tuples, NumPy arrays and
 `.iloc` all **exclude** the endpoint. `.loc` **includes** it.
@@ -241,7 +247,9 @@ print(df[(df["Department"] == "CSE") & (df["Marks"] > 85)])
 4        105    Esha        CSE   21     88
 ```
 
-:::danger `&` not `and`, and parenthesise every condition
+:::danger
+
+**`&` not `and`, and parenthesise every condition**
 
 ```python
 df[(df["Department"] == "CSE") and (df["Marks"] > 85)]
@@ -550,7 +558,9 @@ print(pd.merge(student_details, student_marks2, on="StudentID", how="inner"))
 | `"right"` | all right rows |
 | `"outer"` | everything from both |
 
-:::warning The default silently drops rows
+:::warning
+
+**The default silently drops rows**
 
 `how="inner"` is the default, so Charan **disappears** from the inner join without warning. Check
 `len()` before and after a merge — a row count that shrank unexpectedly means unmatched keys.

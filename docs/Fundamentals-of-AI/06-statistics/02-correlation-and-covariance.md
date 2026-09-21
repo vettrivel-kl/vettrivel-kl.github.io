@@ -200,7 +200,9 @@ print(df["Study_Hours"].cov(df["Marks_scaled"]))    # → 2544.4444444444443
 Multiplying marks by 100 left the **correlation unchanged** and multiplied the **covariance by
 100**. The relationship didn't change — only the units did.
 
-:::warning Covariance has units; correlation doesn't
+:::warning
+
+**Covariance has units; correlation doesn't**
 
 `cov(Study_Hours, Marks)` is measured in *hour-marks*. That isn't a thing anyone can interpret.
 `cov(Study_Hours, Attendance)` is `17.5` **hour-percent**. Different units, so the two numbers
@@ -244,7 +246,9 @@ is no stronger relationship possible, and Pearson correlation reports nothing.
 The reason: as `x` goes from −3 to 0, `y` falls; from 0 to 3, `y` rises. The two halves cancel.
 Pearson correlation measures **linear** association only.
 
-:::danger `corr() == 0` does not mean "unrelated"
+:::danger
+
+**`corr() == 0` does not mean "unrelated"**
 
 It means "no *linear* relationship". Always plot the data — a scatter plot would show the
 parabola instantly, and no summary statistic ever will.

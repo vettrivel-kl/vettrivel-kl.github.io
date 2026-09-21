@@ -40,8 +40,12 @@ The page settles two confusions:
 | **Weighted-average** | Macro-average weighted by class frequency. |
 | **One-vs-rest** | For class i, treat i as positive, others as negative. Compute binary metric, repeat for all i, average. |
 
-:::tip If you only take one thing from this page
+:::tip
+
+**If you only take one thing from this page**
+
 On multiclass, use macro F1 for balanced weight to each class, weighted F1 when class imbalance is real, and micro F1 only if all classes matter equally. To choose a metric: prioritise recall if false negatives are costly, precision if false positives are costly, and F1 if both matter.
+
 :::
 
 ---

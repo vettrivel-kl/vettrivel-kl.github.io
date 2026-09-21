@@ -175,7 +175,9 @@ Three parts, and all three are your responsibility:
 2. **test** — `while i <= 5:`
 3. **update** — `i += 1` inside the loop
 
-:::danger Forget the update and the loop never ends
+:::danger
+
+**Forget the update and the loop never ends**
 
 ```python
 i = 1

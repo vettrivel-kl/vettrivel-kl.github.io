@@ -88,7 +88,9 @@ confusing or — worse — succeeds and concatenates strings.
 
 **It reported 2 missing values.** There are more than that, as the next section shows.
 
-:::danger Print `.dtypes` immediately after every load
+:::danger
+
+**Print `.dtypes` immediately after every load**
 
 This is a one-line habit that catches a whole class of silent failure:
 
@@ -137,7 +139,9 @@ The last three are **sentinel values**, and they are the dangerous category. A `
 is a perfectly valid number as far as any library is concerned. It will be averaged, scaled, and fed
 to a model as though someone were minus one year old.
 
-:::warning No library can find sentinels for you
+:::warning
+
+**No library can find sentinels for you**
 
 Whether `-1` in `Age` means "missing" or is a genuine data error, and whether `999999` in `Salary`
 is a real high earner or a placeholder, is **not inferable from the data**. It requires knowing how
@@ -187,7 +191,9 @@ dtype: object
 | `skiprows=`, `nrows=` | Skip preamble; read a sample | Reports with header junk |
 | `chunksize=` | Iterate in chunks | Files larger than memory |
 
-:::note `dtype={"zip": str}` — the leading-zero trap
+:::note
+
+**`dtype={"zip": str}` — the leading-zero trap**
 
 A postcode column containing `01234` will be inferred as `int64` and become `1234`. The leading zero
 is gone and cannot be recovered. Anything that is an **identifier rather than a quantity** — postcodes,

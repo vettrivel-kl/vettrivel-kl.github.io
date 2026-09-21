@@ -130,7 +130,9 @@ Two kinds of object, distinguished by which they have:
 
 `fit_transform` is just `fit` then `transform` in one call.
 
-:::danger `fit` on training data only — never on the test set
+:::danger
+
+**`fit` on training data only — never on the test set**
 
 `fit` is where the object *learns* something: a scaler learns the mean and standard deviation of each
 column. If you `fit` a scaler on the whole dataset before splitting, the training data has been scaled
