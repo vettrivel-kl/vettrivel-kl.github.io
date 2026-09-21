@@ -22,7 +22,7 @@ const config = {
   },
 
   // Set the production url of your site here
-  url: 'https://vettrivel-kl.github.io',
+  url: 'https://vettrivel.com',
   baseUrl: '/',
   organizationName: 'vettrivel-kl', // Usually your GitHub org/user name.
   projectName: 'vettrivel-kl.github.io', // Usually your repo name.
