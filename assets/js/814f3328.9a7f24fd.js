@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkvettrivel_com=self.webpackChunkvettrivel_com||[]).push([["1833"],{5513(e){e.exports=JSON.parse('{"title":"Recent posts","items":[{"title":"first-post","permalink":"/blog/2025/10/21/first-post","unlisted":false,"date":"2025-10-21T00:00:00.000Z"}]}')}}]);
