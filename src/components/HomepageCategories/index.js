@@ -8,8 +8,8 @@ import styles from './styles.module.css';
 // `onBrokenLinks: 'throw'` will fail the build if they drift apart.
 const SUBJECTS = [
   {
-    title: 'Python',
-    href: '/docs/Python',
+    title: 'Fundamentals of AI',
+    href: '/docs/category/fundamentals-of-ai',
     categories: [
       {
         label: '1 · Basics',
@@ -62,8 +62,8 @@ const SUBJECTS = [
     ],
   },
   {
-    title: 'Machine Learning',
-    href: '/docs/category/machine-learning',
+    title: 'Machine Learning Algorithms',
+    href: '/docs/category/machine-learning-algorithms',
     categories: [
       {
         label: '1 · Foundations',

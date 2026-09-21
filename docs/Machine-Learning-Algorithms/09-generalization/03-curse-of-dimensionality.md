@@ -233,7 +233,7 @@ Do you have many features (p)?
 
 **Previous:** [Regularization Strength](./02-regularization-strength-and-solvers.md) — tuning λ.
 
-**See also:** [Cross-Validation](../06-validation-strategy/) for evaluating different feature sets.
+**See also:** [Cross-Validation](../06-validation-strategy/01-why-cross-validation.md) for evaluating different feature sets.
 
 ---
 

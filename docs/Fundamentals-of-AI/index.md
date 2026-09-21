@@ -1,10 +1,10 @@
 ---
-title: Python
-description: Python notes from Fundamentals of AI — basics through NumPy, Pandas, and visualisation.
-tags: [python]
+title: Fundamentals of AI
+description: Foundations of Artificial Intelligence — programming basics, numerical computing with NumPy, data manipulation, and visualization.
+tags: [python, ai-foundations]
 ---
 
-# Python
+# Fundamentals of AI
 
 ## What's here
 

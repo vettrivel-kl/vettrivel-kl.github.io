@@ -273,7 +273,7 @@ END
 - Always report baseline: what does a trivial classifier achieve?
 - On imbalanced data, avoid accuracy; use AUC, PR AUC, or balanced accuracy.
 
-**Next in this section:** [Part I — Generalization & Model Control](../09-generalization/) — how to detect overfitting and control it via regularization.
+**Next in this section:** [Part I — Generalization & Model Control](../09-generalization/01-overfitting-underfitting-regularization.md) — how to detect overfitting and control it via regularization.
 
 **See also:** [Confusion Matrix](./01-confusion-matrix-and-basic-metrics.md) for binary metrics · [Precision and Recall](./02-precision-and-recall.md) for definitions · [F-Scores](./03-f-scores-and-balanced-metrics.md) for balanced metrics · [ROC and AUC](./04-roc-auc-and-threshold-tuning.md) for threshold tuning.
 

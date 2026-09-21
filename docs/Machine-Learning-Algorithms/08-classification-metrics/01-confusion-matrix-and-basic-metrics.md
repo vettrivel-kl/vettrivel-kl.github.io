@@ -177,7 +177,7 @@ For fraud, missing a fraudulent transaction (FN) is much worse than falsely flag
 
 **Next in this section:** [Precision and Recall](./02-precision-and-recall.md) — how to measure what really matters: false alarms and missed detections.
 
-**See also:** [Classification Metrics Overview](./05-multiclass-and-choosing-metrics.md#which-metric-when) for a decision tree on metric selection · [Logistic Regression](../07-logistic-regression/) for how classifiers generate predictions.
+**See also:** [Classification Metrics Overview](./05-multiclass-and-choosing-metrics.md#decision-guide-which-metric-to-choose) for a decision tree on metric selection · [Logistic Regression](../07-logistic-regression/01-why-logistic-regression.md) for how classifiers generate predictions.
 
 ---
 

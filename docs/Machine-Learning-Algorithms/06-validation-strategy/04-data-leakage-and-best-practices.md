@@ -361,7 +361,7 @@ else:
 
 **Previous sections:** [Why Cross-Validation](./01-why-cross-validation.md) · [CV Methods](./02-cross-validation-methods.md) · [K-Fold](./03-k-fold-and-stratified-k-fold.md).
 
-**Next:** [Part I — Generalization & Model Control](../09-generalization/) — overfitting, regularization, model selection.
+**Next:** [Part I — Generalization & Model Control](../09-generalization/01-overfitting-underfitting-regularization.md) — overfitting, regularization, model selection.
 
 ---
 

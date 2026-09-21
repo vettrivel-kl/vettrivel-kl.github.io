@@ -222,7 +222,7 @@ If m = 0.5, then for a one-unit increase in x:
 - **Scikit-learn API:** LogisticRegression(multi_class='ovr' or 'multinomial').
 - **Coefficient interpretation:** Positive m → higher odds for class; negative m → lower odds.
 
-**Next in this section:** [Part I — Generalization & Model Control](../09-generalization/) — overfitting, underfitting, regularization (L1/L2).
+**Next in this section:** [Part I — Generalization & Model Control](../09-generalization/01-overfitting-underfitting-regularization.md) — overfitting, underfitting, regularization (L1/L2).
 
 **See also:** [Confusion Matrix](../08-classification-metrics/01-confusion-matrix-and-basic-metrics.md) for evaluating multiclass · [The Sigmoid](./02-the-sigmoid-and-fitting.md) for binary sigmoid.
 

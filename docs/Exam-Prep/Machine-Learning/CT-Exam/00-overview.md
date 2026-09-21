@@ -29,8 +29,8 @@ This comprehensive study package covers **Module 1** and **Module 2** of your Ma
 ## 🎯 Quick Start
 
 ### If you have 5 hours:
-1. Read [Linear Regression Basics](./01-module-1/01-linear-regression)
-2. Do [Practice Problems Set 1-2](./02-practice-problems/01-module-1-problems)
+1. Read [Linear Regression Basics](./01-module-1/01-linear-regression.md)
+2. Do [Practice Problems Set 1-2](./02-practice-problems/01-module-1-problems.md)
 3. Review Common Mistakes
 
 ### If you have 1 week:
@@ -44,20 +44,20 @@ Work through materials systematically in order
 ## 📚 Navigation
 
 **Module 1 Topics:**
-- [Machine Learning Basics](./01-module-1/00-ml-basics)
-- [Linear Regression](./01-module-1/01-linear-regression)
-- [Bias-Variance Tradeoff](./01-module-1/03-bias-variance)
-- [Error Metrics](./01-module-1/04-metrics)
+- [Machine Learning Basics](./01-module-1/00-ml-basics.md)
+- [Linear Regression](./01-module-1/01-linear-regression.md)
+- [Bias-Variance Tradeoff](./01-module-1/03-bias-variance.md)
+- [Error Metrics](./01-module-1/04-metrics.md)
 
 **Module 2 Topics:**
-- [Cross-Validation](./02-module-2/01-cross-validation)
+- [Cross-Validation](./02-module-2/01-cross-validation.md)
 - Classification Metrics
-- [Multiple Regression](./01-module-1/02-multiple-regression)
-- [Logistic Regression](./02-module-2/02-logistic-regression)
+- [Multiple Regression](./01-module-1/02-multiple-regression.md)
+- [Logistic Regression](./02-module-2/02-logistic-regression.md)
 
 **Practice & Review:**
-- [Practice Problems (22 total)](02-practice-problems)
-- [Python Code Guide](03-python-code)
+- [Practice Problems (22 total)](./02-practice-problems/00-overview.md)
+- [Python Code Guide](./03-python-code/00-overview.md)
 - Common Mistakes
 - Exam Checklist
 
@@ -114,9 +114,9 @@ After completing this package, you'll be able to:
 **Choose your path:**
 
 - 👉 Start with Day 1 Tasks
-- 📖 [Read Module 1 Overview](./01-module-1/00-ml-basics)
-- 💪 [Jump to Practice Problems](./02-practice-problems/01-module-1-problems)
-- 💻 [See Python Code Examples](03-python-code)
+- 📖 [Read Module 1 Overview](./01-module-1/00-ml-basics.md)
+- 💪 [Jump to Practice Problems](./02-practice-problems/01-module-1-problems.md)
+- 💻 [See Python Code Examples](./03-python-code/00-overview.md)
 
 ---
 
@@ -133,9 +133,9 @@ After completing this package, you'll be able to:
 
 ## 📞 Quick Links
 
-- [Search for a topic](../../../) - Use site search
-- [View all practice problems](02-practice-problems) - 22 problems organized by difficulty
-- [Get Python code](03-python-code) - Copy-paste ready implementations
+- [Search for a topic](/) - Use site search
+- [View all practice problems](./02-practice-problems/00-overview.md) - 22 problems organized by difficulty
+- [Get Python code](./03-python-code/00-overview.md) - Copy-paste ready implementations
 - Check daily tasks - Track your progress
 
 ---

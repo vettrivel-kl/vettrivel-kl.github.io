@@ -256,7 +256,7 @@ Five-fold CV on a classification task:
 
 **Next in this section:** [K-Fold and Stratified K-Fold](./03-k-fold-and-stratified-k-fold.md) — detailed K-fold flow, choosing K, imbalanced data.
 
-**See also:** [Why Cross-Validation](./01-why-cross-validation.md) for motivation · [Logistic Regression](../07-logistic-regression/) for a practical CV example.
+**See also:** [Why Cross-Validation](./01-why-cross-validation.md) for motivation · [Logistic Regression](../07-logistic-regression/01-why-logistic-regression.md) for a practical CV example.
 
 ---
 

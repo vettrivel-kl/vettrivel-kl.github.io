@@ -197,7 +197,7 @@ Competitors who overfit to the public test (by repeated submissions) often drop 
 
 **Next in this section:** [Cross-Validation Methods](./02-cross-validation-methods.md) — LOO-CV, LPO-CV, and K-fold mechanics.
 
-**See also:** [Confusion Matrix](../08-classification-metrics/01-confusion-matrix-and-basic-metrics.md) for evaluating classifiers · [Part I — Generalization](../09-generalization/) for overfitting and regularisation.
+**See also:** [Confusion Matrix](../08-classification-metrics/01-confusion-matrix-and-basic-metrics.md) for evaluating classifiers · [Part I — Generalization](../09-generalization/01-overfitting-underfitting-regularization.md) for overfitting and regularisation.
 
 ---
 

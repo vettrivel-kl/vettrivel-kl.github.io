@@ -251,7 +251,7 @@ w ≈ [1.25, 0.6, 0.05] (some shrinkage with occasional zeros).
 
 **Next in this section:** [Regularization Strength and Solvers](./02-regularization-strength-and-solvers.md) — tuning λ, solvers, hyperparameter search strategies.
 
-**See also:** [Cross-Validation](../06-validation-strategy/) for CV-based hyperparameter tuning · [Logistic Regression](../07-logistic-regression/) for classification with regularisation.
+**See also:** [Cross-Validation](../06-validation-strategy/01-why-cross-validation.md) for CV-based hyperparameter tuning · [Logistic Regression](../07-logistic-regression/01-why-logistic-regression.md) for classification with regularisation.
 
 ---
 
