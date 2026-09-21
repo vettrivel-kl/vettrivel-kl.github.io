@@ -53,7 +53,7 @@ consumes it three things that are not true:
 
 For genuinely **ordinal** data — `low < medium < high` — those claims are fine, because the order is
 real. For **nominal** data — cities, colours, countries — they are fabrications. This is the
-nominal/ordinal distinction from [Types of Learning](../01-foundations/03-types-of-learning.md#numeric-and-categorical-data),
+nominal/ordinal distinction from [Types of Learning](../01-foundations/03-types-of-learning.mdx#numeric-and-categorical-data),
 and this is where it starts costing you accuracy.
 
 ### How much does it cost? It depends entirely on the model
@@ -461,7 +461,7 @@ A workable default policy:
 **Next in this section:** [Feature Scaling and Transformation](./04-feature-scaling-and-transformation.md)
 — now that everything is numeric, the columns are on wildly different scales
 
-**See also:** [Types of Learning](../01-foundations/03-types-of-learning.md#numeric-and-categorical-data)
+**See also:** [Types of Learning](../01-foundations/03-types-of-learning.mdx#numeric-and-categorical-data)
 for nominal versus ordinal · [Loading and Preparing Data](./01-loading-and-preparing-data.md#should-you-convert-to-numpy-at-all)
 for why `X` was `object` · [Missing Values](./02-missing-values.md) for handling gaps before this step
 

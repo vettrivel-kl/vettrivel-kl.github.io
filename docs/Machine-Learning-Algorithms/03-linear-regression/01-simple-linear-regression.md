@@ -17,7 +17,7 @@ toc_max_heading_level: 3
 
 ## Regression versus classification
 
-The distinction from [Types of Learning](../01-foundations/03-types-of-learning.md#the-rule-worth-memorising),
+The distinction from [Types of Learning](../01-foundations/03-types-of-learning.mdx#the-rule-worth-memorising),
 restated because this is where it starts to matter:
 
 | | **Regression** | **Classification** |
@@ -467,7 +467,7 @@ jointly rather than screening them one at a time.
 one feature, the normal equations solved by hand, and what happens to a coefficient when two features
 carry the same information
 
-**See also:** [Types of Learning](../01-foundations/03-types-of-learning.md#the-rule-worth-memorising)
+**See also:** [Types of Learning](../01-foundations/03-types-of-learning.mdx#the-rule-worth-memorising)
 for regression versus classification · [Outliers and Feature Engineering](../02-data-preprocessing/05-outliers-and-feature-engineering.md#interactions--the-product-a-linear-model-cannot-form)
 for the interaction a linear model cannot form · [Loading and Preparing Data](../02-data-preprocessing/01-loading-and-preparing-data.md#a-pre-flight-audit)
 for the constant-column check that a zero `Sxx` implies

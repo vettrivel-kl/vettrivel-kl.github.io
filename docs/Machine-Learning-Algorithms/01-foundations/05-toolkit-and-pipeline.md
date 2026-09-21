@@ -244,7 +244,7 @@ scaler that produced that scaling. Save them together, or save a `Pipeline` that
 - Measured: three different algorithms all scored **0.967** on iris, while a deliberately crippled
   one-split tree scored **0.667** — the comparison works, the three genuinely tie
 
-**See also:** [Types of Learning](./03-types-of-learning.md) for what goes in step 3 ·
+**See also:** [Types of Learning](./03-types-of-learning.mdx) for what goes in step 3 ·
 [Applications and Major Techniques](./02-applications-and-techniques.mdx) for choosing the technique
 before the algorithm · [What is Machine Learning?](./01-what-is-machine-learning.mdx) for why
 `.fit` replaces hand-written rules

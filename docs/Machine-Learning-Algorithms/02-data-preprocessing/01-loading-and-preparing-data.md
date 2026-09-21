@@ -273,7 +273,7 @@ think about; it doesn't replace the thinking.
 ## Separating features from target
 
 With a trustworthy table, split it into `X` (the features) and `y` (the target) — the vocabulary from
-[Types of Learning](../01-foundations/03-types-of-learning.md#features-and-attributes).
+[Types of Learning](../01-foundations/03-types-of-learning.mdx#features-and-attributes).
 
 ```python
 clean = df.drop(columns=["id", "Region"]).drop_duplicates()
@@ -530,7 +530,7 @@ has simply been overtaken.
 **Next in this section:** [Missing Values](./02-missing-values.md) — imputing the `NaN`s this page
 has now correctly counted
 
-**See also:** [Types of Learning](../01-foundations/03-types-of-learning.md#features-and-attributes)
+**See also:** [Types of Learning](../01-foundations/03-types-of-learning.mdx#features-and-attributes)
 for the `X`/`y` vocabulary · [The Toolkit and the Pipeline](../01-foundations/05-toolkit-and-pipeline.md)
 for where loading sits in the seven-step pipeline
 

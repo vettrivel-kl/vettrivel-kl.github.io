@@ -218,7 +218,7 @@ that made hand-written rules fail in the first place, one level further up.
 **Next in this section:** [The Toolkit and the Pipeline](./05-toolkit-and-pipeline.md) — the libraries and the
 workflow that implement all four paradigms
 
-**See also:** [Types of Learning](./03-types-of-learning.md) for the three paradigms this one sits
+**See also:** [Types of Learning](./03-types-of-learning.mdx) for the three paradigms this one sits
 beside · [Applications and Major Techniques](./02-applications-and-techniques.mdx) for where each
 technique is used
 
