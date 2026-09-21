@@ -12,7 +12,7 @@ import rehypeKatex from 'rehype-katex';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: "Vettrivel's Notes",
+  title: "Vettri's Notes",
   tagline: 'one note at a time',
   favicon: 'img/vettri/favicon.ico',
 
@@ -85,7 +85,7 @@ const config = {
         respectPrefersColorScheme: true,
       },
       navbar: {
-        title: "Vettrivel's Notes",
+        title: "Vettri's Notes",
         logo: {
           alt: 'My Site Logo',
           src: 'img/vettri/vettri-384x384.png',
