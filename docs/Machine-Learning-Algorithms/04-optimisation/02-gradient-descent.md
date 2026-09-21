@@ -268,7 +268,7 @@ and its contours are circles rather than stretched ellipses.
 **A round bowl is a special case, not the general picture**
 
 `κ = 1.00` here is not a fact about gradient descent — it is what
-[standardising](../02-data-preprocessing/04-feature-scaling-and-transformation.md#standardisation-z-score-normalisation)
+[standardising](../02-data-preprocessing/04-feature-scaling-and-transformation.mdx#standardisation-z-score-normalisation)
 the single feature did. With mean `0` and standard deviation `1`, `(1/n)XᵀX` is exactly the identity,
 so `H = 2·I`.
 
@@ -439,7 +439,7 @@ Notice also what happened to `2/lambda_max`, the largest usable learning rate: `
 **An unscaled feature can make gradient descent unusable, not just slow**
 
 This is a far sharper consequence of feature scaling than the accuracy differences measured in
-[which models actually need it](../02-data-preprocessing/04-feature-scaling-and-transformation.md#which-models-actually-need-it).
+[which models actually need it](../02-data-preprocessing/04-feature-scaling-and-transformation.mdx#which-models-actually-need-it).
 There, skipping scaling cost some points of performance. Here it is the difference between
 **40 iterations and never finishing**, and neither the code nor the data looks wrong while it happens
 — the cost just descends implausibly slowly.
@@ -517,7 +517,7 @@ compute from `λ_max` before running anything
 **See also:** [Loss Functions](./01-loss-functions.md#the-loss-decides-whether-the-problem-is-solvable-at-all)
 for why a differentiable loss is a precondition for any of this ·
 [The Matrix Formulation](../03-linear-regression/03-the-matrix-formulation.md#why-anyone-bothers-with-gradient-descent)
-for when to prefer the closed form · [Feature Scaling and Transformation](../02-data-preprocessing/04-feature-scaling-and-transformation.md#standardisation-z-score-normalisation)
+for when to prefer the closed form · [Feature Scaling and Transformation](../02-data-preprocessing/04-feature-scaling-and-transformation.mdx#standardisation-z-score-normalisation)
 for the transform that turned the ravine back into a bowl
 
 ---

@@ -434,7 +434,7 @@ pushed `κ` to `929437.6` and the run never finished at all.
 
 **This is the concrete reason to standardise before an iterative solver**
 
-[Feature scaling](../02-data-preprocessing/04-feature-scaling-and-transformation.md#which-models-actually-need-it)
+[Feature scaling](../02-data-preprocessing/04-feature-scaling-and-transformation.mdx#which-models-actually-need-it)
 is usually justified by appeals to fairness between features. The sharper argument is arithmetic:
 standardising makes `λ_max` small and known, which makes `α` transferable between problems and puts
 the safe ceiling near `1.0` instead of somewhere you have to discover.
@@ -515,7 +515,7 @@ stopwatch
 **See also:** [Gradient Descent](./02-gradient-descent.md#the-braking-rate-is-predictable-in-advance)
 for the `max|1 − α·λ|` contraction this page's thresholds come from ·
 [Gradient Descent](./02-gradient-descent.md#the-bowl-is-usually-a-ravine) for the condition-number
-ladder · [Feature Scaling and Transformation](../02-data-preprocessing/04-feature-scaling-and-transformation.md#standardisation-z-score-normalisation)
+ladder · [Feature Scaling and Transformation](../02-data-preprocessing/04-feature-scaling-and-transformation.mdx#standardisation-z-score-normalisation)
 for the transform that makes `α` portable
 
 ---

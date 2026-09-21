@@ -226,7 +226,7 @@ singular for the same reason as above — and the model achieves a **perfect `R�
 training data by passing exactly through every point.
 
 That perfect score carries no information whatsoever. It is the
-[memorisation](../02-data-preprocessing/06-train-test-split.md#why-hold-anything-back) problem in its
+[memorisation](../02-data-preprocessing/06-train-test-split.mdx#why-hold-anything-back) problem in its
 purest algebraic form: with `p ≥ n` an exact fit always exists.
 
 This case is common in practice — genomics, text with one column per word, and any wide one-hot
@@ -237,7 +237,7 @@ invertible even when `Xᵀ X` is not.
 
 A column with the same value in every row is a multiple of the ones column, so it too destroys
 independence. That is precisely why the
-[pre-flight audit](../02-data-preprocessing/01-loading-and-preparing-data.md#a-pre-flight-audit)
+[pre-flight audit](../02-data-preprocessing/01-loading-and-preparing-data.mdx#a-pre-flight-audit)
 checked for constant columns — the `Region` column that was `EU` in every row would have made the
 design matrix singular.
 
@@ -329,8 +329,8 @@ form exists only for squared error, so the next section begins by asking what el
 minimise, and what that choice costs
 
 **See also:** [Multiple Linear Regression](./02-multiple-linear-regression.md#when-coefficients-stop-meaning-anything)
-for collinearity short of perfect · [Loading and Preparing Data](../02-data-preprocessing/01-loading-and-preparing-data.md#a-pre-flight-audit)
-for the constant-column check · [Train / Test Split](../02-data-preprocessing/06-train-test-split.md#why-hold-anything-back)
+for collinearity short of perfect · [Loading and Preparing Data](../02-data-preprocessing/01-loading-and-preparing-data.mdx#a-pre-flight-audit)
+for the constant-column check · [Train / Test Split](../02-data-preprocessing/06-train-test-split.mdx#why-hold-anything-back)
 for why a perfect training fit is worthless
 
 ---

@@ -261,7 +261,7 @@ does not transfer.
 
 The baseline is also computed from the rows **being scored**, not from training. Score identical
 predictions on two test splits and you get two values of `SST`, hence two R² values, from one
-model — the same [split lottery](../02-data-preprocessing/06-train-test-split.md#the-split-lottery)
+model — the same [split lottery](../02-data-preprocessing/06-train-test-split.mdx#the-split-lottery)
 that makes a single train/test split unreliable in the first place.
 
 ---
@@ -567,7 +567,7 @@ that R² alone escapes ·
 for Adjusted R² losing a race against noise features ·
 [Simple Linear Regression](../03-linear-regression/01-simple-linear-regression.md#how-wrong-is-it-the-five-error-measures)
 for where `SSE`, `SST` and `R²` first appear ·
-[Train / Test Split](../02-data-preprocessing/06-train-test-split.md#the-split-lottery)
+[Train / Test Split](../02-data-preprocessing/06-train-test-split.mdx#the-split-lottery)
 for why one split's R² is not the model's R²
 
 ---

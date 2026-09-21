@@ -68,7 +68,7 @@ Two things are worth noticing before computing anything.
 **`b₁` is a ratio of sums about the means.** The numerator asks how `x` and `y` deviate *together*;
 the denominator asks how much `x` deviates at all. If `x` barely varies, the denominator is tiny and
 the slope is unstable — which is the same defect that makes a constant column
-[fail a pre-flight audit](../02-data-preprocessing/01-loading-and-preparing-data.md#a-pre-flight-audit).
+[fail a pre-flight audit](../02-data-preprocessing/01-loading-and-preparing-data.mdx#a-pre-flight-audit).
 
 **`b₀` is not fitted independently.** Once the slope is known, the intercept is forced: the line must
 pass through `(x̄, ȳ)`. Every least-squares line goes through the mean of the data. That is not a
@@ -304,7 +304,7 @@ A model is linear if the prediction is a **weighted sum of its inputs** — what
 
 This is why feature engineering is so powerful here: `x²`, `log(x)`, `x₁ × x₂` and `sin(2πh/24)` are
 all just columns, and each extends what a linear model can express without changing the model at all.
-It is also why [adding `length × width`](../02-data-preprocessing/05-outliers-and-feature-engineering.md#interactions--the-product-a-linear-model-cannot-form)
+It is also why [adding `length × width`](../02-data-preprocessing/05-outliers-and-feature-engineering.mdx#interactions--the-product-a-linear-model-cannot-form)
 took `R²` from `0.9023` to `0.9997`.
 
 What linear regression genuinely cannot do is *discover* those columns for itself.
@@ -325,7 +325,7 @@ Linear regression is a model of the world, and it assumes four things.
 | **Normality of residuals** | Errors are roughly normally distributed | Needed for confidence intervals, not for fitting |
 
 Two are worth stressing. **Independence** is the same requirement that made a random
-[train/test split](../02-data-preprocessing/06-train-test-split.md#2-grouped-rows--the-worst-case)
+[train/test split](../02-data-preprocessing/06-train-test-split.mdx#2-grouped-rows--the-worst-case)
 invalid on grouped data — one violation, two consequences. And **normality of residuals** is often
 over-emphasised: the coefficients are unbiased without it. It matters for inference, not for
 prediction.
@@ -468,8 +468,8 @@ one feature, the normal equations solved by hand, and what happens to a coeffici
 carry the same information
 
 **See also:** [Types of Learning](../01-foundations/03-types-of-learning.mdx#the-rule-worth-memorising)
-for regression versus classification · [Outliers and Feature Engineering](../02-data-preprocessing/05-outliers-and-feature-engineering.md#interactions--the-product-a-linear-model-cannot-form)
-for the interaction a linear model cannot form · [Loading and Preparing Data](../02-data-preprocessing/01-loading-and-preparing-data.md#a-pre-flight-audit)
+for regression versus classification · [Outliers and Feature Engineering](../02-data-preprocessing/05-outliers-and-feature-engineering.mdx#interactions--the-product-a-linear-model-cannot-form)
+for the interaction a linear model cannot form · [Loading and Preparing Data](../02-data-preprocessing/01-loading-and-preparing-data.mdx#a-pre-flight-audit)
 for the constant-column check that a zero `Sxx` implies
 
 ---

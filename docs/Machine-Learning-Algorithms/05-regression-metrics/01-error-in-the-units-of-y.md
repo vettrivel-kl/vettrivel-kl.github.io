@@ -335,7 +335,7 @@ any regression, on any scale, without knowing anything about the target:
 Every regression report contains MAE and RMSE. Dividing them costs nothing and points at the same
 rows a `y`-outlier scan would find — but it finds them in the *residuals*, which is where they matter,
 rather than in the raw column. Compare with the univariate rules in
-[Outliers and Feature Engineering](../02-data-preprocessing/05-outliers-and-feature-engineering.md#z-scores-and-why-outliers-hide-each-other),
+[Outliers and Feature Engineering](../02-data-preprocessing/05-outliers-and-feature-engineering.mdx#z-scores-and-why-outliers-hide-each-other),
 which can only see a value that is extreme in itself, not a value the model got badly wrong.
 
 :::
@@ -515,7 +515,7 @@ for why the same choice changes the fitted line ·
 for these measures on a hand-fitted line ·
 [The Matrix Formulation](../03-linear-regression/03-the-matrix-formulation.md#the-column-of-ones)
 for why the intercept forces `Σr = 0` ·
-[Outliers and Feature Engineering](../02-data-preprocessing/05-outliers-and-feature-engineering.md#z-scores-and-why-outliers-hide-each-other)
+[Outliers and Feature Engineering](../02-data-preprocessing/05-outliers-and-feature-engineering.mdx#z-scores-and-why-outliers-hide-each-other)
 for finding extreme values before they become residuals
 
 ---

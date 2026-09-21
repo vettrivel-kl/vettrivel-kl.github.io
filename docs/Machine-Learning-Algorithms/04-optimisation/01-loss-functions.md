@@ -580,7 +580,7 @@ near the minimum without anyone programming it
 
 **See also:** [Simple Linear Regression](../03-linear-regression/01-simple-linear-regression.md#how-wrong-is-it-the-five-error-measures)
 for the error measures as *metrics* rather than objectives ·
-[Outliers and Feature Engineering](../02-data-preprocessing/05-outliers-and-feature-engineering.md#robust-models-fix-y-outliers-not-x-outliers)
+[Outliers and Feature Engineering](../02-data-preprocessing/05-outliers-and-feature-engineering.mdx#robust-models-fix-y-outliers-not-x-outliers)
 for why a robust loss fixes `y`-outliers and not `X`-outliers ·
 [The Matrix Formulation](../03-linear-regression/03-the-matrix-formulation.md#why-anyone-bothers-with-gradient-descent)
 for the closed form that exists only for squared error
