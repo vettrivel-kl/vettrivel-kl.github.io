@@ -8,6 +8,7 @@ toc_max_heading_level: 3
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import React from 'react';
 
 # What is Machine Learning?
 
@@ -29,13 +30,31 @@ Tom Mitchell (1997) sharpened it into a definition you can actually test a syste
 > A computer program **learns** from experience `E` with respect to task `T` and performance
 > measure `P`, if its performance at `T`, as measured by `P`, improves with `E`.
 
-Three things must be nameable, or it isn't learning:
+Three things must be nameable, or it isn't learning. Click the tabs below to explore how they interact mathematically and operationally:
 
-| Symbol | Name | In the cats-and-dogs task below |
-|---|---|---|
-| `T` | **Task** | Label an animal photo as cat, dog or bird |
-| `E` | **Experience** | 10 already-labelled animals |
-| `P` | **Performance measure** | Fraction of *new* animals labelled correctly |
+<Tabs>
+  <TabItem value="task" label="🎯 Task (T)" default>
+    <br/>
+    
+    *   **The Operational Definition:** The specific problem, action, or prediction you want the computer to solve.
+    *   **In our Cats-and-Dogs lab below:** Labeling an animal photo as either a **cat**, **dog**, or **bird**.
+    *   **M.Tech Note:** The task is represented mathematically as a mapping function from input features to categorical targets: $f(X) \to Y$.
+  </TabItem>
+  <TabItem value="exp" label="📊 Experience (E)">
+    <br/>
+    
+    *   **The Operational Definition:** The historical, empirical data that the system is allowed to analyze and train on.
+    *   **In our Cats-and-Dogs lab below:** 10 already-labeled animal rows containing their physical measurements.
+    *   **M.Tech Note:** Experience is represented as a dataset $D = \{(x_1, y_1), (x_2, y_2), ..., (x_n, y_n)\}$ drawn from an underlying data distribution.
+  </TabItem>
+  <TabItem value="perf" label="📈 Performance (P)">
+    <br/>
+    
+    *   **The Operational Definition:** The objective mathematical metric used to measure whether the system has actually "learned" or improved.
+    *   **In our Cats-and-Dogs lab below:** The fraction (accuracy) of *new, unseen* animals labeled correctly.
+    *   **M.Tech Note:** Performance must be measured on a **separate test set** to ensure we evaluate generalization rather than memorization.
+  </TabItem>
+</Tabs>
 
 :::tip
 
@@ -207,23 +226,37 @@ Learning is not one calculation; it is a loop of *guess → measure the error �
 
 Same task, same features, two approaches. 
 
-The hand-written rules use **weight**, because that is what looks obvious to a human:
+Compare the implementation code for both paradigms:
 
-```python
-def rule_based(row):
-    has_wings, legs, weight, snout, claws = row
-    if has_wings:
-        return "bird"
-    if weight < 10:          # the human's guess: "small means cat"
-        return "cat"
-    return "dog"
-```
+<Tabs>
+  <TabItem value="traditional" label="❌ Traditional Rules (Hand-Written)" default>
+    <br/>
+    
+    The hand-written rules rely on human intuition (e.g., guessing that "body weight" represents the major difference):
 
-The learned model is given no rules at all — only ten labelled animals:
+    ```python
+    def rule_based(row):
+        has_wings, legs, weight, snout, claws = row
+        if has_wings:
+            return "bird"
+        if weight < 10:          # the human's guess: "small means cat"
+            return "cat"
+        return "dog"
+    ```
+  </TabItem>
+  <TabItem value="ml" label="✅ Learned Model (Scikit-Learn)">
+    <br/>
+    
+    The learned model is given absolutely no rules—only the raw dataset matrix `X_train` and target vectors `y_train` to fit against:
 
-```python
-tree = DecisionTreeClassifier(random_state=0).fit(X_train, y_train)
-```
+    ```python
+    from sklearn.tree import DecisionTreeClassifier
+    
+    # Model derives all feature splits and decision boundaries autonomously
+    tree = DecisionTreeClassifier(random_state=0).fit(X_train, y_train)
+    ```
+  </TabItem>
+</Tabs>
 
 Now ask what the model taught itself:
 
@@ -340,6 +373,26 @@ nest, strictly:
 
 Note that **AI does not require learning at all**. A rule-based chess engine is AI. That is why the
 `what_animal` function above was a legitimate attempt at AI — a bad one, but AI.
+
+export const AIQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Testing Your Taxonomy</h4>
+      <p style={{ margin: '0 0 15px 0' }}>A rule-based expert system (like a classical chess engine that contains no statistical learning) belongs in which category?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('ai')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'ai' ? '#3182ce' : 'transparent', color: selected === 'ai' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Artificial Intelligence (AI)</button>
+        <button onClick={() => setSelected('ml')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'ml' ? '#e53e3e' : 'transparent', color: selected === 'ml' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Machine Learning (ML)</button>
+        <button onClick={() => setSelected('dl')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'dl' ? '#e53e3e' : 'transparent', color: selected === 'dl' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Deep Learning (DL)</button>
+      </div>
+      {selected === 'ai' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! AI is the broad umbrella covering any system acting autonomously without human intervention. Standard search trees and expert rules are AI, even if they never learn from data.</p>}
+      {selected === 'ml' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. ML is a subset of AI requiring statistical learning from experience (E). An expert chess engine uses static search rules, not statistical learning. Try again!</p>}
+      {selected === 'dl' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. DL is a subset of ML utilizing multi-layered neural networks. An expert rule-based engine is at the outermost AI layer. Try again!</p>}
+    </div>
+  );
+};
+
+<AIQuiz />
 
 ### Why the job titles don't map to different fields
 
