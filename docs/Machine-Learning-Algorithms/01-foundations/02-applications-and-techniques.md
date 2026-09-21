@@ -381,7 +381,7 @@ you actually have. This is the same divide as
 these techniques keep turning on · [Reinforcement Learning](./04-reinforcement-learning.md) ·
 [The Toolkit and the Pipeline](./05-toolkit-and-pipeline.md)
 
-**See also:** [What is Machine Learning?](./01-what-is-machine-learning.md) for why any of this
+**See also:** [What is Machine Learning?](./01-what-is-machine-learning.mdx) for why any of this
 beats hand-written rules
 
 ---

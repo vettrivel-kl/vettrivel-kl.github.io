@@ -400,7 +400,7 @@ question, not a cheaper version of the same one.
 that has no dataset at all · [The Toolkit and the Pipeline](./05-toolkit-and-pipeline.md)
 
 **See also:** [Applications and Major Techniques](./02-applications-and-techniques.md) for the eight
-techniques these paradigms unlock · [What is Machine Learning?](./01-what-is-machine-learning.md) for
+techniques these paradigms unlock · [What is Machine Learning?](./01-what-is-machine-learning.mdx) for
 why labels beat hand-written rules
 
 ---
