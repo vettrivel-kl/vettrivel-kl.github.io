@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkvettrivel_com=self.webpackChunkvettrivel_com||[]).push([["612"],{13327(e,c,t){t.d(c,{createPacketServices:()=>r.$});var r=t(73263);t(4954)}}]);

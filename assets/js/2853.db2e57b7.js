@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkvettrivel_com=self.webpackChunkvettrivel_com||[]).push([["2853"],{90884(e,c,r){r.d(c,{createTreemapServices:()=>t.d});var t=r(16527);r(4954)}}]);

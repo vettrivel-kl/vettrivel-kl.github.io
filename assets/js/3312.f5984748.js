@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkvettrivel_com=self.webpackChunkvettrivel_com||[]).push([["3312"],{52355(e,t,c){c.d(t,{createEventModelingServices:()=>v.g});var v=c(82688);c(4954)}}]);

@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkvettrivel_com=self.webpackChunkvettrivel_com||[]).push([["5493"],{57636(e,t,c){c.d(t,{createCynefinServices:()=>r.t});var r=c(93279);c(4954)}}]);

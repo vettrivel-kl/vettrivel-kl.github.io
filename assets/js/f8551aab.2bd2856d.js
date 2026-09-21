@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkvettrivel_com=self.webpackChunkvettrivel_com||[]).push([["9609"],{28208(e,c,r){r.r(c),r.d(c,{default:()=>a});var s=r(74848);r(96540);var t=r(56525);function a(){return(0,s.jsxs)(t.A,{children:[(0,s.jsx)("h1",{children:"My React page"}),(0,s.jsx)("p",{children:"This is a React page"})]})}}}]);

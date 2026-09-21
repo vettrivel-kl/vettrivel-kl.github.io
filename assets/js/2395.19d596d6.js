@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkvettrivel_com=self.webpackChunkvettrivel_com||[]).push([["2395"],{59590(e,c,t){t.d(c,{createPieServices:()=>r.f});var r=t(26041);t(4954)}}]);
