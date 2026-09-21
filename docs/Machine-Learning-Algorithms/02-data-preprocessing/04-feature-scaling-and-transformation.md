@@ -417,7 +417,7 @@ dangerous ones seriously.
 
 **See also:** [Encoding Categorical Data](./03-encoding-categorical-data.md#what-cardinality-costs) for
 the sparsity this must preserve · [Missing Values](./02-missing-values.md) for why imputation comes
-first · [The Toolkit and the Pipeline](../01-foundations/05-toolkit-and-pipeline.md#the-contract-that-makes-it-work)
+first · [The Toolkit and the Pipeline](../01-foundations/05-toolkit-and-pipeline.mdx#the-contract-that-makes-it-work)
 for `fit` versus `transform`
 
 ---

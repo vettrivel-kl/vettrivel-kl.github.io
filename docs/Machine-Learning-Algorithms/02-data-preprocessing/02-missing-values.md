@@ -304,7 +304,7 @@ signal you can legitimately keep.
 ## The `fit` / `transform` contract
 
 Imputation is the clearest possible illustration of the rule from
-[The Toolkit and the Pipeline](../01-foundations/05-toolkit-and-pipeline.md#the-contract-that-makes-it-work):
+[The Toolkit and the Pipeline](../01-foundations/05-toolkit-and-pipeline.mdx#the-contract-that-makes-it-work):
 **`fit` learns, `transform` applies.**
 
 `fit` computes the statistics and stores them:
@@ -432,7 +432,7 @@ the shapes then disagree, and the error surfaces somewhere unrelated. Check
 `Country` into something a model can consume, which is the other half of why `X` was still `object`
 
 **See also:** [Loading and Preparing Data](./01-loading-and-preparing-data.md#the-missingness-pandas-cannot-see)
-for finding the gaps in the first place · [The Toolkit and the Pipeline](../01-foundations/05-toolkit-and-pipeline.md#the-contract-that-makes-it-work)
+for finding the gaps in the first place · [The Toolkit and the Pipeline](../01-foundations/05-toolkit-and-pipeline.mdx#the-contract-that-makes-it-work)
 for the `fit`/`transform` rule
 
 ---

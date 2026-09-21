@@ -531,7 +531,7 @@ has simply been overtaken.
 has now correctly counted
 
 **See also:** [Types of Learning](../01-foundations/03-types-of-learning.mdx#features-and-attributes)
-for the `X`/`y` vocabulary · [The Toolkit and the Pipeline](../01-foundations/05-toolkit-and-pipeline.md)
+for the `X`/`y` vocabulary · [The Toolkit and the Pipeline](../01-foundations/05-toolkit-and-pipeline.mdx)
 for where loading sits in the seven-step pipeline
 
 ---

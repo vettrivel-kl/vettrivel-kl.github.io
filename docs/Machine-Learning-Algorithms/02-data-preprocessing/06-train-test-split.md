@@ -371,7 +371,7 @@ set sealed until the end.
 only · [Encoding Categorical Data](./03-encoding-categorical-data.md#target-encoding-and-the-leak-inside-it)
 for the leak this prevents · [Feature Scaling and Transformation](./04-feature-scaling-and-transformation.md#how-much-does-scaling-before-the-split-really-leak)
 for the measured scaling leak · [Outliers and Feature Engineering](./05-outliers-and-feature-engineering.md)
-for why the test set stays dirty · [The Toolkit and the Pipeline](../01-foundations/05-toolkit-and-pipeline.md)
+for why the test set stays dirty · [The Toolkit and the Pipeline](../01-foundations/05-toolkit-and-pipeline.mdx)
 for where this sits in the workflow
 
 ---
