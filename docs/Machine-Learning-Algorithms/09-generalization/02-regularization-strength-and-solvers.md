@@ -36,13 +36,13 @@ The page settles two confusions:
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **Grid search** | — | Try all combinations of hyperparameters, pick best CV score. |
-| **Random search** | — | Randomly sample hyperparameter combinations, pick best. |
-| **Solver** | — | Algorithm for optimisation (fitting the model). |
-| **Convergence** | — | Algorithm stopped improving (found optimum). |
-| **Hyperparameter** | — | Parameter tuned before training (not learned by the algorithm). |
+| Term | What it means here |
+|---|---|
+| **Grid search** | Try all combinations of hyperparameters, pick best CV score. |
+| **Random search** | Randomly sample hyperparameter combinations, pick best. |
+| **Solver** | Algorithm for optimisation (fitting the model). |
+| **Convergence** | Algorithm stopped improving (found optimum). |
+| **Hyperparameter** | Parameter tuned before training (not learned by the algorithm). |
 
 :::tip If you only take one thing from this page
 Tune regularization strength λ via grid search: try [0.001, 0.01, 0.1, 1, 10, 100], pick best CV score. Use GridSearchCV. For L1, pick a solver that supports it (saga, liblinear on sklearn). Always standardise features first.
@@ -293,7 +293,7 @@ final_model.fit(X, y)  # All data
 - **Check CV std dev.** High std = unstable model; avoid.
 - **Use GridSearchCV.** It handles cross-validation and parallelisation.
 
-**Previous:** [Overfitting and Regularization](./01-overfitting-underfitting-regularization.md) — L1/L2 concepts.
+**Previous:** [Overfitting and Regularization](./01-overfitting-underfitting-regularization.mdx) — L1/L2 concepts.
 
 **Next:** [Curse of Dimensionality](./03-curse-of-dimensionality.md) — feature selection, dimensionality reduction.
 

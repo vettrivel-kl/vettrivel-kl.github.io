@@ -32,13 +32,13 @@ The page settles two confusions:
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **Multiclass** | "multi-class" | >2 classes. |
-| **Macro-average** | — | Average metric across classes, treating each class equally. |
-| **Micro-average** | — | Collapse to single TP/FP/FN, compute metric. Same as accuracy. |
-| **Weighted-average** | — | Macro-average weighted by class frequency. |
-| **One-vs-rest** | — | For class i, treat i as positive, others as negative. Compute binary metric, repeat for all i, average. |
+| Term | What it means here |
+|---|---|
+| **Multiclass** | >2 classes. |
+| **Macro-average** | Average metric across classes, treating each class equally. |
+| **Micro-average** | Collapse to single TP/FP/FN, compute metric. Same as accuracy. |
+| **Weighted-average** | Macro-average weighted by class frequency. |
+| **One-vs-rest** | For class i, treat i as positive, others as negative. Compute binary metric, repeat for all i, average. |
 
 :::tip If you only take one thing from this page
 On multiclass, use macro F1 for balanced weight to each class, weighted F1 when class imbalance is real, and micro F1 only if all classes matter equally. To choose a metric: prioritise recall if false negatives are costly, precision if false positives are costly, and F1 if both matter.
@@ -273,7 +273,7 @@ END
 - Always report baseline: what does a trivial classifier achieve?
 - On imbalanced data, avoid accuracy; use AUC, PR AUC, or balanced accuracy.
 
-**Next in this section:** [Part I — Generalization & Model Control](../09-generalization/01-overfitting-underfitting-regularization.md) — how to detect overfitting and control it via regularization.
+**Next in this section:** [Part I — Generalization & Model Control](../09-generalization/01-overfitting-underfitting-regularization.mdx) — how to detect overfitting and control it via regularization.
 
 **See also:** [Confusion Matrix](./01-confusion-matrix-and-basic-metrics.md) for binary metrics · [Precision and Recall](./02-precision-and-recall.md) for definitions · [F-Scores](./03-f-scores-and-balanced-metrics.md) for balanced metrics · [ROC and AUC](./04-roc-auc-and-threshold-tuning.md) for threshold tuning.
 

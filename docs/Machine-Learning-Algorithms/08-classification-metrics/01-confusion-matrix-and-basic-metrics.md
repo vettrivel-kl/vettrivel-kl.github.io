@@ -33,13 +33,13 @@ The page settles three specific confusions:
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **Confusion matrix** | "confusion MAY-trix" | A 2×2 table: rows are actual class, columns are predicted class. Diagonal entries are correct; off-diagonal are errors. |
-| **TP / TN / FP / FN** | "tee-pee", etc. | True/False Positive/Negative — the four counts in the confusion matrix. |
-| **Accuracy** | "uh-KUR-uh-see" | Fraction of correct predictions: (TP + TN) / total. |
-| **Imbalanced data** | "im-BAL-unst" | A dataset where one class vastly outnumbers the other (e.g., 1% positive, 99% negative). |
-| **Accuracy paradox** | — | On imbalanced data, a trivial classifier (always predict the majority class) achieves high accuracy. |
+| Term | What it means here |
+|---|---|
+| **Confusion matrix** | A 2×2 table: rows are actual class, columns are predicted class. Diagonal entries are correct; off-diagonal are errors. |
+| **TP / TN / FP / FN** | True/False Positive/Negative — the four counts in the confusion matrix. |
+| **Accuracy** | Fraction of correct predictions: (TP + TN) / total. |
+| **Imbalanced data** | A dataset where one class vastly outnumbers the other (e.g., 1% positive, 99% negative). |
+| **Accuracy paradox** | On imbalanced data, a trivial classifier (always predict the majority class) achieves high accuracy. |
 
 :::tip If you only take one thing from this page
 A confusion matrix is a 2×2 table. Extract TP, TN, FP, FN from it. Accuracy is correct-count / total-count — intuitive but unreliable on imbalanced data. Always check class distribution first.

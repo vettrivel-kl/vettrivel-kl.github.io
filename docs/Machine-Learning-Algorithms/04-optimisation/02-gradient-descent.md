@@ -51,15 +51,15 @@ those names (Hessian, eigenvalue, condition number) are how everyone else talks 
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **Gradient** `∇J` | "the uphill direction" | One derivative per parameter, packed into a vector. Its length says how steep |
-| **Convex** | "shaped like a bowl, no side pockets" | Wherever you start, walking downhill reaches *the* bottom. No separate dips to get trapped in |
-| **Hessian** `H` | "the curvature table" | Second derivatives — how fast the slope itself changes. For squared error it is a fixed matrix, `(2/n)XᵀX`, the same everywhere |
-| **Eigenvalue** `λ` | "the steepness of one particular direction" | The bowl has a steepest direction and a shallowest one. `λ_max` and `λ_min` are how sharply it curves along each |
-| **Condition number** `κ` | "how squashed the bowl is" | `λ_max / λ_min`. `κ = 1` is a perfect circular bowl; `κ = 900000` is a canyon |
-| **Contraction** | "the fraction of the error left after one step" | `0.8` means each step removes 20% of what remained. Small is fast |
-| **OLS** | "the exact answer, by formula" | The closed-form least-squares solution, used here as the known target to check against |
+| Term | What it means here |
+|---|---|
+| **Gradient** `∇J` | One derivative per parameter, packed into a vector. Its length says how steep |
+| **Convex** | Wherever you start, walking downhill reaches *the* bottom. No separate dips to get trapped in |
+| **Hessian** `H` | Second derivatives — how fast the slope itself changes. For squared error it is a fixed matrix, `(2/n)XᵀX`, the same everywhere |
+| **Eigenvalue** `λ` | The bowl has a steepest direction and a shallowest one. `λ_max` and `λ_min` are how sharply it curves along each |
+| **Condition number** `κ` | `λ_max / λ_min`. `κ = 1` is a perfect circular bowl; `κ = 900000` is a canyon |
+| **Contraction** | `0.8` means each step removes 20% of what remained. Small is fast |
+| **OLS** | The closed-form least-squares solution, used here as the known target to check against |
 
 :::tip If you only take one thing from this page
 

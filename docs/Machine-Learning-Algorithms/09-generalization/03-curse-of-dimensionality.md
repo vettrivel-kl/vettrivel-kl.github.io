@@ -32,13 +32,13 @@ The page settles two confusions:
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **Curse of dimensionality** | — | Performance degrades as dimensions increase (without enough data). |
-| **Feature selection** | — | Choose a subset of original features; discard weak ones. |
-| **Dimensionality reduction** | — | Compress p features into d < p new features (often combinations). |
-| **Sparse** | "sparse" | Few non-zero values; or data points far apart. |
-| **PCA** | "pee-see-ay" | Principal Component Analysis. Finds directions of max variance. |
+| Term | What it means here |
+|---|---|
+| **Curse of dimensionality** | Performance degrades as dimensions increase (without enough data). |
+| **Feature selection** | Choose a subset of original features; discard weak ones. |
+| **Dimensionality reduction** | Compress p features into d < p new features (often combinations). |
+| **Sparse** | Few non-zero values; or data points far apart. |
+| **PCA** | Principal Component Analysis. Finds directions of max variance. |
 
 :::tip If you only take one thing from this page
 More features = more parameters = higher overfitting risk without more data. Use feature selection (remove weak) or dimensionality reduction (PCA, compress). Rule: samples >> features. If p > N/10, consider reducing.

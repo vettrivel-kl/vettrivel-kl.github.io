@@ -30,14 +30,14 @@ The page settles three confusions:
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **Generalisation** | — | Model performance on new, unseen data. |
-| **Train-test split** | — | Partition data: train set for fitting, test set for evaluation. |
-| **Validation set** | — | Third partition: used for hyperparameter tuning (not training, not final testing). |
-| **Cross-validation (CV)** | — | Multiple train-test splits; average results for stable estimate. |
-| **Fold** | — | One train-test partition in cross-validation. K-fold CV has K folds. |
-| **Sealed test set** | — | Test set never seen during model development. Used only for final evaluation. |
+| Term | What it means here |
+|---|---|
+| **Generalisation** | Model performance on new, unseen data. |
+| **Train-test split** | Partition data: train set for fitting, test set for evaluation. |
+| **Validation set** | Third partition: used for hyperparameter tuning (not training, not final testing). |
+| **Cross-validation (CV)** | Multiple train-test splits; average results for stable estimate. |
+| **Fold** | One train-test partition in cross-validation. K-fold CV has K folds. |
+| **Sealed test set** | Test set never seen during model development. Used only for final evaluation. |
 
 :::tip If you only take one thing from this page
 A single train-test split is unreliable (lottery). Use cross-validation (multiple splits, average results) for stable generalisation estimates. Always hold out a sealed test set for final evaluation.
@@ -197,7 +197,7 @@ Competitors who overfit to the public test (by repeated submissions) often drop 
 
 **Next in this section:** [Cross-Validation Methods](./02-cross-validation-methods.md) — LOO-CV, LPO-CV, and K-fold mechanics.
 
-**See also:** [Confusion Matrix](../08-classification-metrics/01-confusion-matrix-and-basic-metrics.md) for evaluating classifiers · [Part I — Generalization](../09-generalization/01-overfitting-underfitting-regularization.md) for overfitting and regularisation.
+**See also:** [Confusion Matrix](../08-classification-metrics/01-confusion-matrix-and-basic-metrics.md) for evaluating classifiers · [Part I — Generalization](../09-generalization/01-overfitting-underfitting-regularization.mdx) for overfitting and regularisation.
 
 ---
 

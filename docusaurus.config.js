@@ -42,7 +42,9 @@ const config = {
   // <class 'int'> or {value:spec} outside a code fence.
   markdown: {
     format: 'detect',
+    mermaid: true,
   },
+  themes: ['@docusaurus/theme-mermaid'],
 
   stylesheets: [
     {

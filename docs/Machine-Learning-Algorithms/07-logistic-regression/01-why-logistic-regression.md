@@ -35,14 +35,14 @@ The page settles three confusions:
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **Classification** | — | Predicting one of discrete classes (two or more). |
-| **Probability** | "pro-BAB-il-ih-tee" | Number between 0 and 1. P(pass) = 0.7 means 70% chance of pass. |
-| **Sigmoid function** | "SIG-moyd" | S-shaped curve: 1 / (1 + e^(-x)). Always outputs 0 to 1. |
-| **Logistic regression** | "lo-JIS-tik" | Classification via sigmoid. Despite the name, it's for classification, not regression. |
-| **Threshold** | "THRESH-hold" | Cutoff for decision. Default: P ≥ 0.5 → predict positive. |
-| **Decision boundary** | — | The line/curve separating predicted positives from negatives. |
+| Term | What it means here |
+|---|---|
+| **Classification** | Predicting one of discrete classes (two or more). |
+| **Probability** | Number between 0 and 1. P(pass) = 0.7 means 70% chance of pass. |
+| **Sigmoid function** | S-shaped curve: 1 / (1 + e^(-x)). Always outputs 0 to 1. |
+| **Logistic regression** | Classification via sigmoid. Despite the name, it's for classification, not regression. |
+| **Threshold** | Cutoff for decision. Default: P ≥ 0.5 → predict positive. |
+| **Decision boundary** | The line/curve separating predicted positives from negatives. |
 
 :::tip If you only take one thing from this page
 Linear regression outputs any number; classification needs 0–1 probabilities. Sigmoid function solves this: σ(x) = 1 / (1 + e^(-x)) always outputs [0, 1]. Logistic regression replaces the line with the sigmoid.

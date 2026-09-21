@@ -51,15 +51,15 @@ want them.
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **Residual** `r` | "how far off this one row was" | `yᵢ − ŷᵢ` — actual minus predicted, for one example |
-| **Gradient** | "which way is uphill, and how steeply" | The derivative of the cost with respect to each parameter |
-| **Leverage** | "how much pull this point has on the tilt" | How far a point's `x` sits from the average `x`. Points at the far ends can tilt the line; points in the middle barely can |
-| **Subgradient** | "a stand-in slope at a corner" | What you use where a loss has a kink instead of a smooth slope, e.g. `\|r\|` at `r = 0` |
-| **Surrogate loss** | "the trainable stand-in" | A smooth loss you minimise *because* the thing you care about (accuracy, F1) has no usable slope |
-| **Calibrated** | "the probabilities mean what they say" | Of the cases predicted at `0.7`, about 70% actually happen |
-| **Margin** `m` | "how far onto the right side of the fence" | `y·f(x)` — positive when the prediction is on the correct side, larger when further from the boundary |
+| Term | What it means here |
+|---|---|
+| **Residual** `r` | `yᵢ − ŷᵢ` — actual minus predicted, for one example |
+| **Gradient** | The derivative of the cost with respect to each parameter |
+| **Leverage** | How far a point's `x` sits from the average `x`. Points at the far ends can tilt the line; points in the middle barely can |
+| **Subgradient** | What you use where a loss has a kink instead of a smooth slope, e.g. `\|r\|` at `r = 0` |
+| **Surrogate loss** | A smooth loss you minimise *because* the thing you care about (accuracy, F1) has no usable slope |
+| **Calibrated** | Of the cases predicted at `0.7`, about 70% actually happen |
+| **Margin** `m` | `y·f(x)` — positive when the prediction is on the correct side, larger when further from the boundary |
 
 ---
 

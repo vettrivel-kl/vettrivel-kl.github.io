@@ -37,20 +37,20 @@ identity linking the three, and the one scikit-learn convention that reverses ev
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| Residual | "ruh-ZID-you-al" | One row's miss: true value minus predicted value, `r = y − ŷ` |
-| `ŷ` | "y-hat" | The model's prediction for a row |
-| MAE | "M-A-E" | Mean Absolute Error — the average size of a miss, ignoring direction |
-| MSE | "M-S-E" | Mean Squared Error — the average of the squared misses |
-| RMSE | "R-M-S-E" | Root Mean Squared Error — the square root of MSE |
-| RSS / SSE | "R-S-S" | Residual Sum of Squares — the total of the squared misses, before dividing by `n` |
-| Loss | "loss" | The quantity minimised *during* fitting |
-| Metric | "MET-rik" | The quantity reported *after* fitting, to a human |
-| Bias of the residuals | — | Their mean. Non-zero means the model is systematically high or low |
-| Scorer | "SCOR-er" | A scikit-learn object that wraps a metric so bigger always means better |
-| Scale-dependent | — | Changes value if you re-express `y` in different units |
-| Baseline | "BASE-line" | The score of predicting the mean of `y` for every row |
+| Term | What it means here |
+|---|---|
+| Residual | One row's miss: true value minus predicted value, `r = y − ŷ` |
+| `ŷ` | The model's prediction for a row |
+| MAE | Mean Absolute Error — the average size of a miss, ignoring direction |
+| MSE | Mean Squared Error — the average of the squared misses |
+| RMSE | Root Mean Squared Error — the square root of MSE |
+| RSS / SSE | Residual Sum of Squares — the total of the squared misses, before dividing by `n` |
+| Loss | The quantity minimised *during* fitting |
+| Metric | The quantity reported *after* fitting, to a human |
+| Bias of the residuals | Their mean. Non-zero means the model is systematically high or low |
+| Scorer | A scikit-learn object that wraps a metric so bigger always means better |
+| Scale-dependent | Changes value if you re-express `y` in different units |
+| Baseline | The score of predicting the mean of `y` for every row |
 
 The five things this page settles:
 

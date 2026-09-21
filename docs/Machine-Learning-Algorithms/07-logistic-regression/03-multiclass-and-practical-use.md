@@ -34,14 +34,14 @@ The page settles three confusions:
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **One-vs-rest (OvR)** | — | Fit K binary classifiers: each class vs all others. |
-| **Softmax** | "soft-max" | Multiclass generalisation of sigmoid. Outputs class probabilities summing to 1. |
-| **Multinomial** | "mul-tin-oh-mee-ul" | Softmax synonym. K-class version of binomial (binary). |
-| **Decision boundary** | — | The curve separating regions predicted as different classes. |
-| **Odds** | "odds" | Ratio of positive to negative: odds = P / (1−P). Relates to log-odds (linear part). |
-| **Log-odds** | — | Natural log of odds: log(P / (1−P)) = mx + b. Linear in x. |
+| Term | What it means here |
+|---|---|
+| **One-vs-rest (OvR)** | Fit K binary classifiers: each class vs all others. |
+| **Softmax** | Multiclass generalisation of sigmoid. Outputs class probabilities summing to 1. |
+| **Multinomial** | Softmax synonym. K-class version of binomial (binary). |
+| **Decision boundary** | The curve separating regions predicted as different classes. |
+| **Odds** | Ratio of positive to negative: odds = P / (1−P). Relates to log-odds (linear part). |
+| **Log-odds** | Natural log of odds: log(P / (1−P)) = mx + b. Linear in x. |
 
 :::tip If you only take one thing from this page
 Multiclass logistic regression: one-vs-rest fits K classifiers (simple, practical), softmax fits one model (elegant, often better). Decision boundary is where max P(class i) changes. Use sklearn: LogisticRegression(..., multi_class='ovr' or 'multinomial').
@@ -222,7 +222,7 @@ If m = 0.5, then for a one-unit increase in x:
 - **Scikit-learn API:** LogisticRegression(multi_class='ovr' or 'multinomial').
 - **Coefficient interpretation:** Positive m → higher odds for class; negative m → lower odds.
 
-**Next in this section:** [Part I — Generalization & Model Control](../09-generalization/01-overfitting-underfitting-regularization.md) — overfitting, underfitting, regularization (L1/L2).
+**Next in this section:** [Part I — Generalization & Model Control](../09-generalization/01-overfitting-underfitting-regularization.mdx) — overfitting, underfitting, regularization (L1/L2).
 
 **See also:** [Confusion Matrix](../08-classification-metrics/01-confusion-matrix-and-basic-metrics.md) for evaluating multiclass · [The Sigmoid](./02-the-sigmoid-and-fitting.md) for binary sigmoid.
 

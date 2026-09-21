@@ -35,14 +35,14 @@ The page settles three confusions:
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **Fold** | — | One train-test partition in CV. K-fold CV has K folds. |
-| **LOO-CV** | "ell-oh-oh" | Leave-One-Out: N folds, one sample per fold. |
-| **LPO-CV** | "ell-pee-oh" | Leave-P-Out: C(N,P) folds, P samples per fold. |
-| **K-Fold CV** | "kay-fold" | K folds (typically 5 or 10). |
-| **CV score** | — | Average (or other aggregate) of fold scores. |
-| **Stratified CV** | — | CV that preserves class distribution per fold (important on imbalanced data). |
+| Term | What it means here |
+|---|---|
+| **Fold** | One train-test partition in CV. K-fold CV has K folds. |
+| **LOO-CV** | Leave-One-Out: N folds, one sample per fold. |
+| **LPO-CV** | Leave-P-Out: C(N,P) folds, P samples per fold. |
+| **K-Fold CV** | K folds (typically 5 or 10). |
+| **CV score** | Average (or other aggregate) of fold scores. |
+| **Stratified CV** | CV that preserves class distribution per fold (important on imbalanced data). |
 
 :::tip If you only take one thing from this page
 K-Fold CV (typically K=5 or 10) is the practical standard. It's cheaper than LOO-CV (N folds) and more reliable than one train-test split. Average the K fold scores to get your final CV score.

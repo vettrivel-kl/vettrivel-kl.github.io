@@ -30,14 +30,14 @@ The page settles three confusions:
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **Precision** | "pree-SIZH-un" | TP / (TP + FP). Of positive predictions, how many are right? |
-| **Recall** | "ree-CALL" | TP / (TP + FN). Of actual positives, how many did we find? Also called sensitivity or true positive rate (TPR). |
-| **TPR** | "tee-pee-ar" | True Positive Rate = Recall = TP / (TP + FN). Fraction of positives found. |
-| **Sensitivity** | "sen-SIH-tiv-ih-tee" | Another name for Recall. Medical term. Ability to detect a positive (e.g., disease). |
-| **Specificity** | "spuh-SIH-fih-sih-tee" | TN / (TN + FP). Of actual negatives, how many did we correctly reject? |
-| **FPR** | "eff-pee-ar" | False Positive Rate = 1 - Specificity = FP / (TN + FP). Fraction of negatives wrongly flagged. |
+| Term | What it means here |
+|---|---|
+| **Precision** | TP / (TP + FP). Of positive predictions, how many are right? |
+| **Recall** | TP / (TP + FN). Of actual positives, how many did we find? Also called sensitivity or true positive rate (TPR). |
+| **TPR** | True Positive Rate = Recall = TP / (TP + FN). Fraction of positives found. |
+| **Sensitivity** | Another name for Recall. Medical term. Ability to detect a positive (e.g., disease). |
+| **Specificity** | TN / (TN + FP). Of actual negatives, how many did we correctly reject? |
+| **FPR** | False Positive Rate = 1 - Specificity = FP / (TN + FP). Fraction of negatives wrongly flagged. |
 
 :::tip If you only take one thing from this page
 Precision = TP / (TP + FP): of predictions marked positive, how many are right. Recall = TP / (TP + FN): of actual positives, how many did we find. They tradeoff—increasing one typically decreases the other.

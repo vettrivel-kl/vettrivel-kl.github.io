@@ -6,9 +6,12 @@ tags: [generalization, overfitting, regularization, l1, l2]
 toc_max_heading_level: 3
 ---
 
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+
 # Overfitting, Underfitting, and Regularization
 
-> **Topic —** A model fits training data perfectly (memorises noise) but fails on test data: **overfitting**. A model is so simple it misses real patterns: **underfitting**. Regularization is a penalty added to the cost function to prevent overfitting—shrinking coefficients toward zero. This page explains both failure modes, introduces L1 (Lasso), L2 (Ridge), and Elastic Net regularization, and shows the tradeoff between training and test accuracy.
+> **Topic -** A model fits training data perfectly (memorises noise) but fails on test data: **overfitting**. A model is so simple it misses real patterns: **underfitting**. Regularization is a penalty added to the cost function to prevent overfitting - shrinking coefficients toward zero. This page explains both failure modes, introduces L1 (Lasso), L2 (Ridge), and Elastic Net regularization, and shows the tradeoff between training and test accuracy.
 
 ---
 
@@ -35,18 +38,26 @@ The page settles three confusions:
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **Overfitting** | — | Model fits training noise; poor generalisation. |
-| **Underfitting** | — | Model is too simple; poor training and test accuracy. |
-| **Regularization** | "reg-yuh-luh-ry-ZAY-shun" | Penalty term in cost function to shrink coefficients. |
-| **L1 regularization (Lasso)** | "ell-one" | Penalty: λ × Σ \|w\|. Shrinks some coefficients to exactly zero. |
-| **L2 regularization (Ridge)** | "ell-two" | Penalty: λ × Σ w². Shrinks coefficients proportionally; none to zero. |
-| **Elastic Net** | — | Combination of L1 and L2. Best of both. |
-| **Regularisation strength λ** | "lambda" | Hyperparameter controlling penalty magnitude. Large λ → strong penalty. |
+| Term | What it means here |
+|---|---|
+| **Overfitting** | Model fits training noise; poor generalisation. |
+| **Underfitting** | Model is too simple; poor training and test accuracy. |
+| **Regularization** | Penalty term in cost function to shrink coefficients. |
+| **L1 regularization (Lasso)** | "ell-one" | Penalty: $\lambda \sum |w|$. Shrinks some coefficients to exactly zero. |
+| **L2 regularization (Ridge)** | Penalty: $\lambda \sum w^2$. Shrinks coefficients proportionally; none to zero. |
+| **Elastic Net** | Combination of L1 and L2. Best of both. |
+| **Regularisation strength λ** | Hyperparameter controlling penalty magnitude. Large \lambda -> strong penalty. |
 
-:::tip If you only take one thing from this page
-Overfitting: model memorises noise (high training, low test accuracy). Underfitting: model is too simple (low both). Regularization shrinks coefficients to prevent overfitting. L1 (Lasso) shrinks some to zero; L2 (Ridge) shrinks proportionally; Elastic Net combines both.
+:::tip 
+
+If you only take one thing from this page
+*   **Overfitting:** Model memorises noise (high training, low test accuracy).
+*   **Underfitting:** Model is too simple (low training and test accuracy).
+*   **Regularization:** Shrinks coefficients to prevent overfitting.
+*   **L1 (Lasso):** Shrinks some coefficients to exactly zero (feature selection).
+*   **L2 (Ridge):** Shrinks coefficients proportionally (all features kept).
+*   **Elastic Net:** Combines both L1 and L2 penalties.
+
 :::
 
 ---
@@ -68,7 +79,7 @@ As degree increases, the polynomial wiggles through every training point (includ
 
 ### Why overfitting happens
 
-- **Model has too many parameters.** A degree-10 polynomial on 10 points has 11 parameters—enough to fit any pattern, including noise.
+- **Model has too many parameters.** A degree-10 polynomial on 10 points has 11 parameters - enough to fit any pattern, including noise.
 - **Noise in training data.** Real data has measurement error, outliers. The model learns these as if they're real patterns.
 - **No penalty for complexity.** Cost function rewards perfect fit, regardless of model size.
 
@@ -125,13 +136,13 @@ The line can't capture the U-shaped true pattern, so both training and test erro
 
 ### Cost function without regularization
 
-**Loss = Σ(y_i − ŷ_i)²** (e.g., squared error, regression)
+**Loss = $\sum (y_i - \hat{y}_i)^2$** (e.g., squared error, regression)
 
 Minimising this allows coefficients to grow large to fit noise.
 
 ### Cost function with regularization
 
-**Loss + Penalty = Σ(y_i − ŷ_i)² + λ × Penalty(w)**
+**Loss + Penalty = $\sum (y_i - \hat{y}_i)^2 + \lambda \times \text{Penalty}(w)$**
 
 where w = [w₁, w₂, …, wₙ] are the model coefficients, and λ controls the penalty strength.
 
@@ -139,35 +150,41 @@ The algorithm minimises both loss (fit) and penalty (complexity). It trades off 
 
 ### Three regularisation types
 
-#### L2 Regularization (Ridge)
+<Tabs>
+  <TabItem value="l2" label="L2 Regularization (Ridge)" default>
+    <br/>
+    
+    **Penalty = $\sum w^2$ (sum of squared coefficients)**
 
-**Penalty = Σ w² (sum of squared coefficients)**
+    **Full loss = $\text{MSE} + \lambda \sum w^2$**
 
-**Full loss = MSE + λ × Σ w²**
+    *   **Proportional Shrinkage:** Shrinks all coefficients proportionally toward zero.
+    *   **Keep All Features:** No coefficient reaches exactly zero (unless $\lambda \to \infty$).
+    *   **Use Case:** Highly recommended when most features are useful and you want to prevent multicollinearity.
+  </TabItem>
+  <TabItem value="l1" label="L1 Regularization (Lasso)">
+    <br/>
+    
+    **Penalty = $\sum |w|$ (sum of absolute values)**
 
-- Shrinks all coefficients proportionally toward zero.
-- No coefficient reaches exactly zero (unless λ → ∞).
-- Keeps all features, just makes their weights smaller.
+    **Full loss = $\text{MSE} + \lambda \sum |w|$**
 
-#### L1 Regularization (Lasso)
+    *   **Feature Selection:** Shrinks weak coefficients to **exactly zero**, removing them from the model entirely.
+    *   **Sparse Models:** Creates simpler, more interpretable models with fewer active parameters.
+    *   **Use Case:** Best when you have high-dimensional features and suspect only a small subset of them carry real signal.
+  </TabItem>
+  <TabItem value="elastic" label="Elastic Net">
+    <br/>
+    
+    **Penalty = $\alpha \sum |w| + (1-\alpha) \sum w^2$ (combination of both)**
 
-**Penalty = Σ \|w\| (sum of absolute values)**
+    **Full loss = $\text{MSE} + \lambda [\alpha \sum |w| + (1-\alpha) \sum w^2]$**
 
-**Full loss = MSE + λ × Σ \|w\|**
-
-- Shrinks coefficients, some to exactly zero.
-- Performs **feature selection:** removes weak features entirely.
-- Sparse model (fewer non-zero coefficients).
-
-#### Elastic Net
-
-**Penalty = α × Σ \|w\| + (1−α) × Σ w² (combination)**
-
-**Full loss = MSE + λ × [α × Σ \|w\| + (1−α) × Σ w²]**
-
-- Combines L1 and L2.
-- Balance between feature selection (L1) and stability (L2).
-- Usually best for real-world problems.
+    *   **Best of Both Worlds:** Combines the feature selection capability of L1 with the grouping stability of L2.
+    *   **Balanced Control:** Tuned via hyperparameter $\alpha$ (which controls the relative weight of L1 vs L2).
+    *   **Use Case:** Ideal for complex datasets where multiple features are correlated and you want to select groups of variables.
+  </TabItem>
+</Tabs>
 
 ---
 
@@ -179,21 +196,21 @@ Fit a linear model to 5 data points with 3 features. Unregularised coefficients:
 
 ### L2 (Ridge) with λ=0.5
 
-Penalty = 0.5 × (1.5² + 0.8² + 0.3²) = 0.5 × 2.98 = 1.49
+Penalty = $0.5 \times (1.5^2 + 0.8^2 + 0.3^2) = 0.5 \times 2.98 = 1.49$
 
 Minimising loss + penalty shrinks coefficients. Approximate result (from gradient descent):
 w ≈ [1.2, 0.64, 0.24] (all shrunk proportionally, none zero).
 
 ### L1 (Lasso) with λ=0.5
 
-Penalty = 0.5 × (\|1.5\| + \|0.8\| + \|0.3\|) = 0.5 × 2.6 = 1.3
+Penalty = $0.5 \times (|1.5| + |0.8| + |0.3|) = 0.5 \times 2.6 = 1.3$
 
 Minimising loss + penalty shrinks coefficients, some to zero:
-w ≈ [1.3, 0.5, 0] (smallest feature (0.3) → 0, others shrunk).
+w ≈ [1.3, 0.5, 0] (smallest feature (0.3) -> 0, others shrunk).
 
 ### Elastic Net (α=0.5) with λ=0.5
 
-Penalty = 0.5 × [0.5 × 2.6 + 0.5 × 2.98] ≈ 1.39
+Penalty = $0.5 \times [0.5 \times 2.6 + 0.5 \times 2.98] \approx 1.39$
 
 Result (approximate):
 w ≈ [1.25, 0.6, 0.05] (some shrinkage with occasional zeros).
@@ -233,9 +250,9 @@ w ≈ [1.25, 0.6, 0.05] (some shrinkage with occasional zeros).
 | **Bias** | Error from simplicity (underfitting). |
 | **Variance** | Error from flexibility (overfitting). |
 | **Regularization** | Penalty term in cost function. Shrinks coefficients. |
-| **L1 (Lasso)** | Penalty = λ × Σ \|w\|. Shrinks some coefficients to zero. |
-| **L2 (Ridge)** | Penalty = λ × Σ w². Shrinks all coefficients proportionally. |
-| **Elastic Net** | Penalty = α × L1 + (1−α) × L2. Combines both. |
+| **L1 (Lasso)** | Penalty = $\lambda \sum |w|$. Shrinks some coefficients to zero. |
+| **L2 (Ridge)** | Penalty = $\lambda \sum w^2$. Shrinks all coefficients proportionally. |
+| **Elastic Net** | Penalty = $\alpha L_1 + (1-\alpha) L_2$. Combines both. |
 | **λ (lambda)** | Regularization strength. Must be tuned via CV. |
 
 **Key takeaways**
@@ -249,7 +266,7 @@ w ≈ [1.25, 0.6, 0.05] (some shrinkage with occasional zeros).
 - **Always tune λ via CV.** Different data, different optimal λ.
 - **Standardise features first.** L1/L2 penalties are scale-dependent.
 
-**Next in this section:** [Regularization Strength and Solvers](./02-regularization-strength-and-solvers.md) — tuning λ, solvers, hyperparameter search strategies.
+**Next in this section:** [Regularization Strength and Solvers](./02-regularization-strength-and-solvers.md) - tuning lambda, solvers, hyperparameter search strategies.
 
 **See also:** [Cross-Validation](../06-validation-strategy/01-why-cross-validation.md) for CV-based hyperparameter tuning · [Logistic Regression](../07-logistic-regression/01-why-logistic-regression.md) for classification with regularisation.
 
@@ -481,10 +498,10 @@ Degree   Train R²      Test R²        Interpretation
 
 ### What to notice in that output
 
-- **Example 1:** Degree 1–5: test error decreases or stable. Degree 8–12: test error explodes (1.89!) while train error drops (0.009). Classic overfitting.
+- **Example 1:** Degree 1-5: test error decreases or stable. Degree 8-12: test error explodes (1.89!) while train error drops (0.009). Classic overfitting.
 - **Example 2:** L1 (Lasso) shrinks feature 5 to exactly 0. L2 and Elastic Net keep all features but smaller. L1 performs feature selection.
 - **Example 3:** α=0.001 (underfitting): train 0.21, CV 0.34. α=1.0 (sweet spot): train 0.29, CV 0.32. α=100 (overfitting prevention but too much): train 0.89, CV 0.91 (both high).
-- **Example 4:** Degree 1–3 balanced (train ≈ test). Degree 5: R² diverges (train 0.95, test 0.81). Degree 8: R² gap huge (train 0.99, test 0.21).
+- **Example 4:** Degree 1-3 balanced (train ≈ test). Degree 5: R² diverges (train 0.95, test 0.81). Degree 8: R² gap huge (train 0.99, test 0.21).
 
 ---
 

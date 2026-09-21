@@ -33,6 +33,67 @@ c) Calculate the intercept (b₀)
 d) Write the fitted equation  
 e) Predict the price for a 1000 sq ft house  
 
+<details>
+<summary>💡 <b>Show Step-by-Step Solution</b></summary>
+<br/>
+
+**Step-by-step Solution:**
+
+**Part a) Calculate means:**
+```
+X̄ = (500 + 800 + 1200 + 1500) / 4 = 4000 / 4 = 1000
+Ȳ = (50 + 70 + 100 + 130) / 4 = 350 / 4 = 87.5
+```
+
+**Part b) Calculate slope (b₁):**
+```
+b₁ = Σ(xᵢ - X̄)(yᵢ - Ȳ) / Σ(xᵢ - X̄)²
+
+Numerator calculation:
+  (500-1000)(50-87.5) = (-500)(-37.5) = 18,750
+  (800-1000)(70-87.5) = (-200)(-17.5) = 3,500
+  (1200-1000)(100-87.5) = (200)(12.5) = 2,500
+  (1500-1000)(130-87.5) = (500)(42.5) = 21,250
+  
+  Sum: 18,750 + 3,500 + 2,500 + 21,250 = 46,000
+
+Denominator calculation:
+  (500-1000)² = 250,000
+  (800-1000)² = 40,000
+  (1200-1000)² = 40,000
+  (1500-1000)² = 250,000
+  
+  Sum: 580,000
+
+b₁ = 46,000 / 580,000 ≈ 0.0793 ≈ 0.08
+```
+
+**Part c) Calculate intercept (b₀):**
+```
+b₀ = Ȳ - b₁×X̄
+b₀ = 87.5 - 0.0793×1000
+b₀ = 87.5 - 79.3
+b₀ ≈ 8.2
+```
+
+**Part d) Fitted equation:**
+```
+ŷ = 8.2 + 0.08×X
+```
+
+**Part e) Prediction for 1000 sq ft:**
+```
+ŷ = 8.2 + 0.08×1000 = 8.2 + 80 = 88.2 thousand = $88,200
+```
+
+**Common Mistakes:**
+- ❌ Forgetting to square differences in denominator
+- ❌ Arithmetic errors when summing
+- ❌ Rounding too early (keep more decimal places)
+- ❌ Confusing which variable is X vs Y
+
+</details>  
+
 ---
 
 ### Problem 1.2: Calculate SSE, MSE, RMSE
@@ -55,6 +116,52 @@ b) Calculate SSE (Sum of Squared Errors)
 c) Calculate MSE (Mean Squared Error)  
 d) Calculate RMSE (Root Mean Squared Error)  
 e) Interpret the RMSE value  
+
+<details>
+<summary>💡 <b>Show Step-by-Step Solution</b></summary>
+<br/>
+
+**Step-by-step Solution:**
+
+**Part a) Residuals:**
+```
+e₁ = 48 - 50 = -2
+e₂ = 75 - 74 = +1
+e₃ = 105 - 106 = -1
+e₄ = 132 - 130 = +2
+```
+
+**Part b) SSE:**
+```
+SSE = Σeᵢ² = (-2)² + (1)² + (-1)² + (2)²
+    = 4 + 1 + 1 + 4
+    = 10
+```
+
+**Part c) MSE:**
+```
+MSE = SSE / n = 10 / 4 = 2.5
+```
+
+**Part d) RMSE:**
+```
+RMSE = √MSE = √2.5 ≈ 1.58 thousand = $1,580
+```
+
+**Part e) Interpretation:**
+```
+On average, predictions are off by about $1,580.
+For house prices in $50-130k range, this is ~1.2-3.2% error.
+Reasonable for a simple model, but room for improvement.
+```
+
+**Common Mistakes:**
+- ❌ Forgetting to square residuals (SSE is "squared" error)
+- ❌ Using n vs (n-1) in denominator (depends on context)
+- ❌ Not taking square root for RMSE
+- ❌ Confusing error sign (residual can be ± but SSE always ≥ 0)
+
+</details>  
 
 ---
 

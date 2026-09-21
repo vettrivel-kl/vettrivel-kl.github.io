@@ -32,13 +32,13 @@ The page settles three confusions:
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **Data leakage** | — | Test set information influences training; test accuracy is optimistic. |
-| **Scaling** | — | StandardScaler, MinMaxScaler. Fit on train, transform test. |
-| **Pipeline** | — | Sklearn object chaining preprocessing + model; refits each fold. |
-| **Nested CV** | — | Two CV loops: outer (generalisation), inner (hyperparameter tuning). |
-| **GridSearchCV** | "grid-search" | Sklearn tool for hyperparameter tuning inside CV. Implements nested CV. |
+| Term | What it means here |
+|---|---|
+| **Data leakage** | Test set information influences training; test accuracy is optimistic. |
+| **Scaling** | StandardScaler, MinMaxScaler. Fit on train, transform test. |
+| **Pipeline** | Sklearn object chaining preprocessing + model; refits each fold. |
+| **Nested CV** | Two CV loops: outer (generalisation), inner (hyperparameter tuning). |
+| **GridSearchCV** | Sklearn tool for hyperparameter tuning inside CV. Implements nested CV. |
 
 :::tip If you only take one thing from this page
 **Data leakage trap:** Fit scaler on all data, then split → test accuracy is inflated. **Prevention:** Use Pipeline or manually fit scaler only on train set per fold. **Nested CV:** Use GridSearchCV for hyperparameter tuning; it handles the two-loop logic.
@@ -361,7 +361,7 @@ else:
 
 **Previous sections:** [Why Cross-Validation](./01-why-cross-validation.md) · [CV Methods](./02-cross-validation-methods.md) · [K-Fold](./03-k-fold-and-stratified-k-fold.md).
 
-**Next:** [Part I — Generalization & Model Control](../09-generalization/01-overfitting-underfitting-regularization.md) — overfitting, regularization, model selection.
+**Next:** [Part I — Generalization & Model Control](../09-generalization/01-overfitting-underfitting-regularization.mdx) — overfitting, regularization, model selection.
 
 ---
 

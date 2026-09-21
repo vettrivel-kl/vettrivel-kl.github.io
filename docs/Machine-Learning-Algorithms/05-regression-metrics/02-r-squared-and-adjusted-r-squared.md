@@ -43,23 +43,23 @@ treats those rows differently where MAE treats them identically.
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| `y`, `ŷ`, `r` | "why", "y hat", "residual" | The true value, the prediction, and `y − ŷ` for one row |
-| `ȳ` | "y bar" | Mean of all true values — the baseline's constant prediction |
-| **SST** | total sum of squares | `Σ(y − ȳ)²` — the baseline's squared error, before any model |
-| **SSE** | error sum of squares | `Σ(y − ŷ)²` — your model's squared error. Also RSS |
-| **SSR** | regression sum of squares | `Σ(ŷ − ȳ)²` — how far predictions spread from the baseline. Also called *explained* |
-| **R²** | "R squared" | `1 − SSE/SST` — the share of the baseline's squared error you removed |
-| **baseline** | — | The mean-only model: predict `ȳ` for every row, ignoring all features |
-| `n`, `p` | "n", "p" | Rows scored; features, **not** counting the intercept |
-| **degrees of freedom** | "D O F" | `n − p − 1` — rows left after the fit spends one per coefficient |
-| **Adjusted R²** | — | R² after charging a fee for each of the `p` features |
-| **in-sample** | — | Scored on the rows the model was fitted on. *Out-of-sample* is the opposite |
-| **APE**, **MAPE** | "A P E", "map-ee" | `abs(y − ŷ)/abs(y)` for one row; and the mean of those, ×100 |
-| **sMAPE** | "ess-map-ee" | Symmetric MAPE — divides by the average of `abs(y)` and `abs(ŷ)` |
-| **WAPE** | "wap-ee" | `Σabs(r) / Σabs(y)` — one ratio for the whole set, not a mean of ratios |
-| **monotone** | "mon-oh-tone" | Moves one direction only. In-sample R² is monotone up in `p` |
+| Term | What it means here |
+|---|---|
+| `y`, `ŷ`, `r` | The true value, the prediction, and `y − ŷ` for one row |
+| `ȳ` | Mean of all true values — the baseline's constant prediction |
+| **SST** | `Σ(y − ȳ)²` — the baseline's squared error, before any model |
+| **SSE** | `Σ(y − ŷ)²` — your model's squared error. Also RSS |
+| **SSR** | `Σ(ŷ − ȳ)²` — how far predictions spread from the baseline. Also called *explained* |
+| **R²** | `1 − SSE/SST` — the share of the baseline's squared error you removed |
+| **baseline** | The mean-only model: predict `ȳ` for every row, ignoring all features |
+| `n`, `p` | Rows scored; features, **not** counting the intercept |
+| **degrees of freedom** | `n − p − 1` — rows left after the fit spends one per coefficient |
+| **Adjusted R²** | R² after charging a fee for each of the `p` features |
+| **in-sample** | Scored on the rows the model was fitted on. *Out-of-sample* is the opposite |
+| **APE**, **MAPE** | `abs(y − ŷ)/abs(y)` for one row; and the mean of those, ×100 |
+| **sMAPE** | Symmetric MAPE — divides by the average of `abs(y)` and `abs(ŷ)` |
+| **WAPE** | `Σabs(r) / Σabs(y)` — one ratio for the whole set, not a mean of ratios |
+| **monotone** | Moves one direction only. In-sample R² is monotone up in `p` |
 
 **What this page settles:**
 

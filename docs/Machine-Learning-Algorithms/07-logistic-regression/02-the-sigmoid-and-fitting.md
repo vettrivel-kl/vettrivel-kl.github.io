@@ -28,12 +28,12 @@ The page settles three confusions:
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **Logistic equation** | — | P = σ(mx + b). Probability as a function of x. |
-| **Log loss** | — | −[y × log(ŷ) + (1−y) × log(1−ŷ)]. Cost function for logistic regression. |
-| **Binary cross-entropy** | — | Same as log loss. Standard name in deep learning. |
-| **Regularization** | "reg-yuh-luh-ry-ZAY-shun" | Adding penalty to cost function to prevent overfitting. Touched briefly here, covered fully in Part I. |
+| Term | What it means here |
+|---|---|
+| **Logistic equation** | P = σ(mx + b). Probability as a function of x. |
+| **Log loss** | −[y × log(ŷ) + (1−y) × log(1−ŷ)]. Cost function for logistic regression. |
+| **Binary cross-entropy** | Same as log loss. Standard name in deep learning. |
+| **Regularization** | Adding penalty to cost function to prevent overfitting. Touched briefly here, covered fully in Part I. |
 
 :::tip If you only take one thing from this page
 Logistic regression: P(positive | x) = σ(mx + b). Fit by minimising log loss: −Σ[y_i × log(ŷ_i) + (1−y_i) × log(1−ŷ_i)]. Log loss penalises confident wrong predictions.

@@ -36,12 +36,12 @@ The page settles three confusions:
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **K-Fold CV** | "kay-fold" | K partitions; train K models, average K scores. |
-| **Stratified K-Fold** | — | K-Fold that preserves class distribution per fold. |
-| **Class distribution** | — | The percentage of each class in the dataset (e.g., 80% class 0, 20% class 1). |
-| **Stratum** | "STRAY-tum" | Singular of strata. A layer or subset of data (one class in stratified split). |
+| Term | What it means here |
+|---|---|
+| **K-Fold CV** | K partitions; train K models, average K scores. |
+| **Stratified K-Fold** | K-Fold that preserves class distribution per fold. |
+| **Class distribution** | The percentage of each class in the dataset (e.g., 80% class 0, 20% class 1). |
+| **Stratum** | Singular of strata. A layer or subset of data (one class in stratified split). |
 
 :::tip If you only take one thing from this page
 Choose K=5 or K=10 (standard). On imbalanced data, always use stratified K-fold—preserves class distribution per fold. For tiny imbalanced classes, use LOO-CV or careful resampling.

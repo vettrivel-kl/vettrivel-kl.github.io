@@ -32,14 +32,14 @@ The page settles three confusions:
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **F1-score** | "eff-one score" | Harmonic mean of precision and recall. Default balanced metric. |
-| **Harmonic mean** | — | 1 / (average of reciprocals). Penalises imbalance: if one value is 0, harmonic mean is 0. |
-| **Arithmetic mean** | — | Sum divided by count. 0.5 + 0 = 0.5. Does not penalise imbalance as much. |
-| **F-beta score** | "eff-beta score" | Weighted harmonic mean. β > 1 emphasises recall; β < 1 emphasises precision. |
-| **Balanced accuracy** | — | (Recall + Specificity) / 2. Average of TPR and TNR; ignores FP/FN asymmetry. |
-| **MCC** | "em-see-see", Matthews Correlation Coefficient | Correlation between predictions and actuals. Ranges −1 to +1. Handles imbalanced data well. |
+| Term | What it means here |
+|---|---|
+| **F1-score** | Harmonic mean of precision and recall. Default balanced metric. |
+| **Harmonic mean** | 1 / (average of reciprocals). Penalises imbalance: if one value is 0, harmonic mean is 0. |
+| **Arithmetic mean** | Sum divided by count. 0.5 + 0 = 0.5. Does not penalise imbalance as much. |
+| **F-beta score** | Weighted harmonic mean. β > 1 emphasises recall; β < 1 emphasises precision. |
+| **Balanced accuracy** | (Recall + Specificity) / 2. Average of TPR and TNR; ignores FP/FN asymmetry. |
+| **MCC** | Correlation between predictions and actuals. Ranges −1 to +1. Handles imbalanced data well. |
 
 :::tip If you only take one thing from this page
 F1 = 2 × (P × R) / (P + R) balances precision and recall using the harmonic mean. Use it when both metrics matter equally. For imbalanced data, prefer balanced accuracy, MCC, or Cohen's Kappa.

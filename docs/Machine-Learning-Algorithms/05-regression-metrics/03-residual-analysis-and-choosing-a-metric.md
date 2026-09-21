@@ -36,13 +36,13 @@ The page settles three confusions:
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **Residual** | "ruh-ZID-yoo-ul" | Prediction error: y_i − ŷ_i. |
-| **Heteroscedasticity** | "het-uh-ro-ska-DAS-tih-suh-tee" | Unequal error variance across fitted values (funnel shape). |
-| **Homoscedasticity** | — | Equal error variance (good; constant spread). |
-| **Q-Q plot** | "cue-cue" | Quantile-Quantile: residuals vs normal quantiles. |
-| **Normality** | — | Residuals follow a normal distribution. |
+| Term | What it means here |
+|---|---|
+| **Residual** | Prediction error: y_i − ŷ_i. |
+| **Heteroscedasticity** | Unequal error variance across fitted values (funnel shape). |
+| **Homoscedasticity** | Equal error variance (good; constant spread). |
+| **Q-Q plot** | Quantile-Quantile: residuals vs normal quantiles. |
+| **Normality** | Residuals follow a normal distribution. |
 
 :::tip If you only take one thing from this page
 Good residuals: random scatter around zero, constant variance, normally distributed. Bad residuals show patterns (curve, funnel, clustering) → model is missing something. Plot residuals to diagnose. Choose a metric matching your goal: MAE for outlier robustness, RMSE for penalising large errors, R² for proportion of variance.

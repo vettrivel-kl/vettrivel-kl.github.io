@@ -30,14 +30,14 @@ The page settles three confusions:
 
 ### Words used on this page
 
-| Term | Say it as | What it means here |
-|---|---|---|
-| **ROC curve** | "rock curve" or "receiver operating characteristic" | Graph: TPR vs FPR as threshold varies. |
-| **TPR** | "tee-pee-ar" | True Positive Rate = Recall = TP / (TP + FN). Fraction of actual positives found. |
-| **FPR** | "eff-pee-ar" | False Positive Rate = FP / (FP + TN). Fraction of actual negatives wrongly flagged. |
-| **AUC** | "ay-you-see" | Area Under the Curve. Summary: 0–1, higher = better. |
-| **Threshold** | "thresh-old" | Cutoff value. Scores ≥ threshold → positive. Default = 0.5 for probability outputs. |
-| **Youden's J** | "you-DEN'S J" | Sensitivity + Specificity − 1 = TPR − FPR. Optimal threshold often maximises J. |
+| Term | What it means here |
+|---|---|
+| **ROC curve** | Graph: TPR vs FPR as threshold varies. |
+| **TPR** | True Positive Rate = Recall = TP / (TP + FN). Fraction of actual positives found. |
+| **FPR** | False Positive Rate = FP / (FP + TN). Fraction of actual negatives wrongly flagged. |
+| **AUC** | Area Under the Curve. Summary: 0–1, higher = better. |
+| **Threshold** | Cutoff value. Scores ≥ threshold → positive. Default = 0.5 for probability outputs. |
+| **Youden's J** | Sensitivity + Specificity − 1 = TPR − FPR. Optimal threshold often maximises J. |
 
 :::tip If you only take one thing from this page
 The ROC curve plots TPR vs FPR as you vary the threshold. AUC is the area under it: 0.5 = random, 1.0 = perfect. To pick a threshold, maximise the metric that matters for your problem (recall for missed-case costs, precision for false-alarm costs).
