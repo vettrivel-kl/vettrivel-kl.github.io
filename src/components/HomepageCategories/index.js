@@ -8,6 +8,92 @@ import styles from './styles.module.css';
 // `onBrokenLinks: 'throw'` will fail the build if they drift apart.
 const SUBJECTS = [
   {
+    title: 'Machine Learning Algorithms',
+    href: '/docs/category/machine-learning-algorithms',
+    categories: [
+      {
+        label: '1 · Foundations',
+        href: '/docs/category/1--foundations',
+        description:
+          'What machine learning is and why it works — the types of learning, and the Python toolkit behind them.',
+      },
+      {
+        label: '2 · Data Preprocessing',
+        href: '/docs/category/2--data-preprocessing',
+        description:
+          'Missing values, categorical encoding, feature scaling, outliers, and the train-test split.',
+      },
+      {
+        label: '3 · Linear Regression',
+        href: '/docs/category/3--linear-regression',
+        description:
+          'Least-squares by hand and in scikit-learn, the matrix formulation, and what the model assumes.',
+      },
+      {
+        label: '4 · Optimisation',
+        href: '/docs/category/4--optimisation',
+        description:
+          'Loss functions, gradient descent, the learning rate, and how many rows each update sees.',
+      },
+      {
+        label: '5 · Regression Metrics',
+        href: '/docs/category/5--regression-metrics',
+        description:
+          'Scoring a fitted regression — the three error averages that live in the units of the target, the two ratio-based scores that do not, and the residual plots that catch a good score sitting on top of a bad fit.',
+      },
+      {
+        label: '6 · Validation Strategy',
+        href: '/docs/category/6--validation-strategy',
+        description:
+          'Evaluating model generalisation — why single train-test splits can be a lottery, the mechanics of K-Fold and Stratified K-Fold cross-validation, and the strict protocols required to prevent data leakage.',
+      },
+      {
+        label: '7 · Logistic Regression',
+        href: '/docs/category/7--logistic-regression',
+        description:
+          'Transitioning to classification — why linear regression fails on discrete targets, the mathematical necessity of the sigmoid curve, and the mechanics of binary and multiclass decision boundaries.',
+      },
+      {
+        label: '8 · Classification Metrics',
+        href: '/docs/category/8--classification-metrics',
+        description:
+          'Measuring classifier performance — decomposing predictions with the 2x2 confusion matrix, navigating the accuracy paradox on imbalanced data, and tuning thresholds with precision, recall, F-scores, and ROC-AUC.',
+      },
+      {
+        label: '9 · Generalization',
+        href: '/docs/category/9--generalization',
+        description:
+          'Ensuring model robustness — balancing the bias-variance tradeoff, controlling model complexity using L1, L2, and Elastic Net penalties, and understanding how the curse of dimensionality impacts model fit.',
+      },
+    ],
+  },
+  {
+    title: 'Inferential Statistics',
+    href: '/docs/category/inferential-statistics',
+    categories: [
+      {
+        label: 'Batch 1: Descriptive Stats',
+        href: '/docs/category/batch-1-descriptive-stats',
+        description: 'Descriptive statistics, covariance, and correlation.',
+      },
+      {
+        label: 'Batch 2: Fundamental Probability',
+        href: '/docs/category/batch-2-fundamental-probability',
+        description: 'Fundamental probability and the addition/multiplication rules.',
+      },
+      {
+        label: 'Batch 3: Probability Distributions',
+        href: '/docs/category/batch-3-probability-distributions',
+        description: 'Probability distributions and Bayes’ theorem.',
+      },
+      {
+        label: 'Batch 4: Theoretical Concepts',
+        href: '/docs/category/batch-4-theoretical-concepts',
+        description: 'Theoretical frameworks for sampling, probability, and metrics.',
+      },
+    ],
+  },
+  {
     title: 'Fundamentals of AI',
     href: '/docs/category/fundamentals-of-ai',
     categories: [
@@ -58,62 +144,6 @@ const SUBJECTS = [
         href: '/docs/category/ct-1--class-test-1',
         description:
           'Class Test 1 revision packages and practice sets, covering NumPy arrays, collections, Pandas, exploratory data analysis, and Matplotlib.',
-      },
-    ],
-  },
-  {
-    title: 'Machine Learning Algorithms',
-    href: '/docs/category/machine-learning-algorithms',
-    categories: [
-      {
-        label: '1 · Foundations',
-        href: '/docs/category/1--foundations',
-        description:
-          'What machine learning is and why it works — the types of learning, and the Python toolkit behind them.',
-      },
-      {
-        label: '2 · Data Preprocessing',
-        href: '/docs/category/2--data-preprocessing',
-        description:
-          'Missing values, categorical encoding, feature scaling, outliers, and the train-test split.',
-      },
-      {
-        label: '3 · Linear Regression',
-        href: '/docs/category/3--linear-regression',
-        description:
-          'Least-squares by hand and in scikit-learn, the matrix formulation, and what the model assumes.',
-      },
-      {
-        label: '4 · Optimisation',
-        href: '/docs/category/4--optimisation',
-        description:
-          'Loss functions, gradient descent, the learning rate, and how many rows each update sees.',
-      },
-    ],
-  },
-  {
-    title: 'Inferential Statistics',
-    href: '/docs/category/inferential-statistics',
-    categories: [
-      {
-        label: 'Batch 1: Descriptive Stats',
-        href: '/docs/category/batch-1-descriptive-stats',
-        description: 'Descriptive statistics, covariance, and correlation.',
-      },
-      {
-        label: 'Batch 2: Fundamental Probability',
-        href: '/docs/category/batch-2-fundamental-probability',
-        description: 'Fundamental probability and the addition/multiplication rules.',
-      },
-      {
-        label: 'Batch 3: Probability Distributions',
-        href: '/docs/category/batch-3-probability-distributions',
-        description: 'Probability distributions and Bayes’ theorem.',
-      },
-      {
-        label: 'Batch 4: Theoretical Concepts',
-        href: '/docs/category/batch-4-theoretical-concepts',
-        description: 'Theoretical frameworks for sampling, probability, and metrics.',
       },
     ],
   },

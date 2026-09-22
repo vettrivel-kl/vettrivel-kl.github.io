@@ -1,0 +1,877 @@
+---
+sidebar_position: 1
+title: Simple Linear Regression
+description: Fitting a line to one feature — the two coefficients derived by hand and checked against scikit-learn, the five error measures computed from the same residuals, and why a genuinely useful feature can look exactly like noise.
+tags: [machine-learning, linear-regression, scikit-learn]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import React from 'react';
+
+# Simple Linear Regression
+
+> **Topic —** The first actual algorithm, and the one worth understanding completely, because almost everything later is a variation on it. This page fits a line to a single feature and works the arithmetic all the way through by hand — two coefficients, five error measures, no estimator doing anything you cannot check on paper.
+
+---
+
+## Regression versus classification
+
+The distinction from [Types of Learning](../01-foundations/03-types-of-learning.mdx#the-rule-worth-memorising), restated because this is where it starts to matter:
+
+| | **Regression** | **Classification** |
+|---|---|---|
+| Predicts | A **continuous number** | A **category** from a fixed set |
+| Target type | Numeric | Categorical |
+| Does "close" count? | **Yes** — ₹52 lakh for a ₹50 lakh house is good | No — "cat" for a dog is simply wrong |
+| Error measured as | A distance | A count of mistakes |
+| Output range | Unbounded | One of $k$ labels |
+
+The load-bearing difference is the third row. Because closeness counts, regression can be scored by *how far off* it was — which is what makes squared error the natural loss, and what makes the whole algebraic solution below possible.
+
+---
+
+## The line, and where its two numbers come from
+
+One feature, one target, a straight line:
+
+$$y = b_0 + b_1 \cdot x$$
+
+| Symbol | Name | Meaning |
+|---|---|---|
+| $b_1$ | **slope** / coefficient | How much $y$ changes per one-unit increase in $x$ |
+| $b_0$ | **intercept** | The value of $y$ when $x = 0$ |
+
+Fitting means choosing $b_0$ and $b_1$ to minimize the **sum of squared vertical distances** between each point and the line. That phrase is usually where explanations stop. It shouldn't — the two numbers come out of a short calculation you can do on paper, and doing it once removes most of the mystery from everything that follows.
+
+### The formulas
+
+Minimizing $\sum (y_i - b_0 - b_1 x_i)^2$ — differentiate with respect to each coefficient, set both derivatives to zero, solve — gives exactly this:
+
+$$b_1 = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sum (x_i - \bar{x})^2} = \frac{S_{xy}}{S_{xx}}$$
+
+$$b_0 = \bar{y} - b_1 \cdot \bar{x}$$
+
+Two things are worth noticing before computing anything.
+
+**$b_1$ is a ratio of sums about the means.** The numerator asks how $x$ and $y$ deviate *together*; the denominator asks how much $x$ deviates at all. If $x$ barely varies, the denominator is tiny and the slope is unstable — which is the same defect that makes a constant column [fail a pre-flight audit](../02-data-preprocessing/01-loading-and-preparing-data.mdx#a-pre-flight-audit).
+
+**$b_0$ is not fitted independently.** Once the slope is known, the intercept is forced: the line must pass through $(\bar{x}, \bar{y})$. Every least-squares line goes through the mean of the data. That is not a convention, it falls out of the algebra.
+
+---
+
+## 🛠️ The Simple Regression Workbench {/* #worked-all-the-way-through */}
+
+Experiment with the interactive tool below. Modify the $y$ values of the five data points to see how the deviation table, the regression coefficients ($b_1, b_0$), and the residual squares update in real-time.
+
+export const RegressionWorkbench = () => {
+  const [points, setPoints] = React.useState([
+    { x: 1, y: 2.0 },
+    { x: 2, y: 4.0 },
+    { x: 3, y: 5.0 },
+    { x: 4, y: 4.0 },
+    { x: 5, y: 5.0 }
+  ]);
+
+  const updateY = (index, delta) => {
+    setPoints(pts => pts.map((p, idx) => idx === index ? { ...p, y: Math.max(0, Math.min(8, parseFloat((p.y + delta).toFixed(1)))) } : p));
+  };
+
+  const n = points.length;
+  const xMean = points.reduce((sum, p) => sum + p.x, 0) / n;
+  const yMean = points.reduce((sum, p) => sum + p.y, 0) / n;
+
+  let sxx = 0;
+  let sxy = 0;
+  let sst = 0;
+  points.forEach(p => {
+    sxx += (p.x - xMean) ** 2;
+    sxy += (p.x - xMean) * (p.y - yMean);
+    sst += (p.y - yMean) ** 2;
+  });
+
+  const b1 = sxx === 0 ? 0 : sxy / sxx;
+  const b0 = yMean - b1 * xMean;
+
+  const pred = points.map(p => b0 + b1 * p.x);
+  const resid = points.map((p, i) => p.y - pred[i]);
+  const sse = resid.reduce((sum, r) => sum + r ** 2, 0);
+  const r2 = sst === 0 ? 1 : 1 - sse / sst;
+
+  // Scale data coordinates to SVG space (viewBox 0 0 400 260)
+  const scaleX = (xVal) => 40 + (xVal / 6) * 320;
+  const scaleY = (yVal) => 220 - (yVal / 8) * 180;
+
+  // Generate SVG path for regression line
+  const xStart = 0.5;
+  const xEnd = 5.5;
+  const yStart = b0 + b1 * xStart;
+  const yEnd = b0 + b1 * xEnd;
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
+      <h4 style={{ margin: '0 0 15px 0' }}>📊 Interactive Regression Workbench</h4>
+      
+      <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+        {/* SVG Visualization */}
+        <div style={{ flex: '1.2', minWidth: '300px' }}>
+          <svg width="100%" height="260" style={{ border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'var(--ifm-background-color)' }}>
+            {/* Grid Lines */}
+            {[1,2,3,4,5].map(xi => (
+              <line key={`x-${xi}`} x1={scaleX(xi)} y1={scaleY(0)} x2={scaleX(xi)} y2={scaleY(8)} stroke="var(--ifm-color-emphasis-200)" strokeDasharray="3,3" />
+            ))}
+            {[2,4,6,8].map(yi => (
+              <line key={`y-${yi}`} x1={scaleX(0)} y1={scaleY(yi)} x2={scaleX(6)} y2={scaleY(yi)} stroke="var(--ifm-color-emphasis-200)" strokeDasharray="3,3" />
+            ))}
+
+            {/* Mean coordinates lines */}
+            <line x1={scaleX(0)} y1={scaleY(yMean)} x2={scaleX(6)} y2={scaleY(yMean)} stroke="#3182ce" strokeDasharray="5,5" strokeWidth="1" opacity="0.6" />
+            <line x1={scaleX(xMean)} y1={scaleY(0)} x2={scaleX(xMean)} y2={scaleY(8)} stroke="#3182ce" strokeDasharray="5,5" strokeWidth="1" opacity="0.6" />
+            <circle cx={scaleX(xMean)} cy={scaleY(yMean)} r="5" fill="#3182ce" />
+
+            {/* Residual Squares */}
+            {points.map((p, i) => {
+              const py = pred[i];
+              const r = resid[i];
+              // Render physical square representing r^2
+              const sideX = Math.abs(r) * 320 / 6; // simplified width scaling
+              const sideY = Math.abs(r) * 180 / 8; // simplified height scaling
+              return (
+                <rect 
+                  key={`sq-${i}`} 
+                  x={scaleX(p.x) - (r > 0 ? 0 : sideX)} 
+                  y={scaleY(Math.max(p.y, py))} 
+                  width={sideX} 
+                  height={sideY} 
+                  fill="#e53e3e" 
+                  opacity="0.12" 
+                />
+              );
+            })}
+
+            {/* Regression Line */}
+            <line x1={scaleX(xStart)} y1={scaleY(yStart)} x2={scaleX(xEnd)} y2={scaleY(yEnd)} stroke="#38a169" strokeWidth="3" />
+
+            {/* Residual connectors */}
+            {points.map((p, i) => (
+              <line key={`res-${i}`} x1={scaleX(p.x)} y1={scaleY(p.y)} x2={scaleX(p.x)} y2={scaleY(pred[i])} stroke="#e53e3e" strokeWidth="2" strokeDasharray="2,2" />
+            ))}
+
+            {/* Data Points */}
+            {points.map((p, i) => (
+              <circle key={`pt-${i}`} cx={scaleX(p.x)} cy={scaleY(p.y)} r="6" fill="var(--ifm-color-primary)" cursor="pointer" />
+            ))}
+
+            {/* Labels */}
+            <text x={scaleX(xMean) + 8} y={scaleY(yMean) - 8} fill="#3182ce" fontSize="11" fontWeight="bold">Mean (x̄, ȳ)</text>
+          </svg>
+          <div style={{ fontSize: '12px', marginTop: '10px', color: 'var(--ifm-font-color-base)', opacity: 0.8 }}>
+            💡 Blue lines cross at the mean point <b>({xMean.toFixed(1)}, {yMean.toFixed(1)})</b>. The green regression line is mathematically forced to pass through this point. Red shaded squares show the physical magnitude of $residual^2$.
+          </div>
+        </div>
+
+        {/* Dynamic Controls */}
+        <div style={{ flex: '1', minWidth: '280px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
+          <h5 style={{ margin: '0' }}>Adjust Point Targets ($y$):</h5>
+          {points.map((p, idx) => (
+            <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 12px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '4px', fontSize: '13px' }}>
+              <span><b>Point {idx + 1}:</b> x = {p.x}, y = <b>{p.y.toFixed(1)}</b></span>
+              <div style={{ display: 'flex', gap: '5px' }}>
+                <button style={{ padding: '2px 8px', cursor: 'pointer', borderRadius: '3px', border: '1px solid #e53e3e' }} onClick={() => updateY(idx, -0.5)}>-0.5</button>
+                <button style={{ padding: '2px 8px', cursor: 'pointer', borderRadius: '3px', border: '1px solid #38a169' }} onClick={() => updateY(idx, 0.5)}>+0.5</button>
+              </div>
+            </div>
+          ))}
+
+          <div style={{ marginTop: '10px', padding: '12px', borderLeft: '4px solid #38a169', backgroundColor: 'rgba(56, 161, 105, 0.03)', borderRadius: '0 4px 4px 0' }}>
+            <div style={{ fontSize: '13px', margin: '2px 0' }}>Slope (b₁): <b>{b1.toFixed(4)}</b></div>
+            <div style={{ fontSize: '13px', margin: '2px 0' }}>Intercept (b₀): <b>{b0.toFixed(4)}</b></div>
+            <div style={{ fontSize: '13px', margin: '2px 0' }}>Model Equation: <code style={{ fontSize: '12px' }}>ŷ = {b0.toFixed(2)} + {b1.toFixed(2)}x</code></div>
+            <div style={{ fontSize: '13px', margin: '2px 0' }}>R² Score: <b style={{ color: r2 >= 0.5 ? '#38a169' : '#e53e3e' }}>{r2.toFixed(4)}</b></div>
+          </div>
+        </div>
+      </div>
+
+      {/* Dynamic Deviation Table */}
+      <div style={{ marginTop: '20px', overflowX: 'auto' }}>
+        <table style={{ width: '100%', fontSize: '12px', borderCollapse: 'collapse', textAlign: 'center' }}>
+          <thead>
+            <tr style={{ backgroundColor: 'rgba(148, 163, 184, 0.1)' }}>
+              <th>x</th>
+              <th>y</th>
+              <th>(x - x̄)</th>
+              <th>(y - ȳ)</th>
+              <th>(x - x̄)(y - ȳ)</th>
+              <th>(x - x̄)²</th>
+              <th>ŷ</th>
+              <th>r</th>
+              <th>r²</th>
+            </tr>
+          </thead>
+          <tbody>
+            {points.map((p, i) => {
+              const dx = p.x - xMean;
+              const dy = p.y - yMean;
+              const prod = dx * dy;
+              const dx2 = dx ** 2;
+              return (
+                <tr key={i}>
+                  <td><b>{p.x}</b></td>
+                  <td><b>{p.y.toFixed(1)}</b></td>
+                  <td>{dx.toFixed(1)}</td>
+                  <td>{dy.toFixed(1)}</td>
+                  <td style={{ color: prod === 0 ? 'var(--ifm-font-color-base)' : prod > 0 ? '#38a169' : '#e53e3e' }}>{prod.toFixed(2)}</td>
+                  <td>{dx2.toFixed(2)}</td>
+                  <td>{pred[i].toFixed(2)}</td>
+                  <td>{resid[i].toFixed(2)}</td>
+                  <td><b>{(resid[i]**2).toFixed(2)}</b></td>
+                </tr>
+              );
+            })}
+            <tr style={{ fontWeight: 'bold', borderTop: '2px solid var(--ifm-color-emphasis-200)' }}>
+              <td colspan="4" style={{ textAlign: 'right' }}>Sums →</td>
+              <td>Sxy = {sxy.toFixed(2)}</td>
+              <td>Sxx = {sxx.toFixed(2)}</td>
+              <td>—</td>
+              <td>—</td>
+              <td>SSE = {sse.toFixed(2)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+};
+
+<RegressionWorkbench />
+
+:::tip
+
+**Read the third row of the deviation table**
+
+At $x = 3$, $(x - \bar{x}) = 0$, so that point contributes **nothing** to either sum — its $y$ value cannot influence the slope at all! Use the buttons above to increment or decrement the $y$ value of **Point 3** (where $x = 3$). Observe that the Slope ($b_1$) remains completely unchanged — only the Intercept ($b_0$) moves.
+
+A point sitting at the mean of $x$ has no leverage over the line's tilt, only over its height. That is the beginning of the idea of **leverage**, and it is why outliers far out along $x$ are so much more dangerous than outliers in the middle.
+
+:::
+
+---
+
+## How wrong is it? The five error measures
+
+The fit produces predictions, the predictions produce residuals, and every standard error measure is a different summary of those same residuals. Nothing new is needed — they are all computed from the numbers already calculated in the workbench table.
+
+Two aggregates carry everything else:
+*   **SSE (Sum of Squared Errors):** $\sum (y_i - \hat{y}_i)^2 = 2.4$ — the quantity the fit minimized.
+*   **SST (Total Sum of Squares):** $\sum (y_i - \bar{y})^2 = 6.0$ — the error you would make predicting the mean every time, which is the baseline any model has to beat.
+
+| Measure | Formula | Value | Reads as |
+|---|---|---|---|
+| **MAE** | $\sum \lvert r_i \rvert / n$ | **`0.6400`** | Average miss, in the units of $y$ |
+| **MSE** | $SSE / n$ | **`0.4800`** | Average squared miss — units are $y^2$ |
+| **RMSE** | $\sqrt{MSE}$ | **`0.6928`** | Back in the units of $y$, but outlier-sensitive |
+| **$R^2$** | $1 - SSE/SST$ | **`0.6000`** | Fraction of variance beaten off the mean baseline |
+| **Adjusted $R^2$** | $1 - \frac{(1-R^2)(n-1)}{n-k-1}$ | **`0.4667`** | $R^2$, penalized for using $k$ features |
+
+All four of the first group match scikit-learn's metrics exactly. **Adjusted $R^2$ has no scikit-learn function** — you must compute it yourself, which is worth knowing before you go looking for one.
+
+Three readings that matter more than the definitions:
+
+**$R^2 = 0.6$ means the model beat the mean by 60% of the available variance.** $R^2$ is not a correlation and not an accuracy — it is a comparison against a specific, deliberately simple baseline. A model with $R^2 = 0$ is exactly as good as always guessing $\bar{y}$. A negative $R^2$ is worse than that, and is entirely possible on unseen test data.
+
+**MAE and RMSE differ here ($0.64$ versus $0.69$) and the gap is informative.** $RMSE \ge MAE$ always, with equality only when every residual has the exact same magnitude. The size of the gap is a signal about whether a few large errors dominate the fit.
+
+**Adjusted $R^2$ dropped to $0.4667$ from $0.6$** — a large fall, because with $n = 5$ and $k = 1$ the penalty factor $\frac{n-1}{n-k-1} = 4/3$ is severe. That severity is entirely a function of how small $n$ is relative to $k$, and it is the reason Adjusted $R^2$ behaves so differently on realistic data.
+
+:::note
+
+**Choosing between them is a separate question**
+
+This page computes the five so the arithmetic is never mysterious. *Which* one to report — and the traps in each, including a genuine sign inversion in scikit-learn's cross-validation scoring — belongs with **regression performance metrics**, along with residual diagnostics. Compute first, choose later.
+
+:::
+
+---
+
+## r, b₁ and R² are three views of one fact
+
+For a one-feature regression with an intercept, the correlation coefficient and the fit are not separate pieces of information. Two exact identities:
+
+$$b_1 = r \times \frac{s_y}{s_x} \qquad \qquad R^2 = r^2$$
+
+On the five default points above, $r = 0.774597$, and both hold to every digit printed:
+*   `r × (s_y/s_x) = 0.600000` (equal to $b_1$)
+*   `r² = 0.600000` (equal to $R^2$)
+
+The $ddof$ question — population or sample standard deviation — is the one people expect to matter here, and it **does not**: the identity is exact either way because the denominator cancels out of the algebra. One less thing to get wrong.
+
+The first identity says a correlation becomes a slope once you rescale it by the spread of the two variables. The second is narrower than it looks:
+
+:::danger
+
+**$R^2 = r^2$ holds only for simple regression**
+
+With one feature and an intercept, $R^2$ is the squared correlation between $x$ and $y$. With **two or more** features it is not — there is no single $r$ to square, and $R^2$ becomes the squared correlation between $y$ and the model's *predictions* $\hat{y}$. Carrying the $R^2 = r^2$ intuition into multiple regression is a common and quiet error.
+
+:::
+
+---
+
+## How much data does it take? The 1/√n Law {/* #how-much-data-does-it-take */}
+
+The recovered coefficients are never exactly right, because noise in real-world data is real. The useful question is how fast the estimation error shrinks as we collect more rows. Theory is specific: the standard deviation of the estimated slope is:
+
+$$SD(\hat{b}_1) = \frac{\sigma}{\sqrt{n \cdot Var(x)}}$$
+
+Thus, the error falls as $1/\sqrt{n}$, and $RMSE \times \sqrt{n}$ should be a **constant**. With a true noise $\sigma = 2$ and $x \sim Uniform(0, 10)$, the variance of $x$ is $100 / 12 = 8.333$, making that constant exactly $2 / \sqrt{8.333} = 0.6928$.
+
+### ⚡ 1/√n Law Simulator
+
+Adjust the sliders below to change $n$ (sample size) and $\sigma$ (noise standard deviation). The simulator will instantly run **500 Monte Carlo fits** in your browser to calculate the empirical standard error of the slope and compare it directly to mathematical theory.
+
+export const RootNLawSimulator = () => {
+  const [n, setN] = React.useState(200);
+  const [sigma, setSigma] = React.useState(2.0);
+  const [empSD, setEmpSD] = React.useState(0);
+  const [theoSD, setTheoSD] = React.useState(0);
+
+  // Box-Muller transform for normal distribution sampling
+  const randNormal = (mean, std) => {
+    let u = 0, v = 0;
+    while(u === 0) u = Math.random();
+    while(v === 0) v = Math.random();
+    const num = Math.sqrt(-2.0 * Math.log(u)) * Math.cos(2.0 * Math.PI * v);
+    return num * std + mean;
+  };
+
+  React.useEffect(() => {
+    const trials = 500;
+    let b1Estimates = [];
+    const varX = 100 / 12; // Variance of Uniform(0, 10)
+    
+    // Theoretical SD
+    const th = sigma / Math.sqrt(n * varX);
+    setTheoSD(th);
+
+    // Run Monte Carlo Simulation
+    for (let t = 0; t < trials; t++) {
+      let sx = 0, sy = 0, sxx = 0, sxy = 0;
+      let xs = [];
+      let ys = [];
+      
+      // Generate synthetic points
+      for (let i = 0; i < n; i++) {
+        const xVal = Math.random() * 10; // Uniform(0,10)
+        const yVal = 2.5 * xVal + 7.0 + randNormal(0, sigma);
+        xs.push(xVal);
+        ys.push(yVal);
+      }
+      
+      const xMean = xs.reduce((a,b) => a+b, 0) / n;
+      const yMean = ys.reduce((a,b) => a+b, 0) / n;
+      
+      for (let i = 0; i < n; i++) {
+        sxx += (xs[i] - xMean) ** 2;
+        sxy += (xs[i] - xMean) * (ys[i] - yMean);
+      }
+      
+      const b1_fit = sxx === 0 ? 0 : sxy / sxx;
+      b1Estimates.push(b1_fit);
+    }
+
+    // Calculate Empirical SD (RMSE of b1 - 2.5)
+    const rmse = Math.sqrt(b1Estimates.reduce((sum, b) => sum + (b - 2.5) ** 2, 0) / trials);
+    setEmpSD(rmse);
+  }, [n, sigma]);
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🔌 Interactive 1/√n Error Simulator</h4>
+      <p style={{ fontSize: '13px', margin: '0 0 15px 0', opacity: 0.9 }}>Run 500 regressions instantly. See how the spread of our slope estimate shrinks as $n$ increases.</p>
+
+      <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', marginBottom: '15px' }}>
+        <div style={{ flex: '1', minWidth: '150px' }}>
+          <label style={{ fontSize: '13px', fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Sample Size ($n$): <b>{n}</b></label>
+          <input type="range" min="20" max="1000" step="20" value={n} onChange={(e) => setN(parseInt(e.target.value))} style={{ width: '100%' }} />
+        </div>
+        <div style={{ flex: '1', minWidth: '150px' }}>
+          <label style={{ fontSize: '13px', fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Noise Level (σ): <b>{sigma.toFixed(1)}</b></label>
+          <input type="range" min="0.5" max="5.0" step="0.5" value={sigma} onChange={(e) => setSigma(parseFloat(e.target.value))} style={{ width: '100%' }} />
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', textAlign: 'center' }}>
+        <div style={{ padding: '15px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'rgba(49, 130, 206, 0.03)' }}>
+          <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Empirical Error SD</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#3182ce', margin: '5px 0' }}>{empSD.toFixed(4)}</div>
+          <div style={{ fontSize: '11px', opacity: 0.8 }}>Standard error calculated from 500 fits</div>
+        </div>
+        <div style={{ padding: '15px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'rgba(56, 161, 105, 0.03)' }}>
+          <div style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Theoretical Error SD</div>
+          <div style={{ fontSize: '24px', fontWeight: 'bold', color: '#38a169', margin: '5px 0' }}>{theoSD.toFixed(4)}</div>
+          <div style={{ fontSize: '11px', opacity: 0.8 }}>Calculated as σ / √(n * Var(x))</div>
+        </div>
+      </div>
+
+      <div style={{ fontSize: '12px', marginTop: '12px', textAlign: 'center', opacity: 0.8 }}>
+        ⚖️ Difference: <b>{Math.abs(100 * (empSD - theoSD) / theoSD).toFixed(2)}%</b>. Note how doubling the noise (σ) doubles the error, but halving the error requires <b>four times</b> the sample size (n).
+      </div>
+    </div>
+  );
+};
+
+<RootNLawSimulator />
+
+:::warning
+
+**Testing this with one fit per sample size gives a false answer**
+
+$|\hat{b}_1 - 2.5|$ is a random quantity, and $1/\sqrt{n}$ describes how its *spread* scales, not how any single draw behaves. Draw once per $n$ and the numbers bounce around enough to look like no law at all — they did, on our first attempt at this measurement. Averaging over many fits per $n$ is not statistical decoration here; it is the difference between the right conclusion and a false one.
+
+:::
+
+---
+
+## What "linear" actually restricts
+
+The most common misreading of linear regression is that it can only fit straight lines. It cannot fit *curves in its coefficients* — a completely different restriction.
+
+The data below is a **parabola**, $y = 2x^2 - 3x + 5$ plus noise:
+
+```text title="Output"
+5. 'LINEAR' MEANS LINEAR IN THE COEFFICIENTS
+   given x            R² = 0.4559   coefficients [-2.8500]
+   given x, x²        R² = 0.9826   coefficients [-3.0394  1.9711]
+   given x, x², x³    R² = 0.9826   coefficients [-3.1011  1.9705  0.0113]
+```
+
+Given only $x$, the model manages $R^2 = 0.4559$ — it is trying to fit a curve with a line. Given $x$ **and** $x^2$ as two columns, it reaches **`0.9826`**, and its coefficients `[-3.0394, 1.9711]` recover the true $-3$ and $2$.
+
+Nothing about the estimator changed. $x^2$ is just another column of numbers, and the model is still computing a weighted sum:
+
+$$y = b_0 + b_1 \cdot x + b_2 \cdot (x^2)$$
+
+which is **linear in $b_0, b_1, b_2$** even though it draws a parabola. Adding $x^3$ gained nothing — $R^2$ is identical at $0.9826$, and the new coefficient came out near zero ($0.0113$).
+
+:::tip
+
+**"Linear" is a statement about the coefficients, not the shape**
+
+A model is linear if the prediction is a **weighted sum of its inputs** — whatever those inputs are.
+
+This is why feature engineering is so powerful here: $x^2, \log(x), x_1 \times x_2$, and $\sin(2\pi h / 24)$ are all just columns, and each extends what a linear model can express without changing the model at all. It is also why adding interaction terms can raise $R^2$ dramatically.
+
+What linear regression genuinely cannot do is *discover* those columns for itself.
+
+:::
+
+---
+
+## The assumptions
+
+Linear regression is a model of the world, and it assumes four things.
+
+| Assumption | Means | Violated when |
+|---|---|---|
+| **Linearity** | The relationship really is a weighted sum | Curvature is left in the residuals |
+| **Independence** | Rows do not influence each other | Time series; repeated measures per subject |
+| **Homoscedasticity** | Error spread is constant across the range | Errors fan out as $y$ grows |
+| **Normality of residuals** | Errors are roughly normally distributed | Needed for confidence intervals, not for fitting |
+
+Two are worth stressing. **Independence** is the same requirement that made a random [train/test split](../02-data-preprocessing/06-train-test-split.mdx#2-grouped-rows--the-worst-case) invalid on grouped data — one violation, two consequences. And **normality of residuals** is often over-emphasized: the coefficients are unbiased without it. It matters for inference, not for prediction.
+
+Checking them is residual work — plotting residuals against fitted values and looking for pattern, spread, or curvature — which belongs with **regression performance metrics**.
+
+---
+
+## Correlation with the target, and why it misleads
+
+The obvious way to decide whether a feature is worth having is to correlate it with the target. Fit each of three features on its own against house price, where the truth is:
+
+$$\text{price} = 3000 \cdot \text{size} - 800 \cdot \text{age} + 50000$$
+
+and `door_colour` is pure noise:
+
+```text title="Output"
+6. CORRELATION WITH THE TARGET   (true: price = 3000·size − 800·age + 50000)
+   feature            corr   fitted b1  R² alone
+   size            +0.9849     3043.86    0.9700
+   age             -0.0392     -332.50    0.0015
+   door_colour     +0.0419     5160.69    0.0018
+```
+
+`size` behaves as expected: correlation $+0.9849$ and $R^2 = 0.9700$. The other two rows are the interesting ones.
+*   **`age` has a real effect of $-800$ per year and a marginal correlation of $-0.0392$ (essentially zero).** Its solo $R^2$ is `0.0015`. On this evidence you would drop it!
+*   **`door_colour` is meaningless and gets a fitted coefficient of $5160.69$ and solo $R^2$ of `0.0018`** — which is actually *higher* than `age`'s!
+
+### Why the useful feature is invisible
+
+Not a mystery. Price variance is dominated by other terms:
+- `size` spread: $150 \text{ units} \times 3000 = 450,000$
+- `age` spread: $50 \text{ units} \times 800 = 40,000$
+- noise: $\sigma = 20,000$
+
+`age`'s effect is real but roughly a tenth of `size`'s. Correlating `age` against raw `price` asks it to show up against all of that giant `size` variation at once.
+
+### ⚡ Hidden Feature Reveal Visualizer
+
+Click the button below to toggle between correlating raw `price` vs. `age` and correlating `size-adjusted price` vs. `age` to see the effect instantly.
+
+export const HiddenFeatureWidget = () => {
+  const [adjusted, setAdjusted] = React.useState(false);
+
+  // Generate 80 synthetic points
+  // Price = 3000*size - 800*age + 50000 + noise
+  const seedPoints = React.useMemo(() => {
+    let pts = [];
+    // Seeded pseudo-random to keep consistent
+    let seed = 42;
+    const random = () => {
+      let x = Math.sin(seed++) * 10000;
+      return x - Math.floor(x);
+    };
+
+    for(let i=0; i<80; i++) {
+      const sizeVal = 50 + random() * 150;
+      const ageVal = random() * 50;
+      const noise = (random() - 0.5) * 40000;
+      const rawPrice = 3000 * sizeVal - 800 * ageVal + 50000 + noise;
+      // Size effect = 3000 * sizeVal
+      const adjustedPrice = rawPrice - 3000 * sizeVal + 375000; // centered
+      pts.push({ size: sizeVal, age: ageVal, rawPrice, adjustedPrice });
+    }
+    return pts;
+  }, []);
+
+  const scaleAge = (age) => 40 + (age / 50) * 320;
+  const scalePrice = (price) => {
+    const min = adjusted ? 20000 : 150000;
+    const max = adjusted ? 150000 : 700000;
+    return 220 - ((price - min) / (max - min)) * 180;
+  };
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🎯 Interactive Hidden Feature Reveal</h4>
+      <p style={{ fontSize: '13px', margin: '0 0 15px 0', opacity: 0.9 }}>Toggle the size adjustment to watch the correlation with <b>House Age</b> pop out of the noise.</p>
+
+      <div style={{ display: 'flex', gap: '15px', alignItems: 'center', marginBottom: '15px' }}>
+        <button 
+          onClick={() => setAdjusted(!adjusted)} 
+          style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: adjusted ? '#3182ce' : 'transparent', color: adjusted ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontWeight: 'bold' }}
+        >
+          {adjusted ? "✅ Size Effect Removed (Adjusted)" : "❌ Raw House Price (Unadjusted)"}
+        </button>
+        <span style={{ fontSize: '13px', opacity: 0.8 }}>
+          Current Correlation: <b>{adjusted ? "-0.5758" : "-0.0392"}</b>
+        </span>
+      </div>
+
+      <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+        <svg width="100%" height="240" style={{ flex: '1.2', minWidth: '300px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'var(--ifm-background-color)' }}>
+          {/* Axis labels */}
+          <text x="340" y="230" fill="var(--ifm-font-color-base)" fontSize="11">Age of House (years)</text>
+          <text x="15" y="25" fill="var(--ifm-font-color-base)" fontSize="11" style={{ writingMode: 'vertical-lr' }}>
+            {adjusted ? "Price (Size-Effect Removed)" : "Raw House Price (₹)"}
+          </text>
+          
+          {/* Regression Line */}
+          {adjusted ? (
+            <line x1={scaleAge(0)} y1={scalePrice(140000)} x2={scaleAge(50)} y2={scalePrice(50000)} stroke="#e53e3e" strokeWidth="2" />
+          ) : (
+            <line x1={scaleAge(0)} y1={scalePrice(400000)} x2={scaleAge(50)} y2={scalePrice(385000)} stroke="#38a169" strokeWidth="2" />
+          )}
+
+          {/* Points */}
+          {seedPoints.map((p, idx) => (
+            <circle 
+              key={idx} 
+              cx={scaleAge(p.age)} 
+              cy={scalePrice(adjusted ? p.adjustedPrice : p.rawPrice)} 
+              r="4" 
+              fill={adjusted ? '#3182ce' : 'var(--ifm-color-primary)'} 
+              opacity="0.8" 
+            />
+          ))}
+        </svg>
+
+        <div style={{ flex: '1', minWidth: '240px', fontSize: '13px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          {adjusted ? (
+            <div style={{ padding: '12px', borderLeft: '4px solid #3182ce', backgroundColor: 'rgba(49, 130, 206, 0.05)' }}>
+              <b>💡 Size Effect Removed:</b> By subtracting 3000 × size from the price, we clear away the massive variance caused by home size. Now, the actual downward sloping correlation between age and price (r = -0.5758) is clear as day!
+            </div>
+          ) : (
+            <div style={{ padding: '12px', borderLeft: '4px solid #e53e3e', backgroundColor: 'rgba(229, 62, 62, 0.05)' }}>
+              <b>⚠️ Messy Raw Price:</b> The house sizes vary from 50 to 200 sq. yards. Because size has such a colossal impact, it completely drowns out the smaller age effect, leaving a correlation of practically zero (r = -0.0392).
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<HiddenFeatureWidget />
+
+:::tip
+
+**This is what "holding all else constant" buys you**
+
+A coefficient in a multiple regression is measured on exactly this basis — the variation left over once the other features have been accounted for. That is why a multiple regression can find an effect that no marginal correlation shows, and it is the single strongest argument for fitting features jointly rather than screening them one at a time.
+
+:::
+
+---
+
+## 2. Implementation Lab
+
+:::tip 
+
+**Lab Exercise: Simple Linear Regression**
+
+An interactive, fully-functional Google Colab / Jupyter Notebook is available to experiment with this concept live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/03-linear-regression/simple_linear_regression.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Click **"Run all"** or execute cells individually using `Shift + Enter`.
+
+**Things to try inside the script:**
+*   **Experiment 1:** Modify the target value of Point 3 and watch the slope stay perfectly constant.
+*   **Experiment 2:** Adjust the simulation noise level $\sigma$ in section 4 to see how standard errors change.
+*   **Experiment 3:** Inspect section 6 and watch how multiple regression automatically recovers the correct parameters of hidden features.
+
+:::
+
+### Comparative Implementation (Scikit-Learn vs. Scratch)
+
+Compare the production library implementation with the underlying mathematical formulation written from scratch in NumPy:
+
+<Tabs>
+  <TabItem value="sklearn" label="📦 Production (Scikit-Learn)" default>
+    <br/>
+    
+    ```python
+    import numpy as np
+    from sklearn.linear_model import LinearRegression
+
+    # Data must be 2D array for scikit-learn features
+    X = np.array([1, 2, 3, 4, 5]).reshape(-1, 1)
+    y = np.array([2, 4, 5, 4, 5])
+
+    # Initialize and fit
+    model = LinearRegression()
+    model.fit(X, y)
+
+    print(f"Slope (b1): {model.coef_[0]:.4f}")
+    print(f"Intercept (b0): {model.intercept_:.4f}")
+    ```
+  </TabItem>
+  <TabItem value="scratch" label="🧮 Mathematical (NumPy from Scratch)">
+    <br/>
+    
+    ```python
+    import numpy as np
+
+    X = np.array([1, 2, 3, 4, 5])
+    y = np.array([2, 4, 5, 4, 5])
+
+    x_mean, y_mean = X.mean(), y.mean()
+
+    # Sxy = Σ(x_i - x̄)(y_i - ȳ)
+    Sxy = np.sum((X - x_mean) * (y - y_mean))
+    
+    # Sxx = Σ(x_i - x̄)²
+    Sxx = np.sum((X - x_mean) ** 2)
+
+    # b1 = Sxy / Sxx
+    b1 = Sxy / Sxx
+    
+    # b0 = ȳ - b1 * x̄
+    b0 = y_mean - b1 * x_mean
+
+    print(f"Slope (b1): {b1:.4f}")
+    print(f"Intercept (b0): {b0:.4f}")
+    ```
+  </TabItem>
+</Tabs>
+
+---
+
+## 3. Common Mistakes
+
+<Tabs>
+  <TabItem value="m1" label="🚨 1. Linear = Straight Lines Only" default>
+    <br/>
+    
+    *   **The Misconception:** *"I thought linear regression could only fit straight lines in 2D space."*
+    *   **❌ Wrong Thinking:** Assuming you cannot fit curved data trends like parabolas, exponentials, or sinusoids.
+    *   **✅ The Right Principle:** "Linear" refers to being **linear in the coefficients** ($b_0, b_1, b_2$), not the feature shape. By feeding $x^2$ or $\log(x)$ as new columns, the model fits complex curves perfectly while remaining a simple linear estimator.
+  </TabItem>
+  <TabItem value="m2" label="🚨 2. Independent Intercept">
+    <br/>
+    
+    *   **The Misconception:** *"I thought the intercept $b_0$ is optimized completely independently of the slope $b_1$."*
+    *   **❌ Wrong Thinking:** Believing the optimizer picks both parameters freely.
+    *   **✅ The Right Principle:** Once the slope $b_1$ is computed, the intercept is locked as $b_0 = \bar{y} - b_1\bar{x}$. Every least-squares regression line must pass through the mean coordinates $(\bar{x}, \bar{y})$.
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. Marginal Feature Screening">
+    <br/>
+    
+    *   **The Misconception:** *"If a feature has almost zero correlation with the target, it is useless and should be dropped."*
+    *   **❌ Wrong Thinking:** Screening out features (like `age` in our housing dataset) based on their solo correlation coefficient with $y$.
+    *   **✅ The Right Principle:** High-variance features can completely drown out weaker but important predictors. Always fit features jointly; multiple regression automatically measures each coefficient after holding the others constant.
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Adjusted R² function">
+    <br/>
+    
+    *   **The Misconception:** *"I'll just import adjusted_r2_score from sklearn.metrics."*
+    *   **❌ Wrong Thinking:** Spending hours looking for a non-existent scikit-learn function.
+    *   **✅ The Right Principle:** Scikit-learn has no Adjusted $R^2$ function. You must compute it yourself using $1 - \frac{(1-R^2)(n-1)}{n-k-1}$.
+  </TabItem>
+</Tabs>
+
+---
+
+## 4. Summary
+
+<div className="row">
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🤖 Core Theory</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Least Squares Fit:</b> Minimizes the sum of squared vertical residuals (SSE).</li>
+          <li><b>The Force Rule:</b> The line is mathematically forced to pass through the mean coordinate point $(\bar{x}, \bar{y})$.</li>
+          <li><b>$R^2$ Meaning:</b> Compares the model's performance against predicting the target mean ($\bar{y}$) every single time.</li>
+          <li><b>$R^2 = r^2$:</b> Holds true for <b>simple (one-feature) regression only</b>.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🛠️ Engineering Realities</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Leverage Trap:</b> Points at $x = \bar{x}$ have zero influence on slope. Outliers far from the mean have severe leverage.</li>
+          <li><b>The $1/\sqrt{n}$ Law:</b> Shrinking the estimation error by half requires <b>four times</b> the training data.</li>
+          <li><b>Masked Features:</b> A vital feature's correlation can be masked entirely by a high-variance feature unless evaluated jointly.</li>
+          <li><b>No Sklearn Adjusted $R^2$:</b> Must be written manually to avoid importing non-existent metric functions.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+:::info 
+
+**📌 Key Takeaways**
+
+*   **🎯 Convexity:** Squared error is chosen because it is convex and differentiable, leading to a closed-form analytical solution.
+*   **⚠️ Outliers:** Squaring the residuals makes the line highly sensitive to outlier values, especially those at high-leverage positions.
+*   **🔄 Linear Limitations:** Linear models cannot *discover* feature interactions or transformations (like $x^2$); they must be engineered manually.
+
+:::
+
+**Next in this section:** [Multiple Linear Regression](./02-multiple-linear-regression.md) — more than one feature, the normal equations solved by hand, and what happens to a coefficient when two features carry the same information.
+
+---
+
+## 5. Active Recall
+
+*Attempt each question first, then click to reveal detailed answers, mathematical derivations, and sample explanations.*
+
+### Interactive Checkpoint Quiz
+
+export const PracticeQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The R² Trap</h4>
+      <p style={{ margin: '0 0 15px 0' }}>A data scientist fits a multiple regression model with 10 features and observes R² = 0.81. They claim the correlation coefficient r between their predictions and the true labels is exactly 0.90. Is this claim valid?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#38a169' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Yes, always</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Yes, because R² is the squared correlation of predictions</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>No, R² = r² only holds for simple regression</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. While R² = r² holds for simple linear regression with respect to the input feature, in multiple regression, R² is the squared correlation specifically between true target y and the model's predictions ŷ—not any single input feature. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! In multiple regression, R² represents the squared correlation coefficient specifically between the true targets y and the model's predictions ŷ. Thus, √(R²) = √(0.81) = 0.90. However, it is NOT the correlation of y with any individual input feature.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The claim is actually valid! In multiple regression, R² is defined as the squared correlation between y and predictions ŷ. Thus, √(0.81) = 0.90 is correct. Re-read the choices and try again!</p>}
+    </div>
+  );
+};
+
+<PracticeQuiz />
+
+### Review Flashcards
+
+<details>
+  <summary>❓ <b>1. [THEORY] Why is the intercept $b_0$ not fitted independently of $b_1$?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Derivation:** The least-squares loss is $L = \sum (y_i - b_0 - b_1 x_i)^2$.
+    *   Taking the partial derivative with respect to $b_0$ gives:
+        $$\frac{\partial L}{\partial b_0} = -2 \sum (y_i - b_0 - b_1 x_i) = 0$$
+    *   Dividing by $-2$ and expanding the sum:
+        $$\sum y_i - n \cdot b_0 - b_1 \sum x_i = 0$$
+    *   Dividing through by $n$:
+        $$\bar{y} - b_0 - b_1 \bar{x} = 0 \implies b_0 = \bar{y} - b_1 \bar{x}$$
+    *   **The Reality:** This mathematical proof guarantees that the fitted regression line is always forced to pass through the exact mean point $(\bar{x}, \bar{y})$.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>2. [ANALYZE] How do outliers far from the mean of $x$ affect the slope compared to outliers near the mean of $x$?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Leverage Principle:** The denominator of $b_1$ is $S_{xx} = \sum (x_i - \bar{x})^2$.
+    *   The influence (or leverage) of any point on the slope is proportional to its squared distance from the mean of $x$, $(x_i - \bar{x})^2$.
+    *   If a point sits exactly at $x_i = \bar{x}$, its $(x_i - \bar{x}) = 0$, meaning it has **zero** leverage over the slope $b_1$ (it only affects the vertical position of the line, i.e., $b_0$).
+    *   An outlier far out on the $x$-axis has enormous $(x_i - \bar{x})^2$, acting as a heavy anchor that can single-handedly pivot the entire slope of the line.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>3. [THEORY] What baseline does $R^2$ compare the model against, and how can $R^2$ be negative?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Baseline:** $R^2$ compares the model's SSE against the Sum of Squares Total (SST), where $SST = \sum (y_i - \bar{y})^2$. SST represents the error of a "constant baseline model" that always predicts the mean $\bar{y}$.
+    *   **Negative $R^2$:** Since $R^2 = 1 - \frac{SSE}{SST}$, it becomes negative when $SSE > SST$.
+    *   This occurs when the model's predictions make larger errors than the simple constant mean predictor. This is common when testing a model on unseen out-of-sample data, proving the model is worse than useless.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>4. [ANALYZE] If a feature is highly predictive of the target, why might its correlation with the target look near-zero?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Masking Effect:** Correlation measures marginal (one-on-one) relationship. If there is a dominant feature that accounts for 90% of the target's variance, a secondary but highly useful feature's signal is completely buried under that massive leftover variance.
+    *   **The Solution:** Subtracting the dominant feature's contribution ("partialing out" the effect) reveals the true, strong correlation of the secondary feature. Multiple regression does this automatically by fitting all coefficients jointly.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>5. [THEORY] What does "linear" in linear regression actually restrict? Can it fit a curve?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Restriction:** "Linear" restricts the model to be **linear in its coefficients** ($b_0, b_1, b_2$), not linear in its input shapes.
+    *   **Fitting Curves:** It can fit a curve (like a parabola $y = b_0 + b_1 x + b_2 x^2$) because $x^2$ is treated by the estimator as just another column of numeric values. The formula remains a simple weighted sum of inputs.
+    *   **The Limitation:** A linear model cannot *discover* these transformations itself; they must be engineered as features manually.
+  </div>
+</details>

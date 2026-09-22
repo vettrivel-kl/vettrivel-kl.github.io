@@ -511,7 +511,7 @@ above into R², explains why adding any feature can only inflate it, and covers 
 **See also:**
 [Loss Functions](../04-optimisation/01-loss-functions.md#absolute-error-does-not-care-how-wrong-an-outlier-is)
 for why the same choice changes the fitted line ·
-[Simple Linear Regression](../03-linear-regression/01-simple-linear-regression.md#how-wrong-is-it-the-five-error-measures)
+[Simple Linear Regression](../03-linear-regression/01-simple-linear-regression.mdx#how-wrong-is-it-the-five-error-measures)
 for these measures on a hand-fitted line ·
 [The Matrix Formulation](../03-linear-regression/03-the-matrix-formulation.md#the-column-of-ones)
 for why the intercept forces `Σr = 0` ·

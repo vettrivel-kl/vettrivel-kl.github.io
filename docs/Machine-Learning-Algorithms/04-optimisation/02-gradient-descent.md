@@ -138,7 +138,7 @@ intended** — which, as the [next page](./03-the-learning-rate.md#the-divergenc
 shows, is exactly the size of mistake that turns a working setting into a diverging one.
 
 Before reusing anyone's `α`, check whether their cost has the `1/2`. These notes use `J = (1/n)Σ(·)²`
-throughout, matching the [MSE definition](../03-linear-regression/01-simple-linear-regression.md#how-wrong-is-it-the-five-error-measures)
+throughout, matching the [MSE definition](../03-linear-regression/01-simple-linear-regression.mdx#how-wrong-is-it-the-five-error-measures)
 used for the error measures.
 
 :::

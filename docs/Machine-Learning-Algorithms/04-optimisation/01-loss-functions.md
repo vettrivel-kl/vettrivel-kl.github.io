@@ -79,7 +79,7 @@ Training minimises the cost. Reporting quotes the metric. They are frequently di
 and the reason is the whole of this page: many good metrics cannot be minimised, so you minimise a
 differentiable stand-in and report the metric afterwards.
 
-The [error measures](../03-linear-regression/01-simple-linear-regression.md#how-wrong-is-it-the-five-error-measures)
+The [error measures](../03-linear-regression/01-simple-linear-regression.mdx#how-wrong-is-it-the-five-error-measures)
 computed earlier were all metrics — summaries of residuals *after* a fit. Squared error was doing
 double duty there: it was also the thing being minimised. That coincidence is the exception.
 
@@ -111,7 +111,7 @@ actually moved *further*, `1.9752 → 1.9432`. If you were testing robustness, t
 you squared error is more robust than absolute error, which is false.
 
 The reason has nothing to do with the loss. A point at `x ≈ x̄` has almost no
-[leverage](../03-linear-regression/01-simple-linear-regression.md#worked-all-the-way-through) — it
+[leverage](../03-linear-regression/01-simple-linear-regression.mdx#worked-all-the-way-through) — it
 contributes nearly zero to `Sxy` and `Sxx`, so it can hardly tilt the line at all. What it *can* do is
 lift the line, and it does: the squared-error intercept moved `5.16 → 6.51`.
 
@@ -127,7 +127,7 @@ Both corruptions moved `y` by the same amount. One produced a `+0.0290` slope sh
 `+0.6576`, from the same loss. The variable being tested was position, not the loss function.
 
 This is the same failure mode as
-[the `1/√n` measurement done with one fit per sample size](../03-linear-regression/01-simple-linear-regression.md#how-much-data-does-it-take)
+[the `1/√n` measurement done with one fit per sample size](../03-linear-regression/01-simple-linear-regression.mdx#how-much-data-does-it-take)
 — a plausible experiment whose design cannot detect the effect it is looking for. It was the first
 version of this demo, and it produced a confident, backwards conclusion.
 
@@ -578,7 +578,7 @@ Confident correctness is where a small gradient is the right answer.
 these gradients downhill, the two different plots that share its name, and why the step size shrinks
 near the minimum without anyone programming it
 
-**See also:** [Simple Linear Regression](../03-linear-regression/01-simple-linear-regression.md#how-wrong-is-it-the-five-error-measures)
+**See also:** [Simple Linear Regression](../03-linear-regression/01-simple-linear-regression.mdx#how-wrong-is-it-the-five-error-measures)
 for the error measures as *metrics* rather than objectives ·
 [Outliers and Feature Engineering](../02-data-preprocessing/05-outliers-and-feature-engineering.mdx#robust-models-fix-y-outliers-not-x-outliers)
 for why a robust loss fixes `y`-outliers and not `X`-outliers ·

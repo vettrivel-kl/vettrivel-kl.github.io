@@ -565,7 +565,7 @@ for why RMSE needs the spread of `y`, and [the `neg_*` scorer convention](./01-e
 that R² alone escapes ·
 [Multiple Linear Regression](../03-linear-regression/02-multiple-linear-regression.md#why-the-penalty-fails)
 for Adjusted R² losing a race against noise features ·
-[Simple Linear Regression](../03-linear-regression/01-simple-linear-regression.md#how-wrong-is-it-the-five-error-measures)
+[Simple Linear Regression](../03-linear-regression/01-simple-linear-regression.mdx#how-wrong-is-it-the-five-error-measures)
 for where `SSE`, `SST` and `R²` first appear ·
 [Train / Test Split](../02-data-preprocessing/06-train-test-split.mdx#the-split-lottery)
 for why one split's R² is not the model's R²

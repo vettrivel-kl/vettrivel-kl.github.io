@@ -436,7 +436,7 @@ merely shrinking them — belong with **generalisation and model control**.
 **Next in this section:** [The Matrix Formulation](./03-the-matrix-formulation.md) — the same solution
 for any number of features in one algebraic step, and what happens when correlation reaches exactly 1.0
 
-**See also:** [Simple Linear Regression](./01-simple-linear-regression.md#correlation-with-the-target-and-why-it-misleads)
+**See also:** [Simple Linear Regression](./01-simple-linear-regression.mdx#correlation-with-the-target-and-why-it-misleads)
 for the partial correlation that revealed `age` · [Train / Test Split](../02-data-preprocessing/06-train-test-split.mdx#why-hold-anything-back)
 for why CV `R²` is the number to trust · [Feature Scaling and Transformation](../02-data-preprocessing/04-feature-scaling-and-transformation.mdx)
 for why ridge needs its features on comparable scales
