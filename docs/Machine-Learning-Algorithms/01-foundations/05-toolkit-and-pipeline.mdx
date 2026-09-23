@@ -8,170 +8,272 @@ toc_max_heading_level: 3
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Heading from '@theme/Heading';
 import React from 'react';
 
 # The Toolkit and the Pipeline
 
-> **Topic —** Four pages of concepts. This one is the code. It covers the five libraries that do the
-> actual work, and the **seven-step pipeline** that every project in this section — and every project
-> after it — follows in the same order.
+> **Topic -** Four chapters established the conceptual landscape of machine learning. This chapter bridges theory to production code. It covers the Python scientific library stack, scikit-learn's unified object contract, and the **seven-step pipeline** that governs every machine learning workflow.
 
-Learn the pipeline once and the rest of machine learning becomes "which algorithm goes in step 3".
+Once you master the structure of the pipeline, the rest of machine learning reduces to choosing which algorithm to place into Step 3.
 
 ---
 
-## Why Python
+## 1. Why Python: The Library Ecosystem
 
-Python is a popular and powerful **general-purpose** programming language that emerged as the
-**preferred language among data scientists**.
+Python is a general-purpose, interpreted programming language that became the undisputed standard for modern data science and machine learning.
 
-You *can* write a machine learning algorithm yourself in Python, and it works very well. But there
-are a great many modules and libraries already implemented that make the work much easier — so in
-practice you almost never do.
+Python did not win because of raw execution speed or language elegance. It won because of its **compiled library ecosystem**. Machine learning requires heavy linear algebra and matrix calculus. Python provides intuitive, readable high-level APIs that wrap high-performance, multithreaded C, C++, and Fortran computational engines.
 
-That's the honest reason Python won: not the language itself, but the libraries built on top of it.
+### The Five Core Libraries & How They Stack
 
----
+These five libraries are not competing alternatives. They represent a modular, hierarchical stack where each layer builds directly upon the primitives beneath it:
 
-## The five libraries
+```mermaid
+flowchart TD
+    classDef base fill:#f8fafc,stroke:#3b82f6,stroke-width:2px;
+    classDef mid fill:#f8fafc,stroke:#8b5cf6,stroke-width:2px;
+    classDef top fill:#f8fafc,stroke:#10b981,stroke-width:2px;
 
-| Library | What it gives you | You use it for |
-|---|---|---|
-| **NumPy** | A math library for **n-dimensional arrays**, computing efficiently and effectively | Arrays and matrices — the numbers underneath everything |
-| **SciPy** | **Numerical algorithms and tools** for domains like signal processing, optimisation and statistics | The maths algorithms models are built from |
-| **Pandas** | Powerful data structures like **DataFrames** for handling structured data (tables) | Loading, cleaning, manipulating and analysing data |
-| **Matplotlib** | Creating **interactive, animated visualisations**, 2-D and 3-D plots | Seeing your data and your results |
-| **scikit-learn** | **Simple and efficient tools** for classical machine learning | Building and evaluating standard statistical models |
-| **PyTorch / TensorFlow** | **Deep Learning Frameworks** with automatic differentiation and GPU acceleration | Designing and training deep neural networks |
+    DL["PyTorch / TensorFlow (Deep Learning & Autograd)"]
+    ML["scikit-learn (Classical Machine Learning)"]
+    SC["SciPy (Numerical Solvers & Optimization)"]
+    PD["Pandas (DataFrames & Tabular Manipulation)"]
+    NP["NumPy (N-Dimensional Arrays & Contiguous Memory)"]
+    PLT["Matplotlib / Seaborn (Diagnostic Visualization)"]
 
-### How they stack
+    DL --> NP
+    ML --> SC
+    ML --> PD
+    SC --> NP
+    PD --> NP
+    PLT -. "Visualizes" .-> NP
+    PLT -. "Visualizes" .-> PD
 
-These aren't five alternatives — they're layers, and each depends on the ones below it:
-
-```
-   ┌──────────────────────────────────────────────┐
-   │  PyTorch / TensorFlow     Deep Learning      │
-   ├──────────────────────────────────────────────┤
-   │  scikit-learn             Classical ML       │
-   ├───────────────────────┬──────────────────────┤
-   │  SciPy                │  Pandas              │
-   │  numerical algorithms │  DataFrames, tables  │
-   ├───────────────────────┴──────────────────────┤
-   │  NumPy                 n-dimensional arrays  │
-   └──────────────────────────────────────────────┘
-              Matplotlib plots any of it
+    class NP base;
+    class SC,PD mid;
+    class ML,DL,PLT top;
 ```
 
-**NumPy sits at the bottom of everything.** A pandas DataFrame holds NumPy arrays; scikit-learn
-converts your DataFrame to a NumPy array on the way in and hands NumPy arrays back out. This is why
-shape errors so often surface as NumPy messages even when you never imported NumPy yourself.
+### Architectural Role of Each Layer
 
-### NumPy
+1.  **NumPy (Numerical Python):** The foundational substrate of scientific computing. It provides the **ndarray** (N-dimensional array), storing uniform numerical types in contiguous memory blocks. Vectorized operations run as single compiled SIMD instructions rather than slow interpreted Python loops.
+2.  **SciPy (Scientific Python):** Provides advanced numerical calculus routines — including optimization solvers, numerical integration, signal processing, and statistical distributions. scikit-learn delegates heavy solver calculations (such as L-BFGS or coordinate descent) directly to SciPy.
+3.  **Pandas:** The tabular data manipulation layer. Introduces the **DataFrame** — a two-dimensional, labeled data structure supporting mixed data types, date slicing, missing value indicators, and relational merges. Preprocessing (Steps 1 and 2) begins here.
+4.  **Matplotlib & Seaborn:** The visual diagnostic engine. `matplotlib.pyplot` (imported as `plt`) renders distributions, residual plots, ROC curves, and decision boundaries.
+5.  **scikit-learn:** The unified classical machine learning toolkit. Implements standardized, battle-tested algorithms for classification, regression, clustering, preprocessing, and model evaluation.
+6.  **PyTorch / TensorFlow:** Deep learning frameworks extending the NumPy array philosophy to tensors with automatic differentiation (autograd) and GPU/TPU hardware acceleration.
 
-A math library to work with **n-dimensional arrays**, enabling computation **efficiently and
-effectively**.
+:::note
 
-"Efficiently" is not marketing. NumPy stores numbers in one contiguous block of memory of a single
-type and runs operations in compiled code, so an operation over a million values is a single call
-rather than a million interpreted loop iterations.
+**NumPy Sits Underneath Everything**
 
-### SciPy
+A Pandas DataFrame is fundamentally a collection of 1-D NumPy arrays. When you pass a DataFrame into scikit-learn, the library converts it into a C-contiguous NumPy array on input and returns NumPy arrays on output.
 
-**Numerical algorithms and tools** for various domains — **signal processing**, **optimisation**, and
-**statistics**.
-
-You will rarely call SciPy directly early on. It matters because it's what scikit-learn calls: when a
-model is fitted, the optimisation routine finding the best parameters usually lives here.
-
-### Pandas
-
-For **data manipulation and analysis**, providing powerful data structures like **DataFrames** for
-handling **structured data** — tables.
-
-A DataFrame is the table you actually think in: named columns, mixed types, an index. It's where
-steps 1 and 2 of the pipeline happen.
-
-### Matplotlib
-
-Creating **interactive, animated visualisations**, and **2-D and 3-D plots**. The plotting module is
-**Pyplot**, conventionally imported as `plt`.
-
-Its role in the pipeline is diagnostic. Summary numbers hide things that a single scatter plot makes
-obvious.
-
-### scikit-learn
-
-**Simple and efficient tools for data analysis**, including **classification, regression, clustering**
-and more. Specifically:
-
-- **Free** software machine learning library
-- Classification, regression **and clustering** algorithms
-- Works with **NumPy and SciPy**
-- **Great documentation**
-- **Easy to implement**
-
-> **Most of the tasks that need to be done in a machine learning pipeline are already implemented in
-> scikit-learn.**
-
-That sentence is the reason this page exists. The seven steps below are not seven programming
-problems — they are seven library calls.
-
----
-
-## The contract that makes it work
-
-Every scikit-learn object follows the same tiny interface. Learn these four method names and you can
-use a component you've never seen before.
-
-| Method | Meaning | Who has it |
-|---|---|---|
-| `.fit(X, y)` | **Learn** from data | Everything |
-| `.predict(X)` | **Produce answers** for new data | Models |
-| `.transform(X)` | **Change** the data | Preprocessors |
-| `.score(X, y)` | **Evaluate** against known answers | Models |
-
-Two kinds of object, distinguished by which they have:
-
-- **Transformers** — `fit` + `transform`. A scaler, an encoder, PCA.
-- **Estimators** — `fit` + `predict`. A classifier, a regressor.
-
-`fit_transform` is just `fit` then `transform` in one call.
-
-:::danger 
-
-**`fit` on training data only — never on the test set**
-
-`fit` is where the object *learns* something: a scaler learns the mean and standard deviation of each column. If you `fit` a scaler on the whole dataset before splitting, the training data has been scaled using information from the test set — and your test score is no longer an honest estimate of performance on unseen data.
-
-The rule, without exception:
-
-```python
-scaler.fit(X_train)             # learn from train
-X_train = scaler.transform(X_train)
-X_test  = scaler.transform(X_test)   # apply to test — never fit on it
-```
-
-This mistake is called **data leakage**, it inflates your score, and it is invisible — nothing errors.
-The `Pipeline` object in the demo below exists largely to make it impossible.
+This is why dimensional mismatch exceptions (such as `ValueError: Expected 2D array, got 1D array instead`) surface as low-level NumPy messages even when you never imported NumPy directly.
 
 :::
+
+---
+
+<Heading as="h2" id="the-contract-that-makes-it-work">2. The Scikit-Learn Contract: Estimators vs. Transformers</Heading>
+
+scikit-learn achieved global dominance because of one design achievement: **API Consistency**. Every object in the library adheres to a strictly defined, predictable four-method interface:
+
+| Method | Technical Purpose | Object Family |
+|---|---|---|
+| **`.fit(X, y)`** | **Learns parameters** from the data matrix (calculates statistics or optimizes weights) | All objects |
+| **`.transform(X)`** | **Modifies the data** using previously learned parameters (scaling, encoding, imputation) | Transformers |
+| **`.predict(X)`** | **Generates predictions** for unseen data using fitted weights | Estimators (Models) |
+| **`.score(X, y)`** | **Evaluates performance** against ground-truth labels (returns $R^2$ or Accuracy) | Estimators (Models) |
+
+### The Two Fundamental Object Types
+
+*   **Transformers (`fit` + `transform`):** Objects that clean, encode, project, or scale data. Examples include `StandardScaler`, `SimpleImputer`, `OneHotEncoder`, and `PCA`.
+*   **Estimators (`fit` + `predict`):** Predictive models that map feature matrices to target arrays. Examples include `LogisticRegression`, `RandomForestClassifier`, and `LinearRegression`.
+
+The convenience method **`fit_transform(X)`** calculates parameters and applies them in a single optimized pass.
+
+---
+
+export const ContractInspector = () => {
+  const [selectedClass, setSelectedClass] = React.useState('StandardScaler');
+
+  const registry = {
+    'StandardScaler': {
+      type: 'Transformer (Preprocessor)',
+      purpose: 'Standardizes features by removing the mean and scaling to unit variance.',
+      hasFit: true,
+      hasTransform: true,
+      hasPredict: false,
+      hasScore: false,
+      learnedAttributes: ['mean_ (Mean per feature)', 'var_ (Variance per feature)', 'scale_ (Std deviation per feature)'],
+      invalidCall: 'scaler.predict(X)',
+      errorRaised: 'AttributeError: \'StandardScaler\' object has no attribute \'predict\''
+    },
+    'SimpleImputer': {
+      type: 'Transformer (Preprocessor)',
+      purpose: 'Replaces missing values (NaN) using statistical strategies (mean, median, most_frequent).',
+      hasFit: true,
+      hasTransform: true,
+      hasPredict: false,
+      hasScore: false,
+      learnedAttributes: ['statistics_ (Imputation fill-values per column)'],
+      invalidCall: 'imputer.predict(X)',
+      errorRaised: 'AttributeError: \'SimpleImputer\' object has no attribute \'predict\''
+    },
+    'PCA': {
+      type: 'Transformer (Dimensionality Reduction)',
+      purpose: 'Projects high-dimensional data onto orthogonal axes of maximum variance.',
+      hasFit: true,
+      hasTransform: true,
+      hasPredict: false,
+      hasScore: false,
+      learnedAttributes: ['components_ (Principal axes)', 'explained_variance_ratio_ (Percentage of variance per component)'],
+      invalidCall: 'pca.predict(X)',
+      errorRaised: 'AttributeError: \'PCA\' object has no attribute \'predict\''
+    },
+    'LogisticRegression': {
+      type: 'Estimator (Classifier)',
+      purpose: 'Fits linear decision boundaries for discrete binary or multiclass classification.',
+      hasFit: true,
+      hasTransform: false,
+      hasPredict: true,
+      hasScore: true,
+      learnedAttributes: ['coef_ (Feature weight coefficients)', 'intercept_ (Bias offsets)', 'classes_ (Class labels)'],
+      invalidCall: 'model.transform(X)',
+      errorRaised: 'AttributeError: \'LogisticRegression\' object has no attribute \'transform\''
+    },
+    'RandomForestClassifier': {
+      type: 'Estimator (Ensemble Classifier)',
+      purpose: 'Averages predictions across a forest of randomized decision trees.',
+      hasFit: true,
+      hasTransform: false,
+      hasPredict: true,
+      hasScore: true,
+      learnedAttributes: ['estimators_ (Collection of fitted DecisionTree objects)', 'feature_importances_ (Impurity reduction per feature)'],
+      invalidCall: 'rf.transform(X)',
+      errorRaised: 'AttributeError: \'RandomForestClassifier\' object has no attribute \'transform\''
+    }
+  };
+
+  const item = registry[selectedClass];
+
+  return (
+    <div style={{ padding: '24px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '25px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive Scikit-Learn API Contract Inspector</h4>
+      <p style={{ margin: '0 0 16px 0', fontSize: '14px' }}>
+        Select a scikit-learn class to inspect its interface implementation, learned attributes, and invalid method calls:
+      </p>
+
+      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '18px' }}>
+        {Object.keys(registry).map(c => (
+          <button
+            key={c}
+            onClick={() => setSelectedClass(c)}
+            style={{
+              padding: '6px 14px',
+              borderRadius: '4px',
+              border: '1px solid #3182ce',
+              backgroundColor: selectedClass === c ? '#3182ce' : 'transparent',
+              color: selectedClass === c ? '#fff' : 'var(--ifm-font-color-base)',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              fontSize: '13px',
+              transition: '0.2s'
+            }}
+          >
+            {c}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ padding: '16px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px', marginBottom: '10px' }}>
+          <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#2b6cb0' }}>
+            <code>{selectedClass}</code>
+          </div>
+          <span style={{ fontSize: '12px', fontWeight: 'bold', padding: '4px 8px', borderRadius: '4px', backgroundColor: item.type.includes('Transformer') ? 'rgba(49, 130, 206, 0.15)' : 'rgba(72, 187, 120, 0.15)', color: item.type.includes('Transformer') ? '#2b6cb0' : '#276749' }}>
+            {item.type}
+          </span>
+        </div>
+
+        <div style={{ fontSize: '13px', color: 'var(--ifm-color-emphasis-800)', marginBottom: '16px', lineHeight: '1.5' }}>
+          {item.purpose}
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '10px', marginBottom: '16px' }}>
+          <div style={{ padding: '8px', borderRadius: '4px', backgroundColor: item.hasFit ? 'rgba(72, 187, 120, 0.1)' : 'rgba(229, 62, 62, 0.1)', textAlign: 'center', border: item.hasFit ? '1px solid #38a169' : '1px solid #e53e3e' }}>
+            <div style={{ fontSize: '11px', fontWeight: 'bold' }}>.fit(X, y)</div>
+            <div style={{ fontSize: '12px', fontWeight: 'bold', color: item.hasFit ? '#276749' : '#c53030' }}>{item.hasFit ? 'Implemented' : 'None'}</div>
+          </div>
+          <div style={{ padding: '8px', borderRadius: '4px', backgroundColor: item.hasTransform ? 'rgba(72, 187, 120, 0.1)' : 'rgba(148, 163, 184, 0.1)', textAlign: 'center', border: item.hasTransform ? '1px solid #38a169' : '1px solid var(--ifm-color-emphasis-300)' }}>
+            <div style={{ fontSize: '11px', fontWeight: 'bold' }}>.transform(X)</div>
+            <div style={{ fontSize: '12px', fontWeight: 'bold', color: item.hasTransform ? '#276749' : 'var(--ifm-color-emphasis-500)' }}>{item.hasTransform ? 'Implemented' : 'None'}</div>
+          </div>
+          <div style={{ padding: '8px', borderRadius: '4px', backgroundColor: item.hasPredict ? 'rgba(72, 187, 120, 0.1)' : 'rgba(148, 163, 184, 0.1)', textAlign: 'center', border: item.hasPredict ? '1px solid #38a169' : '1px solid var(--ifm-color-emphasis-300)' }}>
+            <div style={{ fontSize: '11px', fontWeight: 'bold' }}>.predict(X)</div>
+            <div style={{ fontSize: '12px', fontWeight: 'bold', color: item.hasPredict ? '#276749' : 'var(--ifm-color-emphasis-500)' }}>{item.hasPredict ? 'Implemented' : 'None'}</div>
+          </div>
+          <div style={{ padding: '8px', borderRadius: '4px', backgroundColor: item.hasScore ? 'rgba(72, 187, 120, 0.1)' : 'rgba(148, 163, 184, 0.1)', textAlign: 'center', border: item.hasScore ? '1px solid #38a169' : '1px solid var(--ifm-color-emphasis-300)' }}>
+            <div style={{ fontSize: '11px', fontWeight: 'bold' }}>.score(X, y)</div>
+            <div style={{ fontSize: '12px', fontWeight: 'bold', color: item.hasScore ? '#276749' : 'var(--ifm-color-emphasis-500)' }}>{item.hasScore ? 'Implemented' : 'None'}</div>
+          </div>
+        </div>
+
+        <div style={{ marginBottom: '12px' }}>
+          <div style={{ fontSize: '12px', fontWeight: 'bold', marginBottom: '4px' }}>Learned Attributes (populated strictly after .fit):</div>
+          <ul style={{ margin: '0', paddingLeft: '20px', fontSize: '13px' }}>
+            {item.learnedAttributes.map(attr => (
+              <li key={attr}><code>{attr}</code></li>
+            ))}
+          </ul>
+        </div>
+
+        <div style={{ padding: '10px 14px', borderRadius: '4px', backgroundColor: 'rgba(229, 62, 62, 0.08)', borderLeft: '4px solid #e53e3e', fontSize: '12px' }}>
+          <b>Invalid Call:</b> <code>{item.invalidCall}</code> raises <code>{item.errorRaised}</code>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<ContractInspector />
+
+### The Cardinal Rule: Never Fit on Test Data
+
+`fit` is where the object learns from observations: a `StandardScaler` calculates the sample mean ($\mu$) and standard deviation ($\sigma$).
+
+If you call `fit` on your whole dataset before splitting, the test set distribution leaks into the training pipeline. The model trains on normalized features informed by data it is supposed to be blind to.
+
+```python
+# CORRECT: Strict train-test isolation
+scaler = StandardScaler()
+scaler.fit(X_train)                 # Learn statistics strictly from training data
+X_train_scaled = scaler.transform(X_train)
+X_test_scaled  = scaler.transform(X_test)  # Apply training parameters to test set
+```
+
+This error is known as **Data Leakage**. It silently inflates test scores, causing models to perform brilliantly in validation and fail catastrophically in production.
+
+---
 
 export const PipelineLeakageQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
       <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Preventing Data Leakage</h4>
-      <p style={{ margin: '0 0 15px 0' }}><b>Scenario:</b> You want to train a model predicting customer lifetime value. You have a preprocessing step that centers the feature values (subtracts the mean). What is the correct sequence of calls to avoid data leakage?</p>
+      <p style={{ margin: '0 0 15px 0' }}><b>Scenario:</b> You are building a predictive pipeline for real estate pricing. You must standardize your numerical features (mean = 0, std = 1). Which execution order is structurally leak-free?</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <button onClick={() => setSelected('wrong')} style={{ padding: '10px', textAlign: 'left', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'wrong' ? '#e53e3e' : 'transparent', color: selected === 'wrong' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>
-          Option A: Fit the scaler on all data, split the dataset, then fit the model.
+        <button onClick={() => setSelected('wrong')} style={{ padding: '10px 14px', textAlign: 'left', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'wrong' ? '#e53e3e' : 'transparent', color: selected === 'wrong' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>
+          Option A: Fit the scaler on the entire dataset, partition into train/test, then fit the regressor on X_train.
         </button>
-        <button onClick={() => setSelected('right')} style={{ padding: '10px', textAlign: 'left', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'right' ? '#38a169' : 'transparent', color: selected === 'right' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>
-          Option B: Split the dataset first, fit the scaler ONLY on X_train, transform X_train and X_test separately, then fit the model.
+        <button onClick={() => setSelected('right')} style={{ padding: '10px 14px', textAlign: 'left', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'right' ? '#38a169' : 'transparent', color: selected === 'right' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>
+          Option B: Partition the raw dataset first, fit the scaler strictly on X_train, transform both partitions with that scaler, then fit the regressor.
         </button>
       </div>
-      {selected === 'wrong' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Fitting the scaler on all data before splitting allows testing distribution bounds (means and deviations) to leak into the training features. This inflates testing scores artificially. Try again!</p>}
-      {selected === 'right' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! Splitting first ensures that the scaling factors (the training mean and standard deviation) are learned strictly from the training dataset. We then transform the test set using those exact same factors without ever looking at the test set's mean. This prevents data leakage!</p>}
+      {selected === 'wrong' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Fitting the scaler on the complete dataset incorporates test set distribution bounds (means and standard deviations) into training features. This causes silent data leakage and produces overly optimistic test scores.</p>}
+      {selected === 'right' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! Partitioning first guarantees that scaling parameters are derived strictly from the training partition. Transforming the test set using those frozen training parameters preserves absolute test set isolation.</p>}
     </div>
   );
 };
@@ -180,119 +282,409 @@ export const PipelineLeakageQuiz = () => {
 
 ---
 
-## The seven-step pipeline & MLOps Lifecycle
+## 3. The Seven-Step Pipeline & MLOps Lifecycle
 
-The classical seven-step machine learning pipeline represents a single iteration. Modern engineering frames this inside a continuous **MLOps Model Lifecycle**:
+Every classical machine learning project follows seven sequential steps. In modern engineering, this cycle feeds into continuous production **MLOps Lifecycle Management**:
 
+```mermaid
+flowchart TD
+    classDef dev fill:#f8fafc,stroke:#3b82f6,stroke-width:2px;
+    classDef ops fill:#f8fafc,stroke:#10b981,stroke-width:2px;
+
+    subgraph DevPipeline ["Classical 7-Step Modeling Pipeline"]
+        S1["1. Preprocess (Clean, Impute, Encode)"]
+        S2["2. Train / Test Split (Isolate Validation Bounds)"]
+        S3["3. Setup Algorithm (Configure Hyperparameters)"]
+        S4["4. Fit Model (Optimize Parameter Weights)"]
+        S5["5. Predict (Generate Inferences on Unseen Test Set)"]
+        S6["6. Evaluate (Quantify Accuracy, F1, Loss)"]
+        S7["7. Export (Serialize Model & Transformers)"]
+
+        S1 --> S2 --> S3 --> S4 --> S5 --> S6 --> S7
+    end
+
+    subgraph OpsPipeline ["Continuous MLOps Production Lifecycle"]
+        M8["8. Model Registry (Artifact Versioning)"]
+        M9["9. Canary / Shadow Deployment (Traffic Routing)"]
+        M10["10. Real-Time Drift Monitoring (Covariate Shift)"]
+        M11["11. Automated Retraining Trigger"]
+
+        S7 --> M8 --> M9 --> M10 --> M11
+        M11 -. "Retriggers Training Loop" .-> S1
+    end
+
+    class S1,S2,S3,S4,S5,S6,S7 dev;
+    class M8,M9,M10,M11 ops;
 ```
-   1. Data preprocessing
-            ↓
-   2. Train / test split
-            ↓
-   3. Algorithm setup
-            ↓
-   4. Model fitting          ── train with the training set
-            ↓
-   5. Prediction             ── test with the test set
-            ↓
-   6. Evaluation             ── measure accuracy, show the result
-            ↓
-   7. Model export           ── save the model
-            ↓
-   ===============================================================
-   [MLOps Lifecycle Continuous Stage]
-            ↓
-   8. Model Registry         ── versioning and archiving artifacts
-            ↓
-   9. Canary Deployment      ── shadow or canary deployment to routing
-            ↓
-   10. Drift Monitoring      ── monitoring real-world feature & prior drift
-            ↓
-   11. Retrigger Training    ── automatic model updates on performance drops
-```
-
-| Step | What happens | Typical call |
-|---|---|---|
-| **1. Preprocess** | Load the data; handle missing values, encode categories, scale features; split into `X` and `y` | `pd.read_csv`, `SimpleImputer`, `StandardScaler` |
-| **2. Split** | Hold back part of the data, untouched, for honest testing | `train_test_split` |
-| **3. Algorithm setup** | Create the model object and choose its settings. **Nothing is learned yet** | `LogisticRegression()` |
-| **4. Fit** | Train on the training set — this is where learning happens | `model.fit(X_train, y_train)` |
-| **5. Predict** | Ask for answers on the test set | `model.predict(X_test)` |
-| **6. Evaluate** | Compare predictions against the known answers | `accuracy_score`, `classification_report` |
-| **7. Export** | Save the fitted model so it can be reused without retraining | `joblib.dump` |
-
-Three things about this sequence are worth stating plainly.
-
-**Step 2 comes before step 4 for a reason.** The test set exists to answer one question: how will
-this do on data it has never seen? The moment the model learns anything from the test set, that
-question becomes unanswerable.
-
-**Step 3 is the only step that changes when you change algorithm.** Swap `LogisticRegression()` for
-`RandomForestClassifier()` and steps 1, 2, 4, 5, 6 and 7 are untouched. That's the payoff of the
-shared contract, and the demo below shows it.
-
-**Step 7 must save the preprocessing too.** A model expecting scaled input is useless without the
-scaler that produced that scaling. Save them together, or save a `Pipeline` that contains both.
 
 ---
 
-## Common Mistakes
+export const PipelineStepper = () => {
+  const [activeStep, setActiveStep] = React.useState(1);
 
-Here are the most common conceptual pitfalls when setting up your machine learning pipelines, compared with the correct engineering principles.
+  const pipelineSteps = {
+    1: {
+      name: 'Step 1: Data Preprocessing',
+      lib: 'pandas / scikit-learn',
+      code: `import pandas as pd\nfrom sklearn.impute import SimpleImputer\n\ndf = pd.read_csv("dataset.csv")\nX = df.drop(columns=["target"])\ny = df["target"]\n\nimputer = SimpleImputer(strategy="median")\nX_clean = imputer.fit_transform(X)`,
+      state: 'Raw CSV converted into clean, imputed numerical matrix.',
+      learned: 'imputer.statistics_ stores column medians.',
+      danger: 'Do not scale features here! Scaling before partitioning causes immediate data leakage.'
+    },
+    2: {
+      name: 'Step 2: Train / Test Split',
+      lib: 'scikit-learn (model_selection)',
+      code: `from sklearn.model_selection import train_test_split\n\nX_train, X_test, y_train, y_test = train_test_split(\n    X_clean, y, test_size=0.2, random_state=42, stratify=y\n)`,
+      state: 'Dataset partitioned into disjoint 80% training and 20% testing subsets.',
+      learned: 'Zero parameters learned. Partitioning is purely structural.',
+      danger: 'Step 2 must precede Step 4. The test partition is a sealed vault opened only for final evaluation.'
+    },
+    3: {
+      name: 'Step 3: Algorithm Setup',
+      lib: 'scikit-learn (linear_model / ensemble)',
+      code: `from sklearn.linear_model import LogisticRegression\n\nmodel = LogisticRegression(C=1.0, max_iter=1000)`,
+      state: 'Estimator object initialized with structural hyperparameters in RAM.',
+      learned: 'ABSOLUTELY NOTHING. Weights and coefficients are completely uninitialized.',
+      danger: 'Step 3 is the ONLY step that changes when switching models (e.g., swapping to RandomForest).'
+    },
+    4: {
+      name: 'Step 4: Model Fitting',
+      lib: 'scikit-learn',
+      code: `model.fit(X_train, y_train)`,
+      state: 'Optimization solver minimizes loss function over training observations.',
+      learned: 'model.coef_ and model.intercept_ are computed and saved to object memory.',
+      danger: 'Fitting on test data (model.fit(X_test)) completely destroys experimental validity.'
+    },
+    5: {
+      name: 'Step 5: Prediction',
+      lib: 'scikit-learn',
+      code: `y_pred = model.predict(X_test)\ny_prob = model.predict_proba(X_test)[:, 1]`,
+      state: 'Fitted coefficients multiplied against unseen test features to output class labels.',
+      learned: 'Zero parameters learned. Read-only inference execution.',
+      danger: 'Predictions must use the same preprocessing transformations as the training set.'
+    },
+    6: {
+      name: 'Step 6: Evaluation',
+      lib: 'scikit-learn (metrics)',
+      code: `from sklearn.metrics import classification_report, roc_auc_score\n\nacc = model.score(X_test, y_test)\nauc = roc_auc_score(y_test, y_prob)\nprint(classification_report(y_test, y_pred))`,
+      state: 'Model predictions compared against ground-truth labels y_test.',
+      learned: 'Objective evaluation metric quantified for model selection and auditing.',
+      danger: 'Never judge an imbalanced model solely on raw accuracy. Always inspect Precision, Recall, and ROC-AUC.'
+    },
+    7: {
+      name: 'Step 7: Model Export',
+      lib: 'joblib',
+      code: `import joblib\nfrom sklearn.pipeline import Pipeline\n\n# Best Practice: Bundle scaler + model together\nprod_pipeline = Pipeline([\n    ("scale", scaler),\n    ("clf", model)\n])\njoblib.dump(prod_pipeline, "production_model.joblib")`,
+      state: 'Serialized binary file written to disk or uploaded to cloud model registry.',
+      learned: 'Model weights AND preprocessing parameters archived for production serving.',
+      danger: 'Saving the model without the scaler produces silent runtime failures when unscaled data hits the API.'
+    }
+  };
+
+  const curr = pipelineSteps[activeStep];
+
+  return (
+    <div style={{ padding: '24px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '25px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive Seven-Step Pipeline Stepper</h4>
+      <p style={{ margin: '0 0 16px 0', fontSize: '14px' }}>
+        Step through the complete lifecycle to inspect code, memory states, learned parameters, and engineering rules:
+      </p>
+
+      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '18px' }}>
+        {[1, 2, 3, 4, 5, 6, 7].map(s => (
+          <button
+            key={s}
+            onClick={() => setActiveStep(s)}
+            style={{
+              padding: '6px 12px',
+              borderRadius: '4px',
+              border: '1px solid #3182ce',
+              backgroundColor: activeStep === s ? '#3182ce' : 'transparent',
+              color: activeStep === s ? '#fff' : 'var(--ifm-font-color-base)',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              fontSize: '12px',
+              transition: '0.2s'
+            }}
+          >
+            Step {s}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ padding: '16px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+          <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#2b6cb0' }}>
+            {curr.name}
+          </div>
+          <span style={{ fontSize: '11px', padding: '3px 8px', borderRadius: '4px', backgroundColor: 'rgba(49, 130, 206, 0.1)', color: '#2b6cb0', fontWeight: 'bold' }}>
+            {curr.lib}
+          </span>
+        </div>
+
+        <pre style={{ margin: '0 0 14px 0', padding: '12px', borderRadius: '6px', fontSize: '13px', backgroundColor: '#1e293b', color: '#e2e8f0', overflowX: 'auto' }}>
+          <code>{curr.code}</code>
+        </pre>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '12px' }}>
+          <div style={{ padding: '10px', borderRadius: '4px', backgroundColor: 'rgba(148, 163, 184, 0.08)', fontSize: '12px' }}>
+            <b>Data Matrix State:</b><br />{curr.state}
+          </div>
+          <div style={{ padding: '10px', borderRadius: '4px', backgroundColor: 'rgba(72, 187, 120, 0.08)', fontSize: '12px' }}>
+            <b>What is Learned:</b><br />{curr.learned}
+          </div>
+        </div>
+
+        <div style={{ padding: '10px 14px', borderRadius: '4px', backgroundColor: 'rgba(221, 107, 32, 0.08)', borderLeft: '4px solid #dd6b20', fontSize: '12px' }}>
+          <b>Engineering Caution:</b> {curr.danger}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<PipelineStepper />
+
+### The Modularity Payoff: Swapping Algorithms
+
+Notice the decisive payoff of scikit-learn's unified contract: **Step 3 is the only step that changes when swapping models.** 
+
+When migrating from a linear baseline (`LogisticRegression`) to an ensemble (`RandomForestClassifier`) or an instance-based model (`KNeighborsClassifier`), Steps 1, 2, 4, 5, 6, and 7 remain completely untouched:
+
+---
+
+export const AlgorithmSwapper = () => {
+  const [modelType, setModelType] = React.useState('lr');
+
+  const models = {
+    lr: {
+      name: 'Logistic Regression',
+      importLine: 'from sklearn.linear_model import LogisticRegression',
+      setupLine: 'model = LogisticRegression(C=1.0, max_iter=1000)',
+      desc: 'Linear parametric model. Calculates log-odds using convex numerical optimization.'
+    },
+    rf: {
+      name: 'Random Forest',
+      importLine: 'from sklearn.ensemble import RandomForestClassifier',
+      setupLine: 'model = RandomForestClassifier(n_estimators=100, max_depth=5)',
+      desc: 'Non-linear ensemble model. Averages predictions across 100 randomized decision trees.'
+    },
+    knn: {
+      name: 'K-Nearest Neighbors',
+      importLine: 'from sklearn.neighbors import KNeighborsClassifier',
+      setupLine: 'model = KNeighborsClassifier(n_neighbors=5)',
+      desc: 'Non-parametric instance-based model. Memorizes vectors and votes on Euclidean distance.'
+    }
+  };
+
+  const current = models[modelType];
+
+  return (
+    <div style={{ padding: '24px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '25px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>Dynamic Algorithm Swapper: The Unified Contract in Action</h4>
+      <p style={{ margin: '0 0 16px 0', fontSize: '14px' }}>
+        Switch algorithms below and observe that <b>only Step 3 changes</b>. All surrounding data loading, splitting, training, predicting, and scoring steps remain identical:
+      </p>
+
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+        {Object.keys(models).map(key => (
+          <button
+            key={key}
+            onClick={() => setModelType(key)}
+            style={{
+              padding: '6px 14px',
+              borderRadius: '4px',
+              border: '1px solid #3182ce',
+              backgroundColor: modelType === key ? '#3182ce' : 'transparent',
+              color: modelType === key ? '#fff' : 'var(--ifm-font-color-base)',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              fontSize: '13px',
+              transition: '0.2s'
+            }}
+          >
+            {models[key].name}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: '#1e293b', color: '#e2e8f0', fontSize: '13px', overflowX: 'auto', marginBottom: '14px' }}>
+        <span style={{ color: '#64748b' }}># Step 1 & 2: Preprocess and Split (UNTOUCHED)</span><br />
+        <span style={{ color: '#94a3b8' }}>X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)</span><br /><br />
+        <span style={{ color: '#38bdf8', fontWeight: 'bold' }}># --- STEP 3: THE ONLY CHANGED STEP ---</span><br />
+        <span style={{ color: '#facc15', fontWeight: 'bold' }}>{current.importLine}</span><br />
+        <span style={{ color: '#facc15', fontWeight: 'bold' }}>{current.setupLine}</span><br /><br />
+        <span style={{ color: '#64748b' }}># Steps 4, 5, 6, 7: Fit, Predict, Evaluate, Export (UNTOUCHED)</span><br />
+        <span style={{ color: '#94a3b8' }}>model.fit(X_train, y_train)</span><br />
+        <span style={{ color: '#94a3b8' }}>predictions = model.predict(X_test)</span><br />
+        <span style={{ color: '#94a3b8' }}>score = model.score(X_test, y_test)</span><br />
+        <span style={{ color: '#94a3b8' }}>joblib.dump(model, "model.joblib")</span>
+      </div>
+
+      <div style={{ fontSize: '13px', color: 'var(--ifm-color-emphasis-700)', fontStyle: 'italic' }}>
+        {current.desc}
+      </div>
+    </div>
+  );
+};
+
+<AlgorithmSwapper />
+
+---
+
+## 4. Implementation Lab
+
+:::tip
+
+**Implementation Lab: The End-to-End Machine Learning Pipeline**
+
+Execute the complete classical seven-step machine learning pipeline sequentially on the Iris classification benchmark. Compare manual step-by-step execution against a production `Pipeline` object, and run algorithm swaps in a single line.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/01-foundations/end_to_end_pipeline.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Click **"Runtime" > "Run all"** or execute cells individually using `Shift + Enter`.
+3. Follow the guided experiments: intentionally induce data leakage, test unscaled inputs, and evaluate decision tree depth boundaries.
+
+:::
+
+### Comparative Implementation: Manual Scripting vs. Production Pipeline
+
+Compare the verbose manual execution of preprocessing and modeling against scikit-learn's clean, leak-free `Pipeline` object:
 
 <Tabs>
-  <TabItem value="mistake1" label="Mistake 1: Pre-split Scaling" default>
+  <TabItem value="manual" label="1. Manual Step-by-Step Scripting" default>
     <br/>
 
-    *   **The Pitfall:** Fitting your scaling or encoding estimators on the full dataset before performing your partition.
-    *   **Wrong Thinking:** `scaler.fit(X)`
-    *   **The Right Principle:** Fit strictly on the training partition: `scaler.fit(X_train)`. Fitting before splitting introduces **data leakage**, exposing testing statistics to the training pipeline.
+    ```python
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.linear_model import LogisticRegression
+    import joblib
+
+    # 1. Load & 2. Split
+    iris = load_iris()
+    X_tr, X_te, y_tr, y_te = train_test_split(iris.data, iris.target, test_size=0.2, random_state=42)
+
+    # 3. Setup & 4. Fit Preprocessing
+    scaler = StandardScaler()
+    X_tr_scaled = scaler.fit_transform(X_tr)
+    X_te_scaled = scaler.transform(X_te)  # Must remember to transform test set!
+
+    # Setup & Fit Model
+    model = LogisticRegression(max_iter=1000)
+    model.fit(X_tr_scaled, y_tr)
+
+    # 5. Predict & 6. Evaluate
+    print("Test Accuracy:", model.score(X_te_scaled, y_te))
+
+    # 7. Export (Must manually serialize both objects)
+    joblib.dump({"scaler": scaler, "model": model}, "bundle.joblib")
+    ```
   </TabItem>
-  <TabItem value="mistake2" label="Mistake 2: Fitting on Test Data">
+  <TabItem value="pipeline" label="2. Production Unified Pipeline">
     <br/>
 
-    *   **The Pitfall:** Overwriting your scaler coefficients by fitting again on testing rows.
-    *   **Wrong Thinking:** `scaler.fit(X_test)` or `scaler.fit_transform(X_test)`
-    *   **The Right Principle:** Apply training coefficients strictly: `scaler.transform(X_test)`. The test set must remain completely unseen, mimicking future prediction requests.
-  </TabItem>
-  <TabItem value="mistake3" label="Mistake 3: Monolithic Model Exports">
-    <br/>
+    ```python
+    from sklearn.datasets import load_iris
+    from sklearn.model_selection import train_test_split
+    from sklearn.preprocessing import StandardScaler
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.pipeline import Pipeline
+    import joblib
 
-    *   **The Pitfall:** Exporting and deploying a serialized model object without saving its associated preprocessing estimators.
-    *   **Wrong Thinking:** `joblib.dump(model, "model.joblib")`
-    *   **The Right Principle:** Export a combined `Pipeline` object containing both transformers and estimators, or serialize them as a dictionary. A model expecting scaled features will fail silently on raw deployment values.
+    # Load & Split
+    iris = load_iris()
+    X_tr, X_te, y_tr, y_te = train_test_split(iris.data, iris.target, test_size=0.2, random_state=42)
+
+    # Unified Pipeline: Encapsulates transformers and estimators
+    pipe = Pipeline([
+        ("scale", StandardScaler()),
+        ("model", LogisticRegression(max_iter=1000))
+    ])
+
+    # Fitting the pipeline automatically handles fit_transform on train!
+    pipe.fit(X_tr, y_tr)
+
+    # Scoring automatically applies learned scaler.transform to test data!
+    print("Test Accuracy:", pipe.score(X_te, y_te))
+
+    # A single call serializes the entire operational bundle
+    joblib.dump(pipe, "pipeline.joblib")
+    ```
   </TabItem>
 </Tabs>
 
 ---
 
-## Summary
+## 5. Common Mistakes
+
+<Tabs>
+  <TabItem value="m1" label="1. Pre-Split Scaling (Data Leakage)" default>
+    <br/>
+
+    *   **The Misconception:** *"We should normalize the whole dataset at the very start so all numbers are scaled uniformly."*
+    *   **Wrong Thinking:** Calling `scaler.fit(X)` or `scaler.fit_transform(X)` before calling `train_test_split`.
+    *   **The Right Principle:** Fitting before partitioning calculates means and variances over test rows, leaking validation bounds into the training feature space. Always call `train_test_split` first, then fit scalers strictly on `X_train`.
+  </TabItem>
+  <TabItem value="m2" label="2. Re-Fitting on Test Data">
+    <br/>
+
+    *   **The Misconception:** *"We should call scaler.fit(X_test) so the test data is normalized relative to its own mean."*
+    *   **Wrong Thinking:** Calling `scaler.fit(X_test)` or `scaler.fit_transform(X_test)`.
+    *   **The Right Principle:** A model's weights are calibrated to the scale and offset learned from the training set. Transforming test data with a new test mean shifts coordinate boundaries, corrupting inferences. Always call `scaler.transform(X_test)`.
+  </TabItem>
+  <TabItem value="m3" label="3. Monolithic Model Exports">
+    <br/>
+
+    *   **The Misconception:** *"We only need to export model.joblib to our production server."*
+    *   **Wrong Thinking:** Serializing the fitted estimator without bundling its transformers.
+    *   **The Right Principle:** A model trained on standardized inputs ($z = (x - \mu) / \sigma$) expects inputs centered at zero. Passing raw, unscaled production features directly into the model will produce garbage predictions with zero runtime errors. Always serialize a unified `Pipeline`.
+  </TabItem>
+  <TabItem value="m4" label="4. Re-Inventing Classical Algorithms">
+    <br/>
+
+    *   **The Misconception:** *"Writing our own linear regression solver in raw Python gives us full control over edge cases."*
+    *   **Wrong Thinking:** Writing interpreted Python loops to optimize matrix parameters from scratch in production.
+    *   **The Right Principle:** scikit-learn delegates optimization to highly tuned, multithreaded C and Fortran solvers via SciPy and BLAS/LAPACK. Custom interpreted Python implementations are orders of magnitude slower and lack numerical edge-case guards.
+  </TabItem>
+</Tabs>
+
+---
+
+## 6. Summary
 
 <div className="row">
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
-      <div className="card__header">
+      <div className="card__header" style={{ padding: '15px', borderBottom: '1px solid var(--ifm-color-emphasis-200)' }}>
         <h3>The Data Stack Layer</h3>
       </div>
-      <div className="card__body">
+      <div className="card__body" style={{ padding: '15px' }}>
         <ul>
-          <li><b>NumPy:</b> N-dimensional arrays. Continuous memory structures storing numbers efficiently.</li>
-          <li><b>Pandas:</b> Tabular DataFrame manipulations. Coordinates preprocessing tasks.</li>
-          <li><b>Matplotlib:</b> Visualizes data distribution and diagnostic plots.</li>
+          <li><b>NumPy:</b> N-dimensional arrays. Fast contiguous memory storage powering the entire scientific stack.</li>
+          <li><b>SciPy:</b> Numerical calculus routines and optimization solvers powering scikit-learn models.</li>
+          <li><b>Pandas:</b> Labeled two-dimensional DataFrames for tabular data cleaning and slicing.</li>
+          <li><b>Matplotlib / Seaborn:</b> Diagnostic data plotting and visualization engine.</li>
         </ul>
       </div>
     </div>
   </div>
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
-      <div className="card__header">
-        <h3>Model & Pipeline layer</h3>
+      <div className="card__header" style={{ padding: '15px', borderBottom: '1px solid var(--ifm-color-emphasis-200)' }}>
+        <h3>Pipeline & MLOps Layer</h3>
       </div>
-      <div className="card__body">
+      <div className="card__body" style={{ padding: '15px' }}>
         <ul>
-          <li><b>scikit-learn:</b> Tightly structured APIs for statistical ML with consistent interfaces.</li>
-          <li><b>PyTorch / TF:</b> Deep learning framework with neural layer weights and auto-gradients.</li>
-          <li><b>The Pipeline:</b> Structured chain linking steps 1-7, locking out leakage vectors.</li>
+          <li><b>scikit-learn Contract:</b> Strict interface (`.fit()`, `.predict()`, `.transform()`, `.score()`).</li>
+          <li><b>Transformers vs. Estimators:</b> Preprocessors modify data shapes; estimators predict targets.</li>
+          <li><b>The 7-Step Pipeline:</b> Preprocess $\to$ Split $\to$ Setup $\to$ Fit $\to$ Predict $\to$ Evaluate $\to$ Export.</li>
+          <li><b>MLOps Extension:</b> Bridges local scripts to registries, canary routing, and drift-triggered retraining.</li>
         </ul>
       </div>
     </div>
@@ -301,530 +693,160 @@ Here are the most common conceptual pitfalls when setting up your machine learni
 
 <br/>
 
-:::info 
+:::info
 
-**Key Takeaways: Toolkit & Pipeline**
+**Key Takeaways**
 
-*   **NumPy Underpins All:** Dataframes and scikit-learn models are simply high-level layers on top of contiguous NumPy array vectors. Shape errors are usually low-level NumPy array issues.
-*   **Consistent API Contract:** Every scikit-learn object operates on four main methods: `.fit()`, `.predict()`, `.transform()`, and `.score()`.
-*   **Scalers are Estimators too:** A StandardScaler learns mean and deviation vectors on `.fit()`. Fitting it on testing partitions or prior to splitting constitutes structural **Data Leakage**.
-*   **Export Preprocessing:** Always save your scaler parameters alongside your model weights using a unified `Pipeline` to prevent dimensional format mismatches in live APIs.
+*   **NumPy is the Substrate:** DataFrames and scikit-learn estimators operate directly on contiguous NumPy arrays. Shape mismatch errors bubble up from NumPy.
+*   **Step 3 is the Only Variable:** Swapping models requires changing only Step 3. The surrounding six steps remain 100% identical.
+*   **Leakage Fails Silently:** Fitting scalers on test data raises no errors, but destroys validation integrity. Split before you fit.
+*   **Always Export a Pipeline:** Never export an estimator without its transformers. Package scalers and models into a single `Pipeline` artifact.
 
 :::
 
-**See also:** [Types of Learning](./03-types-of-learning.mdx) for what goes in step 3 · [Applications and Major Techniques](./02-applications-and-techniques.mdx) for choosing the technique before the algorithm · [What is Machine Learning?](./01-what-is-machine-learning.mdx) for why `.fit` replaces hand-written rules
+**Next Section:** [Module 2: Data Preprocessing](../02-data-preprocessing/01-loading-and-preparing-data.mdx) - deep dive into data ingestion, imputation, and feature engineering.
+
+**See also:** [What is Machine Learning?](./01-what-is-machine-learning.mdx) · [Types of Learning](./03-types-of-learning.mdx)
 
 ---
 
-## Implementation Lab
+## 7. Active Recall Flashcards
 
-:::tip 
-
-**Lab Exercise: The End-to-End Machine Learning Pipeline**
-
-Run the complete classical seven-step machine learning pipeline sequentially on the Iris flower dataset. Condense the pipeline into a single scikit-learn object and run comparative swaps of classical classifiers in a single line.
-
-<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/01-foundations/end_to_end_pipeline.ipynb" target="_blank" rel="noopener noreferrer">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
-</a>
-
-**How to run the lab:**
-1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
-2. Run each cell sequentially (`Shift + Enter`).
-3. Experiment with inducing data leakage, skipping scaling, and optimizing decision tree depths.
-
-:::
-
-## Practice Questions
-
-*Test your understanding by working each problem out first, then click the card to reveal the detailed solution. Questions are tagged by type: **[THEORY]**, **[PROG]**, **[OUT]**, or **[ANALYZE]**.*
-
-### The libraries
+*Attempt each conceptual diagnostic question first, then click to reveal the underlying derivation and explanation.*
 
 <details>
-  <summary><b>L1. [THEORY] Name the five libraries and state, in one line each, what they provide.</b></summary>
+  <summary><b>1. [THEORY] Describe the hierarchical dependency stack of Python scientific libraries, explaining why NumPy is foundational.</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **NumPy:** High-performance n-dimensional arrays for foundational linear algebra operations.
-    *   **SciPy:** Scientific algorithms for advanced statistics, optimization, and signal processing.
-    *   **Pandas:** Efficient, labeled two-dimensional DataFrame containers for structured tabular manipulation.
-    *   **Matplotlib:** Plotting engine and visualizations (`pyplot`) for diagnostic graphs.
-    *   **scikit-learn:** Comprehensive toolkit for classical supervised/unsupervised machine learning algorithms.
+
+    *   **The Hierarchy:** NumPy sits at the base. Pandas (tabular DataFrames) and SciPy (numerical solvers) build directly on top of NumPy arrays. scikit-learn (classical ML) and PyTorch/TensorFlow (deep learning) consume Pandas DataFrames and SciPy solvers, but execute all core array calculations over NumPy-compatible memory blocks. Matplotlib visualizes arrays from all layers.
+    *   **Why NumPy is Foundational:** NumPy provides the `ndarray`, which stores homogeneous numerical types in contiguous memory buffers. This allows operations over millions of values to run as single, compiled C/SIMD vector instructions rather than slow, interpreted Python object loops.
   </div>
 </details>
 
 <details>
-  <summary><b>L2. [THEORY] Which library sits at the bottom of the stack, and why do shape errors often mention it even when you never imported it?</b></summary>
+  <summary><b>2. [THEORY] Detail the four core methods of the scikit-learn API contract, specifying the input parameters and operational role of each.</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **Bottom Library:** **NumPy**.
-    *   **Why shape errors occur:** High-level libraries (Pandas and scikit-learn) store and pass numerical tables as contiguous NumPy array instances under the hood. Consequently, dimensional mismatch errors during training bubble up directly from low-level NumPy compiler layers.
+
+    *   **`.fit(X, y)`:** Learns parameters from training data. For estimators, it optimizes weight coefficients; for transformers, it calculates column statistics (e.g., mean and standard deviation).
+    *   **`.transform(X)`:** Applies learned parameters to transform an input feature matrix without updating any internal coefficients. Implemented strictly by Transformers.
+    *   **`.predict(X)`:** Applies fitted coefficients to predict class labels or continuous values on an unseen feature matrix. Implemented strictly by Estimators.
+    *   **`.score(X, y)`:** Computes default evaluation metrics (accuracy for classification, $R^2$ for regression) by comparing model inferences against true target labels $y$.
   </div>
 </details>
 
 <details>
-  <summary><b>L3. [THEORY] Give five properties of scikit-learn.</b></summary>
+  <summary><b>3. [THEORY] Distinguish between a Transformer and an Estimator in scikit-learn by their method implementations and learned attributes.</b></summary>
   <div className="answer-content">
     <br/>
-    
-    1.  **Open Source:** Free, community-driven statistical machine learning library.
-    2.  **API Consistency:** Shares a strict object contract: `.fit()`, `.predict()`, `.transform()`, `.score()`.
-    3.  **Comprehensive Toolkit:** Features prebuilt algorithms for regression, classification, clustering, dimensionality reduction, and evaluation.
-    4.  **Ecosystem Integration:** Works seamlessly with Pandas DataFrames and NumPy arrays.
-    5.  **Exemplary Documentation:** Packed with complete, runnable code examples and rigorous theoretical derivations.
+
+    *   **Transformer:** Implements `.fit()` and `.transform()`. Modifies the data matrix itself. Examples: `StandardScaler` (learns `mean_`, `scale_`), `SimpleImputer` (learns `statistics_`), `PCA` (learns `components_`).
+    *   **Estimator:** Implements `.fit()` and `.predict()`. Computes predictions from feature matrices. Examples: `LogisticRegression` (learns `coef_`, `intercept_`), `RandomForestClassifier` (learns `estimators_`, `feature_importances_`).
   </div>
 </details>
 
 <details>
-  <summary><b>L4. [THEORY] You will rarely call SciPy directly. Why does it still matter?</b></summary>
+  <summary><b>4. [ANALYZE] Explain precisely what occurs when a StandardScaler is fitted on the full dataset before splitting. Why does this error fail silently?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    It serves as scikit-learn's underlying engine. When fitting weights (e.g. OLS regression or Logistic solvers), scikit-learn calls SciPy's optimized numerical solver libraries to perform the matrix calculus efficiently in compiled C/Fortran blocks.
+
+    *   **What Occurs (Data Leakage):** During `.fit()`, the scaler calculates the global mean ($\mu$) and standard deviation ($\sigma$) across all samples, including rows destined for the test set. Training features are normalized using test set distribution statistics.
+    *   **Why It Fails Silently:** Both scaled and unscaled matrices have identical shapes and standard float data types. scikit-learn performs standard linear algebra cleanly with zero syntax or dimensional exceptions. The error manifests only as an artificially inflated test score that collapses when deployed to production.
   </div>
 </details>
 
 <details>
-  <summary><b>L5. [ANALYZE] Python is a general-purpose language, not a mathematical one. Explain why it became the preferred language anyway.</b></summary>
+  <summary><b>5. [THEORY] List the seven steps of the classical machine learning pipeline in their strict operational order.</b></summary>
   <div className="answer-content">
     <br/>
-    
-    Python didn't win on syntax; it won because of its robust **library ecosystem**. By wrapping fast, low-level C libraries (NumPy/SciPy/Pandas) with highly readable high-level Python APIs, it allowed data scientists to prototype mathematical operations easily without sacrificing computation speed.
-  </div>
-</details>
 
-### The scikit-learn contract
-
-<details>
-  <summary><b>S1. [THEORY] Name the four core method names and say what each does.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **`.fit(X, y)`:** Fits model weights/coefficients by learning from a training matrix.
-    *   **`.predict(X)`:** Computes discrete categorical labels or continuous values for raw inputs.
-    *   **`.transform(X)`:** Applies learned transformations (e.g., standardizing offsets, categorical encoding) to clean raw tables.
-    *   **`.score(X, y)`:** Generates automated evaluation metrics (e.g. classification accuracy or regression $R^2$) on target labels.
+    1.  **Preprocess:** Ingest raw data, handle missing values, and clean anomalous records.
+    2.  **Split:** Partition dataset into disjoint training and testing pools (`train_test_split`).
+    3.  **Algorithm Setup:** Instantiate the estimator and define hyperparameters.
+    4.  **Fit:** Train the estimator strictly on the training partition (`model.fit(X_train, y_train)`).
+    5.  **Predict:** Generate inferences on unseen test features (`model.predict(X_test)`).
+    6.  **Evaluate:** Measure performance against ground-truth labels using objective metrics.
+    7.  **Export:** Serialize the model and its associated preprocessors to disk (`joblib.dump`).
   </div>
 </details>
 
 <details>
-  <summary><b>S2. [THEORY] Distinguish a transformer from an estimator by which methods each has. Give an example of both.</b></summary>
+  <summary><b>6. [ANALYZE] Contrast the internal state of a model immediately after Step 3 (Algorithm Setup) versus Step 4 (Model Fitting).</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **Transformer:** Has `fit` + `transform` (e.g. `StandardScaler`, `OneHotEncoder`). They manipulate the shape of the data itself.
-    *   **Estimator (Model):** Has `fit` + `predict` (e.g. `LogisticRegression`, `RandomForestClassifier`). They predict outputs from input data.
+
+    *   **After Step 3:** The model has learned **absolutely nothing**. Step 3 simply allocates an object in memory and stores structural configuration hyperparameters (such as regularization strength `C=1.0` or tree depth `max_depth=5`). Model weight attributes (`coef_`, `intercept_`) do not exist.
+    *   **After Step 4:** The optimization solver has converged. Mathematical weights and bias parameters are fully populated, enabling the model to execute inferences via `.predict()`.
   </div>
 </details>
 
 <details>
-  <summary><b>S3. [THEORY] What does `fit_transform` do that `transform` alone does not?</b></summary>
+  <summary><b>7. [ANALYZE] Why is Step 3 the only step that changes when swapping from Logistic Regression to a Random Forest? What does this demonstrate about software architecture?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    `fit_transform` learns characteristics (such as column mean and variance) and modifies the input dataset simultaneously in a single, computationally-optimized call. `transform` strictly applies pre-learned characteristics without rewriting coefficients.
+
+    *   **Why Only Step 3 Changes:** Because all scikit-learn estimators strictly adhere to the same unified interface contract (`fit` and `predict`). Steps 1 and 2 prepare the feature matrix, Step 4 calls `.fit()`, Step 5 calls `.predict()`, and Step 6 evaluates inferences identically regardless of the underlying algorithm.
+    *   **Software Architecture Principle:** Demonstrates the power of **polymorphism and interface abstraction**. By decoupling the execution pipeline from specific algorithmic mechanics, machine learning workflows become completely modular and maintainable.
   </div>
 </details>
 
 <details>
-  <summary><b>S4. [ANALYZE] Explain precisely what a `StandardScaler` learns during `fit`, and why fitting it on the whole dataset before splitting is an error. Would anything raise an exception?</b></summary>
+  <summary><b>8. [ANALYZE] A developer exports only the fitted LogisticRegression object to disk, omitting the StandardScaler. What happens when the model is deployed in production?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **What it learns:** The mean ($\mu$) and standard deviation ($\sigma$) of each column.
-    *   **Why it's an error:** Fitting before splitting causes **data leakage**. The scaler incorporates boundary statistics from the testing set into training features, inflating testing scores artificially.
-    *   **Exceptions:** No exception is raised. Data leakage fails silently and invisibly.
+
+    *   **Production Failure Mode:** Live API requests will feed raw, unscaled feature values into the model. Because the model's coefficients are calibrated for zero-mean, unit-variance standardized coordinates, unscaled inputs (such as raw salaries or square footages) will heavily distort the linear dot product.
+    *   **Silent Breakdown:** No error or exception will be raised because the input matrix dimensions match. The model will silently emit meaningless, heavily degraded predictions.
+    *   **Solution:** Always serialize a unified scikit-learn `Pipeline` object containing both the scaler and the estimator.
   </div>
 </details>
 
 <details>
-  <summary><b>S5. [ANALYZE] Name the one benefit of `Pipeline` that matters most, and explain the mechanism.</b></summary>
+  <summary><b>9. [PROG] Write a concise Python script constructing a scikit-learn Pipeline that chains a SimpleImputer, StandardScaler, and LogisticRegression, then fits and exports it.</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **Main benefit:** Bypasses **Data Leakage** structurally.
-    *   **Mechanism:** Tying preprocessors (`StandardScaler`) and classifiers into a single object restricts `fit` routines strictly to the training folds. The test data is only transformed during prediction calls, preventing downstream exposure of test boundaries.
-  </div>
-</details>
 
-### The seven steps
-
-<details>
-  <summary><b>P1. [THEORY] List the seven steps of the pipeline in order.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    1.  **Preprocess:** Load, clean, and format variables.
-    2.  **Split:** Partition into disjoint training and testing pools.
-    3.  **Algorithm Setup:** Configure a blank model object (untrained).
-    4.  **Fit:** Train the model using the training partition labels.
-    5.  **Predict:** Generate answers for test features.
-    6.  **Evaluate:** Measure score performance metrics against test ground truth.
-    7.  **Export:** Serialize weights and transformers to disk for deployment.
-  </div>
-</details>
-
-<details>
-  <summary><b>P2. [THEORY] Which step performs the learning? What has been learned after step 3?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Step that learns:** Step 4 (`.fit()`).
-    *   **Learned after step 3:** Absolutely nothing. Step 3 merely allocates memory and configures structural hyperparameters, leaving all model coefficients blank.
-  </div>
-</details>
-
-<details>
-  <summary><b>P3. [THEORY] Which single step changes when you switch from logistic regression to a random forest? What does this tell you about the design of the library?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Changed Step:** Step 3 (instantiating the model object).
-    *   **Library Design:** Highlights the brilliance of scikit-learn's **consistent contract** design. Because all estimators share identical `.fit()` and `.predict()` structures, algorithms are completely interchangeable with zero code impact across downstream pipelines.
-  </div>
-</details>
-
-<details>
-  <summary><b>P4. [ANALYZE] Why must step 2 come before step 4? State what becomes impossible if it doesn't.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    Step 2 must precede training to isolate the test set completely. If split after step 4, the model would be trained on test bounds, making it mathematically impossible to calculate an unbiased, honest evaluation score on unseen future data.
-  </div>
-</details>
-
-<details>
-  <summary><b>P5. [ANALYZE] A colleague saves only the fitted model in step 7, not the scaler. Describe what happens when the model is loaded and used, and why nothing errors.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **What happens:** Raw, unscaled features are fed directly to the model. Since the model expects normalized standard deviations, the numerical prediction checks degrade significantly, producing nonsense outputs.
-    *   **Why nothing errors:** Both scaled and unscaled inputs are 2-D float matrices of identical shape. The model runs standard matrix multiplication calculations cleanly with no dimension exception triggers.
-  </div>
-</details>
-
-### Reading the output
-
-<details>
-  <summary><b>O1. [OUT] Step 4 reported `learned 12 coefficients + 3 intercepts`. The data has 4 features and 3 classes. Explain both numbers.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **12 Coefficients:** Multiclass logistic regression creates distinct linear models per target class: $4 \text{ features} \times 3 \text{ classes} = 12 \text{ coefficients}$.
-    *   **3 Intercepts:** Each of the 3 class boundary lines gets its own baseline bias offset intercept.
-  </div>
-</details>
-
-<details>
-  <summary><b>O2. [OUT] After scaling, the training mean printed as `1.39e-17` rather than `0`. Explain, and say what this implies about testing floats for equality.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Explanation:** Repetitive floating-point binary divisions induce negligible trailing remainders ($1.39 \times 10^{-17}$ is effectively zero).
-    *   **Implication:** Never test floating-point numbers using exact equality (`==`). Always evaluate them using numerical tolerances (e.g., `np.allclose()`).
-  </div>
-</details>
-
-<details>
-  <summary><b>O3. [OUT] Step 7 printed `identical to before: True`. What exactly was compared, and why does it matter?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **What was compared:** Predictions from the original pipeline instance on memory vs predictions from the serialized `.joblib` pipeline loaded back from disk.
-    *   **Why it matters:** Confirms 100% serialization integrity. It ensures our model weights and preprocessors reload flawlessly with zero prediction drift.
-  </div>
-</details>
-
-<details>
-  <summary><b>O4. [OUT] The explicit seven steps and the three-line `Pipeline` both produced `0.967`. What has been gained by using the `Pipeline`, given the accuracy is unchanged?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    While accuracy remains identical on clean data, using `Pipeline` eliminates human error. It guarantees that test features cannot bypass the standardization scaling transform and strictly blocks data leakage.
-  </div>
-</details>
-
-<details>
-  <summary><b>O5. [ANALYZE] Three algorithms scored `0.967` and a depth-1 decision tree scored `0.667`. Explain the tie and the tree structure.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Why the first three tie:** The Iris dataset features simple, highly linear class boundaries. On straightforward datasets, most competent algorithms easily converge on identical bounds, rendering complex configurations unnecessary.
-    *   **Explain the 0.667:** A depth-1 decision tree splits along exactly one feature boundary, partitioning the dataset into two sections. In a balanced, three-class flower set ($50/50/50$), a single split isolates Setosa ($50$) completely and groups Versicolor and Virginica ($100$) together, recovering exactly $\frac{2}{3} \approx 66.7\%$ of target assignments.
-    *   **Fourth row indicator:** Shows our testing framework operates cleanly, discriminating and highlighting inferior model structures accurately.
-    *   **Effort Allocation:** Focus your engineering effort on data cleansing, feature quality, and robust splitting frameworks. A fancy algorithm will not save a model built on corrupt, leaking, or unscaled data matrices.
-  </div>
-</details>
-
-### Applying it
-
-<details>
-  <summary><b>A1. [PROG] Write the seven steps for `load_wine` instead of `load_iris`, printing test accuracy.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
     ```python
     import joblib
-    from sklearn.datasets import load_wine
+    from sklearn.datasets import load_iris
     from sklearn.model_selection import train_test_split
+    from sklearn.impute import SimpleImputer
     from sklearn.preprocessing import StandardScaler
     from sklearn.linear_model import LogisticRegression
-    from sklearn.metrics import accuracy_score
     from sklearn.pipeline import Pipeline
 
-    # 1. Preprocess
-    wine = load_wine()
-    X, y = wine.data, wine.target
+    # 1. Load & 2. Split
+    data = load_iris()
+    X_train, X_test, y_train, y_test = train_test_split(
+        data.data, data.target, test_size=0.2, random_state=42, stratify=data.target
+    )
 
-    # 2. Split
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42, stratify=y)
-
-    # 3. Setup & 4. Fit
-    pipe = Pipeline([
-        ("scale", StandardScaler()),
-        ("clf", LogisticRegression(max_iter=5000))
+    # 3. Setup Unified Pipeline
+    pipeline = Pipeline([
+        ("imputer", SimpleImputer(strategy="median")),
+        ("scaler", StandardScaler()),
+        ("classifier", LogisticRegression(max_iter=1000))
     ])
-    pipe.fit(X_train, y_train)
 
-    # 5. Predict & 6. Evaluate
-    y_pred = pipe.predict(X_test)
-    print(f"Wine Test Accuracy: {accuracy_score(y_test, y_pred):.3f}")
+    # 4. Fit & 5/6. Evaluate
+    pipeline.fit(X_train, y_train)
+    print(f"Test Accuracy: {pipeline.score(X_test, y_test):.4f}")
 
-    # 7. Export
-    joblib.dump(pipe, "wine_pipe.joblib")
+    # 7. Export Entire Bundle
+    joblib.dump(pipeline, "iris_production_pipeline.joblib")
     ```
   </div>
 </details>
 
 <details>
-  <summary><b>A2. [PROG] Build a `Pipeline` of `StandardScaler` and `KNeighborsClassifier`, fit it, and print both the training and test accuracy. Explain any gap.</b></summary>
+  <summary><b>10. [ANALYZE] How does the continuous MLOps lifecycle extend the classical 7-step modeling pipeline once a model reaches production?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    ```python
-    from sklearn.datasets import load_iris
-    from sklearn.model_selection import train_test_split
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.neighbors import KNeighborsClassifier
-    from sklearn.pipeline import Pipeline
 
-    iris = load_iris()
-    X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.2, random_state=42, stratify=iris.target)
-
-    pipe = Pipeline([
-        ("scale", StandardScaler()),
-        ("clf", KNeighborsClassifier(n_neighbors=3))
-    ])
-    pipe.fit(X_train, y_train)
-
-    print(f"Training Accuracy: {pipe.score(X_train, y_train):.3f}")
-    print(f"Testing Accuracy: {pipe.score(X_test, y_test):.3f}")
-    ```
-    
-    *   **Explaining the gap:** Models almost always score slightly higher on training folds because they fit decision margins to those coordinates directly. If a massive gap occurs (e.g. 100% train vs 60% test), it indicates overfitting—the model memorized training points instead of generalizable boundaries.
-  </div>
-</details>
-
-<details>
-  <summary><b>A3. [PROG] Save a fitted `Pipeline` with `joblib.dump`, reload it in a fresh variable, and assert the predictions are identical.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    ```python
-    import joblib
-    import numpy as np
-    from sklearn.datasets import load_iris
-    from sklearn.model_selection import train_test_split
-    from sklearn.pipeline import make_pipeline
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.linear_model import LogisticRegression
-
-    iris = load_iris()
-    X_train, X_test, y_train, y_test = train_test_split(iris.data, iris.target, test_size=0.2, random_state=0)
-
-    pipe = make_pipeline(StandardScaler(), LogisticRegression())
-    pipe.fit(X_train, y_train)
-
-    pred1 = pipe.predict(X_test)
-    joblib.dump(pipe, "temp.joblib")
-
-    reloaded = joblib.load("temp.joblib")
-    pred2 = reloaded.predict(X_test)
-
-    assert np.array_equal(pred1, pred2), "Mismatch detected!"
-    print("Assertion passed! Predictions are perfectly identical.")
-    ```
-  </div>
-</details>
-
-<details>
-  <summary><b>A4. [PROG] Deliberately introduce leakage: fit the scaler on all of `X` before splitting, and compare the resulting test accuracy with the correct version. Report both.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    ```python
-    from sklearn.datasets import load_iris
-    from sklearn.model_selection import train_test_split
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.linear_model import LogisticRegression
-
-    iris = load_iris()
-    X, y = iris.data, iris.target
-
-    # Leaking Scaler (Fit on All)
-    leaked_scaler = StandardScaler().fit(X)
-    X_l = leaked_scaler.transform(X)
-    X_tr_l, X_te_l, y_tr_l, y_te_l = train_test_split(X_l, y, test_size=0.3, random_state=42)
-    leaked_model = LogisticRegression().fit(X_tr_l, y_tr_l)
-    leaked_score = leaked_model.score(X_te_l, y_te_l)
-
-    # Correct Scaler (Fit strictly on Train)
-    X_tr, X_te, y_tr, y_te = train_test_split(X, y, test_size=0.3, random_state=42)
-    scaler = StandardScaler().fit(X_tr)
-    X_tr_s = scaler.transform(X_tr)
-    X_te_s = scaler.transform(X_te)
-    model = LogisticRegression().fit(X_tr_s, y_tr)
-    correct_score = model.score(X_te_s, y_te)
-
-    print(f"Leaked Scaler Accuracy:  {leaked_score:.4f}")
-    print(f"Correct Scaler Accuracy: {correct_score:.4f}")
-    ```
-  </div>
-</details>
-
-<details>
-  <summary><b>A5. [ANALYZE] You are handed a dataset and asked for a model by tomorrow. Write the seven steps as a checklist with the specific decision you must make at each one.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    1.  **Step 1 Checklist (Preprocess):** Check columns. Locate missing parameters (How to impute?). Locate strings (Encode nominal vs ordinal?). Check feature ranges (Symmetric scaling required?).
-    2.  **Step 2 Checklist (Split):** Define split ratio (80/20 standard?). Apply stratification (`stratify=y` enabled?) to preserve balanced class distributions.
-    3.  **Step 3 Checklist (Setup Algorithm):** Pick baseline model (Simple classical baseline first like Logistic Regression?). Define maximum iterations to avoid compilation divergence.
-    4.  **Step 4 Checklist (Fit):** Call model fit strictly on scaled training matrices (`X_train_scaled`, `y_train`).
-    5.  **Step 5 Checklist (Predict):** Generate predictions strictly on scaled test variables (`X_test_scaled`).
-    6.  **Step 6 Checklist (Evaluate):** Generate model evaluation metrics. Compile classification report, confusion matrix, or regression $R^2$/RMSE metrics.
-    7.  **Step 7 Checklist (Export):** Bundle and serialize the scaler and model structures into a unified `Pipeline` using `joblib.dump()`.
-  </div>
-</details>
-
-### Quick self-check
-
-<details>
-  <summary><b>1. Name the five libraries and one use for each.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **NumPy:** Fast multi-dimensional arrays.
-    *   **SciPy:** Advanced scientific mathematical solvers.
-    *   **Pandas:** Efficient, labeled two-dimensional tabular manipulations.
-    *   **Matplotlib:** Compiles visual data graphs.
-    *   **scikit-learn:** Core classical statistical models.
-  </div>
-</details>
-
-<details>
-  <summary><b>2. Which library is underneath all the others?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    **NumPy** is the foundation library for all statistical packages.
-  </div>
-</details>
-
-<details>
-  <summary><b>3. What is a DataFrame, and which library provides it?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **DataFrame:** Labeled, two-dimensional tabular data structure with column indices.
-    *   **Library:** Provided strictly by **Pandas**.
-  </div>
-</details>
-
-<details>
-  <summary><b>4. Which module of Matplotlib do you plot with?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    **`matplotlib.pyplot`** (conventionally imported as `plt`).
-  </div>
-</details>
-
-<details>
-  <summary><b>5. Name the four scikit-learn method names.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    1.  `.fit()`
-    2.  `.predict()`
-    3.  `.transform()`
-    4.  `.score()`
-  </div>
-</details>
-
-<details>
-  <summary><b>6. What is the difference between a transformer and an estimator?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Transformer:** Formats and standardizes features (`fit` + `transform`).
-    *   **Estimator:** Predicts class labels or values (`fit` + `predict`).
-  </div>
-</details>
-
-<details>
-  <summary><b>7. On which data may you call `fit`?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    Strictly on **training data** (`X_train`, `y_train`).
-  </div>
-</details>
-
-<details>
-  <summary><b>8. What is data leakage, and does it raise an error?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Data Leakage:** Exposing testing statistics to training phases.
-    *   **Does it error:** No, it fails silently and invisibly, inflating validation scores misleadingly.
-  </div>
-</details>
-
-<details>
-  <summary><b>9. List the seven pipeline steps in order.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    1. Preprocess $\to$ 2. Split $\to$ 3. Setup Algorithm $\to$ 4. Fit $\to$ 5. Predict $\to$ 6. Evaluate $\to$ 7. Export.
-  </div>
-</details>
-
-<details>
-  <summary><b>10. Is anything trained after step 3?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    No. Step 3 simply allocates configurations. Training strictly initiates on step 4 (`.fit()`).
-  </div>
-</details>
-
-<details>
-  <summary><b>11. Which step changes when you swap the algorithm?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    Only **Step 3** (Setup Algorithm) is modified.
-  </div>
-</details>
-
-<details>
-  <summary><b>12. What must be saved in step 7 besides the model?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    All associated **preprocessing transformers** (such as standard scalers and categorical encoders), ideally packed together inside a combined `Pipeline` object.
+    *   **Model Registry (Step 8):** Versions, tags, and tracks serialized model artifacts alongside metadata, data lineage, and benchmark evaluation scores.
+    *   **Canary / Shadow Deployment (Step 9):** Deploys candidate models in shadow mode (mirroring live traffic) or routes a tiny percentage (e.g., 5%) of live traffic to verify latency and performance before full release.
+    *   **Drift Monitoring (Step 10):** Continuously computes statistical metrics (e.g., Kolmogorov-Smirnov test, Population Stability Index) to detect covariate shift (input distribution changes) and concept drift (relationship changes between inputs and targets).
+    *   **Automated Retraining (Step 11):** Automatically retriggers the classical 7-step pipeline on refreshed data partitions when performance metrics or drift thresholds breach operational tolerances.
   </div>
 </details>

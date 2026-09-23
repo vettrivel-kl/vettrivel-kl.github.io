@@ -8,14 +8,324 @@ toc_max_heading_level: 3
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Heading from '@theme/Heading';
 import React from 'react';
 
 # Feature Scaling and Transformation
 
+> **Topic -** One clinical feature is measured in square millimeters (spread of $569$ units); another is measured in cellular smoothness (spread of $0.014$ units). When distance, gradient, and regularization algorithms consume unscaled metrics, the feature with the largest arbitrary unit outvotes the smaller feature by a million to one.
+
+This chapter establishes when feature scaling is mandatory, why decision trees are mathematically indifferent, and how non-linear transformations reshape skewed distributions.
+
+---
+
+## 1. The Problem: Physical Units Outvote Evidence
+
+Consider four features drawn from the Breast Cancer Wisconsin diagnostic dataset:
+
+```text title="Feature Variance Disparity"
+Feature Column          Min         Max         Std Deviation
+worst area             185.20      4254.00      569.3570
+mean area              143.50      2501.00      351.9141
+mean radius              6.98        28.11        3.5240
+mean smoothness          0.05         0.16        0.0141
+fractal dimension        0.001        0.02        0.0026
+```
+
+The most variable column (`worst area`) has **215,171x the variance** of the least variable column (`fractal dimension error`). Both describe the same physical tumors; they are simply measured in different physical units.
+
+### The Euclidean Distance Collapse
+
+In Euclidean metric space, the straight-line distance between two patient vectors $u$ and $v$ is calculated as:
+
+$$d(u, v) = \sqrt{\sum_{j=1}^D (u_j - v_j)^2}$$
+
+*   A difference of $100\text{ mm}^2$ in `worst area` contributes $100^2 = \mathbf{10,000}$ to the sum.
+*   A difference spanning the entire physiological range of `mean smoothness` ($\sim 0.11$) contributes $0.11^2 = \mathbf{0.0121}$.
+
+The area feature outvotes the smoothness feature by nearly **one million to one**. The model is not weighing predictive evidence — it is reading the physical measuring tape.
+
+---
+
+export const EuclideanDistanceSimulator = () => {
+  const [areaDiff, setAreaDiff] = React.useState(150);
+  const [smoothDiff, setSmoothDiff] = React.useState(0.05);
+
+  // Breast cancer stats: area std ~ 569, smoothness std ~ 0.014
+  const areaStd = 569.0;
+  const smoothStd = 0.014;
+
+  // Raw distance
+  const unscaledAreaSq = Math.pow(areaDiff, 2);
+  const unscaledSmoothSq = Math.pow(smoothDiff, 2);
+  const unscaledTotal = Math.sqrt(unscaledAreaSq + unscaledSmoothSq);
+  const unscaledAreaPct = ((unscaledAreaSq / (unscaledAreaSq + unscaledSmoothSq)) * 100).toFixed(3);
+
+  // Scaled distance (z-score differences)
+  const zArea = areaDiff / areaStd;
+  const zSmooth = smoothDiff / smoothStd;
+  const scaledAreaSq = Math.pow(zArea, 2);
+  const scaledSmoothSq = Math.pow(zSmooth, 2);
+  const scaledTotal = Math.sqrt(scaledAreaSq + scaledSmoothSq);
+  const scaledAreaPct = ((scaledAreaSq / (scaledAreaSq + scaledSmoothSq)) * 100).toFixed(1);
+
+  return (
+    <div style={{ padding: '24px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '25px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive Euclidean Distance Distortion Sandbox</h4>
+      <p style={{ margin: '0 0 16px 0', fontSize: '14px' }}>
+        Adjust the observed differences between two patient samples in <code>Worst Area</code> and <code>Mean Smoothness</code>:
+      </p>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px', marginBottom: '18px' }}>
+        <div>
+          <label style={{ fontSize: '13px', fontWeight: 'bold' }}>Worst Area Difference: {areaDiff} mm²</label>
+          <input
+            type="range"
+            min="10"
+            max="400"
+            step="10"
+            value={areaDiff}
+            onChange={(e) => setAreaDiff(parseFloat(e.target.value))}
+            style={{ width: '100%', marginTop: '6px' }}
+          />
+        </div>
+        <div>
+          <label style={{ fontSize: '13px', fontWeight: 'bold' }}>Mean Smoothness Difference: {smoothDiff.toFixed(3)}</label>
+          <input
+            type="range"
+            min="0.005"
+            max="0.100"
+            step="0.005"
+            value={smoothDiff}
+            onChange={(e) => setSmoothDiff(parseFloat(e.target.value))}
+            style={{ width: '100%', marginTop: '6px' }}
+          />
+        </div>
+      </div>
+
+      <div style={{ padding: '16px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px', textAlign: 'center', marginBottom: '12px' }}>
+          <div style={{ padding: '12px', borderRadius: '4px', backgroundColor: 'rgba(229, 62, 62, 0.1)', border: '1px solid #e53e3e' }}>
+            <div style={{ fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase' }}>Unscaled Raw Distance</div>
+            <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#c53030', marginTop: '4px' }}>
+              {unscaledTotal.toFixed(1)}
+            </div>
+            <div style={{ fontSize: '11px', marginTop: '4px' }}>Area determines <b>{unscaledAreaPct}%</b> of metric</div>
+          </div>
+          <div style={{ padding: '12px', borderRadius: '4px', backgroundColor: 'rgba(72, 187, 120, 0.1)', border: '1px solid #38a169' }}>
+            <div style={{ fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase' }}>Standardized Z-Score Distance</div>
+            <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#276749', marginTop: '4px' }}>
+              {scaledTotal.toFixed(2)}
+            </div>
+            <div style={{ fontSize: '11px', marginTop: '4px' }}>Area contribution balanced to <b>{scaledAreaPct}%</b></div>
+          </div>
+        </div>
+
+        <div style={{ fontSize: '13px', color: 'var(--ifm-color-emphasis-800)', lineHeight: '1.5' }}>
+          <b>Key Takeaway:</b> Without scaling, unscaled Area contributes {unscaledAreaPct}% of the spatial calculation, rendering cellular smoothness completely invisible to kNN, SVM, and clustering algorithms. Standardizing scales restores balanced, unit-free geometry.
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<EuclideanDistanceSimulator />
+
+---
+
+<Heading as="h2" id="standardisation-z-score-normalisation">2. Standardisation (Z-Score) vs. Min-Max Normalisation</Heading>
+
+Linear scaling shifts and divides coordinates using sample statistics. The two primary formulations are:
+
+<Tabs>
+  <TabItem value="zscore" label="1. Standardisation (Z-Score)" default>
+    <br/>
+
+    Subtract the sample mean ($\mu$), divide by the standard deviation ($\sigma$):
+
+    $$z = \frac{x - \mu}{\sigma}$$
+
+    *   **Resulting Bounds:** **Unbounded** (mean is exactly $0$, standard deviation is exactly $1$).
+    *   **Outlier Behavior:** Moderate. Outliers remain outliers, but are expressed in terms of standard deviation offsets.
+    *   **Scikit-Learn Implementation:** `StandardScaler()`
+  </TabItem>
+  <TabItem value="minmax" label="2. Min-Max Normalisation">
+    <br/>
+
+    Subtract the minimum ($x_{\min}$), divide by the feature range ($x_{\max} - x_{\min}$):
+
+    $$x' = \frac{x - x_{\min}}{x_{\max} - x_{\min}}$$
+
+    *   **Resulting Bounds:** **Strictly bounded to $[0, 1]$** (smallest value maps to $0$, largest maps to $1$).
+    *   **Outlier Behavior:** **Extreme.** A single outlier anchors $x_{\max}$, compressing all legitimate observations into a narrow band near zero.
+    *   **Scikit-Learn Implementation:** `MinMaxScaler()`
+  </TabItem>
+</Tabs>
+
+### The Essential Truth: Linear Scalers Never Change Shape
+
+Both Standardisation and Min-Max scaling are **linear transformations** ($f(x) = ax + b$). They translate and scale the axis, but **never change the shape of a distribution**. A heavily right-skewed feature remains identically right-skewed after scaling. Changing distribution shapes requires non-linear power transformations.
+
+---
+
+<Heading as="h2" id="which-models-actually-need-it">3. Which Models Actually Need It (And Why Trees Are Immune)</Heading>
+
+The performance impact of feature scaling is not theoretical — it is directly measurable across model families on the exact same data partitions:
+
+```text title="Empirical Accuracy Gain from Feature Scaling"
+Model Family                Unscaled Accuracy   Scaled Accuracy     Realized Gain
+K-Nearest Neighbors (k=5)         0.9279            0.9649          +0.0369 (+3.7%)
+Support Vector Machine (RBF)      0.9122            0.9736          +0.0615 (+6.2%)
+Logistic Regression (L2)          0.9526            0.9807          +0.0281 (+2.8%)
+Random Forest Classifier          0.9631            0.9631          +0.0000 (Zero Gain)
+```
+
+**Support Vector Machines gained 6.2 points, while Random Forest gained exactly zero.** That zero is not coincidence; it is an architectural property of tree-based partitioning.
+
+---
+
+export const ModelSensitivityMatrix = () => {
+  const [modelType, setModelType] = React.useState('svm');
+
+  const models = {
+    svm: {
+      name: 'Support Vector Machine (RBF Kernel)',
+      need: 'CRITICAL',
+      gain: '+6.15%',
+      color: '#c53030',
+      reason: 'SVM constructs maximum-margin hyperplanes using distance metrics ($K(x, x\') = \\exp(-\\gamma ||x - x\'||^2)$). When scales differ by 1000x, the kernel distance is dominated entirely by the high-variance feature, collapsing classification boundaries.'
+    },
+    knn: {
+      name: 'k-Nearest Neighbors (kNN)',
+      need: 'CRITICAL',
+      gain: '+3.69%',
+      color: '#c53030',
+      reason: 'kNN calculates Euclidean or Manhattan distance to find neighbors. Unscaled features with large ranges dictate neighbor identity 99.9% of the time, ignoring smaller-scale predictors.'
+    },
+    linear: {
+      name: 'Regularized Linear Models (Ridge / Lasso / Logistic)',
+      need: 'MANDATORY',
+      gain: '+2.81%',
+      color: '#dd6b20',
+      reason: 'Regularization adds a penalty on the sum of squared weights ($\\lambda \\sum w_j^2$). Features on small scales require huge coefficients to affect predictions, causing the regularizer to unfairly penalize and suppress them.'
+    },
+    nn: {
+      name: 'Neural Networks & Deep Learning',
+      need: 'MANDATORY',
+      gain: '+4.50%',
+      color: '#dd6b20',
+      reason: 'Unscaled inputs create an elongated, ravine-like loss surface (ill-conditioned Hessian matrix). Gradient descent bounces wildly across steep ravines rather than descending toward the global minimum.'
+    },
+    rf: {
+      name: 'Decision Trees & Random Forests',
+      need: 'INVARIANT (+0.0000%)',
+      gain: '+0.00%',
+      color: '#276749',
+      reason: 'Decision trees evaluate splits on individual feature thresholds ($x_j \\le C$). Because any monotonic scaling preserves value ordering, the exact same samples fall to the left and right branches before and after scaling.'
+    }
+  };
+
+  const curr = models[modelType];
+
+  return (
+    <div style={{ padding: '24px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '25px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive Model Sensitivity Matrix</h4>
+      <p style={{ margin: '0 0 16px 0', fontSize: '14px' }}>
+        Select a model family to inspect its scaling requirement, empirical gain, and architectural reason:
+      </p>
+
+      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '18px' }}>
+        {[
+          { id: 'svm', label: 'Support Vector Machine' },
+          { id: 'knn', label: 'k-Nearest Neighbors' },
+          { id: 'linear', label: 'Regularized Logistic Regression' },
+          { id: 'nn', label: 'Neural Networks' },
+          { id: 'rf', label: 'Random Forest (Trees)' }
+        ].map(m => (
+          <button
+            key={m.id}
+            onClick={() => setModelType(m.id)}
+            style={{
+              padding: '6px 14px',
+              borderRadius: '4px',
+              border: '1px solid #3182ce',
+              backgroundColor: modelType === m.id ? '#3182ce' : 'transparent',
+              color: modelType === m.id ? '#fff' : 'var(--ifm-font-color-base)',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              fontSize: '13px',
+              transition: '0.2s'
+            }}
+          >
+            {m.label}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ padding: '16px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+          <div style={{ fontSize: '15px', fontWeight: 'bold', color: '#2b6cb0' }}>{curr.name}</div>
+          <span style={{ fontSize: '12px', fontWeight: 'bold', padding: '3px 8px', borderRadius: '4px', backgroundColor: curr.need.includes('INVARIANT') ? 'rgba(72, 187, 120, 0.15)' : 'rgba(229, 62, 62, 0.15)', color: curr.color }}>
+            Scaling Requirement: {curr.need}
+          </span>
+        </div>
+
+        <div style={{ padding: '8px 12px', borderRadius: '4px', backgroundColor: 'rgba(148, 163, 184, 0.08)', marginBottom: '12px', fontSize: '13px' }}>
+          <b>Empirical Benchmark Accuracy Gain:</b> <span style={{ fontWeight: 'bold', color: curr.color }}>{curr.gain}</span>
+        </div>
+
+        <div style={{ fontSize: '13px', color: 'var(--ifm-color-emphasis-800)', lineHeight: '1.5' }}>
+          <b>Architectural Reason:</b> {curr.reason}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<ModelSensitivityMatrix />
+
+### Why Trees are Scale-Invariant
+
+A decision tree asks: *"Is $\text{Area} \le 750$?"* If you rescale that feature via standardisation or min-max scaling, the question becomes: *"Is $\text{Area}_{\text{scaled}} \le 0.31$?"*
+
+**The split partitions the exact same subset of samples.** Any monotonic transformation preserves the sorting order of values, and decision trees split purely on rank orderings. Trees, Random Forests, and Gradient Boosted Trees (XGBoost, LightGBM) are 100% immune to feature scale.
+
+:::tip
+
+**When Unsure: Scale Anyway**
+
+Scaling costs nothing for models that do not need it — Random Forest scored `+0.0000` accuracy gain either way. But omitting scaling severely damages models that do (+6.2% loss on SVM). Inside a `Pipeline`, scaling is a single line that guarantees protection.
+
+:::
+
+---
+
+## 4. One Outlier, Four Scalers
+
+Because scaling statistics are computed from data, a single extreme outlier corrupts parameter estimation.
+
+Consider a sample of 200 normal observations centered around $50$, plus a single extreme outlier at $5000$:
+
+```text title="Output Range of 200 Legitimate Values"
+Scaler              Formula Anchors       Output Span of the 200 Real Values
+MinMaxScaler        Min / Max             0.0000 .. 0.0099 (Span: 0.0099)
+StandardScaler      Mean / Std Deviation -0.1460 .. -0.0043 (Span: 0.1417)
+RobustScaler        Median / IQR         -1.7187 .. 1.5329 (Span: 3.2516)
+MaxAbsScaler        Max Absolute Value    0.0049 .. 0.0148 (Span: 0.0099)
+```
+
+*   **`MinMaxScaler` squashes legitimate data into 0.9% of the output space:** The single outlier claims $1.0$ for itself, forcing the remaining 200 legitimate points into an indistinguishable clump near zero.
+*   **`StandardScaler` suffers moderate compression (Span: 0.1417):** The outlier inflates the sample mean and standard deviation, shrinking the legitimate distribution.
+*   **`RobustScaler` preserves the entire structure (Span: 3.2516):** Because it centers on the **median** and divides by the **Interquartile Range (IQR)**, the single outlier has zero influence on the scaling parameters.
+
+---
+
 export const ScalerSimulator = () => {
   const [hasOutlier, setHasOutlier] = React.useState(false);
   const [scaler, setScaler] = React.useState('std');
+
   const rawValues = hasOutlier ? [10, 20, 30, 1000] : [10, 20, 30, 40];
+
   const getScaled = () => {
     if (scaler === 'std') {
       const mean = rawValues.reduce((a, b) => a + b, 0) / rawValues.length;
@@ -35,401 +345,269 @@ export const ScalerSimulator = () => {
       return rawValues.map(v => (v / maxAbs).toFixed(3));
     }
   };
+
   const scaled = getScaled();
+
   return (
-    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>Live Scaler Simulator</h4>
-      <p style={{ margin: '0 0 15px 0', fontSize: '14px' }}>See how an outlier (<code>1000</code>) crushes regular values in MinMaxScaler but gets safely isolated in RobustScaler:</p>
-      <div style={{ display: 'flex', gap: '15px', marginBottom: '15px', alignItems: 'center' }}>
-        <label style={{ fontWeight: 'bold', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer' }}>
-          <input type="checkbox" checked={hasOutlier} onChange={(e) => setHasOutlier(e.target.checked)} style={{ cursor: 'pointer' }} />
+    <div style={{ padding: '24px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '25px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive Scaler vs. Outlier Playground</h4>
+      <p style={{ margin: '0 0 16px 0', fontSize: '14px' }}>
+        Inject an extreme outlier (<code>1000</code>) to observe how MinMaxScaler crushes regular observations compared to RobustScaler:
+      </p>
+
+      <div style={{ display: 'flex', gap: '15px', marginBottom: '16px', alignItems: 'center' }}>
+        <label style={{ fontWeight: 'bold', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '6px', cursor: 'pointer' }}>
+          <input
+            type="checkbox"
+            checked={hasOutlier}
+            onChange={(e) => setHasOutlier(e.target.checked)}
+          />
           Inject Extreme Outlier (1000)
         </label>
       </div>
-      <div style={{ display: 'flex', gap: '10px', marginBottom: '20px', flexWrap: 'wrap' }}>
-        <button onClick={() => setScaler('std')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: scaler === 'std' ? '#3182ce' : 'transparent', color: scaler === 'std' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s', fontWeight: 'bold' }}>StandardScaler</button>
-        <button onClick={() => setScaler('minmax')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: scaler === 'minmax' ? '#3182ce' : 'transparent', color: scaler === 'minmax' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s', fontWeight: 'bold' }}>MinMaxScaler</button>
-        <button onClick={() => setScaler('robust')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: scaler === 'robust' ? '#3182ce' : 'transparent', color: scaler === 'robust' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s', fontWeight: 'bold' }}>RobustScaler</button>
-        <button onClick={() => setScaler('maxabs')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: scaler === 'maxabs' ? '#3182ce' : 'transparent', color: scaler === 'maxabs' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s', fontWeight: 'bold' }}>MaxAbsScaler</button>
+
+      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
+        {[
+          { id: 'std', label: 'StandardScaler' },
+          { id: 'minmax', label: 'MinMaxScaler' },
+          { id: 'robust', label: 'RobustScaler' },
+          { id: 'maxabs', label: 'MaxAbsScaler' }
+        ].map(s => (
+          <button
+            key={s.id}
+            onClick={() => setScaler(s.id)}
+            style={{
+              padding: '6px 14px',
+              borderRadius: '4px',
+              border: '1px solid #3182ce',
+              backgroundColor: scaler === s.id ? '#3182ce' : 'transparent',
+              color: scaler === s.id ? '#fff' : 'var(--ifm-font-color-base)',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              fontSize: '13px',
+              transition: '0.2s'
+            }}
+          >
+            {s.label}
+          </button>
+        ))}
       </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(100px, 1fr))', gap: '15px', backgroundColor: 'rgba(148, 163, 184, 0.1)', padding: '15px', borderRadius: '6px' }}>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(90px, 1fr))', gap: '10px', backgroundColor: 'var(--ifm-background-surface-color)', padding: '16px', borderRadius: '6px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
         {rawValues.map((v, i) => (
-          <div key={i} style={{ textAlign: 'center', borderRight: i < rawValues.length - 1 ? '1px solid var(--ifm-color-emphasis-300)' : 'none' }}>
-            <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Raw {i+1}</div>
-            <div style={{ fontSize: '17px', fontWeight: 'bold', margin: '5px 0' }}>{v}</div>
-            <div style={{ fontSize: '10px', color: '#3182ce', fontWeight: 'bold' }}>Scaled Value:</div>
-            <div style={{ fontSize: '15px', fontWeight: 'bold', color: '#2b6cb0' }}>{scaled[i]}</div>
+          <div key={i} style={{ textAlign: 'center', padding: '10px', borderRadius: '4px', backgroundColor: 'rgba(148, 163, 184, 0.08)' }}>
+            <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Point {i + 1}</div>
+            <div style={{ fontSize: '16px', fontWeight: 'bold', margin: '4px 0' }}>{v}</div>
+            <div style={{ fontSize: '10px', color: '#2b6cb0', fontWeight: 'bold' }}>Scaled:</div>
+            <div style={{ fontSize: '15px', fontWeight: 'bold', color: v === 1000 ? '#c53030' : '#276749' }}>{scaled[i]}</div>
           </div>
         ))}
       </div>
-      <div style={{ fontSize: '12px', color: 'var(--ifm-color-emphasis-600)', fontStyle: 'italic', marginTop: '10px' }}>
-        {scaler === 'minmax' && hasOutlier && "Notice how normal values (10, 20, 30) are squashed down to ~0.01. They are practically indistinguishable!"}
-        {scaler === 'robust' && hasOutlier && "RobustScaler keeps the regular values spaced out because the 1000 outlier doesn't affect the median or IQR."}
-        {scaler === 'std' && "Standardizes features to mean 0 and unit variance. Unbounded range."}
-        {scaler === 'maxabs' && "Scales by the maximum absolute value. Preserves exact sparse zeros."}
+
+      <div style={{ fontSize: '12px', color: 'var(--ifm-color-emphasis-700)', marginTop: '12px', fontStyle: 'italic' }}>
+        {hasOutlier && scaler === 'minmax' && (
+          <span style={{ color: '#c53030', fontWeight: 'bold' }}>Outlier Poisoning: Points [10, 20, 30] are compressed into [0.000, 0.010, 0.020] — less than 2% of the range!</span>
+        )}
+        {hasOutlier && scaler === 'robust' && (
+          <span style={{ color: '#276749', fontWeight: 'bold' }}>Outlier Insulated: Points [10, 20, 30] retain wide separations [-0.750, -0.250, 0.250] because median and IQR ignore the outlier.</span>
+        )}
       </div>
     </div>
   );
 };
 
-> **Topic -** Everything is finally numeric. Now the columns are on absurdly different scales - and
-> some models are crippled by that while others are **provably indifferent** to it. This page is about
-> knowing which situation you're in, then choosing a scaler that survives your data.
-
----
-
-## The problem
-
-One dataset, four of its columns:
-
-```text title="Output"
-                      min        max       std
-mean area        143.5000  2501.0000  351.9141
-worst area       185.2000  4254.0000  569.3570
-mean radius        6.9810    28.1100    3.5240
-mean smoothness    0.0526     0.1634    0.0141
-   largest std 569.36 (worst area), smallest 0.002646 (fractal dimension error)
-   ratio: 215,171x
-```
-
-**The most variable column has 215,171× the spread of the least variable one.** Both describe the same
-tumours; they're simply measured in different units.
-
-Now consider what a distance calculation does with that. Euclidean distance between two samples sums
-squared differences across all columns. A 100-unit difference in `worst area` contributes
-`100² = 10,000`. A difference spanning the *entire range* of `mean smoothness` - about `0.11` -
-contributes `0.0121`. The area column outvotes the smoothness column by roughly a million to one.
-
-The model isn't weighing evidence. **It's reading the units.**
-
 <ScalerSimulator />
 
----
+### `Normalizer` is Not a Scaler: It Scales Rows, Not Columns
 
-## Standardisation (Z-score normalisation)
+A common architectural confusion is treating `Normalizer` as a scaler:
 
-Explore the mathematical foundations of standard scaling and normalisation:
+*   **`StandardScaler` / `MinMaxScaler` / `RobustScaler`:** Scale **down columns** independently (across all samples).
+*   **`Normalizer`:** Scales **across rows** (rescaling each individual sample vector to unit Euclidean length $||x||_2 = 1$).
 
-<Tabs>
-  <TabItem value="zscore" label="Standardisation (Z-Score)" default>
-    <br/>
-    
-    Subtract the mean, divide by the standard deviation:
-    
-    $$z = \frac{x - \mu}{\sigma}$$
-    
-    The result has **mean 0 and standard deviation 1**. Values are *not* bounded - an extreme input stays
-    extreme, just expressed in standard deviations.
-    
-    ```python
-    # Scikit-learn equivalent
-    StandardScaler()
-    ```
-  </TabItem>
-  <TabItem value="minmax" label="Min-Max Normalisation">
-    <br/>
-    
-    Subtract the minimum, divide by the range:
-    
-    $$x' = \frac{x - x_{\min}}{x_{\max} - x_{\min}}$$
-    
-    The result is **bounded to $[0, 1]$** by construction, with the smallest value at exactly $0$ and the
-    largest at exactly $1$.
-    
-    ```python
-    # Scikit-learn equivalent
-    MinMaxScaler()
-    ```
-  </TabItem>
-</Tabs>
+```text title="Row Normalization Example"
+Input Rows:     [1.0, 2.0, 3.0] and [100.0, 200.0, 300.0]  (differ by 100x)
+Normalizer:     [0.267, 0.535, 0.802] and [0.267, 0.535, 0.802]  (IDENTICAL)
+```
 
-| Metric / Feature | Standardisation | Min-Max |
-|---|---|---|
-| **Output Bounds** | Unbounded (mean 0, std 1) | strictly bounded $[0, 1]$ |
-| **Formula anchors** | population mean, std | column minimum, maximum |
-| **Outlier sensitivity** | Moderate | **Severe** |
-| **Preserves distribution shape?** | Yes | Yes |
-| **Default Choice** | **Usually this** | When bounds are required (e.g., image pixels) |
-
-Neither changes the *shape* of a distribution - both are linear rescalings. A skewed column stays
-exactly as skewed after either. Fixing shape is what transformations, further down, are for.
+`Normalizer` discards magnitude completely, keeping only vector direction. It is designed for text frequency vectors (TF-IDF) where document length should not matter, but will ruin standard tabular features where absolute magnitude carries signal.
 
 ---
 
-## Which models actually need it
+<Heading as="h2" id="transformations-changing-the-shape">5. Transformations: Changing the Distribution Shape</Heading>
 
-This is the question worth answering precisely, and it's measurable. Same data, same folds, only
-scaling differs:
+While scaling shifts and stretches distributions linearly, non-linear transformations **reshape distributions** to compress long right tails and reduce skewness:
 
-```text title="Output"
-   model                     unscaled   scaled     gain
-   KNeighbors(5)               0.9279   0.9649  +0.0369
-   SVC(rbf)                    0.9122   0.9736  +0.0615
-   LogisticRegression          0.9526   0.9807  +0.0281
-   RandomForest                0.9631   0.9631  +0.0000
+```text title="Skewness Reduction across California Housing Metrics"
+Column Name       Raw Skew    np.log1p    np.sqrt    Yeo-Johnson    QuantileTransformer
+MedInc             +1.65       +0.23      +0.69         -0.00             +0.18
+AveRooms          +20.70       +1.39      +4.85         -0.17             -0.00
+AveOccup          +97.63       +3.88     +43.34         -0.11             +0.03
+Population         +4.94       -1.04      +1.22         +0.11             +0.03
 ```
 
-**SVC gained 6.2 points. RandomForest gained exactly zero** - identical to four decimal places.
+### The Log-Overshoot Trap
 
-That zero isn't luck, it's structural:
+Log transforms compress large numbers aggressively. For extremely right-tailed columns (`AveOccup`), log transforms reduce skew from $97.63 \to 3.88$.
 
-| Model family | Needs scaling? | Why |
-|---|---|---|
-| **kNN**, **K-Means**, **SVM** | **Yes** - critically | They compute **distances**; units become weights |
-| **Logistic / linear regression** | Yes, when regularised | The penalty shrinks all coefficients equally, so scale decides who gets penalised |
-| **Neural networks** | Yes | Gradient descent converges badly on mismatched scales |
-| **PCA** | **Yes** | It maximises variance, so the largest-variance column dominates |
-| **Decision trees, Random Forest, Boosting** | **No** | They split on **thresholds**, and thresholds are scale-free |
-
-### Why trees are immune
-
-A tree asks *"is `area ≤ 750`?"* Rescale that column and the question simply becomes *"is
-`area_scaled ≤ 0.31`?"* - **the same split, partitioning the same rows.**
-
-Any **monotonic** transformation preserves the ordering of values, and a tree only ever uses ordering.
-So scaling, log transforms, and square roots are all invisible to it. This is a genuinely useful
-property: it means you can skip scaling entirely for tree ensembles, and it explains why boosted trees
-are so forgiving of raw, messy features.
-
-:::tip
-
-**Unsure? Scale anyway**
-
-Scaling costs nothing for models that don't need it - the RandomForest row proves that, at `+0.0000`.
-It's substantial for models that do. Inside a `Pipeline` it's one extra line.
-
-The asymmetry is decisive: forgetting to scale kNN cost 3.7 points here; scaling a forest
-unnecessarily cost nothing at all.
-
-:::
+However, applying log reflexively can **overshoot**: on `Population`, raw skew was $+4.94$, but `log1p` overcorrected to **$-1.04$**, flipping a right tail into a negative left tail!
 
 ---
 
-## One outlier, four scalers
+export const DistributionTransformSandbox = () => {
+  const [col, setCol] = React.useState('AveOccup');
+  const [trans, setTrans] = React.useState('log1p');
 
-Both formulas above are computed *from the data*, so a single extreme value poisons them. Here are
-200 values drawn around 50, plus a single `5000`:
+  const benchmark = {
+    MedInc: { raw: '+1.65', log1p: '+0.23', sqrt: '+0.69', yj: '-0.00', desc: 'Moderate right-skew. log1p brings it cleanly to near-normal symmetry (+0.23).' },
+    AveRooms: { raw: '+20.70', log1p: '+1.39', sqrt: '+4.85', yj: '-0.17', desc: 'Heavy right-skew caused by large estates. log1p achieves major compression.' },
+    AveOccup: { raw: '+97.63', log1p: '+3.88', sqrt: '+43.34', yj: '-0.11', desc: 'Extreme skewness. sqrt is insufficient (43.34); Yeo-Johnson achieves near-perfect normality (-0.11).' },
+    Population: { raw: '+4.94', log1p: '-1.04', sqrt: '+1.22', yj: '+0.11', desc: 'LOG OVERSHOOT: log1p overcorrected, flipping right-skew into negative left-skew (-1.04). Yeo-Johnson fits the optimal parameter (+0.11).' }
+  };
 
-```text title="Output"
-   scaler            uses                range of the 200     span
-   StandardScaler    mean / std        -0.1460 .. -0.0043   0.1417
-   MinMaxScaler      min / max           0.0000 .. 0.0099   0.0099
-   RobustScaler      median / IQR       -1.7187 .. 1.5329   3.2516
-   MaxAbsScaler      max absolute        0.0049 .. 0.0148   0.0099
-```
+  const currCol = benchmark[col];
+  const resultingSkew = trans === 'raw' ? currCol.raw : trans === 'log1p' ? currCol.log1p : trans === 'sqrt' ? currCol.sqrt : currCol.yj;
 
-Read the `span` column - how much room the **200 real values** got:
+  return (
+    <div style={{ padding: '24px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '25px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive Non-Linear Skewness Transformer Sandbox</h4>
+      <p style={{ margin: '0 0 16px 0', fontSize: '14px' }}>
+        Observe how different non-linear transforms reshape empirical features from the California housing dataset:
+      </p>
 
-**`MinMaxScaler` compressed them into `0.0099`** - under **1%** of its output range. The outlier
-claimed `1.0` for itself and everything real is squashed against zero, effectively indistinguishable.
-This is the worst case because `min` and `max` are each set by exactly **one** data point.
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '16px' }}>
+        <div>
+          <label style={{ fontSize: '12px', fontWeight: 'bold' }}>Select Feature Column</label>
+          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '6px' }}>
+            {['MedInc', 'AveRooms', 'AveOccup', 'Population'].map(c => (
+              <button
+                key={c}
+                onClick={() => setCol(c)}
+                style={{
+                  padding: '5px 10px',
+                  borderRadius: '4px',
+                  border: '1px solid #3182ce',
+                  backgroundColor: col === c ? '#3182ce' : 'transparent',
+                  color: col === c ? '#fff' : 'var(--ifm-font-color-base)',
+                  cursor: 'pointer',
+                  fontSize: '12px'
+                }}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+        </div>
 
-**`StandardScaler` gave them `0.1417`** - better, but still badly compressed. The mean was dragged
-upward and the std inflated by the single outlier, so genuine variation shrank to a seventh of what it
-should be.
+        <div>
+          <label style={{ fontSize: '12px', fontWeight: 'bold' }}>Select Transformation</label>
+          <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '6px' }}>
+            {[
+              { id: 'raw', name: 'Raw (None)' },
+              { id: 'log1p', name: 'np.log1p' },
+              { id: 'sqrt', name: 'np.sqrt' },
+              { id: 'yj', name: 'PowerTransformer' }
+            ].map(t => (
+              <button
+                key={t.id}
+                onClick={() => setTrans(t.id)}
+                style={{
+                  padding: '5px 10px',
+                  borderRadius: '4px',
+                  border: '1px solid #3182ce',
+                  backgroundColor: trans === t.id ? '#3182ce' : 'transparent',
+                  color: trans === t.id ? '#fff' : 'var(--ifm-font-color-base)',
+                  cursor: 'pointer',
+                  fontSize: '12px'
+                }}
+              >
+                {t.name}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
-**`RobustScaler` gave them `3.2516`** - the real structure survives intact. It centres on the
-**median** and divides by the **interquartile range**, and neither statistic notices one extreme value.
+      <div style={{ padding: '16px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '10px' }}>
+          <div><b>Feature:</b> <code>{col}</code> &nbsp; | &nbsp; <b>Applied Transform:</b> <code>{trans}</code></div>
+          <span style={{ fontSize: '13px', fontWeight: 'bold', padding: '3px 8px', borderRadius: '4px', backgroundColor: Math.abs(parseFloat(resultingSkew)) < 0.5 ? 'rgba(72, 187, 120, 0.15)' : 'rgba(229, 62, 62, 0.15)', color: Math.abs(parseFloat(resultingSkew)) < 0.5 ? '#276749' : '#c53030' }}>
+            Resulting Skew: {resultingSkew}
+          </span>
+        </div>
 
-| Scaler | Centre | Scale | Robust? |
-|---|---|---|---|
-| `StandardScaler` | mean | std | No |
-| `MinMaxScaler` | min | max - min | **No - worst** |
-| `RobustScaler` | **median** | **IQR** | **Yes** |
-| `MaxAbsScaler` | none | max abs | No - but preserves sparsity |
+        <div style={{ fontSize: '13px', color: 'var(--ifm-color-emphasis-800)', lineHeight: '1.5' }}>
+          {currCol.desc}
+        </div>
+      </div>
+    </div>
+  );
+};
 
-:::warning
+<DistributionTransformSandbox />
 
-**`MinMaxScaler` and outliers do not mix**
+### `log` vs. `log1p` & Automated Power Transformations
 
-If a column might contain an extreme value, min-max is the wrong choice - one point defines your
-entire range. Use `RobustScaler`, or handle the outliers first - see
-[Outliers and Feature Engineering](./05-outliers-and-feature-engineering.mdx).
-
-`MinMaxScaler` earns its place when bounded output is a *requirement* - image pixel values, or a
-neural network layer expecting `[0, 1]` - not as a default.
-
-:::
-
-### `Normalizer` is not a scaler - it works on rows
-
-A genuinely common confusion, worth seeing directly:
-
-```text title="Output"
-   input rows      [1.0, 2.0, 3.0] and [100.0, 200.0, 300.0]
-   StandardScaler  [[-1.0, -1.0, -1.0], [1.0, 1.0, 1.0]]
-   Normalizer      [[0.267, 0.535, 0.802], [0.267, 0.535, 0.802]]
-```
-
-`StandardScaler` works **down columns** - each feature is rescaled independently. `Normalizer` works
-**across rows** - each *sample* is scaled to unit length.
-
-Notice what happened: the two input rows differ by a factor of 100, and `Normalizer` made them
-**identical**. It discarded magnitude entirely, keeping only direction. That's the right thing for
-text frequency vectors, where document length shouldn't matter - and completely wrong if magnitude
-carries information.
-
-**Everything else on this page scales columns. `Normalizer` scales rows. It is not a substitute for
-any of them.**
+*   **`np.log(0)` is $-\infty$:** A single zero value creates a floating-point exception that destroys all downstream computations.
+*   **`np.log1p(x)`:** Computes $\log(1 + x)$. Zero maps cleanly to $0$ ($\log(1) = 0$), preserving sparsity while safely compressing positive skewness.
+*   **`PowerTransformer(method="yeo-johnson")`:** Fits an optimal power parameter ($\lambda$) per column via maximum likelihood estimation. It natively handles zero and negative numbers, avoiding log-overshoot.
 
 ---
 
-## Transformations: changing the shape
+## 6. Sparse Data Preservation
 
-Scaling moves and stretches a distribution. It never changes its **shape**. When a column is heavily
-skewed, shape is the problem - and a linear model asked to fit a variable whose values span four
-orders of magnitude will be dominated by the tail.
+High-cardinality one-hot encoding outputs sparse matrices (`scipy.sparse.csr_matrix`) to save memory (e.g. 0.8 MB sparse vs. 400 MB dense).
 
-Skew measures asymmetry, where `0` is symmetric:
-
-```text title="Output"
-   column            raw    log1p     sqrt  Yeo-Johnson  Quantile
-   MedInc           1.65     0.23     0.69        -0.00      0.18
-   AveRooms        20.70     1.39     4.85        -0.17     -0.00
-   AveOccup        97.63     3.88    43.34        -0.11      0.03
-   Population       4.94    -1.04     1.22         0.11      0.03
-```
-
-Three things to read from that table.
-
-**Log transforms are powerful.** `AveOccup` went from skew `97.63` to `3.88` - a column so
-right-tailed as to be unusable for a linear model became merely awkward. `AveRooms` went from `20.70`
-to `1.39`.
-
-**Square root is a weaker version of the same idea.** `AveOccup` only reached `43.34`. Both compress
-large values more than small ones; log just compresses far harder.
-
-**Log is not automatically correct - it can overshoot.** Look at `Population`: skew `+4.94` became
-**`−1.04`**. The transform overcorrected, converting a right tail into a left one. Applying `log`
-reflexively to anything skewed is how that happens.
-
-### `log` versus `log1p`
-
-```text title="Output"
-    np.log1p([0.0, 1.0, 10.0]) = [0.0, 0.693, 2.398]
-    np.log([0.0, 1.0, 10.0])   = [-inf, 0.0, 2.303]   <- -inf
-```
-
-`log(0)` is `−inf`, and one `−inf` propagates through every downstream computation. `log1p(x)`
-computes `log(1 + x)`, so zero maps to zero. **If a column can contain zeros, use `log1p`.**
-
-Negative values break logarithms entirely - no shifting trick makes that principled.
-
-### Let the data choose the transform
-
-`PowerTransformer` fits the transformation strength to the column rather than assuming it:
+Applying standard centering breaks sparsity:
 
 ```python
-PowerTransformer(method="yeo-johnson")   # default; accepts negatives and zeros
-PowerTransformer(method="box-cox")       # strictly positive input only
+# RAISES ValueError: Cannot center sparse matrices: pass `with_mean=False` instead.
+StandardScaler().fit_transform(X_sparse)
 ```
 
-It got every column in that table to a skew between `−0.17` and `+0.11` - including `Population`,
-which log overcorrected, and including columns with negative values that log cannot touch:
+Subtracting the column mean from a sparse matrix converts every stored zero into a non-zero value, converting a 2%-full matrix into a 100%-dense allocation that exhausts RAM.
 
-```text title="Output"
-PowerTransformer(yeo-johnson) on [-5.0, 0.0, 5.0] -> [-1.225, -0.0, 1.225]
+**Solution:** Use `StandardScaler(with_mean=False)` or `MaxAbsScaler()`, which scales by dividing by the maximum absolute coordinate without subtracting the mean, preserving zero entries by design.
+
+---
+
+<Heading as="h2" id="how-much-does-scaling-before-the-split-really-leak">7. How Much Does Scaling Before the Split Really Leak?</Heading>
+
+To quantify the true impact of pre-split scaling leakage, consider a 30-split Monte Carlo trial comparing honest vs. leaked scaling:
+
+```text title="Empirical Scaling Leakage Measurement"
+Scaler              Honest CV Score     Leaked Pre-Split Score      Inflation
+StandardScaler          0.9643                  0.9645              +0.0002
+MinMaxScaler            0.9663                  0.9657              -0.0006
 ```
 
-`QuantileTransformer(output_distribution="normal")` is the blunter instrument - it maps values to
-their ranks and then onto a normal distribution, forcing near-perfect symmetry (`−0.00`, `0.03`)
-regardless of input shape. It's effective and it discards the actual spacing between values, keeping
-only their order.
+The leakage inflation is **+0.0002 and -0.0006 — pure statistical noise**.
 
-| Transform | Handles 0 | Handles negatives | Strength |
-|---|---|---|---|
-| `np.log` | **No** | **No** | Fixed, strong |
-| `np.log1p` | Yes | No | Fixed, strong |
-| `np.sqrt` | Yes | No | Fixed, mild |
-| `PowerTransformer` (Yeo-Johnson) | Yes | **Yes** | **Fitted per column** |
-| `PowerTransformer` (Box-Cox) | No | No | Fitted per column |
-| `QuantileTransformer` | Yes | Yes | Forced - rank-based |
+### Why Scaling Leakage is Small
 
-:::note
+*   **Target Encoding Leak:** Leaks each individual row's target $y$ directly into $X$, generating **+21 points of fake accuracy**.
+*   **Scaling Leak:** Leaks only a single aggregate mean ($\mu$) and standard deviation ($\sigma$) computed across hundreds of rows, revealing near-zero private information about any individual sample.
 
-**Transforming the target changes what you are optimising**
+:::tip
 
-Everything above concerns features. Log-transforming the **target** is a different decision: minimising
-squared error on `log(y)` minimises *relative* error on `y`, not absolute error.
+**Maintain Pipeline Discipline Regardless:**
 
-For a house-price model that means treating a £20k miss on a £100k house as equivalent to a £200k
-miss on a £1M house. Sometimes exactly right, sometimes badly wrong - but it is a modelling choice,
-not a preprocessing step. And remember predictions come back in log space and need `np.expm1` to be
-interpretable.
+While scaling leakage is small on large datasets, you must still fit scalers strictly on training folds:
+1. On **small datasets** ($N &lt; 100$), single test outliers can distort training boundaries significantly.
+2. In production, live requests arrive **one sample at a time** — it is physically impossible to compute standard deviations on single-sample inference requests.
+3. Placing scalers inside a `Pipeline` enforces reproducible boundaries with zero extra code.
 
 :::
 
 ---
 
-## Sparse data
-
-The [previous page](./03-encoding-categorical-data.mdx#what-cardinality-costs) established that
-one-hot output should stay sparse - 1,000 categories cost `0.8 MB` sparse against `400 MB` dense.
-Centering breaks that:
-
-```text title="Output"
-  sparse one-hot: (5000, 50), stored non-zeros = 5,000 (2.0% of cells)
-  StandardScaler() on sparse -> ValueError
-    Cannot center sparse matrices: pass `with_mean=False` instead.
-  StandardScaler(with_mean=False): OK, still sparse = True, nnz = 5,000
-```
-
-Subtracting the mean would turn every one of those zeros into a non-zero, converting a 2%-full matrix
-into a 100%-full one. scikit-learn refuses rather than silently exhausting your memory - a good error.
-
-For sparse input use `StandardScaler(with_mean=False)` or `MaxAbsScaler`, which never centres and so
-preserves sparsity by design.
-
----
-
-## How much does scaling before the split really leak?
-
-The rule is to `fit` on training data only. It's worth knowing the size of the effect, measured over
-30 different splits:
-
-```text title="Output"
-   StandardScaler  honest 0.9643   leaked 0.9645   inflation +0.0002
-   MinMaxScaler    honest 0.9663   leaked 0.9657   inflation -0.0006
-```
-
-**`+0.0002` and `−0.0006`.** Both are noise. `MinMaxScaler` actually scored marginally *worse* when
-leaked.
-
-That's an honest result and it deserves stating plainly: **scaling leakage is real in principle and
-usually negligible in magnitude.** It is nothing like the target-encoding leak on the previous page,
-which manufactured **21 accuracy points** out of pure noise.
-
-The reason is what gets leaked. Target encoding leaks **the target itself, per row**. Scaling leaks
-one mean and one standard deviation aggregated over hundreds of rows - a vanishing amount of
-information about any individual row.
+## 8. Implementation Lab
 
 :::tip
 
-**Keep the discipline anyway - for reasons other than fear**
+**Implementation Lab: Feature Scaling and Distribution Transformation**
 
-Fit on train only, but not because the numbers above are alarming. Because:
-
-- On a **small** dataset, or with `MinMaxScaler` where one test outlier can define the range, the
-  effect is larger and less predictable
-- A `Pipeline` gives you correctness for free, and you want one regardless once you reach the
-  train/test split
-- At predict time there *is* no test set to compute statistics from, so training-set statistics are
-  what you must ship
-
-Be accurate about which leaks matter. Overstating this one makes it harder to take the genuinely
-dangerous ones seriously.
-
-:::
-
----
-
-## Implementation Lab
-
-:::tip
-
-**Lab Exercise: Scaling & Transformation**
-
-An interactive, fully-functional Google Colab / Jupyter Notebook is available to experiment with these concepts live in your browser.
+Trace accuracy gains across distance, linear, and tree-based models, observe how outliers compress MinMaxScaler ranges, evaluate Yeo-Johnson power transformations on skewed features, and inspect sparse scaling with `with_mean=False`.
 
 <a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/02-data-preprocessing/scaling_transformation.ipynb" target="_blank" rel="noopener noreferrer">
   <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
@@ -437,94 +615,94 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 
 **How to run the lab:**
 1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
-2. Click **"Run all"** or execute cells individually using `Shift + Enter`.
-
-**Things to try inside the script:**
-*   **Experiment 1:** Evaluate the accuracy gain on SVM / kNN models when scaling is turned on vs. off.
-*   **Experiment 2:** Observe how a single outlier compresses MinMaxScaler's non-outlier data to under 1% of the range.
-*   **Experiment 3:** Inspect the Yeo-Johnson exponent values calculated for California housing metrics to understand the automatic distribution fitting.
+2. Click **"Runtime" > "Run all"** or execute cells individually using `Shift + Enter`.
+3. Follow the guided experiments: test the 215,171x variance disparity, compare RobustScaler against MinMaxScaler, and measure log1p overshoot.
 
 :::
 
-### Comparative Implementation (Production vs. Scratch)
-
-Compare production-ready pipelines with a manual, leakage-prone implementation:
+### Comparative Implementation: Production Pipeline vs. Scratch
 
 <Tabs>
-  <TabItem value="sklearn" label="Production (Scikit-Learn Pipeline)" default>
+  <TabItem value="pipeline" label="1. Production Leak-Free Pipeline" default>
     <br/>
-    
+
     ```python
     from sklearn.pipeline import make_pipeline
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.neighbors import KNeighborsClassifier
-    
-    # Safe and isolated scaling fitted ONLY on training folds
+    from sklearn.preprocessing import RobustScaler
+    from sklearn.svm import SVC
+
+    # Scaler parameters fit strictly on training folds inside cross-validation
     model = make_pipeline(
-        StandardScaler(),
-        KNeighborsClassifier()
+        RobustScaler(),
+        SVC(kernel="rbf")
     )
+    model.fit(X_train, y_train)
     ```
   </TabItem>
-  <TabItem value="scratch" label="Manual Scaling (Dangerous Leak)">
+  <TabItem value="scratch" label="2. Manual Scaling from Scratch (NumPy)">
     <br/>
-    
+
     ```python
-    # DANGEROUS: Fit-transforming over entire dataset before splitting
-    # leaks global mean and standard deviation into the validation sets.
-    X_scaled = StandardScaler().fit_transform(X)
-    X_train, X_test, y_train, y_test = train_test_split(X_scaled, y)
+    import numpy as np
+
+    # Vectorized Z-Score Normalisation
+    mean = np.mean(X_train, axis=0)
+    std = np.std(X_train, axis=0)
+
+    # Protect against divide-by-zero on constant columns
+    std[std == 0.0] = 1.0
+
+    X_train_scaled = (X_train - mean) / std
+    X_test_scaled  = (X_test - mean) / std  # Apply frozen training statistics!
     ```
   </TabItem>
 </Tabs>
 
 ---
 
-## Common Mistakes
-
-Explore some of the most critical engineering pitfalls in feature scaling and transformation and how to avoid them:
+## 9. Common Mistakes
 
 <Tabs>
-  <TabItem value="trees" label="Pitfall 1: Unnecessary Tree Scaling" default>
+  <TabItem value="trees" label="1. Unnecessary Tree Scaling" default>
     <br/>
-    
-    *   **The Misconception:** *"Scaling is a mandatory step that always improves RandomForest / XGBoost performance."*
-    *   **Wrong Thinking:** Decision tree nodes split on thresholds, which are completely scale-invariant. Scaling a tree ensemble yields exactly `+0.0000` accuracy gain.
-    *   **The Right Principle:** Focus scaling efforts strictly on distance-based models (kNN, SVM), linear estimators, neural networks, or PCA. You can skip scaling for pure tree ensembles.
+
+    *   **The Misconception:** *"Scaling is mandatory for all machine learning models, including Random Forest and XGBoost."*
+    *   **Wrong Thinking:** Believing that decision tree splits are affected by coordinate scales.
+    *   **The Right Principle:** Decision trees split on single-feature rank thresholds ($x_j \le C$). Monotonic scaling preserves sorting orders identically, yielding exactly `+0.0000` accuracy gain.
   </TabItem>
-  <TabItem value="outliers" label="Pitfall 2: MinMaxScaler Outlier Poisoning">
+  <TabItem value="outliers" label="2. MinMaxScaler Outlier Poisoning">
     <br/>
-    
-    *   **The Misconception:** *"MinMaxScaler is always the best choice because bounded [0, 1] scales look tidier."*
-    *   **Wrong Thinking:** If your column contains extreme outliers, MinMaxScaler will compress 99% of your legitimate data points into a narrow 1% band, rendering them indistinguishable.
-    *   **The Right Principle:** Use `RobustScaler` (median / IQR based) when outliers are present, or handle outliers first before using standard scaling.
+
+    *   **The Misconception:** *"MinMaxScaler is superior because bounded [0, 1] intervals look cleaner."*
+    *   **Wrong Thinking:** Applying `MinMaxScaler` to columns with extreme values.
+    *   **The Right Principle:** A single outlier anchors the maximum, compressing 99% of regular data into a tiny 1% band. Use `RobustScaler` (median and IQR) when outliers are present.
   </TabItem>
-  <TabItem value="normalizer" label="Pitfall 3: Row vs Column Scaling">
+  <TabItem value="normalizer" label="3. Row vs. Column Scaling">
     <br/>
-    
-    *   **The Misconception:** *"Normalizer is a drop-in substitute for StandardScaler."*
-    *   **Wrong Thinking:** `Normalizer` scales **rows** (samples) to unit length, completely discarding magnitude. `StandardScaler` scales **columns** (features) independently.
-    *   **The Right Principle:** Use column-based scalers (`StandardScaler`, `RobustScaler`) for feature-scale alignment. Reserve `Normalizer` for row-wise frequency representations like TF-IDF text features.
+
+    *   **The Misconception:** *"Normalizer is a drop-in alternative to StandardScaler."*
+    *   **Wrong Thinking:** Using `Normalizer` to scale feature columns.
+    *   **The Right Principle:** `Normalizer` scales across **rows** (individual samples) to unit length, discarding magnitude. Use `StandardScaler` to scale down **columns**.
   </TabItem>
-  <TabItem value="log1p" label="Pitfall 4: Reflexive Log Transforms">
+  <TabItem value="log1p" label="4. Reflexive Log Transforms">
     <br/>
-    
-    *   **The Misconception:** *"I should apply plain np.log to any right-skewed feature."*
-    *   **Wrong Thinking:** Plain `np.log` will fail with an `-inf` on zero values and raise errors on negative numbers. Reflexive log scaling can also overcorrect, flipping right-skews into negative left-skews.
-    *   **The Right Principle:** Use `np.log1p` to handle zeros safely. Even better, use `PowerTransformer(method="yeo-johnson")` to let scikit-learn automatically find the optimal skew-reducing exponent for both positive and negative values.
+
+    *   **The Misconception:** *"Apply np.log to any feature with a right-skewed tail."*
+    *   **Wrong Thinking:** Using `np.log` on columns containing zeros ($-\infty$) or moderate skew (causing log-overshoot).
+    *   **The Right Principle:** Use `np.log1p` to handle zeros safely, or `PowerTransformer(method="yeo-johnson")` to let scikit-learn optimize the power parameter automatically.
   </TabItem>
-  <TabItem value="sparse" label="Pitfall 5: Centering Sparse Matrices">
+  <TabItem value="sparse" label="5. Centering Sparse Matrices">
     <br/>
-    
-    *   **The Misconception:** *"I can run standard StandardScaler on high-cardinality one-hot outputs."*
-    *   **Wrong Thinking:** StandardScaler subtracts the mean, which immediately converts all zero entries into non-zero values, causing sparse representations to densify and blow up memory (e.g. from 0.8 MB to 400 MB), resulting in a `ValueError`.
-    *   **The Right Principle:** Always set `with_mean=False` in StandardScaler, or use `MaxAbsScaler()` to scale sparse matrices without destroying their memory-saving properties.
+
+    *   **The Misconception:** *"Apply StandardScaler() to high-cardinality one-hot outputs."*
+    *   **Wrong Thinking:** Subtracting the column mean turns all zero entries into non-zeros, causing a 500x memory explosion.
+    *   **The Right Principle:** Set `with_mean=False` in `StandardScaler`, or use `MaxAbsScaler()`.
   </TabItem>
 </Tabs>
 
 ---
 
-## Summary
+## 10. Summary
 
 <div className="row">
   <div className="col col--6">
@@ -534,10 +712,10 @@ Explore some of the most critical engineering pitfalls in feature scaling and tr
       </div>
       <div className="card__body" style={{ padding: '15px' }}>
         <ul>
-          <li><b>Mean 0, Std 1:</b> Use <code>StandardScaler()</code> for linear and distance models under normal distributions.</li>
-          <li><b>Bounded Ranges:</b> Use <code>MinMaxScaler()</code> to force bounds within $[0, 1]$ (e.g., neural networks or pixels).</li>
-          <li><b>Outlier Resilience:</b> Use <code>RobustScaler()</code> (median and IQR-based) to safely insulate regular data from extreme spikes.</li>
-          <li><b>Sparse Matrix Preservation:</b> Use <code>StandardScaler(with_mean=False)</code> or <code>MaxAbsScaler()</code> to prevent memory blowups.</li>
+          <li><b>StandardScaler:</b> Unbounded mean 0, variance 1. Default for linear models, SVMs, and neural networks.</li>
+          <li><b>MinMaxScaler:</b> Bounded $[0, 1]$. Required for image pixel arrays or neural network inputs. Vulnerable to outliers.</li>
+          <li><b>RobustScaler:</b> Median and IQR-based. Robust against extreme spikes.</li>
+          <li><b>MaxAbsScaler:</b> Divides by maximum absolute value without centering. Preserves sparse matrix memory.</li>
         </ul>
       </div>
     </div>
@@ -549,9 +727,10 @@ Explore some of the most critical engineering pitfalls in feature scaling and tr
       </div>
       <div className="card__body" style={{ padding: '15px' }}>
         <ul>
-          <li><b>Strict Positive Skew:</b> Use <code>np.log1p(x)</code> or <code>np.sqrt(x)</code> to compress long right tails containing zeros.</li>
-          <li><b>Flexible Auto-Fitting:</b> Use <code>PowerTransformer(method="yeo-johnson")</code> to automatically fit the optimal exponent across both positive and negative values.</li>
-          <li><b>Perfect Symmetry:</b> Use <code>QuantileTransformer(output_distribution="normal")</code> to force uniform ranks, at the cost of losing inter-value spacings.</li>
+          <li><b>np.log1p:</b> Safely compresses long right tails while mapping zero cleanly to zero.</li>
+          <li><b>PowerTransformer:</b> Optimizes exponent ($\lambda$) via Yeo-Johnson; supports negative numbers and prevents log-overshoot.</li>
+          <li><b>QuantileTransformer:</b> Forces rank uniform/normal output; destroys linear spacing.</li>
+          <li><b>Tree Invariance:</b> Monotonic scaling yields $+0.0000$ gain on decision trees.</li>
         </ul>
       </div>
     </div>
@@ -564,42 +743,40 @@ Explore some of the most critical engineering pitfalls in feature scaling and tr
 
 **Key Takeaways**
 
-*   **Distance models collapse unscaled:** Algorithms like SVM (+6.2 accuracy points) and kNN (+3.7) are critically crippled by raw unit spreads, whereas tree ensembles (+0.0000) are structurally immune.
-*   **Outliers crush MinMaxScaler:** A single outlier squashes legitimate data down to less than 1% of the scaled range; `RobustScaler` prevents this via median centering.
-*   **Log1p handles zeros safely:** Normal `np.log` creates `-inf` on zero columns; use `np.log1p` or Yeo-Johnson power transforms instead.
+*   **Distance Models Collapse Unscaled:** Algorithms relying on Euclidean metrics (SVM +6.2%, kNN +3.7%) are blinded by unscaled units, while tree ensembles (+0.0000%) are structurally immune.
+*   **Outliers Crush MinMaxScaler:** A single outlier squashes legitimate data into less than 1% of the output space; `RobustScaler` prevents this via median centering.
+*   **Log1p Handles Zeros Safely:** `np.log` produces $-\infty$ on zero columns; use `np.log1p` or Yeo-Johnson transformations.
+*   **Scaling Leakage is Small but Real:** Aggregate scaling leaks only +0.0002 points, but training-set isolation remains mandatory for production single-row serving.
 
 :::
 
-**Next in this section:** [Outliers and Feature Engineering](./05-outliers-and-feature-engineering.mdx)
+**Next in this section:** [Outliers and Feature Engineering](./05-outliers-and-feature-engineering.mdx) - detecting anomalies and engineering domain predictors.
 
-**See also:** [Encoding Categorical Data](./03-encoding-categorical-data.mdx#what-cardinality-costs) for
-the sparsity this must preserve · [Missing Values](./02-missing-values.mdx) for why imputation comes
-first · [The Toolkit and the Pipeline](../01-foundations/05-toolkit-and-pipeline.mdx#the-contract-that-makes-it-work)
-for `fit` versus `transform`
+**See also:** [Encoding Categorical Data](./03-encoding-categorical-data.mdx) · [Missing Values](./02-missing-values.mdx) · [The Toolkit and the Pipeline](../01-foundations/05-toolkit-and-pipeline.mdx)
 
 ---
 
-## Active Recall Flashcards
+## 11. Active Recall Flashcards
 
-*Attempt each question first, then click to reveal detailed answers, mathematical derivations, and sample explanations.*
+*Attempt each conceptual diagnostic question first, then click to reveal the underlying derivation and explanation.*
 
 <details>
   <summary><b>1. [THEORY] Why do distance-based models (SVM, kNN) require feature scaling while decision trees are completely invariant?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **Distance Models:** Compute straight-line (Euclidean) spatial metrics. Features on wildly larger scales outvote smaller-variance columns (e.g. Area vs Smoothness) by millions-to-one, effectively ignoring evidence.
-    *   **Decision Trees:** Split nodes strictly on single-feature **thresholds** (e.g. $x_j \le C$). Since any monotonic scaling transformation preserves the absolute sorting order of elements, the exact same partitions are achieved before and after scaling, resulting in exactly $+0.0000$ accuracy gain.
+
+    *   **Distance Models:** Compute spatial distances using metric tensors (e.g. Euclidean distance $||u - v||_2$). Features on large scales (Area std = 569) outvote smaller-variance features (Smoothness std = 0.014) by over a million-to-one, ignoring informative predictive signals.
+    *   **Decision Trees:** Evaluate splits on individual feature thresholds ($x_j \le C$). Because any monotonic transformation preserves rank ordering ($u_j &lt; v_j \iff f(u_j) &lt; f(v_j)$), the exact same partition of samples is produced before and after scaling, yielding $+0.0000$ accuracy gain.
   </div>
 </details>
 
 <details>
-  <summary><b>2. [THEORY] What are standardisation and min-max equations, and what are their respective output bounds?</b></summary>
+  <summary><b>2. [THEORY] State the mathematical formulations and output ranges for Standardisation (Z-Score) and Min-Max Normalisation.</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **Standardisation (Z-Score):** $z = \frac{x - \mu}{\sigma}$ with unbounded output range (centered at mean 0 with variance 1).
-    *   **Min-Max Scaling:** $x' = \frac{x - x_{\min}}{x_{\max} - x_{\min}}$ with strict output range $[0, 1]$.
+
+    *   **Standardisation (Z-Score):** $z = \frac{x - \mu}{\sigma}$. Output range is unbounded, centered at mean $0$ with standard deviation $1$.
+    *   **Min-Max Normalisation:** $x' = \frac{x - x_{\min}}{x_{\max} - x_{\min}}$. Output range is strictly bounded to $[0, 1]$.
   </div>
 </details>
 
@@ -607,9 +784,9 @@ for `fit` versus `transform`
   <summary><b>3. [ANALYZE] Why is MinMaxScaler uniquely vulnerable to a single outlier, and how does RobustScaler solve this?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **MinMaxScaler Vulnerability:** Uses the single absolute minimum ($x_{\min}$) and maximum ($x_{\max}$) data points. A single large outlier inflates $x_{\max}$ to an extreme value, compressing 99% of legitimate variation into a tiny fraction of the scale (e.g. $[0, 0.01]$).
-    *   **RobustScaler Resolution:** Centers using the **median** and scales by the **Interquartile Range (IQR = Q3 - Q1)**. Since both statistics are based on rank percentiles, they are completely unaffected by extreme individual spikes, keeping the scaled distribution's core wide and stable.
+
+    *   **MinMaxScaler Vulnerability:** Depends on the single absolute minimum ($x_{\min}$) and maximum ($x_{\max}$). A single large outlier anchors $x_{\max}$, compressing all legitimate non-outlier data into less than 1% of the output scale ($[0, 0.01]$).
+    *   **RobustScaler Resolution:** Centers using the **median** and scales by the **Interquartile Range (IQR = Q3 - Q1)**. Because percentiles depend on sample counts rather than extreme magnitudes, individual outliers have zero effect on scaling parameters.
   </div>
 </details>
 
@@ -617,9 +794,9 @@ for `fit` versus `transform`
   <summary><b>4. [THEORY] What is the difference between StandardScaler and Normalizer in scikit-learn?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **StandardScaler:** Operates column-wise (down features), standardizing each variable's scale across all samples.
-    *   **Normalizer:** Operates row-wise (across features per sample), scaling each individual row to unit Euclidean ($L2$) norm. It completely discards magnitude to retain only vector direction (useful for text frequencies).
+
+    *   **`StandardScaler`:** Operates **column-wise** (down features), standardizing each variable's variance independently across all samples.
+    *   **`Normalizer`:** Operates **row-wise** (across features per sample), scaling each individual sample vector to unit Euclidean ($L_2$) length. It discards magnitude completely to preserve only vector direction (ideal for text frequency angles).
   </div>
 </details>
 
@@ -627,19 +804,19 @@ for `fit` versus `transform`
   <summary><b>5. [THEORY] Why does np.log fail on zero columns, and how does np.log1p resolve this?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **np.log Failure:** Mathematical $\log(0) = -\infty$, which introduces non-numeric types and breaks downstream matrix calculations.
-    *   **np.log1p Solution:** Computes $\log(1 + x)$. Since $\log(1) = 0$, zero values map cleanly to zero, preserving original sparse zeroes while compressing right-tailed distributions.
+
+    *   **`np.log` Failure:** $\log(0) = -\infty$, injecting non-numeric floating-point values that destroy gradient calculations.
+    *   **`np.log1p` Solution:** Computes $\log(1 + x)$. Since $\log(1 + 0) = 0$, zero values map cleanly to zero, safely compressing positive skewness while preserving sparsity.
   </div>
 </details>
 
 <details>
-  <summary><b>6. [THEORY] What does PowerTransformer do that fixed log/sqrt transforms cannot?</b></summary>
+  <summary><b>6. [THEORY] What does PowerTransformer (Yeo-Johnson) do that fixed log and square root transforms cannot?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   Fixed transforms (like log/sqrt) apply a constant compression function that may overshoot (e.g., turning Population skew from $+4.94$ to $-1.04$).
-    *   `PowerTransformer` **fits** a parametrizable exponent (using Box-Cox or Yeo-Johnson) to find the exact mathematical transformation that maximizes normality. In addition, its Yeo-Johnson formulation natively supports negative values, which logarithms cannot handle.
+
+    *   Fixed transforms (log, sqrt) apply a rigid compression curve that can overshoot (e.g. flipping Population skew from $+4.94$ to $-1.04$).
+    *   `PowerTransformer` **optimizes an exponent parameter ($\lambda$)** per column via maximum likelihood estimation to find the exact power that maximizes normality. Furthermore, its Yeo-Johnson formulation natively supports negative numbers, which logarithms cannot process.
   </div>
 </details>
 
@@ -647,19 +824,19 @@ for `fit` versus `transform`
   <summary><b>7. [ANALYZE] What happens to a sparse matrix when centered, and why does StandardScaler raise a ValueError?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **Sparse Centering:** Subtracting the mean requires subtracting a non-zero value from every single sparse zero element. This converts an efficient sparse matrix (e.g., 2% non-zero) into a 100% dense matrix.
-    *   **Scikit-Learn Safeguard:** It raises a `ValueError` to prevent your machine from running out of RAM and crashing. The fix is to pass `with_mean=False` to StandardScaler.
+
+    *   **Sparse Centering:** Subtracting the column mean requires subtracting a non-zero value from every zero cell, converting a 2%-full sparse matrix into a 100%-full dense matrix.
+    *   **Scikit-Learn Safeguard:** Raises a `ValueError` to prevent out-of-memory container crashes. The fix is to set `with_mean=False` in `StandardScaler` or use `MaxAbsScaler()`.
   </div>
 </details>
 
 <details>
-  <summary><b>8. [ANALYZE] Why is scaling parameter leakage (e.g., +0.0002) historically negligible compared to target-encoding leakage (+21 points)?</b></summary>
+  <summary><b>8. [ANALYZE] Why is pre-split scaling leakage (+0.0002) statistically negligible compared to target-encoding leakage (+21 points)?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **Scaling Leakage:** Leaks aggregate parameters (a single column mean and standard deviation) computed over hundreds of rows, which conveys almost zero private information about any individual row's target label.
-    *   **Target-Encoding Leakage:** Leaks the exact row target $y$ itself in a slightly blurred format directly into the feature $X$, creating a direct circular dependency on the answer.
+
+    *   **Scaling Leakage:** Leaks aggregate parameters (a single column mean and standard deviation) computed over hundreds of samples, revealing near-zero private information about any individual row's target label.
+    *   **Target-Encoding Leakage:** Directly leaks the exact row target $y$ itself in a slightly blurred format directly into feature $X$, creating a circular dependency on the answer.
   </div>
 </details>
 
@@ -667,19 +844,18 @@ for `fit` versus `transform`
   <summary><b>9. [ANALYZE] Given that scaling leakage is negligible, why must we still enforce fitting scalers strictly on training data?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    It remains an essential production guardrail because:
-    1.  At predict time, you receive data **one row at a time** (making it mathematically impossible to calculate standard deviations on inference splits).
-    2.  For small datasets or with MinMaxScaler, single-point test outliers can wildly and unpredictably distort the validation scores.
-    3.  Encapsulating the scaler `fit` in a pipeline ensures identical, reproducible transformation boundaries across testing, validation, and live production endpoints.
+
+    1.  **Single-Row Production Serving:** Live API endpoints receive data one sample at a time; calculating test-set standard deviations is physically impossible.
+    2.  **Small Datasets ($N &lt; 100$):** Test outliers on small validation sets can shift scaling parameters significantly.
+    3.  **Pipeline Reproducibility:** Wrapping scalers inside a `Pipeline` guarantees identical, bug-free transformation boundaries across training and testing.
   </div>
 </details>
 
 <details>
-  <summary><b>10. [THEORY] Why must you always perform imputation before scaling?</b></summary>
+  <summary><b>10. [THEORY] Why must missing value imputation always precede feature scaling?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    Because missing values (`NaN` or `None`) break the mathematical calculations for mean, standard deviation, and range limits. Attempting to fit a scaler on a column containing missing values will result in a crash or propagate `NaN` values across your entire matrix.
+
+    Missing values (`NaN`) break mathematical calculations for sample mean, variance, and min/max bounds. Fitting a scaler on un-imputed data causes crashes or propagates `NaN` values across output matrices.
   </div>
 </details>

@@ -1,58 +1,78 @@
 ---
 sidebar_position: 1
 title: Loading and Preparing Data
-description: Why read_csv is not a neutral loader, the missingness it silently fails to catch, a pre-flight audit that catches it, and whether to convert to NumPy at all.
+description: Defensive data loading in pandas — handling type inference traps, hidden missingness sentinels, automated pre-flight audits, and memory-efficient array conversions.
 tags: [machine-learning, data-preprocessing, pandas, numpy]
 toc_max_heading_level: 3
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Heading from '@theme/Heading';
 import React from 'react';
 
 # Loading and Preparing Data
 
-> **Topic —** Loading a CSV looks like the one step that can't go wrong. It is in fact where the most
-> damaging errors enter, because they enter **silently** — no exception, no warning, just columns
-> that are quietly the wrong type and missing values that were never counted as missing.
+> **Topic -** Machine learning algorithms assume input matrices are clean, homogeneous, and numeric. Real-world data arrives as messy text files filled with hidden sentinels, currency formatting, duplicate records, and corrupted types. This chapter establishes the defensive data loading practices, automated audits, and slicing rules required before any model fitting can begin.
 
-This page is a defensive routine: what `pd.read_csv` decides on your behalf, how to find out what it
-decided, and how to get `X` and `y` out the other side in a state you can trust.
+A single corrupted character turns an entire numeric column into generic text objects. Catching these defects at the ingestion boundary saves hours of downstream debugging.
 
 ---
 
-## The imports
+## 1. The Canonical Imports & Storage Formats
+
+Every data preprocessing workflow in Python begins with three fundamental imports:
 
 ```python
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
+import matplotlib.pyplot as plt
 ```
 
-| Alias | Library | Role here |
+| Alias | Library | Operational Responsibility |
 |---|---|---|
-| `np` | NumPy | Arrays — what the data becomes underneath |
-| `plt` | Matplotlib's **Pyplot** module | Plotting |
-| `pd` | Pandas | Loading and holding the data as a table |
+| `np` | **NumPy** | N-dimensional arrays — the raw contiguous numeric memory underneath everything |
+| `pd` | **Pandas** | DataFrames — two-dimensional labeled tables for data ingestion, cleaning, and slicing |
+| `plt` | **Matplotlib (Pyplot)** | Diagnostic data plotting — visualizing distributions, missingness, and outliers |
 
-As close to universal as Python conventions get. Deviating makes your code harder for anyone else —
-including future you — to skim.
+### Row-Based (CSV/JSON) vs. Columnar (Parquet) Architecture
+
+Before calling `pd.read_csv`, understand how data serialization layouts affect computational efficiency:
+
+```mermaid
+flowchart TD
+    classDef box fill:#f8fafc,stroke:#3b82f6,stroke-width:2px;
+    classDef col fill:#f8fafc,stroke:#10b981,stroke-width:2px;
+
+    subgraph RowBased ["Row-Oriented Layout (CSV / JSON)"]
+        R1["Row 1: [ID_1, Country_1, Age_1, Salary_1]"]
+        R2["Row 2: [ID_2, Country_2, Age_2, Salary_2]"]
+        R3["Row 3: [ID_3, Country_3, Age_3, Salary_3]"]
+        R1 --> R2 --> R3
+    end
+
+    subgraph Columnar ["Column-Oriented Layout (Apache Parquet)"]
+        C1["Chunk 'ID': [1, 2, 3]"]
+        C2["Chunk 'Country': ['FR', 'ES', 'DE']"]
+        C3["Chunk 'Age': [44, 27, 30]"]
+        C4["Chunk 'Salary': [72000, 48000, 54000]"]
+        C1 --> C2 --> C3 --> C4
+    end
+
+    class R1,R2,R3 box;
+    class C1,C2,C3,C4 col;
+```
+
+*   **Row-Oriented Formats (CSV / JSON):** Store records sequentially on disk row by row (`Row 1, Row 2...`). Ideal for transactional writes, but disastrous for wide analytics: retrieving a single column requires scanning the entire file from disk into RAM.
+*   **Column-Oriented Formats (Apache Parquet):** Store data by column chunks on disk (`All IDs, All Ages...`). Analytical queries read strictly the feature columns requested, skipping unneeded bytes completely. Parquet also enforces strongly typed schemas, Snappy compression, and column-level statistics.
 
 ---
 
-## `read_csv` is not a neutral loader
+<Heading as="h2" id="the-missingness-pandas-cannot-see">2. Silent Type Coercion & Missingness Pandas Cannot See</Heading>
 
-### Columnar (Parquet) vs. Row-Based (CSV/JSON) Loader Design
-In modern big data engineering, choosing the appropriate file serialization layout is critical.
-*   **Row-Based formats (CSV/JSON):** Store entries sequentially on disk row by row (`A1, B1, C1, A2, B2, C2...`). This is optimal for write-intensive operations or simple text editing. However, querying a single feature requires loading the *entire* table into memory.
-*   **Columnar formats (Parquet):** Partition and store entries column by column (`A1, A2... B1, B2...`). This allows analytical engines to scan and load only the requested features, maximizing disk-to-memory throughput. Parquet features Snappy compression, built-in strongly-typed metadata schemas, and statistics per column, enabling ultra-fast audits before any data-parsing loop begins.
+A CSV file is raw text. Every token is a string until `pd.read_csv` makes a series of unannounced, column-by-column type inferences.
 
-
-
-A CSV file is text. Every value in it is a string until something decides otherwise, and that
-something is `pd.read_csv`, making a series of **inferences per column** that it does not report.
-
-Here is a deliberately realistic file — the kind you actually receive:
+Consider this representative dirty dataset:
 
 ```text title="messy.csv"
 id,Country,Age,Salary,Region,Purchased
@@ -70,12 +90,12 @@ id,Country,Age,Salary,Region,Purchased
 10,France,37,67000,EU,Yes
 ```
 
-Load it the obvious way and inspect what you got:
+A naive load yields immediate silent failures:
 
 ```python
 naive = pd.read_csv("messy.csv")
 print(naive.dtypes)
-print(naive.isna().sum().sum())
+print("Missing values detected:", naive.isna().sum().sum())
 ```
 
 ```text title="Output"
@@ -87,172 +107,173 @@ Region       object
 Purchased    object
 dtype: object
 
-2
+Missing values detected: 2
 ```
 
-Two things just happened, both bad, neither announced.
+### Two Silent Catastrophes
 
-**`Age` and `Salary` are `object`, not numbers.** They contain digits in every row you care about,
-but one `?` in `Age` and one `"61,000"` in `Salary` were enough for pandas to give up on a numeric
-type and store the whole column as Python strings. Any arithmetic downstream either raises something
-confusing or — worse — succeeds and concatenates strings.
-
-**It reported 2 missing values.** There are more than that, as the next section shows.
+1.  **`Age` and `Salary` Collapsed to `object`:** Because row 11 has a `"?"` in `Age` and row 4 has `"61,000"` with a comma in `Salary`, Pandas abandons numeric parsing entirely and converts every single number in those columns into Python string objects. Mathematical operations will crash or silently concatenate strings.
+2.  **Only 2 Missing Values Were Found:** The file actually contains **5** missing values. The `"?"` in Age, the `-1` in Age, and the `999999` in Salary were treated as legitimate values.
 
 :::danger
 
-**Print `.dtypes` immediately after every load**
-
-This is a one-line habit that catches a whole class of silent failure:
+**The Golden Habit: Print `.dtypes` Immediately After Every Load**
 
 ```python
 df = pd.read_csv("data.csv")
-print(df.dtypes)          # ← do this every single time
+print(df.dtypes)  # Execute immediately on every dataset
 ```
 
-A column you believe is numeric showing as `object` means something non-numeric is hiding in it. You
-want to discover that now, not three steps later when a model reports a nonsensical score.
+If a column that should be numeric appears as `object`, non-numeric characters are lurking in it. Catch this on line 2, not hours later when a scikit-learn model crashes with a cryptic formatting exception.
 
 :::
 
 ---
 
-## The missingness pandas cannot see
+export const CSVLoaderSandbox = () => {
+  const [handleThousands, setHandleThousands] = React.useState(true);
+  const [handleSentinels, setHandleSentinels] = React.useState(true);
+  const [handleIdString, setHandleIdString] = React.useState(false);
 
-Pandas recognises a fixed list of strings as missing. It is worth knowing exactly what's on it:
+  // Compute states
+  const ageType = handleSentinels ? 'float64' : 'object';
+  const salaryType = handleThousands && handleSentinels ? 'float64' : 'object';
+  const idType = handleIdString ? 'object (string)' : 'int64';
+  
+  let missingCount = 2; // default NaN and N/A
+  if (handleSentinels) missingCount += 3; // + '?', -1, 999999
+
+  return (
+    <div style={{ padding: '24px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '25px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive Defensive CSV Loader Simulator</h4>
+      <p style={{ margin: '0 0 16px 0', fontSize: '14px' }}>
+        Toggle the defensive ingestion parameters below to observe how Pandas resolves type coercion, captures sentinel values, and parses schemas cleanly:
+      </p>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '18px' }}>
+        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', cursor: 'pointer' }}>
+          <input
+            type="checkbox"
+            checked={handleThousands}
+            onChange={(e) => setHandleThousands(e.target.checked)}
+          />
+          <span><b>Strip Digit Separators:</b> <code>thousands=","</code> (parses <code>"61,000"</code> as numeric)</span>
+        </label>
+
+        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', cursor: 'pointer' }}>
+          <input
+            type="checkbox"
+            checked={handleSentinels}
+            onChange={(e) => setHandleSentinels(e.target.checked)}
+          />
+          <span><b>Declare Domain Sentinels:</b> <code>na_values=["?", "-1", "999999"]</code></span>
+        </label>
+
+        <label style={{ display: 'flex', alignItems: 'center', gap: '8px', fontSize: '13px', cursor: 'pointer' }}>
+          <input
+            type="checkbox"
+            checked={handleIdString}
+            onChange={(e) => setHandleIdString(e.target.checked)}
+          />
+          <span><b>Preserve Identifier Types:</b> <code>dtype=&#123;"id": str&#125;</code> (preserves leading zeros)</span>
+        </label>
+      </div>
+
+      <div style={{ padding: '16px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+        <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#2b6cb0', marginBottom: '12px' }}>
+          Parsed Schema & Telemetry Readout
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '10px', marginBottom: '16px' }}>
+          <div style={{ padding: '10px', borderRadius: '4px', backgroundColor: 'rgba(148, 163, 184, 0.08)', textAlign: 'center' }}>
+            <div style={{ fontSize: '11px', fontWeight: 'bold' }}>Column 'Age'</div>
+            <div style={{ fontSize: '13px', fontWeight: 'bold', color: ageType === 'float64' ? '#276749' : '#c53030' }}>{ageType}</div>
+          </div>
+          <div style={{ padding: '10px', borderRadius: '4px', backgroundColor: 'rgba(148, 163, 184, 0.08)', textAlign: 'center' }}>
+            <div style={{ fontSize: '11px', fontWeight: 'bold' }}>Column 'Salary'</div>
+            <div style={{ fontSize: '13px', fontWeight: 'bold', color: salaryType === 'float64' ? '#276749' : '#c53030' }}>{salaryType}</div>
+          </div>
+          <div style={{ padding: '10px', borderRadius: '4px', backgroundColor: 'rgba(148, 163, 184, 0.08)', textAlign: 'center' }}>
+            <div style={{ fontSize: '11px', fontWeight: 'bold' }}>Column 'id'</div>
+            <div style={{ fontSize: '13px', fontWeight: 'bold', color: '#2b6cb0' }}>{idType}</div>
+          </div>
+          <div style={{ padding: '10px', borderRadius: '4px', backgroundColor: missingCount === 5 ? 'rgba(72, 187, 120, 0.1)' : 'rgba(229, 62, 62, 0.1)', textAlign: 'center', border: missingCount === 5 ? '1px solid #38a169' : '1px solid #e53e3e' }}>
+            <div style={{ fontSize: '11px', fontWeight: 'bold' }}>Detected NaN Count</div>
+            <div style={{ fontSize: '15px', fontWeight: 'bold', color: missingCount === 5 ? '#276749' : '#c53030' }}>{missingCount} / 5</div>
+          </div>
+        </div>
+
+        <div style={{ padding: '10px 14px', borderRadius: '4px', backgroundColor: missingCount === 5 && ageType === 'float64' && salaryType === 'float64' ? 'rgba(72, 187, 120, 0.1)' : 'rgba(221, 107, 32, 0.08)', borderLeft: missingCount === 5 && ageType === 'float64' && salaryType === 'float64' ? '4px solid #38a169' : '4px solid #dd6b20', fontSize: '12px' }}>
+          {missingCount === 5 && ageType === 'float64' && salaryType === 'float64' ? (
+            <span><b>Ingestion Clean:</b> All numbers correctly parsed as floats and all 5 missing sentinel coordinates successfully identified.</span>
+          ) : (
+            <span><b>Ingestion Warning:</b> Numeric columns masked as string <code>object</code>. Mathematical modeling algorithms will fail.</span>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<CSVLoaderSandbox />
+
+### The 19 Default Missing Values vs. Domain Sentinels
+
+Pandas recognizes 19 distinct string values as `NaN` automatically (including `""`, `"#N/A"`, `"NaN"`, `"null"`, `"n/a"`).
+
+However, **no library can automatically infer sentinel placeholders**. If a database records missing income as `999999` or missing age as `-1`, Pandas sees legitimate numbers. Declaring them explicitly via `na_values` requires reviewing the data dictionary:
 
 ```python
-print(len(pd._libs.parsers.STR_NA_VALUES))
-print(sorted(pd._libs.parsers.STR_NA_VALUES))
+df = pd.read_csv(
+    "messy.csv",
+    na_values=["?", "-1", "999999"],  # Domain knowledge, not automatic
+    thousands=","
+)
 ```
 
-```text title="Output"
-19
-
-'', '#N/A', '#N/A N/A', '#NA', '-1.#IND', '-1.#QNAN', '-NaN', '-nan',
-'1.#IND', '1.#QNAN', '<NA>', 'N/A', 'NA', 'NULL', 'NaN', 'None', 'n/a',
-'nan', 'null'
-```
-
-That's why the `N/A` in row 7 became `NaN` automatically. Now note what is **not** on the list:
-
-| Encoding of "missing" | Caught by default? |
-|---|---|
-| Empty cell, `NA`, `N/A`, `null`, `None`, `NaN` | Yes |
-| `?` | No |
-| `-`, `--`, `.` | No |
-| `unknown`, `missing`, `not recorded`, `TBD` | No |
-| `-1` as "no value" | No |
-| `999`, `9999`, `999999` as "no value" | No |
-| `0` meaning "not measured" | No |
-
-The last three are **sentinel values**, and they are the dangerous category. A `-1` in an age column
-is a perfectly valid number as far as any library is concerned. It will be averaged, scaled, and fed
-to a model as though someone were minus one year old.
-
-:::warning
-
-**No library can find sentinels for you**
-
-Whether `-1` in `Age` means "missing" or is a genuine data error, and whether `999999` in `Salary`
-is a real high earner or a placeholder, is **not inferable from the data**. It requires knowing how
-the data was collected.
-
-This is the part of preprocessing that cannot be automated, and it's the reason a data dictionary or
-a conversation with whoever produced the file is worth more than any technique on this page.
-
-:::
-
-Once you know, you declare them:
-
-```python
-df = pd.read_csv("messy.csv",
-                 na_values=["?", "-1", "999999"],   # domain knowledge, not automatic
-                 thousands=",")
-print(df.dtypes)
-print(df.isna().sum().sum())
-```
-
-```text title="Output"
-id             int64
-Country       object
-Age          float64
-Salary       float64
-Region        object
-Purchased     object
-dtype: object
-
-5
-```
-
-`Age` and `Salary` are numeric now, and the missing count went from **2 to 5**. Same file, same rows
-— the three extra were always missing, and were previously being treated as data.
-
-### The `read_csv` parameters worth knowing
-
-| Parameter | What it does | When you need it |
-|---|---|---|
-| `na_values=` | Extra strings/values to treat as missing | Sentinels, `?`, `unknown` |
-| `thousands=","` | Strip digit-group separators | `"61,000"` staying numeric |
-| `dtype={...}` | Force a column's type instead of inferring | IDs with leading zeros, codes |
-| `usecols=[...]` | Read only these columns | Wide files; less memory |
-| `parse_dates=[...]` | Parse to real datetimes | Any date column |
-| `index_col=` | Use a column as the index | Natural keys |
-| `encoding=` | File's text encoding | `UnicodeDecodeError` on load |
-| `skiprows=`, `nrows=` | Skip preamble; read a sample | Reports with header junk |
-| `chunksize=` | Iterate in chunks | Files larger than memory |
+---
 
 export const PandasParameterQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Messy CSV Loader</h4>
-      <p style={{ margin: '0 0 15px 0' }}><b>Scenario:</b> You are handed a text file separated by semicolons (<i>;</i>), where missing records are written as the word <i>unknown</i>, and the column <code>account_id</code> contains leading zeros (e.g., <i>00938</i>). Which set of parameters will load this cleanly?</p>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Semicolon Delimiters & Leading Zeros</h4>
+      <p style={{ margin: '0 0 15px 0' }}><b>Scenario:</b> You are handed an export separated by semicolons (<i>;</i>), where missing records are written as <i>unknown</i>, and the column <code>account_id</code> contains leading zeros (e.g., <i>00938</i>). Which parameter combination loads this defensively?</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <button onClick={() => setSelected('wrong')} style={{ padding: '10px', textAlign: 'left', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'wrong' ? '#e53e3e' : 'transparent', color: selected === 'wrong' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>
+        <button onClick={() => setSelected('wrong')} style={{ padding: '10px 14px', textAlign: 'left', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'wrong' ? '#e53e3e' : 'transparent', color: selected === 'wrong' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>
           <b>Option A:</b> <code>pd.read_csv("file.txt", sep=";", na_values=["unknown"])</code>
         </button>
-        <button onClick={() => setSelected('right')} style={{ padding: '10px', textAlign: 'left', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'right' ? '#38a169' : 'transparent', color: selected === 'right' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>
-          <b>Option B:</b> <code>pd.read_csv("file.txt", sep=";", na_values=["unknown"], dtype={"{"}"account_id": str{"}"})</code>
+        <button onClick={() => setSelected('right')} style={{ padding: '10px 14px', textAlign: 'left', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'right' ? '#38a169' : 'transparent', color: selected === 'right' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>
+          <b>Option B:</b> <code>pd.read_csv("file.txt", sep=";", na_values=["unknown"], dtype=&#123;"account_id": str&#125;)</code>
         </button>
       </div>
-      {selected === 'wrong' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Close! Semicolons are parsed and "unknown" becomes NaN. However, without setting account_id explicitly as a string, Pandas will cast it to an integer (938), destroying leading zeros permanently. Try again!</p>}
-      {selected === 'right' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! Specifying semicolons as delimiters, declaring "unknown" as missingness, and forcing account_id to remain a string parses all records defensively with leading zeros intact.</p>}
+      {selected === 'wrong' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Close, but incomplete! Semicolons are parsed and "unknown" becomes NaN. However, without specifying account_id as a string, Pandas casts it to integer 938, permanently destroying leading zeros. Try again!</p>}
+      {selected === 'right' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! Specifying semicolons, declaring "unknown" as missingness, and forcing account_id to remain a string parses all records cleanly with leading zeros intact.</p>}
     </div>
   );
 };
 
 <PandasParameterQuiz />
 
-:::note
-
-**`dtype={"zip": str}` — the leading-zero trap**
-
-A postcode column containing `01234` will be inferred as `int64` and become `1234`. The leading zero
-is gone and cannot be recovered. Anything that is an **identifier rather than a quantity** — postcodes,
-phone numbers, account numbers, product codes — should be read as `str`, even though it looks numeric.
-
-Ask of each column: *would arithmetic on this mean anything?* If not, it isn't a number.
-
-:::
-
 ---
 
-## A pre-flight audit
+<Heading as="h2" id="a-pre-flight-audit">3. The Pre-Flight Data Audit</Heading>
 
-Rather than remembering to check five things, check them all at once. This function is small, and
-running it after every load costs nothing:
+Rather than checking data quality ad-hoc, run an automated pre-flight audit function on every raw DataFrame immediately after ingestion:
 
 ```python
 def audit(df, name):
-    print(f"AUDIT — {name}: {df.shape[0]} rows x {df.shape[1]} columns")
+    print(f"AUDIT - {name}: {df.shape[0]} rows x {df.shape[1]} columns")
 
+    # 1. Duplicate row check
     dups = int(df.duplicated().sum())
     print(f"   duplicate rows:   {dups}")
 
+    # 2. Zero-variance constant column check
     const = [c for c in df.columns if df[c].nunique(dropna=False) <= 1]
     print(f"   constant columns: {const if const else 'none'}")
 
+    # 3. Numeric columns disguised as object
     for c in df.columns:
         note = ""
         if df[c].dtype == object:
@@ -261,308 +282,339 @@ def audit(df, name):
                 note = "LOOKS NUMERIC but is object"
         elif int((df[c] < 0).sum()):
             note = f"{int((df[c] < 0).sum())} negative value(s)"
-        print(f"   {c:<12}{str(df[c].dtype):>9}"
-              f"{int(df[c].isna().sum()):>9}{df[c].nunique():>8}   {note}")
+        print(f"   {c:<12}{str(df[c].dtype):>9}{int(df[c].isna().sum()):>9}{df[c].nunique():>8}   {note}")
 ```
-
-Run on the naive load:
-
-```text title="Output"
-AUDIT — naive read: 12 rows x 6 columns
-   duplicate rows:   1   <- investigate
-   constant columns: ['Region']   <- no predictive value
-
-   column          dtype  missing  unique   note
-   id              int64        0      11
-   Country        object        0       3
-   Age            object        1      10   LOOKS NUMERIC but is object
-   Salary         object        1      10   LOOKS NUMERIC but is object
-   Region         object        0       1
-   Purchased      object        0       2
-```
-
-Four findings from one call:
-
-| Finding | Why it matters |
-|---|---|
-| **1 duplicate row** | Row `10` appears twice. Duplicates inflate whatever they contain, and if they straddle a train/test split the same record is in both |
-| **`Region` is constant** | Every value is `EU`. It cannot possibly help a model — it carries zero information |
-| **`Age` looks numeric but isn't** | The `pd.to_numeric(..., errors="coerce")` trick: if most values convert cleanly, the column was meant to be numeric |
-| **`id` has 11 unique values in 12 rows** | Consistent with the duplicate; also a column to **drop**, since a row identifier is never a feature |
-
-The `id` column deserves a note of its own. An identifier is often *correlated* with the target
-purely because of how the data was ordered or collected, so a model will happily use it and score
-well — on data that includes those exact ids, and never again. Drop identifiers before modelling.
-
-### What the audit does not tell you
-
-It flags `Region` as constant, but it cannot tell you that a column is constant *only in this
-sample*. It flags negatives, but not that `999999` is a placeholder. It counts duplicates, but not
-whether they're a genuine repeat measurement or a join gone wrong. The audit narrows what you have to
-think about; it doesn't replace the thinking.
 
 ---
 
-## Separating features from target
+export const AuditDashboard = () => {
+  const [cleanedView, setCleanedView] = React.useState(false);
 
-With a trustworthy table, split it into `X` (the features) and `y` (the target) — the vocabulary from
-[Types of Learning](../01-foundations/03-types-of-learning.mdx#features-and-attributes).
+  return (
+    <div style={{ padding: '24px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '25px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive Pre-Flight Audit Diagnostic Dashboard</h4>
+      <p style={{ margin: '0 0 16px 0', fontSize: '14px' }}>
+        Compare the audit findings between the raw messy load and the cleaned table ready for modeling:
+      </p>
+
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+        <button
+          onClick={() => setCleanedView(false)}
+          style={{
+            padding: '6px 14px',
+            borderRadius: '4px',
+            border: '1px solid #3182ce',
+            backgroundColor: !cleanedView ? '#3182ce' : 'transparent',
+            color: !cleanedView ? '#fff' : 'var(--ifm-font-color-base)',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            fontSize: '13px',
+            transition: '0.2s'
+          }}
+        >
+          Raw Ingestion Audit
+        </button>
+        <button
+          onClick={() => setCleanedView(true)}
+          style={{
+            padding: '6px 14px',
+            borderRadius: '4px',
+            border: '1px solid #3182ce',
+            backgroundColor: cleanedView ? '#3182ce' : 'transparent',
+            color: cleanedView ? '#fff' : 'var(--ifm-font-color-base)',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            fontSize: '13px',
+            transition: '0.2s'
+          }}
+        >
+          Post-Audit Cleaned Table
+        </button>
+      </div>
+
+      <div style={{ padding: '16px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+        {!cleanedView ? (
+          <div>
+            <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#c53030', marginBottom: '12px' }}>
+              Detected Ingestion Anomalies: 12 rows x 6 columns
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px' }}>
+              <div style={{ padding: '8px 12px', borderRadius: '4px', backgroundColor: 'rgba(229, 62, 62, 0.08)', borderLeft: '4px solid #e53e3e' }}>
+                <b>Duplicate Row Flagged:</b> Row 10 appears twice. Duplicates straddling train/test splits cause immediate data leakage.
+              </div>
+              <div style={{ padding: '8px 12px', borderRadius: '4px', backgroundColor: 'rgba(221, 107, 32, 0.08)', borderLeft: '4px solid #dd6b20' }}>
+                <b>Zero-Variance Constant Column:</b> <code>Region == 'EU'</code> for 100% of rows. Carries zero discriminative information; will cause multicollinearity in linear models.
+              </div>
+              <div style={{ padding: '8px 12px', borderRadius: '4px', backgroundColor: 'rgba(221, 107, 32, 0.08)', borderLeft: '4px solid #dd6b20' }}>
+                <b>Coerced Numeric Columns:</b> <code>Age</code> and <code>Salary</code> contain over 90% numbers but are typed as string <code>object</code>.
+              </div>
+              <div style={{ padding: '8px 12px', borderRadius: '4px', backgroundColor: 'rgba(49, 130, 206, 0.08)', borderLeft: '4px solid #3182ce' }}>
+                <b>Unique Identifier:</b> <code>id</code> has 11 unique values across 12 rows. Identifiers overfit models and must be dropped.
+              </div>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#276749', marginBottom: '12px' }}>
+              Cleaned Feature Matrix: 11 rows x 4 columns
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '13px' }}>
+              <div style={{ padding: '8px 12px', borderRadius: '4px', backgroundColor: 'rgba(72, 187, 120, 0.08)', borderLeft: '4px solid #38a169' }}>
+                <b>Duplicates Dropped:</b> Exactly 1 duplicate row removed (`df.drop_duplicates()`).
+              </div>
+              <div style={{ padding: '8px 12px', borderRadius: '4px', backgroundColor: 'rgba(72, 187, 120, 0.08)', borderLeft: '4px solid #38a169' }}>
+                <b>Zero-Variance Columns Removed:</b> `Region` dropped (`df.drop(columns=['Region'])`).
+              </div>
+              <div style={{ padding: '8px 12px', borderRadius: '4px', backgroundColor: 'rgba(72, 187, 120, 0.08)', borderLeft: '4px solid #38a169' }}>
+                <b>Identifier Purged:</b> `id` removed to prevent memorization overfitting.
+              </div>
+              <div style={{ padding: '8px 12px', borderRadius: '4px', backgroundColor: 'rgba(72, 187, 120, 0.08)', borderLeft: '4px solid #38a169' }}>
+                <b>Feature Partition:</b> Features <code>X</code> (11 rows x 3 columns) separated from target <code>y</code> (11 rows).
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+<AuditDashboard />
+
+---
+
+## 4. Separating Features and Target: loc vs. iloc
+
+Once the dataset is audited and deduplicated, separate it into features $X$ and target $y$:
 
 ```python
 clean = df.drop(columns=["id", "Region"]).drop_duplicates()
 
-X_df = clean.iloc[:, :-1]     # all rows, all columns except the last
-y_df = clean.iloc[:, -1]      # all rows, only the last column
+X_df = clean.iloc[:, :-1]  # All rows, every column but the last (2-D)
+y_df = clean.iloc[:, -1]   # All rows, the last column only (1-D)
 ```
 
-```text title="Output"
-X (11, 3) (2-D)    y (11,) (1-D)
-X columns: ['Country', 'Age', 'Salary']
-```
+### The Two Differences Between loc and iloc
 
-Note the order: **audit and clean first, then split.** Dropping the identifier, the constant column
-and the duplicate row before splitting means those problems never reach a model.
+Everyone remembers that `iloc` is integer-based and `loc` is label-based. The **second** difference is the one that introduces production bugs:
 
-`iloc[row_selector, column_selector]` selects by **position**. `:` means everything along that axis;
-`-1` is the last element as in any Python sequence, so `:-1` is "everything up to but excluding the
-last".
-
-| Expression | Selects |
-|---|---|
-| `iloc[:, :-1]` | all rows, every column but the last — the features |
-| `iloc[:, -1]` | all rows, the last column only — the target |
-| `iloc[2, 1]` | one cell, by position |
-
----
-
-## `loc` and `iloc` — two differences, not one
-
-Everyone learns that `iloc` is positional and `loc` is label-based. The **second** difference is the
-one that causes bugs:
-
-```python
-s = pd.Series([10, 20, 30, 40, 50])
-print(list(s.iloc[1:3]))
-print(list(s.loc[1:3]))
-```
-
-```text title="Output"
-[20, 30]
-[20, 30, 40]
-```
-
-**`iloc` excludes its stop; `loc` includes it.** Same-looking slice, different number of elements.
-
-| | `iloc` | `loc` |
+| Dimension | `iloc` | `loc` |
 |---|---|---|
-| Indexes by | Integer **position** | **Label** |
-| Stop value | **Excluded** (like a Python list) | **Included** |
-| `[1:3]` gives | 2 items | 3 items |
-| Survives sorting/filtering | No — position changes | Yes — label follows the row |
-
-`loc` includes the stop because a label isn't necessarily part of an ordered sequence — pandas can't
-know what comes "before" the label `"Salary"`, so excluding it would be meaningless. The
-inconsistency is a consequence of the two indexers answering genuinely different questions.
-
-Both agree on `df.iloc[2, 1]` and `df.loc[2, "Age"]` in a freshly loaded DataFrame **only because**
-the index is still the default `0, 1, 2, …`. Sort or filter the frame and they diverge immediately:
-`loc[0]` still finds the row labelled `0`, wherever it now sits, while `iloc[0]` finds whatever is
-now first.
-
-**Rule of thumb:** `iloc` when you mean *the Nth row*; `loc` when you mean *the row named N*. After
-any filtering, prefer `loc`, or call `.reset_index(drop=True)` to make position and label agree
-again.
+| **Indexing Criterion** | Integer **position** ($0$-based) | Named **index label** |
+| **Stop Boundary** | **Excluded** (standard Python sequence convention) | **Included** (both start and stop labels returned) |
+| **Slice `[1:3]` Returns** | **2 items** (indices `1` and `2`) | **3 items** (labels `1`, `2`, and `3`) |
+| **Survives Sorting** | No — position changes | Yes — label stays attached to the row |
 
 ---
 
-## NumPy slicing
+export const LocVsIlocSandbox = () => {
+  const [method, setMethod] = React.useState('iloc');
 
-Once you're in arrays rather than DataFrames, slicing follows NumPy's rules — which come up
-constantly in the encoding and scaling steps ahead, where you operate on specific column ranges.
+  const rows = [
+    { label: 0, val: 10 },
+    { label: 1, val: 20 },
+    { label: 2, val: 30 },
+    { label: 3, val: 40 },
+    { label: 4, val: 50 }
+  ];
 
-```python
-sample = np.array([[10, 20, 30, 40],
-                    [50, 60, 70, 80],
-                    [90, 100, 110, 120]])
-print(sample[:, 1:3])
-```
+  const selectedRows = method === 'iloc' ? [1, 2] : [1, 2, 3];
 
-```text title="Output"
-[[ 20  30]
- [ 60  70]
- [100 110]]
-```
+  return (
+    <div style={{ padding: '24px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '25px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive loc vs. iloc Slice Visualizer</h4>
+      <p style={{ margin: '0 0 16px 0', fontSize: '14px' }}>
+        Observe how executing the exact same slice range <code>[1:3]</code> on <code>s = pd.Series([10, 20, 30, 40, 50])</code> yields different row counts:
+      </p>
 
-Read `sample[:, 1:3]` in two halves: `:` selects **all rows**; `1:3` selects **columns 1 and 2** —
-the stop is excluded, exactly as in a Python list. That expression, *all rows and the numeric feature
-columns only*, is precisely the slice the next page hands to `SimpleImputer` so it touches `Age` and
-`Salary` without touching `Country`.
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '18px' }}>
+        <button
+          onClick={() => setMethod('iloc')}
+          style={{
+            padding: '6px 14px',
+            borderRadius: '4px',
+            border: '1px solid #3182ce',
+            backgroundColor: method === 'iloc' ? '#3182ce' : 'transparent',
+            color: method === 'iloc' ? '#fff' : 'var(--ifm-font-color-base)',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            fontSize: '13px',
+            transition: '0.2s'
+          }}
+        >
+          s.iloc[1:3] (Integer Position)
+        </button>
+        <button
+          onClick={() => setMethod('loc')}
+          style={{
+            padding: '6px 14px',
+            borderRadius: '4px',
+            border: '1px solid #3182ce',
+            backgroundColor: method === 'loc' ? '#3182ce' : 'transparent',
+            color: method === 'loc' ? '#fff' : 'var(--ifm-font-color-base)',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            fontSize: '13px',
+            transition: '0.2s'
+          }}
+        >
+          s.loc[1:3] (Index Label)
+        </button>
+      </div>
 
-One asymmetry worth knowing: an out-of-range **slice** is silently clipped, while an out-of-range
-**index** raises.
+      <div style={{ padding: '16px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginBottom: '14px' }}>
+          {rows.map(r => {
+            const isSelected = selectedRows.includes(r.label);
+            return (
+              <div
+                key={r.label}
+                style={{
+                  padding: '12px 18px',
+                  borderRadius: '6px',
+                  backgroundColor: isSelected ? '#3182ce' : 'rgba(148, 163, 184, 0.1)',
+                  color: isSelected ? '#ffffff' : 'var(--ifm-font-color-base)',
+                  border: isSelected ? '2px solid #2b6cb0' : '1px solid var(--ifm-color-emphasis-200)',
+                  textAlign: 'center',
+                  transition: '0.2s'
+                }}
+              >
+                <div style={{ fontSize: '11px', opacity: 0.8 }}>Label: {r.label}</div>
+                <div style={{ fontSize: '16px', fontWeight: 'bold' }}>{r.val}</div>
+                <div style={{ fontSize: '10px', marginTop: '4px' }}>{isSelected ? '[SELECTED]' : 'Excluded'}</div>
+              </div>
+            );
+          })}
+        </div>
 
-```python
-sample[:, 1:99]     # fine — returns columns 1 to 3
-sample[:, 99]       # IndexError
-```
+        <div style={{ padding: '10px 14px', borderRadius: '4px', backgroundColor: 'rgba(49, 130, 206, 0.08)', borderLeft: '4px solid #3182ce', fontSize: '13px' }}>
+          <b>Resulting Slice:</b> <code>{method === 'iloc' ? '[20, 30]' : '[20, 30, 40]'}</code> ({selectedRows.length} items returned).<br />
+          <b>Why:</b> {method === 'iloc' ? 'iloc excludes stop offset 3 (standard 0-based Python sequence behavior).' : 'loc includes stop label 3 because labels are keys without natural sequence ordering.'}
+        </div>
+      </div>
+    </div>
+  );
+};
 
----
-
-## Should you convert to NumPy at all?
-
-The conventional line is `X = df.iloc[:, :-1].values`. It works, and it costs you things worth
-keeping.
-
-### `.values` versus `.to_numpy()`
-
-Both convert. `.to_numpy()` is the current recommendation — `.values` predates it, has fuzzier
-behaviour around extension dtypes, and is effectively legacy. Prefer `.to_numpy()` in new code.
-
-The shape rule is the same either way, and it's where `X` being 2-D and `y` being 1-D originates:
-
-| Converting | Gives | Shape |
-|---|---|---|
-| A DataFrame (many columns) | 2-D array | `(rows, columns)` |
-| A Series (one column) | 1-D array | `(rows,)` |
-
-So `X`, sliced from all-but-one column, is a DataFrame → 2-D. And `y`, sliced from one column, is a
-Series → 1-D. **The shape convention every model expects is a consequence of this, decided before
-you ever call `.fit`.**
-
-### What conversion costs, measured
-
-**Mixed types collapse to `object`.**
-
-```python
-print(X_df.to_numpy().dtype)      # object
-```
-
-A single array can hold only one type. `X` mixes `'France'` with `44.0`, so NumPy falls back to
-storing generic Python object pointers. That is not just inelegant:
-
-```python
-n = 300_000
-num = np.arange(n, dtype=float)
-obj = num.astype(object)
-# time num.sum() vs obj.sum()
-```
-
-```text title="Output"
-sum of 300,000 floats — float64 array:    0.10 ms
-sum of 300,000 floats — object  array:    2.91 ms
-object is 28x slower
-```
-
-**28× slower** on identical numbers. A `float64` array is one contiguous block that compiled code
-walks directly; an `object` array is a block of pointers, each chased to a separate Python object.
-
-**Column names are thrown away.**
-
-```python
-kept = StandardScaler().fit(num_df)             # a DataFrame
-lost = StandardScaler().fit(num_df.to_numpy())  # an array
-```
-
-```text title="Output"
-fitted on DataFrame  -> feature_names_in_ = ['Age', 'Salary']
-fitted on .to_numpy() -> has feature_names_in_? False
-```
-
-Fitted on a DataFrame, scikit-learn records `feature_names_in_`. It then **validates** that anything
-you later pass has the same columns in the same order — catching a whole category of bug where
-columns get reordered between training and prediction. Convert to NumPy and you lose that check, plus
-every error message that would have named the offending column.
-
-### Where `category` dtype wins
-
-For a text column with few distinct values, staying in pandas and using `category` is dramatically
-cheaper than either `object` or one array:
-
-```text title="Output"
-200,000 rows, 3 distinct values
-object   dtype: 12,600,353 bytes
-category dtype:    200,429 bytes
-reduction:           98.4%
-```
-
-**98.4% less memory.** `category` stores each distinct string once and keeps a compact array of
-integer codes — which is, not coincidentally, exactly what label encoding does by hand on the next
-page but one.
-
-### The recommendation
-
-**Keep DataFrames as long as you can.** Modern scikit-learn accepts them throughout, preserves
-feature names, and gives better errors. Convert with `.to_numpy()` only where something genuinely
-requires an array, and convert **after** encoding, when the frame is all-numeric and the result won't
-be `object`.
-
-The `.values` idiom you'll see in most tutorials isn't wrong — it predates good DataFrame support and
-has simply been overtaken.
+<LocVsIlocSandbox />
 
 ---
 
-## Common Mistakes
+<Heading as="h2" id="should-you-convert-to-numpy-at-all">5. When to Convert to NumPy: Memory and Speed Trade-offs</Heading>
 
-Here are the most common conceptual pitfalls when loading and preparing datasets, compared with the correct engineering principles.
+Most online tutorials immediately write: `X = df.iloc[:, :-1].values`. While ubiquitous, converting to NumPy immediately upon ingestion carries severe hidden penalties:
+
+### 1. Mixed Types Collapse to `object` (28x Slower Computation)
+
+A NumPy array requires uniform data types. If your feature matrix mixes string categories (`'France'`) with numbers (`44.0`), NumPy converts every number into a generic Python pointer.
+
+Benchmarking `300,000` floats:
+*   Contiguous `float64` array sum: **`0.10 ms`**
+*   Pointer-chasing `object` array sum: **`2.91 ms`**
+*   **Result: `object` array operations run 28x slower.**
+
+### 2. Loss of `feature_names_in_` Schema Validation
+
+When scikit-learn models are fitted on a Pandas DataFrame, they record `feature_names_in_`. In production, passing features in a scrambled column order raises an immediate exception. If converted to a NumPy array prematurely, that check is lost and the model runs silent invalid dot products.
+
+### 3. The Power of `category` Dtype (98.4% Memory Savings)
+
+For text columns with few distinct values, Pandas `category` dtype compresses memory dramatically compared to raw string `object`:
+
+*   200,000 rows with 3 distinct values stored as `object`: **`12.6 MB`**
+*   Same 200,000 rows stored as `category`: **`200 KB` (98.4% reduction)**
+
+:::tip
+
+**The Production Rule:** Keep your data in Pandas DataFrames throughout loading, auditing, imputation, and categorical encoding. Convert to NumPy using `.to_numpy()` only when required by specialized tensor libraries.
+
+:::
+
+---
+
+## 6. Implementation Lab
+
+:::tip
+
+**Implementation Lab: Defensive Data Ingestion in Pandas**
+
+Verify the silent hazards of type inference, build automated audit pipelines to capture duplicated rows and zero-variance constant columns, and trace how loc vs. iloc slice models on messy dataset inputs.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/02-data-preprocessing/loading_data.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Click **"Runtime" > "Run all"** or execute cells individually using `Shift + Enter`.
+3. Follow the guided experiments: test unescaped thousands separators, induce object type degradation, and verify memory usage with `category` dtypes.
+
+:::
+
+---
+
+## 7. Common Mistakes
 
 <Tabs>
-  <TabItem value="mistake1" label="Mistake 1: Silent Coercion" default>
+  <TabItem value="m1" label="1. Silent Coercion" default>
     <br/>
 
-    *   **The Pitfall:** Blindly assuming a column parsed as floating-point or integer because it looks numeric.
+    *   **The Misconception:** *"The column contains ages, so Pandas will automatically load it as integers or floats."*
     *   **Wrong Thinking:** Assuming `Age` is float64 because the rows look numeric.
-    *   **The Right Principle:** Always execute `df.dtypes` immediately after load. A single corrupt character (like a "?" or comma ",") converts the entire column into `object` dtype, which will fail mathematical operations.
+    *   **The Right Principle:** A single non-numeric token (such as `"?"` or `"N/A"`) coerces the entire column into string `object`. Always inspect `df.dtypes` immediately after every load.
   </TabItem>
-  <TabItem value="mistake2" label="Mistake 2: ID Loss">
+  <TabItem value="m2" label="2. Leading-Zero ID Loss">
     <br/>
 
-    *   **The Pitfall:** Allowing Pandas to parse postcodes, IDs, or account numbers as numeric metrics.
-    *   **Wrong Thinking:** `ID = 01234` parsed as integer `1234`.
-    *   **The Right Principle:** Force these identifiers to string format explicitly using `dtype={"zip": str}` in your load call. Once leading zeros are discarded by numerical inferencing, they are lost.
+    *   **The Misconception:** *"Account numbers, ZIP codes, and phone numbers are made of digits, so they should be read as integers."*
+    *   **Wrong Thinking:** Letting `id = 01234` parse as integer `1234`.
+    *   **The Right Principle:** Identifiers with leading zeros are categorical keys, not quantities. If arithmetic on a column is meaningless, force it to string via `dtype={"id": str}`.
   </TabItem>
-  <TabItem value="mistake3" label="Mistake 3: Slicing Exclusivity">
+  <TabItem value="m3" label="3. Slicing Exclusivity (`loc` vs `iloc`)">
     <br/>
 
-    *   **The Pitfall:** Expecting `loc[1:3]` to behave exactly like `iloc[1:3]` and exclude the stop index.
-    *   **Wrong Thinking:** Expecting `loc[1:3]` to return 2 items.
-    *   **The Right Principle:** `loc` is label-inclusive and returns **3** items. `iloc` is integer-exclusive and returns **2** items.
+    *   **The Misconception:** *"Since iloc[1:3] returns 2 items, loc[1:3] will also return 2 items."*
+    *   **Wrong Thinking:** Expecting `loc` to exclude the stop index.
+    *   **The Right Principle:** `iloc` is integer-exclusive (returns 2 items), while `loc` is label-inclusive (returns 3 items). Mixing them up produces off-by-one errors in feature matrices.
   </TabItem>
-  <TabItem value="mistake4" label="Mistake 4: Premature Array Conversion">
+  <TabItem value="m4" label="4. Premature Array Conversion">
     <br/>
 
-    *   **The Pitfall:** Converting to NumPy too early using `.values` or `.to_numpy()`.
-    *   **Wrong Thinking:** `.values` on the raw DataFrame as soon as the file is loaded.
-    *   **The Right Principle:** Stay in Pandas DataFrames until you've split your data and completed categorical encoding. Mixed types collapse to `object` in NumPy, which is **28x slower** than standard float64.
+    *   **The Misconception:** *"Converting to NumPy immediately with `.values` makes our code run faster."*
+    *   **Wrong Thinking:** Calling `.values` on a raw DataFrame containing mixed string and numeric columns.
+    *   **The Right Principle:** Converting mixed types forces NumPy into `object` arrays, running 28x slower and discarding `feature_names_in_` column alignment guards.
   </TabItem>
 </Tabs>
 
 ---
 
-## Summary
+## 8. Summary
 
 <div className="row">
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
-      <div className="card__header">
-        <h3>Data Loader Checklist</h3>
+      <div className="card__header" style={{ padding: '15px', borderBottom: '1px solid var(--ifm-color-emphasis-200)' }}>
+        <h3>Defensive Loader Checklist</h3>
       </div>
-      <div className="card__body">
+      <div className="card__body" style={{ padding: '15px' }}>
         <ul>
-          <li><b>pd.read_csv:</b> Delimiters (`sep`), separators (`thousands`), types (`dtype`), chunks (`chunksize`).</li>
-          <li><b>Parquet columns:</b> Columnar layout, type guarantees, built-in metadata schemas, ultra-fast pre-flight audits.</li>
+          <li><b>pd.read_csv:</b> Handle delimiters (`sep`), thousands separators (`thousands=","`), and sentinels (`na_values`).</li>
+          <li><b>Parquet Advantage:</b> Columnar layout enables scanning only the requested features, skipping unneeded bytes entirely.</li>
+          <li><b>Identifier Safety:</b> Explicitly declare postcodes and account numbers as strings to preserve leading zeros.</li>
         </ul>
       </div>
     </div>
   </div>
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
-      <div className="card__header">
-        <h3>Audit & Index Verification</h3>
+      <div className="card__header" style={{ padding: '15px', borderBottom: '1px solid var(--ifm-color-emphasis-200)' }}>
+        <h3>Auditing & Slicing</h3>
       </div>
-      <div className="card__body">
+      <div className="card__body" style={{ padding: '15px' }}>
         <ul>
-          <li><b>Audit blocks:</b> Scan for duplicate records, inspect zero-variance constant columns.</li>
-          <li><b>Index keys:</b> <code>loc[1:3]</code> (inclusive stop) vs <code>iloc[1:3]</code> (exclusive stop).</li>
+          <li><b>Automated Audit:</b> Flag duplicate rows, zero-variance constant columns, and masked object dtypes.</li>
+          <li><b>loc vs. iloc:</b> <code>iloc</code> is 0-based positional (exclusive stop); <code>loc</code> is label-based (inclusive stop).</li>
+          <li><b>Postpone Conversion:</b> Stay in DataFrames until categorical encoding is complete to prevent 28x object array slowdowns.</li>
         </ul>
       </div>
     </div>
@@ -571,450 +623,139 @@ Here are the most common conceptual pitfalls when loading and preparing datasets
 
 <br/>
 
-:::info 
+:::info
 
-**Key Takeaways: Loading & Preparing Data**
+**Key Takeaways**
 
-*   **dtypes Fail Silently:** A single invalid character (like a "?" or thousands separator ",") transforms columns into `object` strings. Always inspect `df.dtypes` immediately after every loading loop.
-*   **Danger of Sentinels:** Numerical markers (such as `-1` or `999999`) bypass standard missingness parser checks. Only domain knowledge and `na_values` parameter declarations can capture them defensively.
-*   **Postpone Array Conversion:** Avoid calling `.to_numpy()` or `.values` right after load. Converting mixed string-metric features yields `object` matrix layouts, measured at **28× slower** than `float64` operations.
-*   **Keep DataFrame validation:** Training on DataFrames preserves `feature_names_in_` schemas on estimators, allowing scikit-learn to catch column reordering bugs automatically.
+*   **dtypes Fail Silently:** A single invalid character transforms numeric columns into string `object` dtypes. Always check `df.dtypes` on line 2.
+*   **Sentinels Require Domain Knowledge:** Numbers like `-1` or `999999` bypass standard `NaN` checks. Declare them explicitly via `na_values`.
+*   **loc Includes the Stop:** Slicing `loc[1:3]` returns 3 items; `iloc[1:3]` returns 2 items.
+*   **Keep DataFrames:** Modern scikit-learn preserves `feature_names_in_` on DataFrames, preventing silent column reordering bugs.
 
 :::
 
-**Next in this section:** [Missing Values](./02-missing-values.mdx) — imputing the `NaN`s this page
-has now correctly counted
+**Next in this section:** [Missing Values](./02-missing-values.mdx) - imputing and modeling the missing data this page has identified.
 
-**See also:** [Types of Learning](../01-foundations/03-types-of-learning.mdx#features-and-attributes)
-for the `X`/`y` vocabulary · [The Toolkit and the Pipeline](../01-foundations/05-toolkit-and-pipeline.mdx)
-for where loading sits in the seven-step pipeline
+**See also:** [The Toolkit and the Pipeline](../01-foundations/05-toolkit-and-pipeline.mdx) · [Types of Learning](../01-foundations/03-types-of-learning.mdx)
 
 ---
 
-## Implementation Lab
+## 9. Active Recall Flashcards
 
-:::tip 
-
-**Lab Exercise: Loading Data Defensively in Pandas**
-
-Verify the silent hazards of type inference, build custom data audit pipelines to capture duplicated rows and zero-variance constant columns, and trace how loc vs. iloc slice models on messy dataset inputs.
-
-<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/02-data-preprocessing/loading_data.ipynb" target="_blank" rel="noopener noreferrer">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
-</a>
-
-**How to run the lab:**
-1. Click the **"Open In Colab"** badge above.
-2. Run each cell sequentially (`Shift + Enter`).
-3. Experiment with removing thousands separators and checking coerced object arrays.
-
-:::
-
-## Practice Questions
-
-*Test your understanding by working each problem out first, then click the card to reveal the detailed solution. Questions are tagged by type: **[THEORY]**, **[PROG]**, **[OUT]**, or **[ANALYZE]**.*
-
-### What loading decides for you
+*Attempt each conceptual diagnostic question first, then click to reveal the underlying derivation and explanation.*
 
 <details>
-  <summary><b>L1. [THEORY] Every value in a CSV file is text. Explain what `pd.read_csv` does about that, and what it tells you about the decisions it made.</b></summary>
+  <summary><b>1. [THEORY] How does `pd.read_csv` perform column type inference, and why does a single non-numeric token cause silent failure?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **What pandas does:** It runs statistical data-type inferencing across columns sequentially. It attempts to parse columns as integers (`int64`), floats (`float64`), or booleans, defaulting to raw string objects (`object`) if any non-numeric token is found.
-    *   **Where it tells you:** It reports absolutely nothing during loading. You must explicitly execute `df.dtypes` immediately after every load to verify the decisions it made.
+
+    *   **Inference Mechanism:** Pandas inspects column values sequentially, attempting to cast each column into integers, floats, or booleans. If it encounters any token that cannot be parsed numerically (such as `"?"` or `"61,000"`), it abandons numeric casting and defaults to a Python string `object`.
+    *   **Silent Failure:** No error or warning is reported during ingestion. The column appears to load cleanly, but downstream mathematical operations will crash with type exceptions or silently concatenate strings.
   </div>
 </details>
 
 <details>
-  <summary><b>L2. [ANALYZE] A column of 10,000 ages contains one `?`. State the resulting dtype, and explain what happens when you later try to compute the mean.</b></summary>
+  <summary><b>2. [THEORY] Differentiate between default missing value strings and domain sentinel values. Why can't libraries detect sentinels automatically?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **Resulting dtype:** `object`.
-    *   **What happens to mean:** Pandas cannot execute mathematical operations on string objects. Attempting to call `.mean()` on the column will raise a `TypeError: must be real number, not str`, halting your modeling pipeline.
+
+    *   **Default Missing Strings:** Standard placeholders recognized by Pandas (19 strings, including `""`, `"NaN"`, `"null"`, `"n/a"`).
+    *   **Domain Sentinels:** Mathematically valid numbers (e.g., `-1` for age, `999999` for salary) deliberately used by legacy database systems to represent missingness.
+    *   **Why Libraries Can't Detect Them:** To an algorithm, `-1` and `999999` are legitimate numeric coordinates. Only human domain knowledge can identify them and declare them via `na_values`.
   </div>
 </details>
 
 <details>
-  <summary><b>L3. [THEORY] Pandas recognises 19 strings as missing by default. Name five, and name four common representations of missingness that are **not** on the list.</b></summary>
+  <summary><b>3. [ANALYZE] Why must postal codes, telephone numbers, and account identifiers be loaded as strings (`dtype={"zip": str}`)? What occurs if they are loaded as integers?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **Five recognized defaults:** `""`, `"#N/A"`, `"NaN"`, `"null"`, `"n/a"`.
-    *   **Four common unrecognized entries:** `"?"`, `"-"`, `"unknown"`, `-1` or `999999`.
+
+    *   **Leading Zero Loss:** A postal code such as `01234` loaded as an integer is converted to `1234`. The leading zero is permanently discarded and cannot be recovered.
+    *   **The Decision Rule:** If arithmetic operations (such as calculating the mean or standard deviation) on a column are meaningless, the feature is a categorical identifier and must be read as a string.
   </div>
 </details>
 
 <details>
-  <summary><b>L4. [THEORY] What is a sentinel value? Give two examples, and explain why no library can detect them automatically.</b></summary>
+  <summary><b>4. [THEORY] Detail the four primary checks executed by an automated pre-flight data audit.</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **Sentinel Value:** A valid numerical coordinate used as a coded marker indicating a missing record (e.g. `-1` for age, or `999999` for salary).
-    *   **Why libraries can't detect them:** They are mathematically valid numbers. Only domain knowledge and custom manual declarations via `na_values` can flag them as missingness rather than metrics.
+
+    1.  **Dtype Verification:** Identifies numeric features that were coerced into string `object` due to formatting anomalies.
+    2.  **Duplicate Row Detection:** Identifies duplicate rows that risk straddling train/test partitions and causing data leakage.
+    3.  **Zero-Variance Check:** Flags constant columns (where `nunique <= 1`) that offer zero discriminative power and risk causing singular matrix errors.
+    4.  **Domain Anomaly Bounds:** Flags out-of-range records, such as negative ages or placeholder salaries.
   </div>
 </details>
 
 <details>
-  <summary><b>L5. [ANALYZE] A postcode column contains `01234`. Explain what `read_csv` will do to it by default, why the damage is irreversible, and the test you should apply to decide a column's type.</b></summary>
+  <summary><b>5. [ANALYZE] Why should unique ID columns always be dropped prior to machine learning modeling, even if they correlate with the target?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **Naive parsing behavior:** It strips the leading zero and casts the postcode as a float or integer (`1234`).
-    *   **Why irreversible:** Once written to RAM as `1234`, there is no automatic way to distinguish whether the original was `01234`, `001234`, or simply `1234`.
-    *   **The test:** If performing mathematical arithmetic (such as calculating the mean or standard deviation) on a column is meaningless, the column is a category and must be read as a string (`dtype={col: str}`).
-  </div>
-</details>
 
-### Auditing
-
-<details>
-  <summary><b>A1. [THEORY] Name four things a pre-flight audit should check, and say what each would catch.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    1.  **Dtypes audit:** Catches numeric columns masked as string `object` due to corrupt characters.
-    2.  **Duplicate check:** Catches duplicate rows that can skew splits and train/test boundaries.
-    3.  **Constant columns check:** Catches zero-variance features (e.g., all rows are "North") that provide no predictive value.
-    4.  **Anomaly boundaries check:** Catches out-of-bounds metrics (e.g. negative ages `-1` or out-of-scale salaries `999999`).
+    Unique IDs possess 100% cardinality (every sample has a distinct integer key). Machine learning models (especially decision trees and high-capacity regressors) will fit directly to the ID integers, achieving 100% training accuracy through pure memorization. When deployed to unseen test IDs, generalization collapses completely.
   </div>
 </details>
 
 <details>
-  <summary><b>A2. [THEORY] Explain the `pd.to_numeric(col, errors="coerce")` trick for detecting columns that should be numeric but aren't.</b></summary>
+  <summary><b>6. [THEORY] State the two fundamental differences between Pandas `loc` and `iloc` indexers.</b></summary>
   <div className="answer-content">
     <br/>
-    
-    It attempts to cast strings into numerical floats. By setting `errors="coerce"`, any non-numeric tokens (like `?`) are forced into `NaN`. If auditing shows that more than half of the converted column contains valid numbers (not `NaN`), the column should be numeric and contains noise characters.
+
+    1.  **Addressing Scheme:** `iloc` indexes strictly by $0$-based integer position; `loc` indexes strictly by row/column index labels.
+    2.  **Stop Boundary Exclusivity:** `iloc` **excludes** the stop index (standard Python sequence convention); `loc` **includes** the stop label (both boundary keys are returned).
   </div>
 </details>
 
 <details>
-  <summary><b>A3. [ANALYZE] Why should an `id` column be dropped before modelling, even when it correlates strongly with the target?</b></summary>
+  <summary><b>7. [OUT] Given `s = pd.Series([10, 20, 30, 40, 50])`, what are the exact outputs of `s.iloc[1:3]` and `s.loc[1:3]`? Explain the discrepancy.</b></summary>
   <div className="answer-content">
     <br/>
-    
-    IDs are unique identifiers (100% cardinality). An estimator will fit weights directly to the unique ID integer keys, achieving 100% training accuracy through overfitting, but will fail completely on any unseen test identifiers.
+
+    *   **`s.iloc[1:3]`:** Returns `[20, 30]` (2 items, positions 1 and 2; stop position 3 is excluded).
+    *   **`s.loc[1:3]`:** Returns `[20, 30, 40]` (3 items, labels 1, 2, and 3; stop label 3 is included).
+    *   **Why:** `loc` includes the stop value because index labels are keys without natural chronological sequence ordering, making an exclusive stop unintuitive for arbitrary categorical labels.
   </div>
 </details>
 
 <details>
-  <summary><b>A4. [ANALYZE] A constant column is described as having "no predictive value". Explain why, and say whether it is harmful or merely useless.</b></summary>
+  <summary><b>8. [ANALYZE] Why do numerical calculations on NumPy `object` arrays run 28x slower than on contiguous `float64` arrays?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    *   **Why:** A column with zero variance contains identical values for all classes. It offers no discriminative power.
-    *   **Harmful or useless:** Both. While useless mathematically, it is structurally harmful because it consumes memory, slows down training epochs, and can introduce dummy-variable collinearity issues.
+
+    *   **`float64` Memory Layout:** Values are stored in a single, contiguous byte buffer in RAM. Mathematical operations run directly in compiled C layers using SIMD hardware instructions.
+    *   **`object` Memory Layout:** The array stores memory pointers pointing to fragmented, heap-allocated Python float objects scattered across RAM. Every addition requires pointer chasing and runtime Python type unboxing.
   </div>
 </details>
 
 <details>
-  <summary><b>A5. [ANALYZE] Give two reasons duplicate rows matter, one of which concerns the train/test split.</b></summary>
+  <summary><b>9. [THEORY] How does training scikit-learn estimators on Pandas DataFrames prevent column-reordering production bugs?</b></summary>
   <div className="answer-content">
     <br/>
-    
-    1.  **Data Leakage:** If duplicate rows exist, splitting the data randomly will land identical copies in both train and test sets, inflating test accuracy artificially.
-    2.  **Metric Distortion:** Duplicate rows bias training optimization steps by over-weighting specific coordinates.
-  </div>
-</details>
 
-### `loc`, `iloc` and slicing
-
-<details>
-  <summary><b>I1. [OUT] For `s = pd.Series([10, 20, 30, 40, 50])`, give the output of `s.iloc[1:3]` and `s.loc[1:3]`, and explain why they differ.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **`s.iloc[1:3]`:** `[20, 30]` (returns 2 items, stop index 3 is exclusive).
-    *   **`s.loc[1:3]`:** `[20, 30, 40]` (returns 3 items, stop index key 3 is inclusive).
+    When fitted on a DataFrame, scikit-learn models automatically store the column schema in `feature_names_in_`. If future production requests pass columns in a different order (e.g. `[Salary, Age]` instead of `[Age, Salary]`), the estimator raises an immediate schema validation error. With raw NumPy arrays, the model processes the scrambled columns silently.
   </div>
 </details>
 
 <details>
-  <summary><b>I2. [THEORY] State the **two** differences between `loc` and `iloc`.</b></summary>
+  <summary><b>10. [PROG] Write a complete, defensive Python snippet loading a CSV where semicolons are delimiters, '?' represents missingness, and account IDs preserve leading zeros.</b></summary>
   <div className="answer-content">
     <br/>
-    
-    1.  **Stop exclusivity:** `iloc` excludes the stop offset; `loc` includes the stop key.
-    2.  **Referencing system:** `iloc` strictly references integer offset locations ($0$-based); `loc` strictly references named index label keys.
-  </div>
-</details>
 
-<details>
-  <summary><b>I3. [ANALYZE] Explain why it is reasonable for `loc` to include its stop value while `iloc` excludes it.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **For `iloc`:** Offset slicing relies on mathematical lengths ($0$-based offsets), where `stop - start` equals number of items.
-    *   **For `loc`:** Slicing is categorical label-based (e.g. `loc["Jan":"Mar"]`). If the stop label was excluded, the user would need to know the next chronological label (which might not exist or be hard to specify), making categorical indexing highly unintuitive.
-  </div>
-</details>
-
-<details>
-  <summary><b>I4. [THEORY] After `df = df.sort_values("Age")`, which of `loc` and `iloc` still refers to the same row as before? What would make them agree again?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Which still refers:** `loc` (it tracks the literal, unique row index label key, wherever it moves).
-    *   **How to agree:** Reset the index row keys using `df.reset_index(drop=True)`.
-  </div>
-</details>
-
-<details>
-  <summary><b>I5. [OUT] For a 4-column array, what do `sample[:, 1:99]` and `sample[:, 99]` each do?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **`sample[:, 1:99]`:** Standard slicing. Slices columns from index 1 to the end cleanly without raising errors (slices are tolerant of out-of-bounds markers).
-    *   **`sample[:, 99]`:** Direct indexing. Attempts to retrieve column offset 99, throwing an out-of-bounds `IndexError` because the index doesn't exist.
-  </div>
-</details>
-
-### Converting to NumPy
-
-<details>
-  <summary><b>N1. [THEORY] Explain why `X` comes out 2-D and `y` comes out 1-D, in terms of DataFrames and Series.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **`X` (DataFrame):** Represents multiple feature coordinates (a 2-D tabular matrix, matching scikit-learn's `(n_samples, n_features)` expectation).
-    *   **`y` (Series):** Represents a single target output sequence (a 1-D vector, matching `(n_samples,)`).
-  </div>
-</details>
-
-<details>
-  <summary><b>N2. [THEORY] Why should `.to_numpy()` be preferred over `.values` in new code?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    `.values` is a legacy attribute with inconsistent behaviors depending on the underlying data types. `.to_numpy()` is an explicit, modern method that allows you to specify data types and memory configurations safely.
-  </div>
-</details>
-
-<details>
-  <summary><b>N3. [OUT] Summing 300,000 floats took `0.10 ms` as `float64` and `2.91 ms` as `object`. Explain the ratio in terms of how each is stored in memory.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **`float64`:** Stored as a single, contiguous block of raw numeric bytes in memory, running computations in compiled C layers.
-    *   **`object`:** Stored as an array of pointers pointing to fragmented, individual Python float wrappers scattered in RAM, requiring slow, repeated Python runtime interpreter lookups (unboxing) for each addition.
-  </div>
-</details>
-
-<details>
-  <summary><b>N4. [OUT] A `StandardScaler` fitted on a DataFrame has `feature_names_in_`; one fitted on an array does not. Name a concrete bug the first can catch and the second cannot.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    **Column Reordering:** If deployment features are passed in a different column order (e.g. passed as `[Salary, Age]` instead of `[Age, Salary]`), the DataFrame-fitted scaler will immediately catch the mismatch via `feature_names_in_` and raise an exception. The array-fitted scaler will process the raw matrix silently, standardizing salaries with age statistics and producing garbage predictions.
-  </div>
-</details>
-
-<details>
-  <summary><b>N5. [OUT] A 200,000-row text column with 3 distinct values took `12,600,353` bytes as `object` and `200,429` as `category`. Explain the 98.4% reduction, and name the encoding technique this resembles.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Explanation:** Instead of replicating heavy string bytes 200,000 times, `category` stores unique strings once in a lookup key dictionary, and maps the 200,000 rows as tiny 1-byte integer keys.
-    *   **Encoding resembled:** **Label Encoding** (Ordinal Encoding).
-  </div>
-</details>
-
-<details>
-  <summary><b>N6. [ANALYZE] Most tutorials write `X = df.iloc[:, :-1].values` as the very next line after loading. Give three things this costs, and state when conversion *should* happen.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Three costs:**
-        1.  **Silent mixed-type casting:** Prompts numeric metrics to collapse into expensive `object` dtypes if any string feature is present.
-        2.  **Loss of metadata:** Strips column names, destroying scikit-learn's `feature_names_in_` structural validation.
-        3.  **Data leakage hazard:** Preprocessing scaling is applied to the full array before train/test partition splits are established.
-    *   **When it should happen:** At the very end of the pipeline, strictly after categorical encoding is complete and splits have been established.
-  </div>
-</details>
-
-### Applying it
-
-<details>
-  <summary><b>P1. [PROG] Load `messy.csv` so that `?`, `-1` and `999999` are missing and `"61,000"` parses as a number. Print dtypes and the total missing count.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
     ```python
     import pandas as pd
-    df = pd.read_csv("messy.csv", na_values=["?", "-1", "999999"], thousands=",")
+
+    # Defensive Ingestion Pipeline
+    df = pd.read_csv(
+        "customers.csv",
+        sep=";",                             # Semicolon delimiter
+        na_values=["?", "unknown", "-1"],    # Domain sentinels
+        thousands=",",                       # Digit separators
+        dtype={"account_id": str}           # Preserve leading zeros
+    )
+
+    # Immediate schema and missingness verification
     print(df.dtypes)
-    print("Total missing:", df.isna().sum().sum())
+    print("Total missing entries:", df.isna().sum().sum())
     ```
   </div>
 </details>
-
-<details>
-  <summary><b>P2. [PROG] Write a function that returns the list of columns whose dtype is `object` but where more than half the non-null values convert cleanly with `pd.to_numeric`.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    ```python
-    def find_coerced_numeric_cols(df):
-        cols = []
-        for c in df.select_dtypes(include='object').columns:
-            non_null_count = df[c].notna().sum()
-            if non_null_count == 0:
-                continue
-            coerced = pd.to_numeric(df[c], errors='coerce')
-            if coerced.notna().sum() > 0.5 * non_null_count:
-                cols.append(c)
-        return cols
-    ```
-  </div>
-</details>
-
-<details>
-  <summary><b>P3. [PROG] Print every duplicated row in `messy.csv`, including the first occurrence.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    ```python
-    import pandas as pd
-    df = pd.read_csv("messy.csv")
-    print(df[df.duplicated(keep=False)])
-    ```
-  </div>
-</details>
-
-<details>
-  <summary><b>P4. [PROG] Load `messy.csv` reading only `Country`, `Age` and `Purchased`, with `Country` as a `category` dtype. Print the memory used by each column.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    ```python
-    import pandas as pd
-    df = pd.read_csv("messy.csv", usecols=["Country", "Age", "Purchased"], dtype={"Country": "category"})
-    print(df.memory_usage(deep=True))
-    ```
-  </div>
-</details>
-
-<details>
-  <summary><b>P5. [ANALYZE] You receive a 2 GB CSV that will not fit in memory. Name three `read_csv` parameters that help and explain what each does.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    1.  **`usecols`:** Discards irrelevant feature columns immediately, loading only required features.
-    2.  **`nrows`:** Limits row scans (e.g., loads first 10,000 rows to establish schemas).
-    3.  **`chunksize`:** Streams the 2 GB file in smaller iteration blocks (e.g., 10,000 rows at a time) to prevent memory crashes.
-  </div>
-</details>
-
-### Quick self-check
-
-<details>
-  <summary><b>1. What should you print immediately after every `read_csv`?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    `df.dtypes` and `df.isna().sum()`.
-  </div>
-</details>
-
-<details>
-  <summary><b>2. How many strings does pandas treat as missing by default? Is `?` one of them?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    Pandas treats **19** strings as missing by default. `"?"` is **not** on the list.
-  </div>
-</details>
-
-<details>
-  <summary><b>3. What is a sentinel value, and why can't a library find them for you?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    A valid numeric code (such as `-1` or `999999`) representing missingness. Libraries can't find them because they are mathematically valid coordinates.
-  </div>
-</details>
-
-<details>
-  <summary><b>4. Why must a postcode column be read as `str`?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    To prevent numeric inferencing from permanently stripping leading zeros (e.g. `01234` casting to integer `1234`).
-  </div>
-</details>
-
-<details>
-  <summary><b>5. Name three things a pre-flight audit checks.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    Duplicate rows, constant columns (variance &le; 0), and numeric columns masked as objects.
-  </div>
-</details>
-
-<details>
-  <summary><b>6. Why drop an `id` column even when it predicts well?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    Because unique ID integers act as highly overfit memorization indices that do not generalize to unseen test instances.
-  </div>
-</details>
-
-<details>
-  <summary><b>7. What are the two differences between `loc` and `iloc`?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   `iloc` excludes the stop offset; `loc` includes it.
-    *   `iloc` references integer offsets; `loc` references index label keys.
-  </div>
-</details>
-
-<details>
-  <summary><b>8. How many elements does `loc[1:3]` return? `iloc[1:3]`?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    `loc[1:3]` returns **3** elements. `iloc[1:3]` returns **2** elements.
-  </div>
-</details>
-
-<details>
-  <summary><b>9. Why does `X` end up 2-D and `y` 1-D?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    Because `X` is a multi-column DataFrame (matrix), while `y` is a single-column Series (vector).
-  </div>
-</details>
-
-<details>
-  <summary><b>10. Why is an `object` array so much slower than a `float64` one?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    Because `object` is an array of memory pointers requiring slow, dynamic Python unboxing lookups, while `float64` stores values in continuous, uniform memory blocks.
-  </div>
-</details>
-
-<details>
-  <summary><b>11. What does converting to NumPy cost you that staying in pandas doesn't?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    Strips column name metadata, losing scikit-learn's `feature_names_in_` column alignment validation checks.
-  </div>
-</details>
-
-<details>
-  <summary><b>12. What is the right moment to convert to an array?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    At the very end of preprocessing, after splits are completed and all string columns have been encoded.
-  </div>
-</details>
-\n

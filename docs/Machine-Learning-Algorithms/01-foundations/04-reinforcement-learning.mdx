@@ -1,7 +1,7 @@
 ---
 sidebar_position: 4
 title: Reinforcement Learning
-description: The paradigm with no dataset — an agent learns by acting, receiving rewards and penalties, and the exploration-exploitation tradeoff that decides whether it finds the best policy or settles for a mediocre one.
+description: The paradigm with no dataset — an agent learns by acting, receiving rewards and penalties, and navigating the exploration-exploitation tradeoff that decides whether it finds the global optimum or settles for a mediocre trap.
 tags: [machine-learning, foundations, reinforcement-learning]
 toc_max_heading_level: 3
 ---
@@ -12,53 +12,39 @@ import React from 'react';
 
 # Reinforcement Learning
 
-> **Topic —** The three paradigms so far all begin the same way: a table of data arrives, and you
-> check whether it has a label column. Reinforcement learning begins with **no table at all**. The
-> agent generates its own data by acting, and finds out afterwards how that went.
+> **Topic -** Supervised, unsupervised, and semi-supervised learning all begin with an existing table of data. Reinforcement learning begins with **no dataset at all**. An autonomous agent actively interacts with an external environment, collects numerical feedback, and learns optimal sequential behavior through trial and error.
 
-That difference is not a detail. It changes what "training data" even means.
+This architectural shift fundamentally redefines what training data means: the dataset is generated dynamically by the agent's own actions.
 
 ---
 
-## The definition
+## 1. The Core Concept
 
-> **Reinforcement learning is a feedback-based technique in which an agent learns to behave in an
-> environment by performing actions and seeing the results of those actions.**
+Reinforcement learning is a feedback-based learning paradigm in which an agent learns to make optimal decisions in an environment by performing actions and observing the resulting rewards or penalties.
 
-The two words carrying the weight are **feedback-based** and **actions**.
+*   **Positive Feedback (Reward):** Encourages the agent to reinforce and repeat the chosen behavior.
+*   **Negative Feedback (Penalty):** Discourages the agent from selecting that action in similar situations.
+*   **Zero Ground Truth Labels:** The agent is never told the correct action. It is only informed, after taking an action, of the numerical score it collected. It must work backwards from scalar feedback to deduce an optimal strategy.
 
-- For each **good action**, the agent gets **positive feedback**
-- For each **bad action**, the agent gets **negative feedback**, or a **penalty**
+**The ultimate goal of the agent is to maximize its cumulative positive reward (total return) over time.**
 
-Since there is **no labelled data**, the agent is bound to **learn by its experience only**. Nobody
-ever tells it the correct action. It is told, after the fact, how much reward it collected — and it
-must work backwards from that to figure out what it should have done.
+### Core Vocabulary
 
-**The primary goal of the agent is to improve its performance by getting the maximum positive
-rewards.**
+Reinforcement learning operates on a formal mathematical vocabulary where terms carry exact technical definitions:
 
----
-
-## The vocabulary
-
-Reinforcement learning has more moving parts than the other paradigms, and the terms are used
-precisely.
-
-| Term | Meaning | In the grid demo below |
+| Term | Technical Meaning | In the 4x4 Gridworld Simulation |
 |---|---|---|
-| **Agent** | The learner and decision-maker | The thing walking around |
-| **Environment** | Everything outside the agent, which it acts upon | The 4×4 grid and its rules |
-| **State** | The situation the agent is currently in | Which square it stands on |
-| **Action** | A choice available to the agent | Move up, down, left or right |
-| **Reward** | The numeric feedback for an action | `+10` jackpot, `−10` pit, `−1` per step |
-| **Policy** | The agent's strategy — state → action | "On this square, go down" |
-| **Episode** | One run from start to a terminal state | Start until it hits goal or pit |
-| **Return** | Total reward accumulated over an episode | The episode's score |
-| **Value** | Expected return from a state onwards | How promising this square is |
+| **Agent** | The decision-making entity and learner | The autonomous navigation algorithm |
+| **Environment** | The external system the agent interacts with | The 4x4 maze, walls, and state transition rules |
+| **State ($s$)** | The instantaneous observation or configuration | The current coordinate $(x, y)$ occupied on the grid |
+| **Action ($a$)** | A discrete or continuous decision available | Movement: `Up`, `Down`, `Left`, or `Right` |
+| **Reward ($r$)** | Scalar feedback returned by the environment | `+10` jackpot, `+2` small prize, `−10` pit, `−1` per step |
+| **Policy ($\pi$)** | Strategy mapping situations to actions: $\pi(s) \to a$ | The complete navigation map across all 16 cells |
+| **Episode** | One full trial from start to a terminal state | Navigation run until hitting the goal, a pit, or 100 steps |
+| **Return ($G$)** | Cumulative discounted reward accumulated in an episode | $G_t = \sum_{k=0}^{\infty} \gamma^k r_{t+k+1}$ |
+| **Value ($V$ or $Q$)** | Expected long-term return from a state or state-action pair | How promising a specific square or action is long-term |
 
-The **policy** is the actual output of reinforcement learning. Where supervised learning produces a
-model that maps features to a prediction, reinforcement learning produces a policy that maps
-situations to behaviour.
+The **policy** ($\pi$) is the actual output of reinforcement learning. Where supervised learning produces a model mapping features to static predictions, reinforcement learning produces a policy mapping environmental states to sequential behaviors.
 
 ---
 
@@ -71,37 +57,37 @@ export const RLTerminologyQuiz = () => {
       <h4 style={{ margin: '0 0 15px 0' }}>Interactive Checkpoint: Reinforcement Learning Terminology</h4>
       
       <div style={{ marginBottom: '20px' }}>
-        <p style={{ margin: '0 0 10px 0' }}><b>Scenario 1:</b> An autonomous vehicle's central computer decides to <i>"Apply maximum braking power"</i> after detecting an obstacle. What core RL component does this decision represent?</p>
+        <p style={{ margin: '0 0 10px 0' }}><b>Scenario 1:</b> An autonomous vehicle central computer decides to <i>"Apply maximum braking pressure"</i> after detecting an obstacle. What core RL component does this decision represent?</p>
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          <button onClick={() => setQ1('state')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q1 === 'state' ? '#e53e3e' : 'transparent', color: q1 === 'state' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>State</button>
-          <button onClick={() => setQ1('action')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q1 === 'action' ? '#38a169' : 'transparent', color: q1 === 'action' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Action</button>
-          <button onClick={() => setQ1('policy')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q1 === 'policy' ? '#e53e3e' : 'transparent', color: q1 === 'policy' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Policy</button>
-          <button onClick={() => setQ1('reward')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q1 === 'reward' ? '#e53e3e' : 'transparent', color: q1 === 'reward' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Reward</button>
+          <button onClick={() => setQ1('state')} style={{ padding: '6px 14px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q1 === 'state' ? '#e53e3e' : 'transparent', color: q1 === 'state' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>State</button>
+          <button onClick={() => setQ1('action')} style={{ padding: '6px 14px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q1 === 'action' ? '#38a169' : 'transparent', color: q1 === 'action' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Action</button>
+          <button onClick={() => setQ1('policy')} style={{ padding: '6px 14px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q1 === 'policy' ? '#e53e3e' : 'transparent', color: q1 === 'policy' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Policy</button>
+          <button onClick={() => setQ1('reward')} style={{ padding: '6px 14px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q1 === 'reward' ? '#e53e3e' : 'transparent', color: q1 === 'reward' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Reward</button>
         </div>
-        {q1 === 'action' && <p style={{ color: '#38a169', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Correct! Applying brakes is a choice or physical output available to the agent, which makes it an Action.</p>}
-        {q1 && q1 !== 'action' && <p style={{ color: '#e53e3e', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Try again! Think about what physical outputs or decisions the agent generates to affect the environment.</p>}
+        {q1 === 'action' && <p style={{ color: '#38a169', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Correct! Applying brakes is a physical choice executed by the agent, representing an Action.</p>}
+        {q1 && q1 !== 'action' && <p style={{ color: '#e53e3e', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Incorrect. Consider the physical commands or outputs the agent issues to influence the external world.</p>}
       </div>
 
       <div style={{ marginBottom: '20px' }}>
-        <p style={{ margin: '0 0 10px 0' }}><b>Scenario 2:</b> The vehicle's camera, LiDAR, and speed sensors report: <i>"Object detected at 10 meters, current vehicle speed is 50 km/h, lane position is centered"</i>. What component does this represent?</p>
+        <p style={{ margin: '0 0 10px 0' }}><b>Scenario 2:</b> The vehicle sensors report: <i>"Object detected at 10 meters, speed is 50 km/h, road is wet"</i>. What component does this represent?</p>
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          <button onClick={() => setQ2('state')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q2 === 'state' ? '#38a169' : 'transparent', color: q2 === 'state' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>State</button>
-          <button onClick={() => setQ2('environment')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q2 === 'environment' ? '#e53e3e' : 'transparent', color: q2 === 'environment' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Environment</button>
-          <button onClick={() => setQ2('agent')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q2 === 'agent' ? '#e53e3e' : 'transparent', color: q2 === 'agent' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Agent</button>
+          <button onClick={() => setQ2('state')} style={{ padding: '6px 14px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q2 === 'state' ? '#38a169' : 'transparent', color: q2 === 'state' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>State</button>
+          <button onClick={() => setQ2('environment')} style={{ padding: '6px 14px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q2 === 'environment' ? '#e53e3e' : 'transparent', color: q2 === 'environment' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Environment</button>
+          <button onClick={() => setQ2('agent')} style={{ padding: '6px 14px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q2 === 'agent' ? '#e53e3e' : 'transparent', color: q2 === 'agent' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Agent</button>
         </div>
-        {q2 === 'state' && <p style={{ color: '#38a169', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Correct! The instantaneous readings of the sensors represent the current State the agent is in.</p>}
-        {q2 && q2 !== 'state' && <p style={{ color: '#e53e3e', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Try again! Although the objects are part of the external environment, these specific readings represent the instantaneous situation of the agent.</p>}
+        {q2 === 'state' && <p style={{ color: '#38a169', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Correct! The instantaneous sensor configuration describing the current situation is the State.</p>}
+        {q2 && q2 !== 'state' && <p style={{ color: '#e53e3e', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Incorrect. While these objects exist in the external environment, the numerical snapshot observed by the agent is its State.</p>}
       </div>
 
       <div>
-        <p style={{ margin: '0 0 10px 0' }}><b>Scenario 3:</b> The overall driving software of the vehicle, which converts raw sensor readings into specific control commands (steering, accelerating, braking), represents the:</p>
+        <p style={{ margin: '0 0 10px 0' }}><b>Scenario 3:</b> The overall driving software that maps any arbitrary sensor input into steering, throttling, and braking commands represents the:</p>
         <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          <button onClick={() => setQ3('policy')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q3 === 'policy' ? '#38a169' : 'transparent', color: q3 === 'policy' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Policy</button>
-          <button onClick={() => setQ3('value')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q3 === 'value' ? '#e53e3e' : 'transparent', color: q3 === 'value' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Value Function</button>
-          <button onClick={() => setQ3('episode')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q3 === 'episode' ? '#e53e3e' : 'transparent', color: q3 === 'episode' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Episode</button>
+          <button onClick={() => setQ3('policy')} style={{ padding: '6px 14px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q3 === 'policy' ? '#38a169' : 'transparent', color: q3 === 'policy' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Policy</button>
+          <button onClick={() => setQ3('value')} style={{ padding: '6px 14px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q3 === 'value' ? '#e53e3e' : 'transparent', color: q3 === 'value' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Value Function</button>
+          <button onClick={() => setQ3('episode')} style={{ padding: '6px 14px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q3 === 'episode' ? '#e53e3e' : 'transparent', color: q3 === 'episode' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Episode</button>
         </div>
-        {q3 === 'policy' && <p style={{ color: '#38a169', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Correct! The Policy is the strategy or function mapping states to actions (situations to behavior).</p>}
-        {q3 && q3 !== 'policy' && <p style={{ color: '#e53e3e', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Try again! Think about what name is given to the overall mapping of states to actions.</p>}
+        {q3 === 'policy' && <p style={{ color: '#38a169', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Correct! The Policy is the strategy function mapping states to behavioral actions.</p>}
+        {q3 && q3 !== 'policy' && <p style={{ color: '#e53e3e', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Incorrect. The complete mapping function from situations to actions is the Policy.</p>}
       </div>
     </div>
   );
@@ -109,205 +95,585 @@ export const RLTerminologyQuiz = () => {
 
 <RLTerminologyQuiz />
 
-## The loop
-
-Everything in reinforcement learning is this cycle, repeated:
-
-```
-              ┌─────────────────────────────────────┐
-              │                                     │
-              ▼                                     │
-        ┌──────────┐         action a          ┌────┴─────┐
-        │          │ ────────────────────────► │          │
-        │  AGENT   │                           │  ENVIRON │
-        │          │ ◄──────────────────────── │   MENT   │
-        └──────────┘   new state s', reward r  └──────────┘
-
-        1. agent observes the current state
-        2. agent chooses an action
-        3. environment returns a new state and a reward
-        4. agent updates its policy
-        5. repeat
-```
-
-Two properties of this loop cause all the difficulty:
-
-**The agent's actions change the data it sees next.** In supervised learning your dataset is fixed;
-here, a bad early policy means the agent only ever visits bad states and never discovers the good
-ones. The data distribution depends on the thing being learned.
-
-**Reward is often delayed.** A chess move that loses the game may look fine when played. The agent
-receives one signal at the end and must apportion credit across all the moves that led there — the
-**credit assignment problem**.
-
 ---
 
-## Why it isn't the other three
+## 2. The Agent-Environment Loop
 
-| | Supervised | Unsupervised | Semi-supervised | **Reinforcement** |
+Every reinforcement learning problem operates through a continuous, closed-loop cycle of observation, action, and evaluation:
+
+```mermaid
+flowchart LR
+    classDef box fill:#f8fafc,stroke:#3b82f6,stroke-width:2px;
+
+    Agent["Agent (Decision Maker)"]
+    Env["Environment (External World)"]
+
+    Agent -- "Action (a)" --> Env
+    Env -- "New State (s') & Reward (r)" --> Agent
+
+    class Agent,Env box;
+```
+
+### The Two Primary Algorithmic Challenges
+
+Two structural realities distinguish reinforcement learning from standard machine learning:
+
+1.  **Actions Alter Future Data Distributions:** In supervised learning, the dataset is stationary and fixed before training begins. In reinforcement learning, the agent's actions dictate which states it visits next. If an early policy is poor, the agent wanders exclusively through low-reward states, never discovering high-value regions. The training distribution is non-stationary and coupled to the policy being learned.
+2.  **Delayed Feedback & Credit Assignment:** Rewards are rarely immediate. An opening move in chess may determine a victory forty turns later, but the game-winning reward (`+1`) arrives only at checkmate. Apportioning credit or blame to intermediate actions taken long before the terminal state is called the **Credit Assignment Problem**.
+
+### Comparative Paradigm Breakdown
+
+| Dimension | Supervised | Unsupervised | Semi-Supervised | Reinforcement |
 |---|---|---|---|---|
-| Training data | Labelled rows | Unlabelled rows | Both | **Generated by acting** |
-| Feedback | The correct answer | None | Partial | **A reward, not an answer** |
-| Told what's right? | Yes | Never | Sometimes | **No — only how good** |
-| Data fixed in advance? | Yes | Yes | Yes | **No** |
-| Output | A prediction | A description | A prediction | **A policy** |
-| Timing of feedback | Immediate | — | Immediate | **Often delayed** |
-
-The row that matters most is the third. Reinforcement learning shares "no labels" with unsupervised
-learning, and people therefore lump them together — but this is wrong:
+| **Training Data** | Pre-existing labelled rows $(X, y)$ | Pre-existing unlabelled rows $(X)$ | Both labelled and unlabelled | **No dataset: generated via active trial** |
+| **Feedback Type** | Explicit target answers | No feedback | Partial target answers | **Evaluative scalar reward ($r$), not an answer** |
+| **Told What is Right?** | Yes | Never | Sometimes | **No - only told how good or bad an action was** |
+| **Data Distribution** | Fixed prior to training | Fixed prior to training | Fixed prior to training | **Dynamic: determined by the policy actions** |
+| **Core Objective** | Minimize prediction loss | Discover latent clusters/patterns | Generalize with sparse labels | **Maximize cumulative return ($G_t$)** |
+| **Learned Artifact** | Predictive model ($\hat{y} = f(X)$) | Cluster or density structure | Semi-supervised classifier | **Behavioral policy ($\pi: s \to a$)** |
 
 :::note
 
-**Reward is not a label, and it is not nothing**
+**A Reward is Not a Label, and it is Not Nothing**
 
-**Supervised** learning is told *"the answer was `malignant`"*.
-**Unsupervised** learning is told nothing at all.
-**Reinforcement** learning is told *"that got you `−1`"* — which is neither the answer nor silence.
+*   **Supervised learning** is told: *"The true answer was Malignant."*
+*   **Unsupervised learning** is told: Nothing at all.
+*   **Reinforcement learning** is told: *"Taking that step earned you a score of -1."*
 
-A reward says **how good** an action was, never **what you should have done instead**. That's why
-the agent must try alternatives to find out: evaluating one action tells it nothing about the others.
+A reward evaluates **how well the agent performed**, but never reveals **what the agent should have done instead**. Evaluating action A yields zero information about alternative actions B or C. The agent is forced to actively explore unknown alternatives to discover superior policies.
 
 :::
 
 ---
 
-## The two hard problems
+## 3. Mathematical Formulation: Q-Learning
 
-### Exploration vs exploitation
+To solve the credit assignment problem and determine optimal policies, reinforcement learning algorithms estimate the **Action-Value Function** $Q(s, a)$, representing the expected cumulative reward of taking action $a$ in state $s$ and following policy $\pi$ thereafter.
 
-At every step the agent faces a dilemma:
+In tabular **Q-Learning**, updates follow the **Bellman Optimality Equation**:
 
-- **Exploit** — take the best action it currently knows about, and collect the reward
-- **Explore** — try something else, which may be worse, but might reveal something better
+$$Q(s, a) \leftarrow Q(s, a) + \alpha \left[ r + \gamma \max_{a'} Q(s', a') - Q(s, a) \right]$$
 
-Exploit too much and the agent locks onto the first decent thing it finds, never discovering that
-something far better exists. Explore too much and it spends its life taking actions it already knows
-are bad.
+### Mathematical Decomposition
 
-The standard mechanism is **ε-greedy**: with probability ε take a random action, otherwise take the
-best known one. `ε` is the dial between the two, and the demo below shows exactly what it costs to
-set it wrongly in either direction.
-
-### Credit assignment
-
-When reward arrives late, which of the fifty actions you took deserves the credit? Reinforcement
-learning solves this by propagating value backwards: a state is valuable if it *leads to* valuable
-states. This is why the agent in the demo eventually learns that the square next to the start is
-worth something, despite that square paying nothing itself.
-
----
-
-## Where it's used
-
-**Reinforcement learning plays a significant role in the development of autonomous vehicles**, also
-known as self-driving cars. The fit is natural: there is no dataset of correct steering angles for
-every situation, but there is abundant feedback — stayed in lane, maintained distance, reached the
-destination, or crashed.
-
-| Domain | The agent | The reward |
-|---|---|---|
-| **Autonomous vehicles** | The driving policy | Progress, safety, comfort |
-| Game playing | The player | Winning; score |
-| Robotics | Motor controller | Task completed, energy used |
-| Recommendation | The ranking policy | Clicks, watch time, retention |
-| Resource management | Scheduler | Throughput, latency, cost |
-
-The common shape: **you can recognise good behaviour, but you cannot write down the correct action
-for every situation.** That is precisely the gap reinforcement learning fills — and it's the same gap
-that made hand-written rules fail in the first place, one level further up.
-
-### Reinforcement Learning from Human Feedback (RLHF)
-
-The most prominent modern application of Reinforcement Learning is not in games or robotics, but in **Generative AI** — specifically, fine-tuning Large Language Models (LLMs) to align with human values, safety, and utility. This technique is known as **Reinforcement Learning from Human Feedback (RLHF)**.
-
-Why is RLHF necessary? While next-token prediction (Self-Supervised Learning) is powerful, it can produce completions that are toxic, inaccurate, or unhelpful. RLHF fine-tunes the model's behavior by treating the LLM as an **Agent** and the dialogue session as the **Environment**.
-
-The RLHF pipeline operates in three key phases:
-
-1.  **Human Rating of Completions:**
-    A prompt is given to multiple copies or runs of the LLM. Humans (or high-quality AI raters) evaluate the generated completions, ranking them based on quality, helpfulness, and safety.
-2.  **Training a Reward Model:**
-    These human preference rankings are used to train a separate neural network called the **Reward Model**. This model learns to map any prompt-completion pair to a single scalar **Reward** value, representing how much a human would approve of that response.
-3.  **Policy Optimization:**
-    The base LLM is treated as a **Policy** (mapping prompt states to token actions). A policy optimization algorithm — most commonly **Proximal Policy Optimization (PPO)** or **Direct Preference Optimization (DPO)** — fine-tunes the LLM. The algorithm maximizes the expected reward from the Reward Model while penalizing the LLM if its predictions drift too far from the original base model (using a KL-divergence penalty to ensure stability).
-
-Through RLHF, reinforcement learning serves as the critical bridge that transforms raw text-completion engines into safe, polite, and effective conversational assistants (such as ChatGPT, Claude, and Gemini).
-
----
-
-## Common Mistakes
-
-Here are the most common conceptual pitfalls when implementing and analyzing Reinforcement Learning algorithms, compared with the correct engineering principles.
+Click through the tabs below to dissect the components of the Bellman update rule:
 
 <Tabs>
-  <TabItem value="mistake1" label="1. Unsupervised Fallacy" default>
+  <TabItem value="current" label="1. Current Estimate Q(s, a)" default>
     <br/>
 
-    *   **The Misconception:** *"Reinforcement learning is just a type of unsupervised learning because it does not use human labels."*
-    *   **Wrong Thinking:** Treating RL as if it runs without any feedback, missing the critical difference in objective.
-    *   **The Right Principle:** Unsupervised learning receives **no feedback** at all and is purely exploratory. Reinforcement learning receives numerical **feedback (rewards/penalties)**. It has feedback without answers.
+    *   **What it represents:** The current stored expectation of the total reward achievable by executing action $a$ in state $s$.
+    *   **Algorithmic Role:** Acts as the baseline anchor. When the table is initialized, these values are typically set to zero.
   </TabItem>
-  <TabItem value="mistake2" label="2. Reward = Label">
+  <TabItem value="alpha" label="2. Learning Rate (α)">
     <br/>
 
-    *   **The Misconception:** *"A reward is just another word for a label, telling the model the correct action to take."*
-    *   **Wrong Thinking:** Believing that a reward of `-1` or `+10` directly informs the agent of the exact action it *should* have performed.
-    *   **The Right Principle:** A reward says **how good** an action was, never **what the agent should have done instead**. Evaluating one action tells it nothing about the other choices, which forces the agent to explore alternatives.
+    *   **What it represents:** The step size parameter ($\alpha \in (0, 1]$) determining how aggressively new empirical observations overwrite prior beliefs.
+    *   **Algorithmic Role:** Setting $\alpha = 0.1$ ensures stable, gradual updates in stochastic environments. Setting $\alpha = 1.0$ completely replaces the old estimate with the most recent experience.
   </TabItem>
-  <TabItem value="mistake3" label="3. Policy vs. Model">
+  <TabItem value="target" label="3. TD Target (r + γ max Q)">
     <br/>
 
-    *   **The Misconception:** *"Reinforcement learning outputs a standard predictive model just like supervised learning."*
-    *   **Wrong Thinking:** Expecting the output of RL to be a static mapping of features to predictive target variables.
-    *   **The Right Principle:** RL outputs a **policy** — an active strategy or function mapping situational *states* to optimal *behaviors or actions*.
+    *   **What it represents:** The **Temporal Difference (TD) Target** — the immediate reward $r$ observed, plus the discounted value of the best possible action in the subsequent state $s'$.
+    *   **Algorithmic Role:** Provides the newly observed reality. Because it uses the agent's own estimates to update itself, Q-learning is a **bootstrapping** algorithm.
   </TabItem>
-  <TabItem value="mistake4" label="4. Zero Exploration (ε = 0)">
+  <TabItem value="gamma" label="4. Discount Factor (γ)">
     <br/>
 
-    *   **The Misconception:** *"We should set the exploration rate ε to 0 from the start so the agent always takes the best-known action."*
-    *   **Wrong Thinking:** Trying to maximize online rewards immediately, leading to a complete lack of curiosity.
-    *   **The Right Principle:** If an agent never explores, it locks onto the first mediocre option it discovers (premature convergence), failing to find far more valuable paths.
+    *   **What it represents:** The discount rate ($\gamma \in [0, 1)$) defining how heavily the agent values future rewards compared to immediate ones.
+    *   **Algorithmic Role:** When $\gamma \to 0$, the agent is short-sighted, caring only about immediate payoffs. When $\gamma \to 1$, the agent is far-sighted, willingly enduring negative step penalties to secure distant high-value jackpots.
   </TabItem>
-  <TabItem value="mistake5" label="5. Total Exploration (ε = 1)">
+  <TabItem value="error" label="5. TD Error (Target - Current)">
     <br/>
 
-    *   **The Misconception:** *"An exploration rate of ε = 1 is optimal because the agent will fully discover the environment."*
-    *   **Wrong Thinking:** Believing that random action selection leads to an optimal policy without any performance cost.
-    *   **The Right Principle:** Setting `ε = 1` makes the agent behave completely randomly forever, paying a massive cumulative penalty in rewards while gaining no additional information compared to a balanced decaying epsilon.
-  </TabItem>
-  <TabItem value="mistake6" label="6. Online Reward Progress">
-    <br/>
-
-    *   **The Misconception:** *"We must evaluate our agent's overall progress by plotting its online reward accumulated during training."*
-    *   **Wrong Thinking:** Panicking when the learning curve of an active explorer looks highly unstable or negative.
-    *   **The Right Principle:** During learning, exploration actions (random moves) will drag the online score down. To measure true progress, evaluate the **greedy policy** (setting `ε = 0`) periodically on separate clean runs.
-  </TabItem>
-  <TabItem value="mistake7" label="7. Immediate Feedback Expectation">
-    <br/>
-
-    *   **The Misconception:** *"The environment should reward every single correct choice immediately."*
-    *   **Wrong Thinking:** Assuming that a chess move or steering adjustment can be graded individually without looking at the final outcome.
-    *   **The Right Principle:** Rewards in RL are often highly **delayed** (e.g., winning/losing a game after hours of play). The agent must solve the **credit assignment problem** by propagating value backwards through time.
-  </TabItem>
-  <TabItem value="mistake8" label="8. Fixed Dataset Assumption">
-    <br/>
-
-    *   **The Misconception:** *"We must gather a complete dataset of states and rewards first, then train our RL agent off-line."*
-    *   **Wrong Thinking:** Treating RL as a standard batch-supervised process with static inputs.
-    *   **The Right Principle:** The agent's actions **actively determine** the future states it will visit. A bad early policy means the agent never visits optimal states, altering its own data distribution.
-  </TabItem>
-  <TabItem value="mistake9" label="9. Premature Stopping">
-    <br/>
-
-    *   **The Misconception:** *"We can stop training as soon as the reward curve flattens out for a few hundred episodes."*
-    *   **Wrong Thinking:** Confusing a flat learning curve (local optimum or trap) with true, optimal convergence.
-    *   **The Right Principle:** RL agents can remain trapped on a plateau (such as a local small prize) for thousands of episodes before a random exploration sequence triggers a breakthrough to the global optimum.
+    *   **What it represents:** $\delta = \left[ r + \gamma \max_{a'} Q(s', a') - Q(s, a) \right]$ — the discrepancy between the expected return and the observed outcome.
+    *   **Algorithmic Role:** Drives policy improvement. If the TD error is positive, taking action $a$ yielded a better outcome than expected, increasing $Q(s, a)$.
   </TabItem>
 </Tabs>
 
 ---
 
-## Summary
+## 4. The Exploration-Exploitation Dilemma
+
+At every decision point, an agent faces a fundamental trade-off:
+
+*   **Exploitation:** Choose the best action known from current memory to maximize immediate score.
+    *   *Failure Mode:* If the agent exploits too early, it locks onto the first mediocre reward it finds (premature convergence) and never discovers that a 5x larger jackpot exists elsewhere.
+*   **Exploration:** Choose an unvisited or random action to uncover new environmental dynamics.
+    *   *Failure Mode:* If the agent explores too much, it wastes time taking actions it already knows are disastrous (such as walking into pits), driving its learning score deeply negative.
+
+### The ε-Greedy Strategy
+
+The industry-standard solution is the **$\epsilon$-greedy** selection rule:
+
+$$a = \begin{cases} \operatorname{argmax}_a Q(s, a) & \text{with probability } 1 - \epsilon \quad \text{(Exploit)} \\ \text{Random action from } \mathcal{A} & \text{with probability } \epsilon \quad \text{(Explore)} \end{cases}$$
+
+The parameter $\epsilon \in [0, 1]$ acts as a tuning dial between greed and curiosity.
+
+---
+
+export const GridworldVisualizer = () => {
+  const [epsilonMode, setEpsilonMode] = React.useState('0.5');
+  const [activeStep, setActiveStep] = React.useState(0);
+  const [simRunning, setSimRunning] = React.useState(false);
+
+  // Grid definition: 4x4
+  // S at (0,0), small prize t (+2) at (0,2), Pits X (-10) at (1,1), (1,2), (2,3), Goal G (+10) at (3,3)
+  const scenarios = {
+    '0.0': {
+      title: 'ε = 0.00 (Pure Greed / Zero Exploration)',
+      desc: 'The agent never takes risks. Having discovered the nearby small prize (+2) in early trials, it locks onto it forever, completely blind to the +10 jackpot.',
+      path: [[0,0], [0,1], [0,2]],
+      outcome: 'Trapped in Local Optimum',
+      terminalType: 'small_prize',
+      finalScore: '+1.00',
+      policyQuality: 'Sub-Optimal (Only 20% of achievable jackpot)',
+      steps: 2
+    },
+    '0.2': {
+      title: 'ε = 0.20 (Low Exploration)',
+      desc: 'With only 20% exploration, the agent occasionally tries new steps, but 80% greed pulls it back to the small prize before it can navigate around the pits.',
+      path: [[0,0], [0,1], [0,2]],
+      outcome: 'Trapped in Local Optimum',
+      terminalType: 'small_prize',
+      finalScore: '+1.00',
+      policyQuality: 'Sub-Optimal (Stuck on plateau)',
+      steps: 2
+    },
+    '0.5': {
+      title: 'ε = 0.50 (Balanced Curiosity)',
+      desc: 'Willingness to explore 50% of the time enables the agent to endure negative step penalties, bypass the local small prize, circumnavigate the pits, and discover the +10 jackpot.',
+      path: [[0,0], [1,0], [2,0], [2,1], [3,1], [3,2], [3,3]],
+      outcome: 'Global Optimum Discovered',
+      terminalType: 'jackpot',
+      finalScore: '+5.00',
+      policyQuality: 'Optimal Policy (Maximum theoretical return)',
+      steps: 6
+    },
+    '1.0': {
+      title: 'ε = 1.00 (Pure Random Walking)',
+      desc: 'The agent takes 100% random actions. While it technically encounters the jackpot, it takes chaotic detours, repeatedly walking into pits and paying massive penalties.',
+      path: [[0,0], [0,1], [1,1]],
+      outcome: 'Catastrophic Pitfall',
+      terminalType: 'pit',
+      finalScore: '-11.00',
+      policyQuality: 'Wasteful & Chaotic (No policy exploitation)',
+      steps: 2
+    }
+  };
+
+  const currentScenario = scenarios[epsilonMode];
+
+  const gridData = [
+    [{ type: 'start', label: 'S (Start)' }, { type: 'empty', label: '.' }, { type: 'small', label: 't (+2)' }, { type: 'empty', label: '.' }],
+    [{ type: 'empty', label: '.' }, { type: 'pit', label: 'X (-10)' }, { type: 'pit', label: 'X (-10)' }, { type: 'empty', label: '.' }],
+    [{ type: 'empty', label: '.' }, { type: 'empty', label: '.' }, { type: 'empty', label: '.' }, { type: 'pit', label: 'X (-10)' }],
+    [{ type: 'empty', label: '.' }, { type: 'empty', label: '.' }, { type: 'empty', label: '.' }, { type: 'goal', label: 'G (+10)' }]
+  ];
+
+  const currentPos = currentScenario.path[activeStep] || currentScenario.path[currentScenario.path.length - 1];
+
+  const runSimulation = () => {
+    setActiveStep(0);
+    setSimRunning(true);
+    let step = 0;
+    const interval = setInterval(() => {
+      step += 1;
+      if (step < currentScenario.path.length) {
+        setActiveStep(step);
+      } else {
+        clearInterval(interval);
+        setSimRunning(false);
+      }
+    }, 450);
+  };
+
+  return (
+    <div style={{ padding: '24px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '25px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive 4x4 Gridworld & Exploration Visualizer</h4>
+      <p style={{ margin: '0 0 16px 0', fontSize: '14px' }}>
+        Observe how changing the exploration rate $\epsilon$ determines whether an agent locks onto the nearby small prize $(t, +2)$ or navigates around the penalty pits $(X, -10)$ to reach the distant jackpot $(G, +10)$:
+      </p>
+
+      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '18px' }}>
+        {Object.keys(scenarios).map(mode => (
+          <button
+            key={mode}
+            onClick={() => { setEpsilonMode(mode); setActiveStep(0); setSimRunning(false); }}
+            style={{
+              padding: '6px 14px',
+              borderRadius: '4px',
+              border: '1px solid #3182ce',
+              backgroundColor: epsilonMode === mode ? '#3182ce' : 'transparent',
+              color: epsilonMode === mode ? '#fff' : 'var(--ifm-font-color-base)',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              fontSize: '13px',
+              transition: '0.2s'
+            }}
+          >
+            {mode === '0.0' ? 'ε = 0.0 (Greedy)' : mode === '0.2' ? 'ε = 0.2 (Low)' : mode === '0.5' ? 'ε = 0.5 (Optimal)' : 'ε = 1.0 (Random)'}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '24px', alignItems: 'center' }}>
+        {/* 4x4 Grid Canvas */}
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(4, 1fr)',
+          gap: '8px',
+          maxWidth: '320px',
+          margin: '0 auto',
+          padding: '12px',
+          backgroundColor: 'var(--ifm-background-surface-color)',
+          borderRadius: '8px',
+          border: '2px solid var(--ifm-color-emphasis-300)'
+        }}>
+          {gridData.map((row, rIdx) =>
+            row.map((cell, cIdx) => {
+              const isAgentHere = currentPos[0] === rIdx && currentPos[1] === cIdx;
+              let bg = 'rgba(148, 163, 184, 0.1)';
+              let color = 'var(--ifm-font-color-base)';
+              let border = '1px solid var(--ifm-color-emphasis-200)';
+
+              if (cell.type === 'start') { bg = 'rgba(49, 130, 206, 0.15)'; color = '#2b6cb0'; }
+              if (cell.type === 'small') { bg = 'rgba(236, 201, 75, 0.25)'; color = '#b7791f'; border = '1px solid #d69e2e'; }
+              if (cell.type === 'pit')   { bg = 'rgba(229, 62, 62, 0.2)'; color = '#c53030'; border = '1px solid #e53e3e'; }
+              if (cell.type === 'goal')  { bg = 'rgba(72, 187, 120, 0.25)'; color = '#276749'; border = '2px solid #38a169'; }
+
+              if (isAgentHere) {
+                border = '3px solid #3182ce';
+                bg = '#3182ce';
+                color = '#ffffff';
+              }
+
+              return (
+                <div
+                  key={`${rIdx}-${cIdx}`}
+                  style={{
+                    height: '62px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    borderRadius: '6px',
+                    backgroundColor: bg,
+                    color: color,
+                    border: border,
+                    fontWeight: isAgentHere ? 'bold' : 'normal',
+                    fontSize: '11px',
+                    textAlign: 'center',
+                    transition: 'all 0.3s ease'
+                  }}
+                >
+                  {isAgentHere ? (
+                    <span style={{ fontSize: '13px', fontWeight: 'bold' }}>[AGENT]</span>
+                  ) : (
+                    <span>{cell.label}</span>
+                  )}
+                  <span style={{ fontSize: '9px', opacity: 0.7 }}>({rIdx},{cIdx})</span>
+                </div>
+              );
+            })
+          )}
+        </div>
+
+        {/* Diagnostic Telemetry Panel */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+          <div style={{ padding: '14px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+            <div style={{ fontSize: '14px', fontWeight: 'bold', color: '#3182ce', marginBottom: '6px' }}>
+              {currentScenario.title}
+            </div>
+            <div style={{ fontSize: '13px', color: 'var(--ifm-color-emphasis-800)', lineHeight: '1.5' }}>
+              {currentScenario.desc}
+            </div>
+          </div>
+
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+            <div style={{ padding: '10px 14px', borderRadius: '6px', backgroundColor: 'rgba(49, 130, 206, 0.08)' }}>
+              <div style={{ fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase', color: '#2b6cb0' }}>Terminal Outcome</div>
+              <div style={{ fontSize: '14px', fontWeight: 'bold', marginTop: '3px' }}>{currentScenario.outcome}</div>
+            </div>
+            <div style={{ padding: '10px 14px', borderRadius: '6px', backgroundColor: 'rgba(72, 187, 120, 0.08)' }}>
+              <div style={{ fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase', color: '#276749' }}>Final Policy Value</div>
+              <div style={{ fontSize: '16px', fontWeight: 'bold', marginTop: '3px', color: currentScenario.finalScore.startsWith('+5') ? '#276749' : '#c53030' }}>
+                {currentScenario.finalScore}
+              </div>
+            </div>
+          </div>
+
+          <button
+            onClick={runSimulation}
+            disabled={simRunning}
+            style={{
+              padding: '10px 18px',
+              borderRadius: '6px',
+              border: 'none',
+              backgroundColor: simRunning ? 'var(--ifm-color-emphasis-400)' : '#3182ce',
+              color: '#fff',
+              cursor: simRunning ? 'not-allowed' : 'pointer',
+              fontWeight: 'bold',
+              fontSize: '14px',
+              transition: '0.2s',
+              textAlign: 'center'
+            }}
+          >
+            {simRunning ? 'Simulating Step ' + (activeStep + 1) + '...' : 'Run Episode Simulation'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<GridworldVisualizer />
+
+### The Empirical Cost of Curiosity
+
+Every row in the benchmark below executes the exact same Q-learning algorithm with identical random seeds for 3,000 training episodes on the 4x4 Gridworld. Only the exploration parameter $\epsilon$ differs:
+
+| Exploration Rate ($\epsilon$) | Strategy Classification | Average Reward *While Learning* | Value of *Final Learned Policy* | Realized Outcome |
+|---|---|---|---|---|
+| **$\epsilon = 0.00$** | Pure Exploitation | **$+1.00$** | $+1.00$ | Permanently locked onto small prize $t$ |
+| **$\epsilon = 0.10$** | Low Exploration | $+0.79$ | $+1.00$ | Trapped on local plateau |
+| **$\epsilon = 0.30$** | Moderate-Low | $+0.44$ | $+1.00$ | Trapped on local plateau |
+| **$\epsilon = 0.50$** | **Balanced Curiosity** | **$-4.73$** | **$+5.00$** | **Discovers optimal Jackpot route (5x payoff)** |
+| **$\epsilon = 1.00$** | Pure Randomness | $-12.17$ | $+5.00$ | Finds jackpot, but pays massive exploration penalty |
+
+#### Key Insights from the Empirical Data:
+
+1.  **Low $\epsilon$ Yields Confident, Permanent Failure:** Agents with $\epsilon \in [0.00, 0.30]$ all converge confidently on a policy worth $+1.00$. This is not bad luck; it is structural. Because reaching the small prize terminates the episode in 2 steps, an agent lacking curiosity never receives the opportunity to explore the lower quadrants.
+2.  **Curiosity Has an Inescapable Price:** Inspect the *Reward While Learning* column. As $\epsilon$ rises, score during training falls monotonically: $+1.00 \to +0.79 \to +0.44 \to -4.73 \to -12.17$. The $\epsilon = 0.00$ agent looks like the top performer during training, yet delivers the worst policy at test time.
+3.  **Flat Learning Curves are Deceptive:** An agent can sit on a flat reward plateau for 2,000 consecutive episodes looking perfectly converged, only to experience an explosive breakthrough when an exploratory sequence unlocks the global jackpot.
+
+---
+
+## 5. Real-World Applications & The RLHF Pipeline
+
+Reinforcement learning excels in complex, continuous control domains where writing explicit analytical rules is impossible, but evaluating behavioral outcomes is straightforward:
+
+| Domain | The Learning Agent | The Environment | Objective Reward Signal |
+|---|---|---|---|
+| **Autonomous Vehicles** | Motion planning controller | Highway traffic, lane bounds, pedestrians | Progress made, lane centering, comfort, crash penalties |
+| **Robotic Locomotion** | Actuator torque controller | Physical terrain, gravity, friction | Distance covered, energy efficiency, balance preservation |
+| **Resource Scheduling** | Cloud compute orchestrator | Kubernetes cluster workloads | CPU utilization, response latency, operational server costs |
+| **Quantitative Trading** | Order execution algorithm | Financial order book dynamics | Net profit, Sharpe ratio, drawdown risk penalties |
+| **Generative AI Alignment** | Large Language Model (LLM) | Conversational dialogue turns | Human helpfulness, truthfulness, and safety scores |
+
+### Deep-Dive: Reinforcement Learning from Human Feedback (RLHF)
+
+The most transformative modern application of reinforcement learning is not in robotics or video games, but in **Generative AI** — fine-tuning Large Language Models (LLMs) to align with human intent, safety, and utility.
+
+Pre-trained LLMs trained solely on next-token prediction (Self-Supervised Learning) mimic text found across the internet, making them prone to hallucinations, toxicity, or unhelpful answers. RLHF transforms raw foundation models into reliable assistants through a 3-stage alignment process.
+
+---
+
+export const RLHFStepper = () => {
+  const [stage, setStage] = React.useState(1);
+
+  const stages = {
+    1: {
+      title: 'Stage 1: Supervised Fine-Tuning & Human Ranking',
+      component: 'Human / AI Raters',
+      input: 'Prompt: "How do I build a simple solar dehydrator?"',
+      process: 'The base model generates 4 candidate completions. Human or high-capability AI raters rank them from best to worst based on helpfulness, accuracy, and safety: [Completion B > Completion A > Completion C > Completion D].',
+      output: 'Curated preference dataset of pairwise ranked completions (A preferred over B).'
+    },
+    2: {
+      title: 'Stage 2: Training the Reward Model (RM)',
+      component: 'Reward Neural Network',
+      input: 'Pairwise ranked completions from Stage 1.',
+      process: 'A separate neural network (the Reward Model) is trained using a pairwise ranking loss. It learns to accept any prompt-response pair and predict a single scalar score: r = RM(prompt, response).',
+      output: 'A calibrated scoring engine that mirrors human approval quantitatively.'
+    },
+    3: {
+      title: 'Stage 3: Policy Optimization with PPO / DPO',
+      component: 'Actor-Critic Policy Engine',
+      input: 'Base LLM policy π(tokens | prompt) and trained Reward Model.',
+      process: 'The LLM is optimized as an RL Policy using Proximal Policy Optimization (PPO) or Direct Preference Optimization (DPO). The objective maximizes the Reward Model score while enforcing a KL-divergence penalty to ensure the model does not drift into gibberish.',
+      output: 'Aligned production assistant (e.g., ChatGPT, Claude, Gemini).'
+    }
+  };
+
+  const curr = stages[stage];
+
+  return (
+    <div style={{ padding: '24px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '25px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive 3-Stage RLHF Pipeline Stepper</h4>
+      <p style={{ margin: '0 0 16px 0', fontSize: '14px' }}>
+        Step through the pipeline that bridges raw token prediction to aligned conversational assistants:
+      </p>
+
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '18px' }}>
+        {[1, 2, 3].map(s => (
+          <button
+            key={s}
+            onClick={() => setStage(s)}
+            style={{
+              padding: '8px 16px',
+              borderRadius: '4px',
+              border: '1px solid #3182ce',
+              backgroundColor: stage === s ? '#3182ce' : 'transparent',
+              color: stage === s ? '#fff' : 'var(--ifm-font-color-base)',
+              cursor: 'pointer',
+              fontWeight: 'bold',
+              fontSize: '13px',
+              transition: '0.2s'
+            }}
+          >
+            {s === 1 ? '1. Preference Ranking' : s === 2 ? '2. Reward Model' : '3. PPO Optimization'}
+          </button>
+        ))}
+      </div>
+
+      <div style={{ padding: '16px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+        <div style={{ fontSize: '15px', fontWeight: 'bold', color: '#3182ce', marginBottom: '8px' }}>
+          {curr.title}
+        </div>
+        <div style={{ fontSize: '13px', marginBottom: '10px' }}>
+          <b>Key Entity:</b> <code style={{ color: '#2b6cb0' }}>{curr.component}</code>
+        </div>
+        <div style={{ fontSize: '13px', marginBottom: '10px', lineHeight: '1.5' }}>
+          <b>Operational Input:</b> <i>{curr.input}</i>
+        </div>
+        <div style={{ fontSize: '13px', marginBottom: '10px', lineHeight: '1.5', color: 'var(--ifm-color-emphasis-800)' }}>
+          <b>Mechanism:</b> {curr.process}
+        </div>
+        <div style={{ padding: '8px 12px', borderRadius: '4px', backgroundColor: 'rgba(72, 187, 120, 0.1)', borderLeft: '4px solid #38a169', fontSize: '12px', fontWeight: 'bold' }}>
+          Outcome: {curr.output}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<RLHFStepper />
+
+---
+
+## 6. Implementation Lab
+
+:::tip
+
+**Implementation Lab: Q-Learning Gridworld Simulation**
+
+Execute a standalone NumPy implementation of a Q-learning agent navigating a 4x4 Gridworld containing jackpot rewards (+10), small prize traps (+2), and terminal penalty pits (-10). Experiment with varying exploration rates $\epsilon$ live to observe premature convergence and breakthroughs.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/01-foundations/gridworld_rl.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the notebook.
+2. Click **"Runtime" > "Run all"** or execute cells individually using `Shift + Enter`.
+3. Follow the guided experiments to test parameters such as `episodes=10000`, `gamma=0.5`, or `STEP_R=0.0`.
+
+:::
+
+### Comparative Implementation (Production vs. From Scratch)
+
+Compare a high-level environment loop against the core vectorized Q-learning update step written in NumPy from scratch:
+
+<Tabs>
+  <TabItem value="env" label="1. Production Environment Loop (Gymnasium)" default>
+    <br/>
+
+    ```python
+    import gymnasium as gym
+
+    # Initialize environment
+    env = gym.make("FrozenLake-v1", is_slippery=False)
+    state, info = env.reset()
+
+    # Execution loop
+    for step in range(100):
+        # Select action using policy or epsilon-greedy
+        action = env.action_space.sample() 
+        next_state, reward, terminated, truncated, info = env.step(action)
+        
+        if terminated or truncated:
+            state, info = env.reset()
+        else:
+            state = next_state
+            
+    env.close()
+    ```
+  </TabItem>
+  <TabItem value="scratch" label="2. Tabular Q-Learning (NumPy from Scratch)">
+    <br/>
+
+    ```python
+    import numpy as np
+
+    def update_q_table(Q, s, a, r, s_next, alpha=0.1, gamma=0.95):
+        """
+        Executes a single Bellman Optimality update:
+        Q(s, a) <- Q(s, a) + alpha * [r + gamma * max_a' Q(s', a') - Q(s, a)]
+        """
+        best_future_q = np.max(Q[s_next])
+        td_target = r + gamma * best_future_q
+        td_error = td_target - Q[s, a]
+        
+        # In-place update
+        Q[s, a] += alpha * td_error
+        return Q
+    ```
+  </TabItem>
+</Tabs>
+
+---
+
+## 7. Common Mistakes
+
+<Tabs>
+  <TabItem value="m1" label="1. Unsupervised Fallacy" default>
+    <br/>
+
+    *   **The Misconception:** *"Reinforcement learning is just an advanced form of unsupervised learning because neither method uses ground-truth labels."*
+    *   **Wrong Thinking:** Assuming that absence of labels means absence of feedback.
+    *   **The Right Principle:** Unsupervised learning receives **zero feedback** and simply clusters input features $X$. Reinforcement learning receives numerical **feedback signals (rewards/penalties)** that explicitly direct learning. It has evaluation without explicit answers.
+  </TabItem>
+  <TabItem value="m2" label="2. Reward = Label">
+    <br/>
+
+    *   **The Misconception:** *"A reward of -1 tells the agent that its chosen action was incorrect, acting like a training label."*
+    *   **Wrong Thinking:** Believing scalar feedback reveals what the agent *should* have done.
+    *   **The Right Principle:** A reward evaluates **how good** an action was, but never reveals **what the optimal action was**. Testing action A tells the agent nothing about actions B or C, which forces continuous exploration.
+  </TabItem>
+  <TabItem value="m3" label="3. Policy vs. Predictive Model">
+    <br/>
+
+    *   **The Misconception:** *"Reinforcement learning outputs a predictive regression or classification model."*
+    *   **Wrong Thinking:** Looking for a static function that predicts target variables from fixed features.
+    *   **The Right Principle:** RL produces a **policy ($\pi$)** — an active decision function mapping dynamic environmental states to optimal sequential actions.
+  </TabItem>
+  <TabItem value="m4" label="4. Epsilon Extremes (ε = 0 vs. ε = 1)">
+    <br/>
+
+    *   **The Misconception:** *"Setting ε = 0 guarantees maximum performance because the agent always picks its best action."*
+    *   **Wrong Thinking:** Prioritizing immediate exploitation from the start.
+    *   **The Right Principle:** With $\epsilon = 0$, the agent suffers premature convergence, locking onto the first mediocre reward it encounters. Conversely, $\epsilon = 1.0$ wanders randomly forever without leveraging its learned value function.
+  </TabItem>
+  <TabItem value="m5" label="5. Trusting Flat Learning Curves">
+    <br/>
+
+    *   **The Misconception:** *"The training curve has been flat for 1,000 episodes, so the agent has fully converged to the optimal policy."*
+    *   **Wrong Thinking:** Confusing a local plateau with global convergence.
+    *   **The Right Principle:** RL agents can remain trapped on sub-optimal plateaus for thousands of episodes before random exploration uncovers a superior path. Always test policy variance and probe with higher exploration before halting training.
+  </TabItem>
+  <TabItem value="m6" label="6. Evaluating Online Training Scores">
+    <br/>
+
+    *   **The Misconception:** *"Our agent learning curve is negative, so the algorithm is failing to learn."*
+    *   **Wrong Thinking:** Judging an agent by the rewards it collects while actively exploring.
+    *   **The Right Principle:** Exploratory actions intentionally choose suboptimal moves to gather information, pulling online scores down. To measure true capability, periodically test the **greedy policy** ($\epsilon = 0$) on separate clean evaluation runs.
+  </TabItem>
+</Tabs>
+
+---
+
+## 8. Summary
 
 <div className="row">
   <div className="col col--6">
@@ -317,9 +683,9 @@ Here are the most common conceptual pitfalls when implementing and analyzing Rei
       </div>
       <div className="card__body" style={{ padding: '15px' }}>
         <ul>
-          <li><b>Definition:</b> Feedback-based learning where an agent learns to behave in an environment through trial and error.</li>
-          <li><b>Labels:</b> Completely absent. The agent receives numerical rewards or penalties after taking actions.</li>
-          <li><b>Goal:</b> Maximize the cumulative positive reward (total return) over a series of actions.</li>
+          <li><b>No Pre-existing Dataset:</b> The agent generates its own experience dynamically through environmental interaction.</li>
+          <li><b>Evaluative Feedback:</b> Numerical rewards/penalties tell the agent how well it performed, but never provide the correct answer.</li>
+          <li><b>Objective:</b> Maximize cumulative discounted return ($G_t$) across episodes.</li>
         </ul>
       </div>
     </div>
@@ -327,13 +693,13 @@ Here are the most common conceptual pitfalls when implementing and analyzing Rei
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header" style={{ padding: '15px', borderBottom: '1px solid var(--ifm-color-emphasis-200)' }}>
-        <h3>Decisions & Outputs</h3>
+        <h3>Engineering Realities</h3>
       </div>
       <div className="card__body" style={{ padding: '15px' }}>
         <ul>
-          <li><b>Output:</b> A <b>policy</b> ($\pi$: state $	o$ action) representing the mapping from situational states to behavioral actions.</li>
-          <li><b>Key Dilemma:</b> <i>Exploration</i> (trying new unknown actions) vs. <i>Exploitation</i> (taking the best-known actions).</li>
-          <li><b>Primary Application:</b> Autonomous vehicles, complex gaming (Go, Chess), robotics, and LLM alignment (RLHF).</li>
+          <li><b>Output Artifact:</b> Produces a <b>policy ($\pi: s \to a$)</b> mapping states to sequential behavioral choices.</li>
+          <li><b>The Exploration Dilemma:</b> High exploration ($\epsilon$) lowers training rewards but is mandatory to discover global optima.</li>
+          <li><b>Primary Domains:</b> Robotics, autonomous driving, resource scheduling, and LLM alignment (RLHF via PPO/DPO).</li>
         </ul>
       </div>
     </div>
@@ -342,517 +708,121 @@ Here are the most common conceptual pitfalls when implementing and analyzing Rei
 
 <br/>
 
-:::info[Key Takeaways: Reinforcement Learning]
+:::info
 
-*   **No Fixed Dataset:** The agent generates its own data dynamically through interactions. Bad early choices can lead to poor training data distributions.
-*   **Evaluation is Delayed:** Due to delayed feedback, agents face the **credit assignment problem**—working backwards to see which early decisions caused the final reward.
-*   **Exploration-Exploitation Tradeoff:** Controlled by parameter `ε` in ε-greedy. Too little exploration leads to local optima; too much leads to wasteful random walking.
-*   **Plateaus are Deceptive:** A flat learning curve is not proof of convergence. An agent can sit on a local optimum for 2,000 episodes before discovering a breakthrough.
-*   **Curiosity has a Price:** High exploration rate `ε` increases the cost during learning, but yields a significantly higher final policy return.
+**Key Takeaways**
+
+*   **Reward != Label:** Rewards evaluate the selected action but reveal nothing about untried alternatives. Exploration is mathematically mandatory.
+*   **The Cost of Curiosity:** High exploration lowers immediate scores during training, but yields 5x higher policy values by escaping local traps.
+*   **Credit Assignment Problem:** Delayed terminal rewards require temporal difference bootstrapping (Q-learning) to propagate value backwards to early choices.
+*   **Stationarity Assumption Broken:** Actions change future observations; poor early policies alter the training distribution.
 
 :::
 
-**Next in this section:** [The Toolkit and the Pipeline](./05-toolkit-and-pipeline.mdx) — the libraries and the
-workflow that implement all four paradigms
-
-**See also:** [Types of Learning](./03-types-of-learning.mdx) for the three paradigms this one sits
-beside · [Applications and Major Techniques](./02-applications-and-techniques.mdx) for where each
-technique is used
+**Next in this section:** [The Toolkit and the Pipeline](./05-toolkit-and-pipeline.mdx) - the libraries and workflow that implement all four paradigms.
 
 ---
 
-## Implementation Lab
+## 9. Active Recall Flashcards
 
-:::tip[Lab Exercise: Q-Learning Gridworld Simulation]
-
-Execute a raw, 60-line NumPy implementation of a Q-learning agent navigating a 4x4 Gridworld containing jackpot rewards (+10), small prizes (+2), and deep penalty pits (-10). Tweak exploration rate `ε` live to observe premature convergence and policy breakthroughs.
-
-<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/01-foundations/gridworld_rl.ipynb" target="_blank" rel="noopener noreferrer">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
-</a>
-
-**How to run the lab:**
-1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
-2. Run each cell sequentially (`Shift + Enter`).
-3. Experiment with parameters such as `episodes=10000`, `gamma=0.5`, or `STEP_R=0.0` to see how the agent adapts.
-
-:::
-
-### What to notice in that output
-
-**The learning curve tells a story in four acts.** At episode 0 the greedy policy scores `−100.0` —
-the agent wanders until the 100-step safety limit, reaching nothing. By episode 250 it scores `+1.0`:
-it has found the small prize and locked on. Then it sits at `+1.0` for **two thousand episodes**,
-looking every bit like a converged solution. At episode 2500 it breaks through to `+5.0`. Anyone who
-had stopped training at episode 1000 would have shipped a policy worth a fifth of the achievable
-reward, with no indication anything was wrong.
-
-**The policy is readable, and it is correct.** Trace the arrows from `S`: down, down, then right along
-the bottom row to `G`, threading between the pits. The agent derived that route from nothing but
-rewards.
-
-**The learned numbers match theory exactly.** `Q[start, 'v'] = 3.21` and `Q[start, '>'] = 0.90`.
-Hand-computing the discounted return for the jackpot path gives
-`−1 − 0.95 − 0.95² − 0.95³ − 0.95⁴ + 0.95⁵ × 10 = 3.21`, and for the two-step small-prize path
-`−1 + 0.95 × 2 = 0.90`. The algorithm didn't approximate the right answer, it found it.
-
-**Now the epsilon table, which is the real lesson.** Every row runs the *same algorithm* with the same
-seed for the same 3,000 episodes. Only curiosity differs:
-
-- **`ε` from 0.00 to 0.30 all settle for the small prize** — a final policy worth `1.0`. Not a bug,
-  not bad luck: five different agents, all confidently converged, all permanently wrong.
-- **`ε = 0.50` finds the jackpot** — worth `5.0`, **five times better**. The only change was a
-  willingness to act against its own best judgement half the time.
-- **`ε = 1.00` finds the same best policy as `ε = 0.50`**, but paid `−12.17` per episode while learning
-  instead of `−4.73`. So maximum exploration isn't optimal, it's just expensive — there is a sweet
-  spot, and it isn't at either end.
-
-**Read the last column as a price.** As `ε` rises, reward *during* learning falls monotonically:
-`1.00 → 0.79 → 0.44 → −0.21 → −1.06 → −4.73 → −12.17`. That is the literal cost of curiosity. The
-`ε = 0` agent is the best-performing agent while learning and the worst policy at the end.
-
-:::tip
-
-**Why this environment needs so much exploration**
-
-`ε = 0.5` looks extreme. The reason is the trap: reaching the small prize **ends the episode** after
-two steps, so a greedy agent gets almost no opportunity per episode to see anything further away.
-Environments that terminate early on mediocre outcomes are exactly the ones that punish
-under-exploration hardest.
-
-:::
-
-**Things worth trying:**
-
-1. Set `episodes=10000` with `ε=0.1`. Does patience substitute for curiosity here, or not?
-2. Change the small prize to `+8` in `REWARD`. Now the local optimum is genuinely close to the
-   jackpot — watch how much harder escaping becomes.
-3. Set `gamma=0.5`. The agent becomes short-sighted, discounting distant reward heavily, and should
-   prefer the near prize even at high `ε`.
-4. Set `STEP_R = 0.0`. With no cost per step the agent has no incentive to find a *short* path —
-   compare the policy it settles on.
-
----
-
-## Practice Questions
-
-*Test your understanding by working each problem out first, then click the card to reveal the detailed solution. Questions are tagged by type: **[THEORY]**, **[PROG]**, **[OUT]**, or **[ANALYZE]**.*
-
-### Definitions
+*Attempt each conceptual diagnostic question first, then click to reveal the underlying derivation and explanation.*
 
 <details>
-  <summary><b>R1. [THEORY] Define reinforcement learning in one sentence, and explain what "feedback-based" means in that definition.</b></summary>
+  <summary><b>1. [THEORY] Define reinforcement learning and explain why it is fundamentally distinct from unsupervised learning.</b></summary>
   <div className="answer-content">
     <br/>
 
-    *   **Definition:** Reinforcement learning is a feedback-based paradigm in which an autonomous agent learns to make a sequence of decisions in an environment by performing actions and receiving corresponding numeric rewards or penalties.
-    *   **"Feedback-based" meaning:** Unlike supervised learning where a teacher supplies the correct answer, the RL agent is only told how good or bad its action was after the fact via a reward signal. It must learn by experience which actions are optimal without explicit instruction.
+    *   **Definition:** Reinforcement learning is a feedback-based paradigm where an agent learns to make a sequence of decisions in an environment by executing actions and receiving scalar rewards or penalties.
+    *   **Distinction from Unsupervised Learning:** Unsupervised learning receives **zero feedback** and groups static input features $X$. Reinforcement learning receives explicit **numerical feedback** that evaluates the quality of each action, driving iterative policy improvement.
   </div>
 </details>
 
 <details>
-  <summary><b>R2. [THEORY] What happens for a good action, and what happens for a bad one? What is the agent's primary goal?</b></summary>
+  <summary><b>2. [ANALYZE] Why is a reward not equivalent to a label? How does this distinction force exploration?</b></summary>
   <div className="answer-content">
     <br/>
 
-    *   **Good Action:** The agent receives positive feedback (a positive numeric reward, such as `+10`).
-    *   **Bad Action:** The agent receives negative feedback or a penalty (such as `-10`).
-    *   **Primary Goal:** To maximize its cumulative reward (total return) over time through its experience.
+    *   **Why Reward != Label:** A label in supervised learning tells the model the exact ground-truth answer it should have predicted. A reward merely states how good or bad the *chosen* action was.
+    *   **Why It Forces Exploration:** Receiving a reward of `-1` for action A gives the agent zero information about what would happen if it chose action B or C. To determine if action B yields `+10`, the agent must actively explore it.
   </div>
 </details>
 
 <details>
-  <summary><b>R3. [THEORY] Define each of: agent, environment, state, action, reward, policy, episode.</b></summary>
+  <summary><b>3. [THEORY] What is the credit assignment problem, and why does delayed reward create it?</b></summary>
   <div className="answer-content">
     <br/>
 
-    *   **Agent:** The learner and decision-making entity.
-    *   **Environment:** Everything outside the agent that the agent interacts with and acts upon.
-    *   **State:** The current, instantaneous situation or configuration of the agent and environment.
-    *   **Action:** A choice or physical output available to the agent in its current state.
-    *   **Reward:** The instantaneous scalar numeric feedback returned by the environment evaluating the last action.
-    *   **Policy:** The agent's overall strategy or mapping function from states to actions ($\pi(s) 	o a$).
-    *   **Episode:** A single trial or run from the initial starting state to a terminal ending state.
+    *   **Credit Assignment Problem:** The challenge of determining which specific past action(s) among hundreds or thousands of steps were responsible for a final outcome.
+    *   **Why Delayed Reward Causes It:** When feedback arrives only at the end of an episode (e.g., winning or losing a chess match at turn 60), intermediate moves receive zero immediate feedback. Algorithms must propagate value backwards through time to assign credit to early tactical moves.
   </div>
 </details>
 
 <details>
-  <summary><b>R4. [THEORY] "Since there is no labelled data, the agent is bound to learn by its experience only." Explain what this rules out.</b></summary>
+  <summary><b>4. [ANALYZE] In supervised learning the dataset is fixed prior to training. Why is this not true in RL, and what danger does it create?</b></summary>
   <div className="answer-content">
     <br/>
 
-    *   This rules out passive supervised learning from a fixed historical dataset containing human-labeled correct answers (targets $y$). There is no teacher showing the model the correct action for any given situation, meaning the agent cannot simply "mimic" answers and must instead actively interact with the environment to collect its own feedback loop.
+    *   **Why It Is Not True:** The agent generates its own training data dynamically. Which state the agent visits next depends directly on the action it selects now.
+    *   **The Danger:** If an early policy is poor, the agent will only ever visit low-reward states and never encounter high-reward regions. The training distribution is non-stationary and tightly coupled to the policy being trained.
   </div>
 </details>
 
 <details>
-  <summary><b>R5. [THEORY] What is the output of reinforcement learning, and how does it differ from the output of supervised learning?</b></summary>
+  <summary><b>5. [THEORY] Formulate the Bellman update rule for tabular Q-learning and define the Temporal Difference (TD) target.</b></summary>
   <div className="answer-content">
     <br/>
 
-    *   **Output of RL:** A **policy** — a behavioral strategy mapping situations (states) to optimal actions.
-    *   **Difference from Supervised:** Supervised learning outputs a predictive model mapping features to static predictions (a class label in classification or a continuous number in regression). RL's policy is about active decision-making and behaviors over sequential states rather than single static predictions.
-  </div>
-</details>
-
-### Distinguishing the paradigms
-
-<details>
-  <summary><b>D1. [ANALYZE] A colleague says reinforcement learning is a kind of unsupervised learning because neither has labels. Explain why this is wrong, using the idea of feedback.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   The colleague is incorrect because they ignore the presence of **feedback**.
-    *   **Unsupervised learning** has absolutely no labels and **no feedback** at all; it simply discovers structural groupings or patterns in static data.
-    *   **Reinforcement learning** has **feedback (rewards or penalties)** evaluating every action. While it doesn't have ground-truth answers (labels) telling it what it *should* have done, it does receive evaluative signals telling it how *well* it did, which drives learning.
+    *   **Update Rule:**
+        $$Q(s, a) \leftarrow Q(s, a) + \alpha \left[ r + \gamma \max_{a'} Q(s', a') - Q(s, a) \right]$$
+    *   **TD Target:** The term $r + \gamma \max_{a'} Q(s', a')$, representing the immediate reward $r$ plus the discounted value of the optimal action in the subsequent state $s'$.
   </div>
 </details>
 
 <details>
-  <summary><b>D2. [THEORY] Complete the sentence for all three: supervised learning is told ___, unsupervised learning is told ___, reinforcement learning is told ___.</b></summary>
+  <summary><b>6. [ANALYZE] Explain the exploration-exploitation dilemma and the consequences of setting ε = 0 vs. ε = 1 in ε-greedy selection.</b></summary>
   <div className="answer-content">
     <br/>
 
-    *   Supervised learning is told **the correct answer (ground-truth label $y$)**.
-    *   Unsupervised learning is told **nothing at all (only input features $X$)**.
-    *   Reinforcement learning is told **how good its chosen action was (the scalar reward $r$)**.
+    *   **The Dilemma:** Balancing between trying new actions to discover better strategies (exploration) versus selecting the best-known action to maximize immediate reward (exploitation).
+    *   **Consequence of $\epsilon = 0$:** The agent exploits 100% of the time, suffering from premature convergence by locking onto the first mediocre reward it finds.
+    *   **Consequence of $\epsilon = 1$:** The agent acts completely randomly forever, accumulating massive penalties and failing to execute a learned strategy.
   </div>
 </details>
 
 <details>
-  <summary><b>D3. [ANALYZE] Explain why a reward is not a label. Why does this force the agent to explore?</b></summary>
+  <summary><b>7. [OUT] In the empirical benchmark, why did agents with ε between 0.00 and 0.30 all converge on a policy worth only +1.0 instead of the +5.0 jackpot?</b></summary>
   <div className="answer-content">
     <br/>
 
-    *   **Why a reward is not a label:** A label is the explicit "correct" answer representing the optimal target. A reward is merely a scalar evaluation of the *chosen* action. It does not tell the agent what other actions would have achieved or whether an untried action is better.
-    *   **Why it forces exploration:** Because receiving a reward of `-1` or `+2` for an action gives the agent no information about the alternative actions. To find out if a different action would yield a higher reward (like `+10`), the agent must actively explore those alternatives.
+    *   **Mechanism:** Reaching the nearby small prize ($t, +2$) terminated the episode after only two steps. Because exploration was low ($\le 0.30$), the agents rapidly discovered this local reward and greedy exploitation dominated. Because the episode terminated immediately upon touching $t$, the agent never had an opportunity to explore the lower quadrants where the $+10$ jackpot lay.
   </div>
 </details>
 
 <details>
-  <summary><b>D4. [THEORY] In supervised learning the dataset is fixed before training. Why is this not true in reinforcement learning, and what problem does that create?</b></summary>
+  <summary><b>8. [ANALYZE] Why does average reward during training fall as exploration rate ε increases? What is this phenomenon called?</b></summary>
   <div className="answer-content">
     <br/>
 
-    *   **Why it's not true in RL:** The dataset is generated dynamically by the agent's actions. The state the agent visits next depends entirely on the action it takes now.
-    *   **The resulting problem:** If the agent has a bad early policy, it may only ever visit low-reward, poor states and never discover high-reward regions. The data distribution depends entirely on the behavior being learned, making training unstable or highly biased toward early choices.
+    *   **Why It Falls:** Higher $\epsilon$ forces the agent to take random actions more frequently. Even when the agent has learned which actions are disastrous, exploration forces it to test them, stepping into penalty pits and incurring step costs.
+    *   **The Phenomenon:** This is the literal **Cost of Curiosity**. The best-performing agent during learning ($\epsilon = 0$) delivers the worst final policy, while the agent that explores ($\epsilon = 0.5$) pays an immediate training cost to secure a 5x superior final policy.
   </div>
 </details>
 
 <details>
-  <summary><b>D5. [THEORY] What is the credit assignment problem, and why does delayed reward cause it?</b></summary>
+  <summary><b>9. [THEORY] Why is a flat learning curve over hundreds of episodes not proof of optimal convergence in reinforcement learning?</b></summary>
   <div className="answer-content">
     <br/>
 
-    *   **Credit Assignment Problem:** The challenge of determining which specific action(s) among hundreds or thousands of steps taken during an episode were responsible for the final outcome.
-    *   **Why delayed reward causes it:** When the reward is delayed (e.g., winning/losing a chess game at the very end), there is no immediate feedback for individual intermediate moves. The agent must work backwards to apportion credit or blame to the early decisions that set up the victory or defeat.
-  </div>
-</details>
-
-### Exploration and exploitation
-
-<details>
-  <summary><b>E1. [THEORY] Define exploration and exploitation, and state the risk of doing too much of each.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **Exploitation:** Taking the best-known action based on current knowledge to maximize immediate reward.
-        *   *Risk of too much:* The agent gets trapped in a local optimum (premature convergence) and never discovers much better global paths.
-    *   **Exploration:** Trying random or untried actions to discover more about the environment.
-        *   *Risk of too much:* The agent spends too much time taking known bad actions, accumulating massive penalties and never leveraging what it has learned.
+    *   Because the agent can easily be trapped on a local optimum plateau. Until an exploratory sequence of actions breaches the local barrier and stumbles upon the global reward, the value function will show zero variance and remain flat.
   </div>
 </details>
 
 <details>
-  <summary><b>E2. [THEORY] Describe the ε-greedy strategy. What does ε control?</b></summary>
+  <summary><b>10. [ANALYZE] Explain why autonomous vehicle navigation suits reinforcement learning better than supervised behavioral cloning.</b></summary>
   <div className="answer-content">
     <br/>
 
-    *   **ε-greedy strategy:** An action-selection mechanism where the agent selects a completely random action with probability $\epsilon$ (explores) and selects the action with the highest estimated value with probability $1 - \epsilon$ (exploits).
-    *   **What ε controls:** The parameter $\epsilon$ (typically between 0 and 1) acts as the dial balancing exploration and exploitation.
-  </div>
-</details>
-
-<details>
-  <summary><b>E3. [OUT] From the demo: Which agent produced the best final policy, and which performed best while learning? What did raising ε from 0.30 to 0.50 achieve? Why is ε = 1.00 not the best choice, given it also found the jackpot?</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **Best final policy:** The agents with $\epsilon = 0.50$ and $\epsilon = 1.00$ (both settled on the jackpot worth `5.0`).
-    *   **Best performance while learning:** The agent with $\epsilon = 0.00$ (average score of `1.00` while learning, avoiding all negative penalties).
-    *   **What raising $\epsilon$ from 0.30 to 0.50 achieved:** It increased curiosity enough to escape the local optimum (small prize) and discover the global jackpot.
-    *   **Why $\epsilon = 1.00$ is not the best choice:** Because even after finding the jackpot path, it continued to act 100% randomly during training, accumulating a massive average cost of `-12.17` per episode. It is highly wasteful.
-  </div>
-</details>
-
-<details>
-  <summary><b>E4. [ANALYZE] The last column falls steadily as ε rises: 1.00, 0.79, 0.44, −0.21, −1.06, −4.73, −12.17. Explain what this column is measuring and why it must behave this way.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **What it measures:** The average reward accumulated *while learning* (specifically, during the last 500 training episodes).
-    *   **Why it behaves this way:** Because higher $\epsilon$ forces the agent to make random actions more frequently. Even if the agent knows the perfect path, it is structurally forced to make random moves (which often lead to pits or walls, incurring step penalties), pulling the training average down. This represents the literal cost of curiosity.
-  </div>
-</details>
-
-<details>
-  <summary><b>E5. [ANALYZE] Five agents with ε from 0.00 to 0.30 all converged confidently on a policy worth one fifth of the best available. Explain the mechanism, and say what this implies about trusting a flat learning curve.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **The Mechanism:** The nearby small prize terminated the episode after only two steps. Because the agents had low exploration rates, they quickly found this small prize and exploitation dominated. Since the episode ended immediately, they had no opportunity to explore the states further down the grid where the jackpot was located.
-    *   **Implication:** A flat learning curve is **not** proof of optimal convergence. An agent can look perfectly stabilized and converged, but be locked in a severe local optimum.
-  </div>
-</details>
-
-### Reading the output
-
-<details>
-  <summary><b>O1. [OUT] The greedy policy scored −100.0 after 0 episodes. Given the step reward is −1 and there is a 100-step safety limit, explain that number.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   At episode 0, the Q-table is initialized to all zeros. Followed greedily, the agent has no preferences and simply walks randomly (or takes default actions). Since it fails to find the small prize or a pit, it runs into the 100-step safety cutoff, accumulating a step reward of `-1` for each of the 100 steps, resulting in exactly `-100.0`.
-  </div>
-</details>
-
-<details>
-  <summary><b>O2. [OUT] The learning curve sat at +1.0 from episode 250 to 2250, then jumped to +5.0. Name what the plateau represents and what the jump represents.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **The Plateau:** Represents the local optimum where the agent's greedy policy has locked onto the nearby small prize (return `+1.0`).
-    *   **The Jump:** Represents a policy breakthrough where a random exploration step finally found the path to the jackpot, propagating high Q-values backward and updating the greedy policy to the global optimum (return `+5.0`).
-  </div>
-</details>
-
-<details>
-  <summary><b>O3. [ANALYZE] Someone stops training at episode 1000 because the reward has been flat for 750 episodes. What have they lost, and how could they have detected the problem?</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **What they lost:** They lost the optimal policy (worth `5.0` instead of `1.0` — a 5x improvement).
-    *   **How to detect the problem:** They could run separate exploratory diagnostics, monitor the Q-value variances, or test higher exploration rates ($\epsilon$) to see if the flat line was due to premature convergence.
-  </div>
-</details>
-
-<details>
-  <summary><b>O4. [OUT] The agent learned Q[start, 'v'] = 3.21 and Q[start, '>'] = 0.90. Verify the second of these by hand, given gamma = 0.95, a step reward of −1, and a small prize of +2 two moves away.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   The state starting with action `>` leads directly to the small prize `t` in exactly 2 moves.
-    *   Step 1: Takes action `>`, receives step reward `-1`.
-    *   Step 2: Takes the next action to land on `t`, receives reward `+2`, terminating the episode.
-    *   Applying the discount factor $\gamma = 0.95$:
-        $$	ext{Discounted Return} = -1 + \gamma 	imes 2 = -1 + 0.95 	imes 2 = -1 + 1.90 = 0.90$$
-    *   The calculated value matches the agent's learned expectation of `0.90` exactly.
-  </div>
-</details>
-
-<details>
-  <summary><b>O5. [OUT] Read the learned policy and write out the full route from S to G.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    Given the learned policy map:
-    ```
-       v  >  t  ^
-       v  X  X  ^
-       >  v  v  X
-       >  >  >  G
-    ```
-    *   Start at `S` (0,0). Policy is `v` (go down) $	o$ lands on (1,0).
-    *   At (1,0), policy is `v` (go down) $	o$ lands on (2,0).
-    *   At (2,0), policy is `>` (go right) $	o$ lands on (2,1).
-    *   At (2,1), policy is `v` (go down) $	o$ lands on (3,1).
-    *   At (3,1), policy is `>` (go right) $	o$ lands on (3,2).
-    *   At (3,2), policy is `>` (go right) $	o$ lands on (3,3) which is `G` (jackpot).
-    *   **Full Route:** `(0,0) → (1,0) → (2,0) → (2,1) → (3,1) → (3,2) → (3,3) [G]` (avoiding all pits `X`).
-  </div>
-</details>
-
-### Applying it
-
-<details>
-  <summary><b>P1. [PROG] Modify the grid to add a second pit, and retrain. Print the resulting policy.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    To add an extra pit, you would modify the environment's `GRID` representation. For example, placing an extra pit `X` at coordinate `(0,1)`:
-
-    ```python
-    GRID = ["SXt.",   # Added 'X' at index 1
-            ".XX.",
-            "...X",
-            "...G"]
-    ```
-    Retraining with this grid forces the agent to learn a policy that navigates down immediately from start, avoiding the new pit `X` at the top.
-  </div>
-</details>
-
-<details>
-  <summary><b>P2. [PROG] Write a loop that trains with gamma in [0.5, 0.8, 0.95, 0.99] and prints which terminal state the greedy policy ends at for each. Explain the pattern.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    The following python snippet outlines the loop:
-
-    ```python
-    for g in [0.5, 0.8, 0.95, 0.99]:
-        Q, _, _ = train(epsilon=0.5, gamma=g, episodes=3000)
-        total, ending = run_greedy(Q)
-        print(f"Gamma: {g:.2f} -> Settles on: {ending} (Return: {total:.1f})")
-    ```
-    *   **Pattern Explanation:** Lower values of $\gamma$ (like `0.5`) make the agent short-sighted, prioritizing the immediate small prize `t` even if a jackpot is nearby. Higher values of $\gamma$ (like `0.95` or `0.99`) make the agent far-sighted, willing to take multiple steps of `-1` penalty to secure the high-value jackpot `G`.
-  </div>
-</details>
-
-<details>
-  <summary><b>P3. [PROG] Change the small prize from +2 to +8 and find, by experiment, the smallest ε that still discovers the jackpot.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    With a small prize of `+8`, the local optimum is extremely attractive. An agent using standard low curiosity will easily lock onto it. Under the hood, you can run a grid search over $\epsilon$:
-
-    ```python
-    REWARD["t"] = 8.0 # Update reward in script
-    for eps in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7]:
-        Q, _, _ = train(epsilon=eps, episodes=5000)
-        _, ending = run_greedy(Q)
-        print(f"Epsilon {eps:.1f} found ending: {ending}")
-    ```
-    Typically, you will find that a higher minimum $\epsilon$ (such as `0.4` or `0.5`) is required to break the powerful pull of the local `+8` reward.
-  </div>
-</details>
-
-<details>
-  <summary><b>P4. [ANALYZE] You are building a delivery-route agent. You can simulate routes cheaply but each real delivery is expensive. Explain how this changes how much exploration you can afford, and where you would do it.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **How it changes exploration:** You cannot afford real-world exploration because taking random actions (e.g., driving into a river or making a 500-mile detour) is extremely expensive and dangerous.
-    *   **Where you would do it:** You must perform 100% of your exploration inside a high-fidelity **simulator** (cheap, safe, and fast). Once the agent learns a robust policy in simulation, you deploy it to the real world with exploration disabled ($\epsilon = 0$) or set to a highly restricted safety-fallback mode.
-  </div>
-</details>
-
-<details>
-  <summary><b>P5. [ANALYZE] Explain why autonomous driving suits reinforcement learning, referring to what would be needed to attack it with supervised learning instead.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **Why RL suits it:** Because we can easily write down feedback rules (rewards for staying in lane, matching speed limits; severe penalties for crashes), but we cannot write down the correct physical control commands for every infinite scenario.
-    *   **What Supervised would need:** Supervised learning would require millions of hours of human driving data (features: camera feeds; targets: steering angles/brake pressures). This is called Behavioral Cloning, but it suffers from severe distribution shift: if the model makes a tiny error, it gets off-track into states never seen in the training data, where it has no labels and fails catastrophically.
-  </div>
-</details>
-
-### Quick self-check
-
-<details>
-  <summary><b>1. Define reinforcement learning in one sentence.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    A feedback-based learning paradigm where an agent learns to make a sequence of decisions in an environment by performing actions and receiving rewards or penalties.
-  </div>
-</details>
-
-<details>
-  <summary><b>2. What does the agent get for a good action? For a bad one?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    A numeric reward for a good action, and a penalty (or negative reward) for a bad action.
-  </div>
-</details>
-
-<details>
-  <summary><b>3. What is the agent's primary goal?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    To maximize the cumulative positive reward (total return) over time.
-  </div>
-</details>
-
-<details>
-  <summary><b>4. Name the five core components of a reinforcement learning problem.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    Agent, Environment, State, Action, and Reward.
-  </div>
-</details>
-
-<details>
-  <summary><b>5. What is a policy?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    The agent's strategy mapping states to actions ($\pi(s) 	o a$).
-  </div>
-</details>
-
-<details>
-  <summary><b>6. Why is reinforcement learning not unsupervised learning?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    Because reinforcement learning receives evaluative numerical feedback (rewards/penalties), whereas unsupervised learning receives no feedback at all.
-  </div>
-</details>
-
-<details>
-  <summary><b>7. What does a reward tell the agent, and what does it *not tell it?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    It tells the agent **how good** the chosen action was, but it never tells it **what the correct action was** or what other choices would have achieved.
-  </div>
-</details>
-
-<details>
-  <summary><b>8. What is the exploration–exploitation dilemma?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    The choice between trying new actions to find better strategies (exploration) vs taking the best-known action to secure immediate reward (exploitation).
-  </div>
-</details>
-
-<details>
-  <summary><b>9. What does ε control in ε-greedy?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    The probability $\epsilon$ of choosing a completely random exploratory action instead of exploiting the best-known option.
-  </div>
-</details>
-
-<details>
-  <summary><b>10. What goes wrong if ε is 0? If ε is 1?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **If $\epsilon = 0$:** The agent never explores, locking permanently onto the first mediocre option it finds.
-    *   **If $\epsilon = 1$:** The agent acts completely randomly forever, accumulating massive penalties and never utilizing its learning.
-  </div>
-</details>
-
-<details>
-  <summary><b>11. What is the credit assignment problem?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    The difficulty of determining which specific past action(s) caused a delayed reward received at the end of an episode.
-  </div>
-</details>
-
-<details>
-  <summary><b>12. Why is a flat learning curve not proof of convergence?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    Because the agent could be trapped on a plateau (local optimum) for thousands of episodes before a random exploration breakthrough reveals the global jackpot.
+    *   **Supervised Behavioral Cloning Limitations:** Requires recording human drivers and mapping sensor inputs directly to steering angles. If the model makes a minor compounding error, it enters an out-of-distribution state never seen in human demonstrations, where it has no training labels and fails catastrophically.
+    *   **Reinforcement Learning Fit:** Engineers can easily formulate the objective feedback rules (positive reward for progress, lane centering; negative penalties for collisions), allowing the agent to explore and learn self-correcting policies across infinite continuous scenarios.
   </div>
 </details>
