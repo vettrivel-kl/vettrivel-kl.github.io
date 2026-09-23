@@ -60,7 +60,7 @@ $$\text{MAPE} = \frac{100\%}{n} \sum_{i=1}^{n} \left| \frac{y_i - \hat{y}_i}{y_i
     
     *   **The Component:** $\frac{1}{y_i}$
     *   **Role:** Normalizes the miss by the true magnitude, converting absolute rupees/units into a relative scale.
-    *   **🚨 The Catch:** If $y_i = 0$, division by zero causes a crash. If $y_i$ is close to zero, a tiny error creates an astronomical percentage penalty.
+    *   **The Catch:** If $y_i = 0$, division by zero causes a crash. If $y_i$ is close to zero, a tiny error creates an astronomical percentage penalty.
   </TabItem>
   <TabItem value="scale" label="Scale Factor: 100% / n">
     <br/>
@@ -130,7 +130,7 @@ export const MetricSelector = () => {
   const [goal, setGoal] = React.useState('interpret');
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🎯 Interactive Metric Chooser</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Metric Chooser</h4>
       <p style={{ margin: '0 0 15px 0' }}>Select your primary objective or business constraint to find the appropriate evaluation metric:</p>
       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px' }}>
         <button onClick={() => setGoal('interpret')} style={{ padding: '8px 14px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: goal === 'interpret' ? '#3182ce' : 'transparent', color: goal === 'interpret' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Natural Units & Outlier Robust</button>
@@ -212,40 +212,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 6. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Trusting Aggregate Metrics Only" default>
+  <TabItem value="m1" label="1. Trusting Aggregate Metrics Only" default>
     <br/>
     
     *   **The Misconception:** *"My model achieved an $R^2$ of 0.92 and low RMSE, so the model is well-specified and ready for production."*
-    *   **❌ Wrong Thinking:** Relying entirely on single scalar summaries without visual diagnostics.
-    *   **✅ The Right Principle:** Summary metrics average errors over all samples, concealing systematic failures. An underfit model with missing quadratic terms can still produce high $R^2$. Always inspect residual plots to verify zero-mean randomness.
+    *   **Wrong Thinking:** Relying entirely on single scalar summaries without visual diagnostics.
+    *   **The Right Principle:** Summary metrics average errors over all samples, concealing systematic failures. An underfit model with missing quadratic terms can still produce high $R^2$. Always inspect residual plots to verify zero-mean randomness.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Ignoring Heteroscedasticity">
+  <TabItem value="m2" label="2. Ignoring Heteroscedasticity">
     <br/>
     
     *   **The Misconception:** *"A funnel-shaped residual pattern just means higher predictions have a bit more noise."*
-    *   **❌ Wrong Thinking:** Treating increasing variance as harmless real-world scatter.
-    *   **✅ The Right Principle:** Heteroscedasticity violates the core Gauss-Markov assumption of Ordinary Least Squares (OLS). While point predictions remain unbiased, the calculated standard errors and confidence intervals are invalid. Fix by applying variance-stabilizing transforms ($\log(y)$) or Weighted Least Squares.
+    *   **Wrong Thinking:** Treating increasing variance as harmless real-world scatter.
+    *   **The Right Principle:** Heteroscedasticity violates the core Gauss-Markov assumption of Ordinary Least Squares (OLS). While point predictions remain unbiased, the calculated standard errors and confidence intervals are invalid. Fix by applying variance-stabilizing transforms ($\log(y)$) or Weighted Least Squares.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Using MAPE on Zero-Valued Targets">
+  <TabItem value="m3" label="3. Using MAPE on Zero-Valued Targets">
     <br/>
     
     *   **The Misconception:** *"MAPE is the standard relative metric, so I should use it to benchmark all sales data."*
-    *   **❌ Wrong Thinking:** Computing MAPE on datasets containing zero or near-zero observations.
-    *   **✅ The Right Principle:** When $y_i = 0$, MAPE divides by zero and produces `inf` or `nan`. If $y_i$ is tiny, even an insignificant error produces thousands of percent in error. Use MAE, WAPE, or sMAPE instead.
+    *   **Wrong Thinking:** Computing MAPE on datasets containing zero or near-zero observations.
+    *   **The Right Principle:** When $y_i = 0$, MAPE divides by zero and produces `inf` or `nan`. If $y_i$ is tiny, even an insignificant error produces thousands of percent in error. Use MAE, WAPE, or sMAPE instead.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Cross-Dataset R² Comparisons">
+  <TabItem value="m4" label="4. Cross-Dataset R² Comparisons">
     <br/>
     
     *   **The Misconception:** *"Model A has an $R^2$ of 0.85 on Dataset 1, while Model B has an $R^2$ of 0.70 on Dataset 2. Therefore, Model A is inherently superior."*
-    *   **❌ Wrong Thinking:** Comparing $R^2$ across different datasets with different target variances.
-    *   **✅ The Right Principle:** $R^2$ is normalized by the variance of the target in that specific dataset ($\text{SST}$). If Dataset 2 has minimal target spread, $R^2$ will appear lower even if prediction errors are smaller. Cross-dataset quality must be evaluated using unit-consistent metrics like MAE or RMSE.
+    *   **Wrong Thinking:** Comparing $R^2$ across different datasets with different target variances.
+    *   **The Right Principle:** $R^2$ is normalized by the variance of the target in that specific dataset ($\text{SST}$). If Dataset 2 has minimal target spread, $R^2$ will appear lower even if prediction errors are smaller. Cross-dataset quality must be evaluated using unit-consistent metrics like MAE or RMSE.
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Overreacting to Q-Q Tail Deviations">
+  <TabItem value="m5" label="5. Overreacting to Q-Q Tail Deviations">
     <br/>
     
     *   **The Misconception:** *"Three points bend away from the line at the edge of the Q-Q plot, so the residuals are not normal and the model is invalid."*
-    *   **❌ Wrong Thinking:** Expecting empirical samples to match infinite Gaussian theoretical quantiles at the extremes.
-    *   **✅ The Right Principle:** Minor scatter at the extreme tails is expected, particularly on small sample sizes ($n < 100$). Only systematic, continuous curvature across the distribution (such as a pronounced S-curve) signifies meaningful departure from normality.
+    *   **Wrong Thinking:** Expecting empirical samples to match infinite Gaussian theoretical quantiles at the extremes.
+    *   **The Right Principle:** Minor scatter at the extreme tails is expected, particularly on small sample sizes ($n < 100$). Only systematic, continuous curvature across the distribution (such as a pronounced S-curve) signifies meaningful departure from normality.
   </TabItem>
 </Tabs>
 
@@ -257,7 +257,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Residual Diagnostics</h3>
+        <h3>Residual Diagnostics</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -272,7 +272,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Metric Selection Realities</h3>
+        <h3>Metric Selection Realities</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -290,7 +290,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
 *   **Residuals reveal structure:** Aggregate metrics condense errors into a single scalar, hiding nonlinear trends and unequal spread. Always inspect residual scatter before certifying a model.
 *   **The Trinity of Checks:** Check Linearity and Homoscedasticity via *Residuals vs. Fitted*, Normality via *Q-Q Plot*, and Variance Drift via *Scale-Location*.
@@ -298,7 +298,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::
 
-**Next Module:** [Validation Strategy - Why Cross-Validation](../06-validation-strategy/01-why-cross-validation.md) - moving from reporting error on single splits to robust out-of-sample resampling and cross-validation architectures.
+**Next Module:** [Validation Strategy - Why Cross-Validation](../06-validation-strategy/01-why-cross-validation.mdx) - moving from reporting error on single splits to robust out-of-sample resampling and cross-validation architectures.
 
 ---
 
@@ -312,16 +312,16 @@ export const ResidualQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Residual Pattern Diagnosis</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Residual Pattern Diagnosis</h4>
       <p style={{ margin: '0 0 15px 0' }}>You inspect a <b>Residuals vs. Fitted Values</b> plot and observe an expanding funnel pattern (vertical spread increases systematically as predictions grow). What is this violation, and how should it be addressed?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Nonlinearity; fit a higher-degree polynomial</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Heteroscedasticity; log-transform y or apply Weighted Least Squares</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Autocorrelation; add lagged time-series features</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. A bowed curve indicates nonlinearity. A funnel shape indicates non-constant variance (heteroscedasticity). Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! A funnel shape confirms heteroscedasticity (error variance expands with prediction scale). Applying a variance-stabilizing transformation like $\log(y)$ or using Weighted Least Squares (WLS) restores constant variance.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Autocorrelation is detected in sequence-ordered residual lag plots, not standard fitted scatter plots. Try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. A bowed curve indicates nonlinearity. A funnel shape indicates non-constant variance (heteroscedasticity). Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! A funnel shape confirms heteroscedasticity (error variance expands with prediction scale). Applying a variance-stabilizing transformation like $\log(y)$ or using Weighted Least Squares (WLS) restores constant variance.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Autocorrelation is detected in sequence-ordered residual lag plots, not standard fitted scatter plots. Try again!</p>}
     </div>
   );
 };
@@ -331,7 +331,7 @@ export const ResidualQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why is an aggregate metric like RMSE or R² insufficient on its own to evaluate model health?</b></summary>
+  <summary><b>1. [THEORY] Why is an aggregate metric like RMSE or R² insufficient on its own to evaluate model health?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -342,7 +342,7 @@ export const ResidualQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [ANALYZE] Under what business circumstance should you select MAE over RMSE, and vice versa?</b></summary>
+  <summary><b>2. [ANALYZE] Under what business circumstance should you select MAE over RMSE, and vice versa?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -352,7 +352,7 @@ export const ResidualQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [THEORY] What does an S-shaped departure from the diagonal in a Normal Q-Q plot signify?</b></summary>
+  <summary><b>3. [THEORY] What does an S-shaped departure from the diagonal in a Normal Q-Q plot signify?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -363,7 +363,7 @@ export const ResidualQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [ANALYZE] Why does evaluating models across different datasets using R² lead to invalid conclusions?</b></summary>
+  <summary><b>4. [ANALYZE] Why does evaluating models across different datasets using R² lead to invalid conclusions?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -374,7 +374,7 @@ export const ResidualQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [PRACTICE] How do you systematically test if residuals violate the constant variance assumption without relying solely on visual inspection?</b></summary>
+  <summary><b>5. [PRACTICE] How do you systematically test if residuals violate the constant variance assumption without relying solely on visual inspection?</b></summary>
   <div className="answer-content">
     <br/>
     

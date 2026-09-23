@@ -181,7 +181,7 @@ The corollary matters for reporting: if you fit with absolute error, do not be s
 
 ---
 
-## 🛠️ The Loss Functions Sandbox
+## The Loss Functions Sandbox
 
 Experiment with the interactive tool below. Modify the residual $r$ and the Huber threshold $\delta$ to watch how the penalty cost of a single residual builds under L2 (Squared), L1 (Absolute), and Huber losses, visualizing their exact curves and crossover thresholds.
 
@@ -209,7 +209,7 @@ export const LossSandbox = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
-      <h4 style={{ margin: '0 0 15px 0' }}>📊 Loss Curves Sandbox</h4>
+      <h4 style={{ margin: '0 0 15px 0' }}>Loss Curves Sandbox</h4>
       
       <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginBottom: '15px' }}>
         <div style={{ flex: '1', minWidth: '150px' }}>
@@ -331,7 +331,7 @@ Absolute error is interesting against this table: it is *not* differentiable at 
 
 ---
 
-## 🛠️ The Hiker's Staircase vs. Hillside Sandbox
+## The Hiker's Staircase vs. Hillside Sandbox
 
 Experiment with the interactive complexity sandbox below. Move the weight $w_1$ (representing the hiker searching for the minimum) to watch how the 0/1 loss builds flat steps (zero gradient almost everywhere) while Cross-Entropy / Log Loss builds a smooth, convex slope.
 
@@ -372,7 +372,7 @@ export const SurrogateStaircase = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🔌 Staircase vs. Hillside Simulator</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Staircase vs. Hillside Simulator</h4>
       <p style={{ fontSize: '13px', margin: '0 0 15px 0', opacity: 0.9 }}>Nudge the weight $w_1$ to watch how a hiker on the 0/1 staircase is completely stranded, while log loss offers a smooth slope.</p>
 
       <div style={{ marginBottom: '15px' }}>
@@ -573,7 +573,7 @@ The mechanism is that squared error multiplies the error by $\sigma'(z)$, and $\
 
 ---
 
-## 🛠️ The Sigmoid Vanishing Gradient Explorer
+## The Sigmoid Vanishing Gradient Explorer
 
 Experiment with the interactive slider below. Move the pre-sigmoid logit score $z$ (when true target is $y = 1$) to watch how OLS squared error's gradient vanishes completely on a sigmoid (learning rate drops $11,014\times$!), while Cross-Entropy stays strong.
 
@@ -594,7 +594,7 @@ export const SigmoidGradientExplorer = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🔌 Sigmoid Saturation & Vanishing Gradient Explorer</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Sigmoid Saturation & Vanishing Gradient Explorer</h4>
       <p style={{ fontSize: '13px', margin: '0 0 15px 0', opacity: 0.9 }}>Nudge $z$ to see how squared error completely goes blind on wrong, confident predictions, while Cross-Entropy remains strong.</p>
 
       <div style={{ marginBottom: '15px' }}>
@@ -656,7 +656,7 @@ export const SigmoidGradientExplorer = () => {
 
       {z <= -4.0 && (
         <div style={{ marginTop: '15px', padding: '10px 15px', borderRadius: '4px', backgroundColor: 'rgba(229, 62, 62, 0.08)', border: '1px solid #e53e3e', fontSize: '12px', color: '#e53e3e', fontWeight: 'bold' }}>
-          🚨 Vanishing Gradient Trap! Because the sigmoid saturates, its derivative σ'(z) drops exponentially. Under squared error, the learning pull collapses. At z = {z.toFixed(1)}, Cross-Entropy learns <b>{ratio.toFixed(0)}x</b> faster!
+          Vanishing Gradient Trap! Because the sigmoid saturates, its derivative σ'(z) drops exponentially. Under squared error, the learning pull collapses. At z = {z.toFixed(1)}, Cross-Entropy learns <b>{ratio.toFixed(0)}x</b> faster!
         </div>
       )}
     </div>
@@ -707,33 +707,33 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 ## 3. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. One Canonical Best Line" default>
+  <TabItem value="m1" label="1. One Canonical Best Line" default>
     <br/>
     
     *   **The Misconception:** *"There is only one mathematically 'correct' best-fit line for any dataset."*
-    *   **❌ Wrong Thinking:** Believing OLS is the only legitimate model.
-    *   **✅ The Right Principle:** "Best" is purely a statement about your loss. Clean data fitted with squared error, absolute error, and Huber loss gave three different slopes: `1.9490`, `1.9752`, and `1.9526`. None of them is "wrong"—each satisfies a different mathematical specification.
+    *   **Wrong Thinking:** Believing OLS is the only legitimate model.
+    *   **The Right Principle:** "Best" is purely a statement about your loss. Clean data fitted with squared error, absolute error, and Huber loss gave three different slopes: `1.9490`, `1.9752`, and `1.9526`. None of them is "wrong"—each satisfies a different mathematical specification.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Low-Leverage Outlier robustness">
+  <TabItem value="m2" label="2. Low-Leverage Outlier robustness">
     <br/>
     
     *   **The Misconception:** *"I can test how robust a loss function is by adding a wild outlier anywhere in my dataset."*
-    *   **❌ Wrong Thinking:** Adding a giant outlier at the mean of $x$ (center of data) and drawing conclusions from how the slope changes.
-    *   **✅ The Right Principle:** A point near the mean of $x$ has zero **leverage** over the slope of a regression line (it only lifts the intercept). To test outlier robustness, the corruption must be placed at the extreme edge of $x$ where leverage is high.
+    *   **Wrong Thinking:** Adding a giant outlier at the mean of $x$ (center of data) and drawing conclusions from how the slope changes.
+    *   **The Right Principle:** A point near the mean of $x$ has zero **leverage** over the slope of a regression line (it only lifts the intercept). To test outlier robustness, the corruption must be placed at the extreme edge of $x$ where leverage is high.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Direct Accuracy Optimization">
+  <TabItem value="m3" label="3. Direct Accuracy Optimization">
     <br/>
     
     *   **The Misconception:** *"I should optimize accuracy, F1, or mistake counts directly."*
-    *   **❌ Wrong Thinking:** Trying to pass classification accuracy or 0/1 mistake counts to gradient descent.
-    *   **✅ The Right Principle:** Count-based metrics are flat everywhere except at discrete steps, yielding exactly zero gradient ($1998$ of $2000$ sampled locations was exactly $0.0$). You cannot use gradient-descent on staircase landscapes; you must minimize a smooth **surrogate loss** (like cross-entropy or hinge) instead, and report accuracy afterwards.
+    *   **Wrong Thinking:** Trying to pass classification accuracy or 0/1 mistake counts to gradient descent.
+    *   **The Right Principle:** Count-based metrics are flat everywhere except at discrete steps, yielding exactly zero gradient ($1998$ of $2000$ sampled locations was exactly $0.0$). You cannot use gradient-descent on staircase landscapes; you must minimize a smooth **surrogate loss** (like cross-entropy or hinge) instead, and report accuracy afterwards.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Squared Error on Sigmoid">
+  <TabItem value="m4" label="4. Squared Error on Sigmoid">
     <br/>
     
     *   **The Misconception:** *"Squaring probability differences is a natural way to fit a binary classifier."*
-    *   **❌ Wrong Thinking:** Believing squared error is optimal for sigmoid probability outputs.
-    *   **✅ The Right Principle:** Under squared error, the gradient is multiplied by the sigmoid derivative $\sigma'(z)$. Because the sigmoid saturates and flattens out on wrong confident predictions, $\sigma'$ collapses to zero—making squared error learn **$11,014\times$ slower** than Cross-Entropy when it is most wrong.
+    *   **Wrong Thinking:** Believing squared error is optimal for sigmoid probability outputs.
+    *   **The Right Principle:** Under squared error, the gradient is multiplied by the sigmoid derivative $\sigma'(z)$. Because the sigmoid saturates and flattens out on wrong confident predictions, $\sigma'$ collapses to zero—making squared error learn **$11,014\times$ slower** than Cross-Entropy when it is most wrong.
   </TabItem>
 </Tabs>
 
@@ -745,7 +745,7 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Core Theory</h3>
+        <h3>Core Theory</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -760,7 +760,7 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Engineering Realities</h3>
+        <h3>Engineering Realities</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -778,15 +778,15 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 
 :::info 
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🔒 Absolute limitation:** Because L1 absolute loss looks strictly at residual sign, pushing a high-leverage point from $60$ to $10,000$ yields **exactly the same slope** ($1.975169$).
-*   **⚖️ Probability constraint:** SGDClassifier trained under Hinge loss yields raw decision margins, raising `AttributeError` if `predict_proba` is called.
-*   **🛠️ Robustness trade-off:** Robustness is not a free upgrade—it is a conscious choice to discard the magnitude of extreme measurements, which could otherwise carry valuable signal.
+*   **Absolute limitation:** Because L1 absolute loss looks strictly at residual sign, pushing a high-leverage point from $60$ to $10,000$ yields **exactly the same slope** ($1.975169$).
+*   **Probability constraint:** SGDClassifier trained under Hinge loss yields raw decision margins, raising `AttributeError` if `predict_proba` is called.
+*   **Robustness trade-off:** Robustness is not a free upgrade—it is a conscious choice to discard the magnitude of extreme measurements, which could otherwise carry valuable signal.
 
 :::
 
-**Next in this section:** [Gradient Descent](./02-gradient-descent.md) — the method that follows one of these gradients downhill, the two different plots that share its name, and why the step size shrinks near the minimum without anyone programming it.
+**Next in this section:** [Gradient Descent](./02-gradient-descent.mdx) — the method that follows one of these gradients downhill, the two different plots that share its name, and why the step size shrinks near the minimum without anyone programming it.
 
 ---
 
@@ -800,16 +800,16 @@ export const PracticeQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Absolute Leverage</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: The Absolute Leverage</h4>
       <p style={{ margin: '0 0 15px 0' }}>If we corrupt a high-leverage point on absolute L1 loss, why does the slope stay perfectly constant ($1.975169$) even if we push the target value from 60 to 10,000?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because OLS intercepts are force-constant</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because L1 gradient uses strictly sign(r), ignoring error magnitude entirely</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because the point is located exactly at the mean of x</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The intercept is not forced constant here. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! The gradient of L1 cost is proportional only to $-\sum \text{sign}(r_i) \cdot x_i$. The exact magnitude of the error is completely absent from the gradient, meaning moving a point to infinity does not change its pull on the line unless it crosses the boundary!</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. We specified that the point is high-leverage (at the extreme edge of $x$, not the mean). Re-read and try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. The intercept is not forced constant here. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! The gradient of L1 cost is proportional only to $-\sum \text{sign}(r_i) \cdot x_i$. The exact magnitude of the error is completely absent from the gradient, meaning moving a point to infinity does not change its pull on the line unless it crosses the boundary!</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. We specified that the point is high-leverage (at the extreme edge of $x$, not the mean). Re-read and try again!</p>}
     </div>
   );
 };
@@ -819,7 +819,7 @@ export const PracticeQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why is a low-leverage outlier (at $x \approx \bar{x}$) completely useless for testing loss robustness?</b></summary>
+  <summary><b>1. [THEORY] Why is a low-leverage outlier (at $x \approx \bar{x}$) completely useless for testing loss robustness?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -830,7 +830,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [THEORY] Show mathematically why minimizing L2 loss fits the mean while L1 fits the median.</b></summary>
+  <summary><b>2. [THEORY] Show mathematically why minimizing L2 loss fits the mean while L1 fits the median.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -843,7 +843,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [ANALYZE] Why can't we use standard gradient-descent algorithms to optimize classification accuracy directly?</b></summary>
+  <summary><b>3. [ANALYZE] Why can't we use standard gradient-descent algorithms to optimize classification accuracy directly?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -854,7 +854,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [ANALYZE] Explain the "Sigmoid Trap" and why OLS fails to learn on confident wrong probability predictions.</b></summary>
+  <summary><b>4. [ANALYZE] Explain the "Sigmoid Trap" and why OLS fails to learn on confident wrong probability predictions.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -866,7 +866,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] How does Hinge loss create "Support Vectors" geometrically?</b></summary>
+  <summary><b>5. [THEORY] How does Hinge loss create "Support Vectors" geometrically?</b></summary>
   <div className="answer-content">
     <br/>
     

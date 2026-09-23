@@ -938,18 +938,18 @@ d) Which metric best represents performance?
 ### Red Flags
 
 ```
-🚩 High accuracy on imbalanced data
+- High accuracy on imbalanced data
    → Check precision, recall, F1 instead
 
-🚩 ROC-AUC excellent but PR-AUC poor
+- ROC-AUC excellent but PR-AUC poor
    → Likely imbalanced dataset
    → Use PR-AUC for decisions
 
-🚩 Macro and weighted metrics differ greatly
+- Macro and weighted metrics differ greatly
    → Class sizes matter
    → Use weighted for realistic performance
 
-🚩 Specificity high but recall low
+- Specificity high but recall low
    → Threshold too high
    → Too many false negatives
 ```
@@ -971,7 +971,7 @@ d) Which metric best represents performance?
 
 ## Tips for CT Exam
 
-### ✅ DO
+### DO
 
 - **Calculate both precision and recall** (different purposes)
 - **Plot ROC/PR curves** when asked about thresholds
@@ -979,7 +979,7 @@ d) Which metric best represents performance?
 - **Interpret AUC in context** (what does 0.92 mean practically?)
 - **Consider costs** when selecting threshold
 
-### ❌ DON'T
+### DON'T
 
 - Don't use accuracy alone for imbalanced data
 - Don't confuse sensitivity and specificity

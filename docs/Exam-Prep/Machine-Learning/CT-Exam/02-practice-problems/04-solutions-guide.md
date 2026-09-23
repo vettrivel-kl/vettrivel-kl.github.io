@@ -85,10 +85,10 @@ b₀ ≈ 8.2
 ```
 
 **Common Mistakes:**
-- ❌ Forgetting to square differences in denominator
-- ❌ Arithmetic errors when summing
-- ❌ Rounding too early (keep more decimal places)
-- ❌ Confusing which variable is X vs Y
+- Forgetting to square differences in denominator
+- Arithmetic errors when summing
+- Rounding too early (keep more decimal places)
+- Confusing which variable is X vs Y
 
 ---
 
@@ -138,10 +138,10 @@ Reasonable for a simple model, but room for improvement.
 ```
 
 **Common Mistakes:**
-- ❌ Forgetting to square residuals (SSE is "squared" error)
-- ❌ Using n vs (n-1) in denominator (depends on context)
-- ❌ Not taking square root for RMSE
-- ❌ Confusing error sign (residual can be ± but SSE always ≥ 0)
+- Forgetting to square residuals (SSE is "squared" error)
+- Using n vs (n-1) in denominator (depends on context)
+- Not taking square root for RMSE
+- Confusing error sign (residual can be ± but SSE always ≥ 0)
 
 ---
 
@@ -201,9 +201,9 @@ Variance: Error from overfitting
 ```
 
 **Common Mistakes:**
-- ❌ Thinking high training error means high variance (it's high BIAS)
-- ❌ Confusing gap with variance (gap ≠ variance exactly)
-- ❌ Saying Model A has overfitting (gap is too small)
+- Thinking high training error means high variance (it's high BIAS)
+- Confusing gap with variance (gap ≠ variance exactly)
+- Saying Model A has overfitting (gap is too small)
 
 ---
 
@@ -273,10 +273,10 @@ Reasoning:
 ```
 
 **Common Mistakes:**
-- ❌ Dividing by (n-1) when shouldn't
-- ❌ Forgetting to square deviations
-- ❌ Calculating standard error instead of standard deviation
-- ❌ Misinterpreting what std dev means
+- Dividing by (n-1) when shouldn't
+- Forgetting to square deviations
+- Calculating standard error instead of standard deviation
+- Misinterpreting what std dev means
 
 ---
 
@@ -347,10 +347,10 @@ As z → -∞: σ → 0.0
 ```
 
 **Common Mistakes:**
-- ❌ Computing e^z instead of e^(-z)
-- ❌ Forgetting order of operations
-- ❌ Rounding too early in intermediate steps
-- ❌ Thinking sigmoid can go outside [0,1]
+- Computing e^z instead of e^(-z)
+- Forgetting order of operations
+- Rounding too early in intermediate steps
+- Thinking sigmoid can go outside [0,1]
 
 ---
 
@@ -410,10 +410,10 @@ Interpretation: "Of actual positives, 90% detected"
 ```
 
 **Common Mistakes:**
-- ❌ Swapping numerator and denominator
-- ❌ Confusing recall with specificity
-- ❌ Not understanding what each measures
-- ❌ Saying precision = TP/all predictions (should be TP/(TP+FP))
+- Swapping numerator and denominator
+- Confusing recall with specificity
+- Not understanding what each measures
+- Saying precision = TP/all predictions (should be TP/(TP+FP))
 
 ---
 
@@ -474,10 +474,10 @@ ROI for Model B: ($11,813,650 - $50,000) / $50,000 = 23,527%
 ```
 
 **Common Mistakes:**
-- ❌ Using accuracy instead of precision/recall
-- ❌ Forgetting deployment costs
-- ❌ Not accounting for false negatives
-- ❌ Calculating ROI wrong
+- Using accuracy instead of precision/recall
+- Forgetting deployment costs
+- Not accounting for false negatives
+- Calculating ROI wrong
 
 ---
 
@@ -572,5 +572,5 @@ Specificity = TN / (TN + FP)
 4. Try similar problems with different numbers
 5. Time yourself to build speed
 
-**Ready for exam?** → Good luck! 🚀
+**Ready for exam?** → Good luck!
 

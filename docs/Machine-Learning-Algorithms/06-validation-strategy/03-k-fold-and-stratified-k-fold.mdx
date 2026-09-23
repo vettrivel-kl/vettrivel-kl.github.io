@@ -42,19 +42,19 @@ For balanced datasets or regression tasks, standard **K-Fold ($K=5$ or $K=10$)**
 Selecting the number of folds $K$ involves balancing **computational budget**, **estimation bias**, and **fold variance**:
 
 <Tabs>
-  <TabItem value="small" label="🌱 Small Data (N < 100)" default>
+  <TabItem value="small" label="Small Data (N < 100)" default>
     <br/>
     
     *   **Recommended:** $K=3$ or Leave-One-Out (LOO-CV).
     *   **Statistical Rationale:** When data is scarce, setting $K=10$ creates test folds with only a handful of rows, resulting in noisy, binary-like evaluations. Setting $K=3$ or $K=5$ preserves enough training data per fold to allow model convergence.
   </TabItem>
-  <TabItem value="medium" label="🌿 Medium Data (100 ≤ N ≤ 10,000)">
+  <TabItem value="medium" label="Medium Data (100 ≤ N ≤ 10,000)">
     <br/>
     
     *   **Recommended:** $K=5$ (Speed Default) or $K=10$ (Benchmark Standard).
     *   **Statistical Rationale:** Training on 80% ($K=5$) or 90% ($K=10$) of the data places your model near the flat asymptote of its learning curve, keeping pessimistic bias negligible while averaging out partition noise over 5 to 10 independent test sets.
   </TabItem>
-  <TabItem value="large" label="🌳 Large Data (N > 10,000)">
+  <TabItem value="large" label="Large Data (N > 10,000)">
     <br/>
     
     *   **Recommended:** $K=5$ or a single 3-way split (Train/Val/Test).
@@ -69,7 +69,7 @@ Selecting the number of folds $K$ involves balancing **computational budget**, *
 When dealing with class imbalance (e.g., 95% negative, 5% positive), standard random shuffling is dangerous:
 
 <Tabs>
-  <TabItem value="random" label="❌ Standard K-Fold (Unstratified)" default>
+  <TabItem value="random" label="Standard K-Fold (Unstratified)" default>
     <br/>
     
     *   **The Hazard:** Random partitioning distributes samples without regard to target labels.
@@ -79,7 +79,7 @@ When dealing with class imbalance (e.g., 95% negative, 5% positive), standard ra
         *   Fold 5: 18 negative, **2 positives** (Twice the natural frequency).
     *   **The Failure:** The model tested on Fold 1 cannot compute Precision, Recall, or ROC-AUC correctly because the positive class does not exist in the test ground truth.
   </TabItem>
-  <TabItem value="stratified" label="✅ Stratified K-Fold">
+  <TabItem value="stratified" label="Stratified K-Fold">
     <br/>
     
     *   **The Mechanism:** Groups samples by class label before partitioning, systematically distributing minority instances evenly across all $K$ buckets.
@@ -152,40 +152,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 6. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Using Standard KFold on Imbalanced Classes" default>
+  <TabItem value="m1" label="1. Using Standard KFold on Imbalanced Classes" default>
     <br/>
     
     *   **The Misconception:** *"Shuffling the dataset before running standard KFold ensures random class distribution, making stratification redundant."*
-    *   **❌ Wrong Thinking:** Relying on chance to preserve rare event proportions.
-    *   **✅ The Right Principle:** Random sampling on rare classes (e.g. 1% fraud) frequently leads to zero-event test folds or over-concentrated training folds. Always use `StratifiedKFold` for classification.
+    *   **Wrong Thinking:** Relying on chance to preserve rare event proportions.
+    *   **The Right Principle:** Random sampling on rare classes (e.g. 1% fraud) frequently leads to zero-event test folds or over-concentrated training folds. Always use `StratifiedKFold` for classification.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Attempting to Stratify Continuous Targets">
+  <TabItem value="m2" label="2. Attempting to Stratify Continuous Targets">
     <br/>
     
     *   **The Misconception:** *"StratifiedKFold is safer, so I will use it for my house price regression model."*
-    *   **❌ Wrong Thinking:** Applying classification splitters to continuous float targets.
-    *   **✅ The Right Principle:** `StratifiedKFold` expects discrete categorical labels. Running it on continuous regression targets raises a `ValueError` or creates thousands of single-sample strata. For regression, use standard `KFold` (or bin targets into quantiles if distribution stratification is strictly required).
+    *   **Wrong Thinking:** Applying classification splitters to continuous float targets.
+    *   **The Right Principle:** `StratifiedKFold` expects discrete categorical labels. Running it on continuous regression targets raises a `ValueError` or creates thousands of single-sample strata. For regression, use standard `KFold` (or bin targets into quantiles if distribution stratification is strictly required).
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Neglecting to Set a Random Seed on Shuffled Folds">
+  <TabItem value="m3" label="3. Neglecting to Set a Random Seed on Shuffled Folds">
     <br/>
     
     *   **The Misconception:** *"Setting shuffle=True is enough for a good cross-validation run."*
-    *   **❌ Wrong Thinking:** Omitting `random_state` during shuffled cross-validation.
-    *   **✅ The Right Principle:** Without `random_state`, every execution partitions data differently, preventing reproducible bug diagnostics and invalidating fair model-to-model comparisons. Always pin `random_state=42`.
+    *   **Wrong Thinking:** Omitting `random_state` during shuffled cross-validation.
+    *   **The Right Principle:** Without `random_state`, every execution partitions data differently, preventing reproducible bug diagnostics and invalidating fair model-to-model comparisons. Always pin `random_state=42`.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Comparing Models Using Different Folds">
+  <TabItem value="m4" label="4. Comparing Models Using Different Folds">
     <br/>
     
     *   **The Misconception:** *"I evaluated Model A with K=5 and Model B with K=10, and Model B scored 1% higher, so Model B is better."*
-    *   **❌ Wrong Thinking:** Comparing models evaluated across different fold counts or different partition seeds.
-    *   **✅ The Right Principle:** Different $K$ values possess different estimation biases. To compare two algorithms fairly, evaluate them on the **exact same cross-validation splits** using identical splitters.
+    *   **Wrong Thinking:** Comparing models evaluated across different fold counts or different partition seeds.
+    *   **The Right Principle:** Different $K$ values possess different estimation biases. To compare two algorithms fairly, evaluate them on the **exact same cross-validation splits** using identical splitters.
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Tuning Inside the Evaluation Fold Loop">
+  <TabItem value="m5" label="5. Tuning Inside the Evaluation Fold Loop">
     <br/>
     
     *   **The Misconception:** *"Inside each fold, I tested 10 different regularization strengths on the test fold and picked the winner."*
-    *   **❌ Wrong Thinking:** Using the evaluation test fold as a tuning set.
-    *   **✅ The Right Principle:** The test fold must be evaluated strictly once per outer loop. Optimizing hyperparameters on the test fold causes severe data leakage. Use nested cross-validation or a separate train/val/test split.
+    *   **Wrong Thinking:** Using the evaluation test fold as a tuning set.
+    *   **The Right Principle:** The test fold must be evaluated strictly once per outer loop. Optimizing hyperparameters on the test fold causes severe data leakage. Use nested cross-validation or a separate train/val/test split.
   </TabItem>
 </Tabs>
 
@@ -197,7 +197,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Fold Selection Realities</h3>
+        <h3>Fold Selection Realities</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -211,7 +211,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Stratification Rules</h3>
+        <h3>Stratification Rules</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -228,15 +228,15 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **⚖️ Stratification protects rare classes:** On imbalanced problems, unstratified splits can create unrepresentative or completely empty test folds.
-*   **🎯 Anchor your metrics:** Never quote a single cross-validation number. A score of $85\% \pm 0.5\%$ indicates stability; $85\% \pm 8.0\%$ flags dangerous partition sensitivity.
-*   **🔒 Standardize the benchmark:** Always test competing model architectures on the exact same folds.
+*   **Stratification protects rare classes:** On imbalanced problems, unstratified splits can create unrepresentative or completely empty test folds.
+*   **Anchor your metrics:** Never quote a single cross-validation number. A score of $85\% \pm 0.5\%$ indicates stability; $85\% \pm 8.0\%$ flags dangerous partition sensitivity.
+*   **Standardize the benchmark:** Always test competing model architectures on the exact same folds.
 
 :::
 
-**Next Section:** [Data Leakage and Best Practices](./04-data-leakage-and-best-practices.md) - preventing subtle pipeline leakage, feature-scaling contamination, and mastering Nested CV.
+**Next Section:** [Data Leakage and Best Practices](./04-data-leakage-and-best-practices.mdx) - preventing subtle pipeline leakage, feature-scaling contamination, and mastering Nested CV.
 
 ---
 
@@ -250,16 +250,16 @@ export const StratificationQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Handling Severe Imbalance</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Handling Severe Imbalance</h4>
       <p style={{ margin: '0 0 15px 0' }}>You are training a fraud detection model on 10,000 transactions where only 50 are fraudulent (0.5% fraud rate). Why is standard 10-Fold CV unacceptable here?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because 10 folds takes too long to compute on 10,000 samples</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Random splits can easily yield test folds with 0 or 1 fraud cases, invalidating recall metrics</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because standard K-Fold only works on regression datasets</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. 10 fits on 10,000 tabular rows completes in seconds for standard linear or tree models. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! With only 50 positives across 10 folds, each fold averages just 5 positive cases. In an unstratified split, random variance will leave some folds with 0 or 1 positive samples, making Precision and Recall completely degenerate. StratifiedKFold guarantees exactly 5 positives per fold.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Standard K-Fold works on both regression and classification, but it ignores class distributions. Try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. 10 fits on 10,000 tabular rows completes in seconds for standard linear or tree models. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! With only 50 positives across 10 folds, each fold averages just 5 positive cases. In an unstratified split, random variance will leave some folds with 0 or 1 positive samples, making Precision and Recall completely degenerate. StratifiedKFold guarantees exactly 5 positives per fold.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Standard K-Fold works on both regression and classification, but it ignores class distributions. Try again!</p>}
     </div>
   );
 };
@@ -269,7 +269,7 @@ export const StratificationQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] How does Stratified K-Fold partition data differently from standard K-Fold?</b></summary>
+  <summary><b>1. [THEORY] How does Stratified K-Fold partition data differently from standard K-Fold?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -280,7 +280,7 @@ export const StratificationQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [ANALYZE] Why is setting K=20 usually wasteful compared to K=5 on medium tabular datasets?</b></summary>
+  <summary><b>2. [ANALYZE] Why is setting K=20 usually wasteful compared to K=5 on medium tabular datasets?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -291,7 +291,7 @@ export const StratificationQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [PRACTICE] Can StratifiedKFold be applied directly to a continuous target in a regression problem?</b></summary>
+  <summary><b>3. [PRACTICE] Can StratifiedKFold be applied directly to a continuous target in a regression problem?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -302,7 +302,7 @@ export const StratificationQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [THEORY] What is the difference between setting shuffle=False vs. shuffle=True in KFold?</b></summary>
+  <summary><b>4. [THEORY] What is the difference between setting shuffle=False vs. shuffle=True in KFold?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -313,7 +313,7 @@ export const StratificationQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [ANALYZE] You run 5-Fold CV on two different models. Model A scores 89% ± 0.3%, while Model B scores 91% ± 7.2%. Which model is safer for production?</b></summary>
+  <summary><b>5. [ANALYZE] You run 5-Fold CV on two different models. Model A scores 89% ± 0.3%, while Model B scores 91% ± 7.2%. Which model is safer for production?</b></summary>
   <div className="answer-content">
     <br/>
     

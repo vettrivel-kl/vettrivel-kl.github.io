@@ -60,7 +60,7 @@ export const OutlierSandbox = () => {
   const results = getResults();
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🎛️ Live Outlier Masking Sandbox</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Live Outlier Masking Sandbox</h4>
       <p style={{ margin: '0 0 15px 0', fontSize: '14px' }}>Experience **Masking** directly. Adding multiple outliers (<code>100</code>) inflates standard deviation, causing Z-score to go completely blind. Toggle robust MAD/IQR to see them recover:</p>
       <div style={{ display: 'flex', gap: '15px', marginBottom: '15px', alignItems: 'center' }}>
         <label style={{ fontWeight: 'bold', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer' }}>
@@ -86,16 +86,16 @@ export const OutlierSandbox = () => {
             <div style={{ fontSize: '18px', fontWeight: 'bold', color: r.flagged ? '#e53e3e' : 'var(--ifm-font-color-base)' }}>{r.value}</div>
             <div style={{ fontSize: '9px', color: 'var(--ifm-color-emphasis-600)', marginTop: '5px' }}>{r.explanation}</div>
             <div style={{ fontSize: '10px', fontWeight: 'bold', color: r.flagged ? '#e53e3e' : '#38a169', marginTop: '5px' }}>
-              {r.flagged ? "🔴 Flagged" : "🟢 Normal"}
+              {r.flagged ? "Flagged" : "Normal"}
             </div>
           </div>
         ))}
       </div>
       <div style={{ fontSize: '12px', color: 'var(--ifm-color-emphasis-600)', fontStyle: 'italic' }}>
-        {method === 'zscore' && hasOutliers && "⚠️ Masking Occurred! Because standard deviation inflated from ~2.5 to ~39.2, Z-scores of the outliers fell to only ~1.4, causing them to hide in plain sight!"}
+        {method === 'zscore' && hasOutliers && "Masking Occurred! Because standard deviation inflated from ~2.5 to ~39.2, Z-scores of the outliers fell to only ~1.4, causing them to hide in plain sight!"}
         {method === 'zscore' && !hasOutliers && "Baseline clean data. Standard Z-score works fine since there's no variance inflation."}
-        {method === 'iqr' && hasOutliers && "✅ Recovered! IQR rule successfully flags the 100s because the interquartile range resists the extreme value shift."}
-        {method === 'mad' && hasOutliers && "✅ Recovered! Modified Z-score (median/MAD) is completely immune to masking. It successfully flags all 100s with extreme scores (>13)!"}
+        {method === 'iqr' && hasOutliers && "Recovered! IQR rule successfully flags the 100s because the interquartile range resists the extreme value shift."}
+        {method === 'mad' && hasOutliers && "Recovered! Modified Z-score (median/MAD) is completely immune to masking. It successfully flags all 100s with extreme scores (>13)!"}
       </div>
     </div>
   );
@@ -105,16 +105,16 @@ export const PracticeQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Robust Regression</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Robust Regression</h4>
       <p style={{ margin: '0 0 15px 0' }}>If your training set has outliers in its feature columns (X-outliers), why doesn't fitting a HuberRegressor help prevent model distortion?</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '10px', borderRadius: '4px', border: '1px solid #3182ce', textAlign: 'left', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Option A: HuberRegressor only works on classification targets, not continuous values.</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '10px', borderRadius: '4px', border: '1px solid #3182ce', textAlign: 'left', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Option B: X-outliers are high-leverage points that drag the fitted regression line directly to themselves, keeping their residuals small and rendering residual-based Huber weighting useless.</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '10px', borderRadius: '4px', border: '1px solid #3182ce', textAlign: 'left', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Option C: Robust models are always computationally identical to OLS when regularized.</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. HuberRegressor is designed specifically for continuous regression, not classification.</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! HuberRegressor works by down-weighting observations with large residuals (errors). However, an extreme X-outlier exerts high leverage, pulling the line to itself so its residual remains tiny. Hence, Huber fails to down-weight it.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Robust Huber loss is mathematically different from OLS and handles y-outliers perfectly. It's high-leverage X-outliers that Huber is structurally blind to.</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. HuberRegressor is designed specifically for continuous regression, not classification.</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! HuberRegressor works by down-weighting observations with large residuals (errors). However, an extreme X-outlier exerts high leverage, pulling the line to itself so its residual remains tiny. Hence, Huber fails to down-weight it.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Robust Huber loss is mathematically different from OLS and handles y-outliers perfectly. It's high-leverage X-outliers that Huber is structurally blind to.</p>}
     </div>
   );
 };
@@ -560,40 +560,40 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 Explore some of the most critical engineering pitfalls in outlier detection and feature engineering:
 
 <Tabs>
-  <TabItem value="deleting" label="🚨 Pitfall 1: Blind Deletion" default>
+  <TabItem value="deleting" label="Pitfall 1: Blind Deletion" default>
     <br/>
     
     *   **The Misconception:** *"Every point flagged by a statistical outlier detection rule is a data-quality error and should be deleted immediately."*
-    *   **❌ Wrong Thinking:** Deleting flagged rows can silently purge genuine extreme signals or key fraud-novelties, effectively deleting the most valuable rows in the dataset.
-    *   **✅ The Right Principle:** Only delete confirmed data errors (e.g. key-punch slips). Genuinely extreme values should be kept (or winsorised/transformed for linear models).
+    *   **Wrong Thinking:** Deleting flagged rows can silently purge genuine extreme signals or key fraud-novelties, effectively deleting the most valuable rows in the dataset.
+    *   **The Right Principle:** Only delete confirmed data errors (e.g. key-punch slips). Genuinely extreme values should be kept (or winsorised/transformed for linear models).
   </TabItem>
-  <TabItem value="skew" label="🚨 Pitfall 2: Raw Skew Detection">
+  <TabItem value="skew" label="Pitfall 2: Raw Skew Detection">
     <br/>
     
     *   **The Misconception:** *"Applying the IQR rule directly on skewed features will isolate errors."*
-    *   **❌ Wrong Thinking:** On heavily skewed distributions, the IQR rule flags up to 11% of perfectly clean, legitimate data points as outliers.
-    *   **✅ The Right Principle:** Always apply skew-reducing transformations (e.g., `log1p` or Yeo-Johnson) **before** running outlier detection rules.
+    *   **Wrong Thinking:** On heavily skewed distributions, the IQR rule flags up to 11% of perfectly clean, legitimate data points as outliers.
+    *   **The Right Principle:** Always apply skew-reducing transformations (e.g., `log1p` or Yeo-Johnson) **before** running outlier detection rules.
   </TabItem>
-  <TabItem value="masking" label="🚨 Pitfall 3: Standard Z-Score Masking">
+  <TabItem value="masking" label="Pitfall 3: Standard Z-Score Masking">
     <br/>
     
     *   **The Misconception:** *"The standard $|z| > 3$ rule is the most robust way to find univariate outliers."*
-    *   **❌ Wrong Thinking:** Standard Z-scores suffer from masking. Since outliers are included in the mean and standard deviation, multiple outliers inflate the std and drop below the detection threshold, rendering the Z-score completely blind.
-    *   **✅ The Right Principle:** Use robust statistics. Median and Median Absolute Deviation (MAD) are immune to masking and find all outliers.
+    *   **Wrong Thinking:** Standard Z-scores suffer from masking. Since outliers are included in the mean and standard deviation, multiple outliers inflate the std and drop below the detection threshold, rendering the Z-score completely blind.
+    *   **The Right Principle:** Use robust statistics. Median and Median Absolute Deviation (MAD) are immune to masking and find all outliers.
   </TabItem>
-  <TabItem value="univariate" label="🚨 Pitfall 4: Univariate Blindness">
+  <TabItem value="univariate" label="Pitfall 4: Univariate Blindness">
     <br/>
     
     *   **The Misconception:** *"Running outlier detection column-by-column catches every outlier."*
-    *   **❌ Wrong Thinking:** Single-column rules cannot see correlation-breaking anomalies (e.g. 155 cm height, 85 kg weight). Each value is ordinary independently, but impossible in combination.
-    *   **✅ The Right Principle:** Use multivariate detection tools like `EllipticEnvelope` (Mahalanobis distance) to detect violations of covariance structure.
+    *   **Wrong Thinking:** Single-column rules cannot see correlation-breaking anomalies (e.g. 155 cm height, 85 kg weight). Each value is ordinary independently, but impossible in combination.
+    *   **The Right Principle:** Use multivariate detection tools like `EllipticEnvelope` (Mahalanobis distance) to detect violations of covariance structure.
   </TabItem>
-  <TabItem value="huber" label="🚨 Pitfall 5: Huber Regressor on X-outliers">
+  <TabItem value="huber" label="Pitfall 5: Huber Regressor on X-outliers">
     <br/>
     
     *   **The Misconception:** *"If features contain extreme outliers, I can just use a HuberRegressor robust loss."*
-    *   **❌ Wrong Thinking:** Huber regressor only resists target ($y$) outliers by down-weighting large residuals. Outliers in features ($X$) create high-leverage points that drag the regression line to themselves, leaving tiny residuals that Huber never notices.
-    *   **✅ The Right Principle:** Huber is only useful for $y$-corruption. For $X$-corruption, you must explicitly detect and remove, winsorise, or transform the outliers.
+    *   **Wrong Thinking:** Huber regressor only resists target ($y$) outliers by down-weighting large residuals. Outliers in features ($X$) create high-leverage points that drag the regression line to themselves, leaving tiny residuals that Huber never notices.
+    *   **The Right Principle:** Huber is only useful for $y$-corruption. For $X$-corruption, you must explicitly detect and remove, winsorise, or transform the outliers.
   </TabItem>
 </Tabs>
 
@@ -605,7 +605,7 @@ Explore some of the most critical engineering pitfalls in outlier detection and 
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header" style={{ padding: '15px', borderBottom: '1px solid var(--ifm-color-emphasis-200)' }}>
-        <h3>🤖 Outlier Detection & Action</h3>
+        <h3>Outlier Detection & Action</h3>
       </div>
       <div className="card__body" style={{ padding: '15px' }}>
         <ul>
@@ -620,7 +620,7 @@ Explore some of the most critical engineering pitfalls in outlier detection and 
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header" style={{ padding: '15px', borderBottom: '1px solid var(--ifm-color-emphasis-200)' }}>
-        <h3>🛠️ Feature Engineering</h3>
+        <h3>Feature Engineering</h3>
       </div>
       <div className="card__body" style={{ padding: '15px' }}>
         <ul>
@@ -638,11 +638,11 @@ Explore some of the most critical engineering pitfalls in outlier detection and 
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🎯 Outliers are not all errors:** Errors must be deleted/fixed. Genuine extremes and novelties are highly informative signals and must be preserved.
-*   **⚠️ The Masking Cliff:** Standard Z-scores suffer a masking cliff. Median and Median Absolute Deviation (MAD) remain structurally immune, finding all outliers.
-*   **🔄 Linear models need help:** Linear models score raw baseline performance on cyclical features like `hour`, whereas tree-based models decode the boundaries automatically.
+*   **Outliers are not all errors:** Errors must be deleted/fixed. Genuine extremes and novelties are highly informative signals and must be preserved.
+*   **The Masking Cliff:** Standard Z-scores suffer a masking cliff. Median and Median Absolute Deviation (MAD) remain structurally immune, finding all outliers.
+*   **Linear models need help:** Linear models score raw baseline performance on cyclical features like `hour`, whereas tree-based models decode the boundaries automatically.
 
 :::
 
@@ -660,7 +660,7 @@ you remove
 *Attempt each question first, then click to reveal detailed answers, mathematical derivations, and sample explanations.*
 
 <details>
-  <summary>❓ <b>1. [THEORY] What are the three distinct categories of outliers, and how should their treatment differ?</b></summary>
+  <summary><b>1. [THEORY] What are the three distinct categories of outliers, and how should their treatment differ?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -672,7 +672,7 @@ you remove
 </details>
 
 <details>
-  <summary>❓ <b>2. [THEORY] Why is the standard IQR 1.5x rule dangerous to apply directly on skewed features?</b></summary>
+  <summary><b>2. [THEORY] Why is the standard IQR 1.5x rule dangerous to apply directly on skewed features?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -682,7 +682,7 @@ you remove
 </details>
 
 <details>
-  <summary>❓ <b>3. [THEORY] What is masking in outlier detection, and what causes the abrupt masking "cliff" under Z-scores?</b></summary>
+  <summary><b>3. [THEORY] What is masking in outlier detection, and what causes the abrupt masking "cliff" under Z-scores?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -692,7 +692,7 @@ you remove
 </details>
 
 <details>
-  <summary>❓ <b>4. [THEORY] How does modified Z-score using MAD prevent masking?</b></summary>
+  <summary><b>4. [THEORY] How does modified Z-score using MAD prevent masking?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -705,7 +705,7 @@ you remove
 </details>
 
 <details>
-  <summary>❓ <b>5. [ANALYZE] How can a data record be completely unflagged by univariate checks yet be the most extreme outlier in the dataset?</b></summary>
+  <summary><b>5. [ANALYZE] How can a data record be completely unflagged by univariate checks yet be the most extreme outlier in the dataset?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -715,7 +715,7 @@ you remove
 </details>
 
 <details>
-  <summary>❓ <b>6. [ANALYZE] Why did IsolationForest fail to flag the 155 cm, 85 kg outlier while EllipticEnvelope succeeded?</b></summary>
+  <summary><b>6. [ANALYZE] Why did IsolationForest fail to flag the 155 cm, 85 kg outlier while EllipticEnvelope succeeded?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -725,7 +725,7 @@ you remove
 </details>
 
 <details>
-  <summary>❓ <b>7. [ANALYZE] Why does HuberRegressor robust loss completely fail on X-outliers (features) while succeeding on y-outliers (targets)?</b></summary>
+  <summary><b>7. [ANALYZE] Why does HuberRegressor robust loss completely fail on X-outliers (features) while succeeding on y-outliers (targets)?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -735,7 +735,7 @@ you remove
 </details>
 
 <details>
-  <summary>❓ <b>8. [THEORY] Why is raw hour (0-23) completely useless for a Logistic Regression model when modeling cyclical night events?</b></summary>
+  <summary><b>8. [THEORY] Why is raw hour (0-23) completely useless for a Logistic Regression model when modeling cyclical night events?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -745,7 +745,7 @@ you remove
 </details>
 
 <details>
-  <summary>❓ <b>9. [PROG] How do you transform a cyclical hour column into standard coordinates, and why are two columns required?</b></summary>
+  <summary><b>9. [PROG] How do you transform a cyclical hour column into standard coordinates, and why are two columns required?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -758,7 +758,7 @@ you remove
 </details>
 
 <details>
-  <summary>❓ <b>10. [ANALYZE] Why are ratio features (e.g. debt / income) highly effective additions for linear models?</b></summary>
+  <summary><b>10. [ANALYZE] Why are ratio features (e.g. debt / income) highly effective additions for linear models?</b></summary>
   <div className="answer-content">
     <br/>
     

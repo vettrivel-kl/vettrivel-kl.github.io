@@ -5,7 +5,7 @@
 
 ---
 
-## ✅ COMPLETE EXAM ANSWER
+## COMPLETE EXAM ANSWER
 
 ---
 
@@ -254,18 +254,18 @@ $$\text{Adjusted R}^2 = 1 - \frac{(1-R^2)(n-1)}{n-p-1}$$
 
 ## **KEY TAKEAWAYS (Quick Review)**
 
-✅ **Linear Regression:**
+**Linear Regression:**
 1. Finds best-fit line minimizing Sum of Squared Residuals
 2. Simple formula: y = β₀ + β₁x
 3. Always show calculation steps with actual numbers
 
-✅ **Performance Metrics:**
+**Performance Metrics:**
 1. **MAE:** Easy to interpret, robust to outliers
 2. **MSE/RMSE:** Standard practice, penalizes large errors
 3. **R²:** Tells how good the fit is (0-1 scale)
 4. Choose metrics based on whether outliers matter
 
-✅ **Exam Tips:**
+**Exam Tips:**
 - Always show coefficient calculations step-by-step
 - Use real numbers in worked examples
 - Explain what each metric means in context
@@ -275,16 +275,16 @@ $$\text{Adjusted R}^2 = 1 - \frac{(1-R^2)(n-1)}{n-p-1}$$
 
 ## **ANSWER CHECKLIST**
 
-- ✅ Define linear regression clearly
-- ✅ Write mathematical formula with variable definitions
-- ✅ Show coefficient calculation method (Least Squares)
-- ✅ Provide complete worked example with sample dataset (5+ data points)
-- ✅ Calculate β₁ and β₀ with all arithmetic steps
-- ✅ Write final equation with interpretation
-- ✅ Explain 5 evaluation metrics with formulas
-- ✅ Provide calculation example for at least MAE, RMSE, R²
-- ✅ Compare when to use each metric
-- ✅ Show summary table
+- Define linear regression clearly
+- Write mathematical formula with variable definitions
+- Show coefficient calculation method (Least Squares)
+- Provide complete worked example with sample dataset (5+ data points)
+- Calculate β₁ and β₀ with all arithmetic steps
+- Write final equation with interpretation
+- Explain 5 evaluation metrics with formulas
+- Provide calculation example for at least MAE, RMSE, R²
+- Compare when to use each metric
+- Show summary table
 
 ---
 
@@ -303,6 +303,6 @@ $$\text{Adjusted R}^2 = 1 - \frac{(1-R^2)(n-1)}{n-p-1}$$
 
 ---
 
-**This answer scores FULL 10 marks** ✅
+**This answer scores FULL 10 marks** 
 
 When writing in exam, allocate **15 minutes** for this question. Write clearly, show all steps, and include interpretations.

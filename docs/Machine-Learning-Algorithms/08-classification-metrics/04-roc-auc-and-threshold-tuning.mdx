@@ -79,7 +79,7 @@ export const ROCCurveSimulator = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>📈 Interactive ROC Curve and Operating Point Tracer</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive ROC Curve and Operating Point Tracer</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Select a classifier quality and slide the threshold $\tau$ to observe how the operating point navigates the ROC space:
       </p>
@@ -208,7 +208,7 @@ $$\text{AUC} = P\left( \text{score}(x^+) > \text{score}(x^-) \right)$$
 
 :::info
 
-**📌 The Wilcoxon-Mann-Whitney Equivalence**
+**The Wilcoxon-Mann-Whitney Equivalence**
 
 If you draw one positive sample $x^+$ and one negative sample $x^-$ uniformly at random from your test cohort, **AUC is the exact probability that your model gives a higher predicted score to the positive sample than to the negative sample.**
 
@@ -270,7 +270,7 @@ export const ROCVsPRComparator = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>⚠️ The Imbalance Illusion: ROC-AUC vs. PR-AUC</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>The Imbalance Illusion: ROC-AUC vs. PR-AUC</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Toggle dataset distribution to observe how class prevalence impacts curve honesty:
       </p>
@@ -292,7 +292,7 @@ export const ROCVsPRComparator = () => {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px' }}>
         <div style={{ padding: '14px', borderRadius: '6px', borderLeft: '4px solid #3182ce', backgroundColor: 'var(--ifm-background-surface-color)' }}>
-          <strong style={{ fontSize: '15px' }}>📈 ROC-AUC Score: {imbalanced ? '0.94 (Deceptively High)' : '0.94 (Honest)'}</strong>
+          <strong style={{ fontSize: '15px' }}>ROC-AUC Score: {imbalanced ? '0.94 (Deceptively High)' : '0.94 (Honest)'}</strong>
           <p style={{ margin: '6px 0 0 0', fontSize: '13px', lineHeight: '1.5' }}>
             {imbalanced
               ? 'FPR denominator (TN + FP) contains 9,900 negative instances. Generating 100 false alarms produces an FPR of only 1.0%! The ROC curve looks stellar despite a massive flood of false alarms.'
@@ -301,7 +301,7 @@ export const ROCVsPRComparator = () => {
         </div>
 
         <div style={{ padding: '14px', borderRadius: '6px', borderLeft: `4px solid ${imbalanced ? '#e53e3e' : '#38a169'}`, backgroundColor: 'var(--ifm-background-surface-color)' }}>
-          <strong style={{ fontSize: '15px' }}>🎯 PR-AUC Score: {imbalanced ? '0.24 (Exposes Failure)' : '0.92 (Honest)'}</strong>
+          <strong style={{ fontSize: '15px' }}>PR-AUC Score: {imbalanced ? '0.24 (Exposes Failure)' : '0.92 (Honest)'}</strong>
           <p style={{ margin: '6px 0 0 0', fontSize: '13px', lineHeight: '1.5' }}>
             {imbalanced
               ? 'Precision denominator (TP + FP) ignores TN. 100 false alarms alongside 30 true positives causes Precision to collapse to 23%! PR-AUC exposes that 77% of alerts are false alarms.'
@@ -345,40 +345,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 7. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Confusing ROC Axes with PR Axes" default>
+  <TabItem value="m1" label="1. Confusing ROC Axes with PR Axes" default>
     <br/>
     
     *   **The Misconception:** *"The ROC curve plots Precision on the y-axis and Recall on the x-axis."*
-    *   **❌ Wrong Thinking:** Mixing up the ROC curve with the Precision-Recall curve.
-    *   **✅ The Right Principle:** The ROC curve plots **TPR (Recall) on the y-axis** and **FPR ($1 - \text{Specificity}$) on the x-axis**. The PR curve plots Precision vs. Recall.
+    *   **Wrong Thinking:** Mixing up the ROC curve with the Precision-Recall curve.
+    *   **The Right Principle:** The ROC curve plots **TPR (Recall) on the y-axis** and **FPR ($1 - \text{Specificity}$) on the x-axis**. The PR curve plots Precision vs. Recall.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Interpreting AUC as Accuracy">
+  <TabItem value="m2" label="2. Interpreting AUC as Accuracy">
     <br/>
     
     *   **The Misconception:** *"Our model has an AUC of 0.85, so its accuracy is 85%."*
-    *   **❌ Wrong Thinking:** Equating area under a ranking curve to thresholded point accuracy.
-    *   **✅ The Right Principle:** AUC is the probability that a randomly chosen positive sample is ranked higher than a randomly chosen negative sample. Accuracy requires specifying a single decision threshold.
+    *   **Wrong Thinking:** Equating area under a ranking curve to thresholded point accuracy.
+    *   **The Right Principle:** AUC is the probability that a randomly chosen positive sample is ranked higher than a randomly chosen negative sample. Accuracy requires specifying a single decision threshold.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Trusting ROC-AUC Blindly on Severe Imbalance">
+  <TabItem value="m3" label="3. Trusting ROC-AUC Blindly on Severe Imbalance">
     <br/>
     
     *   **The Misconception:** *"The model has an AUC of 0.96 on fraud detection (0.1% fraud), so the model is ready for deployment."*
-    *   **❌ Wrong Thinking:** Ignoring the massive True Negative count dampening FPR.
-    *   **✅ The Right Principle:** On 1:1000 imbalance, an FPR of $1\%$ still means $10$ false alarms for every $1$ fraudster. Always inspect the **Precision-Recall (PR) curve and PR-AUC** on imbalanced data.
+    *   **Wrong Thinking:** Ignoring the massive True Negative count dampening FPR.
+    *   **The Right Principle:** On 1:1000 imbalance, an FPR of $1\%$ still means $10$ false alarms for every $1$ fraudster. Always inspect the **Precision-Recall (PR) curve and PR-AUC** on imbalanced data.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Deploying with Default Threshold 0.5">
+  <TabItem value="m4" label="4. Deploying with Default Threshold 0.5">
     <br/>
     
     *   **The Misconception:** *"0.5 is the mathematical midpoint, so it is the correct cutoff for all production applications."*
-    *   **❌ Wrong Thinking:** Adopting arbitrary defaults without domain cost analysis.
-    *   **✅ The Right Principle:** If missing a positive sample costs $10\times$ more than a false alarm, the optimal cutoff is closer to $0.1$ or $0.2$. Always calibrate the threshold to real-world business loss functions.
+    *   **Wrong Thinking:** Adopting arbitrary defaults without domain cost analysis.
+    *   **The Right Principle:** If missing a positive sample costs $10\times$ more than a false alarm, the optimal cutoff is closer to $0.1$ or $0.2$. Always calibrate the threshold to real-world business loss functions.
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Omitting the Random Chance Baseline">
+  <TabItem value="m5" label="5. Omitting the Random Chance Baseline">
     <br/>
     
     *   **The Misconception:** *"An AUC of 0.55 demonstrates positive predictive skill."*
-    *   **❌ Wrong Thinking:** Forgetting that the random guessing baseline is 0.50.
-    *   **✅ The Right Principle:** An AUC of 0.55 is barely distinguishable from random noise. Genuine predictive discrimination begins at $\text{AUC} \ge 0.70$.
+    *   **Wrong Thinking:** Forgetting that the random guessing baseline is 0.50.
+    *   **The Right Principle:** An AUC of 0.55 is barely distinguishable from random noise. Genuine predictive discrimination begins at $\text{AUC} \ge 0.70$.
   </TabItem>
 </Tabs>
 
@@ -390,7 +390,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Curve Geometry</h3>
+        <h3>Curve Geometry</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -405,7 +405,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Operational Realities</h3>
+        <h3>Operational Realities</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -423,11 +423,11 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **📊 AUC measures ranking skill:** A model with high AUC can cleanly separate classes; selecting the decision threshold $\tau$ chooses *where* to operate on that curve.
-*   **⚖️ Youden's J finds the elbow:** Maximizing $\text{TPR} - \text{FPR}$ identifies the point on the ROC curve closest to ideal perfection.
-*   **⚠️ Watch out for imbalance:** If the negative class dominates by orders of magnitude, use the Precision-Recall curve to avoid being fooled by an inflated ROC-AUC.
+*   **AUC measures ranking skill:** A model with high AUC can cleanly separate classes; selecting the decision threshold $\tau$ chooses *where* to operate on that curve.
+*   **Youden's J finds the elbow:** Maximizing $\text{TPR} - \text{FPR}$ identifies the point on the ROC curve closest to ideal perfection.
+*   **Watch out for imbalance:** If the negative class dominates by orders of magnitude, use the Precision-Recall curve to avoid being fooled by an inflated ROC-AUC.
 
 :::
 
@@ -445,16 +445,16 @@ export const ROCAUCQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Probabilistic Meaning of AUC</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: The Probabilistic Meaning of AUC</h4>
       <p style={{ margin: '0 0 15px 0' }}>A binary classifier trained to detect bank fraud achieves an ROC-AUC score of 0.88. What is the precise statistical meaning of this number?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>The model achieves 88% overall classification accuracy at threshold 0.5</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>If you pick one random fraudster and one random legitimate customer, there is an 88% chance the model scores the fraudster higher</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>The model catches 88% of all fraud cases</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. AUC is threshold-independent and does not represent accuracy at threshold 0.5. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Mathematically, ROC-AUC is identical to the Wilcoxon-Mann-Whitney U statistic: it is the probability that a randomly selected positive instance ranks higher than a randomly selected negative instance.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Catching 88% of cases is Recall, not AUC. Try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. AUC is threshold-independent and does not represent accuracy at threshold 0.5. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! Mathematically, ROC-AUC is identical to the Wilcoxon-Mann-Whitney U statistic: it is the probability that a randomly selected positive instance ranks higher than a randomly selected negative instance.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Catching 88% of cases is Recall, not AUC. Try again!</p>}
     </div>
   );
 };
@@ -464,7 +464,7 @@ export const ROCAUCQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] What do the extreme corners (0, 0) and (1, 1) on an ROC curve represent?</b></summary>
+  <summary><b>1. [THEORY] What do the extreme corners (0, 0) and (1, 1) on an ROC curve represent?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -474,7 +474,7 @@ export const ROCAUCQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [ANALYZE] Why is the ROC curve completely unaffected by changes in class prevalence?</b></summary>
+  <summary><b>2. [ANALYZE] Why is the ROC curve completely unaffected by changes in class prevalence?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -487,7 +487,7 @@ export const ROCAUCQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [PRACTICE] How is Youden's J statistic calculated from Sensitivity and Specificity?</b></summary>
+  <summary><b>3. [PRACTICE] How is Youden's J statistic calculated from Sensitivity and Specificity?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -500,7 +500,7 @@ export const ROCAUCQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [ANALYZE] Why can a classifier with ROC-AUC = 0.95 still be practically useless for rare cancer screening?</b></summary>
+  <summary><b>4. [ANALYZE] Why can a classifier with ROC-AUC = 0.95 still be practically useless for rare cancer screening?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -513,7 +513,7 @@ export const ROCAUCQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] What does an ROC curve that dips below the diagonal line indicate?</b></summary>
+  <summary><b>5. [THEORY] What does an ROC curve that dips below the diagonal line indicate?</b></summary>
   <div className="answer-content">
     <br/>
     

@@ -23,14 +23,14 @@ An identifier is a token used to name a variable, function, class, or module. In
 
 | Status | Rule | Example |
 | :--- | :--- | :--- |
-| ✅ Allowed | Must **start with** a letter (`a-z`, `A-Z`) or an underscore (`_`) | `student`, `_private` |
-| ✅ Allowed | Can **contain** letters, digits (`0-9`), and underscores | `user_123`, `batch_size` |
-| ✅ Allowed | Case-sensitive (`age`, `Age`, `AGE` are 3 separate variables) | `age != Age != AGE` |
-| ❌ Forbidden | Cannot start with a digit | `2fast` (SyntaxError) |
-| ❌ Forbidden | Cannot contain spaces | `student name` (SyntaxError) |
-| ❌ Forbidden | Cannot contain hyphens or symbols (`-`, `@`, `#`, `$`, `%`) | `my-var`, `total$` |
-| ❌ Forbidden | Cannot be a Python keyword | `class`, `for`, `def` |
-| ⚠️ Warning | Should never shadow built-ins (`list`, `str`, `dict`, `sum`) | `list = [1, 2]` (Breaks `list()`) |
+| Allowed | Must **start with** a letter (`a-z`, `A-Z`) or an underscore (`_`) | `student`, `_private` |
+| Allowed | Can **contain** letters, digits (`0-9`), and underscores | `user_123`, `batch_size` |
+| Allowed | Case-sensitive (`age`, `Age`, `AGE` are 3 separate variables) | `age != Age != AGE` |
+| Forbidden | Cannot start with a digit | `2fast` (SyntaxError) |
+| Forbidden | Cannot contain spaces | `student name` (SyntaxError) |
+| Forbidden | Cannot contain hyphens or symbols (`-`, `@`, `#`, `$`, `%`) | `my-var`, `total$` |
+| Forbidden | Cannot be a Python keyword | `class`, `for`, `def` |
+| Warning | Should never shadow built-ins (`list`, `str`, `dict`, `sum`) | `list = [1, 2]` (Breaks `list()`) |
 
 :::tip
 
@@ -95,7 +95,7 @@ export const VariableNameValidator = () => {
     styleInfo = 'Reserved Keyword';
   } else if (builtins.includes(candidate)) {
     status = 'warning';
-    message = `⚠️ DANGEROUS: '${candidate}' is syntactically legal, but SHADOWS a core Python built-in function! This will break ${candidate}() for the rest of your program.`;
+    message = `DANGEROUS: '${candidate}' is syntactically legal, but SHADOWS a core Python built-in function! This will break ${candidate}() for the rest of your program.`;
     styleInfo = 'Shadows Built-in';
   } else if (/^[A-Z0-9_]+$/.test(candidate) && candidate.length > 1) {
     status = 'valid';
@@ -113,7 +113,7 @@ export const VariableNameValidator = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🧪 Python Variable Name Validator</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Python Variable Name Validator</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Type a candidate variable name or test one of the common problem presets:
       </p>
@@ -176,7 +176,7 @@ export const VariableNameValidator = () => {
       <div style={{ padding: '14px', borderRadius: '6px', backgroundColor: status === 'valid' ? 'rgba(56, 161, 105, 0.1)' : status === 'warning' ? 'rgba(221, 107, 32, 0.1)' : 'rgba(229, 62, 62, 0.1)', borderLeft: `4px solid ${status === 'valid' ? '#38a169' : status === 'warning' ? '#dd6b20' : '#e53e3e'}` }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
           <strong style={{ fontSize: '15px', color: status === 'valid' ? '#276749' : status === 'warning' ? '#c05621' : '#c53030' }}>
-            {status === 'valid' ? '✅ VALID PYTHON IDENTIFIER' : status === 'warning' ? '⚠️ LEGAL BUT HAZARDOUS' : '❌ INVALID IDENTIFIER (SYNTAX ERROR)'}
+            {status === 'valid' ? 'VALID PYTHON IDENTIFIER' : status === 'warning' ? 'LEGAL BUT HAZARDOUS' : 'INVALID IDENTIFIER (SYNTAX ERROR)'}
           </strong>
           <span style={{ fontSize: '12px', padding: '2px 8px', borderRadius: '4px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
             Style: {styleInfo}
@@ -226,7 +226,7 @@ Unlike keywords, Python's built-in functions (`list`, `str`, `int`, `dict`, `sum
 Assigning `list = [1, 2, 3]` is syntactically legal. However, doing so **shadows** the built-in function in the local namespace:
 
 ```python
-# ❌ THE SHADOWING TRAP
+# THE SHADOWING TRAP
 list = [1, 2, 3]  # Legal, but 'list' now references an array instance!
 
 # Later in your codebase:
@@ -253,7 +253,7 @@ export const VariablePointerSimulator = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🏷️ Memory Pointer and Object Identity Simulator</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Memory Pointer and Object Identity Simulator</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Select a scenario to visualize how variables reference objects in memory:
       </p>
@@ -294,7 +294,7 @@ print(a)       # Output: [1, 2, 3, 99]`}
               </div>
             </div>
             <p style={{ margin: '10px 0 0 0', fontSize: '13px' }}>
-              💡 <b>Memory Mechanism:</b> Because lists are mutable, <code>b = a</code> does not duplicate the list. Both variable names point to the exact same heap memory location (<code>a is b == True</code>).
+              <b>Memory Mechanism:</b> Because lists are mutable, <code>b = a</code> does not duplicate the list. Both variable names point to the exact same heap memory location (<code>a is b == True</code>).
             </p>
           </div>
         ) : (
@@ -317,7 +317,7 @@ print(x)       # Output: 10 (Completely unaffected!)`}
               </div>
             </div>
             <p style={{ margin: '10px 0 0 0', fontSize: '13px' }}>
-              💡 <b>Memory Mechanism:</b> Integers are immutable. You cannot modify the number 10 in-place. Reassigning <code>y = y + 1</code> re-binds the tag <code>y</code> to a newly allocated integer object on the heap, leaving <code>x</code> pointing to 10.
+              <b>Memory Mechanism:</b> Integers are immutable. You cannot modify the number 10 in-place. Reassigning <code>y = y + 1</code> re-binds the tag <code>y</code> to a newly allocated integer object on the heap, leaving <code>x</code> pointing to 10.
             </p>
           </div>
         )}
@@ -358,40 +358,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 7. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Using Hyphens (Kebab-Case)" default>
+  <TabItem value="m1" label="1. Using Hyphens (Kebab-Case)" default>
     <br/>
     
     *   **The Misconception:** *"HTML and CSS use `user-name`, so Python allows it."*
-    *   **❌ Wrong Thinking:** Typing `user-name = "Alex"`.
-    *   **✅ The Right Principle:** `-` is the subtraction operator. Python evaluates `user minus name = "Alex"`, which raises `SyntaxError: cannot assign to expression`. Always use underscores (`user_name`).
+    *   **Wrong Thinking:** Typing `user-name = "Alex"`.
+    *   **The Right Principle:** `-` is the subtraction operator. Python evaluates `user minus name = "Alex"`, which raises `SyntaxError: cannot assign to expression`. Always use underscores (`user_name`).
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Shadowing Built-in Functions">
+  <TabItem value="m2" label="2. Shadowing Built-in Functions">
     <br/>
     
     *   **The Misconception:** *"Using `list = [1, 2]` or `max = 50` is fine because Python didn't raise a syntax error."*
-    *   **❌ Wrong Thinking:** Naming variables after built-in types or functions.
-    *   **✅ The Right Principle:** Python silently overwrites the built-in reference in your local scope, causing `list()` or `max()` to crash later with `TypeError: 'int' object is not callable`.
+    *   **Wrong Thinking:** Naming variables after built-in types or functions.
+    *   **The Right Principle:** Python silently overwrites the built-in reference in your local scope, causing `list()` or `max()` to crash later with `TypeError: 'int' object is not callable`.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Starting Identifiers with Digits">
+  <TabItem value="m3" label="3. Starting Identifiers with Digits">
     <br/>
     
     *   **The Misconception:** *"Naming a variable `1st_place` is clear and descriptive."*
-    *   **❌ Wrong Thinking:** Placing a number as the first character.
-    *   **✅ The Right Principle:** When the Python lexer encounters a digit, it enters numeric literal parsing mode. Hitting letters causes an immediate `SyntaxError: invalid decimal literal`. Use `first_place` or `place_1`.
+    *   **Wrong Thinking:** Placing a number as the first character.
+    *   **The Right Principle:** When the Python lexer encounters a digit, it enters numeric literal parsing mode. Hitting letters causes an immediate `SyntaxError: invalid decimal literal`. Use `first_place` or `place_1`.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Believing UPPER_CASE Enforces Real Constants">
+  <TabItem value="m4" label="4. Believing UPPER_CASE Enforces Real Constants">
     <br/>
     
     *   **The Misconception:** *"Defining `MAX_USERS = 100` prevents other code from reassigning it."*
-    *   **❌ Wrong Thinking:** Assuming Python has native compiler constants like `const` in C++ or JavaScript.
-    *   **✅ The Right Principle:** `UPPER_CASE` is strictly a PEP 8 human convention. Python's runtime does not protect constants; `MAX_USERS = 200` reassigns without error.
+    *   **Wrong Thinking:** Assuming Python has native compiler constants like `const` in C++ or JavaScript.
+    *   **The Right Principle:** `UPPER_CASE` is strictly a PEP 8 human convention. Python's runtime does not protect constants; `MAX_USERS = 200` reassigns without error.
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Case-Sensitivity Confusion">
+  <TabItem value="m5" label="5. Case-Sensitivity Confusion">
     <br/>
     
     *   **The Misconception:** *"Typing `Age` or `age` references the same variable."*
-    *   **❌ Wrong Thinking:** Treating Python as case-insensitive like SQL.
-    *   **✅ The Right Principle:** Python is strictly case-sensitive. `age`, `Age`, and `AGE` are three completely independent variables in the namespace.
+    *   **Wrong Thinking:** Treating Python as case-insensitive like SQL.
+    *   **The Right Principle:** Python is strictly case-sensitive. `age`, `Age`, and `AGE` are three completely independent variables in the namespace.
   </TabItem>
 </Tabs>
 
@@ -403,7 +403,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Syntactic Rules</h3>
+        <h3>Syntactic Rules</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -418,7 +418,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ PEP 8 Style Conventions</h3>
+        <h3>PEP 8 Style Conventions</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -436,15 +436,15 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🏷️ Variables are pointers:** Assignment binds a label to an object; mutable objects can be altered via any shared alias tag.
-*   **🚫 Never shadow built-ins:** Avoid using `list`, `str`, `dict`, `sum`, `id`, `type`, or `input` as variable names.
-*   **🐍 Follow PEP 8:** Use descriptive `snake_case` names rather than single-letter acronyms.
+*   **Variables are pointers:** Assignment binds a label to an object; mutable objects can be altered via any shared alias tag.
+*   **Never shadow built-ins:** Avoid using `list`, `str`, `dict`, `sum`, `id`, `type`, or `input` as variable names.
+*   **Follow PEP 8:** Use descriptive `snake_case` names rather than single-letter acronyms.
 
 :::
 
-**Next Section:** [Data Types](./03-data-types.md) - exploring the full catalog of Python's built-in numeric, sequence, mapping, and set data types.
+**Next Section:** [Data Types](./03-data-types.mdx) - exploring the full catalog of Python's built-in numeric, sequence, mapping, and set data types.
 
 ---
 
@@ -458,16 +458,16 @@ export const NamingQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Identifying the Illegal Identifier</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Identifying the Illegal Identifier</h4>
       <p style={{ margin: '0 0 15px 0' }}>Which of the following variable assignments will cause an immediate Python <code>SyntaxError</code>?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>_private_score = 95</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>user-score = 95</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>list = [95, 80]</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Leading underscores are completely valid in Python (PEP 8 convention for private/internal variables). Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! In Python, '-' is the arithmetic subtraction operator. Python interprets 'user-score = 95' as 'user minus score = 95', raising SyntaxError: cannot assign to expression.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Assigning to 'list' is syntactically legal and does NOT raise a SyntaxError, although it is a dangerous practice because it shadows the built-in list() constructor. Try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Leading underscores are completely valid in Python (PEP 8 convention for private/internal variables). Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! In Python, '-' is the arithmetic subtraction operator. Python interprets 'user-score = 95' as 'user minus score = 95', raising SyntaxError: cannot assign to expression.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Assigning to 'list' is syntactically legal and does NOT raise a SyntaxError, although it is a dangerous practice because it shadows the built-in list() constructor. Try again!</p>}
     </div>
   );
 };
@@ -477,7 +477,7 @@ export const NamingQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why does Python raise a SyntaxError on `student-name = "Alex"`, but a NameError on `student#name = "Alex"`?</b></summary>
+  <summary><b>1. [THEORY] Why does Python raise a SyntaxError on `student-name = "Alex"`, but a NameError on `student#name = "Alex"`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -488,7 +488,7 @@ export const NamingQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [PRACTICE] What happens when you run `sum = 100` followed by `sum([1, 2, 3])`? How do you fix it?</b></summary>
+  <summary><b>2. [PRACTICE] What happens when you run `sum = 100` followed by `sum([1, 2, 3])`? How do you fix it?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -500,7 +500,7 @@ export const NamingQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [THEORY] What does the `is` operator test compared to `==` in Python?</b></summary>
+  <summary><b>3. [THEORY] What does the `is` operator test compared to `==` in Python?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -511,7 +511,7 @@ export const NamingQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [ANALYZE] Does Python have true constants like C++ `const` or JavaScript `const`?</b></summary>
+  <summary><b>4. [ANALYZE] Does Python have true constants like C++ `const` or JavaScript `const`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -522,7 +522,7 @@ export const NamingQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] Why are leading underscores used in variable names like `_cache`?</b></summary>
+  <summary><b>5. [THEORY] Why are leading underscores used in variable names like `_cache`?</b></summary>
   <div className="answer-content">
     <br/>
     

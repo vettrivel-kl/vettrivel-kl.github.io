@@ -354,8 +354,8 @@ python: Not a Palindrome
 - `.find()` returns `-1` for "not found"; `.index()` raises instead
 
 **See also:** [Lists](./02-lists.md) — the same indexing and slicing, but mutable ·
-[F-Strings](../01-basics/05-f-strings.md) for formatting strings ·
-[Data Types](../01-basics/03-data-types.md) for `str` in context
+[F-Strings](../01-basics/05-f-strings.mdx) for formatting strings ·
+[Data Types](../01-basics/03-data-types.mdx) for `str` in context
 
 ---
 

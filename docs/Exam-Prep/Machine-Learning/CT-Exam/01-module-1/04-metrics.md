@@ -957,22 +957,22 @@ MULTI-CLASS:
 ### Red Flags to Watch
 
 ```
-🚩 High accuracy on imbalanced data
+- High accuracy on imbalanced data
    → Use F1, ROC-AUC instead
 
-🚩 Precision = 100%, Recall = 50%
+- Precision = 100%, Recall = 50%
    → Model is too conservative
    → Adjust threshold
 
-🚩 RMSE >> MAE
+- RMSE >> MAE
    → Large outlier errors exist
    → Investigate outliers
 
-🚩 R² = 0.95 but Adjusted R² = 0.30
+- R² = 0.95 but Adjusted R² = 0.30
    → Serious overfitting
    → Too many features
 
-🚩 F1 metric alone for imbalanced data
+- F1 metric alone for imbalanced data
    → Still incomplete
    → Also check ROC-AUC
 ```
@@ -997,7 +997,7 @@ MULTI-CLASS:
 
 ## Tips for CT Exam
 
-### ✅ DO
+### DO
 
 - **Calculate ALL metrics for classification problems**
 - **Build confusion matrix first, then calculate**
@@ -1005,7 +1005,7 @@ MULTI-CLASS:
 - **Explain WHY you chose a metric** (business context)
 - **Compare metrics across models**
 
-### ❌ DON'T
+### DON'T
 
 - Don't use accuracy for imbalanced datasets
 - Don't choose precision without mentioning recall tradeoff

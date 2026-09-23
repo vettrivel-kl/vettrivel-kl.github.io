@@ -70,7 +70,7 @@ export const MulticlassAveragingCalculator = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🧮 Interactive Multiclass Averaging Calculator</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive Multiclass Averaging Calculator</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Dataset Support: Class A (1,000 samples, 90.1%), Class B (100 samples, 9.0%), Class C (10 samples, 0.9%).
       </p>
@@ -80,7 +80,7 @@ export const MulticlassAveragingCalculator = () => {
           onClick={() => applyPreset(0.96, 0.88, 0.00)}
           style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #e53e3e', backgroundColor: f1C === 0 ? '#e53e3e' : 'transparent', color: f1C === 0 ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold', transition: '0.2s' }}
         >
-          🚨 Rare Class C Collapse (F1 = 0%)
+          Rare Class C Collapse (F1 = 0%)
         </button>
         <button
           onClick={() => applyPreset(0.90, 0.90, 0.90)}
@@ -165,7 +165,7 @@ export const MulticlassAveragingCalculator = () => {
       <div style={{ padding: '12px 16px', borderRadius: '6px', backgroundColor: f1C < 0.2 ? 'rgba(229, 62, 62, 0.12)' : 'rgba(56, 161, 105, 0.12)', borderLeft: `4px solid ${f1C < 0.2 ? '#e53e3e' : '#38a169'}` }}>
         {f1C < 0.2 ? (
           <div>
-            <strong style={{ color: '#c53030' }}>🚨 Masking Alert: Minority Class Failure Hidden</strong>
+            <strong style={{ color: '#c53030' }}>Masking Alert: Minority Class Failure Hidden</strong>
             <p style={{ margin: '4px 0 0 0', fontSize: '13px' }}>
               Class C is failing miserably (F1 = {(f1C * 100).toFixed(0)}%). Yet, <b>Weighted F1 reports a stellar {(weightedF1 * 100).toFixed(1)}%</b> because Class A dominates 90% of samples! <b>Macro F1 plummets to {(macroF1 * 100).toFixed(1)}%</b>, exposing that the system cannot detect the rare category.
             </p>
@@ -301,7 +301,7 @@ export const MetricDecisionWizard = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🎯 Interactive Metric Decision Wizard</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive Metric Decision Wizard</h4>
       <p style={{ margin: '0 0 16px 0', fontSize: '14px' }}>
         Configure your production constraints below to discover the optimal evaluation strategy:
       </p>
@@ -445,40 +445,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 7. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Using Accuracy on Imbalanced Multiclass" default>
+  <TabItem value="m1" label="1. Using Accuracy on Imbalanced Multiclass" default>
     <br/>
     
     *   **The Misconception:** *"Our 10-class document classifier achieved 93% accuracy, so it is ready for deployment."*
-    *   **❌ Wrong Thinking:** Quoting accuracy without checking per-class support.
-    *   **✅ The Right Principle:** If two majority classes account for 90% of documents, an accuracy of 93% can coexist with 0% accuracy on the remaining 8 rare document types. Always inspect **Macro F1** and the full confusion matrix.
+    *   **Wrong Thinking:** Quoting accuracy without checking per-class support.
+    *   **The Right Principle:** If two majority classes account for 90% of documents, an accuracy of 93% can coexist with 0% accuracy on the remaining 8 rare document types. Always inspect **Macro F1** and the full confusion matrix.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Believing Micro F1 is a Novel Metric">
+  <TabItem value="m2" label="2. Believing Micro F1 is a Novel Metric">
     <br/>
     
     *   **The Misconception:** *"Micro F1 provides a balanced harmonic synthesis across classes."*
-    *   **❌ Wrong Thinking:** Treating Micro F1 as distinct from Overall Accuracy.
-    *   **✅ The Right Principle:** In mutually exclusive multiclass classification, total False Positives equal total False Negatives ($\sum FP = \sum FN$). Therefore, $\text{Micro Precision} = \text{Micro Recall} = \text{Micro } F_1 \equiv \text{Accuracy}$.
+    *   **Wrong Thinking:** Treating Micro F1 as distinct from Overall Accuracy.
+    *   **The Right Principle:** In mutually exclusive multiclass classification, total False Positives equal total False Negatives ($\sum FP = \sum FN$). Therefore, $\text{Micro Precision} = \text{Micro Recall} = \text{Micro } F_1 \equiv \text{Accuracy}$.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Omitting the 'average' Flag in Scikit-Learn">
+  <TabItem value="m3" label="3. Omitting the 'average' Flag in Scikit-Learn">
     <br/>
     
     *   **The Misconception:** *"Calling `f1_score(y_true, y_pred)` works automatically for multiclass."*
-    *   **❌ Wrong Thinking:** Relying on default parameter settings.
-    *   **✅ The Right Principle:** By default, `f1_score` sets `average='binary'`. Calling it on multiclass targets raises a `ValueError: Target is multiclass but average='binary'`. You must explicitly specify `average='macro'` or `average='weighted'`.
+    *   **Wrong Thinking:** Relying on default parameter settings.
+    *   **The Right Principle:** By default, `f1_score` sets `average='binary'`. Calling it on multiclass targets raises a `ValueError: Target is multiclass but average='binary'`. You must explicitly specify `average='macro'` or `average='weighted'`.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Defaulting to Weighted F1 on Extreme Imbalance">
+  <TabItem value="m4" label="4. Defaulting to Weighted F1 on Extreme Imbalance">
     <br/>
     
     *   **The Misconception:** *"Weighted F1 is always superior to Macro F1 because it uses class counts."*
-    *   **❌ Wrong Thinking:** Using weighted averaging when rare class detection is mission-critical.
-    *   **✅ The Right Principle:** Weighted F1 multiplies minority classes by their tiny sample percentage ($0.01$), hiding complete failure on rare events. Use **Macro F1** when every class matters equally.
+    *   **Wrong Thinking:** Using weighted averaging when rare class detection is mission-critical.
+    *   **The Right Principle:** Weighted F1 multiplies minority classes by their tiny sample percentage ($0.01$), hiding complete failure on rare events. Use **Macro F1** when every class matters equally.
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Ignoring Baseline Performance Benchmarks">
+  <TabItem value="m5" label="5. Ignoring Baseline Performance Benchmarks">
     <br/>
     
     *   **The Misconception:** *"Macro F1 = 0.40 on a 5-class problem is poor."*
-    *   **❌ Wrong Thinking:** Evaluating metrics without comparing against random or zero-rule baselines.
-    *   **✅ The Right Principle:** Random guessing on 5 balanced classes yields $\text{Macro } F_1 \approx 0.20$. An $F_1$ of $0.40$ represents a $2\times$ lift over chance. Always benchmark against `DummyClassifier`.
+    *   **Wrong Thinking:** Evaluating metrics without comparing against random or zero-rule baselines.
+    *   **The Right Principle:** Random guessing on 5 balanced classes yields $\text{Macro } F_1 \approx 0.20$. An $F_1$ of $0.40$ represents a $2\times$ lift over chance. Always benchmark against `DummyClassifier`.
   </TabItem>
 </Tabs>
 
@@ -490,7 +490,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Averaging Schemes</h3>
+        <h3>Averaging Schemes</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -505,7 +505,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Selection Guide</h3>
+        <h3>Selection Guide</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -524,11 +524,11 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **📊 Macro protects the rare:** Whenever catching minority classes is critical, Macro F1 prevents majority classes from masking failures.
-*   **⚡ Micro is just Accuracy:** Never report Micro F1 as if it were a new balanced metric; it is mathematically identical to accuracy.
-*   **🎯 Anchor against baseline:** Always compare model metrics to a zero-rule dummy classifier to quantify genuine diagnostic lift.
+*   **Macro protects the rare:** Whenever catching minority classes is critical, Macro F1 prevents majority classes from masking failures.
+*   **Micro is just Accuracy:** Never report Micro F1 as if it were a new balanced metric; it is mathematically identical to accuracy.
+*   **Anchor against baseline:** Always compare model metrics to a zero-rule dummy classifier to quantify genuine diagnostic lift.
 
 :::
 
@@ -546,16 +546,16 @@ export const MulticlassMetricsQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Averaging Scheme for Rare Tumors</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Averaging Scheme for Rare Tumors</h4>
       <p style={{ margin: '0 0 15px 0' }}>A pathology model classifies 5 tumor types. Benign cysts represent 85% of cases, while an aggressive malignant lymphoma represents only 1% of cases. Which averaging method should the clinical evaluation committee prioritize to ensure the rare lymphoma is not overlooked?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Micro F1-Score</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#e53e3e' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Weighted F1-Score</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#38a169' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Macro F1-Score</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Micro F1 equals Overall Accuracy, which is dominated 85% by the benign cyst class! Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Weighted F1 multiplies the lymphoma score by its 1% frequency (weight = 0.01). If the model catches 0% of lymphomas, Weighted F1 barely moves. Try again!</p>}
-      {selected === 'opt3' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Macro F1 gives equal (20%) voting power to all 5 tumor categories regardless of sample frequency. If the model fails on the 1% malignant lymphoma, Macro F1 drops by a massive 20 percentage points, immediately alerting clinicians to the failure.</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Micro F1 equals Overall Accuracy, which is dominated 85% by the benign cyst class! Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Weighted F1 multiplies the lymphoma score by its 1% frequency (weight = 0.01). If the model catches 0% of lymphomas, Weighted F1 barely moves. Try again!</p>}
+      {selected === 'opt3' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! Macro F1 gives equal (20%) voting power to all 5 tumor categories regardless of sample frequency. If the model fails on the 1% malignant lymphoma, Macro F1 drops by a massive 20 percentage points, immediately alerting clinicians to the failure.</p>}
     </div>
   );
 };
@@ -565,7 +565,7 @@ export const MulticlassMetricsQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why is Micro F1 mathematically identical to Overall Accuracy in mutually exclusive multiclass classification?</b></summary>
+  <summary><b>1. [THEORY] Why is Micro F1 mathematically identical to Overall Accuracy in mutually exclusive multiclass classification?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -580,7 +580,7 @@ export const MulticlassMetricsQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [MATH] A 3-class model achieves per-class F1 scores of [0.90, 0.70, 0.20] on classes with support [700, 200, 100]. Compute Macro F1 and Weighted F1.</b></summary>
+  <summary><b>2. [MATH] A 3-class model achieves per-class F1 scores of [0.90, 0.70, 0.20] on classes with support [700, 200, 100]. Compute Macro F1 and Weighted F1.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -593,7 +593,7 @@ export const MulticlassMetricsQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [ANALYZE] In scikit-learn, what error occurs if you call `precision_score(y_true, y_pred)` on multiclass targets without parameters?</b></summary>
+  <summary><b>3. [ANALYZE] In scikit-learn, what error occurs if you call `precision_score(y_true, y_pred)` on multiclass targets without parameters?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -604,7 +604,7 @@ export const MulticlassMetricsQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [PRACTICE] Given a 3x3 confusion matrix: Row 0: [45, 3, 2], Row 1: [2, 40, 8], Row 2: [1, 4, 45]. Extract TP, FP, FN for Class 1.</b></summary>
+  <summary><b>4. [PRACTICE] Given a 3x3 confusion matrix: Row 0: [45, 3, 2], Row 1: [2, 40, 8], Row 2: [1, 4, 45]. Extract TP, FP, FN for Class 1.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -617,7 +617,7 @@ export const MulticlassMetricsQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] Why is Log Loss considered a superior evaluation metric to F1 when outputs are used for probabilistic decision making?</b></summary>
+  <summary><b>5. [THEORY] Why is Log Loss considered a superior evaluation metric to F1 when outputs are used for probabilistic decision making?</b></summary>
   <div className="answer-content">
     <br/>
     

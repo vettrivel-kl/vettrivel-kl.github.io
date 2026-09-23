@@ -1,4 +1,4 @@
-# 🚀 Deployment Guide
+# Deployment Guide
 
 Your Docusaurus site is ready to deploy! Here are all the options:
 

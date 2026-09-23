@@ -24,7 +24,7 @@ Learn what NOT to do by studying the most common errors students (and profession
 
 ## Linear Regression Mistakes
 
-### ❌ Mistake 1.1: Forgetting to Square Residuals in SSE
+### Mistake 1.1: Forgetting to Square Residuals in SSE
 
 **The Error:**
 ```
@@ -51,7 +51,7 @@ Wrong way: |2| + |-1| + |3| + |-2| = 8 (MAE, not SSE)
 
 ---
 
-### ❌ Mistake 1.2: Using n vs (n-1) Inconsistently
+### Mistake 1.2: Using n vs (n-1) Inconsistently
 
 **The Error:**
 ```
@@ -81,7 +81,7 @@ Exception: If problem says "sample" or asks for "unbiased estimate"
 
 ---
 
-### ❌ Mistake 1.3: Misinterpreting Logistic Coefficients
+### Mistake 1.3: Misinterpreting Logistic Coefficients
 
 **The Error:**
 ```
@@ -112,7 +112,7 @@ Coefficient b₁ = 0.5:
 
 ---
 
-### ❌ Mistake 1.4: Ignoring Feature Scaling Impact
+### Mistake 1.4: Ignoring Feature Scaling Impact
 
 **The Error:**
 ```
@@ -148,7 +148,7 @@ model.fit(X_scaled, y)
 
 ---
 
-### ❌ Mistake 1.5: Using R² on Test Set Without Context
+### Mistake 1.5: Using R² on Test Set Without Context
 
 **The Error:**
 ```
@@ -183,7 +183,7 @@ Model B is actually better! (simpler, less overfitting)
 
 ## Classification Mistakes
 
-### ❌ Mistake 2.1: Using Accuracy on Imbalanced Data
+### Mistake 2.1: Using Accuracy on Imbalanced Data
 
 **The Error:**
 ```
@@ -217,7 +217,7 @@ f1_score or roc_auc_score
 
 ---
 
-### ❌ Mistake 2.2: Confusing Precision and Recall
+### Mistake 2.2: Confusing Precision and Recall
 
 **The Error:**
 ```
@@ -259,7 +259,7 @@ Medical diagnosis: Recall matters
 
 ---
 
-### ❌ Mistake 2.3: Wrong Threshold Direction
+### Mistake 2.3: Wrong Threshold Direction
 
 **The Error:**
 ```
@@ -294,7 +294,7 @@ Example:
 
 ---
 
-### ❌ Mistake 2.4: Not Using Stratified CV for Imbalanced Data
+### Mistake 2.4: Not Using Stratified CV for Imbalanced Data
 
 **The Error:**
 ```
@@ -331,7 +331,7 @@ kfold = StratifiedKFold(n_splits=5, shuffle=True)
 
 ## Cross-Validation Mistakes
 
-### ❌ Mistake 3.1: Not Fixing Random Seed
+### Mistake 3.1: Not Fixing Random Seed
 
 **The Error:**
 ```python
@@ -371,7 +371,7 @@ cv_scores2 = cross_val_score(
 
 ---
 
-### ❌ Mistake 3.2: Tuning Hyperparameters on Test Set
+### Mistake 3.2: Tuning Hyperparameters on Test Set
 
 **The Error:**
 ```python
@@ -423,7 +423,7 @@ final_score = best_model.score(X_test, y_test)
 
 ## Bias-Variance Mistakes
 
-### ❌ Mistake 4.1: Confusing High Training Error with High Variance
+### Mistake 4.1: Confusing High Training Error with High Variance
 
 **The Error:**
 ```
@@ -453,7 +453,7 @@ Low train error + low test error = GOOD FIT
 
 ---
 
-### ❌ Mistake 4.2: Adding Data Won't Help Everything
+### Mistake 4.2: Adding Data Won't Help Everything
 
 **The Error:**
 ```
@@ -491,7 +491,7 @@ High Variance (overfitting):
 
 ## Evaluation Metrics Mistakes
 
-### ❌ Mistake 5.1: Averaging Metrics Incorrectly
+### Mistake 5.1: Averaging Metrics Incorrectly
 
 **The Error:**
 ```
@@ -534,7 +534,7 @@ Micro Average: Calculate globally first
 
 ---
 
-### ❌ Mistake 5.2: Ignoring Class Imbalance in Multi-Class
+### Mistake 5.2: Ignoring Class Imbalance in Multi-Class
 
 **The Error:**
 ```
@@ -563,7 +563,7 @@ Reporting only macro F1 is misleading!
 
 ## Decision Threshold Mistakes
 
-### ❌ Mistake 6.1: Not Tuning Threshold for Business Cost
+### Mistake 6.1: Not Tuning Threshold for Business Cost
 
 **The Error:**
 ```
@@ -605,7 +605,7 @@ Choose threshold 0.3
 
 ## Real-World Application Mistakes
 
-### ❌ Mistake 7.1: Training on Biased Historical Data
+### Mistake 7.1: Training on Biased Historical Data
 
 **The Error:**
 ```
@@ -630,7 +630,7 @@ Model accuracy looks good, but systematically unfair!
 
 ---
 
-### ❌ Mistake 7.2: Not Monitoring Model Performance in Production
+### Mistake 7.2: Not Monitoring Model Performance in Production
 
 **The Error:**
 ```
@@ -665,32 +665,32 @@ Never noticed! → Poor decisions made for months
 ## Summary by Topic
 
 ### Linear Regression
-- ❌ Not squaring residuals in SSE
-- ❌ Inconsistent use of n vs n-1
-- ❌ Forgetting feature scaling
-- ❌ R² without context
+- Not squaring residuals in SSE
+- Inconsistent use of n vs n-1
+- Forgetting feature scaling
+- R² without context
 
 ### Classification
-- ❌ Accuracy on imbalanced data
-- ❌ Confusing precision and recall
-- ❌ Wrong threshold direction
-- ❌ Not stratifying CV
+- Accuracy on imbalanced data
+- Confusing precision and recall
+- Wrong threshold direction
+- Not stratifying CV
 
 ### Cross-Validation
-- ❌ Not fixing random seed
-- ❌ Tuning on test set (data leakage)
+- Not fixing random seed
+- Tuning on test set (data leakage)
 
 ### Bias-Variance
-- ❌ Misdiagnosing bias vs variance
-- ❌ Wrong fix for problem type
+- Misdiagnosing bias vs variance
+- Wrong fix for problem type
 
 ### Metrics
-- ❌ Averaging metrics incorrectly
-- ❌ Ignoring class imbalance
+- Averaging metrics incorrectly
+- Ignoring class imbalance
 
 ### Business
-- ❌ Using default threshold
-- ❌ Not monitoring production
+- Using default threshold
+- Not monitoring production
 
 ---
 
@@ -713,7 +713,7 @@ When your model isn't working:
 
 ## Quick Reference: Right vs Wrong
 
-| Aspect | ❌ Wrong | ✓ Right |
+| Aspect | Wrong | ✓ Right |
 |--------|---------|---------|
 | SSE | Σ\|eᵢ\| | Σeᵢ² |
 | CV | Random splits | Fixed seed |

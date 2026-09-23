@@ -959,7 +959,7 @@ d) What problem might each model have?
 
 ## Part 12: Key Takeaways
 
-### ✅ Decision Boundary Concepts
+### Decision Boundary Concepts
 
 ```
 1. Definition:
@@ -988,7 +988,7 @@ d) What problem might each model have?
    • Needs good regularization
 ```
 
-### ✅ Reading Boundaries to Diagnose
+### Reading Boundaries to Diagnose
 
 ```
 Boundary Shape → Diagnosis → Action
@@ -1013,7 +1013,7 @@ Very Jagged & Wiggly
 → Collect more data
 ```
 
-### ✅ Model Selection by Boundary
+### Model Selection by Boundary
 
 ```
 Use Logistic Regression if:
@@ -1046,7 +1046,7 @@ Use Neural Network if:
 
 ## Tips for CT Exam
 
-### ✅ DO
+### DO
 
 - **Sketch boundaries when explaining models**
   Example: "Logistic regression creates a straight line, so it can't capture this curved pattern"
@@ -1060,7 +1060,7 @@ Use Neural Network if:
 - **Connect boundary to model complexity**
   Example: "More flexible models create more complex boundaries"
 
-### ❌ DON'T
+### DON'T
 
 - Don't say "the boundary is good" without explaining why
   Better: "The boundary is smooth and generalization gap is small, indicating good fit"

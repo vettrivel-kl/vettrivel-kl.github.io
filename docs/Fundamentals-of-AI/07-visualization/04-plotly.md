@@ -298,8 +298,8 @@ Choose Plotly when the audience will *interact*. Choose Matplotlib or Seaborn wh
 | Histogram bins | `bins=` | `bins=` | **`nbins=`** |
 | Title | `plt.title()` | `plt.title()` | `title=` argument |
 | Statistical aggregation | manual | automatic | some |
-| Hover tooltips | ❌ | ❌ | ✅ |
-| Zoom / pan | ❌ | ❌ | ✅ |
+| Hover tooltips | | | |
+| Zoom / pan | | | |
 | Output | image | image | HTML |
 | Extra install | bundled with most setups | `pip install seaborn` | `pip install plotly` (+ `kaleido`) |
 

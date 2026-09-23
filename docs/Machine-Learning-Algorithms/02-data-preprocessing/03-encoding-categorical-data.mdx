@@ -53,7 +53,7 @@ export const EncoderSandbox = () => {
   const { headers, rows, footprint } = getEncoding();
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🎛️ Live Encoder Sandbox</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Live Encoder Sandbox</h4>
       <p style={{ margin: '0 0 15px 0', fontSize: '14px' }}>Toggle between different encoding schemes to see how the sample categorical array <code>["Red", "Green", "Blue", "Green"]</code> gets represented in the output matrix:</p>
       <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
         <button onClick={() => setMethod('label')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: method === 'label' ? '#3182ce' : 'transparent', color: method === 'label' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s', fontWeight: 'bold' }}>Label / Ordinal</button>
@@ -89,16 +89,16 @@ export const PracticeQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Target Leakage</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Target Leakage</h4>
       <p style={{ margin: '0 0 15px 0' }}>Why does naive target encoding result in a heavily overfitted 0.71+ cross-validation score on completely random target labels?</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '10px', borderRadius: '4px', border: '1px solid #3182ce', textAlign: 'left', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Option A: The model is highly complex and has memorized the random seed.</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '10px', borderRadius: '4px', border: '1px solid #3182ce', textAlign: 'left', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Option B: Calculating means over the whole dataset before splitting leaks each row's target y into its own feature X.</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '10px', borderRadius: '4px', border: '1px solid #3182ce', textAlign: 'left', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Option C: Cross-validation has an inherent bug when evaluating target encoding.</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The model used is simple Logistic Regression; the issue lies in how features were encoded, not model capacity.</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Computing category target means across all rows incorporates the target value of the row itself, creating a severe data leak.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Cross-validation works perfectly. The problem is that the leak happened BEFORE cross-validation split the data, so the leakage is present in all validation folds.</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. The model used is simple Logistic Regression; the issue lies in how features were encoded, not model capacity.</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! Computing category target means across all rows incorporates the target value of the row itself, creating a severe data leak.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Cross-validation works perfectly. The problem is that the leak happened BEFORE cross-validation split the data, so the leakage is present in all validation folds.</p>}
     </div>
   );
 };
@@ -323,7 +323,7 @@ Chennai is now encoded as all-zeros — the 'reference' category
 The dropped category becomes the **reference**, encoded as all zeros, and every remaining coefficient
 reads as "relative to Chennai". No information is lost.
 
-#### 🧮 Dummy Variable Trap Equation Annotator
+#### Dummy Variable Trap Equation Annotator
 Explore the mathematics of the trap below:
 
 <Tabs>
@@ -558,7 +558,7 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 Compare a robust production target encoder pipeline against a manual (naive) lookup target encoder:
 
 <Tabs>
-  <TabItem value="sklearn" label="📦 Production (Scikit-Learn Pipeline)" default>
+  <TabItem value="sklearn" label="Production (Scikit-Learn Pipeline)" default>
     <br/>
     
     ```python
@@ -573,7 +573,7 @@ Compare a robust production target encoder pipeline against a manual (naive) loo
     )
     ```
   </TabItem>
-  <TabItem value="scratch" label="🧮 Manual Naive (Dangerous Leak)">
+  <TabItem value="scratch" label="Manual Naive (Dangerous Leak)">
     <br/>
     
     ```python
@@ -592,40 +592,40 @@ Compare a robust production target encoder pipeline against a manual (naive) loo
 Explore some of the most critical engineering pitfalls in categorical data encoding and how to avoid them:
 
 <Tabs>
-  <TabItem value="leakage" label="🚨 Pitfall 1: Target Leakage" default>
+  <TabItem value="leakage" label="Pitfall 1: Target Leakage" default>
     <br/>
     
     *   **The Misconception:** *"Computing category means over the whole dataset or before train-test split is fine as long as I run cross-validation."*
-    *   **❌ Wrong Thinking:** Standard cross-validation cannot catch leaks that occurred **before** the split. Naive target encoding will score ~0.71+ on pure noise.
-    *   **✅ The Right Principle:** Always use a cross-fitted encoder like scikit-learn's `TargetEncoder` and place it inside a `Pipeline` so fitting is strictly isolated within training folds.
+    *   **Wrong Thinking:** Standard cross-validation cannot catch leaks that occurred **before** the split. Naive target encoding will score ~0.71+ on pure noise.
+    *   **The Right Principle:** Always use a cross-fitted encoder like scikit-learn's `TargetEncoder` and place it inside a `Pipeline` so fitting is strictly isolated within training folds.
   </TabItem>
-  <TabItem value="nominal" label="🚨 Pitfall 2: Nominal Labeling">
+  <TabItem value="nominal" label="Pitfall 2: Nominal Labeling">
     <br/>
     
     *   **The Misconception:** *"Encoding Red=0, Green=1, Blue=2 is safe for any model because they are just numbers."*
-    *   **❌ Wrong Thinking:** This tells linear/distance-based models that `Blue > Red` and `Green` is exactly in-between, costing over 30 points of accuracy.
-    *   **✅ The Right Principle:** Nominal data (no real order) should be **one-hot encoded** by default. Use label/ordinal encoding only for deep trees or genuinely ordinal features (with explicit ordering passed via `categories=[...]`).
+    *   **Wrong Thinking:** This tells linear/distance-based models that `Blue > Red` and `Green` is exactly in-between, costing over 30 points of accuracy.
+    *   **The Right Principle:** Nominal data (no real order) should be **one-hot encoded** by default. Use label/ordinal encoding only for deep trees or genuinely ordinal features (with explicit ordering passed via `categories=[...]`).
   </TabItem>
-  <TabItem value="api" label="🚨 Pitfall 3: API Misuse">
+  <TabItem value="api" label="Pitfall 3: API Misuse">
     <br/>
     
     *   **The Misconception:** *"I can use LabelEncoder in a loop over my feature matrix X."*
-    *   **❌ Wrong Thinking:** `LabelEncoder` is strictly designed for 1-D targets (`y`). Using it on features violates the scikit-learn pipeline API and breaks `ColumnTransformer`.
-    *   **✅ The Right Principle:** Always use `OrdinalEncoder` for 2-D features (`X`), which integrates seamlessly into pipeline transformers.
+    *   **Wrong Thinking:** `LabelEncoder` is strictly designed for 1-D targets (`y`). Using it on features violates the scikit-learn pipeline API and breaks `ColumnTransformer`.
+    *   **The Right Principle:** Always use `OrdinalEncoder` for 2-D features (`X`), which integrates seamlessly into pipeline transformers.
   </TabItem>
-  <TabItem value="dummy" label="🚨 Pitfall 4: Dummy Variable Trap">
+  <TabItem value="dummy" label="Pitfall 4: Dummy Variable Trap">
     <br/>
     
     *   **The Misconception:** *"I should always drop the first column (drop='first') in one-hot encoding."*
-    *   **❌ Wrong Thinking:** While dropping is mandatory for Ordinary Least Squares (linear models) to prevent perfect multicollinearity, dropping columns for tree-based models or regularized models is counterproductive as it forces trees to split multiple times to reconstruct the dropped category.
-    *   **✅ The Right Principle:** Use `drop="first"` strictly for unregularized linear models, and retain all `k` columns for trees and regularized estimators.
+    *   **Wrong Thinking:** While dropping is mandatory for Ordinary Least Squares (linear models) to prevent perfect multicollinearity, dropping columns for tree-based models or regularized models is counterproductive as it forces trees to split multiple times to reconstruct the dropped category.
+    *   **The Right Principle:** Use `drop="first"` strictly for unregularized linear models, and retain all `k` columns for trees and regularized estimators.
   </TabItem>
-  <TabItem value="memory" label="🚨 Pitfall 5: Memory Blowups">
+  <TabItem value="memory" label="Pitfall 5: Memory Blowups">
     <br/>
     
     *   **The Misconception:** *"One-hot encoding is always safe because the data size is small."*
-    *   **❌ Wrong Thinking:** If you have high cardinality (e.g. 1000 categories) and convert the output to a dense array (`sparse_output=False` or `.toarray()`), a single column can explode from 0.8 MB to 400 MB.
-    *   **✅ The Right Principle:** Keep the default `sparse_output=True` (formerly `sparse=True`). Most scikit-learn models process sparse matrices natively with zero overhead.
+    *   **Wrong Thinking:** If you have high cardinality (e.g. 1000 categories) and convert the output to a dense array (`sparse_output=False` or `.toarray()`), a single column can explode from 0.8 MB to 400 MB.
+    *   **The Right Principle:** Keep the default `sparse_output=True` (formerly `sparse=True`). Most scikit-learn models process sparse matrices natively with zero overhead.
   </TabItem>
 </Tabs>
 
@@ -637,7 +637,7 @@ Explore some of the most critical engineering pitfalls in categorical data encod
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header" style={{ padding: '15px', borderBottom: '1px solid var(--ifm-color-emphasis-200)' }}>
-        <h3>🤖 Encoder Selection</h3>
+        <h3>Encoder Selection</h3>
       </div>
       <div className="card__body" style={{ padding: '15px' }}>
         <ul>
@@ -651,7 +651,7 @@ Explore some of the most critical engineering pitfalls in categorical data encod
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header" style={{ padding: '15px', borderBottom: '1px solid var(--ifm-color-emphasis-200)' }}>
-        <h3>⚠️ Production Guardrails</h3>
+        <h3>Production Guardrails</h3>
       </div>
       <div className="card__body" style={{ padding: '15px' }}>
         <ul>
@@ -668,11 +668,11 @@ Explore some of the most critical engineering pitfalls in categorical data encod
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🎯 False ordering penalty:** Label encoding nominal data hurts linear models (−31 points accuracy) and shallow tree models (−32 points) because they cannot map alternating signs.
-*   **⚠️ Capacity solves ordering:** Unrestricted tree ensembles suffer zero penalty from false orderings because deep splits route around the integer mapping perfectly.
-*   **🔄 Target encoding danger:** Naive target encoding generates 21 points of fake accuracy (0.71 vs 0.50) on pure noise; cross-fitted `TargetEncoder` correctly scores 0.49.
+*   **False ordering penalty:** Label encoding nominal data hurts linear models (−31 points accuracy) and shallow tree models (−32 points) because they cannot map alternating signs.
+*   **Capacity solves ordering:** Unrestricted tree ensembles suffer zero penalty from false orderings because deep splits route around the integer mapping perfectly.
+*   **Target encoding danger:** Naive target encoding generates 21 points of fake accuracy (0.71 vs 0.50) on pure noise; cross-fitted `TargetEncoder` correctly scores 0.49.
 
 :::
 
@@ -689,7 +689,7 @@ for why `X` was `object` · [Missing Values](./02-missing-values.mdx) for handli
 *Attempt each question first, then click to reveal detailed answers, mathematical derivations, and sample explanations.*
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why must categorical data be encoded, and why is numerical representation more efficient?</b></summary>
+  <summary><b>1. [THEORY] Why must categorical data be encoded, and why is numerical representation more efficient?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -699,7 +699,7 @@ for why `X` was `object` · [Missing Values](./02-missing-values.mdx) for handli
 </details>
 
 <details>
-  <summary>❓ <b>2. [THEORY] What three false assumptions does label encoding nominal data Red=0, Green=1, Blue=2 make?</b></summary>
+  <summary><b>2. [THEORY] What three false assumptions does label encoding nominal data Red=0, Green=1, Blue=2 make?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -713,7 +713,7 @@ for why `X` was `object` · [Missing Values](./02-missing-values.mdx) for handli
 </details>
 
 <details>
-  <summary>❓ <b>3. [ANALYZE] Why does label encoding nominal data damage linear models (-31 points accuracy) but leave unrestricted trees unaffected?</b></summary>
+  <summary><b>3. [ANALYZE] Why does label encoding nominal data damage linear models (-31 points accuracy) but leave unrestricted trees unaffected?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -723,7 +723,7 @@ for why `X` was `object` · [Missing Values](./02-missing-values.mdx) for handli
 </details>
 
 <details>
-  <summary>❓ <b>4. [THEORY] What is the difference between LabelEncoder and OrdinalEncoder in scikit-learn?</b></summary>
+  <summary><b>4. [THEORY] What is the difference between LabelEncoder and OrdinalEncoder in scikit-learn?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -734,7 +734,7 @@ for why `X` was `object` · [Missing Values](./02-missing-values.mdx) for handli
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] What is perfect multicollinearity (the dummy variable trap) and how does drop="first" fix it?</b></summary>
+  <summary><b>5. [THEORY] What is perfect multicollinearity (the dummy variable trap) and how does drop="first" fix it?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -745,7 +745,7 @@ for why `X` was `object` · [Missing Values](./02-missing-values.mdx) for handli
 </details>
 
 <details>
-  <summary>❓ <b>6. [ANALYZE] For which models is drop="first" necessary, and for which is it counterproductive?</b></summary>
+  <summary><b>6. [ANALYZE] For which models is drop="first" necessary, and for which is it counterproductive?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -755,7 +755,7 @@ for why `X` was `object` · [Missing Values](./02-missing-values.mdx) for handli
 </details>
 
 <details>
-  <summary>❓ <b>7. [ANALYZE] Why does one-hot encoding memory stay flat at 0.8 MB for sparse output while exploding to 400 MB for dense output at 1,000 categories?</b></summary>
+  <summary><b>7. [ANALYZE] Why does one-hot encoding memory stay flat at 0.8 MB for sparse output while exploding to 400 MB for dense output at 1,000 categories?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -765,7 +765,7 @@ for why `X` was `object` · [Missing Values](./02-missing-values.mdx) for handli
 </details>
 
 <details>
-  <summary>❓ <b>8. [THEORY] Describe how naive target encoding introduces target leakage, and how cross-fitting prevents it.</b></summary>
+  <summary><b>8. [THEORY] Describe how naive target encoding introduces target leakage, and how cross-fitting prevents it.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -775,7 +775,7 @@ for why `X` was `object` · [Missing Values](./02-missing-values.mdx) for handli
 </details>
 
 <details>
-  <summary>❓ <b>9. [THEORY] What happens by default when an encoder meets an unseen category at prediction time, and how do you resolve it?</b></summary>
+  <summary><b>9. [THEORY] What happens by default when an encoder meets an unseen category at prediction time, and how do you resolve it?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -787,7 +787,7 @@ for why `X` was `object` · [Missing Values](./02-missing-values.mdx) for handli
 </details>
 
 <details>
-  <summary>❓ <b>10. [ANALYZE] How many columns does binary encoding produce for 256 categories, and what is its main drawback?</b></summary>
+  <summary><b>10. [ANALYZE] How many columns does binary encoding produce for 256 categories, and what is its main drawback?</b></summary>
   <div className="answer-content">
     <br/>
     

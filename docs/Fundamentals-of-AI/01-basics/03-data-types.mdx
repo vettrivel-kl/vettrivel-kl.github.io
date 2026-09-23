@@ -144,7 +144,7 @@ export const DataTypeTaxonomyExplorer = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🗂️ Interactive Python Data Type Taxonomy</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive Python Data Type Taxonomy</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Click any data type to inspect its structural blueprint and common gotchas:
       </p>
@@ -208,7 +208,7 @@ export const DataTypeTaxonomyExplorer = () => {
         </div>
 
         <div style={{ marginTop: '14px', padding: '10px 12px', borderRadius: '4px', backgroundColor: 'rgba(221, 107, 32, 0.08)', borderLeft: '4px solid #dd6b20', fontSize: '13px', lineHeight: '1.5' }}>
-          ⚠️ <b>Crucial Gotcha:</b> {current.gotcha}
+          <b>Crucial Gotcha:</b> {current.gotcha}
         </div>
       </div>
     </div>
@@ -228,7 +228,7 @@ export const MutabilitySandbox = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🧪 In-Place Mutability and Hashability Sandbox</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>In-Place Mutability and Hashability Sandbox</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Select an operation scenario to inspect Python runtime memory responses:
       </p>
@@ -271,7 +271,7 @@ fruits.append("grape")    # In-place extension
 print(fruits)             # ['pear', 'banana', 'grape']`}
             </pre>
             <p style={{ margin: 0, fontSize: '13px' }}>
-              💡 <b>Mechanism:</b> The list object expands and modifies internal item pointers in-place. The outer memory address (<code>id(fruits)</code>) remains completely unchanged.
+              <b>Mechanism:</b> The list object expands and modifies internal item pointers in-place. The outer memory address (<code>id(fruits)</code>) remains completely unchanged.
             </p>
           </div>
         )}
@@ -285,14 +285,14 @@ coordinates[0] = 30
 # TypeError: 'tuple' object does not support item assignment`}
             </pre>
             <p style={{ margin: 0, fontSize: '13px' }}>
-              💡 <b>Mechanism:</b> Tuples are immutable arrays. Once initialized, their length and internal item references cannot be modified.
+              <b>Mechanism:</b> Tuples are immutable arrays. Once initialized, their length and internal item references cannot be modified.
             </p>
           </div>
         )}
 
         {scenario === 'shallow' && (
           <div>
-            <strong style={{ color: '#dd6b20', fontSize: '15px' }}>⚠️ The Shallow Tuple Gotcha (Nested Mutability)</strong>
+            <strong style={{ color: '#dd6b20', fontSize: '15px' }}>The Shallow Tuple Gotcha (Nested Mutability)</strong>
             <pre style={{ margin: '10px 0', padding: '10px', fontSize: '13px', borderRadius: '4px' }}>
 {`record = ("user", [10, 20])
 # record[0] = "admin"  <- Fails (tuple reference immutable)
@@ -300,23 +300,23 @@ record[1].append(99)   <- SUCCEEDS!
 print(record)          # ('user', [10, 20, 99])`}
             </pre>
             <p style={{ margin: 0, fontSize: '13px' }}>
-              💡 <b>Mechanism:</b> Tuples are only <i>shallowly</i> immutable. The tuple merely freezes the memory pointers to its elements. Because element 1 is a mutable list, you can mutate the list contents in-place!
+              <b>Mechanism:</b> Tuples are only <i>shallowly</i> immutable. The tuple merely freezes the memory pointers to its elements. Because element 1 is a mutable list, you can mutate the list contents in-place!
             </p>
           </div>
         )}
 
         {scenario === 'hash' && (
           <div>
-            <strong style={{ color: '#805ad5', fontSize: '15px' }}>🔑 Hashability: Tuple Keys vs. List Keys</strong>
+            <strong style={{ color: '#805ad5', fontSize: '15px' }}>Hashability: Tuple Keys vs. List Keys</strong>
             <pre style={{ margin: '10px 0', padding: '10px', fontSize: '13px', borderRadius: '4px' }}>
 {`cache = {}
-cache[(10, 20)] = "Valid coordinate"  # ✅ Tuple is immutable & hashable!
+cache[(10, 20)] = "Valid coordinate"  # Tuple is immutable & hashable!
 
 cache[[10, 20]] = "Invalid list"
 # TypeError: unhashable type: 'list'`}
             </pre>
             <p style={{ margin: 0, fontSize: '13px' }}>
-              💡 <b>Mechanism:</b> Hash tables (dictionaries and sets) compute a constant hash integer from keys via <code>hash(key)</code>. Because lists can mutate at any time, their hash would change unpredictably, violating hash table invariants.
+              <b>Mechanism:</b> Hash tables (dictionaries and sets) compute a constant hash integer from keys via <code>hash(key)</code>. Because lists can mutate at any time, their hash would change unpredictably, violating hash table invariants.
             </p>
           </div>
         )}
@@ -414,40 +414,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 6. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Single-Element Tuple Comma" default>
+  <TabItem value="m1" label="1. Single-Element Tuple Comma" default>
     <br/>
     
     *   **The Misconception:** *"Parentheses alone create a tuple, so `x = (42)` is a single-element tuple."*
-    *   **❌ Wrong Thinking:** Typing `x = (42)`.
-    *   **✅ The Right Principle:** Parentheses are also used for arithmetic grouping. Without a trailing comma, `(42)` is evaluated as integer `42`. You must write `x = (42,)`.
+    *   **Wrong Thinking:** Typing `x = (42)`.
+    *   **The Right Principle:** Parentheses are also used for arithmetic grouping. Without a trailing comma, `(42)` is evaluated as integer `42`. You must write `x = (42,)`.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. The Empty Set Trap">
+  <TabItem value="m2" label="2. The Empty Set Trap">
     <br/>
     
     *   **The Misconception:** *"To create an empty set, type `s = {}`."*
-    *   **❌ Wrong Thinking:** `type({})` is `<class 'dict'>`.
-    *   **✅ The Right Principle:** `{}` was reserved for dictionaries historically. Calling `type({})` returns `dict`. To create an empty set, call the constructor: `s = set()`.
+    *   **Wrong Thinking:** `type({})` is `<class 'dict'>`.
+    *   **The Right Principle:** `{}` was reserved for dictionaries historically. Calling `type({})` returns `dict`. To create an empty set, call the constructor: `s = set()`.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Attempting to Index a Set">
+  <TabItem value="m3" label="3. Attempting to Index a Set">
     <br/>
     
     *   **The Misconception:** *"I can access the first element of a set using `my_set[0]`."*
-    *   **❌ Wrong Thinking:** Treating sets like lists.
-    *   **✅ The Right Principle:** Sets are unordered hash tables without sequence indices. `my_set[0]` raises `TypeError: 'set' object is not subscriptable`. Use `for item in my_set:` or convert via `list(my_set)[0]`.
+    *   **Wrong Thinking:** Treating sets like lists.
+    *   **The Right Principle:** Sets are unordered hash tables without sequence indices. `my_set[0]` raises `TypeError: 'set' object is not subscriptable`. Use `for item in my_set:` or convert via `list(my_set)[0]`.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Using Mutable Objects as Dict Keys">
+  <TabItem value="m4" label="4. Using Mutable Objects as Dict Keys">
     <br/>
     
     *   **The Misconception:** *"I can use a list as a key in a dictionary to look up coordinates."*
-    *   **❌ Wrong Thinking:** `d[[10, 20]] = "Home"`.
-    *   **✅ The Right Principle:** Dictionary keys must be hashable. Lists are mutable and unhashable, raising `TypeError: unhashable type: 'list'`. Use an immutable tuple instead: `d[(10, 20)] = "Home"`.
+    *   **Wrong Thinking:** `d[[10, 20]] = "Home"`.
+    *   **The Right Principle:** Dictionary keys must be hashable. Lists are mutable and unhashable, raising `TypeError: unhashable type: 'list'`. Use an immutable tuple instead: `d[(10, 20)] = "Home"`.
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Sets Absorbing Booleans">
+  <TabItem value="m5" label="5. Sets Absorbing Booleans">
     <br/>
     
     *   **The Misconception:** *"A set containing `1` and `True` will have length 2."*
-    *   **❌ Wrong Thinking:** Expecting type distinction in sets for `1` and `True`.
-    *   **✅ The Right Principle:** Because `bool` inherits from `int`, `True == 1` and `hash(True) == hash(1)`. The set treats them as duplicates and retains only one: `len({1, True}) == 1`.
+    *   **Wrong Thinking:** Expecting type distinction in sets for `1` and `True`.
+    *   **The Right Principle:** Because `bool` inherits from `int`, `True == 1` and `hash(True) == hash(1)`. The set treats them as duplicates and retains only one: `len({1, True}) == 1`.
   </TabItem>
 </Tabs>
 
@@ -459,7 +459,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Four Scalar Primitives</h3>
+        <h3>Four Scalar Primitives</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -474,7 +474,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Four Collections</h3>
+        <h3>Four Collections</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -492,11 +492,11 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **⚡ Mutability dictates safety:** Lists and dicts can be modified in-place; tuples and strings cannot.
-*   **🔑 Hashability requires immutability:** Only immutable types (integers, strings, tuples) can be used as dictionary keys or set elements.
-*   **📦 Shallow immutability:** A tuple containing a mutable list can have its inner list modified in-place.
+*   **Mutability dictates safety:** Lists and dicts can be modified in-place; tuples and strings cannot.
+*   **Hashability requires immutability:** Only immutable types (integers, strings, tuples) can be used as dictionary keys or set elements.
+*   **Shallow immutability:** A tuple containing a mutable list can have its inner list modified in-place.
 
 :::
 
@@ -514,16 +514,16 @@ export const DataTypeQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Shallow Tuple Mutation</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: The Shallow Tuple Mutation</h4>
       <p style={{ margin: '0 0 15px 0' }}>Consider this Python snippet: <code>t = ("data", [1, 2]); t[1].append(3); print(t)</code>. What happens when this code executes?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>TypeError: 'tuple' object does not support item assignment</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>It executes successfully and prints: ('data', [1, 2, 3])</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>AttributeError: 'tuple' object has no attribute 'append'</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The code does not perform item assignment on the tuple (it does not do t[1] = ...). It calls .append() on the nested list! Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Tuples are only shallowly immutable. The tuple reference to the list object at index 1 never changes. Calling .append(3) mutates the list object in-place on the heap, producing ('data', [1, 2, 3]) without error!</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. .append() was called on t[1] (which is a list), not on t (the tuple). Try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. The code does not perform item assignment on the tuple (it does not do t[1] = ...). It calls .append() on the nested list! Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! Tuples are only shallowly immutable. The tuple reference to the list object at index 1 never changes. Calling .append(3) mutates the list object in-place on the heap, producing ('data', [1, 2, 3]) without error!</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. .append() was called on t[1] (which is a list), not on t (the tuple). Try again!</p>}
     </div>
   );
 };
@@ -533,7 +533,7 @@ export const DataTypeQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why can't a list be used as a key in a Python dictionary?</b></summary>
+  <summary><b>1. [THEORY] Why can't a list be used as a key in a Python dictionary?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -544,7 +544,7 @@ export const DataTypeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [MATH] Why does `len({1, True, 1.0})` evaluate to 1 instead of 3?</b></summary>
+  <summary><b>2. [MATH] Why does `len({1, True, 1.0})` evaluate to 1 instead of 3?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -557,7 +557,7 @@ export const DataTypeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [PRACTICE] What is the difference between `dict["key"]` and `dict.get("key")`?</b></summary>
+  <summary><b>3. [PRACTICE] What is the difference between `dict["key"]` and `dict.get("key")`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -568,7 +568,7 @@ export const DataTypeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [THEORY] Why is `x = (42)` an integer, while `x = (42,)` is a tuple?</b></summary>
+  <summary><b>4. [THEORY] Why is `x = (42)` an integer, while `x = (42,)` is a tuple?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -581,7 +581,7 @@ export const DataTypeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [ANALYZE] How do you create an empty set in Python, and why does `{}` not work?</b></summary>
+  <summary><b>5. [ANALYZE] How do you create an empty set in Python, and why does `{}` not work?</b></summary>
   <div className="answer-content">
     <br/>
     

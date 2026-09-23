@@ -105,7 +105,7 @@ For very large `p` where the eigendecomposition is too expensive, `λ_max ≤ tr
 
 ---
 
-## 🛠️ The Interactive Learning Regimes Sandbox
+## The Interactive Learning Regimes Sandbox
 
 Experiment with the interactive sandbox below to visualize how different learning rates alter the descent path. Select a regime to watch how a single step-by-step update behaves on a convex 1D loss surface, mapping directly to our printed logs.
 
@@ -143,7 +143,7 @@ export const LearningRegimesSandbox = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>📊 Learning Regimes Live Simulator</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Learning Regimes Live Simulator</h4>
       <p style={{ fontSize: '13px', margin: '0 0 15px 0', opacity: 0.9 }}>Select a learning rate `α` and click "Take Step" to trace the parameter's trajectory down the parabola.</p>
 
       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px' }}>
@@ -181,7 +181,7 @@ export const LearningRegimesSandbox = () => {
               <circle cx={scaleX(currentW)} cy={scaleY(currentCost)} r="5.5" fill={alpha >= 1.0 ? '#e53e3e' : '#3182ce'} />
             ) : (
               <g>
-                <text x="150" y="60" textAnchor="middle" fill="#e53e3e" fontSize="12" fontWeight="bold">💥 BOUNCED OUT OF BANDS / EXPLODED!</text>
+                <text x="150" y="60" textAnchor="middle" fill="#e53e3e" fontSize="12" fontWeight="bold">BOUNCED OUT OF BANDS / EXPLODED!</text>
               </g>
             )}
           </svg>
@@ -391,7 +391,7 @@ Practical rule: aim for roughly `1.8 × 1/λ_max`, i.e. `0.9 × 2/λ_max`. It is
 ---
 
 <details style={{ padding: '15px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
-  <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}>🔌 <b>[ADVANCED DEEP-DIVE] Interactive Step-Shrinkage & Feature Scaling Sandboxes</b></summary>
+  <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}><b>[ADVANCED DEEP-DIVE] Interactive Step-Shrinkage & Feature Scaling Sandboxes</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -506,33 +506,33 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 ## 3. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Hand-Tuning is the Only Path" default>
+  <TabItem value="m1" label="1. Hand-Tuning is the Only Path" default>
     <br/>
     
     *   **The Misconception:** *"The learning rate is an arbitrary number that can only be found by extensive trial and error."*
-    *   **❌ Wrong Thinking:** Guessing random values like `0.1`, `0.01`, or `0.001` and hoping they don't explode.
-    *   **✅ The Right Principle:** The exact divergence limit is a computable property of your data. Calculating `2/λ_max` from the Hessian takes microseconds and hands you the absolute safe ceiling ($1.00000000$ predicted vs. $1.00000000$ measured to fifteen decimal places).
+    *   **Wrong Thinking:** Guessing random values like `0.1`, `0.01`, or `0.001` and hoping they don't explode.
+    *   **The Right Principle:** The exact divergence limit is a computable property of your data. Calculating `2/λ_max` from the Hessian takes microseconds and hands you the absolute safe ceiling ($1.00000000$ predicted vs. $1.00000000$ measured to fifteen decimal places).
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Overshoot is a Bug">
+  <TabItem value="m2" label="2. Overshoot is a Bug">
     <br/>
     
     *   **The Misconception:** *"Overshooting the target and causing parameters to oscillate is an optimization bug."*
-    *   **❌ Wrong Thinking:** Reducing the learning rate the moment you see coefficients flip signs.
-    *   **✅ The Right Principle:** Overshooting is the **fastest converging regime**. On any realistically squashed bowl, the setting that converges fastest overshoots on every step (e.g. `1.9950/λ_max` took **10,870** iterations, while the largest non-oscillating `α` took **21,688**). Reducing `α` systematically leaves you 2× slower.
+    *   **Wrong Thinking:** Reducing the learning rate the moment you see coefficients flip signs.
+    *   **The Right Principle:** Overshooting is the **fastest converging regime**. On any realistically squashed bowl, the setting that converges fastest overshoots on every step (e.g. `1.9950/λ_max` took **10,870** iterations, while the largest non-oscillating `α` took **21,688**). Reducing `α` systematically leaves you 2× slower.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Trusting Textbook Optimums">
+  <TabItem value="m3" label="3. Trusting Textbook Optimums">
     <br/>
     
     *   **The Misconception:** *"The classical textbook optimum 2/(λ_max + λ_min) is always the fastest converging learning rate."*
-    *   **❌ Wrong Thinking:** Calculating the classical optimum and assuming it is mathematically superior.
-    *   **✅ The Right Principle:** The formula is optimal for parameter-space contraction, not cost. Because cost is thousands of times more sensitive to error in the sharp direction than the shallow one, slowing down the sharp direction to satisfy the flat one is a bad trade—taking **23,876** iterations instead of **10,870** (2.20× slower!).
+    *   **Wrong Thinking:** Calculating the classical optimum and assuming it is mathematically superior.
+    *   **The Right Principle:** The formula is optimal for parameter-space contraction, not cost. Because cost is thousands of times more sensitive to error in the sharp direction than the shallow one, slowing down the sharp direction to satisfy the flat one is a bad trade—taking **23,876** iterations instead of **10,870** (2.20× slower!).
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Safe Short Traces">
+  <TabItem value="m4" label="4. Safe Short Traces">
     <br/>
     
     *   **The Misconception:** *"My cost decreases slowly for 500 steps, so my learning rate is perfectly stable."*
-    *   **❌ Wrong Thinking:** Believing any unstable learning rate will explode within the first few iterations.
-    *   **✅ The Right Principle:** Divergence is asymptotic. A learning rate only 0.4% too large ($1.004$) will look completely normal for hundreds of steps, compounding slowly until it finally explodes past $1e10$ at iteration **1098**.
+    *   **Wrong Thinking:** Believing any unstable learning rate will explode within the first few iterations.
+    *   **The Right Principle:** Divergence is asymptotic. A learning rate only 0.4% too large ($1.004$) will look completely normal for hundreds of steps, compounding slowly until it finally explodes past $1e10$ at iteration **1098**.
   </TabItem>
 </Tabs>
 
@@ -544,7 +544,7 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Core Theory</h3>
+        <h3>Core Theory</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -559,7 +559,7 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Engineering Realities</h3>
+        <h3>Engineering Realities</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -577,11 +577,11 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 
 :::info 
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🔒 Bounded overshoots:** The overshooting regime ($1 < \alpha \lambda < 2$) converges and is the fastest path on any realistically stretched ravine cost surface.
-*   **⚖️ Non-portability:** A learning rate is entirely dependent on feature scaling. Someone else's $\alpha = 0.03$ is meaningless without knowing their preprocessing scales.
-*   **🛠️ Standard default:** Aim for roughly $1.8 \times 1/\lambda_{\max}$ (i.e. $0.9 \times 2/\lambda_{\max}$), sitting safely near the optimal flat zone while avoiding the divergence cliff edge.
+*   **Bounded overshoots:** The overshooting regime ($1 < \alpha \lambda < 2$) converges and is the fastest path on any realistically stretched ravine cost surface.
+*   **Non-portability:** A learning rate is entirely dependent on feature scaling. Someone else's $\alpha = 0.03$ is meaningless without knowing their preprocessing scales.
+*   **Standard default:** Aim for roughly $1.8 \times 1/\lambda_{\max}$ (i.e. $0.9 \times 2/\lambda_{\max}$), sitting safely near the optimal flat zone while avoiding the divergence cliff edge.
 
 :::
 
@@ -599,16 +599,16 @@ export const PracticeQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Overshooting Regime</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: The Overshooting Regime</h4>
       <p style={{ margin: '0 0 15px 0' }}>If we are fitting a model on an elongated ravine (kappa = 4791), what is the fastest learning rate regime for cost convergence?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>The monotone regime (approaching smoothly from one side)</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>The overshooting/oscillating regime (flipping parameter signs on every step)</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>The divergence limit boundary</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The monotone limit (e.g. 1/λ_max) is extremely slow—taking **21,688** iterations compared to the oscillating regime's **10,870**. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! On stretched cost surfaces, the fastest converging learning rate lives firmly inside the overshooting regime (e.g. `1.9950/λ_max` took **10,870** iterations—exactly 2× faster!). Overshooting is a performance asset, not a model bug.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Sitting exactly on the divergence limit (2/λ_max) is a cliff edge where the model bounces forever and never moves toward the optimum. Re-read the choices and try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. The monotone limit (e.g. 1/λ_max) is extremely slow—taking **21,688** iterations compared to the oscillating regime's **10,870**. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! On stretched cost surfaces, the fastest converging learning rate lives firmly inside the overshooting regime (e.g. `1.9950/λ_max` took **10,870** iterations—exactly 2× faster!). Overshooting is a performance asset, not a model bug.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Sitting exactly on the divergence limit (2/λ_max) is a cliff edge where the model bounces forever and never moves toward the optimum. Re-read the choices and try again!</p>}
     </div>
   );
 };
@@ -618,7 +618,7 @@ export const PracticeQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Derive the exact divergence limit $\alpha < 2/\lambda_{\max}$ from the contraction inequality.</b></summary>
+  <summary><b>1. [THEORY] Derive the exact divergence limit $\alpha < 2/\lambda_{\max}$ from the contraction inequality.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -635,7 +635,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [ANALYZE] Why can a diverging learning rate look completely stable and normal for over a hundred steps?</b></summary>
+  <summary><b>2. [ANALYZE] Why can a diverging learning rate look completely stable and normal for over a hundred steps?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -647,7 +647,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [THEORY] Why is overshooting (the $1 < \alpha \lambda < 2$ regime) the fastest path on a ravine, and why does the textbook optimum fail?</b></summary>
+  <summary><b>3. [THEORY] Why is overshooting (the $1 < \alpha \lambda < 2$ regime) the fastest path on a ravine, and why does the textbook optimum fail?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -658,7 +658,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [ANALYZE] Why is overshooting invisible in the cost curve when $\kappa = 1.00$ (a perfectly round bowl)?</b></summary>
+  <summary><b>4. [ANALYZE] Why is overshooting invisible in the cost curve when $\kappa = 1.00$ (a perfectly round bowl)?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -670,7 +670,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [ANALYZE] How does feature standardisation change the safe learning rate range, and why are copied learning rates useless?</b></summary>
+  <summary><b>5. [ANALYZE] How does feature standardisation change the safe learning rate range, and why are copied learning rates useless?</b></summary>
   <div className="answer-content">
     <br/>
     

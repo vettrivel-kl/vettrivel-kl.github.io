@@ -256,7 +256,7 @@ They ask for one `True`/`False`, and an array of many values can't answer. You g
 :::
 
 `(a > 20).sum()` counts matches, because `True` is `1` — the same
-[boolean-as-int](../01-basics/01-values-and-types.md#bool-is-a-subclass-of-int) fact from the
+[boolean-as-int](../01-basics/01-values-and-types.mdx#bool-is-a-subclass-of-int) fact from the
 basics.
 
 ### `np.where`

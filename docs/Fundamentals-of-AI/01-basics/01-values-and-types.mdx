@@ -139,7 +139,7 @@ export const TypeInspectorSandbox = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🔍 Python Value and Type Inspector</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Python Value and Type Inspector</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Select a Python literal to inspect how the runtime evaluates its object metadata:
       </p>
@@ -248,7 +248,7 @@ export const TypeInspectorSandbox = () => {
       </div>
 
       <div style={{ padding: '10px 14px', borderRadius: '6px', backgroundColor: 'rgba(49, 130, 206, 0.08)', borderLeft: '4px solid #3182ce', fontSize: '13px', lineHeight: '1.5' }}>
-        💡 <b>Runtime Insight:</b> {curr.insight}
+        <b>Runtime Insight:</b> {curr.insight}
       </div>
     </div>
   );
@@ -320,13 +320,13 @@ True * 50                   # 50
 Because `True` is an instance of `int`, checking `isinstance(val, int)` before `isinstance(val, bool)` will falsely intercept booleans:
 
 ```python
-# ❌ BUG: True matches the int check!
+# BUG: True matches the int check!
 if isinstance(val, int):
     print("Number")
 elif isinstance(val, bool): # Never reached!
     print("Flag")
 
-# ✅ FIX: Always check bool first
+# FIX: Always check bool first
 if isinstance(val, bool):
     print("Flag")
 elif isinstance(val, int):
@@ -410,40 +410,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 7. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Lowercase Booleans" default>
+  <TabItem value="m1" label="1. Lowercase Booleans" default>
     <br/>
     
     *   **The Misconception:** *"In Python, booleans can be typed as `true` or `false` like in JavaScript."*
-    *   **❌ Wrong Thinking:** Typing `flag = true`.
-    *   **✅ The Right Principle:** Python keywords are case-sensitive. `true` raises a `NameError: name 'true' is not defined`. Always capitalize: `True` and `False`.
+    *   **Wrong Thinking:** Typing `flag = true`.
+    *   **The Right Principle:** Python keywords are case-sensitive. `true` raises a `NameError: name 'true' is not defined`. Always capitalize: `True` and `False`.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Accidentally Quoting Numbers">
+  <TabItem value="m2" label="2. Accidentally Quoting Numbers">
     <br/>
     
     *   **The Misconception:** *"A number is a number regardless of whether it has quotes."*
-    *   **❌ Wrong Thinking:** `val = "100"` followed by arithmetic `val * 2`.
-    *   **✅ The Right Principle:** Quotes create a `str`. `"100" * 2` performs sequence repetition resulting in `"100100"`. Remove quotes for mathematical numbers (`val = 100`).
+    *   **Wrong Thinking:** `val = "100"` followed by arithmetic `val * 2`.
+    *   **The Right Principle:** Quotes create a `str`. `"100" * 2` performs sequence repetition resulting in `"100100"`. Remove quotes for mathematical numbers (`val = 100`).
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Forgetting input() Returns String">
+  <TabItem value="m3" label="3. Forgetting input() Returns String">
     <br/>
     
     *   **The Misconception:** *"If a user types 25 into `input()`, Python stores it as an integer."*
-    *   **❌ Wrong Thinking:** `age = input(); age + 5` raises `TypeError: can only concatenate str to str`.
-    *   **✅ The Right Principle:** `input()` **always** returns a `str`. You must explicitly convert it: `age = int(input())`.
+    *   **Wrong Thinking:** `age = input(); age + 5` raises `TypeError: can only concatenate str to str`.
+    *   **The Right Principle:** `input()` **always** returns a `str`. You must explicitly convert it: `age = int(input())`.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Believing int() Rounds Numbers">
+  <TabItem value="m4" label="4. Believing int() Rounds Numbers">
     <br/>
     
     *   **The Misconception:** *"Calling `int(15.75)` gives 16 because .75 is closer to 16."*
-    *   **❌ Wrong Thinking:** Treating `int()` as a rounding function.
-    *   **✅ The Right Principle:** `int()` completely discards the fractional part (truncates toward zero). To round, use `round(15.75)`.
+    *   **Wrong Thinking:** Treating `int()` as a rounding function.
+    *   **The Right Principle:** `int()` completely discards the fractional part (truncates toward zero). To round, use `round(15.75)`.
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Assuming bool('False') is False">
+  <TabItem value="m5" label="5. Assuming bool('False') is False">
     <br/>
     
     *   **The Misconception:** *"Converting the word 'False' to bool gives False."*
-    *   **❌ Wrong Thinking:** Expecting string semantic parsing from `bool()`.
-    *   **✅ The Right Principle:** In Python, `bool(s)` evaluates whether string `s` is non-empty. Because `"False"` contains 5 characters, `bool("False")` evaluates to `True`! Only `""` is `False`.
+    *   **Wrong Thinking:** Expecting string semantic parsing from `bool()`.
+    *   **The Right Principle:** In Python, `bool(s)` evaluates whether string `s` is non-empty. Because `"False"` contains 5 characters, `bool("False")` evaluates to `True`! Only `""` is `False`.
   </TabItem>
 </Tabs>
 
@@ -455,7 +455,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Primitive Types</h3>
+        <h3>Primitive Types</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -470,7 +470,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Runtime Inspection</h3>
+        <h3>Runtime Inspection</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -488,15 +488,15 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🏷️ Values carry types:** Variables are pointers to objects in memory; dynamic re-assignment changes which object the variable points to.
-*   **⚖️ Prefer isinstance():** Use `isinstance(x, (int, float))` for robust numerical validation.
-*   **🩺 Falsy check:** Only $0, 0.0, "", [], {}, None,$ and $False$ are falsy; all other values evaluate to `True`.
+*   **Values carry types:** Variables are pointers to objects in memory; dynamic re-assignment changes which object the variable points to.
+*   **Prefer isinstance():** Use `isinstance(x, (int, float))` for robust numerical validation.
+*   **Falsy check:** Only $0, 0.0, "", [], {}, None,$ and $False$ are falsy; all other values evaluate to `True`.
 
 :::
 
-**Next Section:** [Variables and Naming](./02-variables-and-naming.md) - exploring namespace scopes, reference assignment, and PEP 8 naming conventions.
+**Next Section:** [Variables and Naming](./02-variables-and-naming.mdx) - exploring namespace scopes, reference assignment, and PEP 8 naming conventions.
 
 ---
 
@@ -510,16 +510,16 @@ export const TypeQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Dynamic Typing Trap</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: The Dynamic Typing Trap</h4>
       <p style={{ margin: '0 0 15px 0' }}>Consider this Python snippet: <code>x = "20"; print(x * 3)</code>. What is printed, and why?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>60 (Integer multiplication)</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>'202020' (Sequence repetition on string)</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>TypeError: Cannot multiply str and int</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. x is enclosed in quotes, so it is a string ('str'), not an integer! Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! In Python, multiplying a string by an integer (str * int) executes sequence repetition. "20" * 3 repeats the text three times, producing '202020'. To perform mathematical arithmetic, you must convert it first: int(x) * 3.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Multiplying str by int is completely valid in Python (it repeats the string). TypeError only occurs when adding str and int (e.g. "20" + 3). Try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. x is enclosed in quotes, so it is a string ('str'), not an integer! Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! In Python, multiplying a string by an integer (str * int) executes sequence repetition. "20" * 3 repeats the text three times, producing '202020'. To perform mathematical arithmetic, you must convert it first: int(x) * 3.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Multiplying str by int is completely valid in Python (it repeats the string). TypeError only occurs when adding str and int (e.g. "20" + 3). Try again!</p>}
     </div>
   );
 };
@@ -529,7 +529,7 @@ export const TypeQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why does Python evaluate `0.1 + 0.2 == 0.3` as False?</b></summary>
+  <summary><b>1. [THEORY] Why does Python evaluate `0.1 + 0.2 == 0.3` as False?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -543,7 +543,7 @@ export const TypeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [THEORY] Why does `isinstance(True, int)` evaluate to True, but `type(True) == int` evaluates to False?</b></summary>
+  <summary><b>2. [THEORY] Why does `isinstance(True, int)` evaluate to True, but `type(True) == int` evaluates to False?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -554,7 +554,7 @@ export const TypeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [PRACTICE] Why does `int("15.75")` raise a ValueError, and how do you fix it?</b></summary>
+  <summary><b>3. [PRACTICE] Why does `int("15.75")` raise a ValueError, and how do you fix it?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -567,7 +567,7 @@ export const TypeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [ANALYZE] What is printed by `print(bool("False"))` and `print(bool(""))`?</b></summary>
+  <summary><b>4. [ANALYZE] What is printed by `print(bool("False"))` and `print(bool(""))`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -578,7 +578,7 @@ export const TypeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] What does it mean that Python is dynamically typed?</b></summary>
+  <summary><b>5. [THEORY] What does it mean that Python is dynamically typed?</b></summary>
   <div className="answer-content">
     <br/>
     

@@ -108,7 +108,7 @@ The last column is **`2.00000000` on every row**. The `1/2n` cost at `α = 0.2` 
 
 **`α = 0.1` in one source is not `α = 0.1` in another**
 
-Halving the cost is arithmetically identical to halving the learning rate. So a learning rate copied from a source that uses the `1/2` convention into code that doesn't will be **twice as large as intended** — which, as the [next page](./03-the-learning-rate.md#the-divergence-threshold-is-a-computable-number) shows, is exactly the size of mistake that turns a working setting into a diverging one.
+Halving the cost is arithmetically identical to halving the learning rate. So a learning rate copied from a source that uses the `1/2` convention into code that doesn't will be **twice as large as intended** — which, as the [next page](./03-the-learning-rate.mdx#the-divergence-threshold-is-a-computable-number) shows, is exactly the size of mistake that turns a working setting into a diverging one.
 
 Before reusing anyone's `α`, check whether their cost has the `1/2`. These notes use `J = (1/n)Σ(·)²` throughout, matching the [MSE definition](../03-linear-regression/01-simple-linear-regression.mdx#how-wrong-is-it-the-five-error-measures) used for the error measures.
 
@@ -118,7 +118,7 @@ Before reusing anyone's `α`, check whether their cost has the `1/2`. These note
 
 <span id="worked-all-the-way-through"></span>
 
-## 🛠️ The Gradient Descent Workbench
+## The Gradient Descent Workbench
 
 "The gradient descent curve" refers to two completely different plots. Drag the slider below to step through a gradient descent run and watch both curves update synchronously: 
 
@@ -162,7 +162,7 @@ export const GradientDescentWorkbench = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>📊 Double-View Gradient Descent Workbench</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Double-View Gradient Descent Workbench</h4>
       <p style={{ fontSize: '13px', margin: '0 0 15px 0', opacity: 0.9 }}>Slide to step through 50 iterations. Watch the cost descent curve on the left and the fitted line pivot on the right.</p>
 
       <div style={{ marginBottom: '15px' }}>
@@ -326,7 +326,7 @@ Textbook illustrations use this case because it draws nicely. Real cost surfaces
 
 Descent lands on `0.18502019`. Ascent reaches **`6.33e+07`** at iteration 40 and is still accelerating — a factor of over **340 million** between two runs whose code differs by one character.
 
-The asymmetry is worth naming. Descent has a floor: the cost cannot go below the minimum, so the run converges. Ascent has no ceiling — the paraboloid opens upward forever — so it accelerates without limit. This is the same runaway the next page produces from an `α` that is merely [too large](./03-the-learning-rate.md#four-regimes-and-what-each-looks-like), and it is why an exploding cost is the easiest of all optimiser failures to spot.
+The asymmetry is worth naming. Descent has a floor: the cost cannot go below the minimum, so the run converges. Ascent has no ceiling — the paraboloid opens upward forever — so it accelerates without limit. This is the same runaway the next page produces from an `α` that is merely [too large](./03-the-learning-rate.mdx#four-regimes-and-what-each-looks-like), and it is why an exploding cost is the easiest of all optimiser failures to spot.
 
 ---
 
@@ -361,7 +361,7 @@ The `shrink` column is `0.8000` every single iteration — the same fraction rem
 
 **The plain version.** Call the distance still left to travel your *remaining error*. Each step removes a fixed *percentage* of it — not a fixed amount. Here it removes 20%, leaving `0.8` of what was there before, every single step. That is why the run gets close quickly and then crawls: 20% of a large gap is a big move, 20% of a tiny gap is a tiny move.
 
-Where does the `0.8` come from? A step multiplies your remaining error by `(1 − α·λ)`: the learning rate times the curvature, subtracted from one. With `α = 0.1` and curvature `λ = 2`, that is `1 − 0.1 × 2 = 0.8`. Larger `α` or steeper curvature means more of the error removed per step — up to a point, which is the whole subject of the [next page](./03-the-learning-rate.md).
+Where does the `0.8` come from? A step multiplies your remaining error by `(1 − α·λ)`: the learning rate times the curvature, subtracted from one. With `α = 0.1` and curvature `λ = 2`, that is `1 − 0.1 × 2 = 0.8`. Larger `α` or steeper curvature means more of the error removed per step — up to a point, which is the whole subject of the [next page](./03-the-learning-rate.mdx).
 
 **In symbols**, writing `θ*` for the optimum so `θₜ − θ*` is the remaining error:
 
@@ -416,7 +416,7 @@ Notice also what happened to `2/lambda_max`, the largest usable learning rate: `
 
 ---
 
-## 🛠️ The Elliptical Ravine & Conditioning (Kappa) Sandbox
+## The Elliptical Ravine & Conditioning (Kappa) Sandbox
 
 Run live gradient descent simulations on a quadratic cost surface in your browser. Choose a conditioning multiplier to squash the bowl into a narrow ravine, and adjust the learning rate $\alpha$ to watch how the descent path zigzags, overshoots, or explodes!
 
@@ -455,7 +455,7 @@ export const ContourConditioningSandbox = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🔌 Elliptical Contour & Zigzag Simulator</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Elliptical Contour & Zigzag Simulator</h4>
       <p style={{ fontSize: '13px', margin: '0 0 15px 0', opacity: 0.9 }}>Adjust the condition number (kappa) to squash the cost surface. See why the gradient-descent ball zigzags on a ravine.</p>
 
       <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', marginBottom: '15px' }}>
@@ -519,7 +519,7 @@ export const ContourConditioningSandbox = () => {
 
             {isExploded && (
               <g>
-                <text x="100" y="75" textAnchor="middle" fill="#e53e3e" fontSize="11" fontWeight="bold">💥 RUN DIVERGED / EXPLODED!</text>
+                <text x="100" y="75" textAnchor="middle" fill="#e53e3e" fontSize="11" fontWeight="bold">RUN DIVERGED / EXPLODED!</text>
                 <text x="100" y="90" textAnchor="middle" fill="#e53e3e" fontSize="9">Learning rate α exceeded divergence threshold (2/λ_max)</text>
               </g>
             )}
@@ -531,15 +531,15 @@ export const ContourConditioningSandbox = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center', fontSize: '13px' }}>
           {isExploded ? (
             <div style={{ padding: '12px', borderLeft: '4px solid #e53e3e', backgroundColor: 'rgba(229, 62, 62, 0.05)', fontSize: '12px' }}>
-              <b>💥 Unstable Learning Rate (α = {lr.toFixed(2)}):</b> The step size exceeds the stable bounding curvature limit ($2/\lambda_{max} = 2.0$). Steps grow increasingly larger on each iteration, sending the cost to infinity.
+              <b>Unstable Learning Rate (α = {lr.toFixed(2)}):</b> The step size exceeds the stable bounding curvature limit ($2/\lambda_{max} = 2.0$). Steps grow increasingly larger on each iteration, sending the cost to infinity.
             </div>
           ) : kappa === 1.0 ? (
             <div style={{ padding: '12px', borderLeft: '4px solid #38a169', backgroundColor: 'rgba(56, 161, 105, 0.05)', fontSize: '12px' }}>
-              <b>🟢 Round Bowl (κ = 1.0):</b> Contours are circular. The gradient points directly towards the minimum. Learning is extremely rapid and reaches the center in a single straight path.
+              <b>Round Bowl (κ = 1.0):</b> Contours are circular. The gradient points directly towards the minimum. Learning is extremely rapid and reaches the center in a single straight path.
             </div>
           ) : (
             <div style={{ padding: '12px', borderLeft: '4px solid #dd6b20', backgroundColor: 'rgba(221, 107, 32, 0.05)', fontSize: '12px' }}>
-              <b>⚠️ Elongated Ravine (κ = {kappa.toFixed(1)}):</b> Contours are highly squashed. The gradient points mostly *across* the valley walls. The path <b>zigzags wildly</b>, wasting immense steps overshooting the side walls instead of flowing down the floor!
+              <b>Elongated Ravine (κ = {kappa.toFixed(1)}):</b> Contours are highly squashed. The gradient points mostly *across* the valley walls. The path <b>zigzags wildly</b>, wasting immense steps overshooting the side walls instead of flowing down the floor!
             </div>
           )}
         </div>
@@ -609,7 +609,7 @@ The [normal equation](../03-linear-regression/03-the-matrix-formulation.mdx#the-
 - `κ = 1.00` is what **standardisation** produced, not a general truth. Rescaling one feature drove `κ` to **`929437.6`**, shrank the usable `α` from **`0.82` to `1.27e-06`**, and left the run unfinished after **200,000** iterations
 - **Iterations scale linearly with `κ`**: a 100× rise in `κ` (`92.9 → 9294.4`) gave a 100.9× rise in iterations (`413 → 41674`)
 
-**Next in this section:** [The Learning Rate](./03-the-learning-rate.md) — the one knob, its four failure modes, and the fact that the boundary between "works" and "explodes" is a number you can compute from `λ_max` before running anything
+**Next in this section:** [The Learning Rate](./03-the-learning-rate.mdx) — the one knob, its four failure modes, and the fact that the boundary between "works" and "explodes" is a number you can compute from `λ_max` before running anything
 
 **See also:** [Loss Functions](./01-loss-functions.mdx#the-loss-decides-whether-the-problem-is-solvable-at-all) for why a differentiable loss is a precondition for any of this · [The Matrix Formulation](../03-linear-regression/03-the-matrix-formulation.mdx#why-anyone-bothers-with-gradient-descent) for when to prefer the closed form · [Feature Scaling and Transformation](../02-data-preprocessing/04-feature-scaling-and-transformation.mdx#standardisation-z-score-normalisation) for the transform that turned the ravine back into a bowl
 
@@ -643,33 +643,33 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 ## 3. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. One Unified Curve" default>
+  <TabItem value="m1" label="1. One Unified Curve" default>
     <br/>
     
     *   **The Misconception:** *"The term 'gradient descent curve' refers to a single, unique plot."*
-    *   **❌ Wrong Thinking:** Confusing the Cost Descent Curve ($J$ dropping over iterations) with the parameter-space fitted-line movement.
-    *   **✅ The Right Principle:** The term refers to **two different plots**. Cost curves are for debugging the optimizer (*is cost decreasing?*). Parameter lines are for explaining the model (*what has it learned?*). Never present one to answer a question about the other.
+    *   **Wrong Thinking:** Confusing the Cost Descent Curve ($J$ dropping over iterations) with the parameter-space fitted-line movement.
+    *   **The Right Principle:** The term refers to **two different plots**. Cost curves are for debugging the optimizer (*is cost decreasing?*). Parameter lines are for explaining the model (*what has it learned?*). Never present one to answer a question about the other.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Programmed Braking">
+  <TabItem value="m2" label="2. Programmed Braking">
     <br/>
     
     *   **The Misconception:** *"The algorithm requires an explicit decay schedule to shrink step sizes as it approaches the minimum."*
-    *   **❌ Wrong Thinking:** Adding manual learning rate decay because you expect the step size to stay constant if you don't.
-    *   **✅ The Right Principle:** Braking is free. Step length $\lVert \Delta\theta \rVert$ is exactly $\alpha \lVert \nabla J \rVert$ on every iteration. As the model approaches the minimum, the loss surface flattens, the gradient length $\lVert \nabla J \rVert$ shrinks, and step size contracts in exact proportion.
+    *   **Wrong Thinking:** Adding manual learning rate decay because you expect the step size to stay constant if you don't.
+    *   **The Right Principle:** Braking is free. Step length $\lVert \Delta\theta \rVert$ is exactly $\alpha \lVert \nabla J \rVert$ on every iteration. As the model approaches the minimum, the loss surface flattens, the gradient length $\lVert \nabla J \rVert$ shrinks, and step size contracts in exact proportion.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Automatic Convexity">
+  <TabItem value="m3" label="3. Automatic Convexity">
     <br/>
     
     *   **The Misconception:** *"Any loss function on any model will yield a convex, bowl-shaped optimization surface."*
-    *   **❌ Wrong Thinking:** Assuming gradient descent is guaranteed to find the absolute global minimum for any model-loss combination.
-    *   **✅ The Right Principle:** Convexity is a property of the **model-and-loss pair**, not optimization itself. Standard MSE on linear regression is convex ($0$ chord violations in $2000$ checks), but the exact same squared error applied to a sigmoid is highly non-convex ($957$ violations out of $2000$).
+    *   **Wrong Thinking:** Assuming gradient descent is guaranteed to find the absolute global minimum for any model-loss combination.
+    *   **The Right Principle:** Convexity is a property of the **model-and-loss pair**, not optimization itself. Standard MSE on linear regression is convex ($0$ chord violations in $2000$ checks), but the exact same squared error applied to a sigmoid is highly non-convex ($957$ violations out of $2000$).
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Condition Number Immunity">
+  <TabItem value="m4" label="4. Condition Number Immunity">
     <br/>
     
     *   **The Misconception:** *"Skipping feature scaling makes my gradient descent slightly less accurate."*
-    *   **❌ Wrong Thinking:** Ignoring scaling because you expect the optimizer to eventually find the minimum anyway.
-    *   **✅ The Right Principle:** Unscaled features stretch circular bowls into narrow, deep ravines, blowing up the condition number $\kappa$. This makes gradient descent zigzag wildly, taking **41,674 iterations instead of 40** to converge, or failing to converge entirely. Always scale your features.
+    *   **Wrong Thinking:** Ignoring scaling because you expect the optimizer to eventually find the minimum anyway.
+    *   **The Right Principle:** Unscaled features stretch circular bowls into narrow, deep ravines, blowing up the condition number $\kappa$. This makes gradient descent zigzag wildly, taking **41,674 iterations instead of 40** to converge, or failing to converge entirely. Always scale your features.
   </TabItem>
 </Tabs>
 
@@ -681,7 +681,7 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Core Theory</h3>
+        <h3>Core Theory</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -696,7 +696,7 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Engineering Realities</h3>
+        <h3>Engineering Realities</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -714,15 +714,15 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 
 :::info 
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🔒 Exact Convergence:** Gradient descent converges exactly to the OLS analytical optimum (matching all five decimals), proving iterative does not mean approximate.
-*   **⚖️ Matrix Immunity:** The closed-form Normal Equation is completely immune to conditioning ($\kappa$ does not appear in it), whereas gradient descent is severely paralyzed by it.
-*   **🛠️ Stopping Rules:** Cost $J$ flattens long before the gradient length $\lVert \nabla J \rVert$ reaches 0, meaning cost-based stopping rules halt earlier than gradient-based ones.
+*   **Exact Convergence:** Gradient descent converges exactly to the OLS analytical optimum (matching all five decimals), proving iterative does not mean approximate.
+*   **Matrix Immunity:** The closed-form Normal Equation is completely immune to conditioning ($\kappa$ does not appear in it), whereas gradient descent is severely paralyzed by it.
+*   **Stopping Rules:** Cost $J$ flattens long before the gradient length $\lVert \nabla J \rVert$ reaches 0, meaning cost-based stopping rules halt earlier than gradient-based ones.
 
 :::
 
-**Next in this section:** [The Learning Rate](./03-the-learning-rate.md) — the one knob, its four failure modes, and how the boundary between "works" and "explodes" is a number you can compute before running anything.
+**Next in this section:** [The Learning Rate](./03-the-learning-rate.mdx) — the one knob, its four failure modes, and how the boundary between "works" and "explodes" is a number you can compute before running anything.
 
 ---
 
@@ -736,16 +736,16 @@ export const PracticeQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Step-Shrinkage Mechanism</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: The Step-Shrinkage Mechanism</h4>
       <p style={{ margin: '0 0 15px 0' }}>A student claims that because the learning rate $\alpha$ is held constant at 0.10, the step size taken on each iteration must also remain completely constant unless a decay schedule is programmed. Is this claim valid?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Yes, step length remains constant</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>No, step size shrinks naturally because gradient length shrinks</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Yes, unless we utilize an adaptive SGD variant</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Step length does NOT remain constant! Look at the first columns of section 5: step length contractions occur on every row. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! The step length $\lVert \Delta\theta \rVert$ is defined exactly as $\alpha \lVert \nabla J \rVert$. As the model approaches the global minimum, the loss surface flattens, the gradient length $\lVert \nabla J \rVert$ collapses, and step size contracts in exact proportion—without any decay programmed!</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. This occurs naturally in standard gradient descent even without adaptive optimizers. Re-read the choices and try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Step length does NOT remain constant! Look at the first columns of section 5: step length contractions occur on every row. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! The step length $\lVert \Delta\theta \rVert$ is defined exactly as $\alpha \lVert \nabla J \rVert$. As the model approaches the global minimum, the loss surface flattens, the gradient length $\lVert \nabla J \rVert$ collapses, and step size contracts in exact proportion—without any decay programmed!</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. This occurs naturally in standard gradient descent even without adaptive optimizers. Re-read the choices and try again!</p>}
     </div>
   );
 };
@@ -755,7 +755,7 @@ export const PracticeQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why does the 1/2 convention in some cost functions make learning rates non-portable?</b></summary>
+  <summary><b>1. [THEORY] Why does the 1/2 convention in some cost functions make learning rates non-portable?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -766,7 +766,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [ANALYZE] Why do cost $J(\theta)$ and gradient length $\lVert \nabla J \rVert$ tell different stories, and what does this cost you in a stopping rule?</b></summary>
+  <summary><b>2. [ANALYZE] Why do cost $J(\theta)$ and gradient length $\lVert \nabla J \rVert$ tell different stories, and what does this cost you in a stopping rule?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -777,7 +777,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [THEORY] Prove why standard MSE on a linear model is guaranteed to be convex for any dataset.</b></summary>
+  <summary><b>3. [THEORY] Prove why standard MSE on a linear model is guaranteed to be convex for any dataset.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -790,7 +790,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [ANALYZE] Why does gradient ascent accelerate without limit while gradient descent converges?</b></summary>
+  <summary><b>4. [ANALYZE] Why does gradient ascent accelerate without limit while gradient descent converges?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -800,7 +800,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [ANALYZE] Geometrically, why does feature scaling decide whether gradient descent takes 40 steps or never converges?</b></summary>
+  <summary><b>5. [ANALYZE] Geometrically, why does feature scaling decide whether gradient descent takes 40 steps or never converges?</b></summary>
   <div className="answer-content">
     <br/>
     

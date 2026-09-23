@@ -54,7 +54,7 @@ Hard (18-22 problems, 19-23%):
 
 ## How to Use These Problems
 
-### 🎯 Study Strategy (3 Phases)
+### Study Strategy (3 Phases)
 
 **Phase 1: Attempt (No peeking at solutions)**
 1. Pick a problem at your current difficulty level
@@ -78,7 +78,7 @@ Hard (18-22 problems, 19-23%):
 
 ## Problem Organization
 
-### 📚 [Module 1 Problems](01-module-1-problems.md) (30 problems, 4-5 hours)
+### [Module 1 Problems](01-module-1-problems.md) (30 problems, 4-5 hours)
 
 **Linear Regression (8 problems)**
 - Problem 1.1: Calculate slope and intercept
@@ -109,7 +109,7 @@ Hard (18-22 problems, 19-23%):
 
 ---
 
-### 🎯 [Module 2 Problems](02-module-2-problems.md) (40 problems, 5-6 hours)
+### [Module 2 Problems](02-module-2-problems.md) (40 problems, 5-6 hours)
 
 **Cross-Validation (8 problems)**
 - Problem 1.1-1.3: K-fold CV calculations
@@ -146,7 +146,7 @@ Hard (18-22 problems, 19-23%):
 
 ---
 
-### 🌟 [Mixed & Real-World Problems](03-mixed-problems.md) (25 problems, 3-4 hours)
+### [Mixed & Real-World Problems](03-mixed-problems.md) (25 problems, 3-4 hours)
 
 **Real-World Scenarios (10 problems)**
 - Customer Churn Prediction (Accuracy vs Recall tradeoff)
@@ -175,7 +175,7 @@ Hard (18-22 problems, 19-23%):
 
 ## Solutions Guide
 
-### 📖 [Complete Solutions](04-solutions-guide.md)
+### [Complete Solutions](04-solutions-guide.md)
 
 All solutions include:
 - ✓ Step-by-step calculations
@@ -237,25 +237,25 @@ Use this to track your progress:
 
 ## Tips for Success
 
-### 📌 Before Starting
+### Before Starting
 1. **Review the concept page** relevant to the problem
 2. **Note the difficulty level** - Easy first, progress to Hard
 3. **Set a timer** - Use estimated time as guide
 4. **Gather materials** - Paper, pen, calculator if needed
 
-### 💡 While Solving
+### While Solving
 1. **Show all steps** - Even if you just want the answer
 2. **State assumptions** - "Assuming..." when data is ambiguous
 3. **Use proper notation** - Match textbook/course style
 4. **Check reasonableness** - Does answer make sense?
 
-### ✅ When Checking
+### When Checking
 1. **Compare methodology** - Did you follow right approach?
 2. **Check arithmetic** - Even small errors matter
 3. **Read explanation** - Learn WHY answer is right
 4. **Review common mistakes** - Don't repeat them!
 
-### 📚 For Weak Areas
+### For Weak Areas
 1. **Go back to concept page** - Reread theory
 2. **Try similar problem** - Another angle on same concept
 3. **Change numbers** - Create your own variation
@@ -286,20 +286,20 @@ Use this to track your progress:
 
 ## Recommended Study Paths
 
-### 🎯 Path 1: Concept Mastery (4-5 weeks)
+### Path 1: Concept Mastery (4-5 weeks)
 1. Week 1: Module 1 Easy problems (2-3 hours)
 2. Week 2: Module 1 Medium problems (3-4 hours)
 3. Week 3: Module 2 Easy/Medium problems (3-4 hours)
 4. Week 4: Module 2 Medium problems (3-4 hours)
 5. Week 5: Hard problems + Real-world (4-5 hours)
 
-### 🎯 Path 2: Intensive Prep (1-2 weeks)
+### Path 2: Intensive Prep (1-2 weeks)
 1. Day 1-2: Module 1 all difficulty (5-6 hours)
 2. Day 3-4: Module 2 all difficulty (6-7 hours)
 3. Day 5-7: Hard problems + Real-world (6-8 hours)
 4. Day 8-10: Timed practice + review (8-10 hours)
 
-### 🎯 Path 3: Quick Review (1 week)
+### Path 3: Quick Review (1 week)
 1. Easy problems from all topics (3-4 hours)
 2. Medium problems from weak areas (3-4 hours)
 3. Hard + Real-world problems (4-5 hours)
@@ -364,5 +364,5 @@ Each problem includes:
 
 **Total Practice:** 95+ problems, 13+ hours of study material, complete solutions
 
-Good luck! 🚀
+Good luck!
 

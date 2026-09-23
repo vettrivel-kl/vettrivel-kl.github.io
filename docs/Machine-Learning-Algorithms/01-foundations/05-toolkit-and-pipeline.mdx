@@ -160,18 +160,18 @@ export const PipelineLeakageQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Preventing Data Leakage</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Preventing Data Leakage</h4>
       <p style={{ margin: '0 0 15px 0' }}><b>Scenario:</b> You want to train a model predicting customer lifetime value. You have a preprocessing step that centers the feature values (subtracts the mean). What is the correct sequence of calls to avoid data leakage?</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <button onClick={() => setSelected('wrong')} style={{ padding: '10px', textAlign: 'left', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'wrong' ? '#e53e3e' : 'transparent', color: selected === 'wrong' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>
-          ❌ Option A: Fit the scaler on all data, split the dataset, then fit the model.
+          Option A: Fit the scaler on all data, split the dataset, then fit the model.
         </button>
         <button onClick={() => setSelected('right')} style={{ padding: '10px', textAlign: 'left', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'right' ? '#38a169' : 'transparent', color: selected === 'right' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>
-          ✅ Option B: Split the dataset first, fit the scaler ONLY on X_train, transform X_train and X_test separately, then fit the model.
+          Option B: Split the dataset first, fit the scaler ONLY on X_train, transform X_train and X_test separately, then fit the model.
         </button>
       </div>
-      {selected === 'wrong' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Fitting the scaler on all data before splitting allows testing distribution bounds (means and deviations) to leak into the training features. This inflates testing scores artificially. Try again!</p>}
-      {selected === 'right' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Splitting first ensures that the scaling factors (the training mean and standard deviation) are learned strictly from the training dataset. We then transform the test set using those exact same factors without ever looking at the test set's mean. This prevents data leakage!</p>}
+      {selected === 'wrong' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Fitting the scaler on all data before splitting allows testing distribution bounds (means and deviations) to leak into the training features. This inflates testing scores artificially. Try again!</p>}
+      {selected === 'right' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! Splitting first ensures that the scaling factors (the training mean and standard deviation) are learned strictly from the training dataset. We then transform the test set using those exact same factors without ever looking at the test set's mean. This prevents data leakage!</p>}
     </div>
   );
 };
@@ -241,26 +241,26 @@ scaler that produced that scaling. Save them together, or save a `Pipeline` that
 Here are the most common conceptual pitfalls when setting up your machine learning pipelines, compared with the correct engineering principles.
 
 <Tabs>
-  <TabItem value="mistake1" label="🚨 Mistake 1: Pre-split Scaling" default>
+  <TabItem value="mistake1" label="Mistake 1: Pre-split Scaling" default>
     <br/>
 
     *   **The Pitfall:** Fitting your scaling or encoding estimators on the full dataset before performing your partition.
-    *   **❌ Wrong Thinking:** `scaler.fit(X)`
-    *   **✅ The Right Principle:** Fit strictly on the training partition: `scaler.fit(X_train)`. Fitting before splitting introduces **data leakage**, exposing testing statistics to the training pipeline.
+    *   **Wrong Thinking:** `scaler.fit(X)`
+    *   **The Right Principle:** Fit strictly on the training partition: `scaler.fit(X_train)`. Fitting before splitting introduces **data leakage**, exposing testing statistics to the training pipeline.
   </TabItem>
-  <TabItem value="mistake2" label="🚨 Mistake 2: Fitting on Test Data">
+  <TabItem value="mistake2" label="Mistake 2: Fitting on Test Data">
     <br/>
 
     *   **The Pitfall:** Overwriting your scaler coefficients by fitting again on testing rows.
-    *   **❌ Wrong Thinking:** `scaler.fit(X_test)` or `scaler.fit_transform(X_test)`
-    *   **✅ The Right Principle:** Apply training coefficients strictly: `scaler.transform(X_test)`. The test set must remain completely unseen, mimicking future prediction requests.
+    *   **Wrong Thinking:** `scaler.fit(X_test)` or `scaler.fit_transform(X_test)`
+    *   **The Right Principle:** Apply training coefficients strictly: `scaler.transform(X_test)`. The test set must remain completely unseen, mimicking future prediction requests.
   </TabItem>
-  <TabItem value="mistake3" label="🚨 Mistake 3: Monolithic Model Exports">
+  <TabItem value="mistake3" label="Mistake 3: Monolithic Model Exports">
     <br/>
 
     *   **The Pitfall:** Exporting and deploying a serialized model object without saving its associated preprocessing estimators.
-    *   **❌ Wrong Thinking:** `joblib.dump(model, "model.joblib")`
-    *   **✅ The Right Principle:** Export a combined `Pipeline` object containing both transformers and estimators, or serialize them as a dictionary. A model expecting scaled features will fail silently on raw deployment values.
+    *   **Wrong Thinking:** `joblib.dump(model, "model.joblib")`
+    *   **The Right Principle:** Export a combined `Pipeline` object containing both transformers and estimators, or serialize them as a dictionary. A model expecting scaled features will fail silently on raw deployment values.
   </TabItem>
 </Tabs>
 
@@ -272,7 +272,7 @@ Here are the most common conceptual pitfalls when setting up your machine learni
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>📦 The Data Stack Layer</h3>
+        <h3>The Data Stack Layer</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -286,7 +286,7 @@ Here are the most common conceptual pitfalls when setting up your machine learni
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Model & Pipeline layer</h3>
+        <h3>Model & Pipeline layer</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -303,12 +303,12 @@ Here are the most common conceptual pitfalls when setting up your machine learni
 
 :::info 
 
-**📌 Key Takeaways: Toolkit & Pipeline**
+**Key Takeaways: Toolkit & Pipeline**
 
-*   **⚡ NumPy Underpins All:** Dataframes and scikit-learn models are simply high-level layers on top of contiguous NumPy array vectors. Shape errors are usually low-level NumPy array issues.
-*   **🔌 Consistent API Contract:** Every scikit-learn object operates on four main methods: `.fit()`, `.predict()`, `.transform()`, and `.score()`.
-*   **⚖️ Scalers are Estimators too:** A StandardScaler learns mean and deviation vectors on `.fit()`. Fitting it on testing partitions or prior to splitting constitutes structural **Data Leakage**.
-*   **📐 Export Preprocessing:** Always save your scaler parameters alongside your model weights using a unified `Pipeline` to prevent dimensional format mismatches in live APIs.
+*   **NumPy Underpins All:** Dataframes and scikit-learn models are simply high-level layers on top of contiguous NumPy array vectors. Shape errors are usually low-level NumPy array issues.
+*   **Consistent API Contract:** Every scikit-learn object operates on four main methods: `.fit()`, `.predict()`, `.transform()`, and `.score()`.
+*   **Scalers are Estimators too:** A StandardScaler learns mean and deviation vectors on `.fit()`. Fitting it on testing partitions or prior to splitting constitutes structural **Data Leakage**.
+*   **Export Preprocessing:** Always save your scaler parameters alongside your model weights using a unified `Pipeline` to prevent dimensional format mismatches in live APIs.
 
 :::
 
@@ -342,7 +342,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 ### The libraries
 
 <details>
-  <summary>❓ <b>L1. [THEORY] Name the five libraries and state, in one line each, what they provide.</b></summary>
+  <summary><b>L1. [THEORY] Name the five libraries and state, in one line each, what they provide.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -355,7 +355,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>L2. [THEORY] Which library sits at the bottom of the stack, and why do shape errors often mention it even when you never imported it?</b></summary>
+  <summary><b>L2. [THEORY] Which library sits at the bottom of the stack, and why do shape errors often mention it even when you never imported it?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -365,7 +365,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>L3. [THEORY] Give five properties of scikit-learn.</b></summary>
+  <summary><b>L3. [THEORY] Give five properties of scikit-learn.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -378,7 +378,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>L4. [THEORY] You will rarely call SciPy directly. Why does it still matter?</b></summary>
+  <summary><b>L4. [THEORY] You will rarely call SciPy directly. Why does it still matter?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -387,7 +387,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>L5. [ANALYZE] Python is a general-purpose language, not a mathematical one. Explain why it became the preferred language anyway.</b></summary>
+  <summary><b>L5. [ANALYZE] Python is a general-purpose language, not a mathematical one. Explain why it became the preferred language anyway.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -398,7 +398,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 ### The scikit-learn contract
 
 <details>
-  <summary>❓ <b>S1. [THEORY] Name the four core method names and say what each does.</b></summary>
+  <summary><b>S1. [THEORY] Name the four core method names and say what each does.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -410,7 +410,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>S2. [THEORY] Distinguish a transformer from an estimator by which methods each has. Give an example of both.</b></summary>
+  <summary><b>S2. [THEORY] Distinguish a transformer from an estimator by which methods each has. Give an example of both.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -420,7 +420,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>S3. [THEORY] What does `fit_transform` do that `transform` alone does not?</b></summary>
+  <summary><b>S3. [THEORY] What does `fit_transform` do that `transform` alone does not?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -429,7 +429,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>S4. [ANALYZE] Explain precisely what a `StandardScaler` learns during `fit`, and why fitting it on the whole dataset before splitting is an error. Would anything raise an exception?</b></summary>
+  <summary><b>S4. [ANALYZE] Explain precisely what a `StandardScaler` learns during `fit`, and why fitting it on the whole dataset before splitting is an error. Would anything raise an exception?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -440,7 +440,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>S5. [ANALYZE] Name the one benefit of `Pipeline` that matters most, and explain the mechanism.</b></summary>
+  <summary><b>S5. [ANALYZE] Name the one benefit of `Pipeline` that matters most, and explain the mechanism.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -452,7 +452,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 ### The seven steps
 
 <details>
-  <summary>❓ <b>P1. [THEORY] List the seven steps of the pipeline in order.</b></summary>
+  <summary><b>P1. [THEORY] List the seven steps of the pipeline in order.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -467,7 +467,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>P2. [THEORY] Which step performs the learning? What has been learned after step 3?</b></summary>
+  <summary><b>P2. [THEORY] Which step performs the learning? What has been learned after step 3?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -477,7 +477,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>P3. [THEORY] Which single step changes when you switch from logistic regression to a random forest? What does this tell you about the design of the library?</b></summary>
+  <summary><b>P3. [THEORY] Which single step changes when you switch from logistic regression to a random forest? What does this tell you about the design of the library?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -487,7 +487,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>P4. [ANALYZE] Why must step 2 come before step 4? State what becomes impossible if it doesn't.</b></summary>
+  <summary><b>P4. [ANALYZE] Why must step 2 come before step 4? State what becomes impossible if it doesn't.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -496,7 +496,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>P5. [ANALYZE] A colleague saves only the fitted model in step 7, not the scaler. Describe what happens when the model is loaded and used, and why nothing errors.</b></summary>
+  <summary><b>P5. [ANALYZE] A colleague saves only the fitted model in step 7, not the scaler. Describe what happens when the model is loaded and used, and why nothing errors.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -508,7 +508,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 ### Reading the output
 
 <details>
-  <summary>❓ <b>O1. [OUT] Step 4 reported `learned 12 coefficients + 3 intercepts`. The data has 4 features and 3 classes. Explain both numbers.</b></summary>
+  <summary><b>O1. [OUT] Step 4 reported `learned 12 coefficients + 3 intercepts`. The data has 4 features and 3 classes. Explain both numbers.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -518,7 +518,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>O2. [OUT] After scaling, the training mean printed as `1.39e-17` rather than `0`. Explain, and say what this implies about testing floats for equality.</b></summary>
+  <summary><b>O2. [OUT] After scaling, the training mean printed as `1.39e-17` rather than `0`. Explain, and say what this implies about testing floats for equality.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -528,7 +528,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>O3. [OUT] Step 7 printed `identical to before: True`. What exactly was compared, and why does it matter?</b></summary>
+  <summary><b>O3. [OUT] Step 7 printed `identical to before: True`. What exactly was compared, and why does it matter?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -538,7 +538,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>O4. [OUT] The explicit seven steps and the three-line `Pipeline` both produced `0.967`. What has been gained by using the `Pipeline`, given the accuracy is unchanged?</b></summary>
+  <summary><b>O4. [OUT] The explicit seven steps and the three-line `Pipeline` both produced `0.967`. What has been gained by using the `Pipeline`, given the accuracy is unchanged?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -547,7 +547,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>O5. [ANALYZE] Three algorithms scored `0.967` and a depth-1 decision tree scored `0.667`. Explain the tie and the tree structure.</b></summary>
+  <summary><b>O5. [ANALYZE] Three algorithms scored `0.967` and a depth-1 decision tree scored `0.667`. Explain the tie and the tree structure.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -561,7 +561,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 ### Applying it
 
 <details>
-  <summary>❓ <b>A1. [PROG] Write the seven steps for `load_wine` instead of `load_iris`, printing test accuracy.</b></summary>
+  <summary><b>A1. [PROG] Write the seven steps for `load_wine` instead of `load_iris`, printing test accuracy.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -599,7 +599,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>A2. [PROG] Build a `Pipeline` of `StandardScaler` and `KNeighborsClassifier`, fit it, and print both the training and test accuracy. Explain any gap.</b></summary>
+  <summary><b>A2. [PROG] Build a `Pipeline` of `StandardScaler` and `KNeighborsClassifier`, fit it, and print both the training and test accuracy. Explain any gap.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -628,7 +628,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>A3. [PROG] Save a fitted `Pipeline` with `joblib.dump`, reload it in a fresh variable, and assert the predictions are identical.</b></summary>
+  <summary><b>A3. [PROG] Save a fitted `Pipeline` with `joblib.dump`, reload it in a fresh variable, and assert the predictions are identical.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -660,7 +660,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>A4. [PROG] Deliberately introduce leakage: fit the scaler on all of `X` before splitting, and compare the resulting test accuracy with the correct version. Report both.</b></summary>
+  <summary><b>A4. [PROG] Deliberately introduce leakage: fit the scaler on all of `X` before splitting, and compare the resulting test accuracy with the correct version. Report both.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -695,7 +695,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>❓ <b>A5. [ANALYZE] You are handed a dataset and asked for a model by tomorrow. Write the seven steps as a checklist with the specific decision you must make at each one.</b></summary>
+  <summary><b>A5. [ANALYZE] You are handed a dataset and asked for a model by tomorrow. Write the seven steps as a checklist with the specific decision you must make at each one.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -712,7 +712,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 ### Quick self-check
 
 <details>
-  <summary>🧠 <b>1. Name the five libraries and one use for each.</b></summary>
+  <summary><b>1. Name the five libraries and one use for each.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -725,7 +725,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>🧠 <b>2. Which library is underneath all the others?</b></summary>
+  <summary><b>2. Which library is underneath all the others?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -734,7 +734,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>🧠 <b>3. What is a DataFrame, and which library provides it?</b></summary>
+  <summary><b>3. What is a DataFrame, and which library provides it?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -744,7 +744,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>🧠 <b>4. Which module of Matplotlib do you plot with?</b></summary>
+  <summary><b>4. Which module of Matplotlib do you plot with?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -753,7 +753,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>🧠 <b>5. Name the four scikit-learn method names.</b></summary>
+  <summary><b>5. Name the four scikit-learn method names.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -765,7 +765,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>🧠 <b>6. What is the difference between a transformer and an estimator?</b></summary>
+  <summary><b>6. What is the difference between a transformer and an estimator?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -775,7 +775,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>🧠 <b>7. On which data may you call `fit`?</b></summary>
+  <summary><b>7. On which data may you call `fit`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -784,7 +784,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>🧠 <b>8. What is data leakage, and does it raise an error?</b></summary>
+  <summary><b>8. What is data leakage, and does it raise an error?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -794,7 +794,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>🧠 <b>9. List the seven pipeline steps in order.</b></summary>
+  <summary><b>9. List the seven pipeline steps in order.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -803,7 +803,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>🧠 <b>10. Is anything trained after step 3?</b></summary>
+  <summary><b>10. Is anything trained after step 3?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -812,7 +812,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>🧠 <b>11. Which step changes when you swap the algorithm?</b></summary>
+  <summary><b>11. Which step changes when you swap the algorithm?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -821,7 +821,7 @@ Run the complete classical seven-step machine learning pipeline sequentially on 
 </details>
 
 <details>
-  <summary>🧠 <b>12. What must be saved in step 7 besides the model?</b></summary>
+  <summary><b>12. What must be saved in step 7 besides the model?</b></summary>
   <div className="answer-content">
     <br/>
     

@@ -108,7 +108,7 @@ export const DataSubtypeClassifier = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🧪 Feature Data Subtype Classifier</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Feature Data Subtype Classifier</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Select a real-world variable to inspect its mathematical properties and Scikit-Learn encoding strategy:
       </p>
@@ -171,7 +171,7 @@ export const DataSubtypeClassifier = () => {
         </div>
 
         <div style={{ padding: '10px 12px', borderRadius: '4px', backgroundColor: 'rgba(221, 107, 32, 0.08)', borderLeft: '4px solid #dd6b20', fontSize: '13px', lineHeight: '1.5' }}>
-          💡 <b>Statistical Rule:</b> {curr.trap}
+          <b>Statistical Rule:</b> {curr.trap}
         </div>
       </div>
     </div>
@@ -236,7 +236,7 @@ export const LabelSupervisionSpectrum = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🎚️ Label Supervision Spectrum Explorer</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Label Supervision Spectrum Explorer</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Move the slider to simulate varying levels of available ground-truth labels:
       </p>
@@ -278,7 +278,7 @@ export const LabelSupervisionSpectrum = () => {
         </div>
 
         <div style={{ padding: '10px 12px', borderRadius: '4px', backgroundColor: 'rgba(49, 130, 206, 0.08)', borderLeft: '4px solid #3182ce', fontSize: '13px' }}>
-          🏭 <b>Production Case:</b> {realExample}
+          <b>Production Case:</b> {realExample}
         </div>
       </div>
     </div>
@@ -365,33 +365,33 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 7. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Believing Positive Means Good" default>
+  <TabItem value="m1" label="1. Believing Positive Means Good" default>
     <br/>
     
     *   **The Misconception:** *"The positive class in binary classification represents the desirable medical or business outcome."*
-    *   **❌ Wrong Thinking:** Designating healthy patients as the positive class.
-    *   **✅ The Right Principle:** The **positive class** is the target condition you are actively seeking to detect (cancer, fraud, churn). It is named after a *positive test result*, not moral or medical goodness.
+    *   **Wrong Thinking:** Designating healthy patients as the positive class.
+    *   **The Right Principle:** The **positive class** is the target condition you are actively seeking to detect (cancer, fraud, churn). It is named after a *positive test result*, not moral or medical goodness.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Integer Encoding Nominal Categories">
+  <TabItem value="m2" label="2. Integer Encoding Nominal Categories">
     <br/>
     
     *   **The Misconception:** *"We can encode colors as Red=0, Green=1, Blue=2 for linear regression."*
-    *   **❌ Wrong Thinking:** Imposing false ordinal relationships on nominal categories.
-    *   **✅ The Right Principle:** Only **Ordinal** variables (Low/Med/High) possess a natural rank. Nominal variables must be One-Hot encoded; otherwise, models assume Blue is twice as large as Green!
+    *   **Wrong Thinking:** Imposing false ordinal relationships on nominal categories.
+    *   **The Right Principle:** Only **Ordinal** variables (Low/Med/High) possess a natural rank. Nominal variables must be One-Hot encoded; otherwise, models assume Blue is twice as large as Green!
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Measuring Accuracy on Unsupervised Clusters">
+  <TabItem value="m3" label="3. Measuring Accuracy on Unsupervised Clusters">
     <br/>
     
     *   **The Misconception:** *"Our KMeans clustering model achieved 91% accuracy."*
-    *   **❌ Wrong Thinking:** Comparing arbitrary cluster IDs ($0, 1$) directly to true classes with standard classification accuracy.
-    *   **✅ The Right Principle:** Clustering has no predefined ground-truth labels. Cluster numbers are arbitrary. Use the **Adjusted Rand Index (ARI)** to evaluate pair-wise clustering alignment while correcting for random chance.
+    *   **Wrong Thinking:** Comparing arbitrary cluster IDs ($0, 1$) directly to true classes with standard classification accuracy.
+    *   **The Right Principle:** Clustering has no predefined ground-truth labels. Cluster numbers are arbitrary. Use the **Adjusted Rand Index (ARI)** to evaluate pair-wise clustering alignment while correcting for random chance.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Semi-Supervised Learning is Free Accuracy">
+  <TabItem value="m4" label="4. Semi-Supervised Learning is Free Accuracy">
     <br/>
     
     *   **The Misconception:** *"Adding unlabeled data to our training set will always improve model score."*
-    *   **❌ Wrong Thinking:** Expecting self-training to consistently lift performance.
-    *   **✅ The Right Principle:** Semi-supervised learning only succeeds when data conforms to the **cluster assumption**. If early pseudo-labels are incorrect, self-training reinforces its own errors and actively degrades accuracy.
+    *   **Wrong Thinking:** Expecting self-training to consistently lift performance.
+    *   **The Right Principle:** Semi-supervised learning only succeeds when data conforms to the **cluster assumption**. If early pseudo-labels are incorrect, self-training reinforces its own errors and actively degrades accuracy.
   </TabItem>
 </Tabs>
 
@@ -403,7 +403,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Feature Subtypes</h3>
+        <h3>Feature Subtypes</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -418,7 +418,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ The Four Paradigms</h3>
+        <h3>The Four Paradigms</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -436,11 +436,11 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🎯 Target Alone Decides:** Features ($X$) can be a mixture of numeric and categorical data; the target variable ($y$) alone dictates whether the problem is Classification or Regression.
-*   **⚠️ Watch pos_label:** Scikit-Learn defaults to alphabetical label ordering, which frequently maps the negative class to 1. Always set `pos_label` explicitly.
-*   **📊 Clustering != Classification:** Clustering proposes unnamed geometric segments; it cannot be evaluated using classification accuracy.
+*   **Target Alone Decides:** Features ($X$) can be a mixture of numeric and categorical data; the target variable ($y$) alone dictates whether the problem is Classification or Regression.
+*   **Watch pos_label:** Scikit-Learn defaults to alphabetical label ordering, which frequently maps the negative class to 1. Always set `pos_label` explicitly.
+*   **Clustering != Classification:** Clustering proposes unnamed geometric segments; it cannot be evaluated using classification accuracy.
 
 :::
 
@@ -458,16 +458,16 @@ export const ParadigmCheckQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Nominal Encoding Trap</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: The Nominal Encoding Trap</h4>
       <p style={{ margin: '0 0 15px 0' }}>A data scientist encodes postal Zip Codes (e.g. <code>90210</code>, <code>10001</code>) as standard continuous integers in a linear regression model. What is the fundamental statistical error?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Linear regression only supports floating-point numbers</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Zip Codes are Categorical Nominal; arithmetic and magnitude are meaningless</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>The model will fail to compile due to a syntax error</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Linear regression handles integers seamlessly. The flaw is conceptual and statistical! Try again.</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Zip Codes are categorical nominal identifiers represented by digits. Performing arithmetic on them or assuming that 90210 is "9 times greater than 10001" creates severe mathematical bias. They must be encoded as categorical features!</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Scikit-learn will compile and fit without warning, producing silently biased coefficients! Try again.</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Linear regression handles integers seamlessly. The flaw is conceptual and statistical! Try again.</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! Zip Codes are categorical nominal identifiers represented by digits. Performing arithmetic on them or assuming that 90210 is "9 times greater than 10001" creates severe mathematical bias. They must be encoded as categorical features!</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Scikit-learn will compile and fit without warning, producing silently biased coefficients! Try again.</p>}
     </div>
   );
 };
@@ -477,7 +477,7 @@ export const ParadigmCheckQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why is the "positive class" in medical diagnostics designated as having the disease?</b></summary>
+  <summary><b>1. [THEORY] Why is the "positive class" in medical diagnostics designated as having the disease?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -487,7 +487,7 @@ export const ParadigmCheckQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [ANALYZE] In Scikit-Learn's built-in Breast Cancer dataset, label 1 is `benign`. What dangerous bug occurs if you evaluate recall without checking?</b></summary>
+  <summary><b>2. [ANALYZE] In Scikit-Learn's built-in Breast Cancer dataset, label 1 is `benign`. What dangerous bug occurs if you evaluate recall without checking?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -498,7 +498,7 @@ export const ParadigmCheckQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [THEORY] What is the "cluster assumption" in semi-supervised learning, and what happens when it fails?</b></summary>
+  <summary><b>3. [THEORY] What is the "cluster assumption" in semi-supervised learning, and what happens when it fails?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -508,7 +508,7 @@ export const ParadigmCheckQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [MATH] Why is standard accuracy misleading when evaluating KMeans clustering, and what metric should be used instead?</b></summary>
+  <summary><b>4. [MATH] Why is standard accuracy misleading when evaluating KMeans clustering, and what metric should be used instead?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -518,7 +518,7 @@ export const ParadigmCheckQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] How does Self-Supervised Learning (SSL) differ from traditional Unsupervised Learning?</b></summary>
+  <summary><b>5. [THEORY] How does Self-Supervised Learning (SSL) differ from traditional Unsupervised Learning?</b></summary>
   <div className="answer-content">
     <br/>
     

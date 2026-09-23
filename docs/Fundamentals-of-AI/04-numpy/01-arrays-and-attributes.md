@@ -140,8 +140,8 @@ print(np.linspace(0, 1, 5))    # 5 evenly spaced values
 
 | | Third argument is | `stop` included? |
 |---|---|---|
-| `np.arange(a, b, step)` | the **step size** | ❌ excluded |
-| `np.linspace(a, b, n)` | **how many values** | ✅ included |
+| `np.arange(a, b, step)` | the **step size** | excluded |
+| `np.linspace(a, b, n)` | **how many values** | included |
 
 `arange` is `range()` for arrays. `linspace` is what you want for plot axes — "give me 100
 points from 0 to 1" — and it *does* include the endpoint, unlike everything else in Python.
@@ -308,7 +308,7 @@ print(np.array([1, 0, 2]).astype(bool))
 **`.astype(int)` truncates**
 
 `1.9` becomes `1`, not `2`. Same behaviour as the built-in `int()` — see
-[Values and Types](../01-basics/01-values-and-types.md#type-conversion-casting). Use
+[Values and Types](../01-basics/01-values-and-types.mdx#type-conversion-casting). Use
 `np.round()` first if you want rounding.
 
 :::
@@ -374,7 +374,7 @@ list and call `np.array()` once at the end.
 
 **See also:** [Indexing, Slicing and Reshaping](./02-indexing-slicing-reshaping.md) ·
 [Lists](../03-collections/02-lists.md) for the container being contrasted ·
-[Data Types](../01-basics/03-data-types.md) for Python's own types
+[Data Types](../01-basics/03-data-types.mdx) for Python's own types
 
 ---
 

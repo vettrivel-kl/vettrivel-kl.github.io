@@ -413,13 +413,13 @@ To "modify" a tuple: convert to a list, change it, convert back.
 | | List | Tuple |
 |---|---|---|
 | Syntax | `[1, 2, 3]` | `(1, 2, 3)` |
-| Mutable | ✅ | ❌ |
-| Ordered | ✅ | ✅ |
-| Duplicates | ✅ | ✅ |
-| Indexing / slicing | ✅ | ✅ |
-| `.append()` / `.sort()` | ✅ | ❌ |
-| `.count()` / `.index()` | ✅ | ✅ |
-| Valid as a dict key | ❌ | ✅ |
+| Mutable | | |
+| Ordered | | |
+| Duplicates | | |
+| Indexing / slicing | | |
+| `.append()` / `.sort()` | | |
+| `.count()` / `.index()` | | |
+| Valid as a dict key | | |
 
 **Key takeaways**
 
@@ -433,7 +433,7 @@ To "modify" a tuple: convert to a list, change it, convert back.
 
 **See also:** [Lists](./02-lists.md) for the mutable version ·
 [Dictionaries and Sets](./04-dicts-and-sets.md) for where tuple keys get used ·
-[Data Types](../01-basics/03-data-types.md) for `tuple` in context
+[Data Types](../01-basics/03-data-types.mdx) for `tuple` in context
 
 ---
 

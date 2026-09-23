@@ -349,7 +349,7 @@ list has 2 items
 `0`, `0.0`, `""`, `[]`, `{}`, `None` and `False` are falsy; everything else is truthy. So
 `if items:` is the idiomatic way to say "if the list isn't empty" — you don't need
 `if len(items) > 0:`. See
-[Values and Types](../01-basics/01-values-and-types.md#truthy-and-falsy).
+[Values and Types](../01-basics/01-values-and-types.mdx#truthy-and-falsy).
 
 ---
 
@@ -368,7 +368,7 @@ ODD
 
 The shape is `value_if_true if condition else value_if_false`. It's an **expression**, so
 it can go inside an f-string — which is how the
-[f-strings page](../01-basics/05-f-strings.md) builds status columns.
+[f-strings page](../01-basics/05-f-strings.mdx) builds status columns.
 
 ---
 
@@ -416,7 +416,7 @@ Starting
 
 `match` and `case` are **soft keywords** — still legal as variable names, but don't use
 them as such. See
-[Variables and Naming](../01-basics/02-variables-and-naming.md#python-keywords).
+[Variables and Naming](../01-basics/02-variables-and-naming.mdx#python-keywords).
 
 ---
 
@@ -457,7 +457,7 @@ them as such. See
 - Any value can be a condition — `if items:` beats `if len(items) > 0:`
 
 **See also:** [Loops](./02-loops.md) for repeating a block ·
-[Values and Types](../01-basics/01-values-and-types.md) for truthiness
+[Values and Types](../01-basics/01-values-and-types.mdx) for truthiness
 
 ---
 

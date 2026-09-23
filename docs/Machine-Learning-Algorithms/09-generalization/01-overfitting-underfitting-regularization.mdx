@@ -64,7 +64,7 @@ export const BiasVarianceTradeoffSimulator = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>📈 Interactive Bias-Variance Tradeoff Simulator</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive Bias-Variance Tradeoff Simulator</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Adjust polynomial complexity (Degree d) to watch the U-shaped test error curve emerge:
       </p>
@@ -111,7 +111,7 @@ export const BiasVarianceTradeoffSimulator = () => {
 
       <div style={{ padding: '12px 16px', borderRadius: '6px', backgroundColor: degree <= 1 ? 'rgba(49, 130, 206, 0.12)' : degree <= 4 ? 'rgba(56, 161, 105, 0.12)' : 'rgba(229, 62, 62, 0.12)', borderLeft: `4px solid ${degree <= 1 ? '#3182ce' : degree <= 4 ? '#38a169' : '#e53e3e'}` }}>
         <strong style={{ fontSize: '14px', color: degree <= 1 ? '#2b6cb0' : degree <= 4 ? '#276749' : '#c53030' }}>
-          {degree <= 1 ? '⚠️ Underfitting (High Bias, Low Variance)' : degree <= 4 ? '🎯 Optimal Generalization (The Sweet Spot)' : '🚨 Overfitting (Low Bias, High Variance)'}
+          {degree <= 1 ? 'Underfitting (High Bias, Low Variance)' : degree <= 4 ? 'Optimal Generalization (The Sweet Spot)' : 'Overfitting (Low Bias, High Variance)'}
         </strong>
         <p style={{ margin: '4px 0 0 0', fontSize: '13px' }}>
           {degree <= 1
@@ -145,7 +145,7 @@ export const RegularizationPenaltyExplorer = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🧪 Regularization Penalty and Gradient Explorer</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Regularization Penalty and Gradient Explorer</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Adjust coefficient magnitude $w$ and penalty strength $\lambda$ to compare cost penalties:
       </p>
@@ -321,7 +321,7 @@ export const GeometricLassoSimulator = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>📐 Interactive Geometry of Sparsity Simulator</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive Geometry of Sparsity Simulator</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Rotate the unconstrained OLS optimum angle (θ) to observe how the expanding loss ellipses interact with the constraint boundary:
       </p>
@@ -464,7 +464,7 @@ export const GeometricLassoSimulator = () => {
               w₁ = {tanW1.toFixed(2)}, w₂ = {tanW2.toFixed(2)}
             </div>
             <div style={{ fontSize: '12px', marginTop: '4px', fontWeight: 'bold', color: isCorner ? '#c53030' : '#2b6cb0' }}>
-              {isCorner ? '🎯 EXACT SPARSITY: One weight is zero (Corner Solution)!' : '⚖️ DENSE SOLUTION: Both weights remain non-zero.'}
+              {isCorner ? 'EXACT SPARSITY: One weight is zero (Corner Solution)!' : 'DENSE SOLUTION: Both weights remain non-zero.'}
             </div>
           </div>
 
@@ -517,40 +517,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 7. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Regularizing the Intercept (Bias)" default>
+  <TabItem value="m1" label="1. Regularizing the Intercept (Bias)" default>
     <br/>
     
     *   **The Misconception:** *"The regularization penalty should apply to all parameters including the intercept $b$."*
-    *   **❌ Wrong Thinking:** Adding $\lambda b^2$ to the cost function.
-    *   **✅ The Right Principle:** The intercept represents the global base rate of the target. Penalizing $b$ shifts predictions away from the target mean. Scikit-learn models (`fit_intercept=True`) never regularize the bias term.
+    *   **Wrong Thinking:** Adding $\lambda b^2$ to the cost function.
+    *   **The Right Principle:** The intercept represents the global base rate of the target. Penalizing $b$ shifts predictions away from the target mean. Scikit-learn models (`fit_intercept=True`) never regularize the bias term.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Regularizing Without Feature Standardization">
+  <TabItem value="m2" label="2. Regularizing Without Feature Standardization">
     <br/>
     
     *   **The Misconception:** *"Regularization works identically regardless of whether features are scaled."*
-    *   **❌ Wrong Thinking:** Applying L1 or L2 penalties to unstandardized features.
-    *   **✅ The Right Principle:** The penalty $\sum w_j^2$ treats all weights identically. Features with large scales naturally have tiny weights, escaping penalization, while features with tiny scales are penalized unfairly. Always standardize features with `StandardScaler` inside a `Pipeline`.
+    *   **Wrong Thinking:** Applying L1 or L2 penalties to unstandardized features.
+    *   **The Right Principle:** The penalty $\sum w_j^2$ treats all weights identically. Features with large scales naturally have tiny weights, escaping penalization, while features with tiny scales are penalized unfairly. Always standardize features with `StandardScaler` inside a `Pipeline`.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Confusing Alpha and C Parameters">
+  <TabItem value="m3" label="3. Confusing Alpha and C Parameters">
     <br/>
     
     *   **The Misconception:** *"Setting C=10 in Logistic Regression means strong regularization."*
-    *   **❌ Wrong Thinking:** Inverting the meaning of $C$ and $\alpha$.
-    *   **✅ The Right Principle:** In linear models (`Ridge`, `Lasso`), `alpha` ($\lambda$) represents penalty strength (large $\alpha$ = strong regularization). In `LogisticRegression` and `SVC`, `C` is the inverse penalty ($C = \frac{1}{\lambda}$). Large $C$ means weak regularization!
+    *   **Wrong Thinking:** Inverting the meaning of $C$ and $\alpha$.
+    *   **The Right Principle:** In linear models (`Ridge`, `Lasso`), `alpha` ($\lambda$) represents penalty strength (large $\alpha$ = strong regularization). In `LogisticRegression` and `SVC`, `C` is the inverse penalty ($C = \frac{1}{\lambda}$). Large $C$ means weak regularization!
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Believing L2 Performs Feature Selection">
+  <TabItem value="m4" label="4. Believing L2 Performs Feature Selection">
     <br/>
     
     *   **The Misconception:** *"Ridge regression sets unimportant features to zero if alpha is large enough."*
-    *   **❌ Wrong Thinking:** Expecting L2 to produce sparse models.
-    *   **✅ The Right Principle:** Because the L2 gradient $\lambda w$ diminishes as $w \to 0$, L2 coefficients asymptotically approach zero but never reach it. Only L1 (Lasso) produces exact zeros.
+    *   **Wrong Thinking:** Expecting L2 to produce sparse models.
+    *   **The Right Principle:** Because the L2 gradient $\lambda w$ diminishes as $w \to 0$, L2 coefficients asymptotically approach zero but never reach it. Only L1 (Lasso) produces exact zeros.
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Assuming Zero Training Error Implies Perfection">
+  <TabItem value="m5" label="5. Assuming Zero Training Error Implies Perfection">
     <br/>
     
     *   **The Misconception:** *"Our model achieved 100% training accuracy, so the algorithm is optimal."*
-    *   **❌ Wrong Thinking:** Evaluating model quality using resubstitution accuracy.
-    *   **✅ The Right Principle:** Zero training error is the cardinal diagnostic signature of severe overfitting. True model quality is determined strictly by out-of-sample cross-validation error.
+    *   **Wrong Thinking:** Evaluating model quality using resubstitution accuracy.
+    *   **The Right Principle:** Zero training error is the cardinal diagnostic signature of severe overfitting. True model quality is determined strictly by out-of-sample cross-validation error.
   </TabItem>
 </Tabs>
 
@@ -562,7 +562,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Error Regimes</h3>
+        <h3>Error Regimes</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -577,7 +577,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Penalty Selection</h3>
+        <h3>Penalty Selection</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -595,15 +595,15 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🛡️ Regularization controls variance:** Without regularization, complex models memorize sample noise rather than population signal.
-*   **💎 Corners create sparsity:** The diamond geometry of L1 forces loss contours to touch on coordinate axes, performing automated feature selection.
-*   **🔄 Alpha vs C inversion:** Never forget that in scikit-learn, `alpha` increases regularization, while `C` decreases regularization.
+*   **Regularization controls variance:** Without regularization, complex models memorize sample noise rather than population signal.
+*   **Corners create sparsity:** The diamond geometry of L1 forces loss contours to touch on coordinate axes, performing automated feature selection.
+*   **Alpha vs C inversion:** Never forget that in scikit-learn, `alpha` increases regularization, while `C` decreases regularization.
 
 :::
 
-**Next Section:** [Regularization Strength and Solvers](./02-regularization-strength-and-solvers.md) - tuning $\lambda$ via cross-validation, path algorithms (LassoCV, RidgeCV), and numerical solvers.
+**Next Section:** [Regularization Strength and Solvers](./02-regularization-strength-and-solvers.mdx) - tuning $\lambda$ via cross-validation, path algorithms (LassoCV, RidgeCV), and numerical solvers.
 
 ---
 
@@ -617,16 +617,16 @@ export const GeneralizationQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Diagnosing Generalization Regimes</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Diagnosing Generalization Regimes</h4>
       <p style={{ margin: '0 0 15px 0' }}>A machine learning practitioner trains a 20-layer neural network on tabular customer churn data. The model achieves 99.8% training accuracy, but cross-validation accuracy on held-out folds is only 64.2%. What is the primary diagnosis, and what intervention is appropriate?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Underfitting (High Bias); add more polynomial features</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Overfitting (High Variance); increase regularization penalty and prune complexity</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Optimal Generalization; the model simply needs more training epochs</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The model achieved 99.8% training accuracy, proving it has extremely low bias, not high bias! Adding more features would worsen the problem. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! A massive gap between training accuracy (99.8%) and validation accuracy (64.2%) is the classic hallmark of severe overfitting (High Variance). The model memorized idiosyncratic training noise. Increasing regularization (L2 weight decay) and simplifying model capacity reduces variance.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Training for more epochs on an overfit model will only exacerbate noise memorization. Try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. The model achieved 99.8% training accuracy, proving it has extremely low bias, not high bias! Adding more features would worsen the problem. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! A massive gap between training accuracy (99.8%) and validation accuracy (64.2%) is the classic hallmark of severe overfitting (High Variance). The model memorized idiosyncratic training noise. Increasing regularization (L2 weight decay) and simplifying model capacity reduces variance.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Training for more epochs on an overfit model will only exacerbate noise memorization. Try again!</p>}
     </div>
   );
 };
@@ -636,7 +636,7 @@ export const GeneralizationQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why does L1 regularization produce sparse models (exact zeros) while L2 regularization does not?</b></summary>
+  <summary><b>1. [THEORY] Why does L1 regularization produce sparse models (exact zeros) while L2 regularization does not?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -648,7 +648,7 @@ export const GeneralizationQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [MATH] In the Bias-Variance decomposition, what represents the theoretical lower bound on model error?</b></summary>
+  <summary><b>2. [MATH] In the Bias-Variance decomposition, what represents the theoretical lower bound on model error?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -660,7 +660,7 @@ export const GeneralizationQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [ANALYZE] When should you choose Elastic Net over standard Lasso (L1)?</b></summary>
+  <summary><b>3. [ANALYZE] When should you choose Elastic Net over standard Lasso (L1)?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -670,7 +670,7 @@ export const GeneralizationQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [PRACTICE] Why is feature scaling strictly mandatory before applying Ridge or Lasso regression?</b></summary>
+  <summary><b>4. [PRACTICE] Why is feature scaling strictly mandatory before applying Ridge or Lasso regression?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -681,7 +681,7 @@ export const GeneralizationQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] Why is the bias term (intercept b) excluded from the regularization penalty in scikit-learn?</b></summary>
+  <summary><b>5. [THEORY] Why is the bias term (intercept b) excluded from the regularization penalty in scikit-learn?</b></summary>
   <div className="answer-content">
     <br/>
     

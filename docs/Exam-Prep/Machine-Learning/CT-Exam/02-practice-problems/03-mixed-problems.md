@@ -1004,5 +1004,5 @@ f) Design monitoring for long-term impact
 
 ---
 
-**Good luck! You've got this! 🚀**
+**Good luck! You've got this!**
 

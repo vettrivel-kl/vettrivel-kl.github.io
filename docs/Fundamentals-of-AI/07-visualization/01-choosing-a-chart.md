@@ -160,7 +160,7 @@ Work from what you have, not what looks good:
 | Level | low — you draw it | high — you describe it | high, interactive |
 | Statistical charts | manual | **built in** | built in |
 | Works with DataFrames | column by column | `data=df, x=, y=` | `df, x=, y=` |
-| Interactive | ❌ | ❌ | ✅ hover, zoom, pan |
+| Interactive | | | hover, zoom, pan |
 | Output | image | image | HTML |
 | Default appearance | plain | good | polished |
 | Control | total | good, escapes to matplotlib | good |

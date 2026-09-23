@@ -217,8 +217,8 @@ one division is what makes correlation comparable across any pair of variables i
 |---|---|---|
 | Range | −1 to +1 | any real number |
 | Units | none | product of both units |
-| Comparable across pairs | ✅ | ❌ |
-| Affected by rescaling | ❌ | ✅ |
+| Comparable across pairs | | |
+| Affected by rescaling | | |
 | Diagonal | `1` | the variance |
 | Use for | interpreting strength | intermediate maths, PCA |
 

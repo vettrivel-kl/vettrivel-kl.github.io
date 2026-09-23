@@ -14,19 +14,19 @@ tags: [machine-learning, continuous-test, exam-prep]
 
 ---
 
-## 📦 What's Included
+## What's Included
 
 This comprehensive study package covers **Module 1** and **Module 2** of your Machine Learning course with:
 
-- ✅ **Complete Study Guide** - Theory, concepts, worked examples
-- ✅ **22 Practice Problems** - With full solutions
-- ✅ **Python Code Examples** - All implementations
-- ✅ **Study Checklist** - Week-by-week breakdown
-- ✅ **Quick Reference** - Formulas and key concepts
+- **Complete Study Guide** - Theory, concepts, worked examples
+- **22 Practice Problems** - With full solutions
+- **Python Code Examples** - All implementations
+- **Study Checklist** - Week-by-week breakdown
+- **Quick Reference** - Formulas and key concepts
 
 ---
 
-## 🎯 Quick Start
+## Quick Start
 
 ### If you have 5 hours:
 1. Read [Linear Regression Basics](./01-module-1/01-linear-regression.md)
@@ -41,7 +41,7 @@ Work through materials systematically in order
 
 ---
 
-## 📚 Navigation
+## Navigation
 
 **Module 1 Topics:**
 - [Machine Learning Basics](./01-module-1/00-ml-basics.md)
@@ -63,7 +63,7 @@ Work through materials systematically in order
 
 ---
 
-## ⏱️ Study Timeline
+## Study Timeline
 
 ```
 Week 1: Foundations
@@ -82,7 +82,7 @@ Week 2: Mastery
 
 ---
 
-## 🎓 Learning Outcomes
+## Learning Outcomes
 
 After completing this package, you'll be able to:
 
@@ -98,7 +98,7 @@ After completing this package, you'll be able to:
 
 ---
 
-## 📊 By The Numbers
+## By The Numbers
 
 - **Total study materials:** 5 documents
 - **Total lines of content:** 3,350+ lines
@@ -109,18 +109,18 @@ After completing this package, you'll be able to:
 
 ---
 
-## 🚀 Start Your Preparation
+## Start Your Preparation
 
 **Choose your path:**
 
-- 👉 Start with Day 1 Tasks
-- 📖 [Read Module 1 Overview](./01-module-1/00-ml-basics.md)
-- 💪 [Jump to Practice Problems](./02-practice-problems/01-module-1-problems.md)
-- 💻 [See Python Code Examples](./03-python-code/00-overview.md)
+- Start with Day 1 Tasks
+- [Read Module 1 Overview](./01-module-1/00-ml-basics.md)
+- [Jump to Practice Problems](./02-practice-problems/01-module-1-problems.md)
+- [See Python Code Examples](./03-python-code/00-overview.md)
 
 ---
 
-## 💡 Pro Tips
+## Pro Tips
 
 ✓ **Practice by hand first** - Understand the concept  
 ✓ **Show all work** - Partial credit matters in exams  
@@ -131,7 +131,7 @@ After completing this package, you'll be able to:
 
 ---
 
-## 📞 Quick Links
+## Quick Links
 
 - [Search for a topic](/) - Use site search
 - [View all practice problems](./02-practice-problems/00-overview.md) - 22 problems organized by difficulty
@@ -140,4 +140,4 @@ After completing this package, you'll be able to:
 
 ---
 
-**Ready to ace your CT exam?** Let's get started! 💯
+**Ready to ace your CT exam?** Let's get started!

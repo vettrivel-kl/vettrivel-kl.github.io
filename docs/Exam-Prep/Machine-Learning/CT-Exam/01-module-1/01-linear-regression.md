@@ -769,7 +769,7 @@ Which is better? Why?
 
 ## Tips for CT Exam
 
-### ✅ DO
+### DO
 
 - **Memorize the deviation table approach** - fastest calculation method
 - **Show all steps** - partial credit awarded
@@ -777,7 +777,7 @@ Which is better? Why?
 - **State assumptions** before using linear regression
 - **Check R² reasonableness** (0 to 1 range)
 
-### ❌ DON'T
+### DON'T
 
 - Don't confuse R² with accuracy percentage
 - Don't forget to include intercept in equation

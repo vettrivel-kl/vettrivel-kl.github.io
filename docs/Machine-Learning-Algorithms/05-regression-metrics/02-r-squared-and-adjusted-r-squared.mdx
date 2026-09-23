@@ -93,7 +93,7 @@ R² is dimensionless but **not** portable across datasets — it depends on `SST
 
 ---
 
-## 🛠️ The R² Error Allocation Sandbox
+## The R² Error Allocation Sandbox
 
 Experiment with the interactive tool below. Toggle between the **Baseline model** (always guessing the mean $\bar{y} = 73.2$) and our **OLS Fitted Model** ($ŷ = 39.0 + 11.4x$) to watch the red vertical error bars animate, visualizing how $R^2$ physically measures the share of baseline error ($SST$) that our model clears away.
 
@@ -112,7 +112,7 @@ export const R2Visualizer = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
-      <h4 style={{ margin: '0' }}>📊 R² Error Allocation Sandbox</h4>
+      <h4 style={{ margin: '0' }}>R² Error Allocation Sandbox</h4>
       <p style={{ fontSize: '13px', margin: '5px 0 15px 0', opacity: 0.9 }}>Toggle the target line to see the difference between Baseline Errors ($SST$) and Model Errors ($SSE$).</p>
 
       <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
@@ -164,13 +164,13 @@ export const R2Visualizer = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center', fontSize: '13px' }}>
           {!showModel ? (
             <div style={{ padding: '12px', borderLeft: '4px solid #3182ce', backgroundColor: 'rgba(49, 130, 206, 0.03)' }}>
-              <b>📊 Baseline Sum of Squares (SST):</b>
+              <b>Baseline Sum of Squares (SST):</b>
               <div style={{ fontSize: '18px', fontWeight: 'bold', margin: '5px 0' }}>SST = 1322.80</div>
               <div style={{ opacity: 0.8, fontSize: '11px' }}>This represents the sum of squared errors when predicting the mean of y (73.2) for every row. It is the baseline error that any model has to beat.</div>
             </div>
           ) : (
             <div style={{ padding: '12px', borderLeft: '4px solid #38a169', backgroundColor: 'rgba(56, 161, 105, 0.03)' }}>
-              <b>📊 Model Sum of Squares (SSE):</b>
+              <b>Model Sum of Squares (SSE):</b>
               <div style={{ fontSize: '18px', fontWeight: 'bold', margin: '5px 0' }}>SSE = 23.20</div>
               <div style={{ opacity: 0.8, fontSize: '11px' }}>This is the remaining squared error after fitting our OLS line. We cleared away 1299.60 lakhs of squared error!</div>
               <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#38a169', marginTop: '5px' }}>
@@ -429,7 +429,7 @@ The two differ because MAPE is a **mean of ratios** and `MAE/ȳ` is a **ratio of
 
 ---
 
-## 🛠️ The MAPE Asymmetry Sandbox
+## The MAPE Asymmetry Sandbox
 
 Minimizing MAPE introduces a silent, systemic downward bias in your predictions. Experiment with the interactive tool below. Move the prediction slider (assuming true target $y = 100$) to watch how under-prediction is capped at **100%** (when you guess 0) while over-prediction is completely unbounded. 
 
@@ -444,7 +444,7 @@ export const MapeAsymmetrySandbox = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
-      <h4 style={{ margin: '0' }}>📐 MAPE Asymmetry Sandbox</h4>
+      <h4 style={{ margin: '0' }}>MAPE Asymmetry Sandbox</h4>
       <p style={{ fontSize: '13px', margin: '5px 0 15px 0', opacity: 0.9 }}>Slide the predicted value (for y = 100) and watch how the percentage error scales lopsidedly.</p>
 
       <div style={{ marginBottom: '15px' }}>
@@ -568,33 +568,33 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 ## 3. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. R² bound expectation" default>
+  <TabItem value="m1" label="1. R² bound expectation" default>
     <br/>
     
     *   **The Misconception:** *"R² is the square of the correlation coefficient, so it must stay bounded within [0, 1]."*
-    *   **❌ Wrong Thinking:** Believing a negative $R^2$ is mathematically impossible or represents a code crash.
-    *   **✅ The Right Principle:** $R^2 = 1 - SSE/SST$ is relative and has no lower bound. A negative $R^2$ (e.g. $-0.6586$) means your model predicts worse than simply guessing the average $\bar{y}$ for every single row.
+    *   **Wrong Thinking:** Believing a negative $R^2$ is mathematically impossible or represents a code crash.
+    *   **The Right Principle:** $R^2 = 1 - SSE/SST$ is relative and has no lower bound. A negative $R^2$ (e.g. $-0.6586$) means your model predicts worse than simply guessing the average $\bar{y}$ for every single row.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. SSR/SST equivalence">
+  <TabItem value="m2" label="2. SSR/SST equivalence">
     <br/>
     
     *   **The Misconception:** *"I can compute R² as SSR/SST for any machine learning model."*
-    *   **❌ Wrong Thinking:** Using $SSR/SST$ on neural networks, random forests, or manual spreadsheet predictions.
-    *   **✅ The Right Principle:** $SST = SSR + SSE$ is a **conditional identity** that holds *only* for OLS fits with an intercept (where the cross term $\sum(\hat{y}_i - \bar{y})r_i$ is forced to exactly 0). For any other model, using $SSR/SST$ can yield impossible answers (like $1.1951$). Always use $1 - SSE/SST$.
+    *   **Wrong Thinking:** Using $SSR/SST$ on neural networks, random forests, or manual spreadsheet predictions.
+    *   **The Right Principle:** $SST = SSR + SSE$ is a **conditional identity** that holds *only* for OLS fits with an intercept (where the cross term $\sum(\hat{y}_i - \bar{y})r_i$ is forced to exactly 0). For any other model, using $SSR/SST$ can yield impossible answers (like $1.1951$). Always use $1 - SSE/SST$.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. In-sample Complexity Guard">
+  <TabItem value="m3" label="3. In-sample Complexity Guard">
     <br/>
     
     *   **The Misconception:** *"My in-sample R² rose from 0.82 to 0.835, so my new features are helping the model."*
-    *   **❌ Wrong Thinking:** Adding features based strictly on training $R^2$ improvements.
-    *   **✅ The Right Principle:** In-sample $R^2$ **never decreases** when features are added, because the optimizer can always set the new weights to 0. Use Adjusted $R^2$ (which dropped $0.812 \to 0.807$) or, better yet, out-of-sample cross-validation.
+    *   **Wrong Thinking:** Adding features based strictly on training $R^2$ improvements.
+    *   **The Right Principle:** In-sample $R^2$ **never decreases** when features are added, because the optimizer can always set the new weights to 0. Use Adjusted $R^2$ (which dropped $0.812 \to 0.807$) or, better yet, out-of-sample cross-validation.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Scikit-learn's MAPE scale">
+  <TabItem value="m4" label="4. Scikit-learn's MAPE scale">
     <br/>
     
     *   **The Misconception:** *"Scikit-Learn's MAPE function returns the error as a literal percentage."*
-    *   **❌ Wrong Thinking:** Printing `mean_absolute_percentage_error` and reporting an error of `0.0296%`.
-    *   **✅ The Right Principle:** The function returns a **fraction**, not a percentage. You must multiply by 100 yourself (e.g., `0.0296` represents `2.96%`).
+    *   **Wrong Thinking:** Printing `mean_absolute_percentage_error` and reporting an error of `0.0296%`.
+    *   **The Right Principle:** The function returns a **fraction**, not a percentage. You must multiply by 100 yourself (e.g., `0.0296` represents `2.96%`).
   </TabItem>
 </Tabs>
 
@@ -606,7 +606,7 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Core Theory</h3>
+        <h3>Core Theory</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -621,7 +621,7 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Engineering Realities</h3>
+        <h3>Engineering Realities</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -639,11 +639,11 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 
 :::info 
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🔒 R² Asymmetry:** Unlike MSE, `r2_score` is not symmetric. Swapping arguments computes predictions against the wrong variance denominator, yielding silent review bugs.
-*   **⚖️ In-sample limit:** With $p = n - 1$ features, in-sample $R^2 = 1.0000$ is mathematically guaranteed by exact interpolation, carrying zero generalization value.
-*   **🛠️ sMAPE:** Symmetric MAPE divides by the mean of true and predicted values, keeping errors safely bounded by 200%.
+*   **R² Asymmetry:** Unlike MSE, `r2_score` is not symmetric. Swapping arguments computes predictions against the wrong variance denominator, yielding silent review bugs.
+*   **In-sample limit:** With $p = n - 1$ features, in-sample $R^2 = 1.0000$ is mathematically guaranteed by exact interpolation, carrying zero generalization value.
+*   **sMAPE:** Symmetric MAPE divides by the mean of true and predicted values, keeping errors safely bounded by 200%.
 
 :::
 
@@ -661,16 +661,16 @@ export const PracticeQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Arbitrary Split</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: The Arbitrary Split</h4>
       <p style={{ margin: '0 0 15px 0' }}>Why does scoring the exact same model with the exact same predictions yield two different R² scores on two different test splits?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because OLS intercepts vary across test splits</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because different splits change y_bar, which changes the baseline SST denominator</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because R² is symmetric in its arguments</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The model's coefficients are already fixed—nothing is refitting during scoring. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! R² = 1 − SSE / SST. The baseline SST = Σ(yᵢ − ȳ)² is calculated from the true values being scored. Changing your test split changes the mean ȳ and the baseline SST denominator, meaning R² shifts with identical predictions.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. R² is highly asymmetric. Swapping arguments yields incorrect, meaningless scores. Re-read and try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. The model's coefficients are already fixed—nothing is refitting during scoring. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! R² = 1 − SSE / SST. The baseline SST = Σ(yᵢ − ȳ)² is calculated from the true values being scored. Changing your test split changes the mean ȳ and the baseline SST denominator, meaning R² shifts with identical predictions.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. R² is highly asymmetric. Swapping arguments yields incorrect, meaningless scores. Re-read and try again!</p>}
     </div>
   );
 };
@@ -680,7 +680,7 @@ export const PracticeQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Show algebraically why $SST = SSR + SSE$ holds ONLY when the cross term vanishes.</b></summary>
+  <summary><b>1. [THEORY] Show algebraically why $SST = SSR + SSE$ holds ONLY when the cross term vanishes.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -696,7 +696,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [ANALYZE] Why is it physically impossible for in-sample $R^2$ to decrease when you append a column of pure noise?</b></summary>
+  <summary><b>2. [ANALYZE] Why is it physically impossible for in-sample $R^2$ to decrease when you append a column of pure noise?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -708,7 +708,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [THEORY] Explain why Adjusted $R^2$ is undefined at $p = n - 1$ features, and how this relates to interpolation.</b></summary>
+  <summary><b>3. [THEORY] Explain why Adjusted $R^2$ is undefined at $p = n - 1$ features, and how this relates to interpolation.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -721,7 +721,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [ANALYZE] Why does minimizing MAPE bias predictions downward? Explain the math of the asymmetry.</b></summary>
+  <summary><b>4. [ANALYZE] Why does minimizing MAPE bias predictions downward? Explain the math of the asymmetry.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -734,7 +734,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] What is WAPE, and why does it bypass all of MAPE's numerical pathologies?</b></summary>
+  <summary><b>5. [THEORY] What is WAPE, and why does it bypass all of MAPE's numerical pathologies?</b></summary>
   <div className="answer-content">
     <br/>
     

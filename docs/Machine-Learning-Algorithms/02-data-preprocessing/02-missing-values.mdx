@@ -33,22 +33,22 @@ export const MissingDataMechanismQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Classifying Data Gaps</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Classifying Data Gaps</h4>
       <p style={{ margin: '0 0 15px 0' }}><b>Scenario:</b> A blood pressure tracking sensor automatically stops recording metrics when a patient's temperature spikes above 104°F (and temperature is recorded separately in the same table). What is the statistical missingness mechanism of the blood pressure column?</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <button onClick={() => setSelected('mcar')} style={{ padding: '10px', textAlign: 'left', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'mcar' ? '#e53e3e' : 'transparent', color: selected === 'mcar' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>
-          ❌ Option A: MCAR (Missing Completely at Random)
+          Option A: MCAR (Missing Completely at Random)
         </button>
         <button onClick={() => setSelected('mar')} style={{ padding: '10px', textAlign: 'left', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'mar' ? '#38a169' : 'transparent', color: selected === 'mar' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>
-          ✅ Option B: MAR (Missing at Random)
+          Option B: MAR (Missing at Random)
         </button>
         <button onClick={() => setSelected('mnar')} style={{ padding: '10px', textAlign: 'left', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'mnar' ? '#e53e3e' : 'transparent', color: selected === 'mnar' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>
-          ❌ Option C: MNAR (Missing Not at Random)
+          Option C: MNAR (Missing Not at Random)
         </button>
       </div>
-      {selected === 'mcar' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The missingness of blood pressure is clearly linked to a known, observed value (temperature), meaning it is not completely random or independent of other features. Try again!</p>}
-      {selected === 'mar' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! This is MAR (Missing at Random). The missingness of blood pressure is completely explained by another observed feature in our dataset (temperature). By controlling for temperature, we can use statistical imputers to accurately reconstruct the blood pressure bounds!</p>}
-      {selected === 'mnar' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Close! It is not MNAR because the missingness is explained by temperature (which is observed and recorded in our table). It would only be MNAR if the missingness depended directly on the unobserved blood pressure value itself (e.g., blood pressure is missing because the reading was too high for the machine to record). Try again!</p>}
+      {selected === 'mcar' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. The missingness of blood pressure is clearly linked to a known, observed value (temperature), meaning it is not completely random or independent of other features. Try again!</p>}
+      {selected === 'mar' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! This is MAR (Missing at Random). The missingness of blood pressure is completely explained by another observed feature in our dataset (temperature). By controlling for temperature, we can use statistical imputers to accurately reconstruct the blood pressure bounds!</p>}
+      {selected === 'mnar' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Close! It is not MNAR because the missingness is explained by temperature (which is observed and recorded in our table). It would only be MNAR if the missingness depended directly on the unobserved blood pressure value itself (e.g., blood pressure is missing because the reading was too high for the machine to record). Try again!</p>}
     </div>
   );
 };
@@ -414,33 +414,33 @@ the shapes then disagree, and the error surfaces somewhere unrelated. Check
 Here are the most common conceptual pitfalls when handling missing datasets, compared with the correct engineering principles.
 
 <Tabs>
-  <TabItem value="mistake1" label="🚨 Mistake 1: Imputing before asking WHY" default>
+  <TabItem value="mistake1" label="Mistake 1: Imputing before asking WHY" default>
     <br/>
 
     *   **The Pitfall:** Blindly applying an imputation strategy (such as mean-fill) without diagnosing the underlying missingness mechanism.
-    *   **❌ Wrong Thinking:** "It has missing values, let's call `SimpleImputer(strategy='mean')` and move on."
-    *   **✅ The Right Principle:** Establish whether data gaps are **MCAR**, **MAR**, or **MNAR** first. Under MNAR (non-random drops), mean imputation is heavily biased and cannot recover the truth. You must use `add_indicator=True` or collect data differently.
+    *   **Wrong Thinking:** "It has missing values, let's call `SimpleImputer(strategy='mean')` and move on."
+    *   **The Right Principle:** Establish whether data gaps are **MCAR**, **MAR**, or **MNAR** first. Under MNAR (non-random drops), mean imputation is heavily biased and cannot recover the truth. You must use `add_indicator=True` or collect data differently.
   </TabItem>
-  <TabItem value="mistake2" label="🚨 Mistake 2: Scaling Before Imputing">
+  <TabItem value="mistake2" label="Mistake 2: Scaling Before Imputing">
     <br/>
 
     *   **The Pitfall:** Scaling or standardizing feature coordinates before performing your missing value imputation.
-    *   **❌ Wrong Thinking:** Standard scaling all data first, leaving `NaN` blocks intact.
-    *   **✅ The Right Principle:** Always impute missing values first, and scale second. Standardizing standard deviations is heavily distorted by missing indices, and subsequent imputation can skew normalized margins.
+    *   **Wrong Thinking:** Standard scaling all data first, leaving `NaN` blocks intact.
+    *   **The Right Principle:** Always impute missing values first, and scale second. Standardizing standard deviations is heavily distorted by missing indices, and subsequent imputation can skew normalized margins.
   </TabItem>
-  <TabItem value="mistake3" label="🚨 Mistake 3: Blind Deletion">
+  <TabItem value="mistake3" label="Mistake 3: Blind Deletion">
     <br/>
 
     *   **The Pitfall:** Routinely dropping incomplete rows using `.dropna()` (listwise deletion) on wide datasets.
-    *   **❌ Wrong Thinking:** "Only 10% is missing in each column, let's drop them."
-    *   **✅ The Right Principle:** Calculate rows kept first: $1 - (1 - p)^k$. For 8 columns at 10% missingness each, listwise deletion silently drops **57% of your entire dataset**! Use imputation solvers instead of throwing away massive data volumes.
+    *   **Wrong Thinking:** "Only 10% is missing in each column, let's drop them."
+    *   **The Right Principle:** Calculate rows kept first: $1 - (1 - p)^k$. For 8 columns at 10% missingness each, listwise deletion silently drops **57% of your entire dataset**! Use imputation solvers instead of throwing away massive data volumes.
   </TabItem>
-  <TabItem value="mistake4" label="🚨 Mistake 4: Estimator fit leakage">
+  <TabItem value="mistake4" label="Mistake 4: Estimator fit leakage">
     <br/>
 
     *   **The Pitfall:** Calling `fit_transform` on your test or deployment dataset inputs.
-    *   **❌ Wrong Thinking:** `imputer.fit_transform(X_test)`
-    *   **✅ The Right Principle:** Call strictly `imputer.transform(X_test)`. The imputer must learn substitution statistics (like column means or medians) solely from the training partition to avoid data leakage.
+    *   **Wrong Thinking:** `imputer.fit_transform(X_test)`
+    *   **The Right Principle:** Call strictly `imputer.transform(X_test)`. The imputer must learn substitution statistics (like column means or medians) solely from the training partition to avoid data leakage.
   </TabItem>
 </Tabs>
 
@@ -452,7 +452,7 @@ Here are the most common conceptual pitfalls when handling missing datasets, com
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🔍 Missingness Taxonomies</h3>
+        <h3>Missingness Taxonomies</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -466,7 +466,7 @@ Here are the most common conceptual pitfalls when handling missing datasets, com
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 sklearn Imputation solvers</h3>
+        <h3>sklearn Imputation solvers</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -482,12 +482,12 @@ Here are the most common conceptual pitfalls when handling missing datasets, com
 
 :::info 
 
-**📌 Key Takeaways: Missing Values Imputation**
+**Key Takeaways: Missing Values Imputation**
 
-*   **📉 Imputation Shrinks Variance:** Mean imputation preserves column averages but crushes standard deviation (by **19%** in our California trial). Imputed values contribute zero variance and dilute correlations.
-*   **📐 Listwise Deletion scales poorly:** Dropping incomplete rows via `dropna` scales exponentially with column counts. 8 columns at 10% missingness drops **57%** of your dataset.
-*   **📊 Use Skew-Appropriate Solvers:** Prefer `median` for highly skewed fields, and `most_frequent` for categorical columns. Filling binary outputs with `mean` can yield impossible values (like `0.714286`).
-*   **🔌 Test-Set Imputing Rule:** Fit imputers solely on the training partition (`imp.fit(X_train)`). Retain and transform test entries strictly using those pre-learned metrics to ensure no data leakage.
+*   **Imputation Shrinks Variance:** Mean imputation preserves column averages but crushes standard deviation (by **19%** in our California trial). Imputed values contribute zero variance and dilute correlations.
+*   **Listwise Deletion scales poorly:** Dropping incomplete rows via `dropna` scales exponentially with column counts. 8 columns at 10% missingness drops **57%** of your dataset.
+*   **Use Skew-Appropriate Solvers:** Prefer `median` for highly skewed fields, and `most_frequent` for categorical columns. Filling binary outputs with `mean` can yield impossible values (like `0.714286`).
+*   **Test-Set Imputing Rule:** Fit imputers solely on the training partition (`imp.fit(X_train)`). Retain and transform test entries strictly using those pre-learned metrics to ensure no data leakage.
 
 :::
 
@@ -523,7 +523,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 ### Mechanisms
 
 <details>
-  <summary>❓ <b>M1. [THEORY] Define MCAR, MAR and MNAR, and give an example of each.</b></summary>
+  <summary><b>M1. [THEORY] Define MCAR, MAR and MNAR, and give an example of each.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -537,7 +537,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>M2. [THEORY] For which mechanisms can imputation recover the information, and for which can it not? Explain why.</b></summary>
+  <summary><b>M2. [THEORY] For which mechanisms can imputation recover the information, and for which can it not? Explain why.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -547,7 +547,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>M3. [ANALYZE] A survey asks for income and 30% decline. Which mechanism is most likely, and what does that imply about imputing the mean?</b></summary>
+  <summary><b>M3. [ANALYZE] A survey asks for income and 30% decline. Which mechanism is most likely, and what does that imply about imputing the mean?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -557,7 +557,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>M4. [ANALYZE] Give a practical test for suspecting MNAR, and explain why the question cannot be answered from the data alone.</b></summary>
+  <summary><b>M4. [ANALYZE] Give a practical test for suspecting MNAR, and explain why the question cannot be answered from the data alone.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -567,7 +567,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>M5. [ANALYZE] Under MNAR, listwise deletion is sometimes described as "at least honest". Argue against that.</b></summary>
+  <summary><b>M5. [ANALYZE] Under MNAR, listwise deletion is sometimes described as "at least honest". Argue against that.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -578,7 +578,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 ### The cost of imputation
 
 <details>
-  <summary>❓ <b>C1. [OUT] Complete truth had mean `3.851`, std `1.936`. After MCAR removal plus mean imputation: mean `3.815`, std `1.573`. Explain why the mean survived and the std did not.</b></summary>
+  <summary><b>C1. [OUT] Complete truth had mean `3.851`, std `1.936`. After MCAR removal plus mean imputation: mean `3.815`, std `1.573`. Explain why the mean survived and the std did not.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -588,7 +588,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>C2. [THEORY] Explain, in terms of what imputed rows contribute, why mean imputation must shrink variance.</b></summary>
+  <summary><b>C2. [THEORY] Explain, in terms of what imputed rows contribute, why mean imputation must shrink variance.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -597,7 +597,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>C3. [THEORY] Name three consequences of variance shrinkage for downstream analysis.</b></summary>
+  <summary><b>C3. [THEORY] Name three consequences of variance shrinkage for downstream analysis.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -608,7 +608,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>C4. [ANALYZE] "The mean is unchanged, so mean imputation is safe." Rebut this using the measured figures.</b></summary>
+  <summary><b>C4. [ANALYZE] "The mean is unchanged, so mean imputation is safe." Rebut this using the measured figures.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -617,7 +617,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>C5. [THEORY] What is mean imputation failing to represent that multiple imputation captures?</b></summary>
+  <summary><b>C5. [THEORY] What is mean imputation failing to represent that multiple imputation captures?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -628,7 +628,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 ### Deletion
 
 <details>
-  <summary>❓ <b>D1. [THEORY] Give the formula for the fraction of rows surviving `dropna()` with `k` columns each missing a fraction `p`.</b></summary>
+  <summary><b>D1. [THEORY] Give the formula for the fraction of rows surviving `dropna()` with `k` columns each missing a fraction `p`.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -638,7 +638,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>D2. [OUT] With 8 columns at 10% missing each, what fraction of rows is kept? Show the calculation.</b></summary>
+  <summary><b>D2. [OUT] With 8 columns at 10% missing each, what fraction of rows is kept? Show the calculation.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -649,7 +649,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>D3. [ANALYZE] A dataset has 40 columns, each 2% missing. Would you use `dropna()`? Justify with the arithmetic.</b></summary>
+  <summary><b>D3. [ANALYZE] A dataset has 40 columns, each 2% missing. Would you use `dropna()`? Justify with the arithmetic.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -659,7 +659,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>D4. [THEORY] Name two situations where dropping the whole **column** is better than either imputing or dropping rows.</b></summary>
+  <summary><b>D4. [THEORY] Name two situations where dropping the whole **column** is better than either imputing or dropping rows.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -671,7 +671,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 ### Strategies
 
 <details>
-  <summary>❓ <b>S1. [THEORY] List the four `SimpleImputer` strategies and the data type each suits.</b></summary>
+  <summary><b>S1. [THEORY] List the four `SimpleImputer` strategies and the data type each suits.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -683,7 +683,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>S2. [OUT] Mean imputation on a `0`/`1` column produced `0.714286`. Explain why this is invalid and what should have been used.</b></summary>
+  <summary><b>S2. [OUT] Mean imputation on a `0`/`1` column produced `0.714286`. Explain why this is invalid and what should have been used.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -693,7 +693,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>S3. [ANALYZE] Why should `median` be preferred to `mean` on a column whose maximum is 442× its median?</b></summary>
+  <summary><b>S3. [ANALYZE] Why should `median` be preferred to `mean` on a column whose maximum is 442× its median?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -702,7 +702,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>S4. [THEORY] A column stores `0` and `1`. What single question determines whether `mean` is a legitimate strategy?</b></summary>
+  <summary><b>S4. [THEORY] A column stores `0` and `1`. What single question determines whether `mean` is a legitimate strategy?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -714,7 +714,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 ### Smarter imputers
 
 <details>
-  <summary>❓ <b>K1. [OUT] Interpret this result: why does the ranking reverse?</b></summary>
+  <summary><b>K1. [OUT] Interpret this result: why does the ranking reverse?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -732,7 +732,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>K2. [THEORY] Explain how `KNNImputer` fills a value, and why weak correlations make it perform worse than the mean.</b></summary>
+  <summary><b>K2. [THEORY] Explain how `KNNImputer` fills a value, and why weak correlations make it perform worse than the mean.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -742,7 +742,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>K3. [OUT] `IterativeImputer` scored `0.9840` on the unpredictable column — identical to the mean. Explain what happened inside it.</b></summary>
+  <summary><b>K3. [OUT] `IterativeImputer` scored `0.9840` on the unpredictable column — identical to the mean. Explain what happened inside it.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -751,7 +751,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>K4. [ANALYZE] Describe the procedure for measuring which imputer is best on your own data, without needing any external ground truth.</b></summary>
+  <summary><b>K4. [ANALYZE] Describe the procedure for measuring which imputer is best on your own data, without needing any external ground truth.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -764,7 +764,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>K5. [ANALYZE] Why did `IterativeImputer` do much worse than the mean on a column with skew 44.7?</b></summary>
+  <summary><b>K5. [ANALYZE] Why did `IterativeImputer` do much worse than the mean on a column with skew 44.7?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -773,7 +773,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>K6. [THEORY] What single check should you run before choosing `KNNImputer` over `median`?</b></summary>
+  <summary><b>K6. [THEORY] What single check should you run before choosing `KNNImputer` over `median`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -784,7 +784,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 ### `fit` and `transform`
 
 <details>
-  <summary>❓ <b>F1. [THEORY] What does `fit` compute for a `SimpleImputer`, and where is it stored?</b></summary>
+  <summary><b>F1. [THEORY] What does `fit` compute for a `SimpleImputer`, and where is it stored?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -794,7 +794,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>F2. [OUT] A test row's `NaN`s were filled with `32.5` and `72500`, which are the training means. Explain why using the test set's own means would be wrong.</b></summary>
+  <summary><b>F2. [OUT] A test row's `NaN`s were filled with `32.5` and `72500`, which are the training means. Explain why using the test set's own means would be wrong.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -803,7 +803,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>F3. [THEORY] Which method do you call on training data, and which on test data?</b></summary>
+  <summary><b>F3. [THEORY] Which method do you call on training data, and which on test data?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -813,7 +813,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>F4. [OUT] An input of shape `(3, 2)` produced output of shape `(3, 1)`. What happened, why, and what would you inspect to detect it?</b></summary>
+  <summary><b>F4. [OUT] An input of shape `(3, 2)` produced output of shape `(3, 1)`. What happened, why, and what would you inspect to detect it?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -824,7 +824,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>F5. [ANALYZE] Describe a concrete scenario in which the dropped-column behaviour causes a failure that surfaces far from its cause.</b></summary>
+  <summary><b>F5. [ANALYZE] Describe a concrete scenario in which the dropped-column behaviour causes a failure that surfaces far from its cause.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -835,7 +835,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 ### Applying it
 
 <details>
-  <summary>❓ <b>P1. [PROG] For a DataFrame, print each column's missing count and percentage, sorted worst first.</b></summary>
+  <summary><b>P1. [PROG] For a DataFrame, print each column's missing count and percentage, sorted worst first.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -850,7 +850,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>P2. [PROG] Write a function that hides 20% of a chosen complete column at random, imputes with `mean`, `median` and `KNNImputer`, and prints the RMSE of each against the hidden truth.</b></summary>
+  <summary><b>P2. [PROG] Write a function that hides 20% of a chosen complete column at random, imputes with `mean`, `median` and `KNNImputer`, and prints the RMSE of each against the hidden truth.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -895,7 +895,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>P3. [PROG] Impute with `add_indicator=True` and print the resulting column count before and after.</b></summary>
+  <summary><b>P3. [PROG] Impute with `add_indicator=True` and print the resulting column count before and after.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -912,7 +912,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>P4. [PROG] Compute, for a given DataFrame, the fraction of rows that `dropna()` would keep, and compare it against `(1−p)ᵏ` using the mean missing rate as `p`.</b></summary>
+  <summary><b>P4. [PROG] Compute, for a given DataFrame, the fraction of rows that `dropna()` would keep, and compare it against `(1−p)ᵏ` using the mean missing rate as `p`.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -934,7 +934,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>P5. [PROG] Build a `Pipeline` containing a `SimpleImputer` and a `StandardScaler`, fit it on train, and explain in a comment why this arrangement prevents leakage.</b></summary>
+  <summary><b>P5. [PROG] Build a `Pipeline` containing a `SimpleImputer` and a `StandardScaler`, fit it on train, and explain in a comment why this arrangement prevents leakage.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -960,7 +960,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>❓ <b>P6. [ANALYZE] You have a medical dataset where `blood_pressure` is 35% missing, and you learn the reading was skipped when patients were too unwell. State the mechanism, say whether you would impute, and describe what you would do instead.</b></summary>
+  <summary><b>P6. [ANALYZE] You have a medical dataset where `blood_pressure` is 35% missing, and you learn the reading was skipped when patients were too unwell. State the mechanism, say whether you would impute, and describe what you would do instead.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -973,7 +973,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 ### Quick self-check
 
 <details>
-  <summary>🧠 <b>1. What do MCAR, MAR and MNAR stand for?</b></summary>
+  <summary><b>1. What do MCAR, MAR and MNAR stand for?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -984,7 +984,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>🧠 <b>2. Which mechanism makes imputation impossible, and why?</b></summary>
+  <summary><b>2. Which mechanism makes imputation impossible, and why?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -993,7 +993,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>🧠 <b>3. Mean imputation preserves the mean. What does it damage?</b></summary>
+  <summary><b>3. Mean imputation preserves the mean. What does it damage?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -1002,7 +1002,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>🧠 <b>4. By how much did the standard deviation fall in the measured example?</b></summary>
+  <summary><b>4. By how much did the standard deviation fall in the measured example?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -1011,7 +1011,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>🧠 <b>5. With 8 columns at 5% missing each, what fraction of rows survives `dropna()`?</b></summary>
+  <summary><b>5. With 8 columns at 5% missing each, what fraction of rows survives `dropna()`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -1020,7 +1020,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>🧠 <b>6. When should you use `median` instead of `mean`?</b></summary>
+  <summary><b>6. When should you use `median` instead of `mean`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -1029,7 +1029,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>🧠 <b>7. What is wrong with `0.714286` as an imputed value for `employed`?</b></summary>
+  <summary><b>7. What is wrong with `0.714286` as an imputed value for `employed`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -1038,7 +1038,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>🧠 <b>8. What decides whether `KNNImputer` beats the mean?</b></summary>
+  <summary><b>8. What decides whether `KNNImputer` beats the mean?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -1047,7 +1047,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>🧠 <b>9. What does `IterativeImputer` do when there is no signal to find?</b></summary>
+  <summary><b>9. What does `IterativeImputer` do when there is no signal to find?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -1056,7 +1056,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>🧠 <b>10. What does `add_indicator=True` preserve, and when does it matter most?</b></summary>
+  <summary><b>10. What does `add_indicator=True` preserve, and when does it matter most?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -1065,7 +1065,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>🧠 <b>11. Which of `fit_transform` and `transform` belongs on the test set?</b></summary>
+  <summary><b>11. Which of `fit_transform` and `transform` belongs on the test set?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -1074,7 +1074,7 @@ Trace how MCAR vs. MNAR missingness alters baseline statistical distributions, c
 </details>
 
 <details>
-  <summary>🧠 <b>12. What happens to a column that is entirely `NaN` when `fit` is called?</b></summary>
+  <summary><b>12. What happens to a column that is entirely `NaN` when `fit` is called?</b></summary>
   <div className="answer-content">
     <br/>
     

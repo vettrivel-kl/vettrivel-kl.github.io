@@ -40,7 +40,7 @@ Cross-validation is defined by a fundamental tradeoff between **estimation bias*
 ## 2. Comparing CV Architectures
 
 <Tabs>
-  <TabItem value="kfold" label="⭐ 1. K-Fold CV (Practical Standard)" default>
+  <TabItem value="kfold" label="1. K-Fold CV (Practical Standard)" default>
     <br/>
     
     *   **The Mechanics:** Partition data into $K$ equal-sized folds. Run $K$ iterations; in each iteration, reserve 1 fold for testing and $K-1$ folds for training.
@@ -49,7 +49,7 @@ Cross-validation is defined by a fundamental tradeoff between **estimation bias*
     *   **The Tradeoff:** Balanced computation with low variance across folds. Small, negligible pessimistic bias because the training set is slightly smaller than $N$.
     *   **Verdict:** Universal industry standard for almost all production datasets.
   </TabItem>
-  <TabItem value="loocv" label="🔬 2. Leave-One-Out (LOO-CV)">
+  <TabItem value="loocv" label="2. Leave-One-Out (LOO-CV)">
     <br/>
     
     *   **The Mechanics:** Extreme form of K-fold where $K = N$. In each iteration, exactly 1 observation is held out for testing, and the model fits on the remaining $N-1$ rows.
@@ -57,7 +57,7 @@ Cross-validation is defined by a fundamental tradeoff between **estimation bias*
     *   **The Tradeoff:** **Zero statistical bias** because $N-1 \approx N$. However, it has **high computational cost** ($N$ trainings) and **high test variance** (each fold score is binary 0% or 100% on classification, and training folds overlap by $\frac{N-2}{N-1}$, inducing high correlation between fitted models).
     *   **Verdict:** Reserved strictly for very small datasets ($N < 100$) where data loss cannot be tolerated.
   </TabItem>
-  <TabItem value="lpocv" label="💥 3. Leave-P-Out (LPO-CV)">
+  <TabItem value="lpocv" label="3. Leave-P-Out (LPO-CV)">
     <br/>
     
     *   **The Mechanics:** Evaluates every possible unique combination of $P$ test samples out of $N$.
@@ -108,40 +108,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 5. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Running LOO-CV on Large Datasets" default>
+  <TabItem value="m1" label="1. Running LOO-CV on Large Datasets" default>
     <br/>
     
     *   **The Misconception:** *"LOO-CV uses $N-1$ samples for training, so it is the most statistically accurate method and should always be used."*
-    *   **❌ Wrong Thinking:** Choosing LOO-CV on datasets with thousands of rows.
-    *   **✅ The Right Principle:** LOO requires fitting your model $N$ times. For complex models (e.g. Gradient Boosting, Deep Nets) on $N = 10,000$, training takes days. Furthermore, LOO fold scores have high variance. Use 5-Fold or 10-Fold CV instead.
+    *   **Wrong Thinking:** Choosing LOO-CV on datasets with thousands of rows.
+    *   **The Right Principle:** LOO requires fitting your model $N$ times. For complex models (e.g. Gradient Boosting, Deep Nets) on $N = 10,000$, training takes days. Furthermore, LOO fold scores have high variance. Use 5-Fold or 10-Fold CV instead.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Dropping the Standard Deviation">
+  <TabItem value="m2" label="2. Dropping the Standard Deviation">
     <br/>
     
     *   **The Misconception:** *"Our 5-Fold cross-validation accuracy is 87.5%."*
-    *   **❌ Wrong Thinking:** Reporting a single scalar average without quantifying uncertainty.
-    *   **✅ The Right Principle:** A model with $87.5\% \pm 0.8\%$ behaves very differently in production from one with $87.5\% \pm 9.4\%$. The latter indicates extreme instability across data partitions. Always report both mean and standard deviation: $\mu \pm \sigma$.
+    *   **Wrong Thinking:** Reporting a single scalar average without quantifying uncertainty.
+    *   **The Right Principle:** A model with $87.5\% \pm 0.8\%$ behaves very differently in production from one with $87.5\% \pm 9.4\%$. The latter indicates extreme instability across data partitions. Always report both mean and standard deviation: $\mu \pm \sigma$.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Tuning Hyperparameters Inside the Evaluation CV">
+  <TabItem value="m3" label="3. Tuning Hyperparameters Inside the Evaluation CV">
     <br/>
     
     *   **The Misconception:** *"I looped over 5 folds and inside each fold selected the best learning rate on the test fold."*
-    *   **❌ Wrong Thinking:** Using the evaluation test fold to guide optimization decisions.
-    *   **✅ The Right Principle:** Evaluating candidate hyperparameters on the validation fold leaks information. If hyperparameter tuning is required inside cross-validation, you must implement **Nested Cross-Validation** (an inner CV loop for tuning, and an outer CV loop for evaluation).
+    *   **Wrong Thinking:** Using the evaluation test fold to guide optimization decisions.
+    *   **The Right Principle:** Evaluating candidate hyperparameters on the validation fold leaks information. If hyperparameter tuning is required inside cross-validation, you must implement **Nested Cross-Validation** (an inner CV loop for tuning, and an outer CV loop for evaluation).
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Blindly Setting Extreme K Values">
+  <TabItem value="m4" label="4. Blindly Setting Extreme K Values">
     <br/>
     
     *   **The Misconception:** *"If 10-fold is better than 5-fold, then 50-fold or 100-fold must be even better."*
-    *   **❌ Wrong Thinking:** Pushing $K$ toward $N$ without considering sample overlap.
-    *   **✅ The Right Principle:** Higher $K$ gives diminishing returns on bias reduction while linearly increasing computational cost. As $K \to N$, training sets become almost identical across folds, which can increase the variance of the overall mean estimate. Stick to standard $K=5$ or $K=10$.
+    *   **Wrong Thinking:** Pushing $K$ toward $N$ without considering sample overlap.
+    *   **The Right Principle:** Higher $K$ gives diminishing returns on bias reduction while linearly increasing computational cost. As $K \to N$, training sets become almost identical across folds, which can increase the variance of the overall mean estimate. Stick to standard $K=5$ or $K=10$.
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Random K-Fold on Imbalanced Classes">
+  <TabItem value="m5" label="5. Random K-Fold on Imbalanced Classes">
     <br/>
     
     *   **The Misconception:** *"Standard K-Fold randomly shuffles rows, so class distribution will be roughly equal across folds."*
-    *   **❌ Wrong Thinking:** Using unstratified `KFold` for imbalanced targets.
-    *   **✅ The Right Principle:** Random splitting can leave some folds with few or zero minority instances, causing crashes or skewed metric calculations. Always use **StratifiedKFold** for classification tasks.
+    *   **Wrong Thinking:** Using unstratified `KFold` for imbalanced targets.
+    *   **The Right Principle:** Random splitting can leave some folds with few or zero minority instances, causing crashes or skewed metric calculations. Always use **StratifiedKFold** for classification tasks.
   </TabItem>
 </Tabs>
 
@@ -153,7 +153,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Method Dynamics</h3>
+        <h3>Method Dynamics</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -168,7 +168,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Practical Guidelines</h3>
+        <h3>Practical Guidelines</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -186,15 +186,15 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **⚡ K-Fold is king:** In real-world data science, K-Fold ($K=5$ or $K=10$) handles $99\%$ of validation needs.
-*   **📊 Std Dev matters:** A low mean with tight variance is often preferable in production to a high mean with wild variance.
-*   **🚫 Beware LOO runtime:** Training 10,000 models on 10,000 rows rarely provides better signal than training 10 models via 10-Fold CV.
+*   **K-Fold is king:** In real-world data science, K-Fold ($K=5$ or $K=10$) handles $99\%$ of validation needs.
+*   **Std Dev matters:** A low mean with tight variance is often preferable in production to a high mean with wild variance.
+*   **Beware LOO runtime:** Training 10,000 models on 10,000 rows rarely provides better signal than training 10 models via 10-Fold CV.
 
 :::
 
-**Next Section:** [K-Fold and Stratified K-Fold](./03-k-fold-and-stratified-k-fold.md) - diving deeper into fold mechanics, grouping, and handling severe class imbalances.
+**Next Section:** [K-Fold and Stratified K-Fold](./03-k-fold-and-stratified-k-fold.mdx) - diving deeper into fold mechanics, grouping, and handling severe class imbalances.
 
 ---
 
@@ -208,16 +208,16 @@ export const CVMethodsQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Bias-Variance Tradeoff in CV</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: The Bias-Variance Tradeoff in CV</h4>
       <p style={{ margin: '0 0 15px 0' }}>Why does Leave-One-Out CV (LOO-CV) often produce higher estimation variance for the overall performance estimate than 10-Fold CV on moderately sized datasets?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because LOO-CV training sets are too small</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because LOO training sets overlap heavily, creating highly correlated models</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because LOO-CV relies on random seed shuffling</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. LOO training sets are as large as possible ($N-1$ samples), which minimizes bias, not size. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! In LOO-CV, each pair of training sets shares $N-2$ observations. Because the training sets are nearly identical, the models fitted across folds are highly correlated. The average of highly correlated random variables has higher variance than the average of less-correlated variables (as in 5 or 10-fold CV).</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. LOO-CV is completely deterministic; it does not involve random shuffling. Try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. LOO training sets are as large as possible ($N-1$ samples), which minimizes bias, not size. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! In LOO-CV, each pair of training sets shares $N-2$ observations. Because the training sets are nearly identical, the models fitted across folds are highly correlated. The average of highly correlated random variables has higher variance than the average of less-correlated variables (as in 5 or 10-fold CV).</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. LOO-CV is completely deterministic; it does not involve random shuffling. Try again!</p>}
     </div>
   );
 };
@@ -227,7 +227,7 @@ export const CVMethodsQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why is LOO-CV considered asymptotically unbiased for generalization error?</b></summary>
+  <summary><b>1. [THEORY] Why is LOO-CV considered asymptotically unbiased for generalization error?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -238,7 +238,7 @@ export const CVMethodsQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [ANALYZE] How does the computational complexity of LPO-CV scale with dataset size N when P=2?</b></summary>
+  <summary><b>2. [ANALYZE] How does the computational complexity of LPO-CV scale with dataset size N when P=2?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -250,7 +250,7 @@ export const CVMethodsQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [PRACTICE] Why is reporting 5-Fold accuracy as "89.2% ± 0.5%" far more informative than reporting "89.2%" alone?</b></summary>
+  <summary><b>3. [PRACTICE] Why is reporting 5-Fold accuracy as "89.2% ± 0.5%" far more informative than reporting "89.2%" alone?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -261,7 +261,7 @@ export const CVMethodsQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [THEORY] Can LOO-CV be computed efficiently for linear regression without fitting N separate models?</b></summary>
+  <summary><b>4. [THEORY] Can LOO-CV be computed efficiently for linear regression without fitting N separate models?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -273,7 +273,7 @@ export const CVMethodsQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [ANALYZE] When should you prefer 5-Fold over 10-Fold CV in an industrial ML pipeline?</b></summary>
+  <summary><b>5. [ANALYZE] When should you prefer 5-Fold over 10-Fold CV in an industrial ML pipeline?</b></summary>
   <div className="answer-content">
     <br/>
     

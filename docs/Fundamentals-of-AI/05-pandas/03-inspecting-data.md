@@ -358,7 +358,7 @@ One missing `Age`, one missing `Marks`.
 
 How it works: `isnull()` gives a DataFrame of `True`/`False` the same shape as the original,
 then `.sum()` adds up each column — and `True` counts as `1`, the same
-[boolean-as-int](../01-basics/01-values-and-types.md#bool-is-a-subclass-of-int) trick as in
+[boolean-as-int](../01-basics/01-values-and-types.mdx#bool-is-a-subclass-of-int) trick as in
 NumPy. `.sum()` defaults to `axis=0`, which is why you get one number per column.
 
 `isna()` is an exact alias for `isnull()`. Use whichever you prefer, consistently.

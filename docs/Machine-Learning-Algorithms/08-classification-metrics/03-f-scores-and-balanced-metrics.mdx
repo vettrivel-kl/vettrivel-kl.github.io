@@ -64,7 +64,7 @@ export const FScoreCalculator = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🧮 Interactive Harmonic Mean and F-Beta Explorer</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive Harmonic Mean and F-Beta Explorer</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Move the Precision and Recall sliders to observe how the harmonic penalty reacts to extreme divergence:
       </p>
@@ -163,7 +163,7 @@ export const FScoreCalculator = () => {
       <div style={{ padding: '10px 14px', borderRadius: '6px', backgroundColor: Math.abs(p - r) >= 0.4 ? 'rgba(229, 62, 62, 0.12)' : 'rgba(56, 161, 105, 0.12)', fontSize: '13px' }}>
         {Math.abs(p - r) >= 0.4 ? (
           <span style={{ color: '#c53030', fontWeight: 'bold' }}>
-            🚨 Metric Imbalance Trap: The Arithmetic Mean ({ (arith * 100).toFixed(0) }%) deceptively flatters the model, but the Harmonic Mean F1 ({ (f1 * 100).toFixed(0) }%) correctly penalizes the lagging metric by { divergence.toFixed(0) } percentage points!
+            Metric Imbalance Trap: The Arithmetic Mean ({ (arith * 100).toFixed(0) }%) deceptively flatters the model, but the Harmonic Mean F1 ({ (f1 * 100).toFixed(0) }%) correctly penalizes the lagging metric by { divergence.toFixed(0) } percentage points!
           </span>
         ) : (
           <span style={{ color: '#276749' }}>
@@ -272,40 +272,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 6. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Using the Arithmetic Mean for F1" default>
+  <TabItem value="m1" label="1. Using the Arithmetic Mean for F1" default>
     <br/>
     
     *   **The Misconception:** *"The F1-score is simply the average of precision and recall: (P + R) / 2."*
-    *   **❌ Wrong Thinking:** Computing the arithmetic mean instead of the harmonic mean.
-    *   **✅ The Right Principle:** $F_1 = 2 \frac{P \cdot R}{P + R}$. The arithmetic mean masks catastrophic failure when one metric collapses to near zero.
+    *   **Wrong Thinking:** Computing the arithmetic mean instead of the harmonic mean.
+    *   **The Right Principle:** $F_1 = 2 \frac{P \cdot R}{P + R}$. The arithmetic mean masks catastrophic failure when one metric collapses to near zero.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Inverting Beta Weights in F-Beta">
+  <TabItem value="m2" label="2. Inverting Beta Weights in F-Beta">
     <br/>
     
     *   **The Misconception:** *"F2 prioritizes precision because 2 is greater than 1."*
-    *   **❌ Wrong Thinking:** Assuming $\beta > 1$ weights precision.
-    *   **✅ The Right Principle:** $\beta$ represents how many times more important **Recall** is compared to Precision. $F_2$ ($\beta=2$) weights Recall twice as much as Precision. $F_{0.5}$ ($\beta=0.5$) weights Precision twice as much as Recall.
+    *   **Wrong Thinking:** Assuming $\beta > 1$ weights precision.
+    *   **The Right Principle:** $\beta$ represents how many times more important **Recall** is compared to Precision. $F_2$ ($\beta=2$) weights Recall twice as much as Precision. $F_{0.5}$ ($\beta=0.5$) weights Precision twice as much as Recall.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Assuming F1 Cares About True Negatives">
+  <TabItem value="m3" label="3. Assuming F1 Cares About True Negatives">
     <br/>
     
     *   **The Misconception:** *"A high F1-score proves the model accurately handles both positive and negative classes."*
-    *   **❌ Wrong Thinking:** Forgetting that TN is absent from the F1 formula.
-    *   **✅ The Right Principle:** $F_1$ only inspects $TP, FP, FN$. It provides zero verification of negative class accuracy. To evaluate performance across both classes symmetrically on imbalanced datasets, report **Matthews Correlation Coefficient (MCC)** or Balanced Accuracy.
+    *   **Wrong Thinking:** Forgetting that TN is absent from the F1 formula.
+    *   **The Right Principle:** $F_1$ only inspects $TP, FP, FN$. It provides zero verification of negative class accuracy. To evaluate performance across both classes symmetrically on imbalanced datasets, report **Matthews Correlation Coefficient (MCC)** or Balanced Accuracy.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Comparing F1 Across Differing Class Prevalences">
+  <TabItem value="m4" label="4. Comparing F1 Across Differing Class Prevalences">
     <br/>
     
     *   **The Misconception:** *"An F1 score of 0.70 means the same thing on a 50:50 dataset as on a 99:1 dataset."*
-    *   **❌ Wrong Thinking:** Treating $F_1$ as an absolute scale-invariant metric.
-    *   **✅ The Right Principle:** On a 99:1 dataset, baseline precision is $1\%$, making an $F_1$ of $0.70$ an extraordinary achievement. On a balanced dataset, random guessing yields $F_1 \approx 0.50$. Always anchor $F_1$ against class distribution.
+    *   **Wrong Thinking:** Treating $F_1$ as an absolute scale-invariant metric.
+    *   **The Right Principle:** On a 99:1 dataset, baseline precision is $1\%$, making an $F_1$ of $0.70$ an extraordinary achievement. On a balanced dataset, random guessing yields $F_1 \approx 0.50$. Always anchor $F_1$ against class distribution.
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Zero Denominator Crashes in MCC">
+  <TabItem value="m5" label="5. Zero Denominator Crashes in MCC">
     <br/>
     
     *   **The Misconception:** *"MCC can always be calculated for any classifier output."*
-    *   **❌ Wrong Thinking:** Failing to handle degenerate models that predict only one class.
-    *   **✅ The Right Principle:** If a model predicts 'Negative' for every sample ($TP = FP = 0$), the MCC denominator $\sqrt{(TP+FP)\dots}$ evaluates to zero. Scikit-learn handles this edge case by returning $0.0$.
+    *   **Wrong Thinking:** Failing to handle degenerate models that predict only one class.
+    *   **The Right Principle:** If a model predicts 'Negative' for every sample ($TP = FP = 0$), the MCC denominator $\sqrt{(TP+FP)\dots}$ evaluates to zero. Scikit-learn handles this edge case by returning $0.0$.
   </TabItem>
 </Tabs>
 
@@ -317,7 +317,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Metric Formulations</h3>
+        <h3>Metric Formulations</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -332,7 +332,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Engineering Selection</h3>
+        <h3>Engineering Selection</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -350,15 +350,15 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **⚡ Harmonic mean enforces balance:** A model cannot achieve high $F_1$ by sacrificing Recall to artificially inflate Precision.
-*   **🎯 Choose your β intentionally:** Use $F_2$ when missed cases are catastrophic; use $F_{0.5}$ when false alarms destroy customer trust.
-*   **🛡️ MCC is the ultimate test:** Because it accounts for True Negatives, MCC is the most rigorous single scalar metric for imbalanced classification.
+*   **Harmonic mean enforces balance:** A model cannot achieve high $F_1$ by sacrificing Recall to artificially inflate Precision.
+*   **Choose your β intentionally:** Use $F_2$ when missed cases are catastrophic; use $F_{0.5}$ when false alarms destroy customer trust.
+*   **MCC is the ultimate test:** Because it accounts for True Negatives, MCC is the most rigorous single scalar metric for imbalanced classification.
 
 :::
 
-**Next Section:** [ROC-AUC and Threshold Tuning](./04-roc-auc-and-threshold-tuning.md) - sweeping all decision thresholds simultaneously and quantifying discrimination power via the Area Under the Curve.
+**Next Section:** [ROC-AUC and Threshold Tuning](./04-roc-auc-and-threshold-tuning.mdx) - sweeping all decision thresholds simultaneously and quantifying discrimination power via the Area Under the Curve.
 
 ---
 
@@ -372,16 +372,16 @@ export const FScoreQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Metric Selection for Medical Screening</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Metric Selection for Medical Screening</h4>
       <p style={{ margin: '0 0 15px 0' }}>A medical research team wants a single metric to benchmark diagnostic algorithms for a rare deadly disease. False negatives must be penalized twice as heavily as false positives. Which metric should they select?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>F0.5-Score</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>F2-Score</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Standard Accuracy</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. F0.5 sets β = 0.5, which weights Precision twice as heavily as Recall. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! In F_β, the parameter β represents the relative importance of Recall compared to Precision. Setting β = 2.0 (F2) weights Recall twice as heavily as Precision, penalizing False Negatives heavily.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Standard accuracy fails on rare diseases due to the Accuracy Paradox. Try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. F0.5 sets β = 0.5, which weights Precision twice as heavily as Recall. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! In F_β, the parameter β represents the relative importance of Recall compared to Precision. Setting β = 2.0 (F2) weights Recall twice as heavily as Precision, penalizing False Negatives heavily.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Standard accuracy fails on rare diseases due to the Accuracy Paradox. Try again!</p>}
     </div>
   );
 };
@@ -391,7 +391,7 @@ export const FScoreQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why is the harmonic mean of two non-zero numbers always less than or equal to their arithmetic mean?</b></summary>
+  <summary><b>1. [THEORY] Why is the harmonic mean of two non-zero numbers always less than or equal to their arithmetic mean?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -404,7 +404,7 @@ export const FScoreQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [MATH] A model achieves Precision = 0.80 and Recall = 0.60. Calculate F1 by hand.</b></summary>
+  <summary><b>2. [MATH] A model achieves Precision = 0.80 and Recall = 0.60. Calculate F1 by hand.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -417,7 +417,7 @@ export const FScoreQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [ANALYZE] Why can Matthews Correlation Coefficient (MCC) identify a useless model on imbalanced data when F1 cannot?</b></summary>
+  <summary><b>3. [ANALYZE] Why can Matthews Correlation Coefficient (MCC) identify a useless model on imbalanced data when F1 cannot?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -430,7 +430,7 @@ export const FScoreQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [PRACTICE] How does Balanced Accuracy prevent the Accuracy Paradox on an imbalanced dataset (99% negative, 1% positive)?</b></summary>
+  <summary><b>4. [PRACTICE] How does Balanced Accuracy prevent the Accuracy Paradox on an imbalanced dataset (99% negative, 1% positive)?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -444,7 +444,7 @@ export const FScoreQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] Can F1 ever exceed both Precision and Recall?</b></summary>
+  <summary><b>5. [THEORY] Can F1 ever exceed both Precision and Recall?</b></summary>
   <div className="answer-content">
     <br/>
     

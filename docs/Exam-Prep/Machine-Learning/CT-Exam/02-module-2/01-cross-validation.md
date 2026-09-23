@@ -782,16 +782,16 @@ d) What do you recommend?
 ### Red Flags from CV Results
 
 ```
-🚩 High std deviation (> 0.2 × mean):
+- High std deviation (> 0.2 × mean):
    Model unstable, investigate data quality
 
-🚩 Large train-CV gap:
+- Large train-CV gap:
    Overfitting, reduce complexity
 
-🚩 One fold much worse than others:
+- One fold much worse than others:
    Check that fold for anomalies
 
-🚩 CV RMSE much higher than single split:
+- CV RMSE much higher than single split:
    Single split was lucky, CV is more honest
 ```
 
@@ -812,7 +812,7 @@ d) What do you recommend?
 
 ## Tips for CT Exam
 
-### ✅ DO
+### DO
 
 - **Always report CV error ± std dev** (not just mean)
 - **Use CV for hyperparameter selection** (show grid search)
@@ -820,7 +820,7 @@ d) What do you recommend?
 - **Compare models using CV** (fair comparison)
 - **Stratify for classification** (if imbalanced)
 
-### ❌ DON'T
+### DON'T
 
 - Don't use single train/test split for model evaluation
 - Don't ignore the standard deviation

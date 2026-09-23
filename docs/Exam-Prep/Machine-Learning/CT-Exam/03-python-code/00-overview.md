@@ -630,5 +630,5 @@ import seaborn as sns
 - Apply to practice problems
 - Build your own pipelines
 
-**Happy coding! 🐍**
+**Happy coding! **
 

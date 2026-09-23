@@ -1025,7 +1025,7 @@ Mistake 5: Assuming probabilities sum to 1 in OvR
 
 ## Tips for CT Exam
 
-### ✅ DO
+### DO
 
 - **Always interpret coefficients** (positive/negative, magnitude)
 - **Discuss threshold tradeoffs** (precision vs recall)
@@ -1034,7 +1034,7 @@ Mistake 5: Assuming probabilities sum to 1 in OvR
 - **Compare OvR vs Softmax** for multi-class
 - **Mention assumptions** (linear decision boundary, etc.)
 
-### ❌ DON'T
+### DON'T
 
 - Don't use linear regression for classification
 - Don't forget sigmoid function bounds output to [0,1]

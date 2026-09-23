@@ -128,7 +128,7 @@ export const FStringPlayground = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🧮 Interactive F-String Formatter Playground</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive F-String Formatter Playground</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Adjust alignment, width, precision, and padding to inspect the generated format string:
       </p>
@@ -231,7 +231,7 @@ export const FStringPlayground = () => {
       </div>
 
       <div style={{ padding: '8px 12px', borderRadius: '4px', backgroundColor: 'rgba(49, 130, 206, 0.08)', borderLeft: '4px solid #3182ce', fontSize: '12px' }}>
-        💡 <b>Grammar Breakdown:</b> <code>&#123;value:{spec}&#125;</code> instructs Python to fill with <code>{fill === ' ' ? 'space' : fill}</code>, align {align === '<' ? 'left' : align === '>' ? 'right' : 'center'}, fit into a {width}-character field, and format with precision <code>{precision}</code>.
+        <b>Grammar Breakdown:</b> <code>&#123;value:{spec}&#125;</code> instructs Python to fill with <code>{fill === ' ' ? 'space' : fill}</code>, align {align === '<' ? 'left' : align === '>' ? 'right' : 'center'}, fit into a {width}-character field, and format with precision <code>{precision}</code>.
       </div>
     </div>
   );
@@ -323,7 +323,7 @@ export const FStringGotchasSandbox = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>⚠️ F-String Edge Cases and Debugging</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>F-String Edge Cases and Debugging</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Select a special case to inspect exact Python syntax requirements:
       </p>
@@ -365,7 +365,7 @@ print(f"{x=}")        # Output: x=42
 print(f"{x + y=}")    # Output: x + y=52`}
             </pre>
             <p style={{ margin: 0, fontSize: '13px' }}>
-              💡 <b>Why it's essential:</b> Placing an equals sign <code>=</code> inside the curly braces automatically prints the expression text alongside its evaluated result—eliminating tedious <code>print("x =", x)</code> statements.
+              <b>Why it's essential:</b> Placing an equals sign <code>=</code> inside the curly braces automatically prints the expression text alongside its evaluated result—eliminating tedious <code>print("x =", x)</code> statements.
             </p>
           </div>
         )}
@@ -379,7 +379,7 @@ print(f"|{flag:<10}|")        # Output: |1         | (Formatted as int 1!)
 print(f"|{str(flag):<10}|")   # Output: |True      | (Correct!)`}
             </pre>
             <p style={{ margin: 0, fontSize: '13px' }}>
-              💡 <b>Mechanism:</b> Because <code>bool</code> is a subclass of <code>int</code>, applying a numeric field width causes Python to format the boolean numerically. Always wrap in <code>str(flag)</code> when formatting boolean column tables.
+              <b>Mechanism:</b> Because <code>bool</code> is a subclass of <code>int</code>, applying a numeric field width causes Python to format the boolean numerically. Always wrap in <code>str(flag)</code> when formatting boolean column tables.
             </p>
           </div>
         )}
@@ -391,7 +391,7 @@ print(f"|{str(flag):<10}|")   # Output: |True      | (Correct!)`}
               <code>{'print(f"JSON format: {{id}}")  # Output: JSON format: {id}\n# Single brace {id} attempts to evaluate variable \'id\'!'}</code>
             </pre>
             <p style={{ margin: 0, fontSize: '13px' }}>
-              💡 <b>Mechanism:</b> Just as <code>\\</code> escapes a backslash, double curly braces <code>&#123;&#123;</code> and <code>&#125;&#125;</code> escape literal curly braces inside an f-string.
+              <b>Mechanism:</b> Just as <code>\\</code> escapes a backslash, double curly braces <code>&#123;&#123;</code> and <code>&#125;&#125;</code> escape literal curly braces inside an f-string.
             </p>
           </div>
         )}
@@ -400,10 +400,10 @@ print(f"|{str(flag):<10}|")   # Output: |True      | (Correct!)`}
           <div>
             <strong style={{ color: '#3182ce', fontSize: '15px' }}>Dictionary Key Quote Nesting</strong>
             <pre style={{ margin: '10px 0', padding: '10px', fontSize: '13px', borderRadius: '4px' }}>
-              <code>{'user = {"name": "Alex", "role": "admin"}\n# ✅ RIGHT: Alternate double and single quotes\nprint(f"User: {user[\'name\']}")\n\n# ❌ WRONG (Python <= 3.11): Reusing double quotes raises SyntaxError\n# print(f"User: {user[\\"name\\"]}")'}</code>
+              <code>{'user = {"name": "Alex", "role": "admin"}\n# RIGHT: Alternate double and single quotes\nprint(f"User: {user[\'name\']}")\n\n# WRONG (Python <= 3.11): Reusing double quotes raises SyntaxError\n# print(f"User: {user[\\"name\\"]}")'}</code>
             </pre>
             <p style={{ margin: 0, fontSize: '13px' }}>
-              💡 <b>Mechanism:</b> In Python 3.11 and earlier, reusing the same quote delimiter inside the braces terminates the f-string prematurely. Python 3.12 relaxed this constraint, but alternating quotes remains standard cross-version practice.
+              <b>Mechanism:</b> In Python 3.11 and earlier, reusing the same quote delimiter inside the braces terminates the f-string prematurely. Python 3.12 relaxed this constraint, but alternating quotes remains standard cross-version practice.
             </p>
           </div>
         )}
@@ -444,40 +444,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 7. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Forgetting the 'f' Prefix" default>
+  <TabItem value="m1" label="1. Forgetting the 'f' Prefix" default>
     <br/>
     
     *   **The Misconception:** *"Typing `"{name}"` will automatically insert the variable."*
-    *   **❌ Wrong Thinking:** Forgetting the leading `f`.
-    *   **✅ The Right Principle:** Without the leading `f`, Python treats `{name}` as literal text characters. You must write `f"{name}"`.
+    *   **Wrong Thinking:** Forgetting the leading `f`.
+    *   **The Right Principle:** Without the leading `f`, Python treats `{name}` as literal text characters. You must write `f"{name}"`.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Aligning Booleans Directly">
+  <TabItem value="m2" label="2. Aligning Booleans Directly">
     <br/>
     
     *   **The Misconception:** *"Writing `f'{True:<10}'` aligns the word 'True'."*
-    *   **❌ Wrong Thinking:** Applying a numeric width specifier to a boolean.
-    *   **✅ The Right Principle:** Because `bool` inherits from `int`, Python formats `True` as integer `1`. Always convert to string first: `f"{str(True):<10}"`.
+    *   **Wrong Thinking:** Applying a numeric width specifier to a boolean.
+    *   **The Right Principle:** Because `bool` inherits from `int`, Python formats `True` as integer `1`. Always convert to string first: `f"{str(True):<10}"`.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Expecting .2f to Truncate">
+  <TabItem value="m3" label="3. Expecting .2f to Truncate">
     <br/>
     
     *   **The Misconception:** *"Specifying `.2f` chops off decimals after 2 places."*
-    *   **❌ Wrong Thinking:** Expecting truncation on `19.999`.
-    *   **✅ The Right Principle:** `.2f` performs standard arithmetic **rounding** (`19.999` rounds up to `20.00`). If true truncation is needed, truncate mathematically via `int(x * 100) / 100`.
+    *   **Wrong Thinking:** Expecting truncation on `19.999`.
+    *   **The Right Principle:** `.2f` performs standard arithmetic **rounding** (`19.999` rounds up to `20.00`). If true truncation is needed, truncate mathematically via `int(x * 100) / 100`.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Literal Braces in F-Strings">
+  <TabItem value="m4" label="4. Literal Braces in F-Strings">
     <br/>
     
     *   **The Misconception:** *"Writing `f'{Hello}'` prints literal curly braces."*
-    *   **❌ Wrong Thinking:** Forgetting to double curly braces.
-    *   **✅ The Right Principle:** Python attempts to evaluate `Hello` as a variable name and raises a `NameError`. To print a literal brace, double it: `f"{{Hello}}"`.
+    *   **Wrong Thinking:** Forgetting to double curly braces.
+    *   **The Right Principle:** Python attempts to evaluate `Hello` as a variable name and raises a `NameError`. To print a literal brace, double it: `f"{{Hello}}"`.
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Backslashes Inside Braces (Python <= 3.11)">
+  <TabItem value="m5" label="5. Backslashes Inside Braces (Python <= 3.11)">
     <br/>
     
     *   **The Misconception:** *"I can write `f'{'\\n'.join(items)}'` directly inside the braces."*
-    *   **❌ Wrong Thinking:** Using escape characters inside expressions in Python $\le$ 3.11.
-    *   **✅ The Right Principle:** In Python 3.11 and earlier, backslashes inside `{}` raise a `SyntaxError`. Pre-compute the joined string into a variable outside the f-string first.
+    *   **Wrong Thinking:** Using escape characters inside expressions in Python $\le$ 3.11.
+    *   **The Right Principle:** In Python 3.11 and earlier, backslashes inside `{}` raise a `SyntaxError`. Pre-compute the joined string into a variable outside the f-string first.
   </TabItem>
 </Tabs>
 
@@ -489,7 +489,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Format Mini-Language</h3>
+        <h3>Format Mini-Language</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -504,7 +504,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Field Alignment</h3>
+        <h3>Field Alignment</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -522,11 +522,11 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **⚡ Modern standard:** F-strings are faster, more readable, and evaluated directly at runtime.
-*   **🛠️ Debug mode saves time:** Use `f"{variable=}"` for instant logging and troubleshooting.
-*   **🔒 Double braces to escape:** Always use `{{` and `}}` when generating JSON or literal braces.
+*   **Modern standard:** F-strings are faster, more readable, and evaluated directly at runtime.
+*   **Debug mode saves time:** Use `f"{variable=}"` for instant logging and troubleshooting.
+*   **Double braces to escape:** Always use `{{` and `}}` when generating JSON or literal braces.
 
 :::
 
@@ -544,16 +544,16 @@ export const FStringQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Formatting Booleans in Columns</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Formatting Booleans in Columns</h4>
       <p style={{ margin: '0 0 15px 0' }}>What does Python print when executing <code>f"|&#123;True:&lt;6&#125;|"</code>?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>|True  | (The word 'True' padded to 6 chars)</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>|1     | (The integer 1 padded to 6 chars)</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>TypeError: Cannot format bool with alignment</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. While you might expect 'True', Python's bool type inherits from int! Under a numeric field width, it formats as an integer. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Because bool is a subclass of int, passing a numeric field width specifier causes Python to evaluate True as integer 1, printing '|1     |'! To preserve the word 'True', you must explicitly cast: f"|&#123;str(True):&lt;6&#125;|".</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. It does not raise an error; it compiles cleanly but outputs unexpected integer formatting. Try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. While you might expect 'True', Python's bool type inherits from int! Under a numeric field width, it formats as an integer. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! Because bool is a subclass of int, passing a numeric field width specifier causes Python to evaluate True as integer 1, printing '|1     |'! To preserve the word 'True', you must explicitly cast: f"|&#123;str(True):&lt;6&#125;|".</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. It does not raise an error; it compiles cleanly but outputs unexpected integer formatting. Try again!</p>}
     </div>
   );
 };
@@ -563,7 +563,7 @@ export const FStringQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why do f-strings execute significantly faster than `str.format()` and `%` formatting?</b></summary>
+  <summary><b>1. [THEORY] Why do f-strings execute significantly faster than `str.format()` and `%` formatting?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -574,7 +574,7 @@ export const FStringQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [PRACTICE] How do you format a float `ratio = 0.8567` as a percentage rounded to 1 decimal place?</b></summary>
+  <summary><b>2. [PRACTICE] How do you format a float `ratio = 0.8567` as a percentage rounded to 1 decimal place?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -587,7 +587,7 @@ export const FStringQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [THEORY] What does the `=` specifier do in Python 3.8+ f-strings?</b></summary>
+  <summary><b>3. [THEORY] What does the `=` specifier do in Python 3.8+ f-strings?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -602,7 +602,7 @@ export const FStringQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [PRACTICE] How do you construct a centered 16-character string padded with asterisks `*`?</b></summary>
+  <summary><b>4. [PRACTICE] How do you construct a centered 16-character string padded with asterisks `*`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -617,7 +617,7 @@ export const FStringQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [ANALYZE] How do you escape literal curly braces in an f-string when generating JSON?</b></summary>
+  <summary><b>5. [ANALYZE] How do you escape literal curly braces in an f-string when generating JSON?</b></summary>
   <div className="answer-content">
     <br/>
     

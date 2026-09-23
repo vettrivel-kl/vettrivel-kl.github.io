@@ -25,7 +25,7 @@ export const SplitLottery = () => {
   const acc = getAccuracy();
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🎛️ Live Split Lottery Simulator</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Live Split Lottery Simulator</h4>
       <p style={{ margin: '0 0 15px 0', fontSize: '14px' }}>Re-roll the split seed to see how reported test accuracy fluctuates purely based on the random seed. Notice how a larger dataset stabilizes the reported score:</p>
       <div style={{ display: 'flex', gap: '20px', marginBottom: '20px', alignItems: 'center', flexWrap: 'wrap' }}>
         <label style={{ fontSize: '13px', fontWeight: 'bold' }}>
@@ -35,7 +35,7 @@ export const SplitLottery = () => {
             <option value="large">Large (569 rows - stable)</option>
           </select>
         </label>
-        <button onClick={() => setSeed(prev => prev + 1)} style={{ padding: '6px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: '#3182ce', color: '#fff', cursor: 'pointer', fontWeight: 'bold' }}>🎲 Re-roll Split Seed</button>
+        <button onClick={() => setSeed(prev => prev + 1)} style={{ padding: '6px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: '#3182ce', color: '#fff', cursor: 'pointer', fontWeight: 'bold' }}>Re-roll Split Seed</button>
       </div>
       <div style={{ display: 'flex', gap: '15px', alignItems: 'center', backgroundColor: 'rgba(49, 130, 206, 0.1)', padding: '15px', borderRadius: '6px' }}>
         <div>
@@ -69,7 +69,7 @@ export const GroupVisualizer = () => {
   ];
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>👥 Live Group Leakage Visualizer</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Live Group Leakage Visualizer</h4>
       <p style={{ margin: '0 0 15px 0', fontSize: '14px' }}>Compare how a standard random split causes **Patient Leakage** by putting different scans from the *same patient* on both sides, versus the safe **GroupShuffleSplit**:</p>
       <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
         <button onClick={() => setSplitType('random')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: splitType === 'random' ? '#3182ce' : 'transparent', color: splitType === 'random' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s', fontWeight: 'bold' }}>Random Split (Bleeding)</button>
@@ -90,15 +90,15 @@ export const GroupVisualizer = () => {
               <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Patient {s.pat}</div>
               <div style={{ fontSize: '14px', fontWeight: 'bold', margin: '4px 0' }}>{s.name}</div>
               <div style={{ fontSize: '11px', fontWeight: 'bold', color: isTrain ? '#2b6cb0' : '#c05621' }}>
-                {isTrain ? "💙 Train Set" : "🧡 Test Set"}
+                {isTrain ? "Train Set" : "Test Set"}
               </div>
             </div>
           );
         })}
       </div>
       <div style={{ fontSize: '12px', color: 'var(--ifm-color-emphasis-600)', fontStyle: 'italic' }}>
-        {splitType === 'random' && "⚠️ Patient Leakage! Notice how Patient A has Scan A1 & A3 in Train, and Scan A2 in Test. The model will recognize Patient A's identity rather than learning general disease signatures, reporting an artificial 89% accuracy when true accuracy is only 47%!"}
-        {splitType === 'group' && "✅ Perfectly Isolated! Patients A & B are used strictly for training, and Patients C & D are used strictly for testing. The model is forced to generalise to entirely new patient identities, reporting an honest chance score."}
+        {splitType === 'random' && "Patient Leakage! Notice how Patient A has Scan A1 & A3 in Train, and Scan A2 in Test. The model will recognize Patient A's identity rather than learning general disease signatures, reporting an artificial 89% accuracy when true accuracy is only 47%!"}
+        {splitType === 'group' && "Perfectly Isolated! Patients A & B are used strictly for training, and Patients C & D are used strictly for testing. The model is forced to generalise to entirely new patient identities, reporting an honest chance score."}
       </div>
     </div>
   );
@@ -108,16 +108,16 @@ export const PracticeQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Patient Leakage</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Patient Leakage</h4>
       <p style={{ margin: '0 0 15px 0' }}>If Patient A has 5 medical scans, and a random train_test_split places 4 scans in Train and 1 scan in Test, why is the resulting test accuracy artificial?</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '10px', borderRadius: '4px', border: '1px solid #3182ce', textAlign: 'left', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Option A: Scans are corrupted by image noise during splitting.</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '10px', borderRadius: '4px', border: '1px solid #3182ce', textAlign: 'left', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Option B: The model simply memorizes Patient A's distinct, non-disease biological features (lookup), failing to generalize to entirely new patients in production.</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '10px', borderRadius: '4px', border: '1px solid #3182ce', textAlign: 'left', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Option C: Class imbalances naturally adjust in a way that destroys the positive labels.</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Image noise is not created by train_test_split.</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Interleaving patient scans across splits allows the model to perform a simple look-up of the patient's identity (biomarkers, scan background), masking the model's inability to diagnose new patient cases.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. This is Patient Leakage, not a class imbalance or stratification issue.</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Image noise is not created by train_test_split.</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! Interleaving patient scans across splits allows the model to perform a simple look-up of the patient's identity (biomarkers, scan background), masking the model's inability to diagnose new patient cases.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. This is Patient Leakage, not a class imbalance or stratification issue.</p>}
     </div>
   );
 };
@@ -404,11 +404,11 @@ every prediction is an average of training targets.
 Split by time: train on the past, test on the future, exactly as the deployed model will experience it.
 `TimeSeriesSplit` does this across multiple folds.
 
-#### ⏳ Time-Series Splits: Shuffled vs. Chronological
+#### Time-Series Splits: Shuffled vs. Chronological
 Explore the difference between interpolation leakage and honest chronological splits below:
 
 <Tabs>
-  <TabItem value="shuffled" label="🚫 Shuffled Split (Interpolation Leak)" default>
+  <TabItem value="shuffled" label="Shuffled Split (Interpolation Leak)" default>
     <br/>
     
     Shuffled splits interleave train and test points across the entire timeline:
@@ -418,7 +418,7 @@ Explore the difference between interpolation leakage and honest chronological sp
     *   **The Hazard:** The model is tested on $t_5$ while having already trained on $t_4$ (the past) and $t_6$ (the future). It simply **interpolates** between points it has already memorized, inflating $R^2$ to `0.9994` on a trending series.
     *   **The Outcome:** Catastrophic failure in production because real-world deployment can never train on the future.
   </TabItem>
-  <TabItem value="chrono" label="✅ Chronological Split (Honest Extrapolation)">
+  <TabItem value="chrono" label="Chronological Split (Honest Extrapolation)">
     <br/>
     
     Chronological splits enforce a strict historical threshold:
@@ -489,40 +489,40 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 Explore some of the most critical engineering pitfalls in train-test splitting:
 
 <Tabs>
-  <TabItem value="lottery" label="🚨 Pitfall 1: Seed Lottery Tuning" default>
+  <TabItem value="lottery" label="Pitfall 1: Seed Lottery Tuning" default>
     <br/>
     
     *   **The Misconception:** *"Tuning my random_state seed is a good way to optimize model performance."*
-    *   **❌ Wrong Thinking:** Trying multiple seeds and keeping the best is self-deception. A seed lottery can swing scores by 18 points on small datasets purely due to lucky row distribution.
-    *   **✅ The Right Principle:** Never report a single-split score as final. Use cross-validation to average scores over multiple folds to ensure the seed is irrelevant.
+    *   **Wrong Thinking:** Trying multiple seeds and keeping the best is self-deception. A seed lottery can swing scores by 18 points on small datasets purely due to lucky row distribution.
+    *   **The Right Principle:** Never report a single-split score as final. Use cross-validation to average scores over multiple folds to ensure the seed is irrelevant.
   </TabItem>
-  <TabItem value="stratify" label="🚨 Pitfall 2: Omitting Stratify">
+  <TabItem value="stratify" label="Pitfall 2: Omitting Stratify">
     <br/>
     
     *   **The Misconception:** *"A standard random split will automatically keep the minority case ratio intact."*
-    *   **❌ Wrong Thinking:** On imbalanced datasets, unstratified splits can frequently result in test sets with 0% minority cases, making precision and recall completely undefined.
-    *   **✅ The Right Principle:** Always pass `stratify=y` on classification tasks to freeze class proportions across splits.
+    *   **Wrong Thinking:** On imbalanced datasets, unstratified splits can frequently result in test sets with 0% minority cases, making precision and recall completely undefined.
+    *   **The Right Principle:** Always pass `stratify=y` on classification tasks to freeze class proportions across splits.
   </TabItem>
-  <TabItem value="leakage" label="🚨 Pitfall 3: Pre-Split Fitting">
+  <TabItem value="leakage" label="Pitfall 3: Pre-Split Fitting">
     <br/>
     
     *   **The Misconception:** *"It's fine to fit my scalers and imputers on the full dataset before calling train_test_split."*
-    *   **❌ Wrong Thinking:** This introduces data leakage (e.g. leaking global mean/std). Standard scaling leak is tiny (+0.0002) but target encoding leakage is massive (+0.21), creating fake accuracy.
-    *   **✅ The Right Principle:** Always split first, fit encoders/scalers ONLY on training subsets, and wrap everything in a `Pipeline`.
+    *   **Wrong Thinking:** This introduces data leakage (e.g. leaking global mean/std). Standard scaling leak is tiny (+0.0002) but target encoding leakage is massive (+0.21), creating fake accuracy.
+    *   **The Right Principle:** Always split first, fit encoders/scalers ONLY on training subsets, and wrap everything in a `Pipeline`.
   </TabItem>
-  <TabItem value="group" label="🚨 Pitfall 4: Grouped Patient Leaks">
+  <TabItem value="group" label="Pitfall 4: Grouped Patient Leaks">
     <br/>
     
     *   **The Misconception:** *"As long as rows are shuffled randomly, patients having multiple rows is fine."*
-    *   **❌ Wrong Thinking:** Random splits place scans from the same patient in both Train and Test. The model does a simple look-up of patient identity and reports an artificial 89% accuracy against a 50% ceiling.
-    *   **✅ The Right Principle:** Group related rows! Use `GroupShuffleSplit` with patient/entity ids to keep patients completely on one side.
+    *   **Wrong Thinking:** Random splits place scans from the same patient in both Train and Test. The model does a simple look-up of patient identity and reports an artificial 89% accuracy against a 50% ceiling.
+    *   **The Right Principle:** Group related rows! Use `GroupShuffleSplit` with patient/entity ids to keep patients completely on one side.
   </TabItem>
-  <TabItem value="time" label="🚨 Pitfall 5: Time-Series Shuffling">
+  <TabItem value="time" label="Pitfall 5: Time-Series Shuffling">
     <br/>
     
     *   **The Misconception:** *"Shuffling time-series data is correct because it ensures random samples."*
-    *   **❌ Wrong Thinking:** Shuffling time-series leaks future values (interpolation), reporting a perfect 0.99 $R^2$ on trending series where chronological predictions actually fail catastrophically ($R^2 = -2.45$).
-    *   **✅ The Right Principle:** Always split chronologically: train on the past, test on the future.
+    *   **Wrong Thinking:** Shuffling time-series leaks future values (interpolation), reporting a perfect 0.99 $R^2$ on trending series where chronological predictions actually fail catastrophically ($R^2 = -2.45$).
+    *   **The Right Principle:** Always split chronologically: train on the past, test on the future.
   </TabItem>
 </Tabs>
 
@@ -534,7 +534,7 @@ Explore some of the most critical engineering pitfalls in train-test splitting:
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header" style={{ padding: '15px', borderBottom: '1px solid var(--ifm-color-emphasis-200)' }}>
-        <h3>🤖 Isolation & Reproducibility</h3>
+        <h3>Isolation & Reproducibility</h3>
       </div>
       <div className="card__body" style={{ padding: '15px' }}>
         <ul>
@@ -549,7 +549,7 @@ Explore some of the most critical engineering pitfalls in train-test splitting:
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header" style={{ padding: '15px', borderBottom: '1px solid var(--ifm-color-emphasis-200)' }}>
-        <h3>👥 Structural Splitting</h3>
+        <h3>Structural Splitting</h3>
       </div>
       <div className="card__body" style={{ padding: '15px' }}>
         <ul>
@@ -566,11 +566,11 @@ Explore some of the most critical engineering pitfalls in train-test splitting:
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🎯 Memorisation is not generalization:** Evaluating models on training datasets leads to lookups rather than predictions. Unrestricted trees and 1-NN score a perfect 1.0000 train score by construction.
-*   **⚠️ Group Leakage is lethal:** Bleeding patient scans across training and testing results in a massive 42-point accuracy overstatement.
-*   **🔄 Chronology exposes limits:** Shuffling time-series reports a perfect $R^2 = 0.9994$ whereas chronological tests reveal a realistic $R^2 = -2.4583$.
+*   **Memorisation is not generalization:** Evaluating models on training datasets leads to lookups rather than predictions. Unrestricted trees and 1-NN score a perfect 1.0000 train score by construction.
+*   **Group Leakage is lethal:** Bleeding patient scans across training and testing results in a massive 42-point accuracy overstatement.
+*   **Chronology exposes limits:** Shuffling time-series reports a perfect $R^2 = 0.9994$ whereas chronological tests reveal a realistic $R^2 = -2.4583$.
 
 :::
 
@@ -590,7 +590,7 @@ for where this sits in the workflow
 *Attempt each question first, then click to reveal detailed answers, mathematical derivations, and sample explanations.*
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why is model performance measured strictly on training data completely uninformative?</b></summary>
+  <summary><b>1. [THEORY] Why is model performance measured strictly on training data completely uninformative?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -600,7 +600,7 @@ for where this sits in the workflow
 </details>
 
 <details>
-  <summary>❓ <b>2. [THEORY] What is the "Split Lottery", and how do dataset size and test_size affect it?</b></summary>
+  <summary><b>2. [THEORY] What is the "Split Lottery", and how do dataset size and test_size affect it?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -610,7 +610,7 @@ for where this sits in the workflow
 </details>
 
 <details>
-  <summary>❓ <b>3. [THEORY] What is class imbalance drift, and how does stratify=y prevent undefined metrics?</b></summary>
+  <summary><b>3. [THEORY] What is class imbalance drift, and how does stratify=y prevent undefined metrics?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -621,7 +621,7 @@ for where this sits in the workflow
 </details>
 
 <details>
-  <summary>❓ <b>4. [ANALYZE] Why is preprocessing leakage from scaling (+0.0002) statistically negligible compared to target-encoding leakage (+0.21) and duplicate leaks (+0.24)?</b></summary>
+  <summary><b>4. [ANALYZE] Why is preprocessing leakage from scaling (+0.0002) statistically negligible compared to target-encoding leakage (+0.21) and duplicate leaks (+0.24)?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -632,7 +632,7 @@ for where this sits in the workflow
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] Why is deduplication (df.drop_duplicates) the one data cleaning step that belongs strictly BEFORE splitting?</b></summary>
+  <summary><b>5. [THEORY] Why is deduplication (df.drop_duplicates) the one data cleaning step that belongs strictly BEFORE splitting?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -641,7 +641,7 @@ for where this sits in the workflow
 </details>
 
 <details>
-  <summary>❓ <b>6. [ANALYZE] Why does evaluating a random split on grouped data (e.g., patient scans) report 89% accuracy when the true generalizing limit is chance (50%)?</b></summary>
+  <summary><b>6. [ANALYZE] Why does evaluating a random split on grouped data (e.g., patient scans) report 89% accuracy when the true generalizing limit is chance (50%)?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -652,7 +652,7 @@ for where this sits in the workflow
 </details>
 
 <details>
-  <summary>❓ <b>7. [ANALYZE] Why does shuffling a time-series result in an artificial R² of 0.9994 when a chronological split shows a realistic -2.4583?</b></summary>
+  <summary><b>7. [ANALYZE] Why does shuffling a time-series result in an artificial R² of 0.9994 when a chronological split shows a realistic -2.4583?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -663,7 +663,7 @@ for where this sits in the workflow
 </details>
 
 <details>
-  <summary>❓ <b>8. [THEORY] What is the difference between a Validation set and a Test set in a three-way split, and how many times can you use the Test set?</b></summary>
+  <summary><b>8. [THEORY] What is the difference between a Validation set and a Test set in a three-way split, and how many times can you use the Test set?</b></summary>
   <div className="answer-content">
     <br/>
     

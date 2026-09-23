@@ -68,7 +68,7 @@ export const RLTerminologyQuiz = () => {
   const [q3, setQ3] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 15px 0' }}>🧠 Interactive Checkpoint: Reinforcement Learning Terminology</h4>
+      <h4 style={{ margin: '0 0 15px 0' }}>Interactive Checkpoint: Reinforcement Learning Terminology</h4>
       
       <div style={{ marginBottom: '20px' }}>
         <p style={{ margin: '0 0 10px 0' }}><b>Scenario 1:</b> An autonomous vehicle's central computer decides to <i>"Apply maximum braking power"</i> after detecting an obstacle. What core RL component does this decision represent?</p>
@@ -78,8 +78,8 @@ export const RLTerminologyQuiz = () => {
           <button onClick={() => setQ1('policy')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q1 === 'policy' ? '#e53e3e' : 'transparent', color: q1 === 'policy' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Policy</button>
           <button onClick={() => setQ1('reward')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q1 === 'reward' ? '#e53e3e' : 'transparent', color: q1 === 'reward' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Reward</button>
         </div>
-        {q1 === 'action' && <p style={{ color: '#38a169', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>✅ Correct! Applying brakes is a choice or physical output available to the agent, which makes it an Action.</p>}
-        {q1 && q1 !== 'action' && <p style={{ color: '#e53e3e', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>❌ Try again! Think about what physical outputs or decisions the agent generates to affect the environment.</p>}
+        {q1 === 'action' && <p style={{ color: '#38a169', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Correct! Applying brakes is a choice or physical output available to the agent, which makes it an Action.</p>}
+        {q1 && q1 !== 'action' && <p style={{ color: '#e53e3e', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Try again! Think about what physical outputs or decisions the agent generates to affect the environment.</p>}
       </div>
 
       <div style={{ marginBottom: '20px' }}>
@@ -89,8 +89,8 @@ export const RLTerminologyQuiz = () => {
           <button onClick={() => setQ2('environment')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q2 === 'environment' ? '#e53e3e' : 'transparent', color: q2 === 'environment' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Environment</button>
           <button onClick={() => setQ2('agent')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q2 === 'agent' ? '#e53e3e' : 'transparent', color: q2 === 'agent' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Agent</button>
         </div>
-        {q2 === 'state' && <p style={{ color: '#38a169', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>✅ Correct! The instantaneous readings of the sensors represent the current State the agent is in.</p>}
-        {q2 && q2 !== 'state' && <p style={{ color: '#e53e3e', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>❌ Try again! Although the objects are part of the external environment, these specific readings represent the instantaneous situation of the agent.</p>}
+        {q2 === 'state' && <p style={{ color: '#38a169', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Correct! The instantaneous readings of the sensors represent the current State the agent is in.</p>}
+        {q2 && q2 !== 'state' && <p style={{ color: '#e53e3e', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Try again! Although the objects are part of the external environment, these specific readings represent the instantaneous situation of the agent.</p>}
       </div>
 
       <div>
@@ -100,8 +100,8 @@ export const RLTerminologyQuiz = () => {
           <button onClick={() => setQ3('value')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q3 === 'value' ? '#e53e3e' : 'transparent', color: q3 === 'value' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Value Function</button>
           <button onClick={() => setQ3('episode')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q3 === 'episode' ? '#e53e3e' : 'transparent', color: q3 === 'episode' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Episode</button>
         </div>
-        {q3 === 'policy' && <p style={{ color: '#38a169', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>✅ Correct! The Policy is the strategy or function mapping states to actions (situations to behavior).</p>}
-        {q3 && q3 !== 'policy' && <p style={{ color: '#e53e3e', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>❌ Try again! Think about what name is given to the overall mapping of states to actions.</p>}
+        {q3 === 'policy' && <p style={{ color: '#38a169', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Correct! The Policy is the strategy or function mapping states to actions (situations to behavior).</p>}
+        {q3 && q3 !== 'policy' && <p style={{ color: '#e53e3e', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>Try again! Think about what name is given to the overall mapping of states to actions.</p>}
       </div>
     </div>
   );
@@ -240,68 +240,68 @@ Through RLHF, reinforcement learning serves as the critical bridge that transfor
 Here are the most common conceptual pitfalls when implementing and analyzing Reinforcement Learning algorithms, compared with the correct engineering principles.
 
 <Tabs>
-  <TabItem value="mistake1" label="🚨 1. Unsupervised Fallacy" default>
+  <TabItem value="mistake1" label="1. Unsupervised Fallacy" default>
     <br/>
 
     *   **The Misconception:** *"Reinforcement learning is just a type of unsupervised learning because it does not use human labels."*
-    *   **❌ Wrong Thinking:** Treating RL as if it runs without any feedback, missing the critical difference in objective.
-    *   **✅ The Right Principle:** Unsupervised learning receives **no feedback** at all and is purely exploratory. Reinforcement learning receives numerical **feedback (rewards/penalties)**. It has feedback without answers.
+    *   **Wrong Thinking:** Treating RL as if it runs without any feedback, missing the critical difference in objective.
+    *   **The Right Principle:** Unsupervised learning receives **no feedback** at all and is purely exploratory. Reinforcement learning receives numerical **feedback (rewards/penalties)**. It has feedback without answers.
   </TabItem>
-  <TabItem value="mistake2" label="🚨 2. Reward = Label">
+  <TabItem value="mistake2" label="2. Reward = Label">
     <br/>
 
     *   **The Misconception:** *"A reward is just another word for a label, telling the model the correct action to take."*
-    *   **❌ Wrong Thinking:** Believing that a reward of `-1` or `+10` directly informs the agent of the exact action it *should* have performed.
-    *   **✅ The Right Principle:** A reward says **how good** an action was, never **what the agent should have done instead**. Evaluating one action tells it nothing about the other choices, which forces the agent to explore alternatives.
+    *   **Wrong Thinking:** Believing that a reward of `-1` or `+10` directly informs the agent of the exact action it *should* have performed.
+    *   **The Right Principle:** A reward says **how good** an action was, never **what the agent should have done instead**. Evaluating one action tells it nothing about the other choices, which forces the agent to explore alternatives.
   </TabItem>
-  <TabItem value="mistake3" label="🚨 3. Policy vs. Model">
+  <TabItem value="mistake3" label="3. Policy vs. Model">
     <br/>
 
     *   **The Misconception:** *"Reinforcement learning outputs a standard predictive model just like supervised learning."*
-    *   **❌ Wrong Thinking:** Expecting the output of RL to be a static mapping of features to predictive target variables.
-    *   **✅ The Right Principle:** RL outputs a **policy** — an active strategy or function mapping situational *states* to optimal *behaviors or actions*.
+    *   **Wrong Thinking:** Expecting the output of RL to be a static mapping of features to predictive target variables.
+    *   **The Right Principle:** RL outputs a **policy** — an active strategy or function mapping situational *states* to optimal *behaviors or actions*.
   </TabItem>
-  <TabItem value="mistake4" label="🚨 4. Zero Exploration (ε = 0)">
+  <TabItem value="mistake4" label="4. Zero Exploration (ε = 0)">
     <br/>
 
     *   **The Misconception:** *"We should set the exploration rate ε to 0 from the start so the agent always takes the best-known action."*
-    *   **❌ Wrong Thinking:** Trying to maximize online rewards immediately, leading to a complete lack of curiosity.
-    *   **✅ The Right Principle:** If an agent never explores, it locks onto the first mediocre option it discovers (premature convergence), failing to find far more valuable paths.
+    *   **Wrong Thinking:** Trying to maximize online rewards immediately, leading to a complete lack of curiosity.
+    *   **The Right Principle:** If an agent never explores, it locks onto the first mediocre option it discovers (premature convergence), failing to find far more valuable paths.
   </TabItem>
-  <TabItem value="mistake5" label="🚨 5. Total Exploration (ε = 1)">
+  <TabItem value="mistake5" label="5. Total Exploration (ε = 1)">
     <br/>
 
     *   **The Misconception:** *"An exploration rate of ε = 1 is optimal because the agent will fully discover the environment."*
-    *   **❌ Wrong Thinking:** Believing that random action selection leads to an optimal policy without any performance cost.
-    *   **✅ The Right Principle:** Setting `ε = 1` makes the agent behave completely randomly forever, paying a massive cumulative penalty in rewards while gaining no additional information compared to a balanced decaying epsilon.
+    *   **Wrong Thinking:** Believing that random action selection leads to an optimal policy without any performance cost.
+    *   **The Right Principle:** Setting `ε = 1` makes the agent behave completely randomly forever, paying a massive cumulative penalty in rewards while gaining no additional information compared to a balanced decaying epsilon.
   </TabItem>
-  <TabItem value="mistake6" label="🚨 6. Online Reward Progress">
+  <TabItem value="mistake6" label="6. Online Reward Progress">
     <br/>
 
     *   **The Misconception:** *"We must evaluate our agent's overall progress by plotting its online reward accumulated during training."*
-    *   **❌ Wrong Thinking:** Panicking when the learning curve of an active explorer looks highly unstable or negative.
-    *   **✅ The Right Principle:** During learning, exploration actions (random moves) will drag the online score down. To measure true progress, evaluate the **greedy policy** (setting `ε = 0`) periodically on separate clean runs.
+    *   **Wrong Thinking:** Panicking when the learning curve of an active explorer looks highly unstable or negative.
+    *   **The Right Principle:** During learning, exploration actions (random moves) will drag the online score down. To measure true progress, evaluate the **greedy policy** (setting `ε = 0`) periodically on separate clean runs.
   </TabItem>
-  <TabItem value="mistake7" label="🚨 7. Immediate Feedback Expectation">
+  <TabItem value="mistake7" label="7. Immediate Feedback Expectation">
     <br/>
 
     *   **The Misconception:** *"The environment should reward every single correct choice immediately."*
-    *   **❌ Wrong Thinking:** Assuming that a chess move or steering adjustment can be graded individually without looking at the final outcome.
-    *   **✅ The Right Principle:** Rewards in RL are often highly **delayed** (e.g., winning/losing a game after hours of play). The agent must solve the **credit assignment problem** by propagating value backwards through time.
+    *   **Wrong Thinking:** Assuming that a chess move or steering adjustment can be graded individually without looking at the final outcome.
+    *   **The Right Principle:** Rewards in RL are often highly **delayed** (e.g., winning/losing a game after hours of play). The agent must solve the **credit assignment problem** by propagating value backwards through time.
   </TabItem>
-  <TabItem value="mistake8" label="🚨 8. Fixed Dataset Assumption">
+  <TabItem value="mistake8" label="8. Fixed Dataset Assumption">
     <br/>
 
     *   **The Misconception:** *"We must gather a complete dataset of states and rewards first, then train our RL agent off-line."*
-    *   **❌ Wrong Thinking:** Treating RL as a standard batch-supervised process with static inputs.
-    *   **✅ The Right Principle:** The agent's actions **actively determine** the future states it will visit. A bad early policy means the agent never visits optimal states, altering its own data distribution.
+    *   **Wrong Thinking:** Treating RL as a standard batch-supervised process with static inputs.
+    *   **The Right Principle:** The agent's actions **actively determine** the future states it will visit. A bad early policy means the agent never visits optimal states, altering its own data distribution.
   </TabItem>
-  <TabItem value="mistake9" label="🚨 9. Premature Stopping">
+  <TabItem value="mistake9" label="9. Premature Stopping">
     <br/>
 
     *   **The Misconception:** *"We can stop training as soon as the reward curve flattens out for a few hundred episodes."*
-    *   **❌ Wrong Thinking:** Confusing a flat learning curve (local optimum or trap) with true, optimal convergence.
-    *   **✅ The Right Principle:** RL agents can remain trapped on a plateau (such as a local small prize) for thousands of episodes before a random exploration sequence triggers a breakthrough to the global optimum.
+    *   **Wrong Thinking:** Confusing a flat learning curve (local optimum or trap) with true, optimal convergence.
+    *   **The Right Principle:** RL agents can remain trapped on a plateau (such as a local small prize) for thousands of episodes before a random exploration sequence triggers a breakthrough to the global optimum.
   </TabItem>
 </Tabs>
 
@@ -313,7 +313,7 @@ Here are the most common conceptual pitfalls when implementing and analyzing Rei
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header" style={{ padding: '15px', borderBottom: '1px solid var(--ifm-color-emphasis-200)' }}>
-        <h3>🎯 Core Mechanics</h3>
+        <h3>Core Mechanics</h3>
       </div>
       <div className="card__body" style={{ padding: '15px' }}>
         <ul>
@@ -327,7 +327,7 @@ Here are the most common conceptual pitfalls when implementing and analyzing Rei
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header" style={{ padding: '15px', borderBottom: '1px solid var(--ifm-color-emphasis-200)' }}>
-        <h3>⚙️ Decisions & Outputs</h3>
+        <h3>Decisions & Outputs</h3>
       </div>
       <div className="card__body" style={{ padding: '15px' }}>
         <ul>
@@ -342,7 +342,7 @@ Here are the most common conceptual pitfalls when implementing and analyzing Rei
 
 <br/>
 
-:::info[📌 Key Takeaways: Reinforcement Learning]
+:::info[Key Takeaways: Reinforcement Learning]
 
 *   **No Fixed Dataset:** The agent generates its own data dynamically through interactions. Bad early choices can lead to poor training data distributions.
 *   **Evaluation is Delayed:** Due to delayed feedback, agents face the **credit assignment problem**—working backwards to see which early decisions caused the final reward.
@@ -363,7 +363,7 @@ technique is used
 
 ## Implementation Lab
 
-:::tip[💻 Lab Exercise: Q-Learning Gridworld Simulation]
+:::tip[Lab Exercise: Q-Learning Gridworld Simulation]
 
 Execute a raw, 60-line NumPy implementation of a Q-learning agent navigating a 4x4 Gridworld containing jackpot rewards (+10), small prizes (+2), and deep penalty pits (-10). Tweak exploration rate `ε` live to observe premature convergence and policy breakthroughs.
 
@@ -441,7 +441,7 @@ under-exploration hardest.
 ### Definitions
 
 <details>
-  <summary>❓ <b>R1. [THEORY] Define reinforcement learning in one sentence, and explain what "feedback-based" means in that definition.</b></summary>
+  <summary><b>R1. [THEORY] Define reinforcement learning in one sentence, and explain what "feedback-based" means in that definition.</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -451,7 +451,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>R2. [THEORY] What happens for a good action, and what happens for a bad one? What is the agent's primary goal?</b></summary>
+  <summary><b>R2. [THEORY] What happens for a good action, and what happens for a bad one? What is the agent's primary goal?</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -462,7 +462,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>R3. [THEORY] Define each of: agent, environment, state, action, reward, policy, episode.</b></summary>
+  <summary><b>R3. [THEORY] Define each of: agent, environment, state, action, reward, policy, episode.</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -477,7 +477,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>R4. [THEORY] "Since there is no labelled data, the agent is bound to learn by its experience only." Explain what this rules out.</b></summary>
+  <summary><b>R4. [THEORY] "Since there is no labelled data, the agent is bound to learn by its experience only." Explain what this rules out.</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -486,7 +486,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>R5. [THEORY] What is the output of reinforcement learning, and how does it differ from the output of supervised learning?</b></summary>
+  <summary><b>R5. [THEORY] What is the output of reinforcement learning, and how does it differ from the output of supervised learning?</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -498,7 +498,7 @@ under-exploration hardest.
 ### Distinguishing the paradigms
 
 <details>
-  <summary>❓ <b>D1. [ANALYZE] A colleague says reinforcement learning is a kind of unsupervised learning because neither has labels. Explain why this is wrong, using the idea of feedback.</b></summary>
+  <summary><b>D1. [ANALYZE] A colleague says reinforcement learning is a kind of unsupervised learning because neither has labels. Explain why this is wrong, using the idea of feedback.</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -509,7 +509,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>D2. [THEORY] Complete the sentence for all three: supervised learning is told ___, unsupervised learning is told ___, reinforcement learning is told ___.</b></summary>
+  <summary><b>D2. [THEORY] Complete the sentence for all three: supervised learning is told ___, unsupervised learning is told ___, reinforcement learning is told ___.</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -520,7 +520,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>D3. [ANALYZE] Explain why a reward is not a label. Why does this force the agent to explore?</b></summary>
+  <summary><b>D3. [ANALYZE] Explain why a reward is not a label. Why does this force the agent to explore?</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -530,7 +530,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>D4. [THEORY] In supervised learning the dataset is fixed before training. Why is this not true in reinforcement learning, and what problem does that create?</b></summary>
+  <summary><b>D4. [THEORY] In supervised learning the dataset is fixed before training. Why is this not true in reinforcement learning, and what problem does that create?</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -540,7 +540,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>D5. [THEORY] What is the credit assignment problem, and why does delayed reward cause it?</b></summary>
+  <summary><b>D5. [THEORY] What is the credit assignment problem, and why does delayed reward cause it?</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -552,7 +552,7 @@ under-exploration hardest.
 ### Exploration and exploitation
 
 <details>
-  <summary>❓ <b>E1. [THEORY] Define exploration and exploitation, and state the risk of doing too much of each.</b></summary>
+  <summary><b>E1. [THEORY] Define exploration and exploitation, and state the risk of doing too much of each.</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -564,7 +564,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>E2. [THEORY] Describe the ε-greedy strategy. What does ε control?</b></summary>
+  <summary><b>E2. [THEORY] Describe the ε-greedy strategy. What does ε control?</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -574,7 +574,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>E3. [OUT] From the demo: Which agent produced the best final policy, and which performed best while learning? What did raising ε from 0.30 to 0.50 achieve? Why is ε = 1.00 not the best choice, given it also found the jackpot?</b></summary>
+  <summary><b>E3. [OUT] From the demo: Which agent produced the best final policy, and which performed best while learning? What did raising ε from 0.30 to 0.50 achieve? Why is ε = 1.00 not the best choice, given it also found the jackpot?</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -586,7 +586,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>E4. [ANALYZE] The last column falls steadily as ε rises: 1.00, 0.79, 0.44, −0.21, −1.06, −4.73, −12.17. Explain what this column is measuring and why it must behave this way.</b></summary>
+  <summary><b>E4. [ANALYZE] The last column falls steadily as ε rises: 1.00, 0.79, 0.44, −0.21, −1.06, −4.73, −12.17. Explain what this column is measuring and why it must behave this way.</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -596,7 +596,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>E5. [ANALYZE] Five agents with ε from 0.00 to 0.30 all converged confidently on a policy worth one fifth of the best available. Explain the mechanism, and say what this implies about trusting a flat learning curve.</b></summary>
+  <summary><b>E5. [ANALYZE] Five agents with ε from 0.00 to 0.30 all converged confidently on a policy worth one fifth of the best available. Explain the mechanism, and say what this implies about trusting a flat learning curve.</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -608,7 +608,7 @@ under-exploration hardest.
 ### Reading the output
 
 <details>
-  <summary>❓ <b>O1. [OUT] The greedy policy scored −100.0 after 0 episodes. Given the step reward is −1 and there is a 100-step safety limit, explain that number.</b></summary>
+  <summary><b>O1. [OUT] The greedy policy scored −100.0 after 0 episodes. Given the step reward is −1 and there is a 100-step safety limit, explain that number.</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -617,7 +617,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>O2. [OUT] The learning curve sat at +1.0 from episode 250 to 2250, then jumped to +5.0. Name what the plateau represents and what the jump represents.</b></summary>
+  <summary><b>O2. [OUT] The learning curve sat at +1.0 from episode 250 to 2250, then jumped to +5.0. Name what the plateau represents and what the jump represents.</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -627,7 +627,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>O3. [ANALYZE] Someone stops training at episode 1000 because the reward has been flat for 750 episodes. What have they lost, and how could they have detected the problem?</b></summary>
+  <summary><b>O3. [ANALYZE] Someone stops training at episode 1000 because the reward has been flat for 750 episodes. What have they lost, and how could they have detected the problem?</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -637,7 +637,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>O4. [OUT] The agent learned Q[start, 'v'] = 3.21 and Q[start, '>'] = 0.90. Verify the second of these by hand, given gamma = 0.95, a step reward of −1, and a small prize of +2 two moves away.</b></summary>
+  <summary><b>O4. [OUT] The agent learned Q[start, 'v'] = 3.21 and Q[start, '>'] = 0.90. Verify the second of these by hand, given gamma = 0.95, a step reward of −1, and a small prize of +2 two moves away.</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -651,7 +651,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>O5. [OUT] Read the learned policy and write out the full route from S to G.</b></summary>
+  <summary><b>O5. [OUT] Read the learned policy and write out the full route from S to G.</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -675,7 +675,7 @@ under-exploration hardest.
 ### Applying it
 
 <details>
-  <summary>❓ <b>P1. [PROG] Modify the grid to add a second pit, and retrain. Print the resulting policy.</b></summary>
+  <summary><b>P1. [PROG] Modify the grid to add a second pit, and retrain. Print the resulting policy.</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -692,7 +692,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>P2. [PROG] Write a loop that trains with gamma in [0.5, 0.8, 0.95, 0.99] and prints which terminal state the greedy policy ends at for each. Explain the pattern.</b></summary>
+  <summary><b>P2. [PROG] Write a loop that trains with gamma in [0.5, 0.8, 0.95, 0.99] and prints which terminal state the greedy policy ends at for each. Explain the pattern.</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -709,7 +709,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>P3. [PROG] Change the small prize from +2 to +8 and find, by experiment, the smallest ε that still discovers the jackpot.</b></summary>
+  <summary><b>P3. [PROG] Change the small prize from +2 to +8 and find, by experiment, the smallest ε that still discovers the jackpot.</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -727,7 +727,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>P4. [ANALYZE] You are building a delivery-route agent. You can simulate routes cheaply but each real delivery is expensive. Explain how this changes how much exploration you can afford, and where you would do it.</b></summary>
+  <summary><b>P4. [ANALYZE] You are building a delivery-route agent. You can simulate routes cheaply but each real delivery is expensive. Explain how this changes how much exploration you can afford, and where you would do it.</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -737,7 +737,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>P5. [ANALYZE] Explain why autonomous driving suits reinforcement learning, referring to what would be needed to attack it with supervised learning instead.</b></summary>
+  <summary><b>P5. [ANALYZE] Explain why autonomous driving suits reinforcement learning, referring to what would be needed to attack it with supervised learning instead.</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -749,7 +749,7 @@ under-exploration hardest.
 ### Quick self-check
 
 <details>
-  <summary>❓ <b>1. Define reinforcement learning in one sentence.</b></summary>
+  <summary><b>1. Define reinforcement learning in one sentence.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -758,7 +758,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>2. What does the agent get for a good action? For a bad one?</b></summary>
+  <summary><b>2. What does the agent get for a good action? For a bad one?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -767,7 +767,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>3. What is the agent's primary goal?</b></summary>
+  <summary><b>3. What is the agent's primary goal?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -776,7 +776,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>4. Name the five core components of a reinforcement learning problem.</b></summary>
+  <summary><b>4. Name the five core components of a reinforcement learning problem.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -785,7 +785,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>5. What is a policy?</b></summary>
+  <summary><b>5. What is a policy?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -794,7 +794,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>6. Why is reinforcement learning not unsupervised learning?</b></summary>
+  <summary><b>6. Why is reinforcement learning not unsupervised learning?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -803,7 +803,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>7. What does a reward tell the agent, and what does it *not tell it?</b></summary>
+  <summary><b>7. What does a reward tell the agent, and what does it *not tell it?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -812,7 +812,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>8. What is the exploration–exploitation dilemma?</b></summary>
+  <summary><b>8. What is the exploration–exploitation dilemma?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -821,7 +821,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>9. What does ε control in ε-greedy?</b></summary>
+  <summary><b>9. What does ε control in ε-greedy?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -830,7 +830,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>10. What goes wrong if ε is 0? If ε is 1?</b></summary>
+  <summary><b>10. What goes wrong if ε is 0? If ε is 1?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -840,7 +840,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>11. What is the credit assignment problem?</b></summary>
+  <summary><b>11. What is the credit assignment problem?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -849,7 +849,7 @@ under-exploration hardest.
 </details>
 
 <details>
-  <summary>❓ <b>12. Why is a flat learning curve not proof of convergence?</b></summary>
+  <summary><b>12. Why is a flat learning curve not proof of convergence?</b></summary>
   <div className="answer-content">
     <br/>
     

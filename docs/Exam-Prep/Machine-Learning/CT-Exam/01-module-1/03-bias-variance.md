@@ -977,7 +977,7 @@ Solution: Adjust decision threshold
 
 ## Tips for CT Exam
 
-### ✅ DO
+### DO
 
 - **Always compare train vs test error** - immediate diagnosis
 - **Mention specific solutions** - not just "reduce bias"
@@ -985,7 +985,7 @@ Solution: Adjust decision threshold
 - **Use the bias-variance decomposition formula** - shows mathematical knowledge
 - **Connect to model complexity** - key relationship
 
-### ❌ DON'T
+### DON'T
 
 - Don't confuse bias and variance
 - Don't say "get more features" for variance problems

@@ -338,7 +338,7 @@ and the rest all work, because it's the same axes underneath.
 | Box plot per group | build the groups | `sns.boxplot(x=, y=)` |
 | Correlation heatmap | `imshow` plus annotation loop | `sns.heatmap(annot=True)` |
 | Confidence intervals | compute them yourself | automatic |
-| Full control of a custom chart | ✅ | escapes to matplotlib |
+| Full control of a custom chart | | escapes to matplotlib |
 
 Seaborn for statistical charts; matplotlib for control. Not competitors — layers.
 

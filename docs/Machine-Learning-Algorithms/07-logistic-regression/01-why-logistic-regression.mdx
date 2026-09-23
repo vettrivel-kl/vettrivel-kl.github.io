@@ -56,7 +56,7 @@ export const SigmoidCalculator = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🧮 Interactive Sigmoid & Odds Sandbox</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive Sigmoid & Odds Sandbox</h4>
       <p style={{ margin: '0 0 16px 0', fontSize: '14px' }}>
         Adjust the linear logit score $z$ to inspect the transformation into probability $\sigma(z)$:
       </p>
@@ -130,7 +130,7 @@ export const SigmoidCalculator = () => {
 Why can we not simply fit Ordinary Least Squares $y = mx + b$ and apply a cutoff at $0.5$?
 
 <Tabs>
-  <TabItem value="flaw1" label="🚫 Flaw 1: Nonsensical Probabilities" default>
+  <TabItem value="flaw1" label="Flaw 1: Nonsensical Probabilities" default>
     <br/>
     
     *   **The Problem:** Linear equations are unbounded rays: as $x \to \pm \infty$, $y \to \pm \infty$.
@@ -139,7 +139,7 @@ Why can we not simply fit Ordinary Least Squares $y = mx + b$ and apply a cutoff
         *   Student studying 15 hours: predicted score is $1.82$ (**Probability of 182%!**).
     *   **Statistical Violation:** Violates Kolmogorov probability axioms. Downstream decision systems (expected value, risk budgeting) fail when passed negative probabilities.
   </TabItem>
-  <TabItem value="flaw2" label="💥 Flaw 2: Severe Outlier Sensitivity">
+  <TabItem value="flaw2" label="Flaw 2: Severe Outlier Sensitivity">
     <br/>
     
     *   **The Problem:** OLS minimizes squared residuals $\sum (y_i - \hat{y}_i)^2$.
@@ -160,7 +160,7 @@ export const OutlierShockVisualizer = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>⚡ Outlier Vulnerability Comparator</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Outlier Vulnerability Comparator</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Compare how an extreme observation (50 study hours) warps model parameters:
       </p>
@@ -199,19 +199,19 @@ export const OutlierShockVisualizer = () => {
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '15px' }}>
         <div style={{ padding: '14px', borderLeft: '4px solid #e53e3e', backgroundColor: 'rgba(229, 62, 62, 0.06)', borderRadius: '4px' }}>
-          <strong>📉 Linear Regression (OLS)</strong>
+          <strong>Linear Regression (OLS)</strong>
           <div style={{ fontSize: '13px', marginTop: '6px' }}>
             • Slope: <b>{hasOutlier ? '0.019 (Flattened)' : '0.164 (Sharp)'}</b><br/>
-            • 6-Hour Student Prediction: <b>{hasOutlier ? '0.26 (FAIL ❌)' : '0.40 / Pass boundary'}</b><br/>
+            • 6-Hour Student Prediction: <b>{hasOutlier ? '0.26 (FAIL )' : '0.40 / Pass boundary'}</b><br/>
             • Impact: <i>{hasOutlier ? 'Outlier tilts line downward; borderline passing students flipped to FAIL!' : 'Standard linear fit across range.'}</i>
           </div>
         </div>
 
         <div style={{ padding: '14px', borderLeft: '4px solid #38a169', backgroundColor: 'rgba(56, 161, 105, 0.06)', borderRadius: '4px' }}>
-          <strong>🛡️ Logistic Regression (Sigmoid)</strong>
+          <strong>Logistic Regression (Sigmoid)</strong>
           <div style={{ fontSize: '13px', marginTop: '6px' }}>
             • Boundary: <b>Stable at x ≈ 3.8 hours</b><br/>
-            • 6-Hour Student Prediction: <b>{hasOutlier ? '0.78 (PASS ✅)' : '0.82 (PASS ✅)'}</b><br/>
+            • 6-Hour Student Prediction: <b>{hasOutlier ? '0.78 (PASS )' : '0.82 (PASS )'}</b><br/>
             • Impact: <i>Sigmoid plateau asymptotes cleanly at 1.0; extreme points create zero gradient distortion!</i>
           </div>
         </div>
@@ -294,40 +294,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 7. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Confusing Classification with Regression" default>
+  <TabItem value="m1" label="1. Confusing Classification with Regression" default>
     <br/>
     
     *   **The Misconception:** *"Logistic Regression has 'Regression' in its name, so it is used to predict continuous numeric values."*
-    *   **❌ Wrong Thinking:** Using LogisticRegression to forecast prices or temperature.
-    *   **✅ The Right Principle:** The name is an artifact of statistics (modeling the continuous log-odds parameter). Logistic Regression is fundamentally a **classification algorithm** designed for discrete categorical targets.
+    *   **Wrong Thinking:** Using LogisticRegression to forecast prices or temperature.
+    *   **The Right Principle:** The name is an artifact of statistics (modeling the continuous log-odds parameter). Logistic Regression is fundamentally a **classification algorithm** designed for discrete categorical targets.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Using OLS for Probability Estimation">
+  <TabItem value="m2" label="2. Using OLS for Probability Estimation">
     <br/>
     
     *   **The Misconception:** *"We can fit linear regression to 0/1 labels and simply clamp predictions into [0, 1] using min/max."*
-    *   **❌ Wrong Thinking:** Patching linear models with artificial clipping.
-    *   **✅ The Right Principle:** Clamping ignores the non-linear relationship of probabilities near 0 and 1, distorts variance, and remains fragile to outlier-induced boundary shifts. Use Logistic Regression natively.
+    *   **Wrong Thinking:** Patching linear models with artificial clipping.
+    *   **The Right Principle:** Clamping ignores the non-linear relationship of probabilities near 0 and 1, distorts variance, and remains fragile to outlier-induced boundary shifts. Use Logistic Regression natively.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Blindly Fixing Threshold at 0.5">
+  <TabItem value="m3" label="3. Blindly Fixing Threshold at 0.5">
     <br/>
     
     *   **The Misconception:** *"A model should always predict positive when $P \ge 0.5$."*
-    *   **❌ Wrong Thinking:** Treating the 0.5 mathematical midpoint as a universal business rule.
-    *   **✅ The Right Principle:** Thresholds must reflect downstream asymmetric costs. In fraud detection or cancer diagnostics, false negatives are catastrophic; lower the threshold to 0.1 or 0.2 to maximize recall.
+    *   **Wrong Thinking:** Treating the 0.5 mathematical midpoint as a universal business rule.
+    *   **The Right Principle:** Thresholds must reflect downstream asymmetric costs. In fraud detection or cancer diagnostics, false negatives are catastrophic; lower the threshold to 0.1 or 0.2 to maximize recall.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Confusing Sigmoid with Tanh">
+  <TabItem value="m4" label="4. Confusing Sigmoid with Tanh">
     <br/>
     
     *   **The Misconception:** *"Sigmoid and Hyperbolic Tangent (Tanh) are interchangeable activation functions."*
-    *   **❌ Wrong Thinking:** Using Tanh to model probabilities.
-    *   **✅ The Right Principle:** Sigmoid maps to $(0, 1)$, matching probability axioms. Tanh maps to $(-1, 1)$, zero-centered for neural network hidden states, but invalid for direct binary probabilities.
+    *   **Wrong Thinking:** Using Tanh to model probabilities.
+    *   **The Right Principle:** Sigmoid maps to $(0, 1)$, matching probability axioms. Tanh maps to $(-1, 1)$, zero-centered for neural network hidden states, but invalid for direct binary probabilities.
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Fitting Linear Regression Outliers">
+  <TabItem value="m5" label="5. Fitting Linear Regression Outliers">
     <br/>
     
     *   **The Misconception:** *"Squared error loss ($MSE$) is suitable for training binary classification models."*
-    *   **❌ Wrong Thinking:** Minimizing $(y - \hat{y})^2$ on binary targets.
-    *   **✅ The Right Principle:** Squared error penalizes correct but confident predictions ($y=1, \hat{y}=3 \implies \text{loss}=4$). Logistic regression uses **Binary Cross-Entropy (Log Loss)**, which creates zero penalty for confident correct classifications.
+    *   **Wrong Thinking:** Minimizing $(y - \hat{y})^2$ on binary targets.
+    *   **The Right Principle:** Squared error penalizes correct but confident predictions ($y=1, \hat{y}=3 \implies \text{loss}=4$). Logistic regression uses **Binary Cross-Entropy (Log Loss)**, which creates zero penalty for confident correct classifications.
   </TabItem>
 </Tabs>
 
@@ -339,7 +339,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Linear Regression Failures</h3>
+        <h3>Linear Regression Failures</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -353,7 +353,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ The Sigmoid Solution</h3>
+        <h3>The Sigmoid Solution</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -370,15 +370,15 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🎯 Probabilities require sigmoid:** Linear models cannot enforce the unit interval constraint $[0, 1]$.
-*   **⚖️ Sigmoid symmetry simplifies math:** $\sigma(-z) = 1 - \sigma(z)$ ensures that modeling $P(y=1)$ automatically defines $P(y=0)$.
-*   **🛡️ Asymptotes protect against outliers:** The plateau of the S-curve prevents extreme inputs from distorting classifications near the decision threshold.
+*   **Probabilities require sigmoid:** Linear models cannot enforce the unit interval constraint $[0, 1]$.
+*   **Sigmoid symmetry simplifies math:** $\sigma(-z) = 1 - \sigma(z)$ ensures that modeling $P(y=1)$ automatically defines $P(y=0)$.
+*   **Asymptotes protect against outliers:** The plateau of the S-curve prevents extreme inputs from distorting classifications near the decision threshold.
 
 :::
 
-**Next Section:** [The Sigmoid and Fitting](./02-the-sigmoid-and-fitting.md) - deriving the log-loss function, maximum likelihood estimation, and gradient descent optimization.
+**Next Section:** [The Sigmoid and Fitting](./02-the-sigmoid-and-fitting.mdx) - deriving the log-loss function, maximum likelihood estimation, and gradient descent optimization.
 
 ---
 
@@ -392,16 +392,16 @@ export const LogisticQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: OLS vs. Sigmoid Loss</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: OLS vs. Sigmoid Loss</h4>
       <p style={{ margin: '0 0 15px 0' }}>Why does fitting a linear regression model with Mean Squared Error (MSE) fail when an extremely obvious positive sample (e.g. $x=100, y=1$) is present in the training set?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because the linear slope becomes infinite</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because OLS penalizes predictions where ŷ is much greater than 1, pulling the line away from borderline points</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because MSE cannot be computed on values greater than 1</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The slope does not become infinite; it actually flattens out to minimize squared error across all samples. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! In OLS, error is $(y - \hat{y})^2$. If $y=1$ and the linear model predicts $\hat{y}=8.0$, OLS treats this as a massive error of $(1-8)^2 = 49$, even though the classification is completely correct! To reduce this penalty, the line tilts, causing misclassifications near the 0.5 decision boundary.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. MSE can be computed on any real numbers. Try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. The slope does not become infinite; it actually flattens out to minimize squared error across all samples. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! In OLS, error is $(y - \hat{y})^2$. If $y=1$ and the linear model predicts $\hat{y}=8.0$, OLS treats this as a massive error of $(1-8)^2 = 49$, even though the classification is completely correct! To reduce this penalty, the line tilts, causing misclassifications near the 0.5 decision boundary.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. MSE can be computed on any real numbers. Try again!</p>}
     </div>
   );
 };
@@ -411,7 +411,7 @@ export const LogisticQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why is the sigmoid function preferred over a simple step function (Heaviside) for classification?</b></summary>
+  <summary><b>1. [THEORY] Why is the sigmoid function preferred over a simple step function (Heaviside) for classification?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -421,7 +421,7 @@ export const LogisticQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [MATH] Prove the sigmoid symmetry property: σ(-z) = 1 - σ(z).</b></summary>
+  <summary><b>2. [MATH] Prove the sigmoid symmetry property: σ(-z) = 1 - σ(z).</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -434,7 +434,7 @@ export const LogisticQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [PRACTICE] A logistic regression model outputs a linear logit score of z = 2.197. What is the predicted probability and odds?</b></summary>
+  <summary><b>3. [PRACTICE] A logistic regression model outputs a linear logit score of z = 2.197. What is the predicted probability and odds?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -445,7 +445,7 @@ export const LogisticQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [ANALYZE] Why is setting the classification threshold to 0.5 dangerous in an automated credit card fraud detection system?</b></summary>
+  <summary><b>4. [ANALYZE] Why is setting the classification threshold to 0.5 dangerous in an automated credit card fraud detection system?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -456,7 +456,7 @@ export const LogisticQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] What geometric shape is the decision boundary of Logistic Regression in feature space?</b></summary>
+  <summary><b>5. [THEORY] What geometric shape is the decision boundary of Logistic Regression in feature space?</b></summary>
   <div className="answer-content">
     <br/>
     

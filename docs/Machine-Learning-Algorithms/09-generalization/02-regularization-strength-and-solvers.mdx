@@ -57,7 +57,7 @@ export const AlphaVsCSimulator = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>⚖️ Alpha vs. C Inversion Simulator</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Alpha vs. C Inversion Simulator</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Adjust regularization strength across 6 logarithmic decades to track parameter shrinkage:
       </p>
@@ -116,7 +116,7 @@ export const AlphaVsCSimulator = () => {
 
       <div style={{ padding: '12px 16px', borderRadius: '6px', backgroundColor: logAlpha <= -2.0 ? 'rgba(229, 62, 62, 0.12)' : logAlpha >= 2.0 ? 'rgba(221, 107, 32, 0.12)' : 'rgba(56, 161, 105, 0.12)', borderLeft: `4px solid ${logAlpha <= -2.0 ? '#e53e3e' : logAlpha >= 2.0 ? '#dd6b20' : '#38a169'}` }}>
         <strong style={{ fontSize: '14px', color: logAlpha <= -2.0 ? '#c53030' : logAlpha >= 2.0 ? '#c05621' : '#276749' }}>
-          {logAlpha <= -2.0 ? '🚨 Overfitting Regime (Weak Penalty)' : logAlpha >= 2.0 ? '⚠️ Underfitting Regime (Excessive Penalty)' : '🎯 Optimal Regularization Sweet Spot'}
+          {logAlpha <= -2.0 ? 'Overfitting Regime (Weak Penalty)' : logAlpha >= 2.0 ? 'Underfitting Regime (Excessive Penalty)' : 'Optimal Regularization Sweet Spot'}
         </strong>
         <p style={{ margin: '4px 0 0 0', fontSize: '13px' }}>
           {logAlpha <= -2.0
@@ -198,7 +198,7 @@ export const SolverCompatibilityWizard = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🧩 Interactive Solver Compatibility Matrix</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive Solver Compatibility Matrix</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Select your desired regularization penalty and target structure to check solver support:
       </p>
@@ -276,15 +276,15 @@ export const SolverCompatibilityWizard = () => {
       <div style={{ padding: '10px 14px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)', fontSize: '13px' }}>
         {penalty === 'elasticnet' ? (
           <span>
-            💡 <b>ElasticNet Rule:</b> In scikit-learn, <code>saga</code> is the <b>only solver</b> that supports Elastic Net regularization!
+            <b>ElasticNet Rule:</b> In scikit-learn, <code>saga</code> is the <b>only solver</b> that supports Elastic Net regularization!
           </span>
         ) : penalty === 'l1' && targetType === 'multinomial' ? (
           <span>
-            💡 <b>L1 + Multiclass Rule:</b> <code>liblinear</code> fails on multinomial loss; <code>saga</code> is required for true multiclass L1 regularization.
+            <b>L1 + Multiclass Rule:</b> <code>liblinear</code> fails on multinomial loss; <code>saga</code> is required for true multiclass L1 regularization.
           </span>
         ) : (
           <span>
-            💡 <b>Default Recommendation:</b> For smooth L2 problems, <code>lbfgs</code> is the fastest default. For sparse L1 problems, use <code>saga</code>.
+            <b>Default Recommendation:</b> For smooth L2 problems, <code>lbfgs</code> is the fastest default. For sparse L1 problems, use <code>saga</code>.
           </span>
         )}
       </div>
@@ -361,40 +361,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 6. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Confusing Alpha and C Inversion" default>
+  <TabItem value="m1" label="1. Confusing Alpha and C Inversion" default>
     <br/>
     
     *   **The Misconception:** *"I want heavier regularization in Logistic Regression, so I set C = 100."*
-    *   **❌ Wrong Thinking:** Assuming $C$ behaves like $\alpha$.
-    *   **✅ The Right Principle:** $C = \frac{1}{\alpha}$. Large $C$ ($C=100$) means **weak regularization**, allowing large weights. To apply heavy regularization in `LogisticRegression`, set $C \le 0.01$.
+    *   **Wrong Thinking:** Assuming $C$ behaves like $\alpha$.
+    *   **The Right Principle:** $C = \frac{1}{\alpha}$. Large $C$ ($C=100$) means **weak regularization**, allowing large weights. To apply heavy regularization in `LogisticRegression`, set $C \le 0.01$.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Pairing L-BFGS with L1 Penalties">
+  <TabItem value="m2" label="2. Pairing L-BFGS with L1 Penalties">
     <br/>
     
     *   **The Misconception:** *"L-BFGS is the default solver, so it handles L1 feature selection automatically."*
-    *   **❌ Wrong Thinking:** Requesting `penalty='l1'` with `solver='lbfgs'`.
-    *   **✅ The Right Principle:** L-BFGS requires continuous second derivatives. The non-differentiable sharp corner of $L_1$ ($|w|$) causes an immediate `ValueError`. You must specify `solver='saga'`.
+    *   **Wrong Thinking:** Requesting `penalty='l1'` with `solver='lbfgs'`.
+    *   **The Right Principle:** L-BFGS requires continuous second derivatives. The non-differentiable sharp corner of $L_1$ ($|w|$) causes an immediate `ValueError`. You must specify `solver='saga'`.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Tuning Hyperparameters on the Test Set">
+  <TabItem value="m3" label="3. Tuning Hyperparameters on the Test Set">
     <br/>
     
     *   **The Misconception:** *"We evaluated candidate alphas on the test set and picked the one with lowest test error."*
-    *   **❌ Wrong Thinking:** Allowing test set feedback to select hyperparameters.
-    *   **✅ The Right Principle:** Tuning against test scores causes implicit data leakage. Hyperparameter optimization must occur strictly on training folds via cross-validation; the test set is evaluated once.
+    *   **Wrong Thinking:** Allowing test set feedback to select hyperparameters.
+    *   **The Right Principle:** Tuning against test scores causes implicit data leakage. Hyperparameter optimization must occur strictly on training folds via cross-validation; the test set is evaluated once.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Setting Linear Grids Instead of Log Grids">
+  <TabItem value="m4" label="4. Setting Linear Grids Instead of Log Grids">
     <br/>
     
     *   **The Misconception:** *"Testing alphas on a linear grid [1, 2, 3, 4, 5] is sufficient."*
-    *   **❌ Wrong Thinking:** Searching hyperparameters on an arithmetic scale.
-    *   **✅ The Right Principle:** Regularization effects scale geometrically. The difference between $\alpha = 0.001$ and $0.01$ is massive, whereas the difference between $4.0$ and $5.0$ is tiny. Always use **logarithmic decade grids** ($10^{-3}, 10^{-2}, \dots, 10^2$).
+    *   **Wrong Thinking:** Searching hyperparameters on an arithmetic scale.
+    *   **The Right Principle:** Regularization effects scale geometrically. The difference between $\alpha = 0.001$ and $0.01$ is massive, whereas the difference between $4.0$ and $5.0$ is tiny. Always use **logarithmic decade grids** ($10^{-3}, 10^{-2}, \dots, 10^2$).
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Ignoring Endpoint Saturation">
+  <TabItem value="m5" label="5. Ignoring Endpoint Saturation">
     <br/>
     
     *   **The Misconception:** *"Grid search returned alpha = 0.001 as best, so our tuning is complete."*
-    *   **❌ Wrong Thinking:** Accepting an optimal parameter that sits on the extreme boundary of your search grid.
-    *   **✅ The Right Principle:** If the winning parameter is an endpoint of your grid, the true optimum likely lies further in that direction. Expand the grid into smaller decades ($10^{-4}, 10^{-5}$) until the optimum sits cleanly in the interior.
+    *   **Wrong Thinking:** Accepting an optimal parameter that sits on the extreme boundary of your search grid.
+    *   **The Right Principle:** If the winning parameter is an endpoint of your grid, the true optimum likely lies further in that direction. Expand the grid into smaller decades ($10^{-4}, 10^{-5}$) until the optimum sits cleanly in the interior.
   </TabItem>
 </Tabs>
 
@@ -406,7 +406,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Hyperparameter Conventions</h3>
+        <h3>Hyperparameter Conventions</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -421,7 +421,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Optimization Solvers</h3>
+        <h3>Optimization Solvers</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -439,11 +439,11 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **⚡ Master the inversion:** $\alpha \uparrow \implies$ heavier penalty; $C \uparrow \implies$ lighter penalty.
-*   **🛠️ SAGA is universal:** When in doubt about solver compatibility (especially for $L_1$ or ElasticNet), use `solver='saga'`.
-*   **🚀 Leverage Path Solvers:** Never use a brute-force `GridSearchCV` on Ridge or Lasso when `RidgeCV` and `LassoCV` calculate the exact path for free.
+*   **Master the inversion:** $\alpha \uparrow \implies$ heavier penalty; $C \uparrow \implies$ lighter penalty.
+*   **SAGA is universal:** When in doubt about solver compatibility (especially for $L_1$ or ElasticNet), use `solver='saga'`.
+*   **Leverage Path Solvers:** Never use a brute-force `GridSearchCV` on Ridge or Lasso when `RidgeCV` and `LassoCV` calculate the exact path for free.
 
 :::
 
@@ -461,16 +461,16 @@ export const SolverQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Selecting a Solver for Gene Classification</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Selecting a Solver for Gene Classification</h4>
       <p style={{ margin: '0 0 15px 0' }}>You are building a multiclass tumor classifier on 10,000 gene expression features. You want to enforce L1 regularization to automatically eliminate uninformative genes. Which solver should you pass to <code>LogisticRegression</code>?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>solver='lbfgs'</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#e53e3e' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>solver='liblinear'</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#38a169' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>solver='saga'</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. lbfgs is a smooth quasi-Newton solver that does not support non-differentiable L1 penalties. It will immediately throw a ValueError! Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. While liblinear supports L1, it is restricted to binary classification (or one-vs-rest heuristics) and cannot fit true multinomial softmax loss. Try again!</p>}
-      {selected === 'opt3' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! SAGA (Stochastic Average Gradient with Accelerations) is the only scikit-learn solver that natively supports L1 penalties combined with true multiclass multinomial cross-entropy.</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. lbfgs is a smooth quasi-Newton solver that does not support non-differentiable L1 penalties. It will immediately throw a ValueError! Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. While liblinear supports L1, it is restricted to binary classification (or one-vs-rest heuristics) and cannot fit true multinomial softmax loss. Try again!</p>}
+      {selected === 'opt3' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! SAGA (Stochastic Average Gradient with Accelerations) is the only scikit-learn solver that natively supports L1 penalties combined with true multiclass multinomial cross-entropy.</p>}
     </div>
   );
 };
@@ -480,7 +480,7 @@ export const SolverQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] How does RidgeCV compute Leave-One-Out cross-validation for dozens of alphas almost instantaneously?</b></summary>
+  <summary><b>1. [THEORY] How does RidgeCV compute Leave-One-Out cross-validation for dozens of alphas almost instantaneously?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -493,7 +493,7 @@ export const SolverQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [MATH] A LogisticRegression model is trained with C = 0.05. What is the equivalent regularization penalty strength alpha?</b></summary>
+  <summary><b>2. [MATH] A LogisticRegression model is trained with C = 0.05. What is the equivalent regularization penalty strength alpha?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -504,7 +504,7 @@ export const SolverQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [ANALYZE] Why are hyperparameter grids almost always defined on a logarithmic scale rather than an arithmetic scale?</b></summary>
+  <summary><b>3. [ANALYZE] Why are hyperparameter grids almost always defined on a logarithmic scale rather than an arithmetic scale?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -515,7 +515,7 @@ export const SolverQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [PRACTICE] What should you do if your GridSearchCV output reveals that the best parameter is the maximum value in your search grid?</b></summary>
+  <summary><b>4. [PRACTICE] What should you do if your GridSearchCV output reveals that the best parameter is the maximum value in your search grid?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -526,7 +526,7 @@ export const SolverQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] Why can't standard L-BFGS optimize models with an L1 (Lasso) penalty?</b></summary>
+  <summary><b>5. [THEORY] Why can't standard L-BFGS optimize models with an L1 (Lasso) penalty?</b></summary>
   <div className="answer-content">
     <br/>
     

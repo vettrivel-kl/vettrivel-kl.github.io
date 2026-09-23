@@ -34,7 +34,7 @@ d) Write the fitted equation
 e) Predict the price for a 1000 sq ft house  
 
 <details>
-<summary>💡 <b>Show Step-by-Step Solution</b></summary>
+<summary><b>Show Step-by-Step Solution</b></summary>
 <br/>
 
 **Step-by-step Solution:**
@@ -87,10 +87,10 @@ b₀ ≈ 8.2
 ```
 
 **Common Mistakes:**
-- ❌ Forgetting to square differences in denominator
-- ❌ Arithmetic errors when summing
-- ❌ Rounding too early (keep more decimal places)
-- ❌ Confusing which variable is X vs Y
+- Forgetting to square differences in denominator
+- Arithmetic errors when summing
+- Rounding too early (keep more decimal places)
+- Confusing which variable is X vs Y
 
 </details>  
 
@@ -118,7 +118,7 @@ d) Calculate RMSE (Root Mean Squared Error)
 e) Interpret the RMSE value  
 
 <details>
-<summary>💡 <b>Show Step-by-Step Solution</b></summary>
+<summary><b>Show Step-by-Step Solution</b></summary>
 <br/>
 
 **Step-by-step Solution:**
@@ -156,10 +156,10 @@ Reasonable for a simple model, but room for improvement.
 ```
 
 **Common Mistakes:**
-- ❌ Forgetting to square residuals (SSE is "squared" error)
-- ❌ Using n vs (n-1) in denominator (depends on context)
-- ❌ Not taking square root for RMSE
-- ❌ Confusing error sign (residual can be ± but SSE always ≥ 0)
+- Forgetting to square residuals (SSE is "squared" error)
+- Using n vs (n-1) in denominator (depends on context)
+- Not taking square root for RMSE
+- Confusing error sign (residual can be ± but SSE always ≥ 0)
 
 </details>  
 

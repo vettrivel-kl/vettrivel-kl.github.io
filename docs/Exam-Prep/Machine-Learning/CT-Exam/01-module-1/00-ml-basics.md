@@ -29,7 +29,7 @@ Machine Learning:
 
 ## Three Types of Learning
 
-### 1️⃣ Supervised Learning
+### 1. Supervised Learning
 **Labeled data provided (X, y)**
 
 ```
@@ -50,7 +50,7 @@ Model learns: price = f(size)
 
 ---
 
-### 2️⃣ Unsupervised Learning
+### 2. Unsupervised Learning
 **No labels provided (X only)**
 
 ```
@@ -71,7 +71,7 @@ Model learns: Find similar customers
 
 ---
 
-### 3️⃣ Semi-Supervised Learning
+### 3. Semi-Supervised Learning
 **Mix of labeled and unlabeled data**
 
 ```
@@ -168,9 +168,9 @@ A:
 
 ## Key Takeaways
 
-✅ ML learns patterns from data, not hand-coded rules  
-✅ Three types: Supervised (labeled), Unsupervised (unlabeled), Semi-supervised (both)  
-✅ Always split data: Training (learn) + Testing (evaluate)  
-✅ Good model generalizes: training error ≈ test error  
-✅ Bad model overfits: train error << test error  
+ML learns patterns from data, not hand-coded rules  
+Three types: Supervised (labeled), Unsupervised (unlabeled), Semi-supervised (both)  
+Always split data: Training (learn) + Testing (evaluate)  
+Good model generalizes: training error ≈ test error  
+Bad model overfits: train error << test error  
 

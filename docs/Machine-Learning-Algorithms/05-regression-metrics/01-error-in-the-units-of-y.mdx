@@ -130,7 +130,7 @@ Three numbers, one set of predictions. **MAE `2.0` and RMSE `2.4495` are not a d
 
 ---
 
-## 🛠️ The Outlier Leverage Sandbox
+## The Outlier Leverage Sandbox
 
 Experiment with the interactive tool below. Drag the slider to change the true value of **House 4** (simulating a wild outlier). Watch in real-time how the OLS (RMSE-based) regression line tilts aggressively to accommodate the outlier, while the Median (MAE-based) line remains robust and completely flat. 
 
@@ -169,7 +169,7 @@ export const OutlierLeverageSandbox = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>📊 Outlier Leverage Sandbox</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Outlier Leverage Sandbox</h4>
       <p style={{ fontSize: '13px', margin: '0 0 15px 0', opacity: 0.9 }}>Slide the slider to change the value of House 4 from 50 to 200. Watch OLS tilt while Median stays flat.</p>
 
       <div style={{ marginBottom: '15px' }}>
@@ -316,7 +316,7 @@ The right-hand equality holds when exactly one row carries all the error. Both b
 
 ---
 
-## 🛠️ The Pythagoras Identity Visualizer
+## The Pythagoras Identity Visualizer
 
 The locking identity $\text{RMSE}^2 = \text{MAE}^2 + \text{Var}(\lvert r \rvert)$ is geometrically identical to **Pythagoras' Theorem**! 
 
@@ -339,7 +339,7 @@ export const PythagorasVisualizer = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
-      <h4 style={{ margin: '0' }}>📐 The Metrics Pythagoras Triangle</h4>
+      <h4 style={{ margin: '0' }}>The Metrics Pythagoras Triangle</h4>
       <p style={{ fontSize: '13px', margin: '5px 0 15px 0', opacity: 0.9 }}>Adjust the error unevenness. Watch the height expand and stretch the RMSE hypotenuse away from the base MAE.</p>
 
       <div style={{ marginBottom: '15px' }}>
@@ -385,12 +385,12 @@ export const PythagorasVisualizer = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center', fontSize: '13px' }}>
           {unevenness === 0 ? (
             <div style={{ padding: '12px', borderLeft: '4px solid #38a169', backgroundColor: 'rgba(56, 161, 105, 0.03)', fontSize: '12px' }}>
-              <b>🟢 Perfectly Uniform Errors:</b>
+              <b>Perfectly Uniform Errors:</b>
               <div style={{ opacity: 0.8, fontSize: '11px', marginTop: '3px' }}>Because every miss has the exact same size, absolute variance is zero (Var(|r|) = 0). The height collapses, the triangle flattens into a single straight line, and RMSE = MAE = 2.00.</div>
             </div>
           ) : (
             <div style={{ padding: '12px', borderLeft: '4px solid #3182ce', backgroundColor: 'rgba(49, 130, 206, 0.03)', fontSize: '12px' }}>
-              <b>🔵 Uneven Outlier Error:</b>
+              <b>Uneven Outlier Error:</b>
               <div style={{ opacity: 0.8, fontSize: '11px', marginTop: '3px' }}>As some errors grow much larger than others, absolute variance climbs. This stretches the triangle's height, forcing the hypotenuse RMSE = {rmse.toFixed(2)} to pull far away from the base MAE = 2.00.</div>
             </div>
           )}
@@ -551,33 +551,33 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 ## 3. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Explaining MSE to humans" default>
+  <TabItem value="m1" label="1. Explaining MSE to humans" default>
     <br/>
     
     *   **The Misconception:** *"Reporting an MSE of 6.0 means the model is off by an average of 6.0 lakhs."*
-    *   **❌ Wrong Thinking:** Quoting raw MSE values directly as average errors.
-    *   **✅ The Right Principle:** MSE is in **squared units** (e.g. squared lakhs of rupees), which is a physically meaningless scale. Always report MAE (₹2.0 lakh) or RMSE (₹2.45 lakh), which return to the original units of $y$.
+    *   **Wrong Thinking:** Quoting raw MSE values directly as average errors.
+    *   **The Right Principle:** MSE is in **squared units** (e.g. squared lakhs of rupees), which is a physically meaningless scale. Always report MAE (₹2.0 lakh) or RMSE (₹2.45 lakh), which return to the original units of $y$.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. RMSE < MAE expectation">
+  <TabItem value="m2" label="2. RMSE < MAE expectation">
     <br/>
     
     *   **The Misconception:** *"My RMSE came out smaller than MAE, which means my model has low error spread."*
-    *   **❌ Wrong Thinking:** Tolerating an RMSE lower than MAE because it looks better on paper.
-    *   **✅ The Right Principle:** `RMSE ≥ MAE` is a rigorous mathematical theorem. The difference of their squares is $\text{Var}(\lvert r \rvert)$, and variance cannot be negative. If RMSE is smaller than MAE, you have a software bug.
+    *   **Wrong Thinking:** Tolerating an RMSE lower than MAE because it looks better on paper.
+    *   **The Right Principle:** `RMSE ≥ MAE` is a rigorous mathematical theorem. The difference of their squares is $\text{Var}(\lvert r \rvert)$, and variance cannot be negative. If RMSE is smaller than MAE, you have a software bug.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Scoring Sign Mismatch">
+  <TabItem value="m3" label="3. Scoring Sign Mismatch">
     <br/>
     
     *   **The Misconception:** *"GridSearchCV is returning negative average errors, which is a software error."*
-    *   **❌ Wrong Thinking:** Discarding negative cross-validation scores because you expect error to be positive.
-    *   **✅ The Right Principle:** Every scikit-learn scorer must follow "greater is better" so searches can run a single unified `argmax` selection. Thus, error metrics are wrapped with a minus sign (e.g. `-6.0` instead of `6.0`). Always negate once, strictly at your final print statement.
+    *   **Wrong Thinking:** Discarding negative cross-validation scores because you expect error to be positive.
+    *   **The Right Principle:** Every scikit-learn scorer must follow "greater is better" so searches can run a single unified `argmax` selection. Thus, error metrics are wrapped with a minus sign (e.g. `-6.0` instead of `6.0`). Always negate once, strictly at your final print statement.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Independent metric evaluations">
+  <TabItem value="m4" label="4. Independent metric evaluations">
     <br/>
     
     *   **The Misconception:** *"Reporting an RMSE of 200,000 means this model has high prediction error."*
-    *   **❌ Wrong Thinking:** Judging a scale-dependent metric in isolation without a baseline.
-    *   **✅ The Right Principle:** These metrics are scale-dependent. An MAE of 200,000 rupees is superb on a ₹5 crore house and useless on a ₹6 lakh one. Always score the mean-only baseline (`DummyRegressor`) beside your model to provide a comparative quality factor.
+    *   **Wrong Thinking:** Judging a scale-dependent metric in isolation without a baseline.
+    *   **The Right Principle:** These metrics are scale-dependent. An MAE of 200,000 rupees is superb on a ₹5 crore house and useless on a ₹6 lakh one. Always score the mean-only baseline (`DummyRegressor`) beside your model to provide a comparative quality factor.
   </TabItem>
 </Tabs>
 
@@ -589,7 +589,7 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Core Theory</h3>
+        <h3>Core Theory</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -604,7 +604,7 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Engineering Realities</h3>
+        <h3>Engineering Realities</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -622,11 +622,11 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 
 :::info 
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🔒 Unit dependency:** MAE, MSE, and RMSE are scale-dependent. Re-expressing lakhs to rupees multiplies MAE/RMSE by $k$ and MSE by $k^2$, leaving only the ratio $\text{RMSE}/\text{MAE}$ unchanged.
-*   **⚖️ The True MAE Win:** MAE describes the *typical* row. If you need a number to budget slack around (interpretation), report MAE. If you want to penalise massive mistakes, use RMSE.
-*   **🛠️ Baseline requirement:** No metric value is interpretable on its own. Always run `DummyRegressor(strategy='mean')` as the baseline.
+*   **Unit dependency:** MAE, MSE, and RMSE are scale-dependent. Re-expressing lakhs to rupees multiplies MAE/RMSE by $k$ and MSE by $k^2$, leaving only the ratio $\text{RMSE}/\text{MAE}$ unchanged.
+*   **The True MAE Win:** MAE describes the *typical* row. If you need a number to budget slack around (interpretation), report MAE. If you want to penalise massive mistakes, use RMSE.
+*   **Baseline requirement:** No metric value is interpretable on its own. Always run `DummyRegressor(strategy='mean')` as the baseline.
 
 :::
 
@@ -644,16 +644,16 @@ export const PracticeQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Pythagoras Gap</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: The Pythagoras Gap</h4>
       <p style={{ margin: '0 0 15px 0' }}>On 100 test rows, we observe MAE = 2.0 and RMSE = 4.47. What is the ratio RMSE / MAE, and what does it suggest about the error distribution?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Ratio is 1.00 (errors are perfectly uniform)</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Ratio is 2.23 (one catastrophic outlier is dominating the squared error)</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Ratio is 1.25 (errors are normal-distributed scatter)</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. If errors were perfectly uniform, the ratio would be exactly 1.00. Here it is 2.23, which is much higher. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! The ratio is 2.235, which is extremely close to the mathematical upper limit $\sqrt{n} = \sqrt{5} \approx 2.236$. This proves that a single catastrophic row accounts for essentially all of the squared error in the entire dataset, isolating a data or feature error immediately!</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. A ratio of 1.25 indicates a clean normal-distributed scatter. A ratio of 2.23 is far above that. Re-read the choices and try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. If errors were perfectly uniform, the ratio would be exactly 1.00. Here it is 2.23, which is much higher. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! The ratio is 2.235, which is extremely close to the mathematical upper limit $\sqrt{n} = \sqrt{5} \approx 2.236$. This proves that a single catastrophic row accounts for essentially all of the squared error in the entire dataset, isolating a data or feature error immediately!</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. A ratio of 1.25 indicates a clean normal-distributed scatter. A ratio of 2.23 is far above that. Re-read the choices and try again!</p>}
     </div>
   );
 };
@@ -663,7 +663,7 @@ export const PracticeQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Prove the locked metrics identity $\text{RMSE}^2 = \text{MAE}^2 + \text{Var}(\lvert r \rvert)$.</b></summary>
+  <summary><b>1. [THEORY] Prove the locked metrics identity $\text{RMSE}^2 = \text{MAE}^2 + \text{Var}(\lvert r \rvert)$.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -681,7 +681,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [ANALYZE] Why is `abs(scores).max()` the WORST cv fold under 'neg_*' scorers, and why does `abs()` need to be delayed?</b></summary>
+  <summary><b>2. [ANALYZE] Why is `abs(scores).max()` the WORST cv fold under 'neg_*' scorers, and why does `abs()` need to be delayed?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -695,7 +695,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [THEORY] Why is the mean residual $\bar{r} = 0$ guaranteed on OLS training data with an intercept?</b></summary>
+  <summary><b>3. [THEORY] Why is the mean residual $\bar{r} = 0$ guaranteed on OLS training data with an intercept?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -709,7 +709,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [ANALYZE] If a model's test RMSE is 2.45 lakhs, but the baseline mean-only RMSE is 16.27 lakhs, what does this tell you about the model?</b></summary>
+  <summary><b>4. [ANALYZE] If a model's test RMSE is 2.45 lakhs, but the baseline mean-only RMSE is 16.27 lakhs, what does this tell you about the model?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -720,7 +720,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] Geometrically, how does Hinge loss compare to MAE and RMSE in terms of gradient behavior near zero?</b></summary>
+  <summary><b>5. [THEORY] Geometrically, how does Hinge loss compare to MAE and RMSE in terms of gradient behavior near zero?</b></summary>
   <div className="answer-content">
     <br/>
     

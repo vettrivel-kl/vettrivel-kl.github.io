@@ -13,8 +13,8 @@ toc_max_heading_level: 3
 
 | | Access by | Ordered | Duplicates |
 |---|---|---|---|
-| `dict` | key | insertion order | keys ❌, values ✅ |
-| `set` | membership only | ❌ | ❌ |
+| `dict` | key | insertion order | keys , values |
+| `set` | membership only | | |
 
 ---
 
@@ -204,11 +204,11 @@ TypeError: cannot use 'list' as a dict key (unhashable type: 'list')
 
 | Candidate | Legal key? | Why |
 |---|---|---|
-| `"name"` | ✅ | `str` is immutable |
-| `10` | ✅ | `int` is immutable |
-| `(1, 2)` | ✅ | `tuple` is immutable |
-| `3.14` | ✅ | `float` is immutable |
-| `[1, 2]` | ❌ | `list` is mutable → unhashable |
+| `"name"` | | `str` is immutable |
+| `10` | | `int` is immutable |
+| `(1, 2)` | | `tuple` is immutable |
+| `3.14` | | `float` is immutable |
+| `[1, 2]` | | `list` is mutable → unhashable |
 
 :::note
 
@@ -375,7 +375,7 @@ False
 Any value can act as a condition — `0`, `""`, `[]`, `{}`, `None` and `False` are falsy,
 everything else is truthy. Some of those results surprise people (`bool(" ")` and
 `bool("False")` are both `True`); the full table is in
-[Values and Types](../01-basics/01-values-and-types.md#truthy-and-falsy).
+[Values and Types](../01-basics/01-values-and-types.mdx#truthy-and-falsy).
 
 ---
 
@@ -393,7 +393,7 @@ everything else is truthy. Some of those results surprise people (`bool(" ")` an
 | 8 | `True` and `1` as separate set items | `{1, True}` has 1 item | `True == 1`, so they collide |
 
 That last one follows from `bool` being a subclass of `int` — see
-[the boolean surprise](../01-basics/01-values-and-types.md#bool-is-a-subclass-of-int).
+[the boolean surprise](../01-basics/01-values-and-types.mdx#bool-is-a-subclass-of-int).
 
 ---
 
@@ -436,7 +436,7 @@ That last one follows from `bool` being a subclass of `int` — see
 
 **See also:** [Tuples](./03-tuples.md) for why tuples make valid keys ·
 [Lists](./02-lists.md) for the ordered mutable alternative ·
-[Data Types](../01-basics/03-data-types.md) for `dict` and `set` in context
+[Data Types](../01-basics/03-data-types.mdx) for `dict` and `set` in context
 
 ---
 

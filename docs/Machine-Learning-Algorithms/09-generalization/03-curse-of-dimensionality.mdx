@@ -89,7 +89,7 @@ export const CurseOfDimensionalitySimulator = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🌌 High-Dimensional Geometry and Sparsity Simulator</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>High-Dimensional Geometry and Sparsity Simulator</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Slide dimension d to observe how volume and distance behave in Euclidean hyperspace:
       </p>
@@ -153,7 +153,7 @@ export const CurseOfDimensionalitySimulator = () => {
 
       <div style={{ padding: '12px 16px', borderRadius: '6px', backgroundColor: dim <= 3 ? 'rgba(56, 161, 105, 0.12)' : dim <= 8 ? 'rgba(49, 130, 206, 0.12)' : 'rgba(229, 62, 62, 0.12)', borderLeft: `4px solid ${dim <= 3 ? '#38a169' : dim <= 8 ? '#3182ce' : '#e53e3e'}` }}>
         <strong style={{ fontSize: '14px', color: dim <= 3 ? '#276749' : dim <= 8 ? '#2b6cb0' : '#c53030' }}>
-          {dim <= 3 ? '🌱 Low-Dimensional Regime (Dense & Intuitive)' : dim <= 8 ? '⚠️ Moderate Dimensionality (Emerging Sparsity)' : '🚨 Curse of Dimensionality Regime'}
+          {dim <= 3 ? 'Low-Dimensional Regime (Dense & Intuitive)' : dim <= 8 ? 'Moderate Dimensionality (Emerging Sparsity)' : 'Curse of Dimensionality Regime'}
         </strong>
         <p style={{ margin: '4px 0 0 0', fontSize: '13px' }}>
           {dim <= 3
@@ -212,7 +212,7 @@ export const DefenseStrategyComparator = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🛡️ High-Dimensional Defense Strategy Chooser</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>High-Dimensional Defense Strategy Chooser</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Select your domain constraints to identify the optimal dimensionality defense:
       </p>
@@ -333,40 +333,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 7. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Adding Features Blindly" default>
+  <TabItem value="m1" label="1. Adding Features Blindly" default>
     <br/>
     
     *   **The Misconception:** *"More features always provide more information, so collecting 500 features is strictly better than 20."*
-    *   **❌ Wrong Thinking:** Assuming all features add net predictive signal.
-    *   **✅ The Right Principle:** Every feature introduces a parameter to estimate and expands the volume of empty space. Without exponentially more data, noise features dilute signal and guarantee overfitting.
+    *   **Wrong Thinking:** Assuming all features add net predictive signal.
+    *   **The Right Principle:** Every feature introduces a parameter to estimate and expands the volume of empty space. Without exponentially more data, noise features dilute signal and guarantee overfitting.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Feature Selection on the Entire Dataset">
+  <TabItem value="m2" label="2. Feature Selection on the Entire Dataset">
     <br/>
     
     *   **The Misconception:** *"Running SelectKBest on all data before train_test_split is fine because it doesn't train the model."*
-    *   **❌ Wrong Thinking:** Leaking test distribution correlations into feature ranking.
-    *   **✅ The Right Principle:** Feature selection evaluates correlation with labels across all rows. Doing this prior to splitting leaks test fold identities, creating artificial 95% CV scores that crash in production. Wrap `SelectKBest` inside a `Pipeline`.
+    *   **Wrong Thinking:** Leaking test distribution correlations into feature ranking.
+    *   **The Right Principle:** Feature selection evaluates correlation with labels across all rows. Doing this prior to splitting leaks test fold identities, creating artificial 95% CV scores that crash in production. Wrap `SelectKBest` inside a `Pipeline`.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Applying PCA on Unstandardized Data">
+  <TabItem value="m3" label="3. Applying PCA on Unstandardized Data">
     <br/>
     
     *   **The Misconception:** *"PCA handles scale differences automatically because it finds eigenvectors."*
-    *   **❌ Wrong Thinking:** Passing raw features to PCA without scaling.
-    *   **✅ The Right Principle:** PCA seeks directions that maximize raw variance. A feature measured in millions (e.g. Annual Revenue) will have massive variance purely due to units, completely hijacking the first principal component and ignoring subtle informative features. Always apply `StandardScaler` first.
+    *   **Wrong Thinking:** Passing raw features to PCA without scaling.
+    *   **The Right Principle:** PCA seeks directions that maximize raw variance. A feature measured in millions (e.g. Annual Revenue) will have massive variance purely due to units, completely hijacking the first principal component and ignoring subtle informative features. Always apply `StandardScaler` first.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Keeping Too Many Principal Components">
+  <TabItem value="m4" label="4. Keeping Too Many Principal Components">
     <br/>
     
     *   **The Misconception:** *"To be safe, I will retain 99.9% of variance, keeping 45 out of 50 components."*
-    *   **❌ Wrong Thinking:** Retaining noise components to achieve arbitrary variance thresholds.
-    *   **✅ The Right Principle:** The tail components of PCA capture mostly random measurement noise. Retaining too many components defeats the purpose of dimensionality reduction and re-introduces the curse. Aim for the "elbow" (e.g. 80-90% variance).
+    *   **Wrong Thinking:** Retaining noise components to achieve arbitrary variance thresholds.
+    *   **The Right Principle:** The tail components of PCA capture mostly random measurement noise. Retaining too many components defeats the purpose of dimensionality reduction and re-introduces the curse. Aim for the "elbow" (e.g. 80-90% variance).
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Using t-SNE as a Preprocessing Step for Linear Models">
+  <TabItem value="m5" label="5. Using t-SNE as a Preprocessing Step for Linear Models">
     <br/>
     
     *   **The Misconception:** *"t-SNE reduced my data to 2D for plotting, so I can use those 2 columns as training features."*
-    *   **❌ Wrong Thinking:** Using non-parametric manifold embeddings for out-of-sample prediction.
-    *   **✅ The Right Principle:** Standard t-SNE does not have a deterministic out-of-sample projection function (`transform()` does not exist). Use PCA, UMAP (with parametric models), or Autoencoders for ML feature pipelines.
+    *   **Wrong Thinking:** Using non-parametric manifold embeddings for out-of-sample prediction.
+    *   **The Right Principle:** Standard t-SNE does not have a deterministic out-of-sample projection function (`transform()` does not exist). Use PCA, UMAP (with parametric models), or Autoencoders for ML feature pipelines.
   </TabItem>
 </Tabs>
 
@@ -378,7 +378,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Curse Manifestations</h3>
+        <h3>Curse Manifestations</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -393,7 +393,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Engineering Defenses</h3>
+        <h3>Engineering Defenses</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -411,11 +411,11 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🌌 High dimensions are empty:** In high dimensions, intuition fails; all points live on the extreme surface skin and distance contrast vanishes.
-*   **🎯 Choose your defense:** If stakeholders demand original feature names, use **Feature Selection**; if features are collinear clusters, use **PCA Projection**.
-*   **🛡️ Pipeline isolation:** Never select features or fit PCA outside a cross-validation pipeline.
+*   **High dimensions are empty:** In high dimensions, intuition fails; all points live on the extreme surface skin and distance contrast vanishes.
+*   **Choose your defense:** If stakeholders demand original feature names, use **Feature Selection**; if features are collinear clusters, use **PCA Projection**.
+*   **Pipeline isolation:** Never select features or fit PCA outside a cross-validation pipeline.
 
 :::
 
@@ -433,16 +433,16 @@ export const CurseQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: k-NN Failure in High Dimensions</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: k-NN Failure in High Dimensions</h4>
       <p style={{ margin: '0 0 15px 0' }}>A data scientist fits a 5-Nearest Neighbors classifier on raw 500-dimensional gene expression vectors. The classifier performs no better than random guessing. What fundamental mathematical phenomenon caused this failure?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>The model underfit because k=5 is too small</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Distance concentration: in 500D, the nearest and farthest neighbors are almost equidistant</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>k-NN cannot be evaluated with cross-validation</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Small k increases variance; it does not cause underfitting. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! In high dimensions, Euclidean distance concentrates: the ratio (d_max - d_min) / d_min converges toward zero. Because all points become practically equidistant from one another, the concept of a 'nearest neighbor' becomes meaningless, reducing k-NN to random guessing.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. k-NN works seamlessly with cross-validation. Try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Small k increases variance; it does not cause underfitting. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! In high dimensions, Euclidean distance concentrates: the ratio (d_max - d_min) / d_min converges toward zero. Because all points become practically equidistant from one another, the concept of a 'nearest neighbor' becomes meaningless, reducing k-NN to random guessing.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. k-NN works seamlessly with cross-validation. Try again!</p>}
     </div>
   );
 };
@@ -452,7 +452,7 @@ export const CurseQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] What is the 'Empty Space Phenomenon' in high-dimensional Euclidean space?</b></summary>
+  <summary><b>1. [THEORY] What is the 'Empty Space Phenomenon' in high-dimensional Euclidean space?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -466,7 +466,7 @@ export const CurseQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [MATH] If a 1D feature requires 10 samples to achieve a density of 10 points per unit, how many samples are required in 10 dimensions?</b></summary>
+  <summary><b>2. [MATH] If a 1D feature requires 10 samples to achieve a density of 10 points per unit, how many samples are required in 10 dimensions?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -478,7 +478,7 @@ export const CurseQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [ANALYZE] Why is PCA considered a linear dimensionality reduction method, and what limitation does this impose?</b></summary>
+  <summary><b>3. [ANALYZE] Why is PCA considered a linear dimensionality reduction method, and what limitation does this impose?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -490,7 +490,7 @@ export const CurseQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [PRACTICE] What happens if you fit PCA on unstandardized data where one feature has a variance of 1,000,000 and another has a variance of 0.1?</b></summary>
+  <summary><b>4. [PRACTICE] What happens if you fit PCA on unstandardized data where one feature has a variance of 1,000,000 and another has a variance of 0.1?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -501,7 +501,7 @@ export const CurseQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] What is the difference between Filter, Wrapper, and Embedded feature selection methods?</b></summary>
+  <summary><b>5. [THEORY] What is the difference between Filter, Wrapper, and Embedded feature selection methods?</b></summary>
   <div className="answer-content">
     <br/>
     

@@ -61,7 +61,7 @@ Two things are worth noticing before computing anything.
 
 ---
 
-## 🛠️ The Simple Regression Workbench {/* #worked-all-the-way-through */}
+## The Simple Regression Workbench {/* #worked-all-the-way-through */}
 
 Experiment with the interactive tool below. Modify the $y$ values of the five data points to see how the deviation table, the regression coefficients ($b_1, b_0$), and the residual squares update in real-time.
 
@@ -111,7 +111,7 @@ export const RegressionWorkbench = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
-      <h4 style={{ margin: '0 0 15px 0' }}>📊 Interactive Regression Workbench</h4>
+      <h4 style={{ margin: '0 0 15px 0' }}>Interactive Regression Workbench</h4>
       
       <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
         {/* SVG Visualization */}
@@ -167,7 +167,7 @@ export const RegressionWorkbench = () => {
             <text x={scaleX(xMean) + 8} y={scaleY(yMean) - 8} fill="#3182ce" fontSize="11" fontWeight="bold">Mean (x̄, ȳ)</text>
           </svg>
           <div style={{ fontSize: '12px', marginTop: '10px', color: 'var(--ifm-font-color-base)', opacity: 0.8 }}>
-            💡 Blue lines cross at the mean point <b>({xMean.toFixed(1)}, {yMean.toFixed(1)})</b>. The green regression line is mathematically forced to pass through this point. Red shaded squares show the physical magnitude of residual².
+            Blue lines cross at the mean point <b>({xMean.toFixed(1)}, {yMean.toFixed(1)})</b>. The green regression line is mathematically forced to pass through this point. Red shaded squares show the physical magnitude of residual².
           </div>
         </div>
 
@@ -380,7 +380,7 @@ export const RootNLawSimulator = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🔌 Interactive 1/√n Error Simulator</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive 1/√n Error Simulator</h4>
       <p style={{ fontSize: '13px', margin: '0 0 15px 0', opacity: 0.9 }}>Run 500 regressions instantly. See how the spread of our slope estimate shrinks as $n$ increases.</p>
 
       <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', marginBottom: '15px' }}>
@@ -408,14 +408,14 @@ export const RootNLawSimulator = () => {
       </div>
 
       <div style={{ fontSize: '12px', marginTop: '12px', textAlign: 'center', opacity: 0.8 }}>
-        ⚖️ Difference: <b>{Math.abs(100 * (empSD - theoSD) / theoSD).toFixed(2)}%</b>. Note how doubling the noise (σ) doubles the error, but halving the error requires <b>four times</b> the sample size (n).
+        Difference: <b>{Math.abs(100 * (empSD - theoSD) / theoSD).toFixed(2)}%</b>. Note how doubling the noise (σ) doubles the error, but halving the error requires <b>four times</b> the sample size (n).
       </div>
     </div>
   );
 };
 
 <details style={{ padding: '15px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
-  <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}>🔌 <b>[ADVANCED DEEP-DIVE] Run 500 Real-Time Monte Carlo Simulations</b></summary>
+  <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}><b>[ADVANCED DEEP-DIVE] Run 500 Real-Time Monte Carlo Simulations</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -519,7 +519,7 @@ Not a mystery. Price variance is dominated by other terms:
 
 `age`'s effect is real but roughly a tenth of `size`'s. Correlating `age` against raw `price` asks it to show up against all of that giant `size` variation at once.
 
-### ⚡ Hidden Feature Reveal Visualizer
+### Hidden Feature Reveal Visualizer
 
 Click the button below to toggle between correlating raw `price` vs. `age` and correlating `size-adjusted price` vs. `age` to see the effect instantly.
 
@@ -558,7 +558,7 @@ export const HiddenFeatureWidget = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🎯 Interactive Hidden Feature Reveal</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Hidden Feature Reveal</h4>
       <p style={{ fontSize: '13px', margin: '0 0 15px 0', opacity: 0.9 }}>Toggle the size adjustment to watch the correlation with <b>House Age</b> pop out of the noise.</p>
 
       <div style={{ display: 'flex', gap: '15px', alignItems: 'center', marginBottom: '15px' }}>
@@ -566,7 +566,7 @@ export const HiddenFeatureWidget = () => {
           onClick={() => setAdjusted(!adjusted)} 
           style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: adjusted ? '#3182ce' : 'transparent', color: adjusted ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontWeight: 'bold' }}
         >
-          {adjusted ? "✅ Size Effect Removed (Adjusted)" : "❌ Raw House Price (Unadjusted)"}
+          {adjusted ? "Size Effect Removed (Adjusted)" : "Raw House Price (Unadjusted)"}
         </button>
         <span style={{ fontSize: '13px', opacity: 0.8 }}>
           Current Correlation: <b>{adjusted ? "-0.5758" : "-0.0392"}</b>
@@ -604,11 +604,11 @@ export const HiddenFeatureWidget = () => {
         <div style={{ flex: '1', minWidth: '240px', fontSize: '13px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           {adjusted ? (
             <div style={{ padding: '12px', borderLeft: '4px solid #3182ce', backgroundColor: 'rgba(49, 130, 206, 0.05)' }}>
-              <b>💡 Size Effect Removed:</b> By subtracting 3000 × size from the price, we clear away the massive variance caused by home size. Now, the actual downward sloping correlation between age and price (r = -0.5758) is clear as day!
+              <b>Size Effect Removed:</b> By subtracting 3000 × size from the price, we clear away the massive variance caused by home size. Now, the actual downward sloping correlation between age and price (r = -0.5758) is clear as day!
             </div>
           ) : (
             <div style={{ padding: '12px', borderLeft: '4px solid #e53e3e', backgroundColor: 'rgba(229, 62, 62, 0.05)' }}>
-              <b>⚠️ Messy Raw Price:</b> The house sizes vary from 50 to 200 sq. yards. Because size has such a colossal impact, it completely drowns out the smaller age effect, leaving a correlation of practically zero (r = -0.0392).
+              <b>Messy Raw Price:</b> The house sizes vary from 50 to 200 sq. yards. Because size has such a colossal impact, it completely drowns out the smaller age effect, leaving a correlation of practically zero (r = -0.0392).
             </div>
           )}
         </div>
@@ -657,33 +657,33 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 ## 3. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Linear = Straight Lines Only" default>
+  <TabItem value="m1" label="1. Linear = Straight Lines Only" default>
     <br/>
     
     *   **The Misconception:** *"I thought linear regression could only fit straight lines in 2D space."*
-    *   **❌ Wrong Thinking:** Assuming you cannot fit curved data trends like parabolas, exponentials, or sinusoids.
-    *   **✅ The Right Principle:** "Linear" refers to being **linear in the coefficients** ($b_0, b_1, b_2$), not the feature shape. By feeding $x^2$ or $\log(x)$ as new columns, the model fits complex curves perfectly while remaining a simple linear estimator.
+    *   **Wrong Thinking:** Assuming you cannot fit curved data trends like parabolas, exponentials, or sinusoids.
+    *   **The Right Principle:** "Linear" refers to being **linear in the coefficients** ($b_0, b_1, b_2$), not the feature shape. By feeding $x^2$ or $\log(x)$ as new columns, the model fits complex curves perfectly while remaining a simple linear estimator.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Independent Intercept">
+  <TabItem value="m2" label="2. Independent Intercept">
     <br/>
     
     *   **The Misconception:** *"I thought the intercept $b_0$ is optimized completely independently of the slope $b_1$."*
-    *   **❌ Wrong Thinking:** Believing the optimizer picks both parameters freely.
-    *   **✅ The Right Principle:** Once the slope $b_1$ is computed, the intercept is locked as $b_0 = \bar{y} - b_1\bar{x}$. Every least-squares regression line must pass through the mean coordinates $(\bar{x}, \bar{y})$.
+    *   **Wrong Thinking:** Believing the optimizer picks both parameters freely.
+    *   **The Right Principle:** Once the slope $b_1$ is computed, the intercept is locked as $b_0 = \bar{y} - b_1\bar{x}$. Every least-squares regression line must pass through the mean coordinates $(\bar{x}, \bar{y})$.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Marginal Feature Screening">
+  <TabItem value="m3" label="3. Marginal Feature Screening">
     <br/>
     
     *   **The Misconception:** *"If a feature has almost zero correlation with the target, it is useless and should be dropped."*
-    *   **❌ Wrong Thinking:** Screening out features (like `age` in our housing dataset) based on their solo correlation coefficient with $y$.
-    *   **✅ The Right Principle:** High-variance features can completely drown out weaker but important predictors. Always fit features jointly; multiple regression automatically measures each coefficient after holding the others constant.
+    *   **Wrong Thinking:** Screening out features (like `age` in our housing dataset) based on their solo correlation coefficient with $y$.
+    *   **The Right Principle:** High-variance features can completely drown out weaker but important predictors. Always fit features jointly; multiple regression automatically measures each coefficient after holding the others constant.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Adjusted R² function">
+  <TabItem value="m4" label="4. Adjusted R² function">
     <br/>
     
     *   **The Misconception:** *"I'll just import adjusted_r2_score from sklearn.metrics."*
-    *   **❌ Wrong Thinking:** Spending hours looking for a non-existent scikit-learn function.
-    *   **✅ The Right Principle:** Scikit-learn has no Adjusted $R^2$ function. You must compute it yourself using $1 - \frac{(1-R^2)(n-1)}{n-k-1}$.
+    *   **Wrong Thinking:** Spending hours looking for a non-existent scikit-learn function.
+    *   **The Right Principle:** Scikit-learn has no Adjusted $R^2$ function. You must compute it yourself using $1 - \frac{(1-R^2)(n-1)}{n-k-1}$.
   </TabItem>
 </Tabs>
 
@@ -695,7 +695,7 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Core Theory</h3>
+        <h3>Core Theory</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -710,7 +710,7 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Engineering Realities</h3>
+        <h3>Engineering Realities</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -728,11 +728,11 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 
 :::info 
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🎯 Convexity:** Squared error is chosen because it is convex and differentiable, leading to a closed-form analytical solution.
-*   **⚠️ Outliers:** Squaring the residuals makes the line highly sensitive to outlier values, especially those at high-leverage positions.
-*   **🔄 Linear Limitations:** Linear models cannot *discover* feature interactions or transformations (like $x^2$); they must be engineered manually.
+*   **Convexity:** Squared error is chosen because it is convex and differentiable, leading to a closed-form analytical solution.
+*   **Outliers:** Squaring the residuals makes the line highly sensitive to outlier values, especially those at high-leverage positions.
+*   **Linear Limitations:** Linear models cannot *discover* feature interactions or transformations (like $x^2$); they must be engineered manually.
 
 :::
 
@@ -750,16 +750,16 @@ export const PracticeQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The R² Trap</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: The R² Trap</h4>
       <p style={{ margin: '0 0 15px 0' }}>A data scientist fits a multiple regression model with 10 features and observes R² = 0.81. They claim the correlation coefficient r between their predictions and the true labels is exactly 0.90. Is this claim valid?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#38a169' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Yes, always</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Yes, because R² is the squared correlation of predictions</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>No, R² = r² only holds for simple regression</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. While R² = r² holds for simple linear regression with respect to the input feature, in multiple regression, R² is the squared correlation specifically between true target y and the model's predictions ŷ—not any single input feature. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! In multiple regression, R² represents the squared correlation coefficient specifically between the true targets y and the model's predictions ŷ. Thus, √(R²) = √(0.81) = 0.90. However, it is NOT the correlation of y with any individual input feature.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The claim is actually valid! In multiple regression, R² is defined as the squared correlation between y and predictions ŷ. Thus, √(0.81) = 0.90 is correct. Re-read the choices and try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. While R² = r² holds for simple linear regression with respect to the input feature, in multiple regression, R² is the squared correlation specifically between true target y and the model's predictions ŷ—not any single input feature. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! In multiple regression, R² represents the squared correlation coefficient specifically between the true targets y and the model's predictions ŷ. Thus, √(R²) = √(0.81) = 0.90. However, it is NOT the correlation of y with any individual input feature.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. The claim is actually valid! In multiple regression, R² is defined as the squared correlation between y and predictions ŷ. Thus, √(0.81) = 0.90 is correct. Re-read the choices and try again!</p>}
     </div>
   );
 };
@@ -769,7 +769,7 @@ export const PracticeQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why is the intercept $b_0$ not fitted independently of $b_1$?</b></summary>
+  <summary><b>1. [THEORY] Why is the intercept $b_0$ not fitted independently of $b_1$?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -785,7 +785,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [ANALYZE] How do outliers far from the mean of $x$ affect the slope compared to outliers near the mean of $x$?</b></summary>
+  <summary><b>2. [ANALYZE] How do outliers far from the mean of $x$ affect the slope compared to outliers near the mean of $x$?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -797,7 +797,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [THEORY] What baseline does $R^2$ compare the model against, and how can $R^2$ be negative?</b></summary>
+  <summary><b>3. [THEORY] What baseline does $R^2$ compare the model against, and how can $R^2$ be negative?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -808,7 +808,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [ANALYZE] If a feature is highly predictive of the target, why might its correlation with the target look near-zero?</b></summary>
+  <summary><b>4. [ANALYZE] If a feature is highly predictive of the target, why might its correlation with the target look near-zero?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -818,7 +818,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] What does "linear" in linear regression actually restrict? Can it fit a curve?</b></summary>
+  <summary><b>5. [THEORY] What does "linear" in linear regression actually restrict? Can it fit a curve?</b></summary>
   <div className="answer-content">
     <br/>
     

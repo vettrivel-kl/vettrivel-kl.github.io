@@ -240,7 +240,7 @@ print(df["Marks"].std() ** 2)   # → 93.6
 ```
 
 (`93.59999999999998` rather than `93.6` is ordinary
-[float imprecision](../01-basics/01-values-and-types.md#float), not a pandas quirk.)
+[float imprecision](../01-basics/01-values-and-types.mdx#float), not a pandas quirk.)
 
 **Why two numbers for one idea?** Units. Variance is in *marks squared*, which means nothing
 physically. Standard deviation is back in **marks**, so you can say "the typical student is

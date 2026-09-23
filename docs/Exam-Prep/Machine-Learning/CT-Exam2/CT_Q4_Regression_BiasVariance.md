@@ -12,7 +12,7 @@ Identify the problems exhibited by these two models and explain Overfitting and 
 
 ---
 
-## ✅ COMPLETE EXAM ANSWER
+## COMPLETE EXAM ANSWER
 
 ---
 
@@ -265,17 +265,17 @@ BIAS-VARIANCE RISK PROFILE:
 
 ## **KEY TAKEAWAYS (Quick Review)**
 
-✅ **Least-Squares Approach:**
+**Least-Squares Approach:**
 1. Minimizes the sum of squared residuals to find the optimal $\beta_1$ (slope) and $\beta_0$ (intercept).
 2. The regression line always passes through the sample centroid $(\bar{x}, \bar{y})$.
 3. Sum of OLS residuals $\sum e_i$ must always sum to exactly 0.
 
-✅ **Performance Metrics:**
+**Performance Metrics:**
 1. **MAE:** Linear scaling, easy to interpret, robust to outlier noise.
 2. **MSE / RMSE:** Quadratic scaling, heavily penalizes large errors.
 3. **R²:** Proportional variance explained, representing the quality of fit (0-1).
 
-✅ **Overfitting vs. Underfitting Duality:**
+**Overfitting vs. Underfitting Duality:**
 1. **Overfitting:** High variance, low bias. Model memorizes training noise $\rightarrow$ *Regularize, prune features, collect more data.*
 2. **Underfitting:** High bias, low variance. Model fails to learn basic structures $\rightarrow$ *Enrich features, increase model complexity, decrease regularization.*
 
@@ -283,16 +283,16 @@ BIAS-VARIANCE RISK PROFILE:
 
 ## **ANSWER CHECKLIST**
 
-- ✅ Define SLR and write standard equation with variable definitions
-- ✅ Provide calculus OLS derivative proof for both slope ($\beta_1$) and intercept ($\beta_0$)
-- ✅ Show complete calculation tables for a sample dataset
-- ✅ State the final regression line equation and interpret parameters
-- ✅ Explain MAE, MSE, RMSE, and $R^2$ with full formulas and significance
-- ✅ Demonstrate step-by-step metric calculations on the dataset
-- ✅ Diagnose Model A (Overfitting) and Model B (Underfitting)
-- ✅ Explain definitions, causes, and remedies for overfitting and underfitting
-- ✅ Display a comprehensive metric summary table
-- ✅ Include an answer checklist and mark breakdown
+- Define SLR and write standard equation with variable definitions
+- Provide calculus OLS derivative proof for both slope ($\beta_1$) and intercept ($\beta_0$)
+- Show complete calculation tables for a sample dataset
+- State the final regression line equation and interpret parameters
+- Explain MAE, MSE, RMSE, and $R^2$ with full formulas and significance
+- Demonstrate step-by-step metric calculations on the dataset
+- Diagnose Model A (Overfitting) and Model B (Underfitting)
+- Explain definitions, causes, and remedies for overfitting and underfitting
+- Display a comprehensive metric summary table
+- Include an answer checklist and mark breakdown
 
 ---
 
@@ -316,4 +316,4 @@ BIAS-VARIANCE RISK PROFILE:
 
 ---
 
-**This answer scores FULL 20 marks** ✅
+**This answer scores FULL 20 marks** 

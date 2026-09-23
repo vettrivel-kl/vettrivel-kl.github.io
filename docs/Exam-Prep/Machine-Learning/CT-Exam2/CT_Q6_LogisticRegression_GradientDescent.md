@@ -8,7 +8,7 @@
 
 ---
 
-## ✅ COMPLETE EXAM ANSWER
+## COMPLETE EXAM ANSWER
 
 ---
 
@@ -221,12 +221,12 @@ $$\boxed{\frac{\partial \mathcal{J}}{\partial b} = \frac{1}{N} \sum_{i=1}^{N} (p
 
 ## **KEY TAKEAWAYS (Quick Review)**
 
-✅ **Logistic Regression:**
+**Logistic Regression:**
 1. Fits a Sigmoid curve: $P(y=1 \mid \mathbf{x}) = \frac{1}{1 + e^{-z}}$.
 2. Probability boundary of $\tau = 0.5$ corresponds exactly to $z = 0$.
 3. Models log-odds linearly: $\ln(\text{odds}) = \mathbf{w}^T\mathbf{x} + b$.
 
-✅ **Loss Functions & Optimization:**
+**Loss Functions & Optimization:**
 1. MSE cannot be used because Sigmoid makes it non-convex.
 2. Log-Loss is convex and derived from Maximum Likelihood Estimation (MLE).
 3. Gradient Descent iteratively minimizes loss by taking steps proportional to the negative gradient.
@@ -236,16 +236,16 @@ $$\boxed{\frac{\partial \mathcal{J}}{\partial b} = \frac{1}{N} \sum_{i=1}^{N} (p
 
 ## **ANSWER CHECKLIST**
 
-- ✅ Define Logistic Regression as a Generalized Linear Model (GLM)
-- ✅ Write the standard Sigmoid function and decision boundary threshold
-- ✅ Provide a worked prediction pass/fail example for 3 distinct students
-- ✅ Sketch or describe the S-shaped sigmoid probability curve
-- ✅ Define a loss function and prove why MSE cannot be used for logistic classification
-- ✅ Write the formal Binary Cross-Entropy (Log-Loss) equation
-- ✅ Explain the physical intuition of Gradient Descent
-- ✅ Write down iterative weight and bias update equations with learning rate ($\eta$)
-- ✅ Show a step-by-step calculus derivation of gradients using the chain rule
-- ✅ Explain the significance of the final gradient equations ($p_i - y_i$)
+- Define Logistic Regression as a Generalized Linear Model (GLM)
+- Write the standard Sigmoid function and decision boundary threshold
+- Provide a worked prediction pass/fail example for 3 distinct students
+- Sketch or describe the S-shaped sigmoid probability curve
+- Define a loss function and prove why MSE cannot be used for logistic classification
+- Write the formal Binary Cross-Entropy (Log-Loss) equation
+- Explain the physical intuition of Gradient Descent
+- Write down iterative weight and bias update equations with learning rate ($\eta$)
+- Show a step-by-step calculus derivation of gradients using the chain rule
+- Explain the significance of the final gradient equations ($p_i - y_i$)
 
 ---
 
@@ -267,4 +267,4 @@ $$\boxed{\frac{\partial \mathcal{J}}{\partial b} = \frac{1}{N} \sum_{i=1}^{N} (p
 
 ---
 
-**This answer scores FULL 20 marks** ✅
+**This answer scores FULL 20 marks** 

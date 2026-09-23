@@ -503,17 +503,17 @@ n < 100 samples:
 100 ≤ n < 10,000:
   ✓ Use: Most algorithms work
   ✓ Prefer: Decision Trees, Random Forest
-  ⚠️ Caution: Monitor for overfitting
+  Caution: Monitor for overfitting
   
 10,000 ≤ n < 100,000:
   ✓ Use: Any algorithm including Neural Networks
   ✓ Prefer: Gradient Boosting for best accuracy
-  ⚠️ Need: Cross-validation to avoid overfitting
+  Need: Cross-validation to avoid overfitting
   
 n ≥ 100,000:
   ✓ Use: Gradient Boosting, Neural Networks
   ✓ Advantage: Can handle very complex models
-  ⚠️ Cost: Training time becomes significant
+  Cost: Training time becomes significant
 ```
 
 ### Feature Count Impact
@@ -526,8 +526,8 @@ m < 10 features:
   
 10 ≤ m < 100:
   ✓ Use: Most algorithms
-  ⚠️ Watch: Multicollinearity (use Ridge/Lasso)
-  ⚠️ Feature selection may help
+  Watch: Multicollinearity (use Ridge/Lasso)
+  Feature selection may help
   
 100 ≤ m < 10,000:
   ✓ Use: Algorithms with built-in feature selection
@@ -546,22 +546,22 @@ m ≥ 10,000:
 ```
 Real-time Constraint (< 100ms for prediction):
   ✓ Best: Linear Regression, Logistic, Shallow Tree
-  ⚠️ OK: KNN, SVM
+  OK: KNN, SVM
   ✗ Slow: Random Forest, XGBoost, Neural Networks
 
 Hourly Retraining (model trains hourly):
   ✓ Best: Linear, Logistic, Single Tree
-  ⚠️ OK: Random Forest, Shallow Neural
+  OK: Random Forest, Shallow Neural
   ✗ Slow: XGBoost, Deep Neural
 
 Daily Retraining (model trains once per day):
   ✓ Use: Gradient Boosting, Neural Networks
-  ⚠️ OK: Random Forest, SVM
+  OK: Random Forest, SVM
   ✓ Training time < 1 hour acceptable
 
 Batch Processing (train once per week/month):
   ✓ Use: Any algorithm, even expensive ones
-  ⚠️ Training time < 1 day acceptable
+  Training time < 1 day acceptable
 ```
 
 ---
@@ -971,7 +971,7 @@ SIMPLICITY WINS:
 
 ## Tips for CT Exam
 
-### ✅ DO
+### DO
 
 - **Consider data size first** - dictates algorithm choice
 - **Discuss tradeoffs explicitly** - accuracy vs interpretability/speed
@@ -979,7 +979,7 @@ SIMPLICITY WINS:
 - **Mention alternatives** - "Could use Z but better because W"
 - **Reference performance metrics** - compare actual numbers
 
-### ❌ DON'T
+### DON'T
 
 - Don't always choose the most complex algorithm
 - Don't ignore deployment constraints

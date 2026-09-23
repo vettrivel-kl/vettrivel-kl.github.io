@@ -360,7 +360,7 @@ first, convert second** — that's why `astype` is the last step of the pipeline
 
 Also remember `.astype(int)` **truncates** rather than rounds, as it does in
 [NumPy](../04-numpy/01-arrays-and-attributes.md#setting-and-converting) and plain
-[Python](../01-basics/01-values-and-types.md#type-conversion-casting). Here every value is
+[Python](../01-basics/01-values-and-types.mdx#type-conversion-casting). Here every value is
 already whole, so it's safe — but a mean-filled age of `21.4` would silently become `21`. Use
 `.round().astype(int)` when that matters.
 

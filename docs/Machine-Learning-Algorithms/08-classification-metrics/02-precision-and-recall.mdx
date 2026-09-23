@@ -73,7 +73,7 @@ export const PrecisionRecallSimulator = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>⚖️ Precision-Recall Threshold Simulator</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Precision-Recall Threshold Simulator</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Move the decision threshold cutoff to visualize the mechanical tradeoff:
       </p>
@@ -152,7 +152,7 @@ export const PrecisionRecallSimulator = () => {
 
       <div style={{ padding: '12px 16px', borderRadius: '6px', backgroundColor: thresh <= 0.35 ? 'rgba(56, 161, 105, 0.12)' : thresh >= 0.65 ? 'rgba(128, 90, 213, 0.12)' : 'rgba(49, 130, 206, 0.12)', borderLeft: `4px solid ${thresh <= 0.35 ? '#38a169' : thresh >= 0.65 ? '#805ad5' : '#3182ce'}` }}>
         <strong style={{ fontSize: '14px', color: thresh <= 0.35 ? '#276749' : thresh >= 0.65 ? '#6b46c1' : '#2b6cb0' }}>
-          {thresh <= 0.35 ? '🩺 High-Recall Screening Regime' : thresh >= 0.65 ? '🛡️ High-Precision Conservative Regime' : '⚖️ Balanced Operational Regime'}
+          {thresh <= 0.35 ? 'High-Recall Screening Regime' : thresh >= 0.65 ? 'High-Precision Conservative Regime' : 'Balanced Operational Regime'}
         </strong>
         <p style={{ margin: '4px 0 0 0', fontSize: '13px' }}>
           {thresh <= 0.35
@@ -175,7 +175,7 @@ export const PrecisionRecallSimulator = () => {
 The choice between optimizing Precision vs. Recall depends entirely on the **asymmetry of operational costs**:
 
 <Tabs>
-  <TabItem value="recall" label="🚨 When Recall is Paramount" default>
+  <TabItem value="recall" label="When Recall is Paramount" default>
     <br/>
     
     *   **The Cost Asymmetry:** False Negatives (missed cases) are dangerous, fatal, or irreversible. False Positives (false alarms) merely incur minor review overhead.
@@ -184,7 +184,7 @@ The choice between optimizing Precision vs. Recall depends entirely on the **asy
     *   **Domain 3: Financial Fraud:** Approving a $50,000 fraudulent wire (FN) causes immediate financial loss. A false alarm (FP) sends a one-time confirmation SMS to the cardholder.
     *   **Tuning Rule:** Lower threshold $\tau$ (e.g. $\tau = 0.10 - 0.30$) to cast a wide net.
   </TabItem>
-  <TabItem value="precision" label="🎯 When Precision is Paramount">
+  <TabItem value="precision" label="When Precision is Paramount">
     <br/>
     
     *   **The Cost Asymmetry:** False Positives (false alarms) destroy user trust, incur heavy legal liability, or trigger expensive irreversible actions. False Negatives are safely tolerated.
@@ -240,40 +240,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 6. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Confusing Precision and Recall Denominators" default>
+  <TabItem value="m1" label="1. Confusing Precision and Recall Denominators" default>
     <br/>
     
     *   **The Misconception:** *"Precision and Recall have the same denominator since both start with TP in the numerator."*
-    *   **❌ Wrong Thinking:** Dividing TP by total correct or mixing predicted and actual counts.
-    *   **✅ The Right Principle:** Precision divides by **Predicted Positives** ($\text{TP} + \text{FP}$, the column total). Recall divides by **Actual Positives** ($\text{TP} + \text{FN}$, the row total).
+    *   **Wrong Thinking:** Dividing TP by total correct or mixing predicted and actual counts.
+    *   **The Right Principle:** Precision divides by **Predicted Positives** ($\text{TP} + \text{FP}$, the column total). Recall divides by **Actual Positives** ($\text{TP} + \text{FN}$, the row total).
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Believing Both Can Be 100% on Real Data">
+  <TabItem value="m2" label="2. Believing Both Can Be 100% on Real Data">
     <br/>
     
     *   **The Misconception:** *"With sufficient hyperparameter tuning and deep models, we can reach 100% Precision and 100% Recall."*
-    *   **❌ Wrong Thinking:** Expecting perfect separation on overlapping real-world feature distributions.
-    *   **✅ The Right Principle:** Unless feature classes are completely linearly separable with zero noise, raising the threshold to eliminate false positives inevitably misses borderline positives. You must make an intentional engineering tradeoff.
+    *   **Wrong Thinking:** Expecting perfect separation on overlapping real-world feature distributions.
+    *   **The Right Principle:** Unless feature classes are completely linearly separable with zero noise, raising the threshold to eliminate false positives inevitably misses borderline positives. You must make an intentional engineering tradeoff.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Neglecting Baseline Precision">
+  <TabItem value="m3" label="3. Neglecting Baseline Precision">
     <br/>
     
     *   **The Misconception:** *"A model with 60% precision is terrible."*
-    *   **❌ Wrong Thinking:** Evaluating precision in a vacuum without knowing class prevalence.
-    *   **✅ The Right Principle:** If true fraud prevalence is $0.1\%$ (1 in 1,000), a random guess has a precision of $0.1\%$. Achieving $60\%$ precision represents a **600x diagnostic lift** over baseline! Always contextualize precision against class prevalence.
+    *   **Wrong Thinking:** Evaluating precision in a vacuum without knowing class prevalence.
+    *   **The Right Principle:** If true fraud prevalence is $0.1\%$ (1 in 1,000), a random guess has a precision of $0.1\%$. Achieving $60\%$ precision represents a **600x diagnostic lift** over baseline! Always contextualize precision against class prevalence.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Confusing Specificity with Precision">
+  <TabItem value="m4" label="4. Confusing Specificity with Precision">
     <br/>
     
     *   **The Misconception:** *"Specificity and Precision both measure how clean our negative classifications are."*
-    *   **❌ Wrong Thinking:** Conflating row-wise True Negative Rate with column-wise Positive Predictive Value.
-    *   **✅ The Right Principle:** Specificity is $\frac{\text{TN}}{\text{TN} + \text{FP}}$ (row percentage of healthy people correctly cleared). Precision is $\frac{\text{TP}}{\text{TP} + \text{FP}}$ (column percentage of positive calls that were right).
+    *   **Wrong Thinking:** Conflating row-wise True Negative Rate with column-wise Positive Predictive Value.
+    *   **The Right Principle:** Specificity is $\frac{\text{TN}}{\text{TN} + \text{FP}}$ (row percentage of healthy people correctly cleared). Precision is $\frac{\text{TP}}{\text{TP} + \text{FP}}$ (column percentage of positive calls that were right).
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Trivial 100% Recall Trap">
+  <TabItem value="m5" label="5. Trivial 100% Recall Trap">
     <br/>
     
     *   **The Misconception:** *"Our model achieved 100% Recall, so our fraud detector is flawless."*
-    *   **❌ Wrong Thinking:** Quoting Recall without checking False Positive counts.
-    *   **✅ The Right Principle:** Any trivial algorithm that predicts 'Positive' for 100% of inputs automatically achieves 100% Recall ($\text{FN} = 0$). However, its Precision will collapse to baseline prevalence. Always evaluate Precision and Recall in tandem.
+    *   **Wrong Thinking:** Quoting Recall without checking False Positive counts.
+    *   **The Right Principle:** Any trivial algorithm that predicts 'Positive' for 100% of inputs automatically achieves 100% Recall ($\text{FN} = 0$). However, its Precision will collapse to baseline prevalence. Always evaluate Precision and Recall in tandem.
   </TabItem>
 </Tabs>
 
@@ -285,7 +285,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Metric Perspectives</h3>
+        <h3>Metric Perspectives</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -300,7 +300,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Engineering Tradeoffs</h3>
+        <h3>Engineering Tradeoffs</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -318,15 +318,15 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **⚖️ Tradeoff is mechanical:** Adjusting the classification threshold $\tau$ moves the operational point along the Precision-Recall curve.
-*   **🎯 Align to cost asymmetry:** If false negatives kill or cost millions, tune for Recall; if false alarms destroy customer trust or incur legal liability, tune for Precision.
-*   **📊 Never report one in isolation:** A 100% Recall model can be trivial (predict everything positive); always report Precision alongside Recall or combine them via the F1-Score.
+*   **Tradeoff is mechanical:** Adjusting the classification threshold $\tau$ moves the operational point along the Precision-Recall curve.
+*   **Align to cost asymmetry:** If false negatives kill or cost millions, tune for Recall; if false alarms destroy customer trust or incur legal liability, tune for Precision.
+*   **Never report one in isolation:** A 100% Recall model can be trivial (predict everything positive); always report Precision alongside Recall or combine them via the F1-Score.
 
 :::
 
-**Next Section:** [F-Scores and Balanced Metrics](./03-f-scores-and-balanced-metrics.md) - synthesizing precision and recall via the harmonic mean, $F_\beta$ weighting, and MCC.
+**Next Section:** [F-Scores and Balanced Metrics](./03-f-scores-and-balanced-metrics.mdx) - synthesizing precision and recall via the harmonic mean, $F_\beta$ weighting, and MCC.
 
 ---
 
@@ -340,16 +340,16 @@ export const PrecisionRecallQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Threshold Adjustment Decision</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: The Threshold Adjustment Decision</h4>
       <p style={{ margin: '0 0 15px 0' }}>A hospital deploys an automated sepsis early-warning classifier. Clinicians complain that the model misses 20% of deteriorating patients (False Negatives), but when it does trigger an alert, it is correct 95% of the time (Precision = 95%). What threshold adjustment should the engineering team make?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Raise the decision threshold from 0.50 to 0.75</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Lower the decision threshold from 0.50 to 0.25</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Leave threshold at 0.50 because 95% precision is already high</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Raising the threshold requires higher model confidence before sounding an alarm, which would increase False Negatives and cause even more patients to be missed! Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Sepsis is life-threatening; missing 20% of cases (Recall = 80%) is clinically unacceptable. Lowering the threshold to 0.25 makes the classifier more sensitive, capturing borderline septic patients (boosting Recall to 95%+), while trading away some precision (incurring more false alarms).</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Leaving the threshold unchanged ignores the 20% missed septic patients who require urgent clinical intervention. Try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Raising the threshold requires higher model confidence before sounding an alarm, which would increase False Negatives and cause even more patients to be missed! Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! Sepsis is life-threatening; missing 20% of cases (Recall = 80%) is clinically unacceptable. Lowering the threshold to 0.25 makes the classifier more sensitive, capturing borderline septic patients (boosting Recall to 95%+), while trading away some precision (incurring more false alarms).</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Leaving the threshold unchanged ignores the 20% missed septic patients who require urgent clinical intervention. Try again!</p>}
     </div>
   );
 };
@@ -359,7 +359,7 @@ export const PrecisionRecallQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why does lowering a classifier's decision threshold mechanically increase Recall while decreasing Precision?</b></summary>
+  <summary><b>1. [THEORY] Why does lowering a classifier's decision threshold mechanically increase Recall while decreasing Precision?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -370,7 +370,7 @@ export const PrecisionRecallQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [MATH] A model evaluates 200 samples: TP = 70, FP = 10, FN = 30, TN = 90. Calculate Precision, Recall, and Specificity.</b></summary>
+  <summary><b>2. [MATH] A model evaluates 200 samples: TP = 70, FP = 10, FN = 30, TN = 90. Calculate Precision, Recall, and Specificity.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -381,7 +381,7 @@ export const PrecisionRecallQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [ANALYZE] Why is high Precision prioritized over Recall in automated content moderation (e.g., auto-banning toxic user accounts)?</b></summary>
+  <summary><b>3. [ANALYZE] Why is high Precision prioritized over Recall in automated content moderation (e.g., auto-banning toxic user accounts)?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -392,7 +392,7 @@ export const PrecisionRecallQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [PRACTICE] In an imbalanced fraud dataset (1% fraud), what is the precision of a naive random guessing baseline?</b></summary>
+  <summary><b>4. [PRACTICE] In an imbalanced fraud dataset (1% fraud), what is the precision of a naive random guessing baseline?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -403,7 +403,7 @@ export const PrecisionRecallQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] What is the difference between Specificity and Negative Predictive Value (NPV)?</b></summary>
+  <summary><b>5. [THEORY] What is the difference between Specificity and Negative Predictive Value (NPV)?</b></summary>
   <div className="answer-content">
     <br/>
     

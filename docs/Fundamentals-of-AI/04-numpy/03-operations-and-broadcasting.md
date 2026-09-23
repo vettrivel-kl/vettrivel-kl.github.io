@@ -97,8 +97,8 @@ they are **equal**, or **one of them is 1**. A missing dimension counts as 1.
 
 ```text
 (2, 3)  and  (3,)        →  (3,) is read as (1, 3)
-         3 vs 3  ✅ equal
-         2 vs 1  ✅ one is 1
+         3 vs 3  equal
+         2 vs 1  one is 1
 result: (2, 3)
 ```
 
@@ -250,7 +250,7 @@ print(np.round(np.array([1.234, 5.678]), 1))         # → [1.2 5.7]
 
 Unrounded, it's `1.2246467991473532e-16`. `np.pi` is a `float64` approximation of π, so the
 sine of it is approximately-but-not-exactly 0. The same float imprecision as
-[`0.1 + 0.2`](../01-basics/01-values-and-types.md#float) — compare with a tolerance, never
+[`0.1 + 0.2`](../01-basics/01-values-and-types.mdx#float) — compare with a tolerance, never
 `== 0`.
 
 :::

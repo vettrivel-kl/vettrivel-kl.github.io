@@ -78,7 +78,7 @@ export const TerminalIOSimulator = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>💻 Virtual Python CLI Terminal</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Virtual Python CLI Terminal</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Toggle between interactive user input streams and print parameter configuration:
       </p>
@@ -227,7 +227,7 @@ export const MultiValueInputParser = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>⚡ Multi-Value Input Unpacking Pipeline</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Multi-Value Input Unpacking Pipeline</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Type space-separated values to trace the four-stage transformation pipeline:
       </p>
@@ -356,40 +356,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 6. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Arithmetic on Raw input()" default>
+  <TabItem value="m1" label="1. Arithmetic on Raw input()" default>
     <br/>
     
     *   **The Misconception:** *"If the user enters 25, calling `age + 5` equals 30."*
-    *   **❌ Wrong Thinking:** Forgetting that `input()` returns a string.
-    *   **✅ The Right Principle:** `"25" + 5` raises `TypeError: can only concatenate str to str`. You must wrap the input call: `age = int(input())`.
+    *   **Wrong Thinking:** Forgetting that `input()` returns a string.
+    *   **The Right Principle:** `"25" + 5` raises `TypeError: can only concatenate str to str`. You must wrap the input call: `age = int(input())`.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. int(input()) on Decimals">
+  <TabItem value="m2" label="2. int(input()) on Decimals">
     <br/>
     
     *   **The Misconception:** *"int(input()) can parse numbers with decimals like '25.5'."*
-    *   **❌ Wrong Thinking:** Expecting `int()` to parse decimal points.
-    *   **✅ The Right Principle:** `int("25.5")` crashes with `ValueError`. If input can contain decimals, parse through `float(input())` first.
+    *   **Wrong Thinking:** Expecting `int()` to parse decimal points.
+    *   **The Right Principle:** `int("25.5")` crashes with `ValueError`. If input can contain decimals, parse through `float(input())` first.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Concatenating Numbers with +">
+  <TabItem value="m3" label="3. Concatenating Numbers with +">
     <br/>
     
     *   **The Misconception:** *"Writing `print("Age: " + 30)` works like in JavaScript."*
-    *   **❌ Wrong Thinking:** Relying on implicit type coercion.
-    *   **✅ The Right Principle:** Python never converts integers to strings implicitly. Use commas `print("Age:", 30)` or f-strings `print(f"Age: {30}")`.
+    *   **Wrong Thinking:** Relying on implicit type coercion.
+    *   **The Right Principle:** Python never converts integers to strings implicitly. Use commas `print("Age:", 30)` or f-strings `print(f"Age: {30}")`.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Expecting sep Between Separate print() Calls">
+  <TabItem value="m4" label="4. Expecting sep Between Separate print() Calls">
     <br/>
     
     *   **The Misconception:** *"Setting `sep=','` in one print statement separates it from the next print statement."*
-    *   **❌ Wrong Thinking:** Believing `sep` applies across lines.
-    *   **✅ The Right Principle:** `sep` only controls characters placed *between arguments within a single call*. To control how a call ends, customize `end`.
+    *   **Wrong Thinking:** Believing `sep` applies across lines.
+    *   **The Right Principle:** `sep` only controls characters placed *between arguments within a single call*. To control how a call ends, customize `end`.
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Missing Bare print() After Loop">
+  <TabItem value="m5" label="5. Missing Bare print() After Loop">
     <br/>
     
     *   **The Misconception:** *"Printing loop elements with `end=' '` terminates automatically."*
-    *   **❌ Wrong Thinking:** Leaving the terminal cursor hanging on the same line.
-    *   **✅ The Right Principle:** The next `print()` in your program will run directly onto the end of the loop output. Add a bare `print()` immediately after the loop to flush a newline.
+    *   **Wrong Thinking:** Leaving the terminal cursor hanging on the same line.
+    *   **The Right Principle:** The next `print()` in your program will run directly onto the end of the loop output. Add a bare `print()` immediately after the loop to flush a newline.
   </TabItem>
 </Tabs>
 
@@ -401,7 +401,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 input() Stream Rules</h3>
+        <h3>input() Stream Rules</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -416,7 +416,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ print() Customization</h3>
+        <h3>print() Customization</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -434,11 +434,11 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **⌨️ input() is always str:** Always sanitize and cast inputs before passing them into numeric calculations.
-*   **🖨️ print() parameters are local:** `sep` joins arguments within a call; `end` terminates the call.
-*   **🎉 Fundamentals Complete:** Congratulations on mastering Values, Variables, Data Types, Expressions, F-Strings, and I/O!
+*   **input() is always str:** Always sanitize and cast inputs before passing them into numeric calculations.
+*   **print() parameters are local:** `sep` joins arguments within a call; `end` terminates the call.
+*   **Fundamentals Complete:** Congratulations on mastering Values, Variables, Data Types, Expressions, F-Strings, and I/O!
 
 :::
 
@@ -456,16 +456,16 @@ export const IOQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The input() Arithmetic Trap</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: The input() Arithmetic Trap</h4>
       <p style={{ margin: '0 0 15px 0' }}>A user enters <code>25</code> at the prompt: <code>val = input("Enter number: ")</code>. What is the output of <code>print(val + val)</code>?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>50 (Arithmetic addition)</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>'2525' (String concatenation)</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>TypeError: Cannot add input variables</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. input() ALWAYS returns a string! val holds "25", not integer 25. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Because input() strictly returns a string, val holds "25". The + operator on two strings executes string concatenation, producing '2525'! To perform mathematical addition (50), you must cast explicitly: int(val) + int(val).</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Adding two strings with + is completely valid syntax in Python. Try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. input() ALWAYS returns a string! val holds "25", not integer 25. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! Because input() strictly returns a string, val holds "25". The + operator on two strings executes string concatenation, producing '2525'! To perform mathematical addition (50), you must cast explicitly: int(val) + int(val).</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Adding two strings with + is completely valid syntax in Python. Try again!</p>}
     </div>
   );
 };
@@ -475,7 +475,7 @@ export const IOQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why does `print(1, 2, 3, sep="-", end="!\n")` output `1-2-3!`?</b></summary>
+  <summary><b>1. [THEORY] Why does `print(1, 2, 3, sep="-", end="!\n")` output `1-2-3!`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -487,7 +487,7 @@ export const IOQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [PRACTICE] How do you parse multiple integers from a single space-separated line in Python?</b></summary>
+  <summary><b>2. [PRACTICE] How do you parse multiple integers from a single space-separated line in Python?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -502,7 +502,7 @@ export const IOQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [THEORY] What is the difference between `print("Age: " + str(30))` and `print("Age:", 30)`?</b></summary>
+  <summary><b>3. [THEORY] What is the difference between `print("Age: " + str(30))` and `print("Age:", 30)`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -512,7 +512,7 @@ export const IOQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [PRACTICE] Why is a bare `print()` required after a loop using `print(i, end=" ")`?</b></summary>
+  <summary><b>4. [PRACTICE] Why is a bare `print()` required after a loop using `print(i, end=" ")`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -523,7 +523,7 @@ export const IOQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [ANALYZE] Why does `int(input())` crash if the user enters `25.0`? How do you make it resilient?</b></summary>
+  <summary><b>5. [ANALYZE] Why does `int(input())` crash if the user enters `25.0`? How do you make it resilient?</b></summary>
   <div className="answer-content">
     <br/>
     

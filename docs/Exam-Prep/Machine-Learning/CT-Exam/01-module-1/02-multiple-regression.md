@@ -1217,7 +1217,7 @@ Application: Balance features, complexity, and data
 
 ## Tips for CT Exam
 
-### ✅ DO
+### DO
 
 - **Show matrix setup clearly** - examiners want to see understanding
 - **Interpret coefficients as partial/marginal effects** - key distinction
@@ -1225,7 +1225,7 @@ Application: Balance features, complexity, and data
 - **Mention multicollinearity risks** - shows deeper understanding
 - **Explain why features were selected/removed** - demonstrate reasoning
 
-### ❌ DON'T
+### DON'T
 
 - Don't confuse simple and multiple regression interpretation
 - Don't forget "holding other variables constant" in coefficient interpretation

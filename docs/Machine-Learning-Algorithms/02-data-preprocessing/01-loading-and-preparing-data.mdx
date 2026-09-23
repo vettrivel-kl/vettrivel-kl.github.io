@@ -138,13 +138,13 @@ That's why the `N/A` in row 7 became `NaN` automatically. Now note what is **not
 
 | Encoding of "missing" | Caught by default? |
 |---|---|
-| Empty cell, `NA`, `N/A`, `null`, `None`, `NaN` | ✅ Yes |
-| `?` | ❌ No |
-| `-`, `--`, `.` | ❌ No |
-| `unknown`, `missing`, `not recorded`, `TBD` | ❌ No |
-| `-1` as "no value" | ❌ No |
-| `999`, `9999`, `999999` as "no value" | ❌ No |
-| `0` meaning "not measured" | ❌ No |
+| Empty cell, `NA`, `N/A`, `null`, `None`, `NaN` | Yes |
+| `?` | No |
+| `-`, `--`, `.` | No |
+| `unknown`, `missing`, `not recorded`, `TBD` | No |
+| `-1` as "no value" | No |
+| `999`, `9999`, `999999` as "no value" | No |
+| `0` meaning "not measured" | No |
 
 The last three are **sentinel values**, and they are the dangerous category. A `-1` in an age column
 is a perfectly valid number as far as any library is concerned. It will be averaged, scaled, and fed
@@ -206,7 +206,7 @@ export const PandasParameterQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Messy CSV Loader</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Messy CSV Loader</h4>
       <p style={{ margin: '0 0 15px 0' }}><b>Scenario:</b> You are handed a text file separated by semicolons (<i>;</i>), where missing records are written as the word <i>unknown</i>, and the column <code>account_id</code> contains leading zeros (e.g., <i>00938</i>). Which set of parameters will load this cleanly?</p>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         <button onClick={() => setSelected('wrong')} style={{ padding: '10px', textAlign: 'left', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'wrong' ? '#e53e3e' : 'transparent', color: selected === 'wrong' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>
@@ -216,8 +216,8 @@ export const PandasParameterQuiz = () => {
           <b>Option B:</b> <code>pd.read_csv("file.txt", sep=";", na_values=["unknown"], dtype={"{"}"account_id": str{"}"})</code>
         </button>
       </div>
-      {selected === 'wrong' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Close! Semicolons are parsed and "unknown" becomes NaN. However, without setting account_id explicitly as a string, Pandas will cast it to an integer (938), destroying leading zeros permanently. Try again!</p>}
-      {selected === 'right' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Specifying semicolons as delimiters, declaring "unknown" as missingness, and forcing account_id to remain a string parses all records defensively with leading zeros intact.</p>}
+      {selected === 'wrong' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Close! Semicolons are parsed and "unknown" becomes NaN. However, without setting account_id explicitly as a string, Pandas will cast it to an integer (938), destroying leading zeros permanently. Try again!</p>}
+      {selected === 'right' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! Specifying semicolons as delimiters, declaring "unknown" as missingness, and forcing account_id to remain a string parses all records defensively with leading zeros intact.</p>}
     </div>
   );
 };
@@ -506,33 +506,33 @@ has simply been overtaken.
 Here are the most common conceptual pitfalls when loading and preparing datasets, compared with the correct engineering principles.
 
 <Tabs>
-  <TabItem value="mistake1" label="🚨 Mistake 1: Silent Coercion" default>
+  <TabItem value="mistake1" label="Mistake 1: Silent Coercion" default>
     <br/>
 
     *   **The Pitfall:** Blindly assuming a column parsed as floating-point or integer because it looks numeric.
-    *   **❌ Wrong Thinking:** Assuming `Age` is float64 because the rows look numeric.
-    *   **✅ The Right Principle:** Always execute `df.dtypes` immediately after load. A single corrupt character (like a "?" or comma ",") converts the entire column into `object` dtype, which will fail mathematical operations.
+    *   **Wrong Thinking:** Assuming `Age` is float64 because the rows look numeric.
+    *   **The Right Principle:** Always execute `df.dtypes` immediately after load. A single corrupt character (like a "?" or comma ",") converts the entire column into `object` dtype, which will fail mathematical operations.
   </TabItem>
-  <TabItem value="mistake2" label="🚨 Mistake 2: ID Loss">
+  <TabItem value="mistake2" label="Mistake 2: ID Loss">
     <br/>
 
     *   **The Pitfall:** Allowing Pandas to parse postcodes, IDs, or account numbers as numeric metrics.
-    *   **❌ Wrong Thinking:** `ID = 01234` parsed as integer `1234`.
-    *   **✅ The Right Principle:** Force these identifiers to string format explicitly using `dtype={"zip": str}` in your load call. Once leading zeros are discarded by numerical inferencing, they are lost.
+    *   **Wrong Thinking:** `ID = 01234` parsed as integer `1234`.
+    *   **The Right Principle:** Force these identifiers to string format explicitly using `dtype={"zip": str}` in your load call. Once leading zeros are discarded by numerical inferencing, they are lost.
   </TabItem>
-  <TabItem value="mistake3" label="🚨 Mistake 3: Slicing Exclusivity">
+  <TabItem value="mistake3" label="Mistake 3: Slicing Exclusivity">
     <br/>
 
     *   **The Pitfall:** Expecting `loc[1:3]` to behave exactly like `iloc[1:3]` and exclude the stop index.
-    *   **❌ Wrong Thinking:** Expecting `loc[1:3]` to return 2 items.
-    *   **✅ The Right Principle:** `loc` is label-inclusive and returns **3** items. `iloc` is integer-exclusive and returns **2** items.
+    *   **Wrong Thinking:** Expecting `loc[1:3]` to return 2 items.
+    *   **The Right Principle:** `loc` is label-inclusive and returns **3** items. `iloc` is integer-exclusive and returns **2** items.
   </TabItem>
-  <TabItem value="mistake4" label="🚨 Mistake 4: Premature Array Conversion">
+  <TabItem value="mistake4" label="Mistake 4: Premature Array Conversion">
     <br/>
 
     *   **The Pitfall:** Converting to NumPy too early using `.values` or `.to_numpy()`.
-    *   **❌ Wrong Thinking:** `.values` on the raw DataFrame as soon as the file is loaded.
-    *   **✅ The Right Principle:** Stay in Pandas DataFrames until you've split your data and completed categorical encoding. Mixed types collapse to `object` in NumPy, which is **28x slower** than standard float64.
+    *   **Wrong Thinking:** `.values` on the raw DataFrame as soon as the file is loaded.
+    *   **The Right Principle:** Stay in Pandas DataFrames until you've split your data and completed categorical encoding. Mixed types collapse to `object` in NumPy, which is **28x slower** than standard float64.
   </TabItem>
 </Tabs>
 
@@ -544,7 +544,7 @@ Here are the most common conceptual pitfalls when loading and preparing datasets
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>📂 Data Loader Checklist</h3>
+        <h3>Data Loader Checklist</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -557,7 +557,7 @@ Here are the most common conceptual pitfalls when loading and preparing datasets
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🔍 Audit & Index Verification</h3>
+        <h3>Audit & Index Verification</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -573,12 +573,12 @@ Here are the most common conceptual pitfalls when loading and preparing datasets
 
 :::info 
 
-**📌 Key Takeaways: Loading & Preparing Data**
+**Key Takeaways: Loading & Preparing Data**
 
-*   **🕵️ dtypes Fail Silently:** A single invalid character (like a "?" or thousands separator ",") transforms columns into `object` strings. Always inspect `df.dtypes` immediately after every loading loop.
-*   **⚠️ Danger of Sentinels:** Numerical markers (such as `-1` or `999999`) bypass standard missingness parser checks. Only domain knowledge and `na_values` parameter declarations can capture them defensively.
-*   **🧱 Postpone Array Conversion:** Avoid calling `.to_numpy()` or `.values` right after load. Converting mixed string-metric features yields `object` matrix layouts, measured at **28× slower** than `float64` operations.
-*   **🔗 Keep DataFrame validation:** Training on DataFrames preserves `feature_names_in_` schemas on estimators, allowing scikit-learn to catch column reordering bugs automatically.
+*   **dtypes Fail Silently:** A single invalid character (like a "?" or thousands separator ",") transforms columns into `object` strings. Always inspect `df.dtypes` immediately after every loading loop.
+*   **Danger of Sentinels:** Numerical markers (such as `-1` or `999999`) bypass standard missingness parser checks. Only domain knowledge and `na_values` parameter declarations can capture them defensively.
+*   **Postpone Array Conversion:** Avoid calling `.to_numpy()` or `.values` right after load. Converting mixed string-metric features yields `object` matrix layouts, measured at **28× slower** than `float64` operations.
+*   **Keep DataFrame validation:** Training on DataFrames preserves `feature_names_in_` schemas on estimators, allowing scikit-learn to catch column reordering bugs automatically.
 
 :::
 
@@ -617,7 +617,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 ### What loading decides for you
 
 <details>
-  <summary>❓ <b>L1. [THEORY] Every value in a CSV file is text. Explain what `pd.read_csv` does about that, and what it tells you about the decisions it made.</b></summary>
+  <summary><b>L1. [THEORY] Every value in a CSV file is text. Explain what `pd.read_csv` does about that, and what it tells you about the decisions it made.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -627,7 +627,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>L2. [ANALYZE] A column of 10,000 ages contains one `?`. State the resulting dtype, and explain what happens when you later try to compute the mean.</b></summary>
+  <summary><b>L2. [ANALYZE] A column of 10,000 ages contains one `?`. State the resulting dtype, and explain what happens when you later try to compute the mean.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -637,7 +637,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>L3. [THEORY] Pandas recognises 19 strings as missing by default. Name five, and name four common representations of missingness that are **not** on the list.</b></summary>
+  <summary><b>L3. [THEORY] Pandas recognises 19 strings as missing by default. Name five, and name four common representations of missingness that are **not** on the list.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -647,7 +647,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>L4. [THEORY] What is a sentinel value? Give two examples, and explain why no library can detect them automatically.</b></summary>
+  <summary><b>L4. [THEORY] What is a sentinel value? Give two examples, and explain why no library can detect them automatically.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -657,7 +657,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>L5. [ANALYZE] A postcode column contains `01234`. Explain what `read_csv` will do to it by default, why the damage is irreversible, and the test you should apply to decide a column's type.</b></summary>
+  <summary><b>L5. [ANALYZE] A postcode column contains `01234`. Explain what `read_csv` will do to it by default, why the damage is irreversible, and the test you should apply to decide a column's type.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -670,7 +670,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 ### Auditing
 
 <details>
-  <summary>❓ <b>A1. [THEORY] Name four things a pre-flight audit should check, and say what each would catch.</b></summary>
+  <summary><b>A1. [THEORY] Name four things a pre-flight audit should check, and say what each would catch.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -682,7 +682,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>A2. [THEORY] Explain the `pd.to_numeric(col, errors="coerce")` trick for detecting columns that should be numeric but aren't.</b></summary>
+  <summary><b>A2. [THEORY] Explain the `pd.to_numeric(col, errors="coerce")` trick for detecting columns that should be numeric but aren't.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -691,7 +691,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>A3. [ANALYZE] Why should an `id` column be dropped before modelling, even when it correlates strongly with the target?</b></summary>
+  <summary><b>A3. [ANALYZE] Why should an `id` column be dropped before modelling, even when it correlates strongly with the target?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -700,7 +700,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>A4. [ANALYZE] A constant column is described as having "no predictive value". Explain why, and say whether it is harmful or merely useless.</b></summary>
+  <summary><b>A4. [ANALYZE] A constant column is described as having "no predictive value". Explain why, and say whether it is harmful or merely useless.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -710,7 +710,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>A5. [ANALYZE] Give two reasons duplicate rows matter, one of which concerns the train/test split.</b></summary>
+  <summary><b>A5. [ANALYZE] Give two reasons duplicate rows matter, one of which concerns the train/test split.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -722,7 +722,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 ### `loc`, `iloc` and slicing
 
 <details>
-  <summary>❓ <b>I1. [OUT] For `s = pd.Series([10, 20, 30, 40, 50])`, give the output of `s.iloc[1:3]` and `s.loc[1:3]`, and explain why they differ.</b></summary>
+  <summary><b>I1. [OUT] For `s = pd.Series([10, 20, 30, 40, 50])`, give the output of `s.iloc[1:3]` and `s.loc[1:3]`, and explain why they differ.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -732,7 +732,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>I2. [THEORY] State the **two** differences between `loc` and `iloc`.</b></summary>
+  <summary><b>I2. [THEORY] State the **two** differences between `loc` and `iloc`.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -742,7 +742,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>I3. [ANALYZE] Explain why it is reasonable for `loc` to include its stop value while `iloc` excludes it.</b></summary>
+  <summary><b>I3. [ANALYZE] Explain why it is reasonable for `loc` to include its stop value while `iloc` excludes it.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -752,7 +752,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>I4. [THEORY] After `df = df.sort_values("Age")`, which of `loc` and `iloc` still refers to the same row as before? What would make them agree again?</b></summary>
+  <summary><b>I4. [THEORY] After `df = df.sort_values("Age")`, which of `loc` and `iloc` still refers to the same row as before? What would make them agree again?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -762,7 +762,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>I5. [OUT] For a 4-column array, what do `sample[:, 1:99]` and `sample[:, 99]` each do?</b></summary>
+  <summary><b>I5. [OUT] For a 4-column array, what do `sample[:, 1:99]` and `sample[:, 99]` each do?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -774,7 +774,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 ### Converting to NumPy
 
 <details>
-  <summary>❓ <b>N1. [THEORY] Explain why `X` comes out 2-D and `y` comes out 1-D, in terms of DataFrames and Series.</b></summary>
+  <summary><b>N1. [THEORY] Explain why `X` comes out 2-D and `y` comes out 1-D, in terms of DataFrames and Series.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -784,7 +784,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>N2. [THEORY] Why should `.to_numpy()` be preferred over `.values` in new code?</b></summary>
+  <summary><b>N2. [THEORY] Why should `.to_numpy()` be preferred over `.values` in new code?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -793,7 +793,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>N3. [OUT] Summing 300,000 floats took `0.10 ms` as `float64` and `2.91 ms` as `object`. Explain the ratio in terms of how each is stored in memory.</b></summary>
+  <summary><b>N3. [OUT] Summing 300,000 floats took `0.10 ms` as `float64` and `2.91 ms` as `object`. Explain the ratio in terms of how each is stored in memory.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -803,7 +803,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>N4. [OUT] A `StandardScaler` fitted on a DataFrame has `feature_names_in_`; one fitted on an array does not. Name a concrete bug the first can catch and the second cannot.</b></summary>
+  <summary><b>N4. [OUT] A `StandardScaler` fitted on a DataFrame has `feature_names_in_`; one fitted on an array does not. Name a concrete bug the first can catch and the second cannot.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -812,7 +812,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>N5. [OUT] A 200,000-row text column with 3 distinct values took `12,600,353` bytes as `object` and `200,429` as `category`. Explain the 98.4% reduction, and name the encoding technique this resembles.</b></summary>
+  <summary><b>N5. [OUT] A 200,000-row text column with 3 distinct values took `12,600,353` bytes as `object` and `200,429` as `category`. Explain the 98.4% reduction, and name the encoding technique this resembles.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -822,7 +822,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>N6. [ANALYZE] Most tutorials write `X = df.iloc[:, :-1].values` as the very next line after loading. Give three things this costs, and state when conversion *should* happen.</b></summary>
+  <summary><b>N6. [ANALYZE] Most tutorials write `X = df.iloc[:, :-1].values` as the very next line after loading. Give three things this costs, and state when conversion *should* happen.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -837,7 +837,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 ### Applying it
 
 <details>
-  <summary>❓ <b>P1. [PROG] Load `messy.csv` so that `?`, `-1` and `999999` are missing and `"61,000"` parses as a number. Print dtypes and the total missing count.</b></summary>
+  <summary><b>P1. [PROG] Load `messy.csv` so that `?`, `-1` and `999999` are missing and `"61,000"` parses as a number. Print dtypes and the total missing count.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -851,7 +851,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>P2. [PROG] Write a function that returns the list of columns whose dtype is `object` but where more than half the non-null values convert cleanly with `pd.to_numeric`.</b></summary>
+  <summary><b>P2. [PROG] Write a function that returns the list of columns whose dtype is `object` but where more than half the non-null values convert cleanly with `pd.to_numeric`.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -871,7 +871,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>P3. [PROG] Print every duplicated row in `messy.csv`, including the first occurrence.</b></summary>
+  <summary><b>P3. [PROG] Print every duplicated row in `messy.csv`, including the first occurrence.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -884,7 +884,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>P4. [PROG] Load `messy.csv` reading only `Country`, `Age` and `Purchased`, with `Country` as a `category` dtype. Print the memory used by each column.</b></summary>
+  <summary><b>P4. [PROG] Load `messy.csv` reading only `Country`, `Age` and `Purchased`, with `Country` as a `category` dtype. Print the memory used by each column.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -897,7 +897,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>❓ <b>P5. [ANALYZE] You receive a 2 GB CSV that will not fit in memory. Name three `read_csv` parameters that help and explain what each does.</b></summary>
+  <summary><b>P5. [ANALYZE] You receive a 2 GB CSV that will not fit in memory. Name three `read_csv` parameters that help and explain what each does.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -910,7 +910,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 ### Quick self-check
 
 <details>
-  <summary>🧠 <b>1. What should you print immediately after every `read_csv`?</b></summary>
+  <summary><b>1. What should you print immediately after every `read_csv`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -919,7 +919,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>🧠 <b>2. How many strings does pandas treat as missing by default? Is `?` one of them?</b></summary>
+  <summary><b>2. How many strings does pandas treat as missing by default? Is `?` one of them?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -928,7 +928,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>🧠 <b>3. What is a sentinel value, and why can't a library find them for you?</b></summary>
+  <summary><b>3. What is a sentinel value, and why can't a library find them for you?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -937,7 +937,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>🧠 <b>4. Why must a postcode column be read as `str`?</b></summary>
+  <summary><b>4. Why must a postcode column be read as `str`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -946,7 +946,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>🧠 <b>5. Name three things a pre-flight audit checks.</b></summary>
+  <summary><b>5. Name three things a pre-flight audit checks.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -955,7 +955,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>🧠 <b>6. Why drop an `id` column even when it predicts well?</b></summary>
+  <summary><b>6. Why drop an `id` column even when it predicts well?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -964,7 +964,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>🧠 <b>7. What are the two differences between `loc` and `iloc`?</b></summary>
+  <summary><b>7. What are the two differences between `loc` and `iloc`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -974,7 +974,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>🧠 <b>8. How many elements does `loc[1:3]` return? `iloc[1:3]`?</b></summary>
+  <summary><b>8. How many elements does `loc[1:3]` return? `iloc[1:3]`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -983,7 +983,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>🧠 <b>9. Why does `X` end up 2-D and `y` 1-D?</b></summary>
+  <summary><b>9. Why does `X` end up 2-D and `y` 1-D?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -992,7 +992,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>🧠 <b>10. Why is an `object` array so much slower than a `float64` one?</b></summary>
+  <summary><b>10. Why is an `object` array so much slower than a `float64` one?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -1001,7 +1001,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>🧠 <b>11. What does converting to NumPy cost you that staying in pandas doesn't?</b></summary>
+  <summary><b>11. What does converting to NumPy cost you that staying in pandas doesn't?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -1010,7 +1010,7 @@ Verify the silent hazards of type inference, build custom data audit pipelines t
 </details>
 
 <details>
-  <summary>🧠 <b>12. What is the right moment to convert to an array?</b></summary>
+  <summary><b>12. What is the right moment to convert to an array?</b></summary>
   <div className="answer-content">
     <br/>
     

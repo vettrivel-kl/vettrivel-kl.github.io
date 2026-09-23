@@ -13,11 +13,11 @@ tags: [module-overview, classification, evaluation]
 
 | Topic | Page | Key Concepts | Est. Study Time |
 |-------|------|--------------|-----------------|
-| **[Cross-Validation](01-cross-validation.md)** | 1️⃣ | K-Fold, LOOCV, Stratified CV, Hyperparameter selection | 45 min |
-| **[Logistic Regression](02-logistic-regression.md)** | 2️⃣ | Sigmoid, Binary classification, Multi-class (OvR/OvO/Softmax), Coefficient interpretation | 60 min |
-| **[Classification Advanced](03-classification-advanced.md)** | 3️⃣ | ROC curves, AUC, Precision-Recall, Decision thresholds, Multi-class metrics | 60 min |
-| **[Model Comparison](04-model-comparison.md)** | 4️⃣ | Algorithm selection framework, Bias-variance across models, Cost-benefit analysis | 60 min |
-| **[Decision Boundaries](05-decision-boundaries.md)** | 5️⃣ | 2D boundary visualization, Overfitting vs underfitting, Model interpretability | 45 min |
+| **[Cross-Validation](01-cross-validation.md)** | 1 | K-Fold, LOOCV, Stratified CV, Hyperparameter selection | 45 min |
+| **[Logistic Regression](02-logistic-regression.md)** | 2 | Sigmoid, Binary classification, Multi-class (OvR/OvO/Softmax), Coefficient interpretation | 60 min |
+| **[Classification Advanced](03-classification-advanced.md)** | 3 | ROC curves, AUC, Precision-Recall, Decision thresholds, Multi-class metrics | 60 min |
+| **[Model Comparison](04-model-comparison.md)** | 4 | Algorithm selection framework, Bias-variance across models, Cost-benefit analysis | 60 min |
+| **[Decision Boundaries](05-decision-boundaries.md)** | 5 | 2D boundary visualization, Overfitting vs underfitting, Model interpretability | 45 min |
 
 ---
 
@@ -25,20 +25,20 @@ tags: [module-overview, classification, evaluation]
 
 By the end of Module 2, you should understand:
 
-### ✅ Evaluation & Validation
+### Evaluation & Validation
 - Why single train/test splits are unreliable
 - How K-fold CV provides stable error estimates
 - When to use LOOCV, stratified CV, or time-series CV
 - Hyperparameter selection using cross-validation
 
-### ✅ Logistic Regression
+### Logistic Regression
 - How logistic regression differs from linear regression
 - The sigmoid function and its properties
 - Binary classification and multi-class approaches
 - Coefficient interpretation and odds/log-odds
 - When logistic regression is the right choice
 
-### ✅ Classification Metrics
+### Classification Metrics
 - Confusion matrix and its components
 - Precision, Recall, F1, Accuracy trade-offs
 - ROC curves and AUC calculation
@@ -46,7 +46,7 @@ By the end of Module 2, you should understand:
 - When each metric matters (medical vs banking vs recommenders)
 - Decision threshold tuning with cost analysis
 
-### ✅ Model Comparison
+### Model Comparison
 - Decision framework for algorithm selection
 - Bias-variance characteristics across algorithms
 - Performance vs interpretability tradeoff
@@ -54,7 +54,7 @@ By the end of Module 2, you should understand:
 - Real-world constraints (speed, cost, explainability)
 - Cost-benefit analysis for production models
 
-### ✅ Decision Boundaries
+### Decision Boundaries
 - How classification models create decision boundaries
 - Boundary shape for different algorithms
 - Overfitting through boundary perspective
@@ -64,12 +64,12 @@ By the end of Module 2, you should understand:
 
 ## Study Roadmap
 
-### 🎯 For Quick Review (30 minutes)
+### For Quick Review (30 minutes)
 1. Read this overview
 2. Skim the key takeaways section of each page
 3. Review exam question titles (not full solutions)
 
-### 📚 For Thorough Preparation (4-5 hours)
+### For Thorough Preparation (4-5 hours)
 1. **Cross-Validation (45 min):**
    - Understand why CV is necessary
    - Work through the house price example
@@ -97,7 +97,7 @@ By the end of Module 2, you should understand:
    - See how overfitting looks graphically
    - Understand underfitting from boundary perspective
 
-### 🧪 For Exam Preparation (6-7 hours)
+### For Exam Preparation (6-7 hours)
 - Do all of the above (4-5 hours)
 - Solve all practice problems (2 hours)
 - Answer exam questions without solutions (30 min)
@@ -177,24 +177,24 @@ Speed: Slow ← Gradient Boost → Fast ← Logistic
 
 ## Common Mistakes to Avoid
 
-### ❌ Evaluation Mistakes
+### Evaluation Mistakes
 - Using single train/test split for model selection
 - Not reporting CV standard deviation
 - Ignoring class imbalance in cross-validation
 - Using test data to tune hyperparameters
 
-### ❌ Logistic Regression Mistakes
+### Logistic Regression Mistakes
 - Treating logistic regression output as continuous instead of probability
 - Misinterpreting coefficients (e.g., b₁ = 0.5 means +0.5 change in probability, which is WRONG)
 - Confusing binary classification with multi-class extension
 
-### ❌ Classification Metric Mistakes
+### Classification Metric Mistakes
 - Optimizing only for accuracy in imbalanced problems
 - Using the same threshold for all problems
 - Not considering business costs when choosing threshold
 - Averaging metrics incorrectly (macro vs micro vs weighted)
 
-### ❌ Model Selection Mistakes
+### Model Selection Mistakes
 - Choosing highest accuracy without considering complexity
 - Ignoring training time or interpretability requirements
 - Not stratifying folds for imbalanced classification
@@ -204,20 +204,20 @@ Speed: Slow ← Gradient Boost → Fast ← Logistic
 
 ## Tips for Success
 
-### 📌 Study Tips
+### Study Tips
 1. **Work through examples:** Don't just read—calculate by hand
 2. **Use visualizations:** Draw confusion matrices, ROC curves, boundaries
 3. **Connect concepts:** Understand how CV → Logistic → Metrics → Comparison → Boundaries form a pipeline
 4. **Solve practice problems:** Do both guided examples and independent problems
 
-### 💡 Exam Tips
+### Exam Tips
 1. **Show all steps:** Partial credit for method even if answer is slightly off
 2. **Define terms:** When asked to interpret, define what metrics mean
 3. **Use tables:** For comparisons (algorithms, models, metrics), use tables for clarity
 4. **Justify choices:** When recommending an algorithm, explain the tradeoff
 5. **Check reasonableness:** If a probability is > 1 or < 0, you made an error
 
-### ⚡ Time Management
+### Time Management
 - **Calculator tip:** Know how to compute log, sqrt, division by hand
 - **Rough calculations:** OK to round for intermediate steps (e.g., 0.9842 ≈ 0.98)
 - **Standard formulas:** Memorize CV, Logistic sigmoid, Precision/Recall/F1
@@ -256,13 +256,13 @@ Module 2: Logistic Regression (Extend to classification)
 
 With Module 2 mastered, you're ready for:
 
-### 🚀 Advanced Topics (Not in CT)
+### Advanced Topics (Not in CT)
 - Tree-based models (Decision Trees, Random Forests, Gradient Boosting)
 - Unsupervised learning (Clustering, PCA, Dimensionality reduction)
 - Neural networks and deep learning
 - Model interpretability and explainability (SHAP, LIME)
 
-### 📊 Real-World Application
+### Real-World Application
 - Build end-to-end classification pipelines
 - Handle imbalanced data with proper techniques
 - Deploy models with production safeguards
@@ -299,33 +299,33 @@ With Module 2 mastered, you're ready for:
 ## Resources in Module 2
 
 Each page includes:
-- ✅ **Conceptual explanation** (why it matters)
-- ✅ **Worked examples** (step-by-step calculation)
-- ✅ **Complete inference** (interpretation of results)
-- ✅ **Exam questions** (5-6 questions with full solutions)
-- ✅ **Practice problems** (2-3 problems to try yourself)
-- ✅ **Key takeaways** (summary for review)
+- **Conceptual explanation** (why it matters)
+- **Worked examples** (step-by-step calculation)
+- **Complete inference** (interpretation of results)
+- **Exam questions** (5-6 questions with full solutions)
+- **Practice problems** (2-3 problems to try yourself)
+- **Key takeaways** (summary for review)
 
 ---
 
 ## How to Use This Module
 
-### 🎯 If You Have 1 Hour
+### If You Have 1 Hour
 → Read pages 1-2 (Cross-Validation, Logistic Regression)  
 → Look at key takeaways on all pages
 
-### 🎯 If You Have 3 Hours
+### If You Have 3 Hours
 → Read all pages completely  
 → Work through all worked examples  
 → Attempt 1-2 practice problems
 
-### 🎯 If You Have 5+ Hours
+### If You Have 5+ Hours
 → Complete full study roadmap above  
 → Solve all exam questions (without looking at solutions)  
 → Compare your answers to solutions  
 → Review weak areas
 
-### 🎯 Right Before Exam
+### Right Before Exam
 → Review key formulas  
 → Review algorithm selection framework  
 → Review exam question titles (quick memory refresh)

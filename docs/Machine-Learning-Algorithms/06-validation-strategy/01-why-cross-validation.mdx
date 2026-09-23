@@ -51,21 +51,21 @@ A single train-test split does not measure a definitive property of your algorit
 ## 2. Evolution of Partitioning Strategies
 
 <Tabs>
-  <TabItem value="naive" label="❌ 1. No Split (Resubstitution)" default>
+  <TabItem value="naive" label="1. No Split (Resubstitution)" default>
     <br/>
     
     *   **The Setup:** Train on 100% of the data; evaluate on the exact same 100% of the data.
     *   **The Flaw:** Severe optimistic bias. Models with high capacity (like unpruned decision trees or high-degree polynomials) achieve 100% training accuracy through pure rote memorization.
     *   **Verdict:** Gives zero indication of real-world generalization.
   </TabItem>
-  <TabItem value="twoway" label="⚠️ 2. Two-Way Split (Train / Test)">
+  <TabItem value="twoway" label="2. Two-Way Split (Train / Test)">
     <br/>
     
     *   **The Setup:** Partition into 80% Train and 20% Test.
     *   **The Flaw:** High variance on small datasets (the lottery effect). Furthermore, if you iteratively tune hyperparameters to maximize this test score, the test set becomes contaminated by implicit information leakage.
     *   **Verdict:** Acceptable only for very large datasets when no hyperparameter optimization is performed.
   </TabItem>
-  <TabItem value="threeway" label="✅ 3. Three-Way Split (Train / Val / Test)">
+  <TabItem value="threeway" label="3. Three-Way Split (Train / Val / Test)">
     <br/>
     
     *   **The Setup:** Partition into 60% Train, 20% Validation, and 20% Test.
@@ -137,40 +137,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 5. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Reporting Unanchored Test Accuracy" default>
+  <TabItem value="m1" label="1. Reporting Unanchored Test Accuracy" default>
     <br/>
     
     *   **The Misconception:** *"Our model achieved 91.2% accuracy on the test set, proving it will achieve ~91% in production."*
-    *   **❌ Wrong Thinking:** Quoting a single scalar accuracy without reporting standard deviation or confidence intervals.
-    *   **✅ The Right Principle:** On moderate datasets, a single test score has high standard error. Always report cross-validated performance as $\mu \pm \sigma$ (e.g., $88.6\% \pm 2.5\%$) to communicate partition uncertainty honestly.
+    *   **Wrong Thinking:** Quoting a single scalar accuracy without reporting standard deviation or confidence intervals.
+    *   **The Right Principle:** On moderate datasets, a single test score has high standard error. Always report cross-validated performance as $\mu \pm \sigma$ (e.g., $88.6\% \pm 2.5\%$) to communicate partition uncertainty honestly.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Test Set Peeking (Implicit Tuning)">
+  <TabItem value="m2" label="2. Test Set Peeking (Implicit Tuning)">
     <br/>
     
     *   **The Misconception:** *"I evaluated 10 different model architectures on the test set and reported the score of the best one."*
-    *   **❌ Wrong Thinking:** Using the test partition as an arbiter between candidate algorithms.
-    *   **✅ The Right Principle:** Selecting the best model using the test set optimizes for that specific test partition's idiosyncrasies. The reported score is optimistic and biased. Model selection must occur strictly on a validation set or via nested cross-validation.
+    *   **Wrong Thinking:** Using the test partition as an arbiter between candidate algorithms.
+    *   **The Right Principle:** Selecting the best model using the test set optimizes for that specific test partition's idiosyncrasies. The reported score is optimistic and biased. Model selection must occur strictly on a validation set or via nested cross-validation.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Inadvertent Feature Leakage Prior to Split">
+  <TabItem value="m3" label="3. Inadvertent Feature Leakage Prior to Split">
     <br/>
     
     *   **The Misconception:** *"Standardizing the entire dataset with StandardScaler before train_test_split is harmless because it doesn't touch the labels."*
-    *   **❌ Wrong Thinking:** Computing global statistics across all samples before partitioning.
-    *   **✅ The Right Principle:** Calculating feature means or standard deviations across the whole dataset leaks test set distribution information into the training pipeline. Always split first, fit scalers exclusively on the training partition, and use `transform` on the test partition.
+    *   **Wrong Thinking:** Computing global statistics across all samples before partitioning.
+    *   **The Right Principle:** Calculating feature means or standard deviations across the whole dataset leaks test set distribution information into the training pipeline. Always split first, fit scalers exclusively on the training partition, and use `transform` on the test partition.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Ignoring Class Imbalance in Random Splits">
+  <TabItem value="m4" label="4. Ignoring Class Imbalance in Random Splits">
     <br/>
     
     *   **The Misconception:** *"A random 80-20 split automatically preserves class balance across partitions."*
-    *   **❌ Wrong Thinking:** Relying on unstratified random sampling on imbalanced classification datasets.
-    *   **✅ The Right Principle:** In rare-event detection (e.g. 1% fraud), an unstratified split can easily assign zero positive instances to the test set purely by chance. Always use **Stratified Splits** to ensure identical class proportions across all partitions.
+    *   **Wrong Thinking:** Relying on unstratified random sampling on imbalanced classification datasets.
+    *   **The Right Principle:** In rare-event detection (e.g. 1% fraud), an unstratified split can easily assign zero positive instances to the test set purely by chance. Always use **Stratified Splits** to ensure identical class proportions across all partitions.
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Discarding the Validation Set During Final Training">
+  <TabItem value="m5" label="5. Discarding the Validation Set During Final Training">
     <br/>
     
     *   **The Misconception:** *"Once hyperparameter tuning is complete, evaluate the model trained on just the 60% training set on the test set."*
-    *   **❌ Wrong Thinking:** Leaving 20% of your valuable training data on the table.
-    *   **✅ The Right Principle:** After selecting the winning hyperparameter configuration using the validation set, refit the model on the combined **Train + Validation (80%)** data before final evaluation on the test set. More data yields better parameter estimates.
+    *   **Wrong Thinking:** Leaving 20% of your valuable training data on the table.
+    *   **The Right Principle:** After selecting the winning hyperparameter configuration using the validation set, refit the model on the combined **Train + Validation (80%)** data before final evaluation on the test set. More data yields better parameter estimates.
   </TabItem>
 </Tabs>
 
@@ -182,7 +182,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Partitioning Realities</h3>
+        <h3>Partitioning Realities</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -197,7 +197,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Experimental Hygiene</h3>
+        <h3>Experimental Hygiene</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -215,15 +215,15 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🎰 The Lottery Trap:** A single split gives a single point estimate with unknown variance. Never trust an unanchored test metric.
-*   **🛡️ The Sealed Vault:** The test partition is a sealed envelope opened exactly once. The moment it guides any modeling decision, it ceases to be an honest test set.
-*   **🔄 The Cross-Validation Mandate:** Whenever dataset size makes a three-way split prohibitive, K-Fold Cross-Validation provides the gold standard for reliable generalization estimates.
+*   **The Lottery Trap:** A single split gives a single point estimate with unknown variance. Never trust an unanchored test metric.
+*   **The Sealed Vault:** The test partition is a sealed envelope opened exactly once. The moment it guides any modeling decision, it ceases to be an honest test set.
+*   **The Cross-Validation Mandate:** Whenever dataset size makes a three-way split prohibitive, K-Fold Cross-Validation provides the gold standard for reliable generalization estimates.
 
 :::
 
-**Next Section:** [Cross-Validation Methods](./02-cross-validation-methods.md) - exploring Leave-One-Out (LOO), Leave-P-Out (LPO), and K-Fold architectures.
+**Next Section:** [Cross-Validation Methods](./02-cross-validation-methods.mdx) - exploring Leave-One-Out (LOO), Leave-P-Out (LPO), and K-Fold architectures.
 
 ---
 
@@ -237,16 +237,16 @@ export const ValidationQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Kaggle Leaderboard Trap</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: The Kaggle Leaderboard Trap</h4>
       <p style={{ margin: '0 0 15px 0' }}>A machine learning practitioner submits 150 different models to a competition public leaderboard, choosing the model that scored highest on the public test set. When final rankings are calculated on the private test set, their rank plunges dramatically. What statistical failure occurred?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>The model underfit the training data</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>They overfit the public test set through repetitive feedback leakage</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>The private test set used a different evaluation metric</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The model did not necessarily underfit; it achieved top performance on the public split. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Submitting 150 times and selecting the top score turns the public test set into an unsealed validation set. The practitioner overfit to the idiosyncratic noise of the public split, causing performance to collapse on the truly sealed private test set.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Competitions use identical evaluation metrics across both public and private splits. Try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. The model did not necessarily underfit; it achieved top performance on the public split. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! Submitting 150 times and selecting the top score turns the public test set into an unsealed validation set. The practitioner overfit to the idiosyncratic noise of the public split, causing performance to collapse on the truly sealed private test set.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Competitions use identical evaluation metrics across both public and private splits. Try again!</p>}
     </div>
   );
 };
@@ -256,7 +256,7 @@ export const ValidationQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why does a single train-test split introduce high estimation variance on small datasets?</b></summary>
+  <summary><b>1. [THEORY] Why does a single train-test split introduce high estimation variance on small datasets?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -267,7 +267,7 @@ export const ValidationQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [ANALYZE] Why is it statistically invalid to report validation set accuracy as the final generalization performance of your model?</b></summary>
+  <summary><b>2. [ANALYZE] Why is it statistically invalid to report validation set accuracy as the final generalization performance of your model?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -278,7 +278,7 @@ export const ValidationQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [PRACTICE] In a 3-way split (Train/Val/Test), why do we refit the chosen model on Train + Val before testing?</b></summary>
+  <summary><b>3. [PRACTICE] In a 3-way split (Train/Val/Test), why do we refit the chosen model on Train + Val before testing?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -289,7 +289,7 @@ export const ValidationQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [THEORY] What is the difference between data leakage via feature engineering vs. leakage via hyperparameter tuning?</b></summary>
+  <summary><b>4. [THEORY] What is the difference between data leakage via feature engineering vs. leakage via hyperparameter tuning?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -299,7 +299,7 @@ export const ValidationQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [ANALYZE] If you have a dataset of only 150 rows, why is a 3-way split problematic, and what should you do instead?</b></summary>
+  <summary><b>5. [ANALYZE] If you have a dataset of only 150 rows, why is a 3-way split problematic, and what should you do instead?</b></summary>
   <div className="answer-content">
     <br/>
     

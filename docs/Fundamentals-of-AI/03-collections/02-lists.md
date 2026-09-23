@@ -225,8 +225,8 @@ print(sum(n), max(n), min(n), len(n))
 
 | | Mutates? | Returns |
 |---|---|---|
-| `list.sort()` | ✅ in place | `None` |
-| `sorted(list)` | ❌ | a new sorted list |
+| `list.sort()` | in place | `None` |
+| `sorted(list)` | | a new sorted list |
 
 `sorted()` also works on strings, tuples and sets — anything iterable. `.sort()` is a list
 method only.
@@ -372,16 +372,16 @@ Start with the first element, not `0` — starting at `0` breaks for all-negativ
 
 | Operation | Syntax | Mutates? |
 |---|---|---|
-| Add one item | `.append(x)` | ✅ |
-| Add many items | `.extend(seq)` | ✅ |
-| Insert at position | `.insert(i, x)` | ✅ |
-| Remove by value | `.remove(x)` | ✅ |
-| Remove by index | `.pop(i)` / `del lst[i]` | ✅ |
-| Sort in place | `.sort()` | ✅ |
-| Sorted copy | `sorted(lst)` | ❌ |
-| Copy | `.copy()` / `lst[:]` / `list(lst)` | ❌ |
-| Join | `lst + other` | ❌ |
-| Build from a sequence | `[f(x) for x in seq]` | ❌ |
+| Add one item | `.append(x)` | |
+| Add many items | `.extend(seq)` | |
+| Insert at position | `.insert(i, x)` | |
+| Remove by value | `.remove(x)` | |
+| Remove by index | `.pop(i)` / `del lst[i]` | |
+| Sort in place | `.sort()` | |
+| Sorted copy | `sorted(lst)` | |
+| Copy | `.copy()` / `lst[:]` / `list(lst)` | |
+| Join | `lst + other` | |
+| Build from a sequence | `[f(x) for x in seq]` | |
 
 **Key takeaways**
 

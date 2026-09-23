@@ -434,7 +434,7 @@ for the numerical core.
 
 **See also:** [Operations and Broadcasting](./03-operations-and-broadcasting.md) ·
 [Indexing, Slicing and Reshaping](./02-indexing-slicing-reshaping.md) for the masks used here ·
-[Data Types](../01-basics/03-data-types.md) for Python's own numeric types
+[Data Types](../01-basics/03-data-types.mdx) for Python's own numeric types
 
 ---
 

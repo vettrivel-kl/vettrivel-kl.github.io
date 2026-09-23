@@ -131,7 +131,7 @@ export const OperatorPrecedenceSandbox = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🧮 Interactive Operator and Precedence Sandbox</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Interactive Operator and Precedence Sandbox</h4>
       <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
         Select an expression to inspect its AST execution trace and mathematical quirks:
       </p>
@@ -219,7 +219,7 @@ export const OperatorPrecedenceSandbox = () => {
       </div>
 
       <div style={{ padding: '10px 14px', borderRadius: '6px', backgroundColor: curr.type === 'Exception' ? 'rgba(229, 62, 62, 0.08)' : 'rgba(49, 130, 206, 0.08)', borderLeft: `4px solid ${curr.type === 'Exception' ? '#e53e3e' : '#3182ce'}`, fontSize: '13px', lineHeight: '1.5' }}>
-        💡 <b>Computational Insight:</b> {curr.insight}
+        <b>Computational Insight:</b> {curr.insight}
       </div>
     </div>
   );
@@ -366,40 +366,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 6. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Ignoring Precedence in Divisions" default>
+  <TabItem value="m1" label="1. Ignoring Precedence in Divisions" default>
     <br/>
     
     *   **The Misconception:** *"Writing `a + b + c / 3` computes the average of three numbers."*
-    *   **❌ Wrong Thinking:** Assuming addition happens left-to-right before division.
-    *   **✅ The Right Principle:** Division `/` has higher precedence than addition. Python evaluates `a + b + (c / 3)`. You must wrap the sum in parentheses: `(a + b + c) / 3`.
+    *   **Wrong Thinking:** Assuming addition happens left-to-right before division.
+    *   **The Right Principle:** Division `/` has higher precedence than addition. Python evaluates `a + b + (c / 3)`. You must wrap the sum in parentheses: `(a + b + c) / 3`.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Assuming // Truncates Toward Zero">
+  <TabItem value="m2" label="2. Assuming // Truncates Toward Zero">
     <br/>
     
     *   **The Misconception:** *"Floor division `//` just chops off the decimal part."*
-    *   **❌ Wrong Thinking:** Expecting `-10 // 3` to equal `-3`.
-    *   **✅ The Right Principle:** `//` rounds down toward **negative infinity** ($\lfloor x \rfloor$). Since $-10 / 3 = -3.333$, rounding down yields **`-4`**. To truncate toward zero, use `int(-10 / 3)`.
+    *   **Wrong Thinking:** Expecting `-10 // 3` to equal `-3`.
+    *   **The Right Principle:** `//` rounds down toward **negative infinity** ($\lfloor x \rfloor$). Since $-10 / 3 = -3.333$, rounding down yields **`-4`**. To truncate toward zero, use `int(-10 / 3)`.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Misreading Modulo % as Percentage">
+  <TabItem value="m3" label="3. Misreading Modulo % as Percentage">
     <br/>
     
     *   **The Misconception:** *"Calling `25 % 4` gives 25% of 4 (1.0)."*
-    *   **❌ Wrong Thinking:** Confusing the mathematical modulo operator with percentage calculation.
-    *   **✅ The Right Principle:** `%` returns the integer remainder after division ($25 = 4 \times 6 + 1 \implies 1$). To compute percentages, multiply the ratio by 100: `(num / total) * 100`.
+    *   **Wrong Thinking:** Confusing the mathematical modulo operator with percentage calculation.
+    *   **The Right Principle:** `%` returns the integer remainder after division ($25 = 4 \times 6 + 1 \implies 1$). To compute percentages, multiply the ratio by 100: `(num / total) * 100`.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Assuming ** is Left-Associative">
+  <TabItem value="m4" label="4. Assuming ** is Left-Associative">
     <br/>
     
     *   **The Misconception:** *"2 ** 3 ** 2 evaluates as (2 ** 3) ** 2 = 64."*
-    *   **❌ Wrong Thinking:** Reading chained powers left to right.
-    *   **✅ The Right Principle:** `**` is right-associative: $2^{(3^2)} = 2^9 = 512$. Use explicit parentheses if you desire left-to-right evaluation.
+    *   **Wrong Thinking:** Reading chained powers left to right.
+    *   **The Right Principle:** `**` is right-associative: $2^{(3^2)} = 2^9 = 512$. Use explicit parentheses if you desire left-to-right evaluation.
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Implicit String and Integer Addition">
+  <TabItem value="m5" label="5. Implicit String and Integer Addition">
     <br/>
     
     *   **The Misconception:** *"'5' + 5 will evaluate to '55' or 10."*
-    *   **❌ Wrong Thinking:** Expecting JavaScript-style type coercion.
-    *   **✅ The Right Principle:** Python is strictly typed. Adding string and integer raises `TypeError: can only concatenate str (not "int") to str`. Cast explicitly: `int('5') + 5` $\implies 10$ or `'5' + str(5)` $\implies '55'$.
+    *   **Wrong Thinking:** Expecting JavaScript-style type coercion.
+    *   **The Right Principle:** Python is strictly typed. Adding string and integer raises `TypeError: can only concatenate str (not "int") to str`. Cast explicitly: `int('5') + 5` $\implies 10$ or `'5' + str(5)` $\implies '55'$.
   </TabItem>
 </Tabs>
 
@@ -411,7 +411,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Operator Mechanics</h3>
+        <h3>Operator Mechanics</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -426,7 +426,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Precedence Best Practices</h3>
+        <h3>Precedence Best Practices</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -444,15 +444,15 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **⚡ Division is always float:** In Python 3, single slash `/` will never return an `int`.
-*   **📉 Negative floor rounds down:** Remember that `//` floors toward $-\infty$, meaning `-10 // 3 == -4`.
-*   **🔄 Right-to-left power:** Exponentiation `**` evaluates right-to-left; always add parentheses if in doubt.
+*   **Division is always float:** In Python 3, single slash `/` will never return an `int`.
+*   **Negative floor rounds down:** Remember that `//` floors toward $-\infty$, meaning `-10 // 3 == -4`.
+*   **Right-to-left power:** Exponentiation `**` evaluates right-to-left; always add parentheses if in doubt.
 
 :::
 
-**Next Section:** [F-Strings](./05-f-strings.md) - mastering Python 3.6+ formatted string literals, alignment padding, and precision specifiers.
+**Next Section:** [F-Strings](./05-f-strings.mdx) - mastering Python 3.6+ formatted string literals, alignment padding, and precision specifiers.
 
 ---
 
@@ -466,16 +466,16 @@ export const OperatorQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Right-Associative Exponentiation Trap</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: The Right-Associative Exponentiation Trap</h4>
       <p style={{ margin: '0 0 15px 0' }}>What is the evaluated output of the Python expression <code>2 ** 3 ** 2</code>?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>64 (Evaluated left-to-right as (2**3)**2)</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>512 (Evaluated right-to-left as 2**(3**2))</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>SyntaxError: Chained power operators require parentheses</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. In Python, ** is right-associative, not left-associative! (2**3)**2 would be 64, but 2**3**2 evaluates 3**2 first. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! In Python, exponentiation (**) is strictly right-associative. Python evaluates 3 ** 2 = 9 first, and then calculates 2 ** 9 = 512. Chained power operators do NOT require parentheses.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Chaining power operators is completely legal syntax in Python. Try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. In Python, ** is right-associative, not left-associative! (2**3)**2 would be 64, but 2**3**2 evaluates 3**2 first. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! In Python, exponentiation (**) is strictly right-associative. Python evaluates 3 ** 2 = 9 first, and then calculates 2 ** 9 = 512. Chained power operators do NOT require parentheses.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Chaining power operators is completely legal syntax in Python. Try again!</p>}
     </div>
   );
 };
@@ -485,7 +485,7 @@ export const OperatorQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why does Python evaluate `-10 // 3` as `-4` rather than `-3`?</b></summary>
+  <summary><b>1. [THEORY] Why does Python evaluate `-10 // 3` as `-4` rather than `-3`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -498,7 +498,7 @@ export const OperatorQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [MATH] What is the exact output of `print(2 + 3 * 4 ** 2 - 6 / 3)`? Trace step by step.</b></summary>
+  <summary><b>2. [MATH] What is the exact output of `print(2 + 3 * 4 ** 2 - 6 / 3)`? Trace step by step.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -514,7 +514,7 @@ export const OperatorQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [PRACTICE] How do you convert 127 minutes into hours and remaining minutes in two lines of code?</b></summary>
+  <summary><b>3. [PRACTICE] How do you convert 127 minutes into hours and remaining minutes in two lines of code?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -532,7 +532,7 @@ export const OperatorQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [ANALYZE] What happens when evaluating `5 > 3 and 2 > 4 or not False`? Trace precedence.</b></summary>
+  <summary><b>4. [ANALYZE] What happens when evaluating `5 > 3 and 2 > 4 or not False`? Trace precedence.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -549,7 +549,7 @@ export const OperatorQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] What is the difference between `=` (assignment), `==` (equality), and `is` (identity)?</b></summary>
+  <summary><b>5. [THEORY] What is the difference between `=` (assignment), `==` (equality), and `is` (identity)?</b></summary>
   <div className="answer-content">
     <br/>
     

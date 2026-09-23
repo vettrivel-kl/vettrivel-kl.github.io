@@ -38,7 +38,7 @@ export const ScalerSimulator = () => {
   const scaled = getScaled();
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🎛️ Live Scaler Simulator</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Live Scaler Simulator</h4>
       <p style={{ margin: '0 0 15px 0', fontSize: '14px' }}>See how an outlier (<code>1000</code>) crushes regular values in MinMaxScaler but gets safely isolated in RobustScaler:</p>
       <div style={{ display: 'flex', gap: '15px', marginBottom: '15px', alignItems: 'center' }}>
         <label style={{ fontWeight: 'bold', fontSize: '13px', display: 'flex', alignItems: 'center', gap: '5px', cursor: 'pointer' }}>
@@ -63,8 +63,8 @@ export const ScalerSimulator = () => {
         ))}
       </div>
       <div style={{ fontSize: '12px', color: 'var(--ifm-color-emphasis-600)', fontStyle: 'italic', marginTop: '10px' }}>
-        {scaler === 'minmax' && hasOutlier && "⚠️ Notice how normal values (10, 20, 30) are squashed down to ~0.01. They are practically indistinguishable!"}
-        {scaler === 'robust' && hasOutlier && "✅ RobustScaler keeps the regular values spaced out because the 1000 outlier doesn't affect the median or IQR."}
+        {scaler === 'minmax' && hasOutlier && "Notice how normal values (10, 20, 30) are squashed down to ~0.01. They are practically indistinguishable!"}
+        {scaler === 'robust' && hasOutlier && "RobustScaler keeps the regular values spaced out because the 1000 outlier doesn't affect the median or IQR."}
         {scaler === 'std' && "Standardizes features to mean 0 and unit variance. Unbounded range."}
         {scaler === 'maxabs' && "Scales by the maximum absolute value. Preserves exact sparse zeros."}
       </div>
@@ -111,7 +111,7 @@ The model isn't weighing evidence. **It's reading the units.**
 Explore the mathematical foundations of standard scaling and normalisation:
 
 <Tabs>
-  <TabItem value="zscore" label="📊 Standardisation (Z-Score)" default>
+  <TabItem value="zscore" label="Standardisation (Z-Score)" default>
     <br/>
     
     Subtract the mean, divide by the standard deviation:
@@ -126,7 +126,7 @@ Explore the mathematical foundations of standard scaling and normalisation:
     StandardScaler()
     ```
   </TabItem>
-  <TabItem value="minmax" label="📏 Min-Max Normalisation">
+  <TabItem value="minmax" label="Min-Max Normalisation">
     <br/>
     
     Subtract the minimum, divide by the range:
@@ -451,7 +451,7 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 Compare production-ready pipelines with a manual, leakage-prone implementation:
 
 <Tabs>
-  <TabItem value="sklearn" label="📦 Production (Scikit-Learn Pipeline)" default>
+  <TabItem value="sklearn" label="Production (Scikit-Learn Pipeline)" default>
     <br/>
     
     ```python
@@ -466,7 +466,7 @@ Compare production-ready pipelines with a manual, leakage-prone implementation:
     )
     ```
   </TabItem>
-  <TabItem value="scratch" label="🧮 Manual Scaling (Dangerous Leak)">
+  <TabItem value="scratch" label="Manual Scaling (Dangerous Leak)">
     <br/>
     
     ```python
@@ -485,40 +485,40 @@ Compare production-ready pipelines with a manual, leakage-prone implementation:
 Explore some of the most critical engineering pitfalls in feature scaling and transformation and how to avoid them:
 
 <Tabs>
-  <TabItem value="trees" label="🚨 Pitfall 1: Unnecessary Tree Scaling" default>
+  <TabItem value="trees" label="Pitfall 1: Unnecessary Tree Scaling" default>
     <br/>
     
     *   **The Misconception:** *"Scaling is a mandatory step that always improves RandomForest / XGBoost performance."*
-    *   **❌ Wrong Thinking:** Decision tree nodes split on thresholds, which are completely scale-invariant. Scaling a tree ensemble yields exactly `+0.0000` accuracy gain.
-    *   **✅ The Right Principle:** Focus scaling efforts strictly on distance-based models (kNN, SVM), linear estimators, neural networks, or PCA. You can skip scaling for pure tree ensembles.
+    *   **Wrong Thinking:** Decision tree nodes split on thresholds, which are completely scale-invariant. Scaling a tree ensemble yields exactly `+0.0000` accuracy gain.
+    *   **The Right Principle:** Focus scaling efforts strictly on distance-based models (kNN, SVM), linear estimators, neural networks, or PCA. You can skip scaling for pure tree ensembles.
   </TabItem>
-  <TabItem value="outliers" label="🚨 Pitfall 2: MinMaxScaler Outlier Poisoning">
+  <TabItem value="outliers" label="Pitfall 2: MinMaxScaler Outlier Poisoning">
     <br/>
     
     *   **The Misconception:** *"MinMaxScaler is always the best choice because bounded [0, 1] scales look tidier."*
-    *   **❌ Wrong Thinking:** If your column contains extreme outliers, MinMaxScaler will compress 99% of your legitimate data points into a narrow 1% band, rendering them indistinguishable.
-    *   **✅ The Right Principle:** Use `RobustScaler` (median / IQR based) when outliers are present, or handle outliers first before using standard scaling.
+    *   **Wrong Thinking:** If your column contains extreme outliers, MinMaxScaler will compress 99% of your legitimate data points into a narrow 1% band, rendering them indistinguishable.
+    *   **The Right Principle:** Use `RobustScaler` (median / IQR based) when outliers are present, or handle outliers first before using standard scaling.
   </TabItem>
-  <TabItem value="normalizer" label="🚨 Pitfall 3: Row vs Column Scaling">
+  <TabItem value="normalizer" label="Pitfall 3: Row vs Column Scaling">
     <br/>
     
     *   **The Misconception:** *"Normalizer is a drop-in substitute for StandardScaler."*
-    *   **❌ Wrong Thinking:** `Normalizer` scales **rows** (samples) to unit length, completely discarding magnitude. `StandardScaler` scales **columns** (features) independently.
-    *   **✅ The Right Principle:** Use column-based scalers (`StandardScaler`, `RobustScaler`) for feature-scale alignment. Reserve `Normalizer` for row-wise frequency representations like TF-IDF text features.
+    *   **Wrong Thinking:** `Normalizer` scales **rows** (samples) to unit length, completely discarding magnitude. `StandardScaler` scales **columns** (features) independently.
+    *   **The Right Principle:** Use column-based scalers (`StandardScaler`, `RobustScaler`) for feature-scale alignment. Reserve `Normalizer` for row-wise frequency representations like TF-IDF text features.
   </TabItem>
-  <TabItem value="log1p" label="🚨 Pitfall 4: Reflexive Log Transforms">
+  <TabItem value="log1p" label="Pitfall 4: Reflexive Log Transforms">
     <br/>
     
     *   **The Misconception:** *"I should apply plain np.log to any right-skewed feature."*
-    *   **❌ Wrong Thinking:** Plain `np.log` will fail with an `-inf` on zero values and raise errors on negative numbers. Reflexive log scaling can also overcorrect, flipping right-skews into negative left-skews.
-    *   **✅ The Right Principle:** Use `np.log1p` to handle zeros safely. Even better, use `PowerTransformer(method="yeo-johnson")` to let scikit-learn automatically find the optimal skew-reducing exponent for both positive and negative values.
+    *   **Wrong Thinking:** Plain `np.log` will fail with an `-inf` on zero values and raise errors on negative numbers. Reflexive log scaling can also overcorrect, flipping right-skews into negative left-skews.
+    *   **The Right Principle:** Use `np.log1p` to handle zeros safely. Even better, use `PowerTransformer(method="yeo-johnson")` to let scikit-learn automatically find the optimal skew-reducing exponent for both positive and negative values.
   </TabItem>
-  <TabItem value="sparse" label="🚨 Pitfall 5: Centering Sparse Matrices">
+  <TabItem value="sparse" label="Pitfall 5: Centering Sparse Matrices">
     <br/>
     
     *   **The Misconception:** *"I can run standard StandardScaler on high-cardinality one-hot outputs."*
-    *   **❌ Wrong Thinking:** StandardScaler subtracts the mean, which immediately converts all zero entries into non-zero values, causing sparse representations to densify and blow up memory (e.g. from 0.8 MB to 400 MB), resulting in a `ValueError`.
-    *   **✅ The Right Principle:** Always set `with_mean=False` in StandardScaler, or use `MaxAbsScaler()` to scale sparse matrices without destroying their memory-saving properties.
+    *   **Wrong Thinking:** StandardScaler subtracts the mean, which immediately converts all zero entries into non-zero values, causing sparse representations to densify and blow up memory (e.g. from 0.8 MB to 400 MB), resulting in a `ValueError`.
+    *   **The Right Principle:** Always set `with_mean=False` in StandardScaler, or use `MaxAbsScaler()` to scale sparse matrices without destroying their memory-saving properties.
   </TabItem>
 </Tabs>
 
@@ -530,7 +530,7 @@ Explore some of the most critical engineering pitfalls in feature scaling and tr
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header" style={{ padding: '15px', borderBottom: '1px solid var(--ifm-color-emphasis-200)' }}>
-        <h3>🤖 Scaler Selection</h3>
+        <h3>Scaler Selection</h3>
       </div>
       <div className="card__body" style={{ padding: '15px' }}>
         <ul>
@@ -545,7 +545,7 @@ Explore some of the most critical engineering pitfalls in feature scaling and tr
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header" style={{ padding: '15px', borderBottom: '1px solid var(--ifm-color-emphasis-200)' }}>
-        <h3>🔄 Distribution Transformations</h3>
+        <h3>Distribution Transformations</h3>
       </div>
       <div className="card__body" style={{ padding: '15px' }}>
         <ul>
@@ -562,11 +562,11 @@ Explore some of the most critical engineering pitfalls in feature scaling and tr
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🎯 Distance models collapse unscaled:** Algorithms like SVM (+6.2 accuracy points) and kNN (+3.7) are critically crippled by raw unit spreads, whereas tree ensembles (+0.0000) are structurally immune.
-*   **⚠️ Outliers crush MinMaxScaler:** A single outlier squashes legitimate data down to less than 1% of the scaled range; `RobustScaler` prevents this via median centering.
-*   **🔄 Log1p handles zeros safely:** Normal `np.log` creates `-inf` on zero columns; use `np.log1p` or Yeo-Johnson power transforms instead.
+*   **Distance models collapse unscaled:** Algorithms like SVM (+6.2 accuracy points) and kNN (+3.7) are critically crippled by raw unit spreads, whereas tree ensembles (+0.0000) are structurally immune.
+*   **Outliers crush MinMaxScaler:** A single outlier squashes legitimate data down to less than 1% of the scaled range; `RobustScaler` prevents this via median centering.
+*   **Log1p handles zeros safely:** Normal `np.log` creates `-inf` on zero columns; use `np.log1p` or Yeo-Johnson power transforms instead.
 
 :::
 
@@ -584,7 +584,7 @@ for `fit` versus `transform`
 *Attempt each question first, then click to reveal detailed answers, mathematical derivations, and sample explanations.*
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why do distance-based models (SVM, kNN) require feature scaling while decision trees are completely invariant?</b></summary>
+  <summary><b>1. [THEORY] Why do distance-based models (SVM, kNN) require feature scaling while decision trees are completely invariant?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -594,7 +594,7 @@ for `fit` versus `transform`
 </details>
 
 <details>
-  <summary>❓ <b>2. [THEORY] What are standardisation and min-max equations, and what are their respective output bounds?</b></summary>
+  <summary><b>2. [THEORY] What are standardisation and min-max equations, and what are their respective output bounds?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -604,7 +604,7 @@ for `fit` versus `transform`
 </details>
 
 <details>
-  <summary>❓ <b>3. [ANALYZE] Why is MinMaxScaler uniquely vulnerable to a single outlier, and how does RobustScaler solve this?</b></summary>
+  <summary><b>3. [ANALYZE] Why is MinMaxScaler uniquely vulnerable to a single outlier, and how does RobustScaler solve this?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -614,7 +614,7 @@ for `fit` versus `transform`
 </details>
 
 <details>
-  <summary>❓ <b>4. [THEORY] What is the difference between StandardScaler and Normalizer in scikit-learn?</b></summary>
+  <summary><b>4. [THEORY] What is the difference between StandardScaler and Normalizer in scikit-learn?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -624,7 +624,7 @@ for `fit` versus `transform`
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] Why does np.log fail on zero columns, and how does np.log1p resolve this?</b></summary>
+  <summary><b>5. [THEORY] Why does np.log fail on zero columns, and how does np.log1p resolve this?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -634,7 +634,7 @@ for `fit` versus `transform`
 </details>
 
 <details>
-  <summary>❓ <b>6. [THEORY] What does PowerTransformer do that fixed log/sqrt transforms cannot?</b></summary>
+  <summary><b>6. [THEORY] What does PowerTransformer do that fixed log/sqrt transforms cannot?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -644,7 +644,7 @@ for `fit` versus `transform`
 </details>
 
 <details>
-  <summary>❓ <b>7. [ANALYZE] What happens to a sparse matrix when centered, and why does StandardScaler raise a ValueError?</b></summary>
+  <summary><b>7. [ANALYZE] What happens to a sparse matrix when centered, and why does StandardScaler raise a ValueError?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -654,7 +654,7 @@ for `fit` versus `transform`
 </details>
 
 <details>
-  <summary>❓ <b>8. [ANALYZE] Why is scaling parameter leakage (e.g., +0.0002) historically negligible compared to target-encoding leakage (+21 points)?</b></summary>
+  <summary><b>8. [ANALYZE] Why is scaling parameter leakage (e.g., +0.0002) historically negligible compared to target-encoding leakage (+21 points)?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -664,7 +664,7 @@ for `fit` versus `transform`
 </details>
 
 <details>
-  <summary>❓ <b>9. [ANALYZE] Given that scaling leakage is negligible, why must we still enforce fitting scalers strictly on training data?</b></summary>
+  <summary><b>9. [ANALYZE] Given that scaling leakage is negligible, why must we still enforce fitting scalers strictly on training data?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -676,7 +676,7 @@ for `fit` versus `transform`
 </details>
 
 <details>
-  <summary>❓ <b>10. [THEORY] Why must you always perform imputation before scaling?</b></summary>
+  <summary><b>10. [THEORY] Why must you always perform imputation before scaling?</b></summary>
   <div className="answer-content">
     <br/>
     

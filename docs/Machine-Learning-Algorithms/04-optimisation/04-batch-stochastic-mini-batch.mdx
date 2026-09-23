@@ -102,7 +102,7 @@ The rest of this page is about what that trade actually buys.
 
 ---
 
-## 🛠️ The Interactive Gradient Trajectory Sandbox
+## The Interactive Gradient Trajectory Sandbox
 
 Experiment with the simulator below. Toggle between standard Batch, Stochastic (SGD), and Mini-Batch descent to watch how the trajectories travel down a 2D cost surface. Observe how full-batch moves in a straight line, single-row SGD bounces wildly inside a noisy cloud, and mini-batch offers a stable compromise.
 
@@ -154,7 +154,7 @@ export const TrajectorySandbox = () => {
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
-      <h4 style={{ margin: '0' }}>🔌 Gradient Trajectory Sandbox</h4>
+      <h4 style={{ margin: '0' }}>Gradient Trajectory Sandbox</h4>
       <p style={{ fontSize: '13px', margin: '5px 0 15px 0', opacity: 0.9 }}>Select a variant and slide the step counter to watch the path trace down the cost contours.</p>
 
       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px' }}>
@@ -200,17 +200,17 @@ export const TrajectorySandbox = () => {
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center', fontSize: '13px' }}>
           {variant === 'batch' ? (
             <div style={{ padding: '12px', borderLeft: '4px solid #38a169', backgroundColor: 'rgba(56, 161, 105, 0.03)' }}>
-              <b>🟢 Full-Batch Trajectory:</b>
+              <b>Full-Batch Trajectory:</b>
               <div style={{ opacity: 0.8, fontSize: '11px', marginTop: '5px' }}>Because gradients are computed on all rows, the downhill direction is exact. The ball slides down the hillside in a perfectly straight line, but calculating each step is extremely slow on large datasets.</div>
             </div>
           ) : variant === 'minibatch' ? (
             <div style={{ padding: '12px', borderLeft: '4px solid #3182ce', backgroundColor: 'rgba(49, 130, 206, 0.03)' }}>
-              <b>🔵 Mini-Batch Trajectory (b = 256):</b>
+              <b>Mini-Batch Trajectory (b = 256):</b>
               <div style={{ opacity: 0.8, fontSize: '11px', marginTop: '5px' }}>Gradients have minor variance ($1/b$). The path has a slight wobble, but it stays highly stable, flows smoothly, and settles directly onto the optimum with low calculation overhead.</div>
             </div>
           ) : (
             <div style={{ padding: '12px', borderLeft: '4px solid #e53e3e', backgroundColor: 'rgba(229, 62, 62, 0.03)' }}>
-              <b>🔴 Stochastic Trajectory (b = 1):</b>
+              <b>Stochastic Trajectory (b = 1):</b>
               <div style={{ opacity: 0.8, fontSize: '11px', marginTop: '5px' }}>Because we update after every single row, the variance is huge. The path is wildly jagged, zigzagging and bouncing inside a noisy cloud. Near the minimum, it bounces forever without settling.</div>
             </div>
           )}
@@ -274,7 +274,7 @@ It is also not a claim about epochs, and it is not a claim about the final cost.
 ---
 
 <details style={{ padding: '15px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
-  <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}>🔌 <b>[ADVANCED DEEP-DIVE] Noise Floors & Data Budget vs. Stopwatch trade-offs</b></summary>
+  <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}><b>[ADVANCED DEEP-DIVE] Noise Floors & Data Budget vs. Stopwatch trade-offs</b></summary>
   <div className="answer-content">
     <br/>
 
@@ -318,7 +318,7 @@ It is also not a claim about epochs, and it is not a claim about the final cost.
                   onClick={() => setDecay(!decay)} 
                   style={{ padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold', border: '1px solid #3182ce', backgroundColor: decay ? '#3182ce' : 'transparent', color: decay ? '#fff' : 'inherit' }}
                 >
-                  {decay ? "✅ Decaying alpha" : "❌ Constant alpha"}
+                  {decay ? "Decaying alpha" : "Constant alpha"}
                 </button>
               </div>
             </div>
@@ -334,7 +334,7 @@ It is also not a claim about epochs, and it is not a claim about the final cost.
               <path d={`M ${pathData}`} fill="none" stroke={decay ? '#38a169' : '#e53e3e'} strokeWidth="1.5" />
             </svg>
             <div style={{ fontSize: '11px', marginTop: '5px', textAlign: 'center', fontWeight: 'bold', color: decay ? '#38a169' : '#e53e3e' }}>
-              {decay ? "🟢 Decaying alpha squeezes cost variance down directly onto the minimum." : "🔴 Constant alpha causes cost to plateau and bounce forever inside the noise floor."}
+              {decay ? "Decaying alpha squeezes cost variance down directly onto the minimum." : "Constant alpha causes cost to plateau and bounce forever inside the noise floor."}
             </div>
           </div>
         );
@@ -545,33 +545,33 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 ## 3. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Unqualified 'Faster' Claims" default>
+  <TabItem value="m1" label="1. Unqualified 'Faster' Claims" default>
     <br/>
     
     *   **The Misconception:** *"SGD is mathematically faster than batch gradient descent."*
-    *   **❌ Wrong Thinking:** Expecting SGD to reach a tight OLS tolerance in fewer epochs or wall-clock seconds.
-    *   **✅ The Right Principle:** "Faster" requires a unit. SGD is faster **per row read** (Data Budget). However, Batch/large mini-batches are faster **per epoch**, faster **in wall-clock seconds** (due to vectorised hardware multiplications), and converge to infinitely lower final costs.
+    *   **Wrong Thinking:** Expecting SGD to reach a tight OLS tolerance in fewer epochs or wall-clock seconds.
+    *   **The Right Principle:** "Faster" requires a unit. SGD is faster **per row read** (Data Budget). However, Batch/large mini-batches are faster **per epoch**, faster **in wall-clock seconds** (due to vectorised hardware multiplications), and converge to infinitely lower final costs.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Constant Rate Expectation">
+  <TabItem value="m2" label="2. Constant Rate Expectation">
     <br/>
     
     *   **The Misconception:** *"With a constant learning rate alpha, SGD will eventually reach the exact OLS minimum if given enough iterations."*
-    *   **❌ Wrong Thinking:** Running constant-rate SGD for 1,000,000 steps and wondering why it plateaus.
-    *   **✅ The Right Principle:** A constant learning rate with a noisy single-row gradient creates a **noise floor**. The model bounces forever inside a cloud centered at the minimum. You **must** decay the learning rate (step size) over time so the cloud collapses onto the exact answer.
+    *   **Wrong Thinking:** Running constant-rate SGD for 1,000,000 steps and wondering why it plateaus.
+    *   **The Right Principle:** A constant learning rate with a noisy single-row gradient creates a **noise floor**. The model bounces forever inside a cloud centered at the minimum. You **must** decay the learning rate (step size) over time so the cloud collapses onto the exact answer.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Naive Epoch Comparisons">
+  <TabItem value="m3" label="3. Naive Epoch Comparisons">
     <br/>
     
     *   **The Misconception:** *"Comparing epoch counts across batch sizes is a fair way to grade optimizer speeds."*
-    *   **❌ Wrong Thinking:** Deciding SGD is better because it took 50 epochs compared to Batch's 705.
-    *   **✅ The Right Principle:** An epoch represents the same amount of data read, but a completely different number of updates. One epoch is **1 update** for Batch, but **20,000 updates** for SGD. Naive epoch-based comparisons are meaningless; always compare wall-clock seconds or total updates.
+    *   **Wrong Thinking:** Deciding SGD is better because it took 50 epochs compared to Batch's 705.
+    *   **The Right Principle:** An epoch represents the same amount of data read, but a completely different number of updates. One epoch is **1 update** for Batch, but **20,000 updates** for SGD. Naive epoch-based comparisons are meaningless; always compare wall-clock seconds or total updates.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. SGD is always a superior choice">
+  <TabItem value="m4" label="4. SGD is always a superior choice">
     <br/>
     
     *   **The Misconception:** *"I should always use SGDRegressor for fitting tabular linear regressions."*
-    *   **❌ Wrong Thinking:** Using SGDRegressor on small/medium datasets that fit comfortably in RAM.
-    *   **✅ The Right Principle:** SGD is a scalability and streaming tool. On tabular datasets that fit in memory, SGDRegressor lands $7.8\text{e-}3$ off the minimum in seconds, whereas `LinearRegression` (OLS) solves it **perfectly and instantly**—trades exactness for nothing.
+    *   **Wrong Thinking:** Using SGDRegressor on small/medium datasets that fit comfortably in RAM.
+    *   **The Right Principle:** SGD is a scalability and streaming tool. On tabular datasets that fit in memory, SGDRegressor lands $7.8\text{e-}3$ off the minimum in seconds, whereas `LinearRegression` (OLS) solves it **perfectly and instantly**—trades exactness for nothing.
   </TabItem>
 </Tabs>
 
@@ -583,7 +583,7 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Core Theory</h3>
+        <h3>Core Theory</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -598,7 +598,7 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Engineering Realities</h3>
+        <h3>Engineering Realities</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -616,11 +616,11 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 
 :::info 
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🔒 Sum Invariance:** Under high gradient variance, while individual coefficients are unstable, their combined predictions remain robust because the sum is stable.
-*   **⚖️ The True SGD Win:** SGD and small mini-batches win exclusively on **rows seen to a loose target**, making them the right choice for streaming or out-of-memory data.
-*   **🛠️ Optimal Compromise:** Mini-batch is not a flat compromise; it is where all engineering criteria (variance, updates, seconds) are simultaneously acceptable.
+*   **Sum Invariance:** Under high gradient variance, while individual coefficients are unstable, their combined predictions remain robust because the sum is stable.
+*   **The True SGD Win:** SGD and small mini-batches win exclusively on **rows seen to a loose target**, making them the right choice for streaming or out-of-memory data.
+*   **Optimal Compromise:** Mini-batch is not a flat compromise; it is where all engineering criteria (variance, updates, seconds) are simultaneously acceptable.
 
 :::
 
@@ -638,16 +638,16 @@ export const PracticeQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Stopwatch Dilemma</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: The Stopwatch Dilemma</h4>
       <p style={{ margin: '0 0 15px 0' }}>If we are training a linear model on an in-memory dataset, why does Batch gradient descent converge in far fewer wall-clock seconds than single-row SGD, despite taking fewer updates?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because OLS gradients are non-convex</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because vectorised matrix multiplications on full batches avoid Python loop overheads</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because Batch has a higher noise floor</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The cost remains convex. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! In a vectorised environment (like NumPy/Python), iterating 20,000 single-row updates sequentially carries enormous Python interpreter and call overhead. A single 20,000-row batch is compiled as a single fast matrix product at the hardware level, crushing sequential clock times (Batch took 0.76s while SGD took 3.94s!).</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Batch has exactly zero noise floor since its gradient is exact. Re-read and try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. The cost remains convex. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! In a vectorised environment (like NumPy/Python), iterating 20,000 single-row updates sequentially carries enormous Python interpreter and call overhead. A single 20,000-row batch is compiled as a single fast matrix product at the hardware level, crushing sequential clock times (Batch took 0.76s while SGD took 3.94s!).</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. Batch has exactly zero noise floor since its gradient is exact. Re-read and try again!</p>}
     </div>
   );
 };
@@ -657,7 +657,7 @@ export const PracticeQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why is "SGD is faster" a misleading statement, and what are the four different stopwatches we must attach?</b></summary>
+  <summary><b>1. [THEORY] Why is "SGD is faster" a misleading statement, and what are the four different stopwatches we must attach?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -671,7 +671,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [ANALYZE] Why does constant learning rate SGD hit a "noise floor" plateau, and how does step-size decay mathematically resolve this?</b></summary>
+  <summary><b>2. [ANALYZE] Why does constant learning rate SGD hit a "noise floor" plateau, and how does step-size decay mathematically resolve this?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -682,7 +682,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [THEORY] State the two classical conditions on the step-size schedule $\alpha_t$ and what happens if either is violated.</b></summary>
+  <summary><b>3. [THEORY] State the two classical conditions on the step-size schedule $\alpha_t$ and what happens if either is violated.</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -696,7 +696,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [ANALYZE] On large datasets with loose targets, why does Mini-Batch 32 win over Batch by over 1,250× in rows read?</b></summary>
+  <summary><b>4. [ANALYZE] On large datasets with loose targets, why does Mini-Batch 32 win over Batch by over 1,250× in rows read?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -707,7 +707,7 @@ export const PracticeQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [THEORY] Why is Mini-Batch not a simple compromise, but a sweet-spot where both extremes fail a column outright?</b></summary>
+  <summary><b>5. [THEORY] Why is Mini-Batch not a simple compromise, but a sweet-spot where both extremes fail a column outright?</b></summary>
   <div className="answer-content">
     <br/>
     

@@ -6,7 +6,7 @@
 
 ---
 
-## ✅ COMPLETE EXAM ANSWER
+## COMPLETE EXAM ANSWER
 
 ---
 
@@ -305,22 +305,22 @@ $$= 1 - \frac{0.064}{2} = 1 - 0.032 = 0.968$$
 
 ## **KEY TAKEAWAYS (Quick Review)**
 
-✅ **Multiple Linear Regression:**
+**Multiple Linear Regression:**
 1. Uses **matrix algebra** (normal equation): β = (X^T X)^{-1} X^T Y
 2. Coefficients are **partial effects**: β₁ represents x₁'s effect **holding x₂, x₃, ... constant**
 3. Requires interpretation of **all coefficients together**, not just significant ones
 
-✅ **Design Matrix X:**
+**Design Matrix X:**
 1. First column is all **1s** for the intercept β₀
 2. Remaining columns are the features (x₁, x₂, ..., xₚ)
 3. Dimensions: n rows (samples) × (p+1) columns (features + intercept)
 
-✅ **Performance Metrics:**
+**Performance Metrics:**
 1. **R²** tells "overall fit" but is optimistic for MLR
 2. **Adjusted R²** is the **preferred metric for multiple regression** — it penalizes adding unnecessary features
 3. **RMSE** is most interpretable because it's in original units
 
-✅ **Exam Tips for MLR:**
+**Exam Tips for MLR:**
 - Always show **matrix construction** (X and Y clearly labeled)
 - Show all **intermediate products** (X^T X, X^T Y)
 - **Interpret coefficients** using "holding X constant" language for each one
@@ -331,21 +331,21 @@ $$= 1 - \frac{0.064}{2} = 1 - 0.032 = 0.968$$
 
 ## **ANSWER CHECKLIST**
 
-- ✅ Define multiple linear regression clearly
-- ✅ Write standard formula with all variable definitions
-- ✅ Write matrix form Y = Xβ + ε with component explanations
-- ✅ Show normal equation: β = (X^T X)^{-1} X^T Y
-- ✅ Construct design matrix X correctly (with 1s for intercept)
-- ✅ Show X^T and X^T X calculations step-by-step
-- ✅ Calculate X^T Y vector
-- ✅ Solve for β coefficient vector
-- ✅ Write final regression equation
-- ✅ **Interpret each coefficient** using "holding other variables constant"
-- ✅ Calculate MAE, MSE, RMSE with worked examples
-- ✅ Calculate R² and Adjusted R²
-- ✅ Explain why Adjusted R² < R²
-- ✅ Show comparison table of all metrics
-- ✅ Summarize when to use Adjusted R² in MLR
+- Define multiple linear regression clearly
+- Write standard formula with all variable definitions
+- Write matrix form Y = Xβ + ε with component explanations
+- Show normal equation: β = (X^T X)^{-1} X^T Y
+- Construct design matrix X correctly (with 1s for intercept)
+- Show X^T and X^T X calculations step-by-step
+- Calculate X^T Y vector
+- Solve for β coefficient vector
+- Write final regression equation
+- **Interpret each coefficient** using "holding other variables constant"
+- Calculate MAE, MSE, RMSE with worked examples
+- Calculate R² and Adjusted R²
+- Explain why Adjusted R² < R²
+- Show comparison table of all metrics
+- Summarize when to use Adjusted R² in MLR
 
 ---
 
@@ -376,7 +376,7 @@ $$= 1 - \frac{0.064}{2} = 1 - 0.032 = 0.968$$
 
 ---
 
-**This answer scores FULL 10 marks** ✅
+**This answer scores FULL 10 marks** 
 
 When writing in exam, allocate **15 minutes** for this question. Show all calculation steps, and emphasize the interpretation of coefficients as "partial effects" holding other variables constant.
 

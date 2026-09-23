@@ -41,12 +41,12 @@ Toggle between the **Leaky Workflow** and the **Honest Pipeline** to observe how
 
 export const LeakageSimulator = () => {
   const [mode, setMode] = React.useState('honest');
-  const leakyCode = `# ❌ THE LEAKAGE TRAP\nscaler = StandardScaler()\nX_scaled = scaler.fit_transform(X)  # Leaks test set mean & std!\nX_train, X_test, y_train, y_test = train_test_split(X_scaled, y)`;
-  const honestCode = `# ✅ THE HONEST PIPELINE\npipe = Pipeline([\n    ('scaler', StandardScaler()),\n    ('model', LogisticRegression())\n])\n# cross_val_score refits scaler strictly on train folds per iteration!\nscores = cross_val_score(pipe, X, y, cv=5)`;
+  const leakyCode = `# THE LEAKAGE TRAP\nscaler = StandardScaler()\nX_scaled = scaler.fit_transform(X)  # Leaks test set mean & std!\nX_train, X_test, y_train, y_test = train_test_split(X_scaled, y)`;
+  const honestCode = `# THE HONEST PIPELINE\npipe = Pipeline([\n    ('scaler', StandardScaler()),\n    ('model', LogisticRegression())\n])\n# cross_val_score refits scaler strictly on train folds per iteration!\nscores = cross_val_score(pipe, X, y, cv=5)`;
 
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 12px 0' }}>🧪 Preprocessing Workflow Simulator</h4>
+      <h4 style={{ margin: '0 0 12px 0' }}>Preprocessing Workflow Simulator</h4>
       <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
         <button
           onClick={() => setMode('leaky')}
@@ -61,7 +61,7 @@ export const LeakageSimulator = () => {
             transition: '0.2s'
           }}
         >
-          ❌ Leaky Workflow (Scale First)
+          Leaky Workflow (Scale First)
         </button>
         <button
           onClick={() => setMode('honest')}
@@ -76,13 +76,13 @@ export const LeakageSimulator = () => {
             transition: '0.2s'
           }}
         >
-          ✅ Honest Workflow (Pipeline Isolation)
+          Honest Workflow (Pipeline Isolation)
         </button>
       </div>
 
       {mode === 'leaky' ? (
         <div style={{ padding: '16px', borderLeft: '4px solid #e53e3e', backgroundColor: 'rgba(229, 62, 62, 0.08)', borderRadius: '4px' }}>
-          <strong style={{ color: '#e53e3e', fontSize: '16px' }}>🚨 Flaw: Global Fit Contamination</strong>
+          <strong style={{ color: '#e53e3e', fontSize: '16px' }}>Flaw: Global Fit Contamination</strong>
           <p style={{ margin: '8px 0', fontSize: '14px' }}>
             StandardScaler.fit_transform(X) is executed globally across all 100 observations before train_test_split.
           </p>
@@ -97,7 +97,7 @@ export const LeakageSimulator = () => {
         </div>
       ) : (
         <div style={{ padding: '16px', borderLeft: '4px solid #38a169', backgroundColor: 'rgba(56, 161, 105, 0.08)', borderRadius: '4px' }}>
-          <strong style={{ color: '#38a169', fontSize: '16px' }}>🛡️ Protection: Atomic Pipeline Isolation</strong>
+          <strong style={{ color: '#38a169', fontSize: '16px' }}>Protection: Atomic Pipeline Isolation</strong>
           <p style={{ margin: '8px 0', fontSize: '14px' }}>
             The dataset is partitioned first. Preprocessing statistics are fitted strictly on training rows.
           </p>
@@ -124,28 +124,28 @@ export const LeakageSimulator = () => {
 Data leakage extends far beyond simple scaling. Any preprocessing step that aggregates data can corrupt validation:
 
 <Tabs>
-  <TabItem value="scaling" label="📏 1. Feature Scaling" default>
+  <TabItem value="scaling" label="1. Feature Scaling" default>
     <br/>
     
     *   **The Mechanism:** `StandardScaler` or `MinMaxScaler` fitted on combined data.
     *   **Leakage Consequence:** Global minimums, maximums, means, and variances contaminate training rows. Outliers in the test set alter the scaled magnitude of every training sample.
     *   **Remedy:** Fit scaler strictly on `X_train`; apply `transform` on `X_test`.
   </TabItem>
-  <TabItem value="imputation" label="🩹 2. Missing Value Imputation">
+  <TabItem value="imputation" label="2. Missing Value Imputation">
     <br/>
     
     *   **The Mechanism:** Replacing missing values (`SimpleImputer`) with the mean or median of the full dataset.
     *   **Leakage Consequence:** If the test set contains high values, the calculated imputation mean shifts upward, giving the model advance knowledge of test feature magnitudes.
     *   **Remedy:** Encapsulate `SimpleImputer` inside `Pipeline` so imputation statistics are calculated strictly on training folds.
   </TabItem>
-  <TabItem value="encoding" label="🎯 3. Target Encoding">
+  <TabItem value="encoding" label="3. Target Encoding">
     <br/>
     
     *   **The Mechanism:** Replacing high-cardinality categorical levels with the mean of the target variable $y$.
     *   **Leakage Consequence:** **Catastrophic direct label leakage**. If target values from the test set are averaged into category weights, the model memorizes exact test labels during training.
     *   **Remedy:** Compute target encoding inside cross-validation folds using out-of-fold statistics or Bayesian smoothing.
   </TabItem>
-  <TabItem value="selection" label="🔍 4. Feature Selection">
+  <TabItem value="selection" label="4. Feature Selection">
     <br/>
     
     *   **The Mechanism:** Selecting top $k$ features based on mutual information or ANOVA F-tests against target $y$ on the entire dataset.
@@ -193,7 +193,7 @@ export const NestedCVVisualizer = () => {
   const [activeOuter, setActiveOuter] = React.useState(1);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🔄 Nested Cross-Validation Explorer</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Nested Cross-Validation Explorer</h4>
       <p style={{ margin: '0 0 15px 0', fontSize: '14px' }}>
         Select an outer fold to observe how the inner loop tunes hyperparameters without contaminating the outer test set:
       </p>
@@ -265,7 +265,7 @@ export const NestedCVVisualizer = () => {
             • Inner Sub-Fold B: Candidate C=1.0 scores 95.8%<br/>
             • Inner Sub-Fold C: Candidate C=1.0 scores 95.0%<br/>
             <strong style={{ color: '#38a169' }}>
-              🏆 Winner: C=1.0 (Average Validation: 95.0%)
+              Winner: C=1.0 (Average Validation: 95.0%)
             </strong>
           </div>
         </div>
@@ -293,19 +293,19 @@ export const NestedCVVisualizer = () => {
 Standard random shuffling breaks down when data exhibits grouping, clustering, or temporal dependency:
 
 <Tabs>
-  <TabItem value="group" label="👥 1. GroupKFold" default>
+  <TabItem value="group" label="1. GroupKFold" default>
     <br/>
     
     *   **The Problem:** Multiple rows originate from the same entity (e.g. medical patients, IoT devices, user IDs). If patient rows appear in both train and test partitions, the model identifies the patient rather than disease pathology.
     *   **The Solution:** `GroupKFold` guarantees that all observations belonging to a specific group identifier reside exclusively within the training partition or the test partition, never split across both.
   </TabItem>
-  <TabItem value="time" label="⏳ 2. TimeSeriesSplit">
+  <TabItem value="time" label="2. TimeSeriesSplit">
     <br/>
     
     *   **The Problem:** Temporal autocorrelation. Randomly shuffling stock prices or weather data uses future observations to predict the past, causing severe lookahead bias.
     *   **The Solution:** `TimeSeriesSplit` enforces forward-chaining rolling windows: Fold $i$ trains strictly on records $t_1 \dots t_k$ and evaluates on future window $t_{k+1} \dots t_{k+m}$.
   </TabItem>
-  <TabItem value="repeated" label="🔁 3. RepeatedKFold">
+  <TabItem value="repeated" label="3. RepeatedKFold">
     <br/>
     
     *   **The Problem:** High partition variance on small datasets where a single 5-Fold split yields wide confidence intervals.
@@ -344,40 +344,40 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 ## 8. Common Mistakes
 
 <Tabs>
-  <TabItem value="m1" label="🚨 1. Global Preprocessing Before Splitting" default>
+  <TabItem value="m1" label="1. Global Preprocessing Before Splitting" default>
     <br/>
     
     *   **The Misconception:** *"Running `StandardScaler.fit_transform()` on the entire dataset is harmless because it only modifies feature scales, not class labels."*
-    *   **❌ Wrong Thinking:** Assuming feature transformations cannot cause data leakage.
-    *   **✅ The Right Principle:** Preprocessing parameters ($\mu, \sigma, \min, \max$) calculated across test samples contaminate training features. Always split first, or wrap preprocessing and modeling inside a scikit-learn `Pipeline`.
+    *   **Wrong Thinking:** Assuming feature transformations cannot cause data leakage.
+    *   **The Right Principle:** Preprocessing parameters ($\mu, \sigma, \min, \max$) calculated across test samples contaminate training features. Always split first, or wrap preprocessing and modeling inside a scikit-learn `Pipeline`.
   </TabItem>
-  <TabItem value="m2" label="🚨 2. Manual Preprocessing Inside CV Loops">
+  <TabItem value="m2" label="2. Manual Preprocessing Inside CV Loops">
     <br/>
     
     *   **The Misconception:** *"I can manually fit the scaler inside a standard Python loop for each fold."*
-    *   **❌ Wrong Thinking:** Writing complex manual transformation code inside custom cross-validation loops.
-    *   **✅ The Right Principle:** Manual loops are error-prone and frequently miss inverse transforms or leak validation fold rows. Use `sklearn.pipeline.Pipeline` or `make_pipeline`, which natively refits transformations per fold.
+    *   **Wrong Thinking:** Writing complex manual transformation code inside custom cross-validation loops.
+    *   **The Right Principle:** Manual loops are error-prone and frequently miss inverse transforms or leak validation fold rows. Use `sklearn.pipeline.Pipeline` or `make_pipeline`, which natively refits transformations per fold.
   </TabItem>
-  <TabItem value="m3" label="🚨 3. Tuning Hyperparameters on Evaluation Folds">
+  <TabItem value="m3" label="3. Tuning Hyperparameters on Evaluation Folds">
     <br/>
     
     *   **The Misconception:** *"GridSearchCV already uses cross-validation, so its reported score is an unbiased estimate of generalization."*
-    *   **❌ Wrong Thinking:** Treating `GridSearchCV.best_score_` as an independent evaluation metric.
-    *   **✅ The Right Principle:** `best_score_` is the score of the winning hyperparameter on the validation sets that were used to pick it—it suffers from selection bias. To estimate true generalization, you must nest `GridSearchCV` inside an outer `cross_val_score`.
+    *   **Wrong Thinking:** Treating `GridSearchCV.best_score_` as an independent evaluation metric.
+    *   **The Right Principle:** `best_score_` is the score of the winning hyperparameter on the validation sets that were used to pick it—it suffers from selection bias. To estimate true generalization, you must nest `GridSearchCV` inside an outer `cross_val_score`.
   </TabItem>
-  <TabItem value="m4" label="🚨 4. Group Splitting Blindness">
+  <TabItem value="m4" label="4. Group Splitting Blindness">
     <br/>
     
     *   **The Misconception:** *"Random K-Fold is suitable for patient medical records as long as we shuffle thoroughly."*
-    *   **❌ Wrong Thinking:** Treating multiple rows from the same patient as independent samples.
-    *   **✅ The Right Principle:** Patient physiology, sensor idiosyncrasies, or user writing styles cause the model to memorize group identities. Always deploy `GroupKFold` using patient or subject IDs as the grouping key.
+    *   **Wrong Thinking:** Treating multiple rows from the same patient as independent samples.
+    *   **The Right Principle:** Patient physiology, sensor idiosyncrasies, or user writing styles cause the model to memorize group identities. Always deploy `GroupKFold` using patient or subject IDs as the grouping key.
   </TabItem>
-  <TabItem value="m5" label="🚨 5. Random Splitting on Time-Series Data">
+  <TabItem value="m5" label="5. Random Splitting on Time-Series Data">
     <br/>
     
     *   **The Misconception:** *"Shuffling time-series data ensures all market regimes are represented in both train and test sets."*
-    *   **❌ Wrong Thinking:** Applying standard random cross-validation to chronological series.
-    *   **✅ The Right Principle:** Shuffling time series allows future market trends to predict historical records (lookahead leakage). Always utilize `TimeSeriesSplit` to strictly preserve forward-temporal order.
+    *   **Wrong Thinking:** Applying standard random cross-validation to chronological series.
+    *   **The Right Principle:** Shuffling time series allows future market trends to predict historical records (lookahead leakage). Always utilize `TimeSeriesSplit` to strictly preserve forward-temporal order.
   </TabItem>
 </Tabs>
 
@@ -389,7 +389,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Leakage Defense</h3>
+        <h3>Leakage Defense</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -404,7 +404,7 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🛠️ Specialized Partitioning</h3>
+        <h3>Specialized Partitioning</h3>
       </div>
       <div className="card__body">
         <ul>
@@ -422,11 +422,11 @@ An interactive, fully functional Google Colab / Jupyter Notebook is available to
 
 :::info
 
-**📌 Key Takeaways**
+**Key Takeaways**
 
-*   **🛡️ Pipeline is mandatory:** Never apply manual transformations before splitting. Pipelines ensure mathematical isolation per fold.
-*   **🔄 Nested CV prevents tuning bias:** Evaluating candidate models on the same fold used to optimize them produces optimistic metrics.
-*   **👥 Respect data topology:** Always match the cross-validation splitter (`GroupKFold`, `TimeSeriesSplit`, `StratifiedKFold`) to the structural constraints of the raw data.
+*   **Pipeline is mandatory:** Never apply manual transformations before splitting. Pipelines ensure mathematical isolation per fold.
+*   **Nested CV prevents tuning bias:** Evaluating candidate models on the same fold used to optimize them produces optimistic metrics.
+*   **Respect data topology:** Always match the cross-validation splitter (`GroupKFold`, `TimeSeriesSplit`, `StratifiedKFold`) to the structural constraints of the raw data.
 
 :::
 
@@ -444,16 +444,16 @@ export const LeakageQuiz = () => {
   const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Diagnosing Data Leakage</h4>
+      <h4 style={{ margin: '0 0 10px 0' }}>Interactive Checkpoint: Diagnosing Data Leakage</h4>
       <p style={{ margin: '0 0 15px 0' }}>An engineer builds a high-dimensional customer churn model with 1,000 features. Before running 5-Fold cross-validation, they run <code>SelectKBest(k=50)</code> on the entire dataset to drop noisy features. Cross-validation accuracy is 94%, but deployment accuracy drops to 68%. What caused this collapse?</p>
       <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
         <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>The model underfit because 50 features was too few</button>
         <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Feature selection on the entire dataset leaked test fold labels into feature ranking</button>
         <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>5-Fold CV is mathematically invalid for high-dimensional data</button>
       </div>
-      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The model achieved 94% CV accuracy, which indicates it did not underfit. Try again!</p>}
-      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Running SelectKBest on all data evaluates the correlation between features and the target across both train and test folds. In 1,000 random features, spurious correlations with test labels will always exist. By selecting those features prior to splitting, the test folds are contaminated, creating an illusion of 94% accuracy that fails in production.</p>}
-      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. K-Fold CV is fully valid for high-dimensional data, provided feature selection is wrapped inside a Pipeline. Try again!</p>}
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. The model achieved 94% CV accuracy, which indicates it did not underfit. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Correct! Running SelectKBest on all data evaluates the correlation between features and the target across both train and test folds. In 1,000 random features, spurious correlations with test labels will always exist. By selecting those features prior to splitting, the test folds are contaminated, creating an illusion of 94% accuracy that fails in production.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>Incorrect. K-Fold CV is fully valid for high-dimensional data, provided feature selection is wrapped inside a Pipeline. Try again!</p>}
     </div>
   );
 };
@@ -463,7 +463,7 @@ export const LeakageQuiz = () => {
 ### Review Flashcards
 
 <details>
-  <summary>❓ <b>1. [THEORY] Why is GridSearchCV's `best_score_` an optimistically biased estimate of model generalization?</b></summary>
+  <summary><b>1. [THEORY] Why is GridSearchCV's `best_score_` an optimistically biased estimate of model generalization?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -474,7 +474,7 @@ export const LeakageQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>2. [PRACTICE] How does scikit-learn's `Pipeline` behave differently during `fit` vs. `predict`?</b></summary>
+  <summary><b>2. [PRACTICE] How does scikit-learn's `Pipeline` behave differently during `fit` vs. `predict`?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -488,7 +488,7 @@ export const LeakageQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>3. [ANALYZE] Why does random cross-validation fail on clinical medical imaging datasets?</b></summary>
+  <summary><b>3. [ANALYZE] Why does random cross-validation fail on clinical medical imaging datasets?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -500,7 +500,7 @@ export const LeakageQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>4. [THEORY] What is the difference between data leakage and concept drift?</b></summary>
+  <summary><b>4. [THEORY] What is the difference between data leakage and concept drift?</b></summary>
   <div className="answer-content">
     <br/>
     
@@ -510,7 +510,7 @@ export const LeakageQuiz = () => {
 </details>
 
 <details>
-  <summary>❓ <b>5. [PRACTICE] When conducting a paired t-test between two algorithms on CV fold scores, what is the null hypothesis?</b></summary>
+  <summary><b>5. [PRACTICE] When conducting a paired t-test between two algorithms on CV fold scores, what is the null hypothesis?</b></summary>
   <div className="answer-content">
     <br/>
     

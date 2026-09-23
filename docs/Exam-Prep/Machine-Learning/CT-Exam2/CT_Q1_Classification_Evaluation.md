@@ -24,7 +24,7 @@ Using the above confusion matrix:
 
 ---
 
-## ✅ COMPLETE EXAM ANSWER
+## COMPLETE EXAM ANSWER
 
 ---
 
@@ -206,12 +206,12 @@ Assuming **"Yes" (Renewal)** is our Positive Class and **"No" (Non-Renewal)** is
 
 ## **KEY TAKEAWAYS (Quick Review)**
 
-✅ **K-Fold Cross-Validation:**
+**K-Fold Cross-Validation:**
 1. Fits a model over $K$ distinct folds, estimating generalization score via: $\hat{\theta}_{\text{CV}} = \frac{1}{K} \sum \theta_i$.
 2. Reduces Sampling Variance and Pessimistic Bias compared to a single holdout.
 3. Stratified K-Fold preserves exact class support ratios.
 
-✅ **Performance Metrics:**
+**Performance Metrics:**
 1. **FP (Type I Error) - Churn Trap**: Predicting a customer will renew when they won't, leaving them out of retention efforts (directly losing Customer Lifetime Value).
 2. **FN (Type II Error) - Budget Leak**: Predicting a customer will churn when they would have renewed, resulting in wasted budget on redundant retention discounts.
 
@@ -219,18 +219,18 @@ Assuming **"Yes" (Renewal)** is our Positive Class and **"No" (Non-Renewal)** is
 
 ## **ANSWER CHECKLIST**
 
-- ✅ Define K-Fold CV theoretically
-- ✅ State algorithmic steps sequentially
-- ✅ Compare K-Fold reliability vs. single holdout splits
-- ✅ Provide a real-world clinical dataset example
-- ✅ Construct marginalized confusion matrix table
-- ✅ Define TP, TN, FP, FN with actual customer business significance
-- ✅ Compute Accuracy step-by-step with GCD simplification
-- ✅ Compute Precision step-by-step
-- ✅ Compute Recall step-by-step
-- ✅ Compute F1-Score using dual verification formulas
-- ✅ Detail business takeaways and strategic optimization recommendations
-- ✅ Include metric summary table and mark breakdowns
+- Define K-Fold CV theoretically
+- State algorithmic steps sequentially
+- Compare K-Fold reliability vs. single holdout splits
+- Provide a real-world clinical dataset example
+- Construct marginalized confusion matrix table
+- Define TP, TN, FP, FN with actual customer business significance
+- Compute Accuracy step-by-step with GCD simplification
+- Compute Precision step-by-step
+- Compute Recall step-by-step
+- Compute F1-Score using dual verification formulas
+- Detail business takeaways and strategic optimization recommendations
+- Include metric summary table and mark breakdowns
 
 ---
 
@@ -254,4 +254,4 @@ Assuming **"Yes" (Renewal)** is our Positive Class and **"No" (Non-Renewal)** is
 
 ---
 
-**This answer scores FULL 16 marks** ✅
+**This answer scores FULL 16 marks** 
