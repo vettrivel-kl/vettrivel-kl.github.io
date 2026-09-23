@@ -1,0 +1,731 @@
+---
+sidebar_position: 1
+title: Error in the Units of y
+description: Why MAE, MSE and RMSE can report three different numbers for the same predictions, why RMSE is never below MAE, what their ratio tells you about outliers, and why scikit-learn hands back a negative mean squared error.
+tags: [machine-learning, linear-regression, metrics, scikit-learn]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import React from 'react';
+
+# Error in the Units of y
+
+> **Topic —** [Optimisation](../04-optimisation/01-loss-functions.mdx) chose the loss a model *minimises while fitting*. This page covers the numbers you *report afterwards*: MAE, MSE and RMSE. They are three averages of the same residuals, and they disagree on purpose. It settles four confusions: why RMSE is always at least MAE, what the gap between them measures, why an MSE of `6.0` cannot be quoted in rupees, and why `cross_val_score` returns `-6.0`.
+
+---
+
+## In plain words
+
+A fitted model gives you a predicted number. The data gives you the true number. Subtract them and you have a **miss** — one per row. A metric is nothing more than a rule for turning a whole column of misses into a single number.
+
+There are only three sensible rules on this page, and they differ in one decision: **how harshly to treat a big miss compared with several small ones.**
+
+- **MAE** treats every rupee of miss the same. Ten misses of ₹1 lakh cost exactly what one miss of ₹10 lakh costs.
+- **MSE** squares each miss first, so one miss of ₹10 lakh costs ten times what ten misses of ₹1 lakh cost. The price of that is that the answer is in *squared* lakhs, which nobody can picture.
+- **RMSE** takes the square root of MSE, which puts the answer back into lakhs — but it keeps MSE's opinion that big misses are disproportionately bad.
+
+That is the whole page. What follows is the arithmetic that makes the difference concrete, the exact identity linking the three, and the one scikit-learn convention that reverses every sign.
+
+### Words used on this page
+
+| Term | What it means here |
+|---|---|
+| Residual | One row's miss: true value minus predicted value, `r = y − ŷ` |
+| `ŷ` | The model's prediction for a row |
+| MAE | Mean Absolute Error — the average size of a miss, ignoring direction |
+| MSE | Mean Squared Error — the average of the squared misses |
+| RMSE | Root Mean Squared Error — the square root of MSE |
+| RSS / SSE | Residual Sum of Squares — the total of the squared misses, before dividing by `n` |
+| Loss | The quantity minimised *during* fitting |
+| Metric | The quantity reported *after* fitting, to a human |
+| Bias of the residuals | Their mean. Non-zero means the model is systematically high or low |
+| Scorer | A scikit-learn object that wraps a metric so bigger always means better |
+| Scale-dependent | Changes value if you re-express `y` in different units |
+| Baseline | The score of predicting the mean of `y` for every row |
+
+The five things this page settles:
+1. Which of the three you can say out loud to someone who does not know the model.
+2. Why `RMSE ≥ MAE` is a theorem, not a coincidence, and what closes the gap.
+3. What a ratio of `RMSE / MAE` near `1.0`, near `1.25`, or near `√n` each tell you.
+4. Why `mean_squared_error` is positive but `scoring='neg_mean_squared_error'` is negative.
+5. Why every number on this page is meaningless until you know the spread of `y`.
+
+:::tip
+
+**If you only take one thing from this page**
+
+The three metrics are locked together by one exact identity:
+
+$$\text{RMSE}^2 = \text{MAE}^2 + \text{Var}(\lvert r \rvert)$$
+
+The gap between RMSE and MAE is *precisely* the spread of the absolute errors. Equal-sized misses close the gap to zero. One dominating miss opens it as wide as it goes.
+
+:::
+
+---
+
+## A metric reports, a loss decides
+
+The two words get used interchangeably and they are not the same job.
+
+| | Loss | Metric |
+|---|---|---|
+| When | During fitting | After fitting |
+| Read by | The optimiser | A person |
+| Must be | Differentiable, cheap, well-behaved | Interpretable |
+| Changing it | Changes the fitted coefficients | Changes nothing about the model |
+
+Least squares minimises squared error, so MSE is that model's loss *and* a legitimate metric for it. That coincidence is why the two words blur. But nothing stops you fitting with squared error and reporting MAE — the coefficients are already fixed by then, and MAE just describes them differently.
+
+The reverse matters more: **switching the metric never improves the model.** If MAE is what you actually care about, reporting MAE is not enough; you have to *fit* with absolute error, which is a different line. That distinction is worked through in [Loss Functions](../04-optimisation/01-loss-functions.mdx#absolute-error-does-not-care-how-wrong-an-outlier-is).
+
+---
+
+## All three metrics are the same residuals, summarised differently
+
+Start from one residual per row. Everything else is an average over that column.
+
+$$\text{residual: } r_i = y_i - \hat{y}_i$$
+
+$$\text{RSS (SSE): } \sum r_i^2$$
+
+$$\text{MAE: } \frac{1}{n} \sum \lvert r_i \rvert$$
+
+$$\text{MSE: } \frac{1}{n} \sum r_i^2 = \frac{\text{RSS}}{n}$$
+
+$$\text{RMSE: } \sqrt{\frac{1}{n} \sum r_i^2} = \sqrt{\text{MSE}}$$
+
+Sign convention: `y − ŷ`. A **positive** residual means the model **under**-predicted — the truth was higher than the guess. Reversing the subtraction flips every sign and changes none of the three metrics, because all three destroy the sign.
+
+### Worked all the way through
+
+Five houses, prices in lakhs of rupees, and one model's predictions.
+
+| House | `y` (true) | `ŷ` (predicted) | `r = y − ŷ` | `abs(r)` | `r²` |
+|---|---|---|---|---|---|
+| 1 | 52 | 49 | **+3** | 3 | 9 |
+| 2 | 60 | 61 | **−1** | 1 | 1 |
+| 3 | 71 | 69 | **+2** | 2 | 4 |
+| 4 | 88 | 92 | **−4** | 4 | 16 |
+| 5 | 95 | 95 | **0** | 0 | 0 |
+| | | | **Σr = 0** | **Σ = 10** | **Σ = 30** |
+
+Now every metric falls out of the last two column totals:
+
+$$\text{n = 5} \qquad \text{RSS} = \sum r^2 = 30 \qquad \text{MAE} = 10/5 = 2.0 \text{ lakhs}$$
+
+$$\text{MSE} = 30 / 5 = 6.0 \text{ squared lakhs} \qquad \text{RMSE} = \sqrt{6.0} \approx 2.4495 \text{ lakhs}$$
+
+Three numbers, one set of predictions. **MAE `2.0` and RMSE `2.4495` are not a disagreement about accuracy** — they are answers to two different questions about the same five misses.
+
+:::note
+
+**Two more that scikit-learn ships**
+
+`median_absolute_error` is the median of `|r|` — here the middle of `[0, 1, 2, 3, 4]`, so `2.0`. It ignores an outlier completely rather than merely down-weighting it. `max_error` is `max |r|`, here `4` — a worst-case guarantee, useful when one bad prediction is unacceptable.
+
+:::
+
+---
+
+## 🛠️ The Outlier Leverage Sandbox
+
+Experiment with the interactive tool below. Drag the slider to change the true value of **House 4** (simulating a wild outlier). Watch in real-time how the OLS (RMSE-based) regression line tilts aggressively to accommodate the outlier, while the Median (MAE-based) line remains robust and completely flat. 
+
+Observe also how the gap between RMSE and MAE stretches, pushing the ratio towards its theoretical maximum.
+
+export const OutlierLeverageSandbox = () => {
+  const [house4True, setHouse4True] = React.useState(88);
+
+  const x = [1, 2, 3, 4, 5];
+  const y = [52, 60, 71, house4True, 95];
+  const pred = [49, 61, 69, 92, 95];
+
+  const r1 = 52 - 49;
+  const r2 = 60 - 61;
+  const r3 = 71 - 69;
+  const r4 = house4True - 92;
+  const r5 = 95 - 95;
+
+  const mae = (3 + 1 + 2 + Math.abs(r4) + 0) / 5;
+  const mse = (9 + 1 + 4 + r4 ** 2 + 0) / 5;
+  const rmse = Math.sqrt(mse);
+  const ratio = rmse / (mae || 1e-15);
+
+  // OLS Line calculation for y
+  const xMean = 3.0;
+  const yMean = y.reduce((a,b) => a+b, 0) / 5;
+  // Sxx = (1-3)^2 + (2-3)^2 + ... = 4 + 1 + 0 + 1 + 4 = 10
+  const sxx = 10.0;
+  const sxy = (1-3)*(y[0]-yMean) + (2-3)*(y[1]-yMean) + (3-3)*(y[2]-yMean) + (4-3)*(y[3]-yMean) + (5-3)*(y[4]-yMean);
+  const slopeOLS = sxy / sxx;
+  const interceptOLS = yMean - slopeOLS * xMean;
+
+  // Map coordinates to SVG (viewBox 0 0 380 150)
+  const scaleX = (xVal) => 30 + (xVal / 6) * 320;
+  const scaleY = (yVal) => 135 - ((yVal - 40) / 160) * 110; // y from 40 to 200
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>📊 Outlier Leverage Sandbox</h4>
+      <p style={{ fontSize: '13px', margin: '0 0 15px 0', opacity: 0.9 }}>Slide the slider to change the value of House 4 from 50 to 200. Watch OLS tilt while Median stays flat.</p>
+
+      <div style={{ marginBottom: '15px' }}>
+        <label style={{ fontSize: '13px', fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>
+          House 4 True Price: <b style={{ color: house4True >= 120 ? '#e53e3e' : '#3182ce' }}>₹{house4True} Lakh</b> (Residual: {r4 >= 0 ? '+' : ''}{r4.toFixed(0)})
+        </label>
+        <input type="range" min="50" max="200" step="5" value={house4True} onChange={(e) => setHouse4True(parseInt(e.target.value))} style={{ width: '100%' }} />
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px', flexWrap: 'wrap' }}>
+        {/* SVG Scatter & Line Plot */}
+        <div style={{ textAlign: 'center' }}>
+          <svg width="100%" height="150" style={{ border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'var(--ifm-background-color)' }}>
+            {/* Grid lines */}
+            {[50, 100, 150, 200].map(yi => (
+              <line key={yi} x1="30" y1={scaleY(yi)} x2="350" y2={scaleY(yi)} stroke="var(--ifm-color-emphasis-200)" strokeDasharray="3,3" opacity="0.5" />
+            ))}
+
+            {/* OLS line (RMSE based, tilts dynamically) */}
+            <line x1={scaleX(0.5)} y1={scaleY(interceptOLS + slopeOLS * 0.5)} x2={scaleX(5.5)} y2={scaleY(interceptOLS + slopeOLS * 5.5)} stroke="#e53e3e" strokeWidth="2.5" />
+
+            {/* Robust Median line (MAE based, stays static at 11.5x + 38.5) */}
+            <line x1={scaleX(0.5)} y1={scaleY(38.5 + 11.5 * 0.5)} x2={scaleX(5.5)} y2={scaleY(38.5 + 11.5 * 5.5)} stroke="#3182ce" strokeWidth="2" strokeDasharray="3,3" opacity="0.6" />
+
+            {/* House Data Points */}
+            {x.map((xi, idx) => (
+              <circle key={idx} cx={scaleX(xi)} cy={scaleY(y[idx])} r="5" fill={idx === 3 ? '#e53e3e' : 'var(--ifm-color-primary)'} />
+            ))}
+          </svg>
+          <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', marginTop: '5px', fontSize: '9px' }}>
+            <span><span style={{ color: '#e53e3e' }}>—</span> OLS Line (RMSE-based)</span>
+            <span><span style={{ color: '#3182ce' }}>--</span> Median Line (MAE-based)</span>
+          </div>
+        </div>
+
+        {/* Dynamic Metric Readings */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', justifyContent: 'center' }}>
+          <div style={{ padding: '8px 12px', borderLeft: '4px solid #718096', backgroundColor: 'rgba(113, 128, 150, 0.03)', fontSize: '12px' }}>
+            MAE (L1, average miss): <b>{mae.toFixed(4)} lakhs</b>
+          </div>
+          <div style={{ padding: '8px 12px', borderLeft: '4px solid #e53e3e', backgroundColor: 'rgba(229, 62, 62, 0.03)', fontSize: '12px' }}>
+            RMSE (L2, outlier sensitive): <b style={{ color: house4True >= 120 ? '#e53e3e' : 'inherit' }}>{rmse.toFixed(4)} lakhs</b>
+          </div>
+          <div style={{ padding: '8px 12px', borderLeft: '4px solid #dd6b20', backgroundColor: 'rgba(221, 107, 32, 0.03)', fontSize: '12px' }}>
+            RMSE / MAE Ratio: <b style={{ color: ratio >= 1.5 ? '#dd6b20' : 'inherit' }}>{ratio.toFixed(4)}</b> (Max: 2.236)
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<OutlierLeverageSandbox />
+
+---
+
+## MAE is the only one you can read out loud
+
+MAE is in the units of `y` and it means what it appears to mean.
+
+$$\text{MAE} = \frac{1}{n} \sum \lvert y_i - \hat{y}_i \rvert = 2.0 \text{ lakhs}$$
+
+> "On average this model is off by ₹2 lakh."
+
+That sentence is true and needs no footnote. Neither MSE nor RMSE supports an equally plain sentence: MSE is in the wrong units entirely, and RMSE is an average that has been deliberately tilted towards the big misses, so "average miss" overstates what it reports.
+
+Three properties follow from the absolute value, and all three are consequences of the same thing — that `|r|` grows in a straight line rather than a curve.
+
+| Property | Consequence |
+|---|---|
+| Every rupee of miss weighs the same | Ten misses of 1 cost the same as one miss of 10 |
+| Minimised by the **median** of the targets, not the mean | A constant-only model fitted under MAE predicts the median |
+| Its slope is `±1` everywhere, undefined at `r = 0` | Gradient descent on it does not slow down near the optimum |
+
+The second row is the useful one for reporting. MAE describes the *typical* row. If you want a number that a client can act on — "budget ₹2 lakh of slack" — MAE is the number.
+
+The third row is why MAE is a common metric but an uncommon loss. Its gradient carries no information about how far you still have to go, which is exactly the problem [Loss Functions](../04-optimisation/01-loss-functions.mdx#absolute-error-does-not-care-how-wrong-an-outlier-is) works through.
+
+---
+
+## MSE is in squared units, and splits into spread plus bias
+
+$$\text{MSE} = \frac{1}{n} \sum (y_i - \hat{y}_i)^2 = 6.0 \text{ squared lakhs}$$
+
+"Six squared lakhs" is not a quantity. There is no price, no distance and no error that is measured in squared lakhs, so MSE cannot be reported to anyone outside the modelling. Its value is elsewhere: it is smooth, it is the loss least squares actually minimises, and it decomposes.
+
+### The decomposition
+
+For any set of residuals, MSE splits exactly into two interpretable pieces:
+
+$$\text{MSE} = \text{Var}(r) + (\bar{r})^2$$
+
+$$\text{Var}(r) = \text{how scattered the misses are} \qquad (\bar{r})^2 = \text{how far off-centre they are (bias squared)}$$
+
+Check it against the worked table. There, `r̄ = 0 / 5 = 0` and `var(r) = 30/5 − 0² = 6.0`, so `MSE = 6.0 + 0 = 6.0`. The model is **unbiased** on this data: it is scattered, but not systematically high or low.
+
+Now imagine a second model whose residuals are `[2, 2, 2, 2, 2]` — every prediction exactly ₹2 lakh low. Then `r̄ = 2`, `var(r) = 0`, and `MSE = 0 + 4 = 4.0`. All of its error is bias and none of it is scatter, which is the easiest kind of error to fix: subtract 2 from every prediction and MSE goes to zero.
+
+:::warning
+
+**On training data with an intercept, `Σr = 0` automatically**
+
+Least squares fitted with a constant column forces the residuals to sum to exactly zero — that is one of the normal equations, derived in [The Matrix Formulation](../03-linear-regression/03-the-matrix-formulation.mdx#the-column-of-ones). So on **training** data the bias term is always `0` and `MSE = var(r)`. On **test** data it is not, and a non-zero mean residual there is a real finding: the model is calibrated for the wrong level.
+
+:::
+
+### RSS, MSE and the residual standard error
+
+Three numbers that all divide the same RSS, by three different denominators:
+
+| Name | Formula | Divides by | Why |
+|---|---|---|---|
+| RSS | `Σ r²` | nothing | Grows with `n`; never compare RSS across datasets of different size |
+| MSE | `RSS / n` | `n` | The plain average — what the metric reports |
+| Residual standard error | `√( RSS / (n − p − 1) )` | `n − p − 1` | Unbiased estimate of the noise σ, for `p` fitted features |
+
+The last row is what statistical software prints as "residual standard error", and it is slightly larger than RMSE because fitting `p + 1` coefficients uses up `p + 1` degrees of freedom. With `n = 5` and `p = 1`, RMSE divides by 5 and the residual standard error divides by 3 — the same RSS of `30` gives `√6 ≈ 2.4495` versus `√10 ≈ 3.1623`. On a few hundred rows the difference is negligible; on twenty rows with ten features it is not.
+
+---
+
+## RMSE returns to the units of y, and is never smaller than MAE
+
+$$\text{RMSE} = \sqrt{\text{MSE}} = \sqrt{\frac{1}{n} \sum (y_i - \hat{y}_i)^2} = \sqrt{6.0} \approx 2.4495 \text{ lakhs}$$
+
+Taking the root undoes the squaring of the *units* but not the squaring of the *weights*. RMSE is in lakhs, and it is still an average in which a miss of 10 counted a hundred times as much as a miss of 1 before the root was taken. So it sits above MAE.
+
+That is not a tendency. It is an identity — subtract the two squared:
+
+$$\text{RMSE}^2 - \text{MAE}^2 = \frac{1}{n}\sum r^2 - \left( \frac{1}{n}\sum \lvert r \rvert \right)^2$$
+
+$$= \text{Mean}(\lvert r \rvert^2) - \text{Mean}(\lvert r \rvert)^2 = \text{Var}(\lvert r \rvert) \ge 0$$
+
+A variance cannot be negative, so `RMSE ≥ MAE` always, with equality **exactly** when `var(|r|) = 0` — when every miss is the same size. Rearranged, that is the identity from the top of the page:
+
+$$\text{RMSE}^2 = \text{MAE}^2 + \text{Var}(\lvert r \rvert)$$
+
+Verify on the worked residuals `[3, 1, 2, 4, 0]`: their mean is `2`, their squared deviations are `[1, 1, 0, 4, 4]` summing to `10`, so `var(|r|) = 2`. And indeed `MAE² + 2 = 4 + 2 = 6 = RMSE²`. ✓
+
+The upper bound comes from the other extreme — a single non-zero residual:
+
+$$\text{MAE} \le \text{RMSE} \le \sqrt{n} \cdot \text{MAE}$$
+
+The right-hand equality holds when exactly one row carries all the error. Both bounds are tight, and between them lies the diagnostic in the next section.
+
+---
+
+## 🛠️ The Pythagoras Identity Visualizer
+
+The locking identity $\text{RMSE}^2 = \text{MAE}^2 + \text{Var}(\lvert r \rvert)$ is geometrically identical to **Pythagoras' Theorem**! 
+
+Choose the error unevenness below. Watch how the right-angled triangle stretches: the Base is the constant MAE ($2.0$), the Height is the standard deviation of absolute errors ($\text{SD}(\lvert r \rvert) = \sqrt{\text{Var}(\lvert r \rvert)}$), and the Hypotenuse is the resulting RMSE!
+
+export const PythagorasVisualizer = () => {
+  const [unevenness, setUnevenness] = React.useState(2.0); // SD of absolute errors
+
+  const mae = 2.0;
+  const rmse = Math.sqrt(mae ** 2 + unevenness ** 2);
+
+  // Map triangle coordinates (viewBox 0 0 240 100)
+  // Base constant: 50 to 150 = 100 pixels
+  const xBaseStart = 50;
+  const xBaseEnd = 150;
+  const yBase = 85;
+
+  // Height goes UP (y decreases)
+  const yApex = yBase - (unevenness / 5.0) * 70;
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
+      <h4 style={{ margin: '0' }}>📐 The Metrics Pythagoras Triangle</h4>
+      <p style={{ fontSize: '13px', margin: '5px 0 15px 0', opacity: 0.9 }}>Adjust the error unevenness. Watch the height expand and stretch the RMSE hypotenuse away from the base MAE.</p>
+
+      <div style={{ marginBottom: '15px' }}>
+        <label style={{ fontSize: '13px', fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>
+          Error Unevenness SD(|r|): <b>{unevenness.toFixed(2)}</b> (r is highly {unevenness === 0 ? "uniform" : "uneven"})
+        </label>
+        <input type="range" min="0" max="5.0" step="0.25" value={unevenness} onChange={(e) => setUnevenness(parseFloat(e.target.value))} style={{ width: '100%' }} />
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px', flexWrap: 'wrap' }}>
+        {/* SVG Triangle */}
+        <div style={{ textAlign: 'center' }}>
+          <svg width="100%" height="110" style={{ border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'var(--ifm-background-color)' }}>
+            {/* Right angle marker */}
+            {unevenness > 0 && (
+              <rect x="142" y={yBase - 8} width="8" height="8" fill="none" stroke="var(--ifm-color-emphasis-200)" />
+            )}
+
+            {/* Triangle Path */}
+            <polygon 
+              points={`${xBaseStart},${yBase} ${xBaseEnd},${yBase} ${xBaseEnd},${yApex}`} 
+              fill="rgba(49, 130, 206, 0.05)" 
+              stroke="#3182ce" 
+              strokeWidth="2" 
+            />
+
+            {/* Base Label (MAE) */}
+            <text x="100" y={yBase + 12} textAnchor="middle" fill="#3182ce" fontSize="9" fontWeight="bold">Base: MAE = {mae.toFixed(1)}</text>
+
+            {/* Height Label (SD(|r|)) */}
+            {unevenness > 0 && (
+              <text x={xBaseEnd + 6} y={(yBase + yApex)/2 + 3} textAnchor="start" fill="#718096" fontSize="9" fontWeight="bold">Height: SD(|r|) = {unevenness.toFixed(2)}</text>
+            )}
+
+            {/* Hypotenuse Label (RMSE) */}
+            <text x={(xBaseStart+xBaseEnd)/2 - 12} y={(yBase+yApex)/2 - 6} textAnchor="middle" fill="#38a169" fontSize="10" fontWeight="bold" transform={`rotate(${-Math.atan2(yBase - yApex, 100)*180/Math.PI}, ${(xBaseStart+xBaseEnd)/2}, ${(yBase+yApex)/2})`}>
+              Hypotenuse: RMSE = {rmse.toFixed(2)}
+            </text>
+          </svg>
+        </div>
+
+        {/* Explanatory notes */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center', fontSize: '13px' }}>
+          {unevenness === 0 ? (
+            <div style={{ padding: '12px', borderLeft: '4px solid #38a169', backgroundColor: 'rgba(56, 161, 105, 0.03)', fontSize: '12px' }}>
+              <b>🟢 Perfectly Uniform Errors:</b>
+              <div style={{ opacity: 0.8, fontSize: '11px', marginTop: '3px' }}>Because every miss has the exact same size, absolute variance is zero (Var(|r|) = 0). The height collapses, the triangle flattens into a single straight line, and RMSE = MAE = 2.00.</div>
+            </div>
+          ) : (
+            <div style={{ padding: '12px', borderLeft: '4px solid #3182ce', backgroundColor: 'rgba(49, 130, 206, 0.03)', fontSize: '12px' }}>
+              <b>🔵 Uneven Outlier Error:</b>
+              <div style={{ opacity: 0.8, fontSize: '11px', marginTop: '3px' }}>As some errors grow much larger than others, absolute variance climbs. This stretches the triangle's height, forcing the hypotenuse RMSE = {rmse.toFixed(2)} to pull far away from the base MAE = 2.00.</div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<PythagorasVisualizer />
+
+---
+
+## The RMSE-to-MAE ratio tells you how uneven the errors are
+
+Divide one by the other and the units cancel. What is left is a pure, scale-free number that says nothing about *how big* the errors are and everything about *how evenly they are spread*.
+
+$$1 \le \frac{\text{RMSE}}{\text{MAE}} \le \sqrt{n}$$
+
+Three sets of five residuals, all with **exactly the same MAE of 2.0**:
+
+| Set | Residuals | MAE | MSE | RMSE | RMSE / MAE | What it is |
+|---|---|---|---|---|---|---|
+| A | `[+3, −1, +2, −4, 0]` | 2.0 | 6.0 | 2.4495 | **1.2247** | Ordinary scatter |
+| B | `[0, 0, 0, 0, +10]` | 2.0 | 20.0 | 4.4721 | **2.2361** | One catastrophic row |
+| C | `[+2, +2, +2, +2, +2]` | 2.0 | 4.0 | 2.0000 | **1.0000** | Pure constant bias |
+
+Set B's ratio of `2.2361` is `√5` to four decimals — the theoretical maximum for `n = 5`. Set C's `1.0000` is the theoretical minimum. **MAE alone cannot tell these three models apart.** The pair can, and so can the ratio on its own.
+
+### The number to compare against: 1.2533
+
+If the residuals are normally distributed with mean zero and standard deviation σ, both metrics have closed forms:
+
+$$\text{RMSE} = \sigma \qquad \text{MAE} = \sigma \cdot \sqrt{\frac{2}{\pi}} \approx 0.7979 \sigma$$
+
+$$\frac{\text{RMSE}}{\text{MAE}} = \sqrt{\frac{\pi}{2}} \approx 1.2533$$
+
+So `≈ 1.25` is what "nothing unusual is happening" looks like. That gives a reading you can apply to any regression, on any scale, without knowing anything about the target:
+
+| Ratio | Reading | What to do |
+|---|---|---|
+| `≈ 1.00` | Every miss is nearly the same size | Look for a constant offset — check the mean residual |
+| `1.0 – 1.2` | Errors unusually uniform | Often a truncated or clipped target |
+| `≈ 1.25` | Consistent with normal errors | Nothing to chase |
+| `1.4 – 2.0` | A minority of rows dominates the squared error | Sort by `abs(r)` and read the worst rows |
+| `Near √n` | Essentially one row is the error | Almost always a data problem, not a model problem |
+
+:::tip
+
+**This is an outlier detector you already have**
+
+Every regression report contains MAE and RMSE. Dividing them costs nothing and points at the same rows a `y`-outlier scan would find — but it finds them in the *residuals*, which is where they matter, rather than in the raw column. Compare with the univariate rules in [Outliers and Feature Engineering](../02-data-preprocessing/05-outliers-and-feature-engineering.mdx#z-scores-and-why-outliers-hide-each-other), which can only see a value that is extreme in itself, not a value the model got badly wrong.
+
+:::
+
+The diagnosis is not automatically "delete the row". A high ratio says one of three things, and they need different responses: the row is a data error (fix or drop it), the row is genuine but the model lacks the feature that explains it (add the feature), or the target is heavy-tailed and squared error is the wrong loss (fit absolute error instead, and report MAE).
+
+---
+
+## scikit-learn negates every error metric on purpose
+
+Two APIs, two sign conventions, and the mismatch is the single most common metric bug.
+
+**The functions in `sklearn.metrics` return the natural, positive value.**
+
+```python
+mean_absolute_error(y_true, y_pred)       #  2.0    positive
+mean_squared_error(y_true, y_pred)        #  6.0    positive
+root_mean_squared_error(y_true, y_pred)   #  2.4495 positive
+```
+
+**The scorer *strings* used by `cross_val_score`, `GridSearchCV` and `RandomizedSearchCV` return the negated value.**
+
+```python
+cross_val_score(model, X, y, scoring='neg_mean_squared_error')   # array of −6.0-ish values
+```
+
+The reason is a single design decision: **every scorer in scikit-learn obeys "greater is better",** so that model selection can always maximise, with no per-metric special cases. `r2` and `accuracy` already satisfy it. Error metrics do not — smaller is better — so they are wrapped with a minus sign to make them fit. `GridSearchCV` then picks `argmax` of the scores, and `-6.0 > -20.0` correctly selects the model with the smaller MSE.
+
+| What you want | Function in `sklearn.metrics` | Scorer string | Sign of the scorer |
+|---|---|---|---|
+| MAE | `mean_absolute_error` | `'neg_mean_absolute_error'` | negative |
+| MSE | `mean_squared_error` | `'neg_mean_squared_error'` | negative |
+| RMSE | `root_mean_squared_error` | `'neg_root_mean_squared_error'` | negative |
+| Median absolute error | `median_absolute_error` | `'neg_median_absolute_error'` | negative |
+| MAPE | `mean_absolute_percentage_error` | `'neg_mean_absolute_percentage_error'` | negative |
+| R² | `r2_score` | `'r2'` | positive — no `neg_` prefix |
+
+The rule for reading it: **flip the sign at the moment you print, never before.**
+
+```python
+scores = cross_val_score(model, X, y, scoring='neg_root_mean_squared_error', cv=5)
+print(f"RMSE {-scores.mean():.4f} ± {scores.std():.4f}")   # negate once, at the end
+```
+
+:::danger
+
+**Three ways the sign trap actually bites**
+
+- **Reporting `best_score_` unchanged.** `GridSearchCV(...).best_score_` under a `neg_` scorer is negative. Printed as-is it reads like an impossible error.
+- **Applying `abs()` too early.** `abs(scores)` before averaging is harmless for a mean, but `abs(scores).max()` is the *worst* fold while `scores.max()` is the *best*. The two disagree.
+- **Writing your own scorer with the wrong flag.** `make_scorer(mean_squared_error)` defaults to `greater_is_better=True`, so the search happily selects the model with the **largest** error. It must be `make_scorer(mean_squared_error, greater_is_better=False)`, which negates for you.
+
+:::
+
+One API note: `root_mean_squared_error` was added in scikit-learn 1.4, and the older `mean_squared_error(..., squared=False)` was removed in 1.6. Code that still passes `squared=False` raises a `TypeError` on a current install.
+
+---
+
+## None of the three means anything without the spread of y
+
+Every metric on this page is **scale-dependent**, and two of the three scale differently from each other. Re-express the same five houses in rupees instead of lakhs — a factor of `k = 100000`, the same model, the same fit, the same quality:
+
+| Metric | In lakhs | In rupees | Scales as |
+|---|---|---|---|
+| MAE | 2.0 | 200000 | `k` |
+| MSE | 6.0 | 6.0 × 10¹⁰ | `k²` |
+| RMSE | 2.4495 | 244949 | `k` |
+| RMSE / MAE | 1.2247 | 1.2247 | unchanged |
+
+So "MAE = 200000" is not a worse model than "MAE = 2.0". It is the same model in different units. It follows that these numbers cannot be compared across two problems, and cannot be judged in isolation at all — an MAE of ₹2 lakh is superb on a ₹5 crore house and useless on a ₹6 lakh one.
+
+The fix is to always score the **baseline** alongside the model: predict the mean of `y` for every row and compute the same metric. For the five houses, `ȳ = 366 / 5 = 73.2`, giving baseline residuals `[−21.2, −13.2, −2.2, +14.8, +21.8]`:
+
+$$\text{baseline MAE} = 73.2 / 5 = 14.64 \text{ lakhs}$$
+
+$$\text{baseline MSE} = 1322.8 / 5 = 264.56 \text{ squared lakhs} \qquad \text{baseline RMSE} = \sqrt{264.56} \approx 16.2653 \text{ lakhs}$$
+
+Against a baseline RMSE of `16.2653`, the model's `2.4495` is a factor of `6.6` better — and *that* statement survives a change of units. Turning exactly this comparison into a single number between `−∞` and `1` is what R² does, on the next page. `DummyRegressor(strategy='mean')` computes the baseline for you, so there is no excuse for skipping it.
+
+---
+
+## 2. Implementation Lab
+
+:::tip 
+
+**Lab Exercise: Error in the Units of y**
+
+An interactive, fully-functional Google Colab / Jupyter Notebook is available to experiment with this concept live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/05-regression-metrics/error_metrics.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Click **"Run all"** or execute cells individually using `Shift + Enter`.
+
+**Things to try inside the script:**
+*   **Experiment 1 (MAE vs. RMSE):** In section 3, append a single extreme residual `100` to Set A, and check which metric jumps further and what happens to the ratio.
+*   **Experiment 2 (Early abs() error):** In section 5, inspect the custom CV scoring arrays and check why taking `abs()` before finding the best fold yields a false conclusion.
+*   **Experiment 3 (Scale invariance):** Change the scale variable `k` in section 6 to `1000` (thousands of rupees) and observe how only the RMSE/MAE ratio remains untouched.
+
+:::
+
+---
+
+## 3. Common Mistakes
+
+<Tabs>
+  <TabItem value="m1" label="🚨 1. Explaining MSE to humans" default>
+    <br/>
+    
+    *   **The Misconception:** *"Reporting an MSE of 6.0 means the model is off by an average of 6.0 lakhs."*
+    *   **❌ Wrong Thinking:** Quoting raw MSE values directly as average errors.
+    *   **✅ The Right Principle:** MSE is in **squared units** (e.g. squared lakhs of rupees), which is a physically meaningless scale. Always report MAE (₹2.0 lakh) or RMSE (₹2.45 lakh), which return to the original units of $y$.
+  </TabItem>
+  <TabItem value="m2" label="🚨 2. RMSE < MAE expectation">
+    <br/>
+    
+    *   **The Misconception:** *"My RMSE came out smaller than MAE, which means my model has low error spread."*
+    *   **❌ Wrong Thinking:** Tolerating an RMSE lower than MAE because it looks better on paper.
+    *   **✅ The Right Principle:** `RMSE ≥ MAE` is a rigorous mathematical theorem. The difference of their squares is $\text{Var}(\lvert r \rvert)$, and variance cannot be negative. If RMSE is smaller than MAE, you have a software bug.
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. Scoring Sign Mismatch">
+    <br/>
+    
+    *   **The Misconception:** *"GridSearchCV is returning negative average errors, which is a software error."*
+    *   **❌ Wrong Thinking:** Discarding negative cross-validation scores because you expect error to be positive.
+    *   **✅ The Right Principle:** Every scikit-learn scorer must follow "greater is better" so searches can run a single unified `argmax` selection. Thus, error metrics are wrapped with a minus sign (e.g. `-6.0` instead of `6.0`). Always negate once, strictly at your final print statement.
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Independent metric evaluations">
+    <br/>
+    
+    *   **The Misconception:** *"Reporting an RMSE of 200,000 means this model has high prediction error."*
+    *   **❌ Wrong Thinking:** Judging a scale-dependent metric in isolation without a baseline.
+    *   **✅ The Right Principle:** These metrics are scale-dependent. An MAE of 200,000 rupees is superb on a ₹5 crore house and useless on a ₹6 lakh one. Always score the mean-only baseline (`DummyRegressor`) beside your model to provide a comparative quality factor.
+  </TabItem>
+</Tabs>
+
+---
+
+## 4. Summary
+
+<div className="row">
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🤖 Core Theory</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>MAE:</b> Mean Absolute Error. Units of $y$. Treats every miss linearly. Minimised by the target <b>median</b>.</li>
+          <li><b>MSE:</b> Mean Squared Error. Squared units. Penalises larger errors quadratically. Minimised by the target <b>mean</b>.</li>
+          <li><b>RMSE:</b> Root Mean Squared Error. Units of $y$. Outlier sensitive average.</li>
+          <li><b>The Lock Identity:</b> $\text{RMSE}^2 = \text{MAE}^2 + \text{Var}(\lvert r \rvert)$. The metric gap represents absolute error variance.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🛠️ Engineering Realities</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Bias Decomposition:</b> $\text{MSE} = \text{Var}(r) + (\bar{r})^2$. For least squares on training data with an intercept, bias $\bar{r} = 0$.</li>
+          <li><b>Residual standard error:</b> Divides RSS by $n-p-1$ degrees of freedom, estimating noise $\sigma$ conservatively on small $n$.</li>
+          <li><b>Outlier ratio detector:</b> Ratio $\text{RMSE}/\text{MAE}$ is scale-free. Normal-errors equal $\approx 1.25$. Ratios near $\sqrt{n}$ pinpoint isolated bad rows.</li>
+          <li><b>Scorer negation:</b> Scikit-learn negates error metrics (strings with `neg_` prefix). Failing to set `greater_is_better=False` on `make_scorer` selects the worst model.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+:::info 
+
+**📌 Key Takeaways**
+
+*   **🔒 Unit dependency:** MAE, MSE, and RMSE are scale-dependent. Re-expressing lakhs to rupees multiplies MAE/RMSE by $k$ and MSE by $k^2$, leaving only the ratio $\text{RMSE}/\text{MAE}$ unchanged.
+*   **⚖️ The True MAE Win:** MAE describes the *typical* row. If you need a number to budget slack around (interpretation), report MAE. If you want to penalise massive mistakes, use RMSE.
+*   **🛠️ Baseline requirement:** No metric value is interpretable on its own. Always run `DummyRegressor(strategy='mean')` as the baseline.
+
+:::
+
+**Next Section:** [R² and Adjusted R²](./02-r-squared-and-adjusted-r-squared.mdx) — turns the baseline comparison above into R², explains why adding any feature can only inflate it, and covers MAPE's asymmetry.
+
+---
+
+## 5. Active Recall
+
+*Attempt each question first, then click to reveal detailed answers, mathematical derivations, and sample explanations.*
+
+### Interactive Checkpoint Quiz
+
+export const PracticeQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Pythagoras Gap</h4>
+      <p style={{ margin: '0 0 15px 0' }}>On 100 test rows, we observe MAE = 2.0 and RMSE = 4.47. What is the ratio RMSE / MAE, and what does it suggest about the error distribution?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Ratio is 1.00 (errors are perfectly uniform)</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Ratio is 2.23 (one catastrophic outlier is dominating the squared error)</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Ratio is 1.25 (errors are normal-distributed scatter)</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. If errors were perfectly uniform, the ratio would be exactly 1.00. Here it is 2.23, which is much higher. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! The ratio is 2.235, which is extremely close to the mathematical upper limit $\sqrt{n} = \sqrt{5} \approx 2.236$. This proves that a single catastrophic row accounts for essentially all of the squared error in the entire dataset, isolating a data or feature error immediately!</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. A ratio of 1.25 indicates a clean normal-distributed scatter. A ratio of 2.23 is far above that. Re-read the choices and try again!</p>}
+    </div>
+  );
+};
+
+<PracticeQuiz />
+
+### Review Flashcards
+
+<details>
+  <summary>❓ <b>1. [THEORY] Prove the locked metrics identity $\text{RMSE}^2 = \text{MAE}^2 + \text{Var}(\lvert r \rvert)$.</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Definition:** By standard statistics, the variance of any set of numbers $u$ is defined as:
+        $$\text{Var}(u) = \text{Mean}(u^2) - \text{Mean}(u)^2$$
+    *   **Let $u = \lvert r \rvert$:** Substituting absolute residuals:
+        $$\text{Var}(\lvert r \rvert) = \text{Mean}(\lvert r \rvert^2) - \text{Mean}(\lvert r \rvert)^2$$
+    *   **The Terms:**
+        1.  $\text{Mean}(\lvert r \rvert^2) = \text{Mean}(r^2) = \text{MSE} = \text{RMSE}^2$
+        2.  $\text{Mean}(\lvert r \rvert)^2 = \text{MAE}^2$
+    *   **The Result:**
+        $$\text{Var}(\lvert r \rvert) = \text{RMSE}^2 - \text{MAE}^2 \implies \text{RMSE}^2 = \text{MAE}^2 + \text{Var}(\lvert r \rvert)$$
+    *   This mathematical proof binds the three metrics together. The gap between RMSE and MAE is the physical variance (spread) of the absolute error magnitudes.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>2. [ANALYZE] Why is `abs(scores).max()` the WORST cv fold under 'neg_*' scorers, and why does `abs()` need to be delayed?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Sign Flip:** Under `'neg_root_mean_squared_error'`, the cross-validation scores returned are negative (e.g. `[-6.0, -12.0, -2.5]`).
+    *   The best fold is the one with the smallest error ($2.5$), which has the largest algebraic value ($-2.5$):
+        $$\text{scores.max()} = -2.5 \implies \text{Best Fold}$$
+    *   **The Early abs():** Taking `np.abs(scores)` converts them to `[6.0, 12.0, 2.5]`. 
+    *   Calling `max()` on this positive array returns $12.0$, which is the **worst** fold (the largest error).
+    *   Always average or slice first, and only negate once, strictly at your final print statement.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>3. [THEORY] Why is the mean residual $\bar{r} = 0$ guaranteed on OLS training data with an intercept?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The First Normal Equation:** OLS fits coefficients by minimizing $L = \sum (y_i - b_0 - b_1 x_{1i} - \dots)^2$.
+    *   Differentiating $L$ with respect to the intercept $b_0$ and setting to zero:
+        $$\frac{\partial L}{\partial b_0} = -2 \sum (y_i - b_0 - b_1 x_{1i} - \dots) = 0$$
+    *   Dividing by $-2$:
+        $$\sum (y_i - \hat{y}_i) = \sum r_i = 0$$
+    *   **The Consequence:** Because OLS with an intercept mathematically guarantees that the sum of residuals is exactly zero, the mean residual $\bar{r}$ is also zero. This completely eliminates the bias term $(\bar{r})^2$ from $\text{MSE} = \text{Var}(r) + (\bar{r})^2$ on training data.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>4. [ANALYZE] If a model's test RMSE is 2.45 lakhs, but the baseline mean-only RMSE is 16.27 lakhs, what does this tell you about the model?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Quality Factor:** No scale-dependent metric (like MAE or RMSE) means anything in isolation.
+    *   By comparing against a "dummy baseline" that simply predicts the mean $\bar{y}$ every time, we measure how much useful signal our features provide.
+    *   Our model's RMSE is **$6.6\times$ smaller** than the baseline. This factor is completely unit-free and portable, proving that our features account for the vast majority of target variance.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>5. [THEORY] Geometrically, how does Hinge loss compare to MAE and RMSE in terms of gradient behavior near zero?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **RMSE Near Zero:** Curves smoothly (quadratic $r^2$ shape), so its gradient slows down and approaches exactly zero near the minimum.
+    *   **MAE Near Zero:** Straight V-shape ($\lvert r \rvert$). Its gradient (slope) is exactly $\pm 1$ everywhere and undefined at $r=0$. It does not slow down, which can cause parameters to overshoot the optimum.
+    *   **Hinge Near Zero:** Piecewise linear ($\max(0, 1-m)$). It has a flat zero gradient for $m \ge 1$ (comfortably classified) and a constant slope $-1$ when violated ($m < 1$).
+  </div>
+</details>

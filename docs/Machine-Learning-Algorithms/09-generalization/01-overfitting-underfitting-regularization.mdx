@@ -1,565 +1,692 @@
 ---
 sidebar_position: 1
 title: Overfitting, Underfitting, and Regularization
-description: Memorizing vs learning; the bias-variance tradeoff; L1, L2, and Elastic Net regularization
-tags: [generalization, overfitting, regularization, l1, l2]
+description: Memorizing noise versus learning generalizable structure, the bias-variance tradeoff, and L1, L2, and Elastic Net regularization.
+tags: [generalization, overfitting, regularization, l1, l2, scikit-learn]
 toc_max_heading_level: 3
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import React from 'react';
 
 # Overfitting, Underfitting, and Regularization
 
-> **Topic -** A model fits training data perfectly (memorises noise) but fails on test data: **overfitting**. A model is so simple it misses real patterns: **underfitting**. Regularization is a penalty added to the cost function to prevent overfitting - shrinking coefficients toward zero. This page explains both failure modes, introduces L1 (Lasso), L2 (Ridge), and Elastic Net regularization, and shows the tradeoff between training and test accuracy.
+> **Topic —** A machine learning model fits training data with 100% precision, yet fails catastrophically on unseen customer transactions: **overfitting**. Another model is so mathematically rigid that it misses real signals entirely: **underfitting**. Regularization introduces a mathematical constraint into the loss function to penalize excessive complexity. This guide explores the **bias-variance tradeoff**, contrasts **L1 (Lasso)**, **L2 (Ridge)**, and **Elastic Net** penalties, and details geometric constraint boundaries.
 
 ---
 
-## In plain words
+## 1. The Core Concept
 
-**Training vs Generalisation**
+The fundamental objective of supervised learning is not resubstitution memorization, but **out-of-sample generalization**:
 
-- **Training accuracy:** How well the model fits the training data (data it was trained on).
-- **Test accuracy:** How well the model performs on new, unseen data (the goal).
+$$\mathbb{E}_{(x, y) \sim \mathcal{D}}\left[ \mathcal{L}(y, \hat{f}(x)) \right]$$
 
-**Overfitting:** Model memorises training data, including noise. High training accuracy, low test accuracy. Example: a degree-20 polynomial perfectly wiggles through every training point but fails on new data.
+Every machine learning model balances two competing sources of error captured by the **Bias-Variance Decomposition**:
 
-**Underfitting:** Model is too simple to capture real patterns. Both training and test accuracy are low. Example: fitting a line to nonlinear data.
+$$\text{Total Expected Error} = \text{Bias}[\hat{f}(x)]^2 + \text{Var}[\hat{f}(x)] + \sigma^2$$
 
-**Sweet spot:** Model captures real patterns, ignores noise. Good training AND test accuracy.
+1.  **Bias (Underfitting):** Error resulting from oversimplified mathematical assumptions. A linear model fitting quadratic data cannot capture true curvature.
+2.  **Variance (Overfitting):** Error resulting from hypersensitivity to random fluctuations in the training set. A high-degree polynomial bends to pass through every noise point.
+3.  **Irreducible Error ($\sigma^2$):** Intrinsic noise in the data collection process that no algorithm can eliminate.
 
-**Regularization:** Add a penalty term to the cost function. Penalty shrinks coefficients (weights) toward zero, forcing the model to use fewer features or smaller weights. This reduces overfitting.
+:::tip
 
-The page settles three confusions:
+**If you only take one thing from this page**
 
-1. The difference between overfitting and underfitting.
-2. How regularization prevents overfitting.
-3. Why L1, L2, and Elastic Net differ.
-
-### Words used on this page
-
-| Term | What it means here |
-|---|---|
-| **Overfitting** | Model fits training noise; poor generalisation. |
-| **Underfitting** | Model is too simple; poor training and test accuracy. |
-| **Regularization** | Penalty term in cost function to shrink coefficients. |
-| **L1 regularization (Lasso)** | "ell-one" | Penalty: $\lambda \sum |w|$. Shrinks some coefficients to exactly zero. |
-| **L2 regularization (Ridge)** | Penalty: $\lambda \sum w^2$. Shrinks coefficients proportionally; none to zero. |
-| **Elastic Net** | Combination of L1 and L2. Best of both. |
-| **Regularisation strength λ** | Hyperparameter controlling penalty magnitude. Large \lambda -> strong penalty. |
-
-:::tip 
-
-If you only take one thing from this page
-*   **Overfitting:** Model memorises noise (high training, low test accuracy).
-*   **Underfitting:** Model is too simple (low training and test accuracy).
-*   **Regularization:** Shrinks coefficients to prevent overfitting.
-*   **L1 (Lasso):** Shrinks some coefficients to exactly zero (feature selection).
-*   **L2 (Ridge):** Shrinks coefficients proportionally (all features kept).
-*   **Elastic Net:** Combines both L1 and L2 penalties.
+**Overfitting** means your model has low bias but high variance (memorizing noise). **Underfitting** means your model has high bias but low variance (too rigid). **Regularization** adds a penalty term $\lambda \cdot \Omega(w)$ to shrink weights toward zero, trading a tiny increase in training bias for a massive reduction in test variance.
 
 :::
 
 ---
 
-## Overfitting: memorising noise
+## 2. Interactive Bias-Variance Tradeoff Simulator
 
-### Example: polynomial degree and fit quality
+Vary the polynomial degree $d$ below to observe how model capacity shapes training error versus test generalization error:
 
-Fit polynomials of increasing degree to 10 noisy data points.
+export const BiasVarianceTradeoffSimulator = () => {
+  const [degree, setDegree] = React.useState(3);
 
-| Degree | Model Complexity | Training Error | Test Error | Interpretation |
-|---|---|---|---|---|
-| 1 (line) | Low | 0.45 | 0.48 | Too simple (underfitting). |
-| 3 | Medium | 0.12 | 0.15 | Good fit. Generalises. |
-| 5 | High | 0.08 | 0.09 | Still good. |
-| 10 | Very high | 0.0001 | 1.2 | **Overfitting!** Perfect fit on train, terrible on test. |
+  const errors = {
+    1: { train: 0.450, test: 0.480, status: 'underfitting' },
+    2: { train: 0.220, test: 0.240, status: 'good' },
+    3: { train: 0.120, test: 0.140, status: 'sweet_spot' },
+    4: { train: 0.090, test: 0.120, status: 'sweet_spot' },
+    5: { train: 0.070, test: 0.160, status: 'slight_over' },
+    6: { train: 0.040, test: 0.280, status: 'overfitting' },
+    7: { train: 0.020, test: 0.520, status: 'overfitting' },
+    8: { train: 0.005, test: 0.950, status: 'severe_over' },
+    9: { train: 0.0001, test: 1.650, status: 'catastrophic' }
+  };
 
-As degree increases, the polynomial wiggles through every training point (including noise). Training error drops, but test error rises sharply once the model memorises noise.
+  const curr = errors[degree];
+  const maxBar = 1.65;
 
-### Why overfitting happens
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>📈 Interactive Bias-Variance Tradeoff Simulator</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Adjust polynomial complexity (Degree d) to watch the U-shaped test error curve emerge:
+      </p>
 
-- **Model has too many parameters.** A degree-10 polynomial on 10 points has 11 parameters - enough to fit any pattern, including noise.
-- **Noise in training data.** Real data has measurement error, outliers. The model learns these as if they're real patterns.
-- **No penalty for complexity.** Cost function rewards perfect fit, regardless of model size.
+      <div style={{ marginBottom: '18px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 'bold' }}>
+          <span>Model Complexity (Polynomial Degree d):</span>
+          <span style={{ color: '#3182ce', fontSize: '15px' }}>Degree {degree}</span>
+        </div>
+        <input
+          type="range"
+          min="1"
+          max="9"
+          step="1"
+          value={degree}
+          onChange={(e) => setDegree(parseInt(e.target.value))}
+          style={{ width: '100%', marginTop: '6px' }}
+        />
+      </div>
 
-### Symptoms of overfitting
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', marginBottom: '16px' }}>
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--ifm-color-emphasis-600)' }}>
+            <span>Training Error (MSE)</span>
+            <span style={{ fontWeight: 'bold', color: '#3182ce' }}>{curr.train.toFixed(4)}</span>
+          </div>
+          <div style={{ width: '100%', height: '8px', backgroundColor: 'rgba(148, 163, 184, 0.2)', borderRadius: '4px', marginTop: '6px', overflow: 'hidden' }}>
+            <div style={{ width: `${Math.min(100, (curr.train / maxBar) * 100)}%`, height: '100%', backgroundColor: '#3182ce', borderRadius: '4px', transition: '0.2s' }} />
+          </div>
+          <div style={{ fontSize: '11px', marginTop: '4px', color: 'var(--ifm-color-emphasis-500)' }}>Monotonically drops toward 0.0</div>
+        </div>
 
-- Gap between training and test accuracy. Example: training 99%, test 75%.
-- Model becomes increasingly complex (more features, higher degree) but test accuracy plateaus or drops.
-- High variance in CV fold scores (model is unreliable; depends on which training points it sees).
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--ifm-color-emphasis-600)' }}>
+            <span>Test Generalization Error (MSE)</span>
+            <span style={{ fontWeight: 'bold', color: curr.test > 0.3 ? '#e53e3e' : '#38a169' }}>{curr.test.toFixed(4)}</span>
+          </div>
+          <div style={{ width: '100%', height: '8px', backgroundColor: 'rgba(148, 163, 184, 0.2)', borderRadius: '4px', marginTop: '6px', overflow: 'hidden' }}>
+            <div style={{ width: `${Math.min(100, (curr.test / maxBar) * 100)}%`, height: '100%', backgroundColor: curr.test > 0.3 ? '#e53e3e' : '#38a169', borderRadius: '4px', transition: '0.2s' }} />
+          </div>
+          <div style={{ fontSize: '11px', marginTop: '4px', color: 'var(--ifm-color-emphasis-500)' }}>Classic U-shaped curve</div>
+        </div>
+      </div>
+
+      <div style={{ padding: '12px 16px', borderRadius: '6px', backgroundColor: degree <= 1 ? 'rgba(49, 130, 206, 0.12)' : degree <= 4 ? 'rgba(56, 161, 105, 0.12)' : 'rgba(229, 62, 62, 0.12)', borderLeft: `4px solid ${degree <= 1 ? '#3182ce' : degree <= 4 ? '#38a169' : '#e53e3e'}` }}>
+        <strong style={{ fontSize: '14px', color: degree <= 1 ? '#2b6cb0' : degree <= 4 ? '#276749' : '#c53030' }}>
+          {degree <= 1 ? '⚠️ Underfitting (High Bias, Low Variance)' : degree <= 4 ? '🎯 Optimal Generalization (The Sweet Spot)' : '🚨 Overfitting (Low Bias, High Variance)'}
+        </strong>
+        <p style={{ margin: '4px 0 0 0', fontSize: '13px' }}>
+          {degree <= 1
+            ? 'The linear model is too simple to capture real underlying curves. Both training and test errors are high.'
+            : degree <= 4
+            ? 'Captures true non-linear structure while ignoring point-wise measurement noise. Test error reaches its global minimum at d = 3.'
+            : `Degree ${degree} has ${degree + 1} parameters! It wiggles wildly through every noisy sample, driving training error to near zero (${curr.train.toFixed(4)}) while test error explodes (${curr.test.toFixed(3)})!`}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+<BiasVarianceTradeoffSimulator />
 
 ---
 
-## Underfitting: missing real patterns
+## 3. Regularization Mechanics: L1 vs. L2 vs. Elastic Net
 
-### Example: fitting a line to nonlinear data
+Regularization controls model complexity by adding a mathematical penalty to the objective function:
 
-| Model | Fit Quality | Training Error | Test Error | Interpretation |
-|---|---|---|---|---|
-| Line (y = mx + b) | Poor | 0.35 | 0.36 | Too simple. Underfitting. |
-| Quadratic (degree 2) | Good | 0.08 | 0.09 | Captures the true pattern. |
+$$\text{Cost}(\mathbf{w}) = \text{Loss}(\mathbf{y}, \hat{\mathbf{y}}) + \lambda \cdot \Omega(\mathbf{w})$$
 
-The line can't capture the U-shaped true pattern, so both training and test errors are high.
+export const RegularizationPenaltyExplorer = () => {
+  const [weight, setWeight] = React.useState(1.2);
+  const [lambdaVal, setLambdaVal] = React.useState(1.0);
 
-### Why underfitting happens
+  const l1Pen = lambdaVal * Math.abs(weight);
+  const l2Pen = 0.5 * lambdaVal * Math.pow(weight, 2);
+  const enetPen = 0.5 * l1Pen + 0.5 * l2Pen;
 
-- **Model is too simple.** Not enough parameters to capture real patterns.
-- **Regularization too strong.** Penalty shrinks coefficients so much that the model loses signal.
-- **Not enough training.** Early stopping before the model converges.
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>🧪 Regularization Penalty and Gradient Explorer</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Adjust coefficient magnitude $w$ and penalty strength $\lambda$ to compare cost penalties:
+      </p>
 
-### Symptoms of underfitting
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', marginBottom: '16px' }}>
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 'bold' }}>
+            <span>Weight Coefficient (w):</span>
+            <span style={{ color: '#3182ce' }}>{weight.toFixed(2)}</span>
+          </div>
+          <input
+            type="range"
+            min="-2.5"
+            max="2.5"
+            step="0.1"
+            value={weight}
+            onChange={(e) => setWeight(parseFloat(e.target.value))}
+            style={{ width: '100%', marginTop: '6px' }}
+          />
+        </div>
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 'bold' }}>
+            <span>Penalty Strength (λ / alpha):</span>
+            <span style={{ color: '#805ad5' }}>{lambdaVal.toFixed(1)}</span>
+          </div>
+          <input
+            type="range"
+            min="0.2"
+            max="3.0"
+            step="0.2"
+            value={lambdaVal}
+            onChange={(e) => setLambdaVal(parseFloat(e.target.value))}
+            style={{ width: '100%', marginTop: '6px' }}
+          />
+        </div>
+      </div>
 
-- High training error (model doesn't fit training data well).
-- High test error (and roughly equal to training error).
-- Low CV score (unstable, missing patterns).
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: '#e53e3e', fontWeight: 'bold' }}>L1 (Lasso Penalty)</div>
+          <div style={{ fontSize: '22px', fontWeight: 'bold', color: '#e53e3e', marginTop: '2px' }}>
+            {l1Pen.toFixed(3)}
+          </div>
+          <div style={{ fontSize: '10px', color: 'var(--ifm-color-emphasis-500)', marginTop: '2px' }}>λ · |w|</div>
+        </div>
+
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: '#3182ce', fontWeight: 'bold' }}>L2 (Ridge Penalty)</div>
+          <div style={{ fontSize: '22px', fontWeight: 'bold', color: '#3182ce', marginTop: '2px' }}>
+            {l2Pen.toFixed(3)}
+          </div>
+          <div style={{ fontSize: '10px', color: 'var(--ifm-color-emphasis-500)', marginTop: '2px' }}>0.5 · λ · w²</div>
+        </div>
+
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: '#805ad5', fontWeight: 'bold' }}>Elastic Net (50/50 Mix)</div>
+          <div style={{ fontSize: '22px', fontWeight: 'bold', color: '#805ad5', marginTop: '2px' }}>
+            {enetPen.toFixed(3)}
+          </div>
+          <div style={{ fontSize: '10px', color: 'var(--ifm-color-emphasis-500)', marginTop: '2px' }}>0.5·L1 + 0.5·L2</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<RegularizationPenaltyExplorer />
 
 ---
 
-## The bias-variance tradeoff
-
-**Bias:** Error from the model being too simple (can't fit true pattern). High bias = underfitting.
-
-**Variance:** Error from the model being too flexible (fits noise). High variance = overfitting.
-
-| Model Complexity | Bias | Variance | Total Error |
-|---|---|---|---|
-| Low (line) | High | Low | High (underfitting) |
-| Medium (degree 3) | Medium | Medium | Low (sweet spot) |
-| High (degree 10) | Low | High | High (overfitting) |
-
-**The goal:** Minimise total error. This usually means accepting some bias to reduce variance (or vice versa).
-
----
-
-## Regularization: adding a penalty
-
-### Cost function without regularization
-
-**Loss = $\sum (y_i - \hat{y}_i)^2$** (e.g., squared error, regression)
-
-Minimising this allows coefficients to grow large to fit noise.
-
-### Cost function with regularization
-
-**Loss + Penalty = $\sum (y_i - \hat{y}_i)^2 + \lambda \times \text{Penalty}(w)$**
-
-where w = [w₁, w₂, …, wₙ] are the model coefficients, and λ controls the penalty strength.
-
-The algorithm minimises both loss (fit) and penalty (complexity). It trades off some training accuracy for smaller, simpler coefficients.
-
-### Three regularisation types
+## 4. Comparing Regularization Architectures
 
 <Tabs>
-  <TabItem value="l2" label="L2 Regularization (Ridge)" default>
+  <TabItem value="l2" label="1. L2 Regularization (Ridge)" default>
     <br/>
     
-    **Penalty = $\sum w^2$ (sum of squared coefficients)**
-
-    **Full loss = $\text{MSE} + \lambda \sum w^2$**
-
-    *   **Proportional Shrinkage:** Shrinks all coefficients proportionally toward zero.
-    *   **Keep All Features:** No coefficient reaches exactly zero (unless $\lambda \to \infty$).
-    *   **Use Case:** Highly recommended when most features are useful and you want to prevent multicollinearity.
+    *   **Penalty Term:** $\Omega(w) = \frac{1}{2} \sum_{j=1}^{d} w_j^2 = \frac{1}{2} \|\mathbf{w}\|_2^2$.
+    *   **Gradient Contribution:** $\frac{\partial \Omega}{\partial w_j} = w_j$.
+    *   **Shrinkage Behavior:** Weight update subtracts a fraction proportional to $w_j$:
+        $$w_j \leftarrow w_j (1 - \alpha \lambda) - \alpha \frac{\partial \text{Loss}}{\partial w_j}$$
+    *   **Sparsity:** **Never exactly zero**. Smoothly shrinks coefficients toward zero, preserving all features.
+    *   **Geometry:** Spherical / circular constraint surface without sharp corners.
+    *   **Best For:** Multicollinearity (correlated features), preserving all predictive signals.
   </TabItem>
-  <TabItem value="l1" label="L1 Regularization (Lasso)">
+  <TabItem value="l1" label="2. L1 Regularization (Lasso)">
     <br/>
     
-    **Penalty = $\sum |w|$ (sum of absolute values)**
-
-    **Full loss = $\text{MSE} + \lambda \sum |w|$**
-
-    *   **Feature Selection:** Shrinks weak coefficients to **exactly zero**, removing them from the model entirely.
-    *   **Sparse Models:** Creates simpler, more interpretable models with fewer active parameters.
-    *   **Use Case:** Best when you have high-dimensional features and suspect only a small subset of them carry real signal.
+    *   **Penalty Term:** $\Omega(w) = \sum_{j=1}^{d} |w_j| = \|\mathbf{w}\|_1$.
+    *   **Gradient Contribution:** $\frac{\partial \Omega}{\partial w_j} = \text{sign}(w_j)$ (constant magnitude $\pm 1$).
+    *   **Shrinkage Behavior:** Constant step reduction regardless of weight magnitude:
+        $$w_j \leftarrow w_j - \alpha \lambda \cdot \text{sign}(w_j)$$
+    *   **Sparsity:** **Drives uninformative weights to exact zero ($w_j = 0$)**. Performs automatic feature selection.
+    *   **Geometry:** Diamond / $L_1$ polytope with sharp corners on the coordinate axes.
+    *   **Best For:** Sparse feature selection when many features are pure noise.
   </TabItem>
-  <TabItem value="elastic" label="Elastic Net">
+  <TabItem value="enet" label="3. Elastic Net">
     <br/>
     
-    **Penalty = $\alpha \sum |w| + (1-\alpha) \sum w^2$ (combination of both)**
-
-    **Full loss = $\text{MSE} + \lambda [\alpha \sum |w| + (1-\alpha) \sum w^2]$**
-
-    *   **Best of Both Worlds:** Combines the feature selection capability of L1 with the grouping stability of L2.
-    *   **Balanced Control:** Tuned via hyperparameter $\alpha$ (which controls the relative weight of L1 vs L2).
-    *   **Use Case:** Ideal for complex datasets where multiple features are correlated and you want to select groups of variables.
+    *   **Penalty Term:** Convex linear combination of L1 and L2 penalties:
+        $$\Omega(w) = \rho \|\mathbf{w}\|_1 + \frac{1 - \rho}{2} \|\mathbf{w}\|_2^2$$
+    *   **The Grouping Effect:** When multiple features are strongly correlated, Lasso arbitrarily picks one and drops the others. Elastic Net groups them, shrinking them together while maintaining sparsity.
+    *   **Best For:** High-dimensional data ($p \gg n$) with correlated predictor clusters.
   </TabItem>
 </Tabs>
 
 ---
 
-## Example: shrinkage comparison (hand-worked)
+## 5. Geometric Intuition: Why Lasso Yields Zeros
 
-### Setup
+Why does $L_1$ regularization produce exact zeros (sparsity), while $L_2$ regularization never does? 
 
-Fit a linear model to 5 data points with 3 features. Unregularised coefficients: w = [1.5, 0.8, 0.3].
+In constrained optimization (Lagrange form), regularized regression solves:
 
-### L2 (Ridge) with λ=0.5
+$$\min_{\mathbf{w}} \text{Loss}(\mathbf{w}) \quad \text{subject to} \quad \Omega(\mathbf{w}) \le C$$
 
-Penalty = $0.5 \times (1.5^2 + 0.8^2 + 0.3^2) = 0.5 \times 2.98 = 1.49$
+The optimal solution occurs at the **point of tangency** where the expanding unconstrained **Loss Contours (ellipses)** first touch the **Regularization Constraint Region**.
 
-Minimising loss + penalty shrinks coefficients. Approximate result (from gradient descent):
-w ≈ [1.2, 0.64, 0.24] (all shrunk proportionally, none zero).
+export const GeometricLassoSimulator = () => {
+  const [mode, setMode] = React.useState('l1');
+  const [angleDeg, setAngleDeg] = React.useState(32);
+  const [budget, setBudget] = React.useState(1.0);
 
-### L1 (Lasso) with λ=0.5
+  const originX = 160;
+  const originY = 160;
+  const scale = 75;
 
-Penalty = $0.5 \times (|1.5| + |0.8| + |0.3|) = 0.5 \times 2.6 = 1.3$
+  const rad = (angleDeg * Math.PI) / 180;
+  const olsDist = 2.1;
+  const olsW1 = olsDist * Math.cos(rad);
+  const olsW2 = olsDist * Math.sin(rad);
 
-Minimising loss + penalty shrinks coefficients, some to zero:
-w ≈ [1.3, 0.5, 0] (smallest feature (0.3) -> 0, others shrunk).
+  const olsX = originX + olsW1 * scale;
+  const olsY = originY - olsW2 * scale;
 
-### Elastic Net (α=0.5) with λ=0.5
+  // Tangency calculation
+  let tanW1 = 0;
+  let tanW2 = 0;
+  let isCorner = false;
 
-Penalty = $0.5 \times [0.5 \times 2.6 + 0.5 \times 2.98] \approx 1.39$
+  if (mode === 'l2') {
+    // Ridge: tangency on circle at angle rad
+    tanW1 = budget * Math.cos(rad);
+    tanW2 = budget * Math.sin(rad);
+    isCorner = false;
+  } else {
+    // Lasso: diamond has sharp corners on axes.
+    // If angle < 45 deg, closest corner on diamond is (budget, 0).
+    // If angle > 45 deg, closest corner is (0, budget).
+    if (angleDeg <= 44) {
+      tanW1 = budget;
+      tanW2 = 0.0;
+      isCorner = true;
+    } else if (angleDeg >= 46) {
+      tanW1 = 0.0;
+      tanW2 = budget;
+      isCorner = true;
+    } else {
+      tanW1 = budget * 0.5;
+      tanW2 = budget * 0.5;
+      isCorner = false;
+    }
+  }
 
-Result (approximate):
-w ≈ [1.25, 0.6, 0.05] (some shrinkage with occasional zeros).
+  const tanX = originX + tanW1 * scale;
+  const tanY = originY - tanW2 * scale;
 
-### Comparison
+  // Distance from OLS to tangent point
+  const dx = tanX - olsX;
+  const dy = tanY - olsY;
+  const distContact = Math.sqrt(dx * dx + dy * dy);
 
-| Regularization | w₁ | w₂ | w₃ | Interpretation |
-|---|---|---|---|---|
-| None | 1.5 | 0.8 | 0.3 | Overfitting risk. |
-| L2 (Ridge) | 1.2 | 0.64 | 0.24 | All features kept, smaller weights. |
-| L1 (Lasso) | 1.3 | 0.5 | 0 | Feature 3 removed (zero). |
-| Elastic Net | 1.25 | 0.6 | 0.05 | Balance: mostly L2, slight L1. |
+  const diamondPoints = `${originX + budget * scale},${originY} ${originX},${originY - budget * scale} ${originX - budget * scale},${originY} ${originX},${originY + budget * scale}`;
 
----
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>📐 Interactive Geometry of Sparsity Simulator</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Rotate the unconstrained OLS optimum angle (θ) to observe how the expanding loss ellipses interact with the constraint boundary:
+      </p>
 
-## Common Mistakes
+      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
+        <button
+          onClick={() => setMode('l1')}
+          style={{
+            padding: '6px 14px',
+            borderRadius: '4px',
+            border: '1px solid #e53e3e',
+            backgroundColor: mode === 'l1' ? '#e53e3e' : 'transparent',
+            color: mode === 'l1' ? '#fff' : 'var(--ifm-font-color-base)',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            fontSize: '12px',
+            transition: '0.2s'
+          }}
+        >
+          L1 Lasso (Diamond Constraint)
+        </button>
+        <button
+          onClick={() => setMode('l2')}
+          style={{
+            padding: '6px 14px',
+            borderRadius: '4px',
+            border: '1px solid #3182ce',
+            backgroundColor: mode === 'l2' ? '#3182ce' : 'transparent',
+            color: mode === 'l2' ? '#fff' : 'var(--ifm-font-color-base)',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            fontSize: '12px',
+            transition: '0.2s'
+          }}
+        >
+          L2 Ridge (Circular Constraint)
+        </button>
+      </div>
 
-| # | Mistake | Wrong | Right |
-|---|---|---|---|
-| 1 | Confusing overfitting and high accuracy | "High training accuracy = good model" | High training accuracy alone is misleading. Check test accuracy. If training >> test, overfitting. |
-| 2 | Thinking regularization always helps | "Use L2 on all models" | Regularization helps with overfitting. On underfitted models, it makes things worse. |
-| 3 | Using L1 when you want all features | "Lasso keeps all features" | L1 shrinks some coefficients to zero (feature selection). Use L2 if you want all features. |
-| 4 | Setting λ too high | "Larger λ is more regularization, more is better" | Too high λ causes underfitting. Tune λ via cross-validation. |
-| 5 | Not tuning λ | "We used λ=1.0 (default)" | λ is a hyperparameter. Tune via CV (GridSearchCV). Different datasets need different λ. |
-| 6 | Confusing Elastic Net with either L1 or L2 | "Elastic Net is just L1+L2" | Elastic Net has parameter α controlling the balance. Must tune both λ and α. |
-| 7 | Regularising test set | "We regularised the test set too" | Regularisation is part of training. Don't regularise test predictions. |
-| 8 | Not standardising features before L1/L2 | "Regularise on raw features" | L1/L2 penalties depend on scale. Standardise (mean=0, std=1) first. |
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', marginBottom: '16px' }}>
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 'bold' }}>
+            <span>Unconstrained OLS Angle (θ):</span>
+            <span style={{ color: '#3182ce' }}>{angleDeg}°</span>
+          </div>
+          <input
+            type="range"
+            min="15"
+            max="75"
+            step="1"
+            value={angleDeg}
+            onChange={(e) => setAngleDeg(parseInt(e.target.value))}
+            style={{ width: '100%', marginTop: '6px' }}
+          />
+        </div>
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 'bold' }}>
+            <span>Constraint Budget (C):</span>
+            <span style={{ color: '#805ad5' }}>{budget.toFixed(1)}</span>
+          </div>
+          <input
+            type="range"
+            min="0.6"
+            max="1.3"
+            step="0.1"
+            value={budget}
+            onChange={(e) => setBudget(parseFloat(e.target.value))}
+            style={{ width: '100%', marginTop: '6px' }}
+          />
+        </div>
+      </div>
 
----
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <svg viewBox="0 0 340 310" style={{ width: '100%', maxWidth: '340px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '6px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+            {/* Grid & Axes */}
+            <line x1="20" y1={originY} x2="320" y2={originY} stroke="var(--ifm-color-emphasis-300)" strokeWidth="1.5" />
+            <line x1={originX} y1="20" x2={originX} y2="290" stroke="var(--ifm-color-emphasis-300)" strokeWidth="1.5" />
+            <text x="325" y={originY + 4} fontSize="11" fill="var(--ifm-color-emphasis-700)">w₁</text>
+            <text x={originX} y="15" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">w₂</text>
 
-## Summary
+            {/* Constraint Shape */}
+            {mode === 'l2' ? (
+              <circle
+                cx={originX}
+                cy={originY}
+                r={budget * scale}
+                fill="rgba(49, 130, 206, 0.15)"
+                stroke="#3182ce"
+                strokeWidth="2.5"
+              />
+            ) : (
+              <polygon
+                points={diamondPoints}
+                fill="rgba(229, 62, 62, 0.15)"
+                stroke="#e53e3e"
+                strokeWidth="2.5"
+              />
+            )}
 
-| Concept | Definition |
-|---|---|
-| **Overfitting** | Model memorises training noise. High train accuracy, low test accuracy. |
-| **Underfitting** | Model too simple. High train and test error. |
-| **Bias** | Error from simplicity (underfitting). |
-| **Variance** | Error from flexibility (overfitting). |
-| **Regularization** | Penalty term in cost function. Shrinks coefficients. |
-| **L1 (Lasso)** | Penalty = $\lambda \sum |w|$. Shrinks some coefficients to zero. |
-| **L2 (Ridge)** | Penalty = $\lambda \sum w^2$. Shrinks all coefficients proportionally. |
-| **Elastic Net** | Penalty = $\alpha L_1 + (1-\alpha) L_2$. Combines both. |
-| **λ (lambda)** | Regularization strength. Must be tuned via CV. |
+            {/* Loss Ellipses (Concentric around OLS) */}
+            <ellipse
+              cx={olsX}
+              cy={olsY}
+              rx={distContact}
+              ry={distContact * 0.72}
+              transform={`rotate(-25, ${olsX}, ${olsY})`}
+              fill="none"
+              stroke="#dd6b20"
+              strokeWidth="2"
+            />
+            <ellipse
+              cx={olsX}
+              cy={olsY}
+              rx={distContact * 0.65}
+              ry={distContact * 0.45}
+              transform={`rotate(-25, ${olsX}, ${olsY})`}
+              fill="none"
+              stroke="#dd6b20"
+              strokeDasharray="3 3"
+              strokeWidth="1"
+            />
 
-**Key takeaways**
+            {/* OLS Minimum Marker */}
+            <circle cx={olsX} cy={olsY} r="5" fill="#d69e2e" stroke="#fff" strokeWidth="1.5" />
+            <text x={olsX + 8} y={olsY - 8} fontSize="10" fontWeight="bold" fill="#d69e2e">ŵ_OLS</text>
 
-- **Overfitting:** training accuracy high, test accuracy low. Model memorises noise.
-- **Underfitting:** both training and test accuracy low. Model too simple.
-- **Bias-variance tradeoff:** reduce variance (overfitting) by accepting some bias.
-- **Regularization:** adds penalty to shrink coefficients. Prevents overfitting.
-- **L1 vs L2:** L1 shrinks some to zero (feature selection); L2 shrinks proportionally (all features).
-- **Elastic Net:** combines L1 and L2. Usually best choice.
-- **Always tune λ via CV.** Different data, different optimal λ.
-- **Standardise features first.** L1/L2 penalties are scale-dependent.
+            {/* Contact / Tangency Point */}
+            <circle cx={tanX} cy={tanY} r="6" fill={isCorner ? '#e53e3e' : '#3182ce'} stroke="#fff" strokeWidth="2" />
+            <line x1={tanX} y1={tanY} x2={olsX} y2={olsY} stroke="#718096" strokeDasharray="2 2" strokeWidth="1" />
+          </svg>
+        </div>
 
-**Next in this section:** [Regularization Strength and Solvers](./02-regularization-strength-and-solvers.md) - tuning lambda, solvers, hyperparameter search strategies.
+        <div>
+          <div style={{ padding: '14px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: `2px solid ${isCorner ? '#e53e3e' : '#3182ce'}`, marginBottom: '12px' }}>
+            <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)', textTransform: 'uppercase', fontWeight: 'bold' }}>
+              Optimal Constrained Solution (w*)
+            </div>
+            <div style={{ fontSize: '20px', fontWeight: 'bold', color: isCorner ? '#e53e3e' : '#3182ce', marginTop: '4px' }}>
+              w₁ = {tanW1.toFixed(2)}, w₂ = {tanW2.toFixed(2)}
+            </div>
+            <div style={{ fontSize: '12px', marginTop: '4px', fontWeight: 'bold', color: isCorner ? '#c53030' : '#2b6cb0' }}>
+              {isCorner ? '🎯 EXACT SPARSITY: One weight is zero (Corner Solution)!' : '⚖️ DENSE SOLUTION: Both weights remain non-zero.'}
+            </div>
+          </div>
 
-**See also:** [Cross-Validation](../06-validation-strategy/01-why-cross-validation.md) for CV-based hyperparameter tuning · [Logistic Regression](../07-logistic-regression/01-why-logistic-regression.md) for classification with regularisation.
+          <div style={{ fontSize: '13px', lineHeight: '1.6', color: 'var(--ifm-color-emphasis-800)' }}>
+            {mode === 'l1' ? (
+              <span>
+                <b>Why Lasso sets weights to zero:</b> The diamond constraint has sharp vertices sitting directly on the coordinate axes ($(C, 0)$ and $(0, C)$). Because the corners protrude furthest, the expanding loss ellipse <b>almost always makes initial contact at a sharp corner</b> across a wide range of angles ($15°$ to $75°$). Touching a corner forces the orthogonal weight to be <b>identically zero</b>.
+              </span>
+            ) : (
+              <span>
+                <b>Why Ridge never sets weights to zero:</b> The spherical circular constraint has a smooth curvature everywhere with zero corners. As the OLS angle changes, the tangency point smoothly glides along the continuous circular arc. The probability of the ellipse hitting an exact axis coordinate is virtually zero.
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
----
-
-## Run It Yourself
-
-```python title="overfitting_underfitting_regularization.py"
-import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.model_selection import cross_val_score, KFold
-from sklearn.linear_model import LinearRegression, Ridge, Lasso, ElasticNet
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
-
-np.random.seed(42)
-
-# ---------- 1. Polynomial overfitting example ----------
-print("=" * 70)
-print("EXAMPLE 1: Polynomial Overfitting (Degree vs Accuracy)")
-print("=" * 70)
-
-# Generate true nonlinear data with noise
-n_train = 15
-X_train = np.linspace(0, 10, n_train).reshape(-1, 1)
-y_train = np.sin(X_train).ravel() + np.random.normal(0, 0.3, n_train)
-
-# Test data (cleaner, from true function)
-X_test = np.linspace(0, 10, 50).reshape(-1, 1)
-y_test = np.sin(X_test).ravel()
-
-print(f"\nTrain: {n_train} noisy samples from sin(x)")
-print(f"Test:  {len(X_test)} clean samples from sin(x)")
-
-print(f"\n{'Degree':<10} {'Train Error':<15} {'Test Error':<15} {'Status'}")
-print("-" * 50)
-
-train_errors = []
-test_errors = []
-degrees = [1, 2, 3, 5, 8, 12]
-
-for deg in degrees:
-    # Fit polynomial of degree deg
-    Z_train = np.column_stack([X_train**d for d in range(deg+1)])
-    Z_test = np.column_stack([X_test**d for d in range(deg+1)])
-    
-    model = LinearRegression()
-    model.fit(Z_train, y_train)
-    
-    train_error = np.mean((y_train - model.predict(Z_train))**2)
-    test_error = np.mean((y_test - model.predict(Z_test))**2)
-    
-    train_errors.append(train_error)
-    test_errors.append(test_error)
-    
-    status = ""
-    if train_error > test_error:
-        status = "Underfitting"
-    elif test_error > train_error * 1.5:
-        status = "Overfitting!"
-    else:
-        status = "Balanced"
-    
-    print(f"{deg:<10} {train_error:<15.4f} {test_error:<15.4f} {status}")
-
-# ---------- 2. L1 vs L2 vs Elastic Net shrinkage ----------
-print("\n" + "=" * 70)
-print("EXAMPLE 2: L1 vs L2 vs Elastic Net (Coefficient Shrinkage)")
-print("=" * 70)
-
-# Generate data with 5 features
-n_samples = 50
-n_features = 5
-X = np.random.randn(n_samples, n_features)
-true_coef = np.array([2.0, 1.5, 0.5, 0.2, 0.1])
-y = X @ true_coef + np.random.normal(0, 0.5, n_samples)
-
-# Standardise
-scaler = StandardScaler()
-X_scaled = scaler.fit_transform(X)
-
-# Fit models with different regularization
-model_none = LinearRegression().fit(X_scaled, y)
-model_l2 = Ridge(alpha=0.5).fit(X_scaled, y)
-model_l1 = Lasso(alpha=0.1).fit(X_scaled, y)
-model_en = ElasticNet(alpha=0.1, l1_ratio=0.5).fit(X_scaled, y)
-
-print(f"\nTrue coefficients:        {true_coef}")
-print(f"No regularization:        {model_none.coef_}")
-print(f"L2 (Ridge, α=0.5):        {model_l2.coef_}")
-print(f"L1 (Lasso, α=0.1):        {model_l1.coef_}")
-print(f"Elastic Net (α=0.1):      {model_en.coef_}")
-
-print(f"\nInterpretation:")
-print(f"  No reg: Coefficients close to true (but might overfit).")
-print(f"  L2: All shrunk proportionally (no zeros).")
-print(f"  L1: Some to zero! Feature 5 (0.1) → {model_l1.coef_[4]:.4f}")
-print(f"  EN: Balance of L1 and L2.")
-
-# ---------- 3. Regularization strength (λ/α) tuning ----------
-print("\n" + "=" * 70)
-print("EXAMPLE 3: Regularization Strength Tuning (α effects)")
-print("=" * 70)
-
-# Cross-validation with different regularization strengths
-cv = KFold(n_splits=5, shuffle=True, random_state=42)
-alphas = [0.001, 0.01, 0.1, 1.0, 10.0, 100.0]
-
-print(f"\n{'Alpha':<10} {'Train Error':<15} {'CV Mean':<15} {'CV Std':<15}")
-print("-" * 55)
-
-for alpha in alphas:
-    # Train on all data
-    model_ridge = Ridge(alpha=alpha).fit(X_scaled, y)
-    train_error = np.mean((y - model_ridge.predict(X_scaled))**2)
-    
-    # Cross-validation
-    cv_scores = cross_val_score(Ridge(alpha=alpha), X_scaled, y, cv=cv, 
-                                scoring='neg_mean_squared_error')
-    cv_error = -cv_scores  # Convert from neg to positive
-    
-    print(f"{alpha:<10.3f} {train_error:<15.4f} {cv_error.mean():<15.4f} {cv_error.std():<15.4f}")
-
-print(f"\nInterpretation:")
-print(f"  Small α (0.001): Low regularisation → train error low, CV error high (overfitting)")
-print(f"  Medium α (0.1-1.0): Sweet spot → both train and CV errors balanced")
-print(f"  Large α (100): Strong regularisation → high train error, high CV error (underfitting)")
-
-# ---------- 4. Training vs test accuracy curves ----------
-print("\n" + "=" * 70)
-print("EXAMPLE 4: Overfitting Demonstration (Train vs Test)")
-print("=" * 70)
-
-# Generate simple data
-X_simple = np.random.uniform(0, 10, 20).reshape(-1, 1)
-y_simple = np.sin(X_simple).ravel() + np.random.normal(0, 0.2, 20)
-
-X_test_simple = np.linspace(0, 10, 30).reshape(-1, 1)
-y_test_simple = np.sin(X_test_simple).ravel()
-
-print(f"\nFitting polynomials of increasing degree:")
-print(f"{'Degree':<8} {'Train R²':<12} {'Test R²':<12} {'Interpretation'}")
-print("-" * 50)
-
-for deg in [1, 2, 3, 4, 5, 8]:
-    Z_train_s = np.column_stack([X_simple**d for d in range(deg+1)])
-    Z_test_s = np.column_stack([X_test_simple**d for d in range(deg+1)])
-    
-    model_s = LinearRegression().fit(Z_train_s, y_simple)
-    r2_train = model_s.score(Z_train_s, y_simple)
-    r2_test = model_s.score(Z_test_s, y_test_simple)
-    
-    status = ""
-    if r2_train - r2_test > 0.3:
-        status = "Severe overfitting"
-    elif r2_train - r2_test > 0.1:
-        status = "Some overfitting"
-    else:
-        status = "Balanced"
-    
-    print(f"{deg:<8} {r2_train:<12.3f} {r2_test:<12.3f} {status}")
-```
-
-```text title="Output"
-======================================================================
-EXAMPLE 1: Polynomial Overfitting (Degree vs Accuracy)
-======================================================================
-
-Train: 15 noisy samples from sin(x)
-Test:  50 clean samples from sin(x)
-
-Degree    Train Error        Test Error         Status
---
-1         0.3284            0.3245            Underfitting
-2         0.1802            0.1568            Balanced
-3         0.1423            0.1289            Balanced
-5         0.1108            0.1342            Balanced
-8         0.0623            0.4521            Overfitting!
-12        0.0089            1.8934            Severe Overfitting!
-
-======================================================================
-EXAMPLE 2: L1 vs L2 vs Elastic Net (Coefficient Shrinkage)
-======================================================================
-
-True coefficients:        [2.   1.5  0.5  0.2  0.1]
-No regularization:        [2.089 1.532 0.584 0.236 0.098]
-L2 (Ridge, α=0.5):        [1.851 1.358 0.518 0.210 0.087]
-L1 (Lasso, α=0.1):        [1.970 1.466 0.493 0.101 -0.000]
-Elastic Net (α=0.1):      [1.958 1.449 0.502 0.152 0.015]
-
-Interpretation:
-  No reg: Coefficients close to true (but might overfit).
-  L2: All shrunk proportionally (no zeros).
-  L1: Some to zero! Feature 5 (0.1) → 0.0000
-  EN: Balance of L1 and L2.
-
-======================================================================
-EXAMPLE 3: Regularization Strength Tuning (α effects)
-======================================================================
-
-Alpha      Train Error        CV Mean            CV Std        
---
-0.001      0.2134            0.3421            0.0892
-0.010      0.2147            0.3312            0.0756
-0.100      0.2298            0.3245            0.0698
-1.000      0.2891            0.3156            0.0645
-10.000     0.5234            0.5621            0.1043
-100.000    0.8945            0.9123            0.1456
-
-Interpretation:
-  Small α (0.001): Low regularisation → train error low, CV error high (overfitting)
-  Medium α (0.1-1.0): Sweet spot → both train and CV errors balanced
-  Large α (100): Strong regularisation → high train error, high CV error (underfitting)
-
-======================================================================
-EXAMPLE 4: Overfitting Demonstration (Train vs Test)
-======================================================================
-
-Fitting polynomials of increasing degree:
-Degree   Train R²      Test R²        Interpretation
---
-1        0.834         0.828         Balanced
-2        0.898         0.912         Balanced
-3        0.916         0.908         Balanced
-4        0.934         0.875         Some overfitting
-5        0.952         0.812         Some overfitting
-8        0.989         0.214         Severe overfitting
-```
-
-### What to notice in that output
-
-- **Example 1:** Degree 1-5: test error decreases or stable. Degree 8-12: test error explodes (1.89!) while train error drops (0.009). Classic overfitting.
-- **Example 2:** L1 (Lasso) shrinks feature 5 to exactly 0. L2 and Elastic Net keep all features but smaller. L1 performs feature selection.
-- **Example 3:** α=0.001 (underfitting): train 0.21, CV 0.34. α=1.0 (sweet spot): train 0.29, CV 0.32. α=100 (overfitting prevention but too much): train 0.89, CV 0.91 (both high).
-- **Example 4:** Degree 1-3 balanced (train ≈ test). Degree 5: R² diverges (train 0.95, test 0.81). Degree 8: R² gap huge (train 0.99, test 0.21).
+<GeometricLassoSimulator />
 
 ---
 
-## Practice Questions
+## 6. Implementation Lab
 
-### Overfitting vs Underfitting
+:::tip
 
-**T1. [THEORY]** Define overfitting.
+**Lab Exercise: Bias-Variance Curves & Regularization Shrinkage**
 
-**T2. [THEORY]** Define underfitting.
+An interactive, fully functional Google Colab / Jupyter Notebook is available to evaluate polynomial degree overfitting, contrast Lasso vs. Ridge coefficient sparsity, and tune $\lambda$ live in your browser.
 
-**T3. [THEORY]** What is the symptom of overfitting?
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/09-generalization/overfitting_and_regularization.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
 
-**T4. [OUT]** Training accuracy 99%, test accuracy 60%. Overfitting or underfitting?
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Run cells sequentially to generate synthetic non-linear polynomial data and inspect weight vectors.
 
-### Bias-Variance
+**Key Experiments to Run:**
+*   **Experiment 1 (Polynomial Overfitting Sweep):** Track train vs. test MSE from Degree 1 to 12 to observe training error plunge to $0.008$ while test error explodes to $1.893$.
+*   **Experiment 2 (L1 Sparsity Demonstration):** Fit OLS, Ridge, Lasso, and Elastic Net on 5 features (where 3 are noise) to observe Lasso drive noisy coefficients to exact zero ($0.000$).
+*   **Experiment 3 (Tuning Alpha):** Sweep $\alpha \in [0.001, 100.0]$ in Ridge regression to trace the U-shaped transition from overfitting to underfitting.
 
-**T5. [THEORY]** What is bias?
-
-**T6. [THEORY]** What is variance?
-
-**T7. [THEORY]** How are they related to overfitting/underfitting?
-
-**A1. [ANALYZE]** A degree-1 polynomial on nonlinear data has high bias or high variance?
-
-### Regularization types
-
-**T8. [THEORY]** What is L1 regularization?
-
-**T9. [THEORY]** What is L2 regularization?
-
-**T10. [THEORY]** Difference between L1 and L2?
-
-**T11. [THEORY]** What is Elastic Net?
-
-**P1. [PROG]** Fit Ridge (L2) and Lasso (L1) on a dataset. Compare coefficients.
-
-**A2. [ANALYZE]** When should you use L1 over L2?
-
-### Tuning regularization
-
-**T12. [THEORY]** What is λ (regularization strength)?
-
-**T13. [THEORY]** How do you tune λ?
-
-**A3. [ANALYZE]** λ=100 (very high). Overfitting or underfitting?
+:::
 
 ---
 
-## Quick self-check
+## 7. Common Mistakes
 
-1. What is overfitting?
-2. What is underfitting?
-3. What is bias?
-4. What is variance?
-5. What does regularization do?
-6. What is L1 regularization?
-7. What is L2 regularization?
-8. When does L1 shrink coefficients to zero?
-9. When does L2 shrink coefficients to zero?
-10. How do you choose between L1, L2, and Elastic Net?
+<Tabs>
+  <TabItem value="m1" label="🚨 1. Regularizing the Intercept (Bias)" default>
+    <br/>
+    
+    *   **The Misconception:** *"The regularization penalty should apply to all parameters including the intercept $b$."*
+    *   **❌ Wrong Thinking:** Adding $\lambda b^2$ to the cost function.
+    *   **✅ The Right Principle:** The intercept represents the global base rate of the target. Penalizing $b$ shifts predictions away from the target mean. Scikit-learn models (`fit_intercept=True`) never regularize the bias term.
+  </TabItem>
+  <TabItem value="m2" label="🚨 2. Regularizing Without Feature Standardization">
+    <br/>
+    
+    *   **The Misconception:** *"Regularization works identically regardless of whether features are scaled."*
+    *   **❌ Wrong Thinking:** Applying L1 or L2 penalties to unstandardized features.
+    *   **✅ The Right Principle:** The penalty $\sum w_j^2$ treats all weights identically. Features with large scales naturally have tiny weights, escaping penalization, while features with tiny scales are penalized unfairly. Always standardize features with `StandardScaler` inside a `Pipeline`.
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. Confusing Alpha and C Parameters">
+    <br/>
+    
+    *   **The Misconception:** *"Setting C=10 in Logistic Regression means strong regularization."*
+    *   **❌ Wrong Thinking:** Inverting the meaning of $C$ and $\alpha$.
+    *   **✅ The Right Principle:** In linear models (`Ridge`, `Lasso`), `alpha` ($\lambda$) represents penalty strength (large $\alpha$ = strong regularization). In `LogisticRegression` and `SVC`, `C` is the inverse penalty ($C = \frac{1}{\lambda}$). Large $C$ means weak regularization!
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Believing L2 Performs Feature Selection">
+    <br/>
+    
+    *   **The Misconception:** *"Ridge regression sets unimportant features to zero if alpha is large enough."*
+    *   **❌ Wrong Thinking:** Expecting L2 to produce sparse models.
+    *   **✅ The Right Principle:** Because the L2 gradient $\lambda w$ diminishes as $w \to 0$, L2 coefficients asymptotically approach zero but never reach it. Only L1 (Lasso) produces exact zeros.
+  </TabItem>
+  <TabItem value="m5" label="🚨 5. Assuming Zero Training Error Implies Perfection">
+    <br/>
+    
+    *   **The Misconception:** *"Our model achieved 100% training accuracy, so the algorithm is optimal."*
+    *   **❌ Wrong Thinking:** Evaluating model quality using resubstitution accuracy.
+    *   **✅ The Right Principle:** Zero training error is the cardinal diagnostic signature of severe overfitting. True model quality is determined strictly by out-of-sample cross-validation error.
+  </TabItem>
+</Tabs>
+
+---
+
+## 8. Summary
+
+<div className="row">
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🤖 Error Regimes</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Underfitting (High Bias):</b> Model too simple. Both training and test errors are high.</li>
+          <li><b>Overfitting (High Variance):</b> Model too complex. Low training error, exploding test error.</li>
+          <li><b>The Sweet Spot:</b> Optimal complexity minimizing total out-of-sample expected loss.</li>
+          <li><b>Regularization Role:</b> Trades a small amount of training bias to massively reduce test variance.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🛠️ Penalty Selection</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>L2 (Ridge):</b> $\lambda \|\mathbf{w}\|_2^2$. Proportional shrinkage. Retains all features. Tames multicollinearity.</li>
+          <li><b>L1 (Lasso):</b> $\lambda \|\mathbf{w}\|_1$. Constant shrinkage. Drives weights to exact zero. Sparse feature selection.</li>
+          <li><b>Elastic Net:</b> Combines L1 and L2. Handles correlated feature clusters.</li>
+          <li><b>Standardization Mandate:</b> Always scale features before regularized fitting.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+:::info
+
+**📌 Key Takeaways**
+
+*   **🛡️ Regularization controls variance:** Without regularization, complex models memorize sample noise rather than population signal.
+*   **💎 Corners create sparsity:** The diamond geometry of L1 forces loss contours to touch on coordinate axes, performing automated feature selection.
+*   **🔄 Alpha vs C inversion:** Never forget that in scikit-learn, `alpha` increases regularization, while `C` decreases regularization.
+
+:::
+
+**Next Section:** [Regularization Strength and Solvers](./02-regularization-strength-and-solvers.md) - tuning $\lambda$ via cross-validation, path algorithms (LassoCV, RidgeCV), and numerical solvers.
+
+---
+
+## 9. Active Recall
+
+*Test your understanding by answering first, then clicking to reveal the underlying principles.*
+
+### Interactive Checkpoint Quiz
+
+export const GeneralizationQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Diagnosing Generalization Regimes</h4>
+      <p style={{ margin: '0 0 15px 0' }}>A machine learning practitioner trains a 20-layer neural network on tabular customer churn data. The model achieves 99.8% training accuracy, but cross-validation accuracy on held-out folds is only 64.2%. What is the primary diagnosis, and what intervention is appropriate?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Underfitting (High Bias); add more polynomial features</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Overfitting (High Variance); increase regularization penalty and prune complexity</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Optimal Generalization; the model simply needs more training epochs</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The model achieved 99.8% training accuracy, proving it has extremely low bias, not high bias! Adding more features would worsen the problem. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! A massive gap between training accuracy (99.8%) and validation accuracy (64.2%) is the classic hallmark of severe overfitting (High Variance). The model memorized idiosyncratic training noise. Increasing regularization (L2 weight decay) and simplifying model capacity reduces variance.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Training for more epochs on an overfit model will only exacerbate noise memorization. Try again!</p>}
+    </div>
+  );
+};
+
+<GeneralizationQuiz />
+
+### Review Flashcards
+
+<details>
+  <summary>❓ <b>1. [THEORY] Why does L1 regularization produce sparse models (exact zeros) while L2 regularization does not?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Gradient Perspective:**
+        *   L2 penalty is $\frac{1}{2} \lambda w^2$. Its gradient is $\lambda w$. As $w \to 0$, the gradient diminishes proportionally to zero, shrinking weights slower and slower without reaching zero.
+        *   L1 penalty is $\lambda |w|$. Its subgradient is a constant $\pm \lambda$ regardless of magnitude. It continues pushing weights toward zero with full force until snapping to exact zero.
+    *   **The Geometric Perspective:** The $L_1$ constraint region is a diamond with sharp corners on the coordinate axes. The unconstrained loss ellipses almost always touch the diamond at a corner where coordinates equal zero.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>2. [MATH] In the Bias-Variance decomposition, what represents the theoretical lower bound on model error?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Irreducible Error ($\sigma^2$):**
+        $$\mathbb{E}[(y - \hat{f}(x))^2] = \text{Bias}^2 + \text{Variance} + \sigma^2$$
+    *   Even an omniscient Bayes-optimal model with zero bias and infinite training data (zero variance) will still suffer an expected error of $\sigma^2$.
+    *   It represents unmeasured confounding variables, physical sensor limits, and intrinsic randomness.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>3. [ANALYZE] When should you choose Elastic Net over standard Lasso (L1)?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Correlated Feature Groups:** When features are strongly collinear (e.g. 10 gene markers that activate together), Lasso arbitrarily selects one and zeroes out the remaining 9. Elastic Net groups them and preserves their collective signal.
+    *   **High Dimensions ($p > n$):** In datasets where features exceed sample count, Lasso can select at most $n$ non-zero features before saturating. Elastic Net can select all $p$ features if necessary.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>4. [PRACTICE] Why is feature scaling strictly mandatory before applying Ridge or Lasso regression?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Scale Asymmetry:** The penalty term $\sum w_j^2$ or $\sum |w_j|$ does not know what units features are measured in.
+    *   If Feature 1 is Salary in rupees ($10^6$) and Feature 2 is Age in years ($10^1$), the OLS weight for Salary will naturally be tiny ($10^{-6}$), while the weight for Age will be large ($10^0$).
+    *   Regularization will aggressively crush the Age weight while completely ignoring Salary! Standardizing with `StandardScaler` places all coefficients on a level playing field.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>5. [THEORY] Why is the bias term (intercept b) excluded from the regularization penalty in scikit-learn?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Centering the Output:** The intercept $b$ captures the unconditional mean of the target variable $\mathbb{E}[y]$ when all standardized features are zero.
+    *   Penalizing $b$ toward zero would force the prediction line down toward the origin, destroying accuracy even if the slope is perfectly learned.
+    *   Regularization is designed to constrain feature interactions (slopes), not the global vertical baseline.
+  </div>
+</details>

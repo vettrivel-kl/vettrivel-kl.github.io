@@ -1,0 +1,720 @@
+---
+sidebar_position: 4
+title: Batch, Stochastic and Mini-Batch
+description: One decision left — how many rows the model looks at before each step. "Stochastic is faster" turns out to need a unit attached, because batch beat single-row descent on passes, on seconds and on final cost, single-row descent could not converge at all at a constant step size, and yet mini-batch 32 reached a loose target after reading 4% of one pass where batch read 50 full passes and still missed.
+tags: [machine-learning, optimisation, numpy, scikit-learn]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import React from 'react';
+
+# Batch, Stochastic and Mini-Batch
+
+> **Topic —** One remaining decision: how many rows each update is allowed to see. The usual summary is that batch is slow, stochastic is fast, and mini-batch is the best of both. Every part of that sentence needs a unit attached before it can be checked, and once the units are attached the measurement does not support it. What survives is a narrower and more useful claim.
+
+---
+
+## In plain words
+
+Back to the hiker in the fog, with one change: they are not alone. There are 20,000 people spread over the hillside, and each one can feel the slope where *they* are standing. Before taking a step, the hiker has to decide how many of them to ask.
+
+| Variant | The hiker asks | What they get |
+|---|---|---|
+| **Batch** | Everyone, all 20,000 | The perfect downhill direction — but polling 20,000 people takes a while |
+| **Stochastic (SGD)** | One random person | An answer instantly, pointing *roughly* downhill |
+| **Mini-batch** | 32, or 256, or 2048 of them | Almost the perfect direction, for almost none of the cost |
+
+That is the entire topic. The update rule never changes; only the size of the poll does.
+
+**Everyone says asking one person is "faster" — and that is where the confusion starts.** Faster in what? There are four completely different stopwatches, and the popular ranking is only true on one of them:
+
+| "Faster" could mean | Who actually wins |
+|---|---|
+| Fewer **steps** taken | Large batches — a noisy direction wastes steps |
+| Fewer **passes over the data** | Large batches, again |
+| Fewer **seconds on the clock** | A large mini-batch. One 2048-row calculation is a single fast matrix multiply; 2048 separate one-row updates are 2048 rounds of overhead |
+| Less **data read before the model is usable** | **Small** mini-batches, by a factor of over a thousand — and *this* is the honest version of the folk claim |
+
+The last row is where small batches genuinely shine, and it matters exactly when reading the data is the expensive part: data too big for memory, data arriving as a stream, or a budget measured in rows rather than seconds.
+
+### The other thing to know: the noise floor
+
+Ask one person for directions and their answer points at *their* idea of downhill, not the group's. Far up the hillside that hardly matters — everyone agrees which way is down. But once you are near the bottom, the group's answer is "you're there, stop", while any individual still insists you should move a bit their way. With a fixed stride length you keep taking those steps, so you circle the destination forever without landing on it. That radius is the **noise floor**, and no amount of extra time shrinks it.
+
+The fix is the important part, because it is widely misremembered: the problem is **not** that the direction is noisy. It is a noisy direction *combined with a stride that never gets shorter*. Shorten the stride as you go and the circling tightens onto the exact answer — measured below as a factor of 20,000 improvement from that change alone. Every real stochastic optimiser has such a schedule, which is why scikit-learn's `SGDRegressor` decays its learning rate by default.
+
+### Two words to keep apart
+
+Almost every muddled comparison on this topic comes from mixing these up:
+
+| Term | Definition | With `n = 20000` |
+|---|---|---|
+| **Update** (step, iteration) | One application of `θ ← θ − α·∇J` | Batch: 1 per pass. SGD: 20000 per pass |
+| **Epoch** | One complete pass over the data | The same amount of data read, either way |
+
+"Converged in 50 epochs" therefore means something wildly different for each variant, and comparing that column across batch sizes is meaningless.
+
+---
+
+## Only one thing differs
+
+All three variants run the identical update from the [gradient descent page](./02-gradient-descent.mdx#the-whole-algorithm):
+
+```
+θ ← θ − α·∇J(θ)
+```
+
+The only change is which rows `∇J` is computed on.
+
+| Variant | Rows per update | Gradient is |
+|---|---|---|
+| **Batch** (full-batch) | all `n` | Exact |
+| **Stochastic** (SGD) | 1 | An unbiased but very noisy estimate |
+| **Mini-batch** | `b`, typically 32–512 | An unbiased estimate with variance `propto 1/b` |
+
+Keeping [**update** and **epoch**](#two-words-to-keep-apart) apart is what makes the rest of the page readable: for batch, one epoch **is** one update, while for SGD one epoch is `n` updates. So "faster" means completely different things depending on which you count:
+
+```text title="Output"
+1. ONE CHOICE: ROWS PER UPDATE   (n = 20000, d = 5, alpha = 0.005, tol = 1e-05)
+   exact OLS minimum J_min = 4.005043
+   variant          rows/update  updates/epoch
+   batch                  20000              1
+   SGD (1 row)                1          20000
+   mini-batch 8               8           2500
+   mini-batch 32             32            625
+   mini-batch 256           256             79
+   mini-batch 2048         2048             10
+```
+
+Every comparison below is made against `J_min = 4.005043`, the closed-form [normal equation](../03-linear-regression/03-the-matrix-formulation.mdx#the-normal-equation) minimum, so "how close did it get" is measured against a real number rather than against wherever a run happened to stop.
+
+:::tip
+
+**The stochastic gradient is unbiased, which is the whole justification**
+
+`E[∇J on one random row] = ∇J on all rows`. That is why a noisy gradient works at all: the errors cancel over many steps. What differs is the *variance*, which falls as `1/b`. So the choice of batch size is a choice about how much variance you accept in exchange for how many updates you get per pass.
+
+The rest of this page is about what that trade actually buys.
+
+:::
+
+---
+
+## 🛠️ The Interactive Gradient Trajectory Sandbox
+
+Experiment with the simulator below. Toggle between standard Batch, Stochastic (SGD), and Mini-Batch descent to watch how the trajectories travel down a 2D cost surface. Observe how full-batch moves in a straight line, single-row SGD bounces wildly inside a noisy cloud, and mini-batch offers a stable compromise.
+
+export const TrajectorySandbox = () => {
+  const [variant, setVariant] = React.useState('minibatch');
+  const [step, setStep] = React.useState(0);
+
+  // We map static steps based on noise variance 1/b
+  // Start: [-0.85, -0.85]
+  const path = React.useMemo(() => {
+    let pts = [ [-0.85, -0.85] ];
+    let w = [-0.85, -0.85];
+    
+    // Seeded pseudo-random generator
+    let seed = 42;
+    const random = () => {
+      let x = Math.sin(seed++) * 10000;
+      return x - Math.floor(x);
+    };
+
+    for (let i = 0; i < 20; i++) {
+      let decay = Math.pow(0.75, i);
+      let noise0 = (random() - 0.5) * 2;
+      let noise1 = (random() - 0.5) * 2;
+
+      let b0 = -0.85 * Math.pow(0.72, i);
+      let b1 = -0.85 * Math.pow(0.72, i);
+
+      if (variant === 'batch') {
+        // No noise
+        w[0] = b0;
+        w[1] = b1;
+      } else if (variant === 'minibatch') {
+        // Small noise, variance proportional to 1/256
+        w[0] = b0 + noise0 * 0.05 * Math.min(1.0, decay * 1.5);
+        w[1] = b1 + noise1 * 0.05 * Math.min(1.0, decay * 1.5);
+      } else {
+        // Large noise, variance proportional to 1/1 (SGD)
+        w[0] = b0 + noise0 * 0.28 * Math.min(1.0, decay * 3.0);
+        w[1] = b1 + noise1 * 0.28 * Math.min(1.0, decay * 3.0);
+      }
+      pts.push([w[0], w[1]]);
+    }
+    return pts;
+  }, [variant]);
+
+  const scaleX = (val) => 150 + val * 140;
+  const scaleY = (val) => 75 + val * 70;
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
+      <h4 style={{ margin: '0' }}>🔌 Gradient Trajectory Sandbox</h4>
+      <p style={{ fontSize: '13px', margin: '5px 0 15px 0', opacity: 0.9 }}>Select a variant and slide the step counter to watch the path trace down the cost contours.</p>
+
+      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px' }}>
+        <button onClick={() => { setVariant('batch'); setStep(0); }} style={{ padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', border: '1px solid #718096', backgroundColor: variant === 'batch' ? '#3182ce' : 'transparent', color: variant === 'batch' ? '#fff' : 'inherit' }}>Batch (b = n)</button>
+        <button onClick={() => { setVariant('minibatch'); setStep(0); }} style={{ padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', border: '1px solid #718096', backgroundColor: variant === 'minibatch' ? '#3182ce' : 'transparent', color: variant === 'minibatch' ? '#fff' : 'inherit' }}>Mini-Batch (b = 256)</button>
+        <button onClick={() => { setVariant('sgd'); setStep(0); }} style={{ padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', border: '1px solid #718096', backgroundColor: variant === 'sgd' ? '#3182ce' : 'transparent', color: variant === 'sgd' ? '#fff' : 'inherit' }}>Stochastic (b = 1)</button>
+      </div>
+
+      <div style={{ marginBottom: '15px' }}>
+        <label style={{ fontSize: '12px', fontWeight: 'bold' }}>Simulation Step: <b>{step}</b></label>
+        <input type="range" min="0" max="15" step="1" value={step} onChange={(e) => setStep(parseInt(e.target.value))} style={{ width: '100%' }} />
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px', flexWrap: 'wrap' }}>
+        {/* SVG Contour Plot */}
+        <div style={{ textAlign: 'center' }}>
+          <svg width="100%" height="150" style={{ border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'var(--ifm-background-color)' }}>
+            {/* Ellipse Contours */}
+            {[0.2, 0.4, 0.6, 0.8, 1.0].map((rx, idx) => (
+              <ellipse key={idx} cx="150" cy="75" rx={rx * 130} ry={rx * 60} fill="none" stroke="var(--ifm-color-emphasis-200)" opacity="0.5" />
+            ))}
+
+            {/* Target minimum */}
+            <line x1="145" y1="75" x2="155" y2="75" stroke="#38a169" strokeWidth="1.5" />
+            <line x1="150" y1="70" x2="150" y2="80" stroke="#38a169" strokeWidth="1.5" />
+
+            {/* Path polyline */}
+            <polyline 
+              fill="none" 
+              stroke={variant === 'sgd' ? '#e53e3e' : variant === 'minibatch' ? '#3182ce' : '#38a169'} 
+              strokeWidth="1.5" 
+              points={path.slice(0, step + 1).map(p => `${scaleX(p[0])},${scaleY(p[1])}`).join(' ')} 
+            />
+
+            {/* Dots */}
+            {path.slice(0, step + 1).map((p, idx) => (
+              <circle key={idx} cx={scaleX(p[0])} cy={scaleY(p[1])} r={idx === 0 ? "4" : "3"} fill={idx === 0 ? '#dd6b20' : idx === step ? '#38a169' : '#3182ce'} />
+            ))}
+          </svg>
+        </div>
+
+        {/* Dynamic description */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center', fontSize: '13px' }}>
+          {variant === 'batch' ? (
+            <div style={{ padding: '12px', borderLeft: '4px solid #38a169', backgroundColor: 'rgba(56, 161, 105, 0.03)' }}>
+              <b>🟢 Full-Batch Trajectory:</b>
+              <div style={{ opacity: 0.8, fontSize: '11px', marginTop: '5px' }}>Because gradients are computed on all rows, the downhill direction is exact. The ball slides down the hillside in a perfectly straight line, but calculating each step is extremely slow on large datasets.</div>
+            </div>
+          ) : variant === 'minibatch' ? (
+            <div style={{ padding: '12px', borderLeft: '4px solid #3182ce', backgroundColor: 'rgba(49, 130, 206, 0.03)' }}>
+              <b>🔵 Mini-Batch Trajectory (b = 256):</b>
+              <div style={{ opacity: 0.8, fontSize: '11px', marginTop: '5px' }}>Gradients have minor variance ($1/b$). The path has a slight wobble, but it stays highly stable, flows smoothly, and settles directly onto the optimum with low calculation overhead.</div>
+            </div>
+          ) : (
+            <div style={{ padding: '12px', borderLeft: '4px solid #e53e3e', backgroundColor: 'rgba(229, 62, 62, 0.03)' }}>
+              <b>🔴 Stochastic Trajectory (b = 1):</b>
+              <div style={{ opacity: 0.8, fontSize: '11px', marginTop: '5px' }}>Because we update after every single row, the variance is huge. The path is wildly jagged, zigzagging and bouncing inside a noisy cloud. Near the minimum, it bounces forever without settling.</div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<TrajectorySandbox />
+
+---
+
+## Time to converge, and the ranking that fails
+
+Same `α = 0.005`, same start at zero, same seed. Each variant runs until the cost is within `10⁻⁵` of `J_min`, or until it has made a million updates:
+
+```text title="Output"
+2. TIME TO CONVERGE   (same alpha, same start, same seed)
+   variant           epochs   updates  seconds    J − J_min   status
+   batch                705       705    0.762   9.8075e-06   converged
+   SGD (1 row)           50   1000000    3.945   2.0651e-01   update cap
+   mini-batch 8         400   1000000    4.346   7.7852e-03   update cap
+   mini-batch 32       1600   1000000    5.504   3.1412e-03   update cap
+   mini-batch 256       332     26228    0.430   6.1436e-06   converged
+   mini-batch 2048       71       710    0.072   9.0281e-06   converged
+   of the runs that converged, fewest epochs:  mini-batch 2048 < mini-batch 256 < batch
+   of the runs that converged, fewest seconds: mini-batch 2048 < mini-batch 256 < batch
+   repeatability of the timing (mini-batch 256, 3 runs): 0.433s, 0.438s, 0.437s
+```
+
+Three of the six runs did not converge, and the status column says which — that matters, because a table of epoch counts where some rows are budget limits presented as results is worse than no table.
+
+**Three variants converged; the three smallest batch sizes did not.** SGD used **1,000,000 updates** — 1418× more than batch's **705** — and finished **2.0651e-01** above the minimum, five orders of magnitude worse than batch's **9.8075e-06**. Mini-batch 8 and 32 did better than SGD but still could not reach the tolerance.
+
+**Both rankings among the converged runs are the same, and neither favours small batches.** `mini-batch 2048 < mini-batch 256 < batch` on epochs *and* on seconds. The conventional ordering — SGD fastest, batch slowest, mini-batch in between — is contradicted twice over: SGD was the worst on every column, and the largest mini-batch tested was the best on every column.
+
+The most informative pair is batch against mini-batch 2048:
+
+| | batch | mini-batch 2048 |
+|---|---|---|
+| Updates to converge | **705** | **710** |
+| Rows touched per update | 20000 | 2048 |
+| Epochs | 705 | **71** |
+| Seconds | 0.762 | **0.072** |
+
+**Almost identical update counts — 705 against 710 — but 10.6× faster in wall-clock.** A gradient computed on 2048 rows was, for this problem, just as good a direction as one computed on all 20000, and cost a tenth as much to compute. That is the real argument for mini-batching, and it is about *cost per update*, not about noise being helpful.
+
+:::danger
+
+**"SGD converges faster" is a claim about a quantity nobody was measuring**
+
+The familiar ranking is usually defended by saying SGD makes progress after one row instead of waiting for `n`. That is true, and it concerns **progress per row seen**, which is measured in the [section after next](#where-fewer-rows-per-update-actually-wins) and where SGD-style updates do win.
+
+It is not a claim about seconds, and in a vectorised implementation it is emphatically false about seconds: `20000` one-row updates each carry Python and NumPy call overhead, while one 20000-row update is a single matrix product. SGD spent **3.945s** to get nowhere; batch spent **0.762s** to converge.
+
+It is also not a claim about epochs, and it is not a claim about the final cost.
+
+:::
+
+---
+
+<details style={{ padding: '15px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
+  <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}>🔌 <b>[ADVANCED DEEP-DIVE] Noise Floors & Data Budget vs. Stopwatch trade-offs</b></summary>
+  <div className="answer-content">
+    <br/>
+
+    {/* Section A: Constant vs Decaying α */}
+    <span style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: '8px', color: '#3182ce' }}>A. SGD Constant versus Decaying Learning Rate</span>
+    <div style={{ padding: '15px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'var(--ifm-background-color)', marginBottom: '20px' }}>
+      <p style={{ fontSize: '12px', opacity: 0.9 }}>Under constant learning rates, the noisy gradient bounces indefinitely inside a wide cloud. Selecting <b>Decaying Rate</b> collapses the strides, packing the parameters exactly onto the true minimum.</p>
+      
+      {(() => {
+        const [decay, setDecay] = React.useState(false);
+        const [alpha, setAlpha] = React.useState(0.05);
+
+        // Map x [0, 100] to SVG viewBox 0 0 300 100
+        const mapX = (it) => 30 + (it / 100) * 250;
+        const mapY = (val) => 90 - (val / 100) * 80;
+
+        // Generate line path
+        const steps = Array.from({ length: 101 }, (_, i) => i);
+        let seed = 50;
+        const random = () => {
+          let x = Math.sin(seed++) * 10000;
+          return x - Math.floor(x);
+        };
+
+        const pathData = steps.map(it => {
+          const rate = decay ? alpha / (1 + it / 25) : alpha;
+          const baseCost = 100 * Math.pow(0.9, it);
+          const noise = (random() - 0.5) * rate * 80;
+          return `${mapX(it)},${mapY(Math.max(0.5, baseCost + noise))}`;
+        }).join(' L ');
+
+        return (
+          <div>
+            <div style={{ display: 'flex', gap: '15px', flexWrap: 'wrap', marginBottom: '10px' }}>
+              <div style={{ flex: '1' }}>
+                <label style={{ fontSize: '11px', display: 'block', marginBottom: '4px' }}>Base Rate (α): <b>{alpha.toFixed(3)}</b></label>
+                <input type="range" min="0.01" max="0.10" step="0.01" value={alpha} onChange={(e) => setAlpha(parseFloat(e.target.value))} style={{ width: '100%' }} />
+              </div>
+              <div style={{ flex: '1', display: 'flex', alignItems: 'center' }}>
+                <button 
+                  onClick={() => setDecay(!decay)} 
+                  style={{ padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold', border: '1px solid #3182ce', backgroundColor: decay ? '#3182ce' : 'transparent', color: decay ? '#fff' : 'inherit' }}
+                >
+                  {decay ? "✅ Decaying alpha" : "❌ Constant alpha"}
+                </button>
+              </div>
+            </div>
+
+            <svg width="100%" height="100" style={{ border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'var(--ifm-background-color)' }}>
+              <line x1="30" y1={mapY(10)} x2="280" y2={mapY(10)} stroke="var(--ifm-color-emphasis-200)" strokeDasharray="3,3" />
+              <line x1="30" y1={mapY(50)} x2="280" y2={mapY(50)} stroke="var(--ifm-color-emphasis-200)" strokeDasharray="3,3" />
+              
+              <text x="25" y={mapY(50) + 3} textAnchor="end" fill="var(--ifm-font-color-base)" fontSize="8">50</text>
+              <text x="25" y={mapY(10) + 3} textAnchor="end" fill="var(--ifm-font-color-base)" fontSize="8">10</text>
+              <text x="150" y="95" textAnchor="middle" fill="var(--ifm-font-color-base)" fontSize="8">Epochs</text>
+
+              <path d={`M ${pathData}`} fill="none" stroke={decay ? '#38a169' : '#e53e3e'} strokeWidth="1.5" />
+            </svg>
+            <div style={{ fontSize: '11px', marginTop: '5px', textAlign: 'center', fontWeight: 'bold', color: decay ? '#38a169' : '#e53e3e' }}>
+              {decay ? "🟢 Decaying alpha squeezes cost variance down directly onto the minimum." : "🔴 Constant alpha causes cost to plateau and bounce forever inside the noise floor."}
+            </div>
+          </div>
+        );
+      })()}
+    </div>
+
+    {/* Section B: Stopwatch vs Data Budget */}
+    <span style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: '8px', color: '#dd6b20' }}>B. Who Wins: Stopwatch versus Data Budget</span>
+    <div style={{ padding: '15px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'var(--ifm-background-color)' }}>
+      {(() => {
+        const [target, setTarget] = React.useState('loose');
+        return (
+          <div>
+            <p style={{ fontSize: '12px', opacity: 0.9 }}>Toggle the target accuracy to see how the convergence speed ranking changes completely depending on whether your bottleneck is <b>Seconds on the clock</b> or <b>Data read (rows seen)</b>.</p>
+            
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
+              <button onClick={() => setTarget('loose')} style={{ padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold', border: '1px solid #718096', backgroundColor: target === 'loose' ? '#dd6b20' : 'transparent', color: target === 'loose' ? '#fff' : 'inherit' }}>Loose Target (J_min + 0.01)</button>
+              <button onClick={() => setTarget('tight')} style={{ padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', fontWeight: 'bold', border: '1px solid #718096', backgroundColor: target === 'tight' ? '#dd6b20' : 'transparent', color: target === 'tight' ? '#fff' : 'inherit' }}>Tight Target (J_min + 1e-5)</button>
+            </div>
+
+            {target === 'loose' ? (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12px' }}>
+                <div><b>Winner on Rows Read: Small Mini-Batches (Mini-Batch 32)</b></div>
+                <div>Mini-Batch 32 converges after reading only <b>7,936 rows</b> (0.04% of one pass) because it takes 248 updates immediately.</div>
+                <div style={{ width: '100%', height: '10px', backgroundColor: 'var(--ifm-color-emphasis-200)', borderRadius: '2px' }}>
+                  <div style={{ width: '4%', height: '100%', backgroundColor: '#38a169' }} />
+                </div>
+                <div style={{ marginTop: '5px' }}><b>Loser: Batch (Full-Batch)</b></div>
+                <div>Full-Batch needs to read over <b>10,000,000 rows</b> (50 full passes) because it cannot update until it sees all $n$.</div>
+                <div style={{ width: '100%', height: '10px', backgroundColor: 'var(--ifm-color-emphasis-200)', borderRadius: '2px' }}>
+                  <div style={{ width: '100%', height: '100%', backgroundColor: '#e53e3e' }} />
+                </div>
+              </div>
+            ) : (
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '12px' }}>
+                <div><b>Winner on Wall-Clock Time: Large Mini-Batches (Mini-Batch 2048)</b></div>
+                <div>Mini-Batch 2048 converges to exact OLS finality in only <b>0.072 seconds</b> (710 updates), capitalizing on single vectorised matrix multiplies.</div>
+                <div style={{ width: '100%', height: '10px', backgroundColor: 'var(--ifm-color-emphasis-200)', borderRadius: '2px' }}>
+                  <div style={{ width: '10%', height: '100%', backgroundColor: '#38a169' }} />
+                </div>
+                <div style={{ marginTop: '5px' }}><b>Loser: Stochastic SGD (1 row)</b></div>
+                <div>SGD (1 row) takes <b>3.945 seconds</b> (1,000,000 updates) and fails to converge at all, bouncing forever inside its noise cloud.</div>
+                <div style={{ width: '100%', height: '10px', backgroundColor: 'var(--ifm-color-emphasis-200)', borderRadius: '2px' }}>
+                  <div style={{ width: '100%', height: '100%', backgroundColor: '#e53e3e' }} />
+                </div>
+              </div>
+            )}
+          </div>
+        );
+      })()}
+    </div>
+    
+  </div>
+</details>
+
+---
+
+## The noise floor
+
+SGD's `2.0651e-01` after a million updates is not slowness. It is a ceiling, and no update budget removes it.
+
+This is the circling-the-destination effect from the [opening](#the-other-thing-to-know-the-noise-floor), stated precisely. With a **constant** step size, each SGD update follows a gradient computed from one row, which points at *that row's own* best answer rather than the dataset's. Near the true minimum the dataset's gradient has vanished, but the individual rows' gradients have not — each still wants to pull somewhere. So the parameters never settle; they wander inside a cloud whose radius is set by `α` and by how much the per-row gradients disagree. Batch has no cloud at all: its gradient is the real one, and at the minimum the real one is exactly zero.
+
+Giving every variant the same two seconds — so batch is not starved of updates, which is what made a first attempt at this measurement say the opposite — the floors are directly visible:
+
+```text title="Output"
+3. THE NOISE FLOOR   (2 seconds each, so batch is not starved of updates)
+   variant                             J − J_min   var of last 50 epochs
+   batch                              1.7764e-15              8.6775e-31
+   SGD (1 row)                        1.0595e-01              5.3662e-03
+   mini-batch 256                     2.1275e-05              2.7590e-09
+   SGD (1 row) + alpha/(1+t/1000)     5.1036e-06              1.5083e-06
+```
+
+**Batch reaches `1.7764e-15`** — machine precision — with a variance of `8.6775e-31`. It is not approaching a floor; there isn't one.
+
+**SGD at a constant `α` sits at `1.0595e-01`** and its cost *variance* over the last 50 epochs is `5.3662e-03`. It is still moving, permanently, and averaging over more epochs will not help because it is not converging to anything.
+
+**Mini-batch 256 sits at `2.1275e-05`**, four orders of magnitude below SGD, with variance `2.759e-09`. Gradient variance falls as `1/b`, so `b = 256` shrinks the cloud radius by about `16×` and the cost floor — quadratic in the radius — by about `256×`.
+
+### Decaying the step size removes the floor
+
+If the cloud radius is set by `α`, shrinking `α` over time should shrink the cloud. Adding `αₜ = α / (1 + t/1000)`:
+
+**`1.0595e-01 → 5.1036e-06`.** The same SGD, the same two seconds, the same seed — a factor of about **20,700** closer to the minimum, purely from letting the step size decay.
+
+:::tip
+
+**The plateau is a step-size artefact, not a limit of stochastic gradients**
+
+This is the single most useful thing on the page. A noisy gradient does not prevent convergence to the exact minimum; a *constant step size combined with* a noisy gradient does. Decay the rate and the floor goes away.
+
+The classical conditions on the schedule are `Σαₜ = ∞` and `Σαₜ² < ∞`, and they are less forbidding than they look. The first says the strides must still **add up to enough distance to get there** — shrink them too aggressively and you stall short of the answer. The second says the strides must shrink **fast enough for the accumulated noise to stay finite** — that is what closes the cloud down to a point. You need both, and they pull in opposite directions.
+
+| Schedule | `Σαₜ = ∞`? (gets there) | `Σαₜ² < ∞`? (noise dies) | Result |
+|---|---|---|---|
+| `α/t` | ✓ | ✓ | Converges to the exact minimum |
+| `α/sqrt(t)` | ✓ | ✗ | Reaches the right area, keeps circling |
+| constant `α` | ✓ | ✗ | Reaches the right area, keeps circling — the failure measured above |
+| `α/t²` | ✗ | ✓ | Stalls early; the strides run out before the answer does |
+
+A constant rate fails on the second condition, not the first: it has all the distance in the world, but because the strides never shrink, neither does the cloud.
+
+This is why every practical stochastic optimiser has a schedule, and why scikit-learn's default `learning_rate='invscaling'` is a decay rather than a constant.
+
+:::
+
+---
+
+<span id="where-fewer-rows-per-update-actually-wins"></span>
+
+## Where fewer rows per update actually wins
+
+Everything so far asked for a tight tolerance on a dataset small enough that a full pass is cheap. That is the regime batch is built for. The argument for small batches is about a different regime: a large dataset and a *loose* target, where the question is not "how many seconds" but **"how much data must be read before the model is usable"**.
+
+The mechanism is not subtle, and it is worth stating before the numbers. Batch cannot take its **first** step until it has read every row. Mini-batch 32 has taken its first step after 32 rows, and its two-hundredth after 6,400. So on a large dataset with a modest accuracy target, one of them is finished before the other has done anything at all.
+
+Ten times the rows, `n = 200000`, target `J_min + 0.01`, and the run checked every ~2000 rows so the comparison is uniform rather than an artefact of how often each variant happened to be examined:
+
+```text title="Output"
+4. ROWS SEEN TO REACH J_min + 0.01   (n = 200000, alpha = 0.01, checked every ~2000 rows)
+   variant             rows seen  x the dataset    J − J_min   status
+   batch              10,000,000          50.00   3.1172e+00   not reached
+   SGD (1 row)           600,000           3.00   2.2485e-01   not reached
+   mini-batch 32           7,936           0.04   2.9661e-03   reached
+   mini-batch 256         51,968           0.26   8.8645e-03   reached
+```
+
+**Mini-batch 32 hit the target after reading 7,936 rows — 4% of a single pass.** Batch read **10,000,000** rows, 50 complete passes, and finished `3.1172` away. The ratio in data read is over **1,250×**.
+
+The reason is arithmetic rather than subtle. In 7,936 rows, mini-batch 32 made **248 updates**. In the same 7,936 rows, batch made **zero** — it cannot update until it has seen all 200,000. By the time batch has made its first update, mini-batch 32 has made 6,250 and is already finished.
+
+:::tip
+
+**This is the honest form of "stochastic descent is faster"**
+
+It is about **progress per row read**, and in that unit small batches win by three orders of magnitude. It matters whenever a pass over the data is the expensive thing: data that does not fit in memory, data arriving as a stream, or a training budget measured in data read rather than in seconds.
+
+It does not transfer to wall-clock time on data that fits in memory, and it does not transfer to tight tolerances. Those are the two places the folk ranking is applied and the two places it is wrong.
+
+:::
+
+**SGD did not reach the target either**, stopping at `2.2485e-01` after 600,000 rows. This is not a different phenomenon from the previous section — it is the same noise floor. At `α = 0.01` with one row per update, SGD's floor is around `0.22`, which is **22× above the `0.01` target**. No quantity of data gets it there, because the target is inside its noise cloud.
+
+That completes the picture, and it is why 32 rather than 1:
+
+| | Progress per row read | Cost per update | Noise floor |
+|---|---|---|---|
+| **SGD** (1 row) | Excellent | Terrible (per row) | **Too high to be usable here** |
+| **Mini-batch 32** | **Best measured** | Low | Low enough |
+| **Mini-batch 2048** | Moderate | Low per row | Very low |
+| **Batch** | Worst possible | Highest | **None** |
+
+Mini-batch is not a compromise that splits the difference. It is the setting where all three columns are simultaneously acceptable, and both extremes fail one column outright.
+
+---
+
+## What scikit-learn does with the same data
+
+```text title="Output"
+5. THE SAME PROBLEM THROUGH SCIKIT-LEARN
+   LinearRegression            J − J_min = 0.0000e+00
+   SGDRegressor, defaults      J − J_min = 7.8196e-03
+   SGDRegressor, constant lr   J − J_min = 4.2844e-02
+```
+
+`LinearRegression` returns `0.0000e+00` — it *is* the closed-form solution, so this is a tautology and a useful check that `J_min` was computed correctly.
+
+`SGDRegressor` at its defaults lands `7.8196e-03` above the minimum. Configured with a **constant** learning rate it is *worse*, at `4.2844e-02` — 5.5× further away. The default is `learning_rate='invscaling'`, a decaying schedule, and the two rows are the noise-floor result appearing in library code: the decaying default beats the hand-set constant.
+
+:::warning
+
+**`SGDRegressor` is not a better `LinearRegression`**
+
+On 20,000 rows and 5 features it lands `7.8e-03` from an answer `LinearRegression` gets exactly, in less code. `SGDRegressor` exists for the cases where the closed form is not available — too many features for `O(p³)`, data that does not fit in memory, or `partial_fit` on a stream. Reaching for it on data this size trades exactness for nothing.
+
+Note also that `SGDRegressor` applies L2 regularisation by default (`alpha=0.0001`), so it is not minimising the same objective unless you set `alpha=0`. Comparisons against `LinearRegression` that skip that are comparing two different problems.
+
+:::
+
+---
+
+## 2. Implementation Lab
+
+:::tip 
+
+**Lab Exercise: Batch, Stochastic and Mini-Batch**
+
+An interactive, fully-functional Google Colab / Jupyter Notebook is available to experiment with this concept live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/04-optimisation/gd_variants.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Click **"Run all"** or execute cells individually using `Shift + Enter`.
+
+**Things to try inside the script:**
+*   **Experiment 1 (Convergence rates):** Raise the base learning rate `ALPHA` in section 2 from `0.005` to `0.2` and watch Batch converge instantly, while SGD's noise floor explodes.
+*   **Experiment 2 (Optimal Mini-batch):** Find the wall-clock optimal mini-batch size on your machine by sweeping $b$ over `[512, 1024, 4096, 8192]`.
+*   **Experiment 3 (Decay testing):** Replace the standard decay `alpha / (1 + t/1000)` in section 3 with a square-root decay `alpha / sqrt(1 + t)` and check if the noise floor remains flat.
+
+:::
+
+---
+
+## 3. Common Mistakes
+
+<Tabs>
+  <TabItem value="m1" label="🚨 1. Unqualified 'Faster' Claims" default>
+    <br/>
+    
+    *   **The Misconception:** *"SGD is mathematically faster than batch gradient descent."*
+    *   **❌ Wrong Thinking:** Expecting SGD to reach a tight OLS tolerance in fewer epochs or wall-clock seconds.
+    *   **✅ The Right Principle:** "Faster" requires a unit. SGD is faster **per row read** (Data Budget). However, Batch/large mini-batches are faster **per epoch**, faster **in wall-clock seconds** (due to vectorised hardware multiplications), and converge to infinitely lower final costs.
+  </TabItem>
+  <TabItem value="m2" label="🚨 2. Constant Rate Expectation">
+    <br/>
+    
+    *   **The Misconception:** *"With a constant learning rate alpha, SGD will eventually reach the exact OLS minimum if given enough iterations."*
+    *   **❌ Wrong Thinking:** Running constant-rate SGD for 1,000,000 steps and wondering why it plateaus.
+    *   **✅ The Right Principle:** A constant learning rate with a noisy single-row gradient creates a **noise floor**. The model bounces forever inside a cloud centered at the minimum. You **must** decay the learning rate (step size) over time so the cloud collapses onto the exact answer.
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. Naive Epoch Comparisons">
+    <br/>
+    
+    *   **The Misconception:** *"Comparing epoch counts across batch sizes is a fair way to grade optimizer speeds."*
+    *   **❌ Wrong Thinking:** Deciding SGD is better because it took 50 epochs compared to Batch's 705.
+    *   **✅ The Right Principle:** An epoch represents the same amount of data read, but a completely different number of updates. One epoch is **1 update** for Batch, but **20,000 updates** for SGD. Naive epoch-based comparisons are meaningless; always compare wall-clock seconds or total updates.
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. SGD is always a superior choice">
+    <br/>
+    
+    *   **The Misconception:** *"I should always use SGDRegressor for fitting tabular linear regressions."*
+    *   **❌ Wrong Thinking:** Using SGDRegressor on small/medium datasets that fit comfortably in RAM.
+    *   **✅ The Right Principle:** SGD is a scalability and streaming tool. On tabular datasets that fit in memory, SGDRegressor lands $7.8\text{e-}3$ off the minimum in seconds, whereas `LinearRegression` (OLS) solves it **perfectly and instantly**—trades exactness for nothing.
+  </TabItem>
+</Tabs>
+
+---
+
+## 4. Summary
+
+<div className="row">
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🤖 Core Theory</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Unbiased Gradient:</b> The expected value of a single-row gradient equals the exact full-batch gradient. Unbiased across all $b$.</li>
+          <li><b>Gradient Variance:</b> Falls strictly as $1/b$. Large $b$ shrinks the noise cloud radius, lowering the plateau floor.</li>
+          <li><b>The Noise Floor:</b> Standard constant-rate SGD plateaus and circles the minimum forever without landing.</li>
+          <li><b>The Decay Fix:</b> Squeezes the noise cloud to a point. Requires $\sum \alpha_t = \infty$ (gets there) and $\sum \alpha_t^2 < \infty$ (noise dies).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🛠️ Engineering Realities</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Vectorisation Win:</b> Batching turns sequential row iterations into a single hardware-level matrix product, crushing SGD clock-times.</li>
+          <li><b>Update Overhead:</b> 20,000 one-row updates carry immense Python/NumPy loop overhead compared to 1 full-batch update.</li>
+          <li><b>Data Budget Win:</b> To reach a loose target on large data, mini-batch 32 wins by <b>1,250×</b> (reaches target after 7,936 rows vs 10M for batch).</li>
+          <li><b>SGD Default L2:</b> SGDRegressor regularizes by default (`alpha=0.0001`), meaning it solves a different objective than OLS unless `alpha=0`.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+:::info 
+
+**📌 Key Takeaways**
+
+*   **🔒 Sum Invariance:** Under high gradient variance, while individual coefficients are unstable, their combined predictions remain robust because the sum is stable.
+*   **⚖️ The True SGD Win:** SGD and small mini-batches win exclusively on **rows seen to a loose target**, making them the right choice for streaming or out-of-memory data.
+*   **🛠️ Optimal Compromise:** Mini-batch is not a flat compromise; it is where all engineering criteria (variance, updates, seconds) are simultaneously acceptable.
+
+:::
+
+**Next Section:** [Regression Performance Metrics](../05-regression-metrics/_category_.json) — how to score and diagnose the fitted model once the optimiser has finished.
+
+---
+
+## 5. Active Recall
+
+*Attempt each question first, then click to reveal detailed answers, mathematical derivations, and sample explanations.*
+
+### Interactive Checkpoint Quiz
+
+export const PracticeQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Stopwatch Dilemma</h4>
+      <p style={{ margin: '0 0 15px 0' }}>If we are training a linear model on an in-memory dataset, why does Batch gradient descent converge in far fewer wall-clock seconds than single-row SGD, despite taking fewer updates?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because OLS gradients are non-convex</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because vectorised matrix multiplications on full batches avoid Python loop overheads</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because Batch has a higher noise floor</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The cost remains convex. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! In a vectorised environment (like NumPy/Python), iterating 20,000 single-row updates sequentially carries enormous Python interpreter and call overhead. A single 20,000-row batch is compiled as a single fast matrix product at the hardware level, crushing sequential clock times (Batch took 0.76s while SGD took 3.94s!).</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Batch has exactly zero noise floor since its gradient is exact. Re-read and try again!</p>}
+    </div>
+  );
+};
+
+<PracticeQuiz />
+
+### Review Flashcards
+
+<details>
+  <summary>❓ <b>1. [THEORY] Why is "SGD is faster" a misleading statement, and what are the four different stopwatches we must attach?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Muddle:** "Faster" is a comparative claim with no unit.
+    *   **The Four Stopwatches:**
+        1.  *Fewer Steps/Updates:* **Batch wins** (noisy SGD directions waste steps).
+        2.  *Fewer Epochs (passes over data):* **Batch wins** (converged in 705 vs. 1,000,000 updates).
+        3.  *Fewer Wall-Clock Seconds:* **Large Mini-Batches win** (vectorised matrix math avoids loop overheads).
+        4.  *Less Data Read before Model is Usable:* **Small Mini-Batches win** by over 1,250× (needs only 7,936 rows read vs. 10M for batch).
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>2. [ANALYZE] Why does constant learning rate SGD hit a "noise floor" plateau, and how does step-size decay mathematically resolve this?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Cloud:** Near the optimum, the overall dataset gradient is zero, but individual single-row gradients are not—each pulls in its own direction. With a constant $\alpha$, these non-zero single-row steps make the parameters bounce indefinitely inside a cloud.
+    *   **The Decay Fix:** Step length is defined as $\alpha_t \lVert \nabla J \rVert$. By decaying $\alpha_t$ over time, we physically shrink the stride length, closing the cloud radius down directly onto the exact bottom.
+    *   **The Proof:** Decaying SGD reached **$5.10 \times 10^{-6}$** compared to constant SGD's **$1.05 \times 10^{-1}$** on the exact same budget—a **$20,700\times$** improvement.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>3. [THEORY] State the two classical conditions on the step-size schedule $\alpha_t$ and what happens if either is violated.</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Conditions:**
+        1.  $\sum \alpha_t = \infty$ (The sum of strides must be infinite—guarantees the hiker has enough total distance capacity to reach the valley floor).
+        2.  $\sum \alpha_t^2 < \infty$ (The sum of squared strides must be finite—guarantees the accumulated noise variance shrinks to zero, collapsing the cloud).
+    *   **The Violations:**
+        *   *Constant rate:* Violates condition 2 (keeps bouncing).
+        *   *$\alpha_t = \alpha / t^2$:* Violates condition 1 (stalls early; the hiker's strides run out of juice before reaching the center).
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>4. [ANALYZE] On large datasets with loose targets, why does Mini-Batch 32 win over Batch by over 1,250× in rows read?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Constraint:** Batch cannot take its **first step** until it has read all $n = 200,000$ rows.
+    *   **The Step Advantage:** In the time it takes Batch to read $200,000$ rows once, Mini-Batch 32 has already read $7,936$ rows, taken **248 active updates**, and settled under the loose target.
+    *   Batch spent $10,000,000$ rows read (50 full passes) and still missed, making Mini-Batch 32 over **$1,250\times$** more efficient on a data-budget.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>5. [THEORY] Why is Mini-Batch not a simple compromise, but a sweet-spot where both extremes fail a column outright?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   The trade-offs can be represented across three criteria:
+        1.  *Progress per row read:* SGD is excellent; Batch is worst possible.
+        2.  *Cost per update (wall-clock):* Batch/Large Mini-batch is excellent; SGD is terrible due to interpreter overheads.
+        3.  *Noise floor:* Batch has none; SGD is too high to converge.
+    *   **The Sweet Spot:** Mini-Batch (e.g. 256) is the only setting where all three columns are simultaneously acceptable, while both SGD and Batch fail at least one column completely.
+  </div>
+</details>

@@ -1,0 +1,413 @@
+---
+sidebar_position: 2
+title: Precision and Recall
+description: Two complementary metrics exposing what accuracy hides—false alarms versus missed detections, and mastering the threshold tradeoff.
+tags: [classification, precision, recall, threshold, scikit-learn]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import React from 'react';
+
+# Precision and Recall
+
+> **Topic —** Overall accuracy treats false positives (false alarms) and false negatives (missed cases) as identical errors. In reality, their business costs are rarely symmetrical. This guide explores **Precision** (selectivity against false alarms) and **Recall** (sensitivity to positive instances), proves why they exist in a fundamental mechanical tradeoff governed by the decision threshold $\tau$, and details Specificity and the Four-Way Metric Symmetry.
+
+---
+
+## 1. The Core Concept
+
+When evaluating a binary classifier, we must evaluate two competing operational perspectives:
+
+1.  **Precision (Positive Predictive Value):** Of all instances the model labeled as positive, what fraction was actually positive?
+    $$\text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}} = \frac{\text{True Positives}}{\text{Total Predicted Positives}}$$
+    *   **Focus:** Minimizing **False Positives (Type I Errors)**. High precision guarantees that when the system raises an alarm, you can trust it.
+
+2.  **Recall (Sensitivity, True Positive Rate):** Of all actual positive cases in the population, what fraction did the model successfully detect?
+    $$\text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}} = \frac{\text{True Positives}}{\text{Total Actual Positives}}$$
+    *   **Focus:** Minimizing **False Negatives (Type II Errors)**. High recall guarantees that few true positive instances slip through undetected.
+
+:::tip
+
+**If you only take one thing from this page**
+
+Precision is about **quality of positive predictions** (few false alarms). Recall is about **quantity of positive cases captured** (few missed cases). Lowering the decision threshold raises Recall but lowers Precision; raising the threshold raises Precision but lowers Recall.
+
+:::
+
+---
+
+## 2. Interactive Precision-Recall Threshold Simulator
+
+Slide the decision threshold $\tau$ across a 100-sample test cohort (40 actual positives, 60 actual negatives) to observe how the balance between false alarms and missed cases shifts:
+
+export const PrecisionRecallSimulator = () => {
+  const [thresh, setThresh] = React.useState(0.50);
+
+  const negScores = [
+    0.05, 0.08, 0.10, 0.12, 0.14, 0.15, 0.16, 0.18, 0.20, 0.21,
+    0.22, 0.24, 0.25, 0.26, 0.28, 0.29, 0.30, 0.31, 0.32, 0.34,
+    0.35, 0.36, 0.37, 0.38, 0.39, 0.40, 0.41, 0.42, 0.43, 0.44,
+    0.45, 0.46, 0.47, 0.48, 0.49, 0.50, 0.51, 0.52, 0.53, 0.54,
+    0.55, 0.56, 0.57, 0.58, 0.59, 0.60, 0.61, 0.62, 0.63, 0.64,
+    0.65, 0.66, 0.67, 0.68, 0.70, 0.72, 0.74, 0.76, 0.78, 0.82
+  ];
+
+  const posScores = [
+    0.28, 0.32, 0.35, 0.38, 0.40, 0.42, 0.45, 0.48, 0.50, 0.52,
+    0.54, 0.55, 0.57, 0.59, 0.60, 0.62, 0.64, 0.65, 0.67, 0.68,
+    0.70, 0.71, 0.73, 0.74, 0.76, 0.77, 0.79, 0.80, 0.82, 0.83,
+    0.85, 0.86, 0.88, 0.89, 0.91, 0.92, 0.94, 0.95, 0.97, 0.99
+  ];
+
+  const tp = posScores.filter((s) => s >= thresh).length;
+  const fn = 40 - tp;
+  const fp = negScores.filter((s) => s >= thresh).length;
+  const tn = 60 - fp;
+
+  const precision = tp + fp > 0 ? (tp / (tp + fp)) * 100 : 100;
+  const recall = (tp / 40) * 100;
+  const specificity = (tn / 60) * 100;
+  const f1 = precision + recall > 0 ? (2 * (precision * recall)) / (precision + recall) : 0;
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>⚖️ Precision-Recall Threshold Simulator</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Move the decision threshold cutoff to visualize the mechanical tradeoff:
+      </p>
+
+      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
+        <button
+          onClick={() => setThresh(0.25)}
+          style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #38a169', backgroundColor: thresh === 0.25 ? '#38a169' : 'transparent', color: thresh === 0.25 ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', transition: '0.2s' }}
+        >
+          Low Cutoff (τ = 0.25 - High Recall)
+        </button>
+        <button
+          onClick={() => setThresh(0.50)}
+          style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: thresh === 0.50 ? '#3182ce' : 'transparent', color: thresh === 0.50 ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', transition: '0.2s' }}
+        >
+          Balanced Default (τ = 0.50)
+        </button>
+        <button
+          onClick={() => setThresh(0.75)}
+          style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #805ad5', backgroundColor: thresh === 0.75 ? '#805ad5' : 'transparent', color: thresh === 0.75 ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', transition: '0.2s' }}
+        >
+          High Cutoff (τ = 0.75 - High Precision)
+        </button>
+      </div>
+
+      <div style={{ marginBottom: '18px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 'bold' }}>
+          <span>Decision Threshold (τ):</span>
+          <span style={{ color: '#3182ce', fontSize: '15px' }}>{thresh.toFixed(2)}</span>
+        </div>
+        <input
+          type="range"
+          min="0.15"
+          max="0.85"
+          step="0.05"
+          value={thresh}
+          onChange={(e) => setThresh(parseFloat(e.target.value))}
+          style={{ width: '100%', marginTop: '6px' }}
+        />
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '16px' }}>
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--ifm-color-emphasis-600)' }}>
+            <span>Precision (Selectivity)</span>
+            <span style={{ fontWeight: 'bold', color: '#3182ce' }}>{precision.toFixed(1)}%</span>
+          </div>
+          <div style={{ width: '100%', height: '8px', backgroundColor: 'rgba(148, 163, 184, 0.2)', borderRadius: '4px', marginTop: '6px', overflow: 'hidden' }}>
+            <div style={{ width: `${precision}%`, height: '100%', backgroundColor: '#3182ce', borderRadius: '4px', transition: '0.2s' }} />
+          </div>
+          <div style={{ fontSize: '11px', marginTop: '4px' }}>TP / (TP + FP) = {tp} / {tp + fp}</div>
+        </div>
+
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--ifm-color-emphasis-600)' }}>
+            <span>Recall (Sensitivity)</span>
+            <span style={{ fontWeight: 'bold', color: '#38a169' }}>{recall.toFixed(1)}%</span>
+          </div>
+          <div style={{ width: '100%', height: '8px', backgroundColor: 'rgba(148, 163, 184, 0.2)', borderRadius: '4px', marginTop: '6px', overflow: 'hidden' }}>
+            <div style={{ width: `${recall}%`, height: '100%', backgroundColor: '#38a169', borderRadius: '4px', transition: '0.2s' }} />
+          </div>
+          <div style={{ fontSize: '11px', marginTop: '4px' }}>TP / (TP + FN) = {tp} / 40</div>
+        </div>
+
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '12px', color: 'var(--ifm-color-emphasis-600)' }}>
+            <span>Harmonic Mean (F1-Score)</span>
+            <span style={{ fontWeight: 'bold', color: '#805ad5' }}>{(f1 / 100).toFixed(3)}</span>
+          </div>
+          <div style={{ width: '100%', height: '8px', backgroundColor: 'rgba(148, 163, 184, 0.2)', borderRadius: '4px', marginTop: '6px', overflow: 'hidden' }}>
+            <div style={{ width: `${f1}%`, height: '100%', backgroundColor: '#805ad5', borderRadius: '4px', transition: '0.2s' }} />
+          </div>
+          <div style={{ fontSize: '11px', marginTop: '4px' }}>2 · (P · R) / (P + R)</div>
+        </div>
+      </div>
+
+      <div style={{ padding: '12px 16px', borderRadius: '6px', backgroundColor: thresh <= 0.35 ? 'rgba(56, 161, 105, 0.12)' : thresh >= 0.65 ? 'rgba(128, 90, 213, 0.12)' : 'rgba(49, 130, 206, 0.12)', borderLeft: `4px solid ${thresh <= 0.35 ? '#38a169' : thresh >= 0.65 ? '#805ad5' : '#3182ce'}` }}>
+        <strong style={{ fontSize: '14px', color: thresh <= 0.35 ? '#276749' : thresh >= 0.65 ? '#6b46c1' : '#2b6cb0' }}>
+          {thresh <= 0.35 ? '🩺 High-Recall Screening Regime' : thresh >= 0.65 ? '🛡️ High-Precision Conservative Regime' : '⚖️ Balanced Operational Regime'}
+        </strong>
+        <p style={{ margin: '4px 0 0 0', fontSize: '13px' }}>
+          {thresh <= 0.35
+            ? `Caught ${tp} of 40 true positives (${recall.toFixed(0)}% Recall). Only ${fn} cases missed, but ${fp} false alarms generated. Optimal for Oncology Screening and Fraud Audits.`
+            : thresh >= 0.65
+            ? `When model predicts positive, it is right ${precision.toFixed(0)}% of the time. Only ${fp} false alarms, but ${fn} positives missed. Optimal for Automated Spam Deletion and Legal Discovery.`
+            : `Balanced compromise with F1 = ${(f1 / 100).toFixed(3)}. Tolerates ${fp} false alarms while capturing ${tp} of 40 positive cases.`}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+<PrecisionRecallSimulator />
+
+---
+
+## 3. When to Prioritize Which Metric
+
+The choice between optimizing Precision vs. Recall depends entirely on the **asymmetry of operational costs**:
+
+<Tabs>
+  <TabItem value="recall" label="🚨 When Recall is Paramount" default>
+    <br/>
+    
+    *   **The Cost Asymmetry:** False Negatives (missed cases) are dangerous, fatal, or irreversible. False Positives (false alarms) merely incur minor review overhead.
+    *   **Domain 1: Medical Cancer Screening:** Missing an early-stage malignant tumor (FN) leads to untreated disease and mortality. A false alarm (FP) is cleared with an ultrasound.
+    *   **Domain 2: Airport Security Threat Detection:** Missing a prohibited weapon (FN) compromises flight safety. A false alarm (FP) takes 30 seconds of manual bag inspection.
+    *   **Domain 3: Financial Fraud:** Approving a $50,000 fraudulent wire (FN) causes immediate financial loss. A false alarm (FP) sends a one-time confirmation SMS to the cardholder.
+    *   **Tuning Rule:** Lower threshold $\tau$ (e.g. $\tau = 0.10 - 0.30$) to cast a wide net.
+  </TabItem>
+  <TabItem value="precision" label="🎯 When Precision is Paramount">
+    <br/>
+    
+    *   **The Cost Asymmetry:** False Positives (false alarms) destroy user trust, incur heavy legal liability, or trigger expensive irreversible actions. False Negatives are safely tolerated.
+    *   **Domain 1: Automated Spam Deletion:** Silently deleting a legitimate CEO contract or college acceptance letter (FP) is catastrophic. Letting an occasional spam email reach the inbox (FN) is a minor nuisance.
+    *   **Domain 2: Loan Approval (Auto-Decline):** Falsely denying a highly creditworthy customer (FP) loses high-value long-term interest revenue and damages customer goodwill.
+    *   **Domain 3: Recommender Systems (YouTube / E-commerce):** Recommending an irrelevant or offensive video (FP) causes immediate churn. Failing to surface every great video (FN) is unnoticeable to the user.
+    *   **Tuning Rule:** Raise threshold $\tau$ (e.g. $\tau = 0.70 - 0.90$) to demand strict statistical certainty before acting.
+  </TabItem>
+</Tabs>
+
+---
+
+## 4. The Four-Way Metric Symmetry
+
+Together with Specificity and Negative Predictive Value (NPV), Precision and Recall form a balanced 2x2 mathematical symmetry:
+
+| Perspective | Positive Focus | Negative Focus |
+| :--- | :--- | :--- |
+| **Row Perspective (Actual Classes)** | **Recall (Sensitivity / TPR):**<br/>$$\frac{\text{TP}}{\text{Actual Positives}} = \frac{\text{TP}}{\text{TP} + \text{FN}}$$ | **Specificity (TNR):**<br/>$$\frac{\text{TN}}{\text{Actual Negatives}} = \frac{\text{TN}}{\text{TN} + \text{FP}}$$ |
+| **Column Perspective (Predicted Classes)** | **Precision (PPV):**<br/>$$\frac{\text{TP}}{\text{Predicted Positives}} = \frac{\text{TP}}{\text{TP} + \text{FP}}$$ | **Negative Predictive Value (NPV):**<br/>$$\frac{\text{TN}}{\text{Predicted Negatives}} = \frac{\text{TN}}{\text{TN} + \text{FN}}$$ |
+
+### Complementary Error Rates
+*   **False Positive Rate (FPR):** $\text{FPR} = 1 - \text{Specificity} = \frac{\text{FP}}{\text{TN} + \text{FP}}$ (Fraction of healthy people falsely alarmed).
+*   **False Negative Rate (FNR / Miss Rate):** $\text{FNR} = 1 - \text{Recall} = \frac{\text{FN}}{\text{TP} + \text{FN}}$ (Fraction of sick people overlooked).
+
+---
+
+## 5. Implementation Lab
+
+:::tip
+
+**Lab Exercise: Precision, Recall & Threshold Tuning**
+
+An interactive, fully functional Google Colab / Jupyter Notebook is available to calculate Precision and Recall across spam and disease cohorts, and sweep decision thresholds $\tau \in [0.25, 0.75]$ live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/08-classification-metrics/precision_and_recall.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Run cells sequentially to simulate threshold adjustments and track metric shifts.
+
+**Key Experiments to Run:**
+*   **Experiment 1 (Spam Filter Verification):** Compute Precision ($77.8\%$) and Recall ($70.0\%$) on 20 emails using `precision_score` and `recall_score`.
+*   **Experiment 2 (Medical Screening Tradeoff):** Evaluate how catching $13/15$ sick patients ($86.7\%$ Recall) incurs $8$ false alarms ($61.5\%$ Precision), validating clinical tolerance for Type I errors.
+*   **Experiment 3 (Threshold Sweep):** Sweep $\tau$ from $0.25$ to $0.75$ across 100 beta-distributed probability scores to observe Recall plunging from $97.5\%$ to $35.0\%$ as Precision climbs from $52.7\%$ to $73.7\%$.
+
+:::
+
+---
+
+## 6. Common Mistakes
+
+<Tabs>
+  <TabItem value="m1" label="🚨 1. Confusing Precision and Recall Denominators" default>
+    <br/>
+    
+    *   **The Misconception:** *"Precision and Recall have the same denominator since both start with TP in the numerator."*
+    *   **❌ Wrong Thinking:** Dividing TP by total correct or mixing predicted and actual counts.
+    *   **✅ The Right Principle:** Precision divides by **Predicted Positives** ($\text{TP} + \text{FP}$, the column total). Recall divides by **Actual Positives** ($\text{TP} + \text{FN}$, the row total).
+  </TabItem>
+  <TabItem value="m2" label="🚨 2. Believing Both Can Be 100% on Real Data">
+    <br/>
+    
+    *   **The Misconception:** *"With sufficient hyperparameter tuning and deep models, we can reach 100% Precision and 100% Recall."*
+    *   **❌ Wrong Thinking:** Expecting perfect separation on overlapping real-world feature distributions.
+    *   **✅ The Right Principle:** Unless feature classes are completely linearly separable with zero noise, raising the threshold to eliminate false positives inevitably misses borderline positives. You must make an intentional engineering tradeoff.
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. Neglecting Baseline Precision">
+    <br/>
+    
+    *   **The Misconception:** *"A model with 60% precision is terrible."*
+    *   **❌ Wrong Thinking:** Evaluating precision in a vacuum without knowing class prevalence.
+    *   **✅ The Right Principle:** If true fraud prevalence is $0.1\%$ (1 in 1,000), a random guess has a precision of $0.1\%$. Achieving $60\%$ precision represents a **600x diagnostic lift** over baseline! Always contextualize precision against class prevalence.
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Confusing Specificity with Precision">
+    <br/>
+    
+    *   **The Misconception:** *"Specificity and Precision both measure how clean our negative classifications are."*
+    *   **❌ Wrong Thinking:** Conflating row-wise True Negative Rate with column-wise Positive Predictive Value.
+    *   **✅ The Right Principle:** Specificity is $\frac{\text{TN}}{\text{TN} + \text{FP}}$ (row percentage of healthy people correctly cleared). Precision is $\frac{\text{TP}}{\text{TP} + \text{FP}}$ (column percentage of positive calls that were right).
+  </TabItem>
+  <TabItem value="m5" label="🚨 5. Trivial 100% Recall Trap">
+    <br/>
+    
+    *   **The Misconception:** *"Our model achieved 100% Recall, so our fraud detector is flawless."*
+    *   **❌ Wrong Thinking:** Quoting Recall without checking False Positive counts.
+    *   **✅ The Right Principle:** Any trivial algorithm that predicts 'Positive' for 100% of inputs automatically achieves 100% Recall ($\text{FN} = 0$). However, its Precision will collapse to baseline prevalence. Always evaluate Precision and Recall in tandem.
+  </TabItem>
+</Tabs>
+
+---
+
+## 7. Summary
+
+<div className="row">
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🤖 Metric Perspectives</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Precision:</b> $\frac{\text{TP}}{\text{TP} + \text{FP}}$. Answers: When I flag positive, how often am I right?</li>
+          <li><b>Recall:</b> $\frac{\text{TP}}{\text{TP} + \text{FN}}$. Answers: Of all real positive cases, how many did I catch?</li>
+          <li><b>Specificity:</b> $\frac{\text{TN}}{\text{TN} + \text{FP}}$. Answers: Of all real negatives, how many did I clear?</li>
+          <li><b>F1-Score:</b> Harmonic mean balancing Precision and Recall into a single scalar.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🛠️ Engineering Tradeoffs</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Lower Threshold (τ &lt; 0.5):</b> Catches more positives (Recall ↑), accepts more false alarms (Precision ↓).</li>
+          <li><b>Raise Threshold (τ &gt; 0.5):</b> Avoids false alarms (Precision ↑), misses borderline cases (Recall ↓).</li>
+          <li><b>High-Recall Domains:</b> Medicine, fraud, disaster alerts (FN is dangerous).</li>
+          <li><b>High-Precision Domains:</b> Auto-delete spam, loan denial, recommender systems (FP is costly).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+:::info
+
+**📌 Key Takeaways**
+
+*   **⚖️ Tradeoff is mechanical:** Adjusting the classification threshold $\tau$ moves the operational point along the Precision-Recall curve.
+*   **🎯 Align to cost asymmetry:** If false negatives kill or cost millions, tune for Recall; if false alarms destroy customer trust or incur legal liability, tune for Precision.
+*   **📊 Never report one in isolation:** A 100% Recall model can be trivial (predict everything positive); always report Precision alongside Recall or combine them via the F1-Score.
+
+:::
+
+**Next Section:** [F-Scores and Balanced Metrics](./03-f-scores-and-balanced-metrics.md) - synthesizing precision and recall via the harmonic mean, $F_\beta$ weighting, and MCC.
+
+---
+
+## 8. Active Recall
+
+*Test your understanding by answering first, then clicking to reveal the underlying principles.*
+
+### Interactive Checkpoint Quiz
+
+export const PrecisionRecallQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Threshold Adjustment Decision</h4>
+      <p style={{ margin: '0 0 15px 0' }}>A hospital deploys an automated sepsis early-warning classifier. Clinicians complain that the model misses 20% of deteriorating patients (False Negatives), but when it does trigger an alert, it is correct 95% of the time (Precision = 95%). What threshold adjustment should the engineering team make?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Raise the decision threshold from 0.50 to 0.75</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Lower the decision threshold from 0.50 to 0.25</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Leave threshold at 0.50 because 95% precision is already high</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Raising the threshold requires higher model confidence before sounding an alarm, which would increase False Negatives and cause even more patients to be missed! Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Sepsis is life-threatening; missing 20% of cases (Recall = 80%) is clinically unacceptable. Lowering the threshold to 0.25 makes the classifier more sensitive, capturing borderline septic patients (boosting Recall to 95%+), while trading away some precision (incurring more false alarms).</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Leaving the threshold unchanged ignores the 20% missed septic patients who require urgent clinical intervention. Try again!</p>}
+    </div>
+  );
+};
+
+<PrecisionRecallQuiz />
+
+### Review Flashcards
+
+<details>
+  <summary>❓ <b>1. [THEORY] Why does lowering a classifier's decision threshold mechanically increase Recall while decreasing Precision?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **More Positives Declared:** Lowering $\tau$ broadens the criteria for predicting positive ($\hat{y} = 1$).
+    *   **Effect on Recall:** Borderline true positive cases that previously scored below $\tau$ are now captured as True Positives, reducing $\text{FN} \to 0$ and driving $\text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}} \to 100\%$.
+    *   **Effect on Precision:** Borderline true negative cases are also swept into positive predictions, increasing False Positives ($\text{FP} \uparrow$) and diluting $\text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}$.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>2. [MATH] A model evaluates 200 samples: TP = 70, FP = 10, FN = 30, TN = 90. Calculate Precision, Recall, and Specificity.</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Precision:** $\frac{\text{TP}}{\text{TP} + \text{FP}} = \frac{70}{70 + 10} = \frac{70}{80} = 0.875$ ($87.5\%$).
+    *   **Recall:** $\frac{\text{TP}}{\text{TP} + \text{FN}} = \frac{70}{70 + 30} = \frac{70}{100} = 0.700$ ($70.0\%$).
+    *   **Specificity:** $\frac{\text{TN}}{\text{TN} + \text{FP}} = \frac{90}{90 + 10} = \frac{90}{100} = 0.900$ ($90.0\%$).
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>3. [ANALYZE] Why is high Precision prioritized over Recall in automated content moderation (e.g., auto-banning toxic user accounts)?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Cost Asymmetry:** Banning an innocent user permanently (False Positive) creates intense customer outrage, PR backlash, and potential support tickets.
+    *   Letting a mildly toxic comment slip through (False Negative) is an acceptable compromise that can be addressed via manual community flagging later.
+    *   Automated account actions require extreme precision ($99\%+$) before applying automated punitive actions.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>4. [PRACTICE] In an imbalanced fraud dataset (1% fraud), what is the precision of a naive random guessing baseline?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Prevalence Rate:** The baseline precision of a random or constant positive guesser is equal to the **positive class prevalence**:
+        $$\text{Baseline Precision} = \frac{\text{Actual Positives}}{\text{Total Samples}} = \frac{1}{100} = 1.0\%$$
+    *   If a complex neural net achieves $30\%$ precision on this dataset, it represents a massive **30x diagnostic improvement** over random guessing, even though $30\%$ sounds low in the abstract.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>5. [THEORY] What is the difference between Specificity and Negative Predictive Value (NPV)?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Specificity (TNR):** Row perspective. $\frac{\text{TN}}{\text{TN} + \text{FP}}$. Measures how effectively the model clears actual healthy people. Independent of class prevalence.
+    *   **Negative Predictive Value (NPV):** Column perspective. $\frac{\text{TN}}{\text{TN} + \text{FN}}$. Answers: When the model predicts 'Negative', what is the probability the patient is truly healthy? Heavily dependent on class prevalence.
+  </div>
+</details>

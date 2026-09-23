@@ -1,0 +1,523 @@
+---
+sidebar_position: 4
+title: ROC-AUC and Threshold Tuning
+description: Visualizing classifier discrimination across all cutoffs, interpreting the Area Under the Curve, and optimizing decision thresholds via Youden's J.
+tags: [classification, roc, auc, threshold, scikit-learn]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import React from 'react';
+
+# ROC-AUC and Threshold Tuning
+
+> **Topic —** Evaluating a classifier at a single fixed threshold (like $\tau = 0.5$) provides only a localized snapshot of model skill. The **Receiver Operating Characteristic (ROC)** curve evaluates discrimination power across *every possible threshold* from $0.0$ to $1.0$, plotting Sensitivity against False Alarm Rate. The **Area Under the Curve (AUC)** summarizes this trajectory into a single threshold-independent ranking statistic. This guide covers how to interpret ROC curves, compute AUC, optimize cutoffs with **Youden's J statistic**, and recognize when severe class imbalance demands Precision-Recall curves instead.
+
+---
+
+## 1. The Core Concept
+
+Most probabilistic classifiers (such as Logistic Regression, Random Forests, or Gradient Boosting) output a continuous confidence score or posterior probability:
+
+$$\hat{p} = P(y = 1 \mid x) \in [0.0, 1.0]$$
+
+To convert continuous scores into binary decisions, we apply a **decision threshold ($\tau$)**:
+
+$$\hat{y} = \begin{cases} 1 & \text{if } \hat{p} \ge \tau \\ 0 & \text{if } \hat{p} < \tau \end{cases}$$
+
+Varying $\tau$ from $1.0$ down to $0.0$ sweeps through a continuous spectrum of operational tradeoffs:
+*   **ROC Horizontal Axis (FPR):** False Positive Rate $= \frac{\text{FP}}{\text{TN} + \text{FP}} = 1 - \text{Specificity}$.
+*   **ROC Vertical Axis (TPR):** True Positive Rate $= \frac{\text{TP}}{\text{TP} + \text{FN}} = \text{Recall} = \text{Sensitivity}$.
+
+:::tip
+
+**If you only take one thing from this page**
+
+The **ROC curve** plots Sensitivity (TPR) against the False Alarm Rate (FPR) across all thresholds. **AUC** measures overall ranking quality: an $\text{AUC} = 0.50$ represents a completely uninformative coin toss, while an $\text{AUC} = 1.00$ represents perfect separability.
+
+:::
+
+---
+
+## 2. Interactive ROC Curve & Threshold Tracer
+
+Switch between classifier qualities below and drag the decision threshold $\tau$ to trace the operating point along the ROC trajectory:
+
+export const ROCCurveSimulator = () => {
+  const [quality, setQuality] = React.useState('superior');
+  const [thresh, setThresh] = React.useState(0.50);
+
+  const exponent = quality === 'superior' ? 0.22 : quality === 'moderate' ? 0.45 : 1.0;
+  const aucValue = quality === 'superior' ? 0.93 : quality === 'moderate' ? 0.81 : 0.50;
+
+  // Map threshold tau to FPR and TPR
+  const fpr = Math.pow(1.0 - thresh, 1.6);
+  const tpr = Math.min(1.0, Math.pow(fpr, exponent));
+  const youdenJ = tpr - fpr;
+
+  // SVG coordinate helpers (box: 220x220, offset x=45, y=25)
+  const originX = 45;
+  const originY = 245;
+  const graphSize = 200;
+
+  const pointX = originX + fpr * graphSize;
+  const pointY = originY - tpr * graphSize;
+
+  // Generate curve path
+  const steps = 30;
+  let pathD = `M ${originX} ${originY}`;
+  for (let i = 1; i <= steps; i++) {
+    const f = i / steps;
+    const t = Math.pow(f, exponent);
+    const x = originX + f * graphSize;
+    const y = originY - t * graphSize;
+    pathD += ` L ${x} ${y}`;
+  }
+
+  const fillD = `${pathD} L ${originX + graphSize} ${originY} Z`;
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>📈 Interactive ROC Curve and Operating Point Tracer</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Select a classifier quality and slide the threshold $\tau$ to observe how the operating point navigates the ROC space:
+      </p>
+
+      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '16px' }}>
+        <button
+          onClick={() => setQuality('superior')}
+          style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #38a169', backgroundColor: quality === 'superior' ? '#38a169' : 'transparent', color: quality === 'superior' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', transition: '0.2s' }}
+        >
+          Superior Classifier (AUC ≈ 0.93)
+        </button>
+        <button
+          onClick={() => setQuality('moderate')}
+          style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: quality === 'moderate' ? '#3182ce' : 'transparent', color: quality === 'moderate' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', transition: '0.2s' }}
+        >
+          Moderate Classifier (AUC ≈ 0.81)
+        </button>
+        <button
+          onClick={() => setQuality('random')}
+          style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #718096', backgroundColor: quality === 'random' ? '#718096' : 'transparent', color: quality === 'random' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', transition: '0.2s' }}
+        >
+          Random Guesser (AUC = 0.50)
+        </button>
+      </div>
+
+      <div style={{ marginBottom: '16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 'bold' }}>
+          <span>Decision Threshold (τ):</span>
+          <span style={{ color: '#3182ce', fontSize: '15px' }}>{thresh.toFixed(2)}</span>
+        </div>
+        <input
+          type="range"
+          min="0.05"
+          max="0.95"
+          step="0.05"
+          value={thresh}
+          onChange={(e) => setThresh(parseFloat(e.target.value))}
+          style={{ width: '100%', marginTop: '6px' }}
+        />
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '16px', alignItems: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
+          <svg viewBox="0 0 290 270" style={{ width: '100%', maxWidth: '320px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '6px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+            {/* Shaded AUC */}
+            <path d={fillD} fill="rgba(49, 130, 206, 0.15)" />
+
+            {/* Random diagonal line */}
+            <line x1={originX} y1={originY} x2={originX + graphSize} y2={originY - graphSize} stroke="#a0aec0" strokeDasharray="4 4" strokeWidth="1.5" />
+
+            {/* ROC Curve Path */}
+            <path d={pathD} fill="none" stroke="#3182ce" strokeWidth="2.5" />
+
+            {/* Projection dashed lines */}
+            <line x1={pointX} y1={pointY} x2={pointX} y2={originY} stroke="#e53e3e" strokeDasharray="3 3" strokeWidth="1" />
+            <line x1={originX} y1={pointY} x2={pointX} y2={pointY} stroke="#38a169" strokeDasharray="3 3" strokeWidth="1" />
+
+            {/* Active Operating Point Dot */}
+            <circle cx={pointX} cy={pointY} r="6" fill="#e53e3e" stroke="#fff" strokeWidth="2" />
+
+            {/* Axes */}
+            <line x1={originX} y1={originY} x2={originX + graphSize + 10} y2={originY} stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+            <line x1={originX} y1={originY} x2={originX} y2={originY - graphSize - 10} stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+
+            {/* Labels */}
+            <text x={originX + graphSize / 2} y={originY + 18} textAnchor="middle" fontSize="10" fill="var(--ifm-color-emphasis-800)">False Positive Rate (FPR)</text>
+            <text x={originX - 12} y={originY - graphSize / 2} textAnchor="middle" fontSize="10" fill="var(--ifm-color-emphasis-800)" transform={`rotate(-90, ${originX - 12}, ${originY - graphSize / 2})`}>True Positive Rate (TPR)</text>
+
+            <text x={originX} y={originY + 12} fontSize="9" fill="var(--ifm-color-emphasis-600)">0</text>
+            <text x={originX + graphSize} y={originY + 12} textAnchor="end" fontSize="9" fill="var(--ifm-color-emphasis-600)">1</text>
+            <text x={originX - 6} y={originY - graphSize + 6} textAnchor="end" fontSize="9" fill="var(--ifm-color-emphasis-600)">1</text>
+          </svg>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+          <div style={{ padding: '10px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)', textAlign: 'center' }}>
+            <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>TPR (Recall / Sensitivity)</div>
+            <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#38a169', marginTop: '2px' }}>
+              {(tpr * 100).toFixed(1)}%
+            </div>
+            <div style={{ fontSize: '10px', color: 'var(--ifm-color-emphasis-500)' }}>Vertical Axis</div>
+          </div>
+
+          <div style={{ padding: '10px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)', textAlign: 'center' }}>
+            <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>FPR (False Alarm Rate)</div>
+            <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#e53e3e', marginTop: '2px' }}>
+              {(fpr * 100).toFixed(1)}%
+            </div>
+            <div style={{ fontSize: '10px', color: 'var(--ifm-color-emphasis-500)' }}>Horizontal Axis</div>
+          </div>
+
+          <div style={{ padding: '10px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)', textAlign: 'center' }}>
+            <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Youden's Index (J)</div>
+            <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#3182ce', marginTop: '2px' }}>
+              {youdenJ.toFixed(3)}
+            </div>
+            <div style={{ fontSize: '10px', color: 'var(--ifm-color-emphasis-500)' }}>TPR - FPR</div>
+          </div>
+
+          <div style={{ padding: '10px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid #805ad5', textAlign: 'center' }}>
+            <div style={{ fontSize: '11px', color: '#6b46c1', fontWeight: 'bold' }}>Overall ROC-AUC</div>
+            <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#805ad5', marginTop: '2px' }}>
+              {aucValue.toFixed(2)}
+            </div>
+            <div style={{ fontSize: '10px', color: 'var(--ifm-color-emphasis-500)' }}>Shaded Area Under Curve</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<ROCCurveSimulator />
+
+---
+
+## 3. Decoding AUC: Probabilistic Ranking Interpretation
+
+While AUC is mathematically the definite integral of the ROC curve:
+
+$$\text{AUC} = \int_{0}^{1} \text{TPR}(\text{FPR}) \, d(\text{FPR})$$
+
+In machine learning engineering, AUC possesses a powerful **probabilistic ranking interpretation**:
+
+$$\text{AUC} = P\left( \text{score}(x^+) > \text{score}(x^-) \right)$$
+
+:::info
+
+**📌 The Wilcoxon-Mann-Whitney Equivalence**
+
+If you draw one positive sample $x^+$ and one negative sample $x^-$ uniformly at random from your test cohort, **AUC is the exact probability that your model gives a higher predicted score to the positive sample than to the negative sample.**
+
+*   $\text{AUC} = 0.85$: The model ranks the positive instance higher than the negative instance in $85\%$ of random pairs.
+*   $\text{AUC} = 0.50$: Equivalent to a blind coin toss (no discrimination ability).
+
+:::
+
+### Qualitative AUC Performance Benchmarks
+
+| AUC Range | Discrimination Power | Production Viability |
+| :--- | :--- | :--- |
+| **$0.90 - 1.00$** | **Outstanding** | Production-ready for automated decisions. |
+| **$0.80 - 0.90$** | **Good** | Reliable for decision support and ranking pipelines. |
+| **$0.70 - 0.80$** | **Fair** | Acceptable baseline; requires feature engineering or ensembling. |
+| **$0.60 - 0.70$** | **Poor** | Marginal signal; high risk of misclassification. |
+| **$0.50$** | **Random Guess** | Zero discriminative power; equivalent to a coin toss. |
+
+---
+
+## 4. Threshold Selection Strategies
+
+A trained classifier produces continuous scores; you must intentionally select an operational cutoff:
+
+<Tabs>
+  <TabItem value="youden" label="1. Youden's J Statistic" default>
+    <br/>
+    
+    *   **The Concept:** Finds the point on the ROC curve that maximizes vertical distance above the random chance diagonal.
+    *   **Formula:** $J = \text{Sensitivity} + \text{Specificity} - 1 = \text{TPR} - \text{FPR}$.
+    *   **Geometric Meaning:** The point closest to the top-left ideal $(0, 1)$.
+    *   **Best For:** When false positives and false negatives carry roughly equivalent operational penalties.
+  </TabItem>
+  <TabItem value="metric" label="2. Constraint-Driven Metric Tuning">
+    <br/>
+    
+    *   **The Concept:** Fix one metric to an SLA threshold and optimize the other.
+    *   **Example A (Medical SLA):** "Find the highest threshold that maintains $\text{Recall} \ge 98\%$."
+    *   **Example B (Ad Fraud SLA):** "Find the lowest threshold that guarantees $\text{Precision} \ge 95\%$."
+  </TabItem>
+  <TabItem value="cost" label="3. Cost-Weighted Optimization">
+    <br/>
+    
+    *   **The Concept:** Attach real-world dollar values to false alarms ($c_{\text{FP}}$) and missed cases ($c_{\text{FN}}$).
+    *   **Cost Formula:**
+        $$\text{Expected Cost}(\tau) = c_{\text{FP}} \cdot \text{FP}(\tau) + c_{\text{FN}} \cdot \text{FN}(\tau)$$
+    *   **Optimal Cutoff:** Select $\tau^* = \arg\min_{\tau} \text{Expected Cost}(\tau)$.
+  </TabItem>
+</Tabs>
+
+---
+
+## 5. When ROC Lies: ROC-AUC vs. PR-AUC on Imbalanced Data
+
+The ROC curve has a structural blind spot on **severely imbalanced datasets**:
+
+export const ROCVsPRComparator = () => {
+  const [imbalanced, setImbalanced] = React.useState(true);
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>⚠️ The Imbalance Illusion: ROC-AUC vs. PR-AUC</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Toggle dataset distribution to observe how class prevalence impacts curve honesty:
+      </p>
+
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+        <button
+          onClick={() => setImbalanced(false)}
+          style={{ padding: '6px 14px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: !imbalanced ? '#3182ce' : 'transparent', color: !imbalanced ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+        >
+          Balanced Cohort (50% Positives)
+        </button>
+        <button
+          onClick={() => setImbalanced(true)}
+          style={{ padding: '6px 14px', borderRadius: '4px', border: '1px solid #e53e3e', backgroundColor: imbalanced ? '#e53e3e' : 'transparent', color: imbalanced ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
+        >
+          Severely Imbalanced Cohort (1% Positives)
+        </button>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '14px' }}>
+        <div style={{ padding: '14px', borderRadius: '6px', borderLeft: '4px solid #3182ce', backgroundColor: 'var(--ifm-background-surface-color)' }}>
+          <strong style={{ fontSize: '15px' }}>📈 ROC-AUC Score: {imbalanced ? '0.94 (Deceptively High)' : '0.94 (Honest)'}</strong>
+          <p style={{ margin: '6px 0 0 0', fontSize: '13px', lineHeight: '1.5' }}>
+            {imbalanced
+              ? 'FPR denominator (TN + FP) contains 9,900 negative instances. Generating 100 false alarms produces an FPR of only 1.0%! The ROC curve looks stellar despite a massive flood of false alarms.'
+              : 'On balanced data, FPR reflects false alarm rates accurately. ROC-AUC gives an honest assessment.'}
+          </p>
+        </div>
+
+        <div style={{ padding: '14px', borderRadius: '6px', borderLeft: `4px solid ${imbalanced ? '#e53e3e' : '#38a169'}`, backgroundColor: 'var(--ifm-background-surface-color)' }}>
+          <strong style={{ fontSize: '15px' }}>🎯 PR-AUC Score: {imbalanced ? '0.24 (Exposes Failure)' : '0.92 (Honest)'}</strong>
+          <p style={{ margin: '6px 0 0 0', fontSize: '13px', lineHeight: '1.5' }}>
+            {imbalanced
+              ? 'Precision denominator (TP + FP) ignores TN. 100 false alarms alongside 30 true positives causes Precision to collapse to 23%! PR-AUC exposes that 77% of alerts are false alarms.'
+              : 'Precision and Recall are closely matched, producing a clean, reliable PR-AUC.'}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<ROCVsPRComparator />
+
+---
+
+## 6. Implementation Lab
+
+:::tip
+
+**Lab Exercise: ROC Curves, AUC & Threshold Tuning**
+
+An interactive, fully functional Google Colab / Jupyter Notebook is available to plot ROC trajectories via scikit-learn, optimize cutoffs with Youden's J, and contrast ROC-AUC with PR-AUC on imbalanced cohorts live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/08-classification-metrics/roc_auc_and_threshold_tuning.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Run cells sequentially to generate synthetic cohorts and extract optimal thresholds.
+
+**Key Experiments to Run:**
+*   **Experiment 1 (Plotting ROC Curve via scikit-learn):** Train a logistic classifier on 100 samples to extract the ROC curve and compute $\text{AUC} = 0.931$.
+*   **Experiment 2 (Youden's J Optimization):** Search across all threshold points to find the optimal cutoff ($\tau = 0.583$) maximizing $J = 0.710$.
+*   **Experiment 3 (The Imbalance Shock):** Train on a 98:2 imbalanced cohort to witness an impressive $\text{ROC-AUC} = 0.980$ contrast with a revealing $\text{PR-AUC} = 0.386$.
+
+:::
+
+---
+
+## 7. Common Mistakes
+
+<Tabs>
+  <TabItem value="m1" label="🚨 1. Confusing ROC Axes with PR Axes" default>
+    <br/>
+    
+    *   **The Misconception:** *"The ROC curve plots Precision on the y-axis and Recall on the x-axis."*
+    *   **❌ Wrong Thinking:** Mixing up the ROC curve with the Precision-Recall curve.
+    *   **✅ The Right Principle:** The ROC curve plots **TPR (Recall) on the y-axis** and **FPR ($1 - \text{Specificity}$) on the x-axis**. The PR curve plots Precision vs. Recall.
+  </TabItem>
+  <TabItem value="m2" label="🚨 2. Interpreting AUC as Accuracy">
+    <br/>
+    
+    *   **The Misconception:** *"Our model has an AUC of 0.85, so its accuracy is 85%."*
+    *   **❌ Wrong Thinking:** Equating area under a ranking curve to thresholded point accuracy.
+    *   **✅ The Right Principle:** AUC is the probability that a randomly chosen positive sample is ranked higher than a randomly chosen negative sample. Accuracy requires specifying a single decision threshold.
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. Trusting ROC-AUC Blindly on Severe Imbalance">
+    <br/>
+    
+    *   **The Misconception:** *"The model has an AUC of 0.96 on fraud detection (0.1% fraud), so the model is ready for deployment."*
+    *   **❌ Wrong Thinking:** Ignoring the massive True Negative count dampening FPR.
+    *   **✅ The Right Principle:** On 1:1000 imbalance, an FPR of $1\%$ still means $10$ false alarms for every $1$ fraudster. Always inspect the **Precision-Recall (PR) curve and PR-AUC** on imbalanced data.
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Deploying with Default Threshold 0.5">
+    <br/>
+    
+    *   **The Misconception:** *"0.5 is the mathematical midpoint, so it is the correct cutoff for all production applications."*
+    *   **❌ Wrong Thinking:** Adopting arbitrary defaults without domain cost analysis.
+    *   **✅ The Right Principle:** If missing a positive sample costs $10\times$ more than a false alarm, the optimal cutoff is closer to $0.1$ or $0.2$. Always calibrate the threshold to real-world business loss functions.
+  </TabItem>
+  <TabItem value="m5" label="🚨 5. Omitting the Random Chance Baseline">
+    <br/>
+    
+    *   **The Misconception:** *"An AUC of 0.55 demonstrates positive predictive skill."*
+    *   **❌ Wrong Thinking:** Forgetting that the random guessing baseline is 0.50.
+    *   **✅ The Right Principle:** An AUC of 0.55 is barely distinguishable from random noise. Genuine predictive discrimination begins at $\text{AUC} \ge 0.70$.
+  </TabItem>
+</Tabs>
+
+---
+
+## 8. Summary
+
+<div className="row">
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🤖 Curve Geometry</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>ROC Space:</b> Y-axis is Sensitivity ($\text{TPR}$); X-axis is False Alarm Rate ($\text{FPR}$).</li>
+          <li><b>Ideal Point:</b> Top-left corner $(0, 1)$ achieves $100\%$ Recall with $0\%$ False Alarms.</li>
+          <li><b>AUC Meaning:</b> Probability of ranking a positive sample higher than a negative sample ($0.5$ is random, $1.0$ is perfect).</li>
+          <li><b>Threshold Independent:</b> Evaluates classification potential across all operational cutoffs.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🛠️ Operational Realities</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Youden's J:</b> $\text{TPR} - \text{FPR}$. Best threshold when error costs are symmetric.</li>
+          <li><b>Cost Optimization:</b> Minimize $c_{\text{FP}} \cdot \text{FP} + c_{\text{FN}} \cdot \text{FN}$ when error costs are asymmetric.</li>
+          <li><b>Imbalance Vulnerability:</b> ROC can look deceptively great on imbalanced data; deploy PR-AUC instead.</li>
+          <li><b>Deployment Mandate:</b> Never deploy at $\tau = 0.5$ without explicit threshold calibration.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+:::info
+
+**📌 Key Takeaways**
+
+*   **📊 AUC measures ranking skill:** A model with high AUC can cleanly separate classes; selecting the decision threshold $\tau$ chooses *where* to operate on that curve.
+*   **⚖️ Youden's J finds the elbow:** Maximizing $\text{TPR} - \text{FPR}$ identifies the point on the ROC curve closest to ideal perfection.
+*   **⚠️ Watch out for imbalance:** If the negative class dominates by orders of magnitude, use the Precision-Recall curve to avoid being fooled by an inflated ROC-AUC.
+
+:::
+
+**Next Section:** [Multiclass and Choosing Metrics](./05-multiclass-and-choosing-metrics.mdx) - synthesizing evaluation metrics for $>2$ classes via Macro, Micro, and Weighted averaging.
+
+---
+
+## 9. Active Recall
+
+*Test your understanding by answering first, then clicking to reveal the underlying principles.*
+
+### Interactive Checkpoint Quiz
+
+export const ROCAUCQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Probabilistic Meaning of AUC</h4>
+      <p style={{ margin: '0 0 15px 0' }}>A binary classifier trained to detect bank fraud achieves an ROC-AUC score of 0.88. What is the precise statistical meaning of this number?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>The model achieves 88% overall classification accuracy at threshold 0.5</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>If you pick one random fraudster and one random legitimate customer, there is an 88% chance the model scores the fraudster higher</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>The model catches 88% of all fraud cases</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. AUC is threshold-independent and does not represent accuracy at threshold 0.5. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Mathematically, ROC-AUC is identical to the Wilcoxon-Mann-Whitney U statistic: it is the probability that a randomly selected positive instance ranks higher than a randomly selected negative instance.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Catching 88% of cases is Recall, not AUC. Try again!</p>}
+    </div>
+  );
+};
+
+<ROCAUCQuiz />
+
+### Review Flashcards
+
+<details>
+  <summary>❓ <b>1. [THEORY] What do the extreme corners (0, 0) and (1, 1) on an ROC curve represent?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Bottom-Left $(0, 0)$:** Corresponds to setting threshold $\tau \to 1.0$ (or $+\infty$). The model predicts Negative for everything. $\text{FPR} = 0$ (zero false alarms), but $\text{TPR} = 0$ (catches zero positives).
+    *   **Top-Right $(1, 1)$:** Corresponds to setting threshold $\tau \to 0.0$ (or $-\infty$). The model predicts Positive for everything. $\text{TPR} = 1.0$ (catches 100% of positives), but $\text{FPR} = 1.0$ (flags 100% of negatives as false alarms).
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>2. [ANALYZE] Why is the ROC curve completely unaffected by changes in class prevalence?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Column vs. Row Independence:**
+        *   $\text{TPR} = \frac{\text{TP}}{\text{Actual Positives}}$ is computed purely along the positive row.
+        *   $\text{FPR} = \frac{\text{FP}}{\text{Actual Negatives}}$ is computed purely along the negative row.
+    *   Multiplying the number of negative samples by $1,000\times$ scales both $\text{FP}$ and $\text{TN}$ by $1,000\times$, leaving the ratio $\text{FPR} = \frac{\text{FP}}{\text{TN} + \text{FP}}$ unchanged!
+    *   This makes ROC-AUC mathematically invariant to class prevalence shifts.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>3. [PRACTICE] How is Youden's J statistic calculated from Sensitivity and Specificity?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Definition:**
+        $$J = \text{Sensitivity} + \text{Specificity} - 1$$
+    *   Since $\text{Sensitivity} = \text{TPR}$ and $\text{Specificity} = 1 - \text{FPR}$:
+        $$J = \text{TPR} + (1 - \text{FPR}) - 1 = \text{TPR} - \text{FPR}$$
+    *   Maximizing $J$ finds the point that maximizes the vertical gap between the ROC curve and the random guessing line ($\text{TPR} = \text{FPR}$).
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>4. [ANALYZE] Why can a classifier with ROC-AUC = 0.95 still be practically useless for rare cancer screening?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Rare Prevalence Dilemma:** Suppose cancer prevalence is $0.01\%$ (1 in 10,000).
+    *   At an operating point with $\text{TPR} = 95\%$ and $\text{FPR} = 2\%$ (which fits easily inside an $\text{AUC} = 0.95$ curve):
+        *   In 100,000 people: $10$ true cancers $\implies 9.5$ caught ($\text{TP}$).
+        *   $99,990$ healthy people $\implies 2\% \times 99990 \approx 2,000$ false alarms ($\text{FP}$).
+    *   **Precision:** $\frac{9.5}{9.5 + 2000} \approx 0.47\%$! Less than 1 in 200 positive alerts actually has cancer.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>5. [THEORY] What does an ROC curve that dips below the diagonal line indicate?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Inverted Predictions:** An ROC curve below the diagonal ($\text{AUC} < 0.50$) means the classifier is systematically predicting the wrong class (it ranks negative instances higher than positive instances).
+    *   **The Trivial Fix:** Simply flipping the model's predictions ($\hat{p}_{\text{new}} = 1 - \hat{p}$) reflects the ROC curve across the diagonal, converting an $\text{AUC} = 0.20$ model into an excellent $\text{AUC} = 0.80$ model.
+  </div>
+</details>

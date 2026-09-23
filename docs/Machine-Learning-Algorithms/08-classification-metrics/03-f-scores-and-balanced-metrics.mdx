@@ -1,0 +1,455 @@
+---
+sidebar_position: 3
+title: F-Scores and Balanced Metrics
+description: Synthesizing precision and recall via the harmonic mean, custom weighting with F-beta, and evaluating imbalanced cohorts with Balanced Accuracy and MCC.
+tags: [classification, precision, recall, f-score, harmonic-mean, scikit-learn]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import React from 'react';
+
+# F-Scores and Balanced Metrics
+
+> **Topic —** Because Precision and Recall exist in a continuous mechanical tradeoff, comparing competing models requires a unified scalar benchmark. This guide explores the **$F_1$-Score**, derives why the **harmonic mean** is mathematically mandatory over the arithmetic mean, explores domain weighting with **$F_\beta$** ($F_{0.5}$ and $F_2$), and demonstrates why **Balanced Accuracy** and the **Matthews Correlation Coefficient (MCC)** are superior on imbalanced data.
+
+---
+
+## 1. The Core Concept
+
+When comparing models across validation folds, evaluating two separate numbers (e.g. Model A: $P=90\%, R=50\%$ vs. Model B: $P=70\%, R=75\%$) creates ambiguity. 
+
+The **$F_1$-Score** resolves this by computing the **harmonic mean** of Precision and Recall:
+
+$$F_1 = 2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}$$
+
+### Why the Harmonic Mean?
+
+The arithmetic mean $\frac{P + R}{2}$ treats errors additively and permits **compensatory masking**: a model with $100\%$ precision that catches only $1$ out of $1,000$ actual positives ($R = 0.1\%$) receives an arithmetic mean of $\approx 50\%$.
+
+The harmonic mean is defined as the **reciprocal of the arithmetic mean of reciprocals**:
+
+$$\frac{1}{F_1} = \frac{1}{2} \left( \frac{1}{\text{Precision}} + \frac{1}{\text{Recall}} \right)$$
+
+Because reciprocals explode as values approach zero ($\lim_{x \to 0} \frac{1}{x} = \infty$), **the harmonic mean is dominated by the minimum value**. If either Precision or Recall collapses toward zero, $F_1$ crashes to zero.
+
+:::tip
+
+**If you only take one thing from this page**
+
+The arithmetic mean rewards models that sacrifice one metric to inflate the other. The **Harmonic Mean ($F_1$) penalizes imbalance**, strictly demanding that a model perform well across *both* Precision and Recall to achieve a high score.
+
+:::
+
+---
+
+## 2. Interactive Harmonic Mean & F-Beta Calculator
+
+Adjust Precision and Recall below to observe how the Harmonic Mean ($F_1$) penalizes divergence compared to the Arithmetic Mean, and test custom weighting with $\beta$:
+
+export const FScoreCalculator = () => {
+  const [p, setP] = React.useState(0.85);
+  const [r, setR] = React.useState(0.25);
+  const [beta, setBeta] = React.useState(1.0);
+
+  const arith = (p + r) / 2;
+  const geom = Math.sqrt(p * r);
+  const f1 = p + r > 0 ? (2 * p * r) / (p + r) : 0;
+
+  const betaSq = beta * beta;
+  const fBeta = (betaSq * p + r) > 0 ? ((1 + betaSq) * p * r) / (betaSq * p + r) : 0;
+
+  const divergence = (arith - f1) * 100;
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>🧮 Interactive Harmonic Mean and F-Beta Explorer</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Move the Precision and Recall sliders to observe how the harmonic penalty reacts to extreme divergence:
+      </p>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', marginBottom: '16px' }}>
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 'bold' }}>
+            <span>Precision (P):</span>
+            <span style={{ color: '#3182ce' }}>{(p * 100).toFixed(0)}%</span>
+          </div>
+          <input
+            type="range"
+            min="0.05"
+            max="1.00"
+            step="0.05"
+            value={p}
+            onChange={(e) => setP(parseFloat(e.target.value))}
+            style={{ width: '100%', marginTop: '6px' }}
+          />
+        </div>
+        <div>
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 'bold' }}>
+            <span>Recall (R):</span>
+            <span style={{ color: '#38a169' }}>{(r * 100).toFixed(0)}%</span>
+          </div>
+          <input
+            type="range"
+            min="0.05"
+            max="1.00"
+            step="0.05"
+            value={r}
+            onChange={(e) => setR(parseFloat(e.target.value))}
+            style={{ width: '100%', marginTop: '6px' }}
+          />
+        </div>
+      </div>
+
+      <div style={{ marginBottom: '16px' }}>
+        <span style={{ fontSize: '13px', fontWeight: 'bold', marginRight: '10px' }}>F-Beta Weighting (β):</span>
+        <div style={{ display: 'inline-flex', gap: '8px', marginTop: '6px' }}>
+          <button
+            onClick={() => setBeta(0.5)}
+            style={{ padding: '4px 10px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: beta === 0.5 ? '#3182ce' : 'transparent', color: beta === 0.5 ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+          >
+            β = 0.5 (F₀.₅ Precision Focus)
+          </button>
+          <button
+            onClick={() => setBeta(1.0)}
+            style={{ padding: '4px 10px', borderRadius: '4px', border: '1px solid #805ad5', backgroundColor: beta === 1.0 ? '#805ad5' : 'transparent', color: beta === 1.0 ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+          >
+            β = 1.0 (F₁ Balanced)
+          </button>
+          <button
+            onClick={() => setBeta(2.0)}
+            style={{ padding: '4px 10px', borderRadius: '4px', border: '1px solid #38a169', backgroundColor: beta === 2.0 ? '#38a169' : 'transparent', color: beta === 2.0 ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+          >
+            β = 2.0 (F₂ Recall Focus)
+          </button>
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: '12px', marginBottom: '16px' }}>
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Arithmetic Mean</div>
+          <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#718096', marginTop: '4px' }}>
+            {(arith * 100).toFixed(1)}%
+          </div>
+          <div style={{ fontSize: '10px', color: 'var(--ifm-color-emphasis-500)', marginTop: '2px' }}>(P + R) / 2</div>
+        </div>
+
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid #805ad5', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: '#6b46c1', fontWeight: 'bold' }}>Harmonic Mean (F1)</div>
+          <div style={{ fontSize: '22px', fontWeight: 'bold', color: '#805ad5', marginTop: '2px' }}>
+            {(f1 * 100).toFixed(1)}%
+          </div>
+          <div style={{ fontSize: '10px', color: 'var(--ifm-color-emphasis-500)', marginTop: '2px' }}>2·P·R / (P + R)</div>
+        </div>
+
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Weighted F-Beta</div>
+          <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#3182ce', marginTop: '4px' }}>
+            {(fBeta * 100).toFixed(1)}%
+          </div>
+          <div style={{ fontSize: '10px', color: 'var(--ifm-color-emphasis-500)', marginTop: '2px' }}>β = {beta.toFixed(1)} priority</div>
+        </div>
+
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Harmonic Penalty</div>
+          <div style={{ fontSize: '20px', fontWeight: 'bold', color: divergence > 15 ? '#e53e3e' : '#38a169', marginTop: '4px' }}>
+            -{divergence.toFixed(1)}%
+          </div>
+          <div style={{ fontSize: '10px', color: 'var(--ifm-color-emphasis-500)', marginTop: '2px' }}>Penalty for imbalance</div>
+        </div>
+      </div>
+
+      <div style={{ padding: '10px 14px', borderRadius: '6px', backgroundColor: Math.abs(p - r) >= 0.4 ? 'rgba(229, 62, 62, 0.12)' : 'rgba(56, 161, 105, 0.12)', fontSize: '13px' }}>
+        {Math.abs(p - r) >= 0.4 ? (
+          <span style={{ color: '#c53030', fontWeight: 'bold' }}>
+            🚨 Metric Imbalance Trap: The Arithmetic Mean ({ (arith * 100).toFixed(0) }%) deceptively flatters the model, but the Harmonic Mean F1 ({ (f1 * 100).toFixed(0) }%) correctly penalizes the lagging metric by { divergence.toFixed(0) } percentage points!
+          </span>
+        ) : (
+          <span style={{ color: '#276749' }}>
+            ✓ Balanced Metrics: Precision and Recall are closely matched. F1 ({ (f1 * 100).toFixed(0) }%) aligns closely with the Arithmetic Mean ({ (arith * 100).toFixed(0) }%).
+          </span>
+        )}
+      </div>
+    </div>
+  );
+};
+
+<FScoreCalculator />
+
+---
+
+## 3. Weighting Asymmetric Priorities with F-Beta
+
+When operational costs are asymmetric, the parameter $\beta$ in the generalized **$F_\beta$-Score** allows engineers to tilt evaluation weight toward Precision or Recall:
+
+$$F_\beta = (1 + \beta^2) \cdot \frac{\text{Precision} \cdot \text{Recall}}{\beta^2 \cdot \text{Precision} + \text{Recall}}$$
+
+<Tabs>
+  <TabItem value="f1" label="1. F1-Score (β = 1.0)" default>
+    <br/>
+    
+    *   **Weighting:** Precision and Recall are weighted equally.
+    *   **Formula:** $F_1 = 2 \cdot \frac{P \cdot R}{P + R}$.
+    *   **Optimal For:** General benchmark ranking when false positive and false negative costs are comparable.
+  </TabItem>
+  <TabItem value="f2" label="2. F2-Score (β = 2.0)">
+    <br/>
+    
+    *   **Weighting:** **Weights Recall twice as heavily as Precision** ($\beta^2 = 4$).
+    *   **Formula:** $F_2 = 5 \cdot \frac{P \cdot R}{4P + R}$.
+    *   **Optimal For:**
+        *   Medical cancer detection (missing disease is unacceptable).
+        *   Wire fraud monitoring (catching theft outweighs transaction reviews).
+  </TabItem>
+  <TabItem value="f05" label="3. F0.5-Score (β = 0.5)">
+    <br/>
+    
+    *   **Weighting:** **Weights Precision twice as heavily as Recall** ($\beta^2 = 0.25$).
+    *   **Formula:** $F_{0.5} = 1.25 \cdot \frac{P \cdot R}{0.25P + R}$.
+    *   **Optimal For:**
+        *   Automated spam email deletion (destroying legitimate email is intolerable).
+        *   High-confidence loan approvals.
+  </TabItem>
+</Tabs>
+
+---
+
+## 4. Balanced Metrics for Severe Imbalance: Balanced Accuracy & MCC
+
+While $F_1$ is far superior to overall accuracy, it has a blind spot: **$F_1$ ignores True Negatives completely**.
+
+If a model accurately classifies 10,000 legitimate negative instances, the $F_1$ formula never inspects the $\text{TN}$ quadrant. For extreme class imbalance, two alternative metrics provide complete matrix coverage:
+
+### 1. Balanced Accuracy
+
+Computes the unweighted arithmetic mean of Recall (TPR) and Specificity (TNR):
+
+$$\text{Balanced Accuracy} = \frac{\text{Recall} + \text{Specificity}}{2} = \frac{1}{2} \left( \frac{\text{TP}}{\text{TP} + \text{FN}} + \frac{\text{TN}}{\text{TN} + \text{FP}} \right)$$
+
+*   On balanced data, Balanced Accuracy equals standard Accuracy.
+*   A trivial majority classifier always scores exactly **$50.0\%$**, instantly revealing lack of skill.
+
+### 2. Matthews Correlation Coefficient (MCC)
+
+The **Matthews Correlation Coefficient** treats binary classification as a Pearson product-moment correlation between actual and predicted binary vectors:
+
+$$\text{MCC} = \frac{\text{TP} \cdot \text{TN} - \text{FP} \cdot \text{FN}}{\sqrt{(\text{TP} + \text{FP})(\text{TP} + \text{FN})(\text{TN} + \text{FP})(\text{TN} + \text{FN})}}$$
+
+*   **Range:** $[-1.0, +1.0]$.
+    *   $+1.0$: Perfect classification.
+    *   $0.0$: Equivalent to random guessing or predicting a constant majority class.
+    *   $-1.0$: Total inverse disagreement.
+*   **Completeness:** MCC is the **only metric that uses all four quadrants** symmetrically in both the numerator and denominator.
+
+---
+
+## 5. Implementation Lab
+
+:::tip
+
+**Lab Exercise: F-Scores, Harmonic Means & Balanced Metrics**
+
+An interactive, fully functional Google Colab / Jupyter Notebook is available to evaluate Harmonic vs. Arithmetic divergence, tune $F_\beta$ weights, and benchmark MCC against $F_1$ live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/08-classification-metrics/f_scores_and_balanced_metrics.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Run cells sequentially to simulate extreme metric imbalance and compute MCC benchmarks.
+
+**Key Experiments to Run:**
+*   **Experiment 1 (The Harmonic Penalty):** Verify how $P=0.90, R=0.10$ drops from an Arithmetic Mean of $50.0\%$ down to an $F_1$-Score of $18.0\%$.
+*   **Experiment 2 (F-Beta Sensitivity):** Train a disease detector ($P=62\%, R=87\%$) and observe $F_2 = 80.4\%$ reward high recall while $F_{0.5} = 76.0\%$ penalizes false alarms.
+*   **Experiment 3 (MCC on 95:5 Imbalance):** Compare a trivial dummy model (Accuracy $95\%$, MCC $0.000$) against a trained model (Accuracy $95\%$, MCC $0.592$).
+
+:::
+
+---
+
+## 6. Common Mistakes
+
+<Tabs>
+  <TabItem value="m1" label="🚨 1. Using the Arithmetic Mean for F1" default>
+    <br/>
+    
+    *   **The Misconception:** *"The F1-score is simply the average of precision and recall: (P + R) / 2."*
+    *   **❌ Wrong Thinking:** Computing the arithmetic mean instead of the harmonic mean.
+    *   **✅ The Right Principle:** $F_1 = 2 \frac{P \cdot R}{P + R}$. The arithmetic mean masks catastrophic failure when one metric collapses to near zero.
+  </TabItem>
+  <TabItem value="m2" label="🚨 2. Inverting Beta Weights in F-Beta">
+    <br/>
+    
+    *   **The Misconception:** *"F2 prioritizes precision because 2 is greater than 1."*
+    *   **❌ Wrong Thinking:** Assuming $\beta > 1$ weights precision.
+    *   **✅ The Right Principle:** $\beta$ represents how many times more important **Recall** is compared to Precision. $F_2$ ($\beta=2$) weights Recall twice as much as Precision. $F_{0.5}$ ($\beta=0.5$) weights Precision twice as much as Recall.
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. Assuming F1 Cares About True Negatives">
+    <br/>
+    
+    *   **The Misconception:** *"A high F1-score proves the model accurately handles both positive and negative classes."*
+    *   **❌ Wrong Thinking:** Forgetting that TN is absent from the F1 formula.
+    *   **✅ The Right Principle:** $F_1$ only inspects $TP, FP, FN$. It provides zero verification of negative class accuracy. To evaluate performance across both classes symmetrically on imbalanced datasets, report **Matthews Correlation Coefficient (MCC)** or Balanced Accuracy.
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Comparing F1 Across Differing Class Prevalences">
+    <br/>
+    
+    *   **The Misconception:** *"An F1 score of 0.70 means the same thing on a 50:50 dataset as on a 99:1 dataset."*
+    *   **❌ Wrong Thinking:** Treating $F_1$ as an absolute scale-invariant metric.
+    *   **✅ The Right Principle:** On a 99:1 dataset, baseline precision is $1\%$, making an $F_1$ of $0.70$ an extraordinary achievement. On a balanced dataset, random guessing yields $F_1 \approx 0.50$. Always anchor $F_1$ against class distribution.
+  </TabItem>
+  <TabItem value="m5" label="🚨 5. Zero Denominator Crashes in MCC">
+    <br/>
+    
+    *   **The Misconception:** *"MCC can always be calculated for any classifier output."*
+    *   **❌ Wrong Thinking:** Failing to handle degenerate models that predict only one class.
+    *   **✅ The Right Principle:** If a model predicts 'Negative' for every sample ($TP = FP = 0$), the MCC denominator $\sqrt{(TP+FP)\dots}$ evaluates to zero. Scikit-learn handles this edge case by returning $0.0$.
+  </TabItem>
+</Tabs>
+
+---
+
+## 7. Summary
+
+<div className="row">
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🤖 Metric Formulations</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>F1-Score:</b> Harmonic mean $2 \frac{P \cdot R}{P + R}$. Strictly penalizes extreme divergence between $P$ and $R$.</li>
+          <li><b>F-Beta Score:</b> Weighted harmonic mean. $\beta > 1$ weights Recall; $\beta < 1$ weights Precision.</li>
+          <li><b>Balanced Accuracy:</b> $\frac{\text{TPR} + \text{TNR}}{2}$. Trivial baseline is always $50\%$.</li>
+          <li><b>MCC:</b> Pearson correlation between actual and predicted labels $[-1, +1]$. Uses all 4 quadrants.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🛠️ Engineering Selection</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Balanced Data:</b> $F_1$ is the reliable industry standard.</li>
+          <li><b>Life-or-Death Recall Focus:</b> Use $F_2$ (medicine, disaster warnings, intrusion detection).</li>
+          <li><b>Costly False Alarms:</b> Use $F_{0.5}$ (automated spam deletion, auto-banning users).</li>
+          <li><b>Severe Class Imbalance:</b> Deploy MCC alongside Precision-Recall curves.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+:::info
+
+**📌 Key Takeaways**
+
+*   **⚡ Harmonic mean enforces balance:** A model cannot achieve high $F_1$ by sacrificing Recall to artificially inflate Precision.
+*   **🎯 Choose your β intentionally:** Use $F_2$ when missed cases are catastrophic; use $F_{0.5}$ when false alarms destroy customer trust.
+*   **🛡️ MCC is the ultimate test:** Because it accounts for True Negatives, MCC is the most rigorous single scalar metric for imbalanced classification.
+
+:::
+
+**Next Section:** [ROC-AUC and Threshold Tuning](./04-roc-auc-and-threshold-tuning.md) - sweeping all decision thresholds simultaneously and quantifying discrimination power via the Area Under the Curve.
+
+---
+
+## 8. Active Recall
+
+*Test your understanding by answering first, then clicking to reveal the underlying principles.*
+
+### Interactive Checkpoint Quiz
+
+export const FScoreQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Metric Selection for Medical Screening</h4>
+      <p style={{ margin: '0 0 15px 0' }}>A medical research team wants a single metric to benchmark diagnostic algorithms for a rare deadly disease. False negatives must be penalized twice as heavily as false positives. Which metric should they select?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>F0.5-Score</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>F2-Score</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Standard Accuracy</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. F0.5 sets β = 0.5, which weights Precision twice as heavily as Recall. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! In F_β, the parameter β represents the relative importance of Recall compared to Precision. Setting β = 2.0 (F2) weights Recall twice as heavily as Precision, penalizing False Negatives heavily.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Standard accuracy fails on rare diseases due to the Accuracy Paradox. Try again!</p>}
+    </div>
+  );
+};
+
+<FScoreQuiz />
+
+### Review Flashcards
+
+<details>
+  <summary>❓ <b>1. [THEORY] Why is the harmonic mean of two non-zero numbers always less than or equal to their arithmetic mean?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The AM-GM-HM Inequality:** For any positive real numbers $a$ and $b$:
+        $$\text{Arithmetic Mean } \ge \text{ Geometric Mean } \ge \text{ Harmonic Mean}$$
+        $$\frac{a + b}{2} \ge \sqrt{ab} \ge \frac{2ab}{a + b}$$
+    *   Equality holds if and only if $a = b$ (Precision equals Recall).
+    *   The greater the divergence between Precision and Recall, the larger the penalty gap between Arithmetic and Harmonic mean.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>2. [MATH] A model achieves Precision = 0.80 and Recall = 0.60. Calculate F1 by hand.</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Product:** $P \cdot R = 0.80 \times 0.60 = 0.48$.
+    *   **Sum:** $P + R = 0.80 + 0.60 = 1.40$.
+    *   **F1 Calculation:**
+        $$F_1 = 2 \cdot \frac{0.48}{1.40} = \frac{0.96}{1.40} = \frac{96}{140} = \frac{24}{35} \approx 0.6857 \quad (68.6\%)$$
+    *   Notice $F_1 \approx 68.6\%$ is lower than the Arithmetic Mean ($70.0\%$).
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>3. [ANALYZE] Why can Matthews Correlation Coefficient (MCC) identify a useless model on imbalanced data when F1 cannot?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Missing True Negatives:** $F_1$ only inspects $TP, FP, FN$.
+    *   If a dataset has 9,900 negatives and 100 positives, a naive model that predicts positive for 500 samples (including 80 actual positives and 420 false alarms) gets:
+        *   $P = 80 / 500 = 16\%$, $R = 80 / 100 = 80\% \implies F_1 \approx 26.7\%$.
+    *   MCC evaluates all four cells ($TP=80, FP=420, FN=20, TN=9480$):
+        *   Because the model generated 420 false alarms on the negative class, MCC reflects this error in its denominator and yields a near-zero correlation ($\text{MCC} \approx 0.35$).
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>4. [PRACTICE] How does Balanced Accuracy prevent the Accuracy Paradox on an imbalanced dataset (99% negative, 1% positive)?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   A trivial model that always predicts Negative gets:
+        *   $\text{Recall} = 0 / 1 = 0.0$ ($0\%$).
+        *   $\text{Specificity} = 99 / 99 = 1.0$ ($100\%$).
+    *   **Balanced Accuracy:**
+        $$\text{Balanced Accuracy} = \frac{0.0 + 1.0}{2} = 0.50 \quad (50.0\%)$$
+    *   While standard accuracy reports an inflated $99.0\%$, Balanced Accuracy reveals that the model performs no better than a random coin toss ($50\%$).
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>5. [THEORY] Can F1 ever exceed both Precision and Recall?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **No, never:** Because $F_1$ is a mean (specifically a harmonic mean), it is mathematically constrained to lie strictly between the two values:
+        $$\min(\text{Precision}, \text{Recall}) \le F_1 \le \max(\text{Precision}, \text{Recall})$$
+    *   $F_1$ equals Precision and Recall if and only if Precision equals Recall ($P = R \implies F_1 = P$).
+  </div>
+</details>

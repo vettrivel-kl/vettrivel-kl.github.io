@@ -1,0 +1,467 @@
+---
+sidebar_position: 1
+title: Why Logistic Regression
+description: Binary classification fundamentals, why ordinary least squares linear regression fails on probabilities, and the mathematical necessity of the sigmoid curve.
+tags: [classification, logistic-regression, sigmoid, scikit-learn]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import React from 'react';
+
+# Why Logistic Regression
+
+> **Topic —** Linear regression is designed to predict unbounded continuous quantities like housing prices or temperature. When applied to classification problems (pass/fail, default/repay, spam/ham), linear regression fails catastrophically: it produces nonsensical negative or $>100\%$ probabilities and allows distant outliers to warp the decision boundary. This chapter explores these structural failure modes and introduces the **sigmoid activation function** as the proper mathematical gateway to probabilistic classification.
+
+---
+
+## 1. The Core Concept
+
+In supervised **binary classification**, target labels are discrete binary states:
+
+$$y \in \{0, 1\}$$
+
+Rather than outputting hard discrete labels directly, modern machine learning models estimate the **conditional posterior probability**:
+
+$$P(y = 1 \mid x)$$
+
+A valid probability must strictly adhere to the Kolmogorov axioms, specifically bounded within the unit interval:
+
+$$0 \le P(y = 1 \mid x) \le 1$$
+
+While Ordinary Least Squares (OLS) linear regression fits a hyper-plane $y = w^T x + b$, its outputs are completely unconstrained ($y \in (-\infty, +\infty)$). Wrapping this linear score inside a monotonic, non-linear **sigmoid squashing function** guarantees valid probabilities.
+
+:::tip
+
+**If you only take one thing from this page**
+
+Despite its historical name, **Logistic Regression is a classification algorithm**, not a regression algorithm. It models the log-odds of a binary event as a linear function of features, mapping real-valued inputs into valid $[0, 1]$ probabilities via the sigmoid function $\sigma(z) = \frac{1}{1 + e^{-z}}$.
+
+:::
+
+---
+
+## 2. Interactive Sigmoid & Probability Sandbox
+
+Use the interactive slider below to vary the linear score $z = w^T x + b$ and observe how the sigmoid function maps real numbers into probabilities, odds, and discrete classifications:
+
+export const SigmoidCalculator = () => {
+  const [z, setZ] = React.useState(0.0);
+  const [threshold, setThreshold] = React.useState(0.5);
+
+  const p = 1.0 / (1.0 + Math.exp(-z));
+  const odds = Math.exp(z);
+  const decision = p >= threshold ? 1 : 0;
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>🧮 Interactive Sigmoid & Odds Sandbox</h4>
+      <p style={{ margin: '0 0 16px 0', fontSize: '14px' }}>
+        Adjust the linear logit score $z$ to inspect the transformation into probability $\sigma(z)$:
+      </p>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '15px', marginBottom: '16px' }}>
+        <div>
+          <label style={{ fontSize: '13px', fontWeight: 'bold' }}>
+            Linear Logit Score (z): <span style={{ color: '#3182ce' }}>{z.toFixed(2)}</span>
+          </label>
+          <input
+            type="range"
+            min="-6"
+            max="6"
+            step="0.1"
+            value={z}
+            onChange={(e) => setZ(parseFloat(e.target.value))}
+            style={{ width: '100%', marginTop: '6px' }}
+          />
+        </div>
+        <div>
+          <label style={{ fontSize: '13px', fontWeight: 'bold' }}>
+            Decision Threshold: <span style={{ color: '#805ad5' }}>{threshold.toFixed(2)}</span>
+          </label>
+          <input
+            type="range"
+            min="0.1"
+            max="0.9"
+            step="0.05"
+            value={threshold}
+            onChange={(e) => setThreshold(parseFloat(e.target.value))}
+            style={{ width: '100%', marginTop: '6px' }}
+          />
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+          <div style={{ fontSize: '12px', color: 'var(--ifm-color-emphasis-600)' }}>Probability P(y=1)</div>
+          <div style={{ fontSize: '22px', fontWeight: 'bold', color: p >= threshold ? '#38a169' : '#e53e3e', marginTop: '4px' }}>
+            {(p * 100).toFixed(1)}%
+          </div>
+          <div style={{ fontSize: '11px', marginTop: '4px' }}>σ(z) = {(p).toFixed(4)}</div>
+        </div>
+
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+          <div style={{ fontSize: '12px', color: 'var(--ifm-color-emphasis-600)' }}>Odds Ratio [p / (1-p)]</div>
+          <div style={{ fontSize: '22px', fontWeight: 'bold', color: '#3182ce', marginTop: '4px' }}>
+            {odds > 100 ? '> 100' : odds < 0.01 ? '< 0.01' : odds.toFixed(2)}:1
+          </div>
+          <div style={{ fontSize: '11px', marginTop: '4px' }}>e^z ratio</div>
+        </div>
+
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+          <div style={{ fontSize: '12px', color: 'var(--ifm-color-emphasis-600)' }}>Binary Decision</div>
+          <div style={{ fontSize: '22px', fontWeight: 'bold', color: decision === 1 ? '#38a169' : '#e53e3e', marginTop: '4px' }}>
+            Class {decision}
+          </div>
+          <div style={{ fontSize: '11px', marginTop: '4px' }}>Rule: p ≥ {threshold.toFixed(2)}</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<SigmoidCalculator />
+
+---
+
+## 3. The Two Fatal Flaws of Linear Regression
+
+Why can we not simply fit Ordinary Least Squares $y = mx + b$ and apply a cutoff at $0.5$?
+
+<Tabs>
+  <TabItem value="flaw1" label="🚫 Flaw 1: Nonsensical Probabilities" default>
+    <br/>
+    
+    *   **The Problem:** Linear equations are unbounded rays: as $x \to \pm \infty$, $y \to \pm \infty$.
+    *   **Real-world Disaster:** If predicting student pass/fail based on study hours ($y = 0.16x - 0.58$):
+        *   Student studying 1 hour: predicted score is $-0.42$ (**Negative probability!**).
+        *   Student studying 15 hours: predicted score is $1.82$ (**Probability of 182%!**).
+    *   **Statistical Violation:** Violates Kolmogorov probability axioms. Downstream decision systems (expected value, risk budgeting) fail when passed negative probabilities.
+  </TabItem>
+  <TabItem value="flaw2" label="💥 Flaw 2: Severe Outlier Sensitivity">
+    <br/>
+    
+    *   **The Problem:** OLS minimizes squared residuals $\sum (y_i - \hat{y}_i)^2$.
+    *   **The Distortion:** A student who studied 50 hours and passed easily has $y_i = 1$. The linear model predicts $\hat{y} = 7.6$.
+    *   **The Paradox:** Because $7.6 \gg 1.0$, OLS treats this successful student as an **enormous error** with squared loss $(1 - 7.6)^2 = 43.56$.
+    *   **The Collapse:** To minimize this artificial penalty, OLS rotates its slope downwards, pulling down predictions for borderline students and misclassifying true positives.
+  </TabItem>
+</Tabs>
+
+---
+
+## 4. Interactive Outlier Shock Comparator
+
+Observe how adding an extreme data point tilts a linear regression line while leaving Logistic Regression's decision boundary stable:
+
+export const OutlierShockVisualizer = () => {
+  const [hasOutlier, setHasOutlier] = React.useState(false);
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>⚡ Outlier Vulnerability Comparator</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Compare how an extreme observation (50 study hours) warps model parameters:
+      </p>
+
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
+        <button
+          onClick={() => setHasOutlier(false)}
+          style={{
+            padding: '8px 14px',
+            borderRadius: '4px',
+            border: '1px solid #3182ce',
+            backgroundColor: !hasOutlier ? '#3182ce' : 'transparent',
+            color: !hasOutlier ? '#fff' : 'var(--ifm-font-color-base)',
+            cursor: 'pointer',
+            transition: '0.2s'
+          }}
+        >
+          Normal Dataset (10 Students, Hours 2 to 11)
+        </button>
+        <button
+          onClick={() => setHasOutlier(true)}
+          style={{
+            padding: '8px 14px',
+            borderRadius: '4px',
+            border: '1px solid #e53e3e',
+            backgroundColor: hasOutlier ? '#e53e3e' : 'transparent',
+            color: hasOutlier ? '#fff' : 'var(--ifm-font-color-base)',
+            cursor: 'pointer',
+            fontWeight: 'bold',
+            transition: '0.2s'
+          }}
+        >
+          Add Outlier (Student with 50 Hours)
+        </button>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '15px' }}>
+        <div style={{ padding: '14px', borderLeft: '4px solid #e53e3e', backgroundColor: 'rgba(229, 62, 62, 0.06)', borderRadius: '4px' }}>
+          <strong>📉 Linear Regression (OLS)</strong>
+          <div style={{ fontSize: '13px', marginTop: '6px' }}>
+            • Slope: <b>{hasOutlier ? '0.019 (Flattened)' : '0.164 (Sharp)'}</b><br/>
+            • 6-Hour Student Prediction: <b>{hasOutlier ? '0.26 (FAIL ❌)' : '0.40 / Pass boundary'}</b><br/>
+            • Impact: <i>{hasOutlier ? 'Outlier tilts line downward; borderline passing students flipped to FAIL!' : 'Standard linear fit across range.'}</i>
+          </div>
+        </div>
+
+        <div style={{ padding: '14px', borderLeft: '4px solid #38a169', backgroundColor: 'rgba(56, 161, 105, 0.06)', borderRadius: '4px' }}>
+          <strong>🛡️ Logistic Regression (Sigmoid)</strong>
+          <div style={{ fontSize: '13px', marginTop: '6px' }}>
+            • Boundary: <b>Stable at x ≈ 3.8 hours</b><br/>
+            • 6-Hour Student Prediction: <b>{hasOutlier ? '0.78 (PASS ✅)' : '0.82 (PASS ✅)'}</b><br/>
+            • Impact: <i>Sigmoid plateau asymptotes cleanly at 1.0; extreme points create zero gradient distortion!</i>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<OutlierShockVisualizer />
+
+---
+
+## 5. Mathematical Anatomy of the Sigmoid Curve
+
+The **standard logistic sigmoid function** $\sigma(z)$ maps any real number $z \in (-\infty, +\infty)$ into the open unit interval $(0, 1)$:
+
+$$\sigma(z) = \frac{1}{1 + e^{-z}} = \frac{e^z}{1 + e^z}$$
+
+<Tabs>
+  <TabItem value="numerator" label="1. Numerator: 1" default>
+    <br/>
+    
+    *   Acts as the upper asymptotic ceiling.
+    *   As $z \to +\infty$, $e^{-z} \to 0$, forcing $\sigma(z) \to \frac{1}{1 + 0} = 1.0$.
+  </TabItem>
+  <TabItem value="exp" label="2. Denominator Term: e^(-z)">
+    <br/>
+    
+    *   The exponential engine driving smooth non-linear saturation.
+    *   When $z = 0$, $e^{-0} = 1.0$, producing the exact symmetry center: $\sigma(0) = \frac{1}{1 + 1} = 0.5$.
+    *   As $z \to -\infty$, $e^{-z} \to +\infty$, driving $\sigma(z) \to 0.0$.
+  </TabItem>
+  <TabItem value="symmetry" label="3. Fundamental Symmetry">
+    <br/>
+    
+    *   **The Identity:** $\sigma(-z) = 1 - \sigma(z)$.
+    *   **Proof:**
+        $$1 - \sigma(z) = 1 - \frac{1}{1 + e^{-z}} = \frac{e^{-z}}{1 + e^{-z}} = \frac{1}{e^z + 1} = \sigma(-z)$$
+    *   **Engineering Value:** The probability of failure ($1 - p$) equals the sigmoid of the negated linear score.
+  </TabItem>
+</Tabs>
+
+### Key Sigmoid Benchmarks (Mental Math)
+
+| Input ($z$) | Expression ($e^{-z}$) | Probability ($\sigma(z)$) | Practical Interpretation |
+| :--- | :--- | :--- | :--- |
+| **$-5.0$** | $148.41$ | **$0.7\%$** | Near certainty of Negative Class |
+| **$-2.0$** | $7.39$ | **$11.9\%$** | Low confidence Negative |
+| **$0.0$** | $1.00$ | **$50.0\%$** | Maximum uncertainty (Decision Boundary) |
+| **$+2.0$** | $0.135$ | **$88.1\%$** | Strong confidence Positive |
+| **$+5.0$** | $0.0067$ | **$99.3\%$** | Near certainty of Positive Class |
+
+---
+
+## 6. Implementation Lab
+
+:::tip
+
+**Lab Exercise: Linear Classification Failures & Sigmoid Mechanics**
+
+An interactive, fully functional Google Colab / Jupyter Notebook is available to demonstrate linear regression probability failures, outlier line tilts, and sigmoid symmetry live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/07-logistic-regression/why_logistic_regression.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Run cells sequentially to reproduce linear probability violations and sigmoid stability.
+
+**Key Experiments to Run:**
+*   **Experiment 1 (Negative & >100% Errors):** Fit OLS linear regression on 10 student records to observe predicted values of $-0.255$ and $+1.218$.
+*   **Experiment 2 (Outlier Shock Test):** Inject a single student at $(50, \text{Fail})$ to watch the linear slope collapse by $31\%$ while Logistic Regression maintains accurate classifications.
+*   **Experiment 3 (Sigmoid Symmetry Verification):** Empirically test $\sigma(-z) == 1 - \sigma(z)$ across floating-point ranges using `scipy.special.expit`.
+
+:::
+
+---
+
+## 7. Common Mistakes
+
+<Tabs>
+  <TabItem value="m1" label="🚨 1. Confusing Classification with Regression" default>
+    <br/>
+    
+    *   **The Misconception:** *"Logistic Regression has 'Regression' in its name, so it is used to predict continuous numeric values."*
+    *   **❌ Wrong Thinking:** Using LogisticRegression to forecast prices or temperature.
+    *   **✅ The Right Principle:** The name is an artifact of statistics (modeling the continuous log-odds parameter). Logistic Regression is fundamentally a **classification algorithm** designed for discrete categorical targets.
+  </TabItem>
+  <TabItem value="m2" label="🚨 2. Using OLS for Probability Estimation">
+    <br/>
+    
+    *   **The Misconception:** *"We can fit linear regression to 0/1 labels and simply clamp predictions into [0, 1] using min/max."*
+    *   **❌ Wrong Thinking:** Patching linear models with artificial clipping.
+    *   **✅ The Right Principle:** Clamping ignores the non-linear relationship of probabilities near 0 and 1, distorts variance, and remains fragile to outlier-induced boundary shifts. Use Logistic Regression natively.
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. Blindly Fixing Threshold at 0.5">
+    <br/>
+    
+    *   **The Misconception:** *"A model should always predict positive when $P \ge 0.5$."*
+    *   **❌ Wrong Thinking:** Treating the 0.5 mathematical midpoint as a universal business rule.
+    *   **✅ The Right Principle:** Thresholds must reflect downstream asymmetric costs. In fraud detection or cancer diagnostics, false negatives are catastrophic; lower the threshold to 0.1 or 0.2 to maximize recall.
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Confusing Sigmoid with Tanh">
+    <br/>
+    
+    *   **The Misconception:** *"Sigmoid and Hyperbolic Tangent (Tanh) are interchangeable activation functions."*
+    *   **❌ Wrong Thinking:** Using Tanh to model probabilities.
+    *   **✅ The Right Principle:** Sigmoid maps to $(0, 1)$, matching probability axioms. Tanh maps to $(-1, 1)$, zero-centered for neural network hidden states, but invalid for direct binary probabilities.
+  </TabItem>
+  <TabItem value="m5" label="🚨 5. Fitting Linear Regression Outliers">
+    <br/>
+    
+    *   **The Misconception:** *"Squared error loss ($MSE$) is suitable for training binary classification models."*
+    *   **❌ Wrong Thinking:** Minimizing $(y - \hat{y})^2$ on binary targets.
+    *   **✅ The Right Principle:** Squared error penalizes correct but confident predictions ($y=1, \hat{y}=3 \implies \text{loss}=4$). Logistic regression uses **Binary Cross-Entropy (Log Loss)**, which creates zero penalty for confident correct classifications.
+  </TabItem>
+</Tabs>
+
+---
+
+## 8. Summary
+
+<div className="row">
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🤖 Linear Regression Failures</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Unbounded Output:</b> Linear predictions escape $[0, 1]$, producing impossible negative and $>100\%$ probabilities.</li>
+          <li><b>Outlier Sensitivity:</b> OLS penalizes confident correct samples ($y=1, \hat{y} \gg 1$), tilting the decision boundary.</li>
+          <li><b>Loss Function Mismatch:</b> Mean Squared Error creates non-convex optimization surfaces when paired with non-linear activations.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🛠️ The Sigmoid Solution</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Strict Bounding:</b> $\sigma(z) = \frac{1}{1 + e^{-z}}$ mathematically guarantees outputs in open unit interval $(0, 1)$.</li>
+          <li><b>Symmetry:</b> Perfect anti-symmetry centered at $(0, 0.5)$ via $\sigma(-z) = 1 - \sigma(z)$.</li>
+          <li><b>Robust Asymptotes:</b> Extreme values plateau smoothly, rendering parameter updates robust to outliers.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+:::info
+
+**📌 Key Takeaways**
+
+*   **🎯 Probabilities require sigmoid:** Linear models cannot enforce the unit interval constraint $[0, 1]$.
+*   **⚖️ Sigmoid symmetry simplifies math:** $\sigma(-z) = 1 - \sigma(z)$ ensures that modeling $P(y=1)$ automatically defines $P(y=0)$.
+*   **🛡️ Asymptotes protect against outliers:** The plateau of the S-curve prevents extreme inputs from distorting classifications near the decision threshold.
+
+:::
+
+**Next Section:** [The Sigmoid and Fitting](./02-the-sigmoid-and-fitting.md) - deriving the log-loss function, maximum likelihood estimation, and gradient descent optimization.
+
+---
+
+## 9. Active Recall
+
+*Test your understanding by answering first, then clicking to reveal the underlying principles.*
+
+### Interactive Checkpoint Quiz
+
+export const LogisticQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: OLS vs. Sigmoid Loss</h4>
+      <p style={{ margin: '0 0 15px 0' }}>Why does fitting a linear regression model with Mean Squared Error (MSE) fail when an extremely obvious positive sample (e.g. $x=100, y=1$) is present in the training set?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because the linear slope becomes infinite</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because OLS penalizes predictions where ŷ is much greater than 1, pulling the line away from borderline points</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because MSE cannot be computed on values greater than 1</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The slope does not become infinite; it actually flattens out to minimize squared error across all samples. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! In OLS, error is $(y - \hat{y})^2$. If $y=1$ and the linear model predicts $\hat{y}=8.0$, OLS treats this as a massive error of $(1-8)^2 = 49$, even though the classification is completely correct! To reduce this penalty, the line tilts, causing misclassifications near the 0.5 decision boundary.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. MSE can be computed on any real numbers. Try again!</p>}
+    </div>
+  );
+};
+
+<LogisticQuiz />
+
+### Review Flashcards
+
+<details>
+  <summary>❓ <b>1. [THEORY] Why is the sigmoid function preferred over a simple step function (Heaviside) for classification?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Differentiability:** A step function has a derivative of zero everywhere except at $z=0$, where it is undefined. Gradient-based optimization (gradient descent) cannot compute parameter updates.
+    *   **Continuous Probabilities:** The sigmoid function is smooth, continuously differentiable everywhere ($\sigma'(z) = \sigma(z)(1 - \sigma(z))$), providing informative gradients that indicate not just *whether* a sample is classified correctly, but *how confident* the prediction is.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>2. [MATH] Prove the sigmoid symmetry property: σ(-z) = 1 - σ(z).</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   Start with the right-hand side:
+        $$1 - \sigma(z) = 1 - \frac{1}{1 + e^{-z}} = \frac{(1 + e^{-z}) - 1}{1 + e^{-z}} = \frac{e^{-z}}{1 + e^{-z}}$$
+    *   Multiply numerator and denominator by $e^z$:
+        $$\frac{e^{-z} \cdot e^z}{(1 + e^{-z}) \cdot e^z} = \frac{1}{e^z + 1} = \frac{1}{1 + e^z} = \sigma(-z)$$
+    *   Thus, $\sigma(-z) = 1 - \sigma(z)$ holds identically for all $z \in \mathbb{R}$.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>3. [PRACTICE] A logistic regression model outputs a linear logit score of z = 2.197. What is the predicted probability and odds?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Odds:** $\text{Odds} = e^z = e^{2.197} \approx 9.0$ (i.e. 9 to 1 odds).
+    *   **Probability:** $P = \frac{\text{Odds}}{1 + \text{Odds}} = \frac{9.0}{1 + 9.0} = \frac{9.0}{10.0} = 0.90$ ($90\%$).
+    *   **Direct Sigmoid:** $\sigma(2.197) = \frac{1}{1 + e^{-2.197}} = \frac{1}{1 + 0.111} \approx 0.90$.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>4. [ANALYZE] Why is setting the classification threshold to 0.5 dangerous in an automated credit card fraud detection system?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Asymmetric Costs:** A false positive (flagging a legit $50 transaction) causes minor customer annoyance. A false negative (missing a $5,000 fraudulent charge) causes direct financial loss.
+    *   **Severe Imbalance:** Fraud represents $\approx 0.1\%$ of transactions. A default 0.5 threshold will fail to flag suspicious transactions that have a 20% or 30% probability of fraud.
+    *   **Solution:** Lower the threshold to 0.05 or 0.10 to prioritize recall over precision.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>5. [THEORY] What geometric shape is the decision boundary of Logistic Regression in feature space?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **A Linear Hyperplane:** The decision boundary occurs where $P(y=1) = 0.5$, which corresponds to $z = 0$.
+    *   Since $z = w_1 x_1 + w_2 x_2 + \dots + w_d x_d + b = 0$, the decision boundary is a straight line in 2D, a flat plane in 3D, and a hyperplane in higher dimensions.
+    *   Despite the non-linear sigmoid activation, Logistic Regression is fundamentally a **linear classifier**.
+  </div>
+</details>

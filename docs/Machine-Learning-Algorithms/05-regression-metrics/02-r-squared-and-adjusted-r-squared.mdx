@@ -1,0 +1,747 @@
+---
+sidebar_position: 2
+title: R², Adjusted R² and MAPE
+description: Settles why R² can exceed 1 or go negative, why SST = SSR + SSE only holds for a least-squares fit, why adding a junk feature never lowers R² but does lower Adjusted R², and why scikit-learn's MAPE returns 0.0296 rather than 2.96%.
+tags: [machine-learning, linear-regression, metrics, scikit-learn]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import React from 'react';
+
+# R², Adjusted R² and MAPE
+
+> **Topic —** The previous page gave you three error averages that live in the units of `y`: MAE, MSE and RMSE. All three need context before they mean anything. This page covers the metrics that carry their own context: **R²**, which compares your model against the laziest possible model, **Adjusted R²**, which charges rent for every feature you add, and **MAPE**, which reports error as a percentage. It settles four things: why R² is not always "the fraction of variance explained", why `SST = SSR + SSE` is a conditional identity rather than a law, why R² alone can never tell you a model has too many features, and why MAPE quietly rewards guessing low.
+
+---
+
+## In plain words
+
+Suppose you must predict house prices and you are not allowed to look at a single feature. The best you can do is guess the average price for every house. That guess is the **baseline** — the laziest defensible model. **R² measures how much of the baseline's error your model got rid of.**
+
+- R² = 0 → you did exactly as well as guessing the average. Your features bought nothing.
+- R² = 1 → no error left. Every prediction is exact.
+- R² = 0.85 → you removed 85% of the baseline's squared error.
+- R² &lt; 0 → **you did worse than guessing the average.** This is allowed, and it happens.
+
+That last point surprises people. The name "coefficient of determination" and the square in the symbol both suggest a number trapped in `[0, 1]`. It is not bounded below at all.
+
+**Adjusted R²** exists because plain R² has one specific defect. Add a column of random noise to your features, refit, and R² goes **up** — never down, not by a hair. So R² can never tell you a model is carrying features it does not need. Adjusted R² charges a fee per feature, paid in **degrees of freedom**; a feature that does not earn more than its fee makes the score fall.
+
+**MAPE** answers a different question: how wrong am I *as a percentage of the true value?* An error of ₹2 lakh on a ₹20 lakh house is 10%; the same ₹2 lakh on a ₹2 crore house is 1%. MAPE treats those rows differently where MAE treats them identically.
+
+### Words used on this page
+
+| Term | What it means here |
+|---|---|
+| `y`, `ŷ`, `r` | The true value, the prediction, and `y − ŷ` for one row |
+| `ȳ` | Mean of all true values — the baseline's constant prediction |
+| **SST** | `Σ(y − ȳ)²` — the baseline's squared error, before any model |
+| **SSE** | `Σ(y − ŷ)²` — your model's squared error. Also RSS |
+| **SSR** | `Σ(ŷ − ȳ)²` — how far predictions spread from the baseline. Also called *explained* |
+| **R²** | `1 − SSE/SST` — the share of the baseline's squared error you removed |
+| **baseline** | The mean-only model: predict `ȳ` for every row, ignoring all features |
+| `n`, `p` | Rows scored; features, **not** counting the intercept |
+| **degrees of freedom** | `n − p − 1` — rows left after the fit spends one per coefficient |
+| **Adjusted R²** | R² after charging a fee for each of the `p` features |
+| **in-sample** | Scored on the rows the model was fitted on. *Out-of-sample* is the opposite |
+| **APE**, **MAPE** | `abs(y − ŷ)/abs(y)` for one row; and the mean of those, ×100 |
+| **sMAPE** | Symmetric MAPE — divides by the average of `abs(y)` and `abs(ŷ)` |
+| **WAPE** | `Σabs(r) / Σabs(y)` — one ratio for the whole set, not a mean of ratios |
+| **monotone** | Moves one direction only. In-sample R² is monotone up in `p` |
+
+**What this page settles:**
+1. Why R² can be negative, and why it can exceed 1 if you compute it the wrong way.
+2. Why `SST = SSR + SSE` holds for a fitted line but breaks for predictions you invented.
+3. Why in-sample R² can only rise when you add a feature — with the one-line reason.
+4. What fee Adjusted R² charges, when a feature is worth paying it, and why the fee is too small to make Adjusted R² a feature selector.
+5. Why MAPE punishes over-prediction without limit but under-prediction by at most 100%, and why scikit-learn hands you `0.0296` where you expected `2.96`.
+
+:::tip
+
+**If you only take one thing from this page**
+
+R² compares your model against one specific rival: predicting the mean for every row. Everything strange about R² — negative values, rising when you add junk, changing when you re-split — follows from the fact that the rival changes too. Different rows, different mean, different `SST`, therefore a different R² for the *same* predictions.
+
+:::
+
+---
+
+## R² asks a ratio question, not a magnitude question
+
+MAE, MSE and RMSE answer "how big is the error?" and carry the units of `y`. R² answers "how big is the error **compared to** doing nothing?" and carries no units at all.
+
+$$R^2 = 1 - \frac{\text{SSE}}{\text{SST}} = 1 - \frac{\sum (y_i - \hat{y}_i)^2}{\sum (y_i - \bar{y})^2}$$
+
+Read the fraction alone: `SSE/SST` is the share of the baseline's squared error that **survived** your model. Subtract from one and you have the share you **removed**.
+
+| `SSE/SST` | R² | Meaning |
+|---|---|---|
+| `0.00` | `1.00` | No error left |
+| `0.02` | `0.98` | You removed 98% of the baseline's squared error |
+| `1.00` | `0.00` | You matched the baseline exactly |
+| `1.66` | `−0.66` | You produced 66% **more** squared error than the baseline |
+
+Because units cancel, R² reads the same whether `y` is in rupees, kelvin or millimetres. That is the appeal, and also the danger: a unitless number is easy to quote without checking what baseline it was measured against.
+
+:::note
+
+R² is dimensionless but **not** portable across datasets — it depends on `SST`, which depends on how spread out `y` is in the rows you scored. Quote R² and RMSE together, or you have told half the story: [why the same RMSE is excellent or useless](./01-error-in-the-units-of-y.mdx#none-of-the-three-means-anything-without-the-spread-of-y).
+
+:::
+
+---
+
+## 🛠️ The R² Error Allocation Sandbox
+
+Experiment with the interactive tool below. Toggle between the **Baseline model** (always guessing the mean $\bar{y} = 73.2$) and our **OLS Fitted Model** ($ŷ = 39.0 + 11.4x$) to watch the red vertical error bars animate, visualizing how $R^2$ physically measures the share of baseline error ($SST$) that our model clears away.
+
+export const R2Visualizer = () => {
+  const [showModel, setShowModel] = React.useState(true);
+
+  const r2_x = [1, 2, 3, 4, 5];
+  const r2_y = [52, 60, 71, 88, 95];
+  const r2_y_bar = 73.2;
+
+  // OLS model: ŷ = 39.0 + 11.4x
+  const r2_y_fit = [50.4, 61.8, 73.2, 84.6, 96.0];
+
+  const scaleX = (xVal) => 30 + (xVal / 6) * 320;
+  const mapY = (yVal) => 135 - ((yVal - 40) / 70) * 110; // y from 40 to 110
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
+      <h4 style={{ margin: '0' }}>📊 R² Error Allocation Sandbox</h4>
+      <p style={{ fontSize: '13px', margin: '5px 0 15px 0', opacity: 0.9 }}>Toggle the target line to see the difference between Baseline Errors ($SST$) and Model Errors ($SSE$).</p>
+
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
+        <button 
+          onClick={() => setShowModel(false)} 
+          style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: !showModel ? '#3182ce' : 'transparent', color: !showModel ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontWeight: 'bold' }}
+        >
+          Show Baseline Errors (SST)
+        </button>
+        <button 
+          onClick={() => setShowModel(true)} 
+          style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #38a169', backgroundColor: showModel ? '#38a169' : 'transparent', color: showModel ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontWeight: 'bold' }}
+        >
+          Show Model Errors (SSE)
+        </button>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px', flexWrap: 'wrap' }}>
+        {/* SVG Scatter & Line Plot */}
+        <div style={{ textAlign: 'center' }}>
+          <svg width="100%" height="150" style={{ border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'var(--ifm-background-color)' }}>
+            {/* Grid lines */}
+            {[50, 75, 100].map(yi => (
+              <line key={yi} x1="30" y1={mapY(yi)} x2="350" y2={mapY(yi)} stroke="var(--ifm-color-emphasis-200)" strokeDasharray="3,3" opacity="0.5" />
+            ))}
+
+            {/* Blue horizontal Baseline line */}
+            <line x1={scaleX(0.5)} y1={mapY(r2_y_bar)} x2={scaleX(5.5)} y2={mapY(r2_y_bar)} stroke="#3182ce" strokeWidth="2" opacity={!showModel ? 1.0 : 0.4} />
+
+            {/* Green OLS line */}
+            <line x1={scaleX(0.5)} y1={mapY(39 + 11.4 * 0.5)} x2={scaleX(5.5)} y2={mapY(39 + 11.4 * 5.5)} stroke="#38a169" strokeWidth="2.5" opacity={showModel ? 1.0 : 0.4} />
+
+            {/* Error connectors (red lines) */}
+            {r2_x.map((xi, idx) => {
+              const targetY = showModel ? r2_y_fit[idx] : r2_y_bar;
+              return (
+                <line key={`err-${idx}`} x1={scaleX(xi)} y1={mapY(r2_y[idx])} x2={scaleX(xi)} y2={mapY(targetY)} stroke="#e53e3e" strokeWidth="2" strokeDasharray="2,2" />
+              );
+            })}
+
+            {/* House Data Points */}
+            {r2_x.map((xi, idx) => (
+              <circle key={idx} cx={scaleX(xi)} cy={mapY(r2_y[idx])} r="5" fill="var(--ifm-color-primary)" />
+            ))}
+          </svg>
+        </div>
+
+        {/* Dynamic calculation results */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center', fontSize: '13px' }}>
+          {!showModel ? (
+            <div style={{ padding: '12px', borderLeft: '4px solid #3182ce', backgroundColor: 'rgba(49, 130, 206, 0.03)' }}>
+              <b>📊 Baseline Sum of Squares (SST):</b>
+              <div style={{ fontSize: '18px', fontWeight: 'bold', margin: '5px 0' }}>SST = 1322.80</div>
+              <div style={{ opacity: 0.8, fontSize: '11px' }}>This represents the sum of squared errors when predicting the mean of y (73.2) for every row. It is the baseline error that any model has to beat.</div>
+            </div>
+          ) : (
+            <div style={{ padding: '12px', borderLeft: '4px solid #38a169', backgroundColor: 'rgba(56, 161, 105, 0.03)' }}>
+              <b>📊 Model Sum of Squares (SSE):</b>
+              <div style={{ fontSize: '18px', fontWeight: 'bold', margin: '5px 0' }}>SSE = 23.20</div>
+              <div style={{ opacity: 0.8, fontSize: '11px' }}>This is the remaining squared error after fitting our OLS line. We cleared away 1299.60 lakhs of squared error!</div>
+              <div style={{ fontSize: '12px', fontWeight: 'bold', color: '#38a169', marginTop: '5px' }}>
+                R² = 1 − 23.20/1322.80 = 0.9825
+              </div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<R2Visualizer />
+
+---
+
+## The three sums of squares, and why one identity is conditional
+
+Carry over the five-house table from the previous page. Prices are in lakhs.
+
+| # | `y` | `ŷ` | `r = y − ŷ` | `r²` | `y − ȳ` | `(y − ȳ)²` | `ŷ − ȳ` | `(ŷ − ȳ)²` |
+|---|---|---|---|---|---|---|---|---|
+| 1 | 52 | 49 | +3 | 9 | −21.2 | 449.44 | −24.2 | 585.64 |
+| 2 | 60 | 61 | −1 | 1 | −13.2 | 174.24 | −12.2 | 148.84 |
+| 3 | 71 | 69 | +2 | 4 | −2.2 | 4.84 | −4.2 | 17.64 |
+| 4 | 88 | 92 | −4 | 16 | +14.8 | 219.04 | +18.8 | 353.44 |
+| 5 | 95 | 95 | 0 | 0 | +21.8 | 475.24 | +21.8 | 475.24 |
+| | **366** | **366** | **0** | **30** | **0** | **1322.80** | **0** | **1580.80** |
+
+So `ȳ = 366/5 = 73.2`, and:
+
+$$\text{SST} = \sum(y_i - \bar{y})^2 = 1322.80 \qquad \text{SSE} = \sum(y_i - \hat{y}_i)^2 = 30.00$$
+
+$$\text{SSR} = \sum(\hat{y}_i - \bar{y})^2 = 1580.80$$
+
+$$R^2 = 1 - 30.00 / 1322.80 = 1 - 0.02267938 = 0.97732062 \approx 0.9773$$
+
+The model removed 97.73% of the baseline's squared error.
+
+### The identity that fails here
+
+Textbooks state $SST = SSR + SSE$, then define $R^2$ a second way as $SSR/SST$. Try both:
+
+$$\text{SSR} + \text{SSE} = 1580.80 + 30.00 = 1610.80 \ne 1322.80 = \text{SST}$$
+
+$$\text{SSR} / \text{SST} = 1580.80 / 1322.80 = 1.1951 \qquad \text{(an } R^2 \text{ above 1!)}$$
+
+The reason is algebra, not arithmetic. Write $y - \bar{y} = (\hat{y} - \bar{y}) + (y - \hat{y})$ and square the sum:
+
+$$\sum(y - \bar{y})^2 = \sum(\hat{y} - \bar{y})^2 + \sum(y - \hat{y})^2 + 2\sum(\hat{y} - \bar{y})(y - \hat{y})$$
+
+$$\text{SST} = \text{SSR} + \text{SSE} + 2\cdot\text{(cross term)}$$
+
+The identity holds **only when the cross term vanishes.** Here it does not:
+
+$$\sum(\hat{y} - \bar{y})\cdot r = (-24.2)(+3) + (-12.2)(-1) + (-4.2)(+2) + (18.8)(-4) + (21.8)(0) = -144.0$$
+
+$$\text{SSR} + \text{SSE} + 2(-144.0) = 1610.80 - 288.00 = 1322.80 = \text{SST}$$
+
+The books are quoting a result about **least-squares fits**. Least squares forces the residuals to be uncorrelated with the fitted values — that is exactly what setting the gradient to zero achieves. Our `ŷ` column was invented by hand, so no such guarantee applies.
+
+:::warning
+
+$R^2 = SSR/SST$ and $SST = SSR + SSE$ require predictions from an ordinary least-squares fit **with an intercept**. $R^2 = 1 - SSE/SST$ requires nothing. Use the second form always: it is what `r2_score` computes, and the only one still correct for ridge, a tree, a neural network, or a number a colleague typed into a spreadsheet.
+
+:::
+
+### The same numbers, from a real fit
+
+Give those five houses a feature — age in decades, `x = [1, 2, 3, 4, 5]` — and fit by least squares:
+
+$$\bar{x} = 3 \qquad \bar{y} = 73.2$$
+
+$$S_{xy} = \sum(x - \bar{x})(y - \bar{y}) = (-2)(-21.2) + (-1)(-13.2) + 0 + (1)(14.8) + (2)(21.8) = 114.0$$
+
+$$S_{xx} = \sum(x - \bar{x})^2 = 4 + 1 + 0 + 1 + 4 = 10.0$$
+
+$$b_1 = S_{xy} / S_{xx} = 114.0 / 10.0 = 11.4 \qquad b_0 = \bar{y} - b_1\bar{x} = 73.2 - 34.2 = 39.0$$
+
+$$\hat{y} = 39.0 + 11.4x$$
+
+| # | `x` | `y` | `ŷ` | `r` | `r²` | `ŷ − ȳ` | `(ŷ − ȳ)²` |
+|---|---|---|---|---|---|---|---|
+| 1 | 1 | 52 | 50.4 | +1.6 | 2.56 | −22.8 | 519.84 |
+| 2 | 2 | 60 | 61.8 | −1.8 | 3.24 | −11.4 | 129.96 |
+| 3 | 3 | 71 | 73.2 | −2.2 | 4.84 | 0.0 | 0.00 |
+| 4 | 4 | 88 | 84.6 | +3.4 | 11.56 | +11.4 | 129.96 |
+| 5 | 5 | 95 | 96.0 | −1.0 | 1.00 | +22.8 | 519.84 |
+| | | **366** | **366** | **0.0** | **23.20** | **0.0** | **1299.60** |
+
+Now the identity closes to the last digit, and both R² formulas agree:
+
+$$\text{SSR} + \text{SSE} = 1299.60 + 23.20 = 1322.80 = \text{SST}$$
+
+$$R^2 = 1 - 23.20 / 1322.80 = 1 - 0.01753855 = 0.98246145$$
+
+$$R^2 = 1299.60 / 1322.80 = 0.98246145$$
+
+One more equality appears, and it holds **only** for simple regression — one feature, fitted with an intercept:
+
+$$r^2 = 114.0^2 / (10.0 \times 1322.80) = 12996 / 13228 = 0.98246145 = R^2$$
+
+With two or more features that shortcut dies. The surviving general statement: for any OLS fit with an intercept, R² equals the **squared correlation between `y` and `ŷ`** — not between `y` and any single feature.
+
+---
+
+## R² can be negative, and the sign is the useful part
+
+Since `SSE` has no upper bound, `1 − SSE/SST` has no lower bound. Predict a flat 60 lakh for all five houses:
+
+| `y` | 52 | 60 | 71 | 88 | 95 | Σ |
+|---|---|---|---|---|---|---|
+| `r = y − 60` | −8 | 0 | +11 | +28 | +35 | — |
+| `r²` | 64 | 0 | 121 | 784 | 1225 | **2194** |
+
+$$R^2 = 1 - 2194 / 1322.80 = 1 - 1.658605 = -0.658605 \approx -0.6586$$
+
+That constant produced 66% more squared error than simply guessing 73.2. The negative sign is the metric doing its job.
+
+| Where negative R² shows up | Why |
+|---|---|
+| Scoring on a test set | The fit minimised SSE on *train*. Nothing constrains it on *test*, so it can lose to the test set's own mean |
+| A badly wrong constant, or a diverged fit | Predictions sit far from the data — see [the learning rate](../04-optimisation/03-the-learning-rate.mdx) if a fit diverged |
+
+:::danger
+
+`r2_score` is not symmetric. Swapping the arguments does not flip a sign; it computes `1 − SSE/Σ(ŷ − mean(ŷ))²` — right numerator, wrong denominator. The result looks plausible, which is why the bug survives review. `mean_squared_error` *is* symmetric, so the habit you built there does not transfer.
+
+:::
+
+The baseline is also computed from the rows **being scored**, not from training. Score identical predictions on two test splits and you get two values of `SST`, hence two R² values, from one model — the same [split lottery](../02-data-preprocessing/06-train-test-split.mdx#the-split-lottery) that makes a single train/test split unreliable in the first place.
+
+---
+
+## Adding any feature can only push in-sample R² up
+
+The defect in one sentence: **least squares with `p+1` features can always reproduce the best solution found with `p` features, by setting the new coefficient to zero.**
+
+So the minimum achievable `SSE` cannot rise when a column is added. `SST` does not move — it depends only on `y`. Therefore `SSE/SST` cannot rise and `R² = 1 − SSE/SST` cannot fall.
+
+| Claim | Status |
+|---|---|
+| Adding a useful feature raises in-sample R² | True |
+| Adding a **useless** feature raises in-sample R² | Also true — tiny, but never zero and never negative |
+| Adding a column of pure random noise raises in-sample R² | Also true |
+| In-sample R² can therefore detect an over-featured model | **False.** It structurally cannot |
+| With `p = n − 1` features, in-sample R² is exactly 1 | True — the fit interpolates every point, `SSE = 0` |
+
+That last row is the reductio: nineteen features on twenty rows gives R² = 1.0 and a model that knows nothing. "R² = 0.99" is not a boast until you say how many features, and whether it was measured in-sample or out-of-sample.
+
+Out-of-sample R² has no such guarantee. Adding a junk feature usually **lowers** test R², because the coefficient was fitted to noise that does not repeat. Watch the gap between the two.
+
+---
+
+## Adjusted R² charges rent for every feature
+
+Adjusted R² makes each feature pay for the degree of freedom it consumes. Instead of comparing raw sums of squares it compares **variance estimates** — each sum divided by its own degrees of freedom:
+
+$$R^2_{adj} = 1 - \frac{\text{SSE} / (n - p - 1)}{\text{SST} / (n - 1)} = 1 - (1 - R^2) \cdot \frac{n - 1}{n - p - 1}$$
+
+The two forms are one expression rearranged; use the right-hand one, because you almost always have R² already. For the five-house fit: `n = 5`, `p = 1`, so `n − p − 1 = 3` and `n − 1 = 4`.
+
+$$1 - R^2 = 1 - 0.98246145 = 0.01753855$$
+
+$$R^2_{adj} = 1 - 0.01753855 \times (4/3) = 1 - 0.02338473 = 0.97661527 \approx 0.9766$$
+
+R² was 0.9825; Adjusted R² is 0.9766. The gap is one feature's rent, paid out of five rows. Four facts fall straight out of the formula:
+
+| Fact | Why |
+|---|---|
+| `R²_adj ≤ R²` always | The multiplier `(n−1)/(n−p−1)` is ≥ 1 whenever `p ≥ 0` |
+| Equal only when `p = 0` | The multiplier becomes `(n−1)/(n−1) = 1`. The baseline scores 0 on both |
+| `R²_adj` can be negative while R² is positive | Small R² with large `p/n` inflates `(1 − R²)` past 1 |
+| Undefined at `p = n − 1` | `n − p − 1 = 0`. That is precisely the interpolating fit with R² = 1 |
+
+### Model A versus Model B, worked
+
+Fifty house records, two candidate models. Model B wins on R² — now pay the rent.
+
+| | Model A | Model B |
+|---|---|---|
+| Features `p` | 2 | 7 |
+| `n − p − 1` | 47 | 42 |
+| In-sample R² | 0.820 | **0.835** |
+
+$$\text{Model A: } R^2_{adj} = 1 - (1 - 0.820) \times 49/47 = 1 - 0.180 \times 1.04255319 = 0.81234043$$
+
+$$\text{Model B: } R^2_{adj} = 1 - (1 - 0.835) \times 49/42 = 1 - 0.165 \times 1.16666667 = 0.80750000$$
+
+R² rose by 0.015. Adjusted R² **fell** by 0.0048. The five extra features bought 1.5 percentage points of fit and cost more than that in degrees of freedom, so on this evidence Model A is the better model. Invert the arithmetic to see what Model B needed:
+
+$$1 - (1 - R^2) \times 49/42 = 0.81234043$$
+
+$$(1 - R^2) = 0.18765957 \times 42/49 = 0.16085106 \implies R^2 = 0.83914894 \approx 0.8391$$
+
+Model B needed R² ≥ 0.8391 to justify seven features. It managed 0.835 — close, and losing.
+
+:::note
+
+Neither `r2_score` nor `LinearRegression.score()` gives you Adjusted R². scikit-learn does not implement it, because a scorer sees only `y_true` and `y_pred` and therefore cannot know `p`. Compute it from `r2_score`, `n` and `X.shape[1]`, or read it off a `statsmodels` `OLS(...).fit().summary()`, which prints both.
+
+:::
+
+---
+
+## The rent is too cheap to make Adjusted R² a feature selector
+
+Work out exactly when Adjusted R² rises. Adding one feature improves it **if and only if** that feature's `t`-statistic satisfies `t² > 1`, that is `abs(t) > 1`.
+
+| Threshold | Effective rule |
+|---|---|
+| `abs(t) > 1` | Adjusted R² rises — the feature is kept |
+| `abs(t) > 2` | The coefficient is roughly significant at the 5% level |
+| AIC | Charges 2 per parameter instead of 1 — a strictly stronger penalty |
+
+Adjusted R² accepts a feature at half the evidence you would demand before calling its coefficient real. A pure-noise column clears `abs(t) > 1` about **32%** of the time by chance alone, so throw ten noise columns at a model and roughly three will look like improvements — the multiple-regression page runs that experiment and shows [the penalty being outrun](../03-linear-regression/02-multiple-linear-regression.mdx#why-the-penalty-fails).
+
+| Job | Adjusted R² |
+|---|---|
+| Warn you that R² rose only because `p` rose | Good at this |
+| Compare two nested models on the same rows | Fine |
+| Compare models fitted to **different** targets or row counts | Invalid — `SST` differs |
+| Select features from a large pool | Too permissive. Cross-validate instead |
+
+:::tip
+
+The reliable version of the same question needs no formula: fit both models, score both on rows neither has seen, prefer the winner there. Adjusted R² is an in-sample approximation of that comparison, invented when refitting a model fifty times was expensive. It no longer is.
+
+:::
+
+---
+
+## MAPE puts the error in percent, and breaks near zero
+
+MAPE divides each residual by its own true value before averaging, so every row contributes a relative error:
+
+$$\text{MAPE (\%)} = \frac{100}{n} \cdot \sum_{i=1}^n \frac{\lvert y_i - \hat{y}_i \rvert}{\lvert y_i \rvert}$$
+
+On the original hand table:
+
+| # | `y` | `ŷ` | `abs(r)` | `abs(r)/abs(y)` | as % |
+|---|---|---|---|---|---|
+| 1 | 52 | 49 | 3 | 3/52 = 0.0576923 | 5.76923% |
+| 2 | 60 | 61 | 1 | 1/60 = 0.0166667 | 1.66667% |
+| 3 | 71 | 69 | 2 | 2/71 = 0.0281690 | 2.81690% |
+| 4 | 88 | 92 | 4 | 4/88 = 0.0454545 | 4.54545% |
+| 5 | 95 | 95 | 0 | 0/95 = 0.0000000 | 0.00000% |
+| | | | **10** | **0.1479825** | **14.79825%** |
+
+$$\text{MAPE} = 14.79825\% / 5 = 2.95965\% \approx 2.96\%$$
+
+$$\text{MAE/ȳ} = 2.0 / 73.2 = 0.0273224 = 2.73224\% \qquad \text{(not the same number!)}$$
+
+The two differ because MAPE is a **mean of ratios** and `MAE/ȳ` is a **ratio of means**. MAPE gives row 1 — the cheapest house — more weight per rupee of error than row 5. That is either the point or a distortion, depending on whether a 5% miss on a cheap house matters as much as on a dear one.
+
+---
+
+## 🛠️ The MAPE Asymmetry Sandbox
+
+Minimizing MAPE introduces a silent, systemic downward bias in your predictions. Experiment with the interactive tool below. Move the prediction slider (assuming true target $y = 100$) to watch how under-prediction is capped at **100%** (when you guess 0) while over-prediction is completely unbounded. 
+
+Observe why any model forced to minimize MAPE starts guessing low to "play it safe."
+
+export const MapeAsymmetrySandbox = () => {
+  const [predVal, setPredVal] = React.useState(100);
+
+  const y_true = 100;
+  const absError = Math.abs(y_true - predVal);
+  const ape = (absError / y_true) * 100;
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
+      <h4 style={{ margin: '0' }}>📐 MAPE Asymmetry Sandbox</h4>
+      <p style={{ fontSize: '13px', margin: '5px 0 15px 0', opacity: 0.9 }}>Slide the predicted value (for y = 100) and watch how the percentage error scales lopsidedly.</p>
+
+      <div style={{ marginBottom: '15px' }}>
+        <label style={{ fontSize: '13px', fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>
+          Predicted Value (ŷ): <b style={{ color: predVal >= 200 ? '#e53e3e' : '#38a169' }}>{predVal}</b> (True: 100, Absolute Error: {absError})
+        </label>
+        <input type="range" min="0" max="400" step="10" value={predVal} onChange={(e) => setPredVal(parseInt(e.target.value))} style={{ width: '100%' }} />
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px', flexWrap: 'wrap' }}>
+        {/* SVG gauge showing APE */}
+        <div style={{ textAlign: 'center' }}>
+          <svg width="100%" height="110" style={{ border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'var(--ifm-background-color)' }}>
+            {/* Horizontal line */}
+            <line x1="40" y1="75" x2="310" y2="75" stroke="var(--ifm-color-emphasis-200)" strokeWidth="4" />
+
+            {/* Capped 100% under-prediction region */}
+            <rect x="40" y="71" width="90" height="8" fill="#3182ce" opacity="0.3" />
+            <text x="85" y="60" textAnchor="middle" fill="#3182ce" fontSize="8" fontWeight="bold">Under-prediction Cap (Max 100%)</text>
+
+            {/* Unbounded over-prediction region */}
+            <rect x="130" y="71" width="180" height="8" fill="#e53e3e" opacity="0.3" />
+            <text x="220" y="60" textAnchor="middle" fill="#e53e3e" fontSize="8" fontWeight="bold">Unbounded Over-prediction</text>
+
+            {/* Current pointer */}
+            {/* Map 0..300% to 40..310 pixels */}
+            {(() => {
+              const pixelX = 40 + (Math.min(300, ape) / 300) * 270;
+              return (
+                <g>
+                  <line x1={pixelX} y1="65" x2={pixelX} y2="85" stroke="#e53e3e" strokeWidth="3" />
+                  <circle cx={pixelX} cy="75" r="5" fill="#e53e3e" />
+                </g>
+              );
+            })()}
+          </svg>
+        </div>
+
+        {/* Dynamic description */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center', fontSize: '13px' }}>
+          <div style={{ padding: '8px 12px', borderLeft: '4px solid #dd6b20', backgroundColor: 'rgba(221, 107, 32, 0.03)', fontSize: '12px' }}>
+            Absolute Percentage Error: <b style={{ fontSize: '16px', color: ape >= 100 ? '#e53e3e' : '#38a169' }}>{ape.toFixed(1)}%</b>
+            <div style={{ opacity: 0.8, fontSize: '10px', marginTop: '4px' }}>
+              {predVal === 0 ? "Guessing exactly 0.00 limits your error to 100%." : predVal > 200 ? `Guessing ${predVal} inflates your error to ${ape.toFixed(0)}%! There is no upper ceiling.` : "Equal changes in guessing high vs. guessing low have asymmetric impacts."}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<MapeAsymmetrySandbox />
+
+### Three ways MAPE misbehaves
+
+**1. Undefined at $y = 0$, and scikit-learn hides it.** A true value of zero divides by zero. scikit-learn does not raise; it substitutes `np.finfo(float).eps ≈ 2.22e−16` for the denominator, so one zero-valued row produces a MAPE around `1e+15` and drowns every other row. Nothing warns you.
+
+**2. Over-prediction is punished without limit; under-prediction is capped at 100%.** Predicting zero is the worst an under-prediction can do. Over-prediction has no ceiling, so a model tuned to minimise MAPE shades its forecasts **downward** — a documented bias, not a curiosity.
+
+**3. Identical MAE, MAPE 100× apart.** Two rows, `y = [10, 1000]`, two constant models:
+
+| Model | Absolute errors | MAE | APEs | MAPE |
+|---|---|---|---|---|
+| Predict 10 | `[0, 990]` | 495 | `[0%, 99%]` | **49.5%** |
+| Predict 1000 | `[990, 0]` | 495 | `[9900%, 0%]` | **4950%** |
+
+Same MAE. MAPE differs by a factor of 100, entirely because of *which* row carries the error.
+
+### The two repairs
+
+| Metric | Formula | Range | Fixes | Still broken |
+|---|---|---|---|---|
+| **MAPE** | `mean(abs(r)/abs(y)) × 100` | `[0, ∞)` | — | Zeros; over-prediction asymmetry |
+| **sMAPE** | `mean(abs(r)/((abs(y)+abs(ŷ))/2)) × 100` | `[0, 200%]` | Bounded; less one-sided | Undefined when `y` and `ŷ` are both 0 |
+| **WAPE** | `Σabs(r) / Σabs(y) × 100` | `[0, ∞)` | Aggregates first; survives individual zeros | Says nothing about single rows |
+
+$$\text{sMAPE} = \frac{1}{5} \sum_{i=1}^n \frac{\lvert y_i - \hat{y}_i \rvert}{(\lvert y_i \rvert + \lvert \hat{y}_i \rvert)/2} \cdot 100\% = 2.97901\% \approx 2.98\%$$
+
+$$\text{WAPE} = \frac{\sum \lvert r_i \rvert}{\sum \lvert y_i \rvert} \cdot 100\% = \frac{10}{366} \cdot 100\% \approx 2.73\%$$
+
+WAPE landed on exactly `MAE/ȳ`, and that is no coincidence — divide both sums by `n`:
+
+$$\frac{\sum \lvert r_i \rvert}{\sum \lvert y_i \rvert} = \frac{\frac{1}{n} \sum \lvert r_i \rvert}{\frac{1}{n} \sum \lvert y_i \rvert} = \frac{\text{MAE}}{\bar{y}}$$
+
+WAPE **is** MAE rescaled by the mean of `y`. So if all you wanted was an error you could quote as a percentage, WAPE gets you there without any of MAPE's pathologies — and it is what most demand-planning teams actually report.
+
+:::danger
+
+`mean_absolute_percentage_error` returns a **fraction**, not a percentage. For the table above it returns `0.0295965`, not `2.95965`. The name says "percentage" and the value does not. Multiply by 100 yourself, and check every dashboard you inherit for a factor-of-100 error.
+
+:::
+
+---
+
+## 2. Implementation Lab
+
+:::tip 
+
+**Lab Exercise: R² and Percentage Errors**
+
+An interactive, fully-functional Google Colab / Jupyter Notebook is available to experiment with this concept live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/05-regression-metrics/r_squared_and_mape.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Click **"Run all"** or execute cells individually using `Shift + Enter`.
+
+**Things to try inside the script:**
+*   **Experiment 1 (Junk sweep):** Run section 4, add more noise columns, and observe at what feature count $p$ Adjusted $R^2$ finally starts decreasing.
+*   **Experiment 2 (Swapped arguments):** Swap the true and prediction vectors in section 3. Verify why `r2_score` outputs a different, highly plausible but completely wrong value.
+*   **Experiment 3 (sMAPE boundary):** Run section 6 and push the predicted values of `pv` higher to verify that sMAPE remains strictly bounded by 200%.
+
+:::
+
+---
+
+## 3. Common Mistakes
+
+<Tabs>
+  <TabItem value="m1" label="🚨 1. R² bound expectation" default>
+    <br/>
+    
+    *   **The Misconception:** *"R² is the square of the correlation coefficient, so it must stay bounded within [0, 1]."*
+    *   **❌ Wrong Thinking:** Believing a negative $R^2$ is mathematically impossible or represents a code crash.
+    *   **✅ The Right Principle:** $R^2 = 1 - SSE/SST$ is relative and has no lower bound. A negative $R^2$ (e.g. $-0.6586$) means your model predicts worse than simply guessing the average $\bar{y}$ for every single row.
+  </TabItem>
+  <TabItem value="m2" label="🚨 2. SSR/SST equivalence">
+    <br/>
+    
+    *   **The Misconception:** *"I can compute R² as SSR/SST for any machine learning model."*
+    *   **❌ Wrong Thinking:** Using $SSR/SST$ on neural networks, random forests, or manual spreadsheet predictions.
+    *   **✅ The Right Principle:** $SST = SSR + SSE$ is a **conditional identity** that holds *only* for OLS fits with an intercept (where the cross term $\sum(\hat{y}_i - \bar{y})r_i$ is forced to exactly 0). For any other model, using $SSR/SST$ can yield impossible answers (like $1.1951$). Always use $1 - SSE/SST$.
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. In-sample Complexity Guard">
+    <br/>
+    
+    *   **The Misconception:** *"My in-sample R² rose from 0.82 to 0.835, so my new features are helping the model."*
+    *   **❌ Wrong Thinking:** Adding features based strictly on training $R^2$ improvements.
+    *   **✅ The Right Principle:** In-sample $R^2$ **never decreases** when features are added, because the optimizer can always set the new weights to 0. Use Adjusted $R^2$ (which dropped $0.812 \to 0.807$) or, better yet, out-of-sample cross-validation.
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Scikit-learn's MAPE scale">
+    <br/>
+    
+    *   **The Misconception:** *"Scikit-Learn's MAPE function returns the error as a literal percentage."*
+    *   **❌ Wrong Thinking:** Printing `mean_absolute_percentage_error` and reporting an error of `0.0296%`.
+    *   **✅ The Right Principle:** The function returns a **fraction**, not a percentage. You must multiply by 100 yourself (e.g., `0.0296` represents `2.96%`).
+  </TabItem>
+</Tabs>
+
+---
+
+## 4. Summary
+
+<div className="row">
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🤖 Core Theory</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>R² (Determination):</b> $1 - SSE/SST$ measures the share of baseline mean-guess error removed by the model. Range is $(-\infty, 1]$.</li>
+          <li><b>Conditional Identity:</b> $SST = SSR + SSE$ holds *only* when OLS orthogonality cancels out the cross term $\sum (\hat{y}_i - \bar{y})r_i$.</li>
+          <li><b>Adjusted R²:</b> Divides sums of squares by degrees of freedom, penalizing the score for each feature added.</li>
+          <li><b>WAPE (Weighted APE):</b> $\sum |r_i| / \sum |y_i|$ is mathematically identical to $MAE/\bar{y}$ rescaled by 100, bypassing MAPE's pathologies.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🛠️ Engineering Realities</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>R² scale-free trap:</b> Because R² is unitless, it is easy to compare blindly without verifying the different $SST$ baselines of other splits.</li>
+          <li><b>Asymmetric MAPE:</b> Under-prediction is capped at 100%, whereas over-prediction is completely unbounded. Tuning on MAPE biases predictions low.</li>
+          <li><b>The Zero Trap:</b> If true $y_i = 0$, scikit-learn's MAPE silently divides by `eps ≈ 2.22e-16`, yielding artificial $1e+15$ values. Use WAPE instead.</li>
+          <li><b>Cheap Adjusted R²:</b> It keeps any feature with $t^2 > 1$, which pure noise clears 32% of the time. Use AIC or out-of-sample CV instead.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+:::info 
+
+**📌 Key Takeaways**
+
+*   **🔒 R² Asymmetry:** Unlike MSE, `r2_score` is not symmetric. Swapping arguments computes predictions against the wrong variance denominator, yielding silent review bugs.
+*   **⚖️ In-sample limit:** With $p = n - 1$ features, in-sample $R^2 = 1.0000$ is mathematically guaranteed by exact interpolation, carrying zero generalization value.
+*   **🛠️ sMAPE:** Symmetric MAPE divides by the mean of true and predicted values, keeping errors safely bounded by 200%.
+
+:::
+
+**Next in this section:** [Residual Analysis and Choosing a Metric](./03-residual-analysis-and-choosing-a-metric.mdx) — why a good R² can sit on top of a badly wrong model, and how to pick one metric per problem.
+
+---
+
+## 5. Active Recall
+
+*Attempt each question first, then click to reveal detailed answers, mathematical derivations, and sample explanations.*
+
+### Interactive Checkpoint Quiz
+
+export const PracticeQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Arbitrary Split</h4>
+      <p style={{ margin: '0 0 15px 0' }}>Why does scoring the exact same model with the exact same predictions yield two different R² scores on two different test splits?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because OLS intercepts vary across test splits</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because different splits change y_bar, which changes the baseline SST denominator</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Because R² is symmetric in its arguments</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The model's coefficients are already fixed—nothing is refitting during scoring. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! R² = 1 − SSE / SST. The baseline SST = Σ(yᵢ − ȳ)² is calculated from the true values being scored. Changing your test split changes the mean ȳ and the baseline SST denominator, meaning R² shifts with identical predictions.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. R² is highly asymmetric. Swapping arguments yields incorrect, meaningless scores. Re-read and try again!</p>}
+    </div>
+  );
+};
+
+<PracticeQuiz />
+
+### Review Flashcards
+
+<details>
+  <summary>❓ <b>1. [THEORY] Show algebraically why $SST = SSR + SSE$ holds ONLY when the cross term vanishes.</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Identity:** We can write the baseline deviation $y_i - \bar{y}$ as the sum of model deviation plus residual:
+        $$y_i - \bar{y} = (\hat{y}_i - \bar{y}) + (y_i - \hat{y}_i)$$
+    *   Squaring and summing both sides:
+        $$\sum (y_i - \bar{y})^2 = \sum \left[ (\hat{y}_i - \bar{y}) + (y_i - \hat{y}_i) \right]^2$$
+        $$\sum (y_i - \bar{y})^2 = \sum (\hat{y}_i - \bar{y})^2 + \sum (y_i - \hat{y}_i)^2 + 2\sum (\hat{y}_i - \bar{y})(y_i - \hat{y}_i)$$
+    *   **The Terms:**
+        $$\text{SST} = \text{SSR} + \text{SSE} + 2 \sum (\hat{y}_i - \bar{y}) r_i$$
+    *   **The Orthogonality:** Only OLS fits with an intercept guarantee that the residuals $r$ are orthogonal to predictions $\hat{y}_i$ and sum to zero ($\sum r_i = 0$), forcing the cross term to $0.00$. For any other model, $SST \ne SSR + SSE$.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>2. [ANALYZE] Why is it physically impossible for in-sample $R^2$ to decrease when you append a column of pure noise?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Search Space:** Let the optimal OLS parameters with $p$ features be $\beta_p$, yielding a minimum sum of squared errors $SSE_p$.
+    *   When we append a noise column, OLS has $p+1$ parameters to optimize.
+    *   In the worst-case scenario where the noise has absolutely zero correlation, the optimizer can simply assign $\beta_{p+1} = 0$, reproducing the exact same $SSE_p$ as before.
+    *   Because the optimization search space has expanded, $SSE_{p+1} \le SSE_p$ is guaranteed, meaning in-sample $R^2 = 1 - SSE/SST$ **can never fall**.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>3. [THEORY] Explain why Adjusted $R^2$ is undefined at $p = n - 1$ features, and how this relates to interpolation.</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Formula:** Adjusted $R^2 = 1 - (1 - R^2) \times \frac{n-1}{n-p-1}$.
+    *   At $p = n-1$, the number of parameters equals the number of samples, meaning the OLS model can perfectly interpolate every point, yielding a perfect $R^2 = 1.0000$ and $SSE = 0$.
+    *   **The Division by Zero:** Substituting these values:
+        $$R^2_{adj} = 1 - (1 - 1) \times \frac{n-1}{0} = 1 - 0 \times \text{undefined}$$
+    *   Because you have zero degrees of freedom left ($n-p-1 = 0$), estimating error variance is mathematically impossible.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>4. [ANALYZE] Why does minimizing MAPE bias predictions downward? Explain the math of the asymmetry.</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Ratio:** $APE = \lvert y - \hat{y} \rvert / \lvert y \rvert$.
+    *   Let true target be $y = 100$:
+        *   If we under-predict and guess $\hat{y} = 0$ (a 100% error), APE is **100%**.
+        *   If we over-predict and guess $\hat{y} = 300$ (a 200% error), APE is **200%**.
+    *   **The Bias:** Because under-prediction error is strictly capped at $100\%$ while over-prediction is unbounded, any algorithm forced to minimize MAPE will systematically shade its predictions **downward** to prevent massive over-prediction penalties.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>5. [THEORY] What is WAPE, and why does it bypass all of MAPE's numerical pathologies?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Definition:** Weighted Absolute Percentage Error is:
+        $$\text{WAPE} = \frac{\sum \lvert y_i - \hat{y}_i \rvert}{\sum \lvert y_i \rvert} \cdot 100\%$$
+    *   **The Resolution:**
+        1.  *No Zero division:* Because WAPE aggregates absolute errors and absolute true values first before dividing, a single true $y_i = 0$ does not divide by zero or break the metric.
+        2.  *Identical to MAE/mean(y):* WAPE is mathematically identical to $MAE/\bar{y}$ rescaled by 100, preserving L1 absolute robust properties.
+  </div>
+</details>

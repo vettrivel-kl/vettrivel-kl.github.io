@@ -167,13 +167,13 @@ export const RegressionWorkbench = () => {
             <text x={scaleX(xMean) + 8} y={scaleY(yMean) - 8} fill="#3182ce" fontSize="11" fontWeight="bold">Mean (x̄, ȳ)</text>
           </svg>
           <div style={{ fontSize: '12px', marginTop: '10px', color: 'var(--ifm-font-color-base)', opacity: 0.8 }}>
-            💡 Blue lines cross at the mean point <b>({xMean.toFixed(1)}, {yMean.toFixed(1)})</b>. The green regression line is mathematically forced to pass through this point. Red shaded squares show the physical magnitude of $residual^2$.
+            💡 Blue lines cross at the mean point <b>({xMean.toFixed(1)}, {yMean.toFixed(1)})</b>. The green regression line is mathematically forced to pass through this point. Red shaded squares show the physical magnitude of residual².
           </div>
         </div>
 
         {/* Dynamic Controls */}
         <div style={{ flex: '1', minWidth: '280px', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          <h5 style={{ margin: '0' }}>Adjust Point Targets ($y$):</h5>
+          <h5 style={{ margin: '0' }}>Adjust Point Targets (y):</h5>
           {points.map((p, idx) => (
             <div key={idx} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '6px 12px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '4px', fontSize: '13px' }}>
               <span><b>Point {idx + 1}:</b> x = {p.x}, y = <b>{p.y.toFixed(1)}</b></span>
@@ -274,15 +274,12 @@ Two aggregates carry everything else:
 | **$R^2$** | $1 - SSE/SST$ | **`0.6000`** | Fraction of variance beaten off the mean baseline |
 | **Adjusted $R^2$** | $1 - \frac{(1-R^2)(n-1)}{n-k-1}$ | **`0.4667`** | $R^2$, penalized for using $k$ features |
 
-All four of the first group match scikit-learn's metrics exactly. **Adjusted $R^2$ has no scikit-learn function** — you must compute it yourself, which is worth knowing before you go looking for one.
+All four of the first group match scikit-learn's metrics exactly. **Adjusted $R^2$ has no scikit-learn function** — you must compute it yourself.
 
-Three readings that matter more than the definitions:
-
-**$R^2 = 0.6$ means the model beat the mean by 60% of the available variance.** $R^2$ is not a correlation and not an accuracy — it is a comparison against a specific, deliberately simple baseline. A model with $R^2 = 0$ is exactly as good as always guessing $\bar{y}$. A negative $R^2$ is worse than that, and is entirely possible on unseen test data.
-
-**MAE and RMSE differ here ($0.64$ versus $0.69$) and the gap is informative.** $RMSE \ge MAE$ always, with equality only when every residual has the exact same magnitude. The size of the gap is a signal about whether a few large errors dominate the fit.
-
-**Adjusted $R^2$ dropped to $0.4667$ from $0.6$** — a large fall, because with $n = 5$ and $k = 1$ the penalty factor $\frac{n-1}{n-k-1} = 4/3$ is severe. That severity is entirely a function of how small $n$ is relative to $k$, and it is the reason Adjusted $R^2$ behaves so differently on realistic data.
+Three load-bearing insights from these numbers:
+*   **$R^2 = 0.6000$ represents a comparison, not an accuracy.** It means our model has cleared away 60% of the baseline variance (SST) that a constant mean-guesser ($\bar{y}$) would suffer. It is unbounded below: a negative $R^2$ is common on test sets and means your model is worse than predicting the mean.
+*   **The gap between MAE ($0.6400$) and RMSE ($0.6928$) measures outlier severity.** Because RMSE squares errors, large outliers pull it upward, widening the gap. A wide gap signals that a few massive misses are dominating your model's performance.
+*   **Adjusted $R^2$ falls severely ($0.6000 \to 0.4667$) due to small sample size.** With $n = 5$ and $k = 1$, the degree-of-freedom penalty $\frac{n-1}{n-k-1} = 1.33$ is extremely punitive. On realistic datasets with large $n$, this gap shrinks unless you flood the model with useless noise columns.
 
 :::note
 
@@ -325,10 +322,6 @@ The recovered coefficients are never exactly right, because noise in real-world 
 $$SD(\hat{b}_1) = \frac{\sigma}{\sqrt{n \cdot Var(x)}}$$
 
 Thus, the error falls as $1/\sqrt{n}$, and $RMSE \times \sqrt{n}$ should be a **constant**. With a true noise $\sigma = 2$ and $x \sim Uniform(0, 10)$, the variance of $x$ is $100 / 12 = 8.333$, making that constant exactly $2 / \sqrt{8.333} = 0.6928$.
-
-### ⚡ 1/√n Law Simulator
-
-Adjust the sliders below to change $n$ (sample size) and $\sigma$ (noise standard deviation). The simulator will instantly run **500 Monte Carlo fits** in your browser to calculate the empirical standard error of the slope and compare it directly to mathematical theory.
 
 export const RootNLawSimulator = () => {
   const [n, setN] = React.useState(200);
@@ -421,7 +414,19 @@ export const RootNLawSimulator = () => {
   );
 };
 
-<RootNLawSimulator />
+<details style={{ padding: '15px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
+  <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}>🔌 <b>[ADVANCED DEEP-DIVE] Run 500 Real-Time Monte Carlo Simulations</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    <div style={{ fontSize: '13px', margin: '0 0 15px 0', opacity: 0.9 }}>
+      Adjust the sliders below to change $n$ (sample size) and $\sigma$ (noise standard deviation). The simulator will instantly run <b>500 Monte Carlo fits</b> in your browser to calculate the empirical standard error of the slope and compare it directly to mathematical theory.
+    </div>
+
+    <RootNLawSimulator />
+    
+  </div>
+</details>
 
 :::warning
 
@@ -647,59 +652,6 @@ An interactive, fully-functional Google Colab / Jupyter Notebook is available to
 
 :::
 
-### Comparative Implementation (Scikit-Learn vs. Scratch)
-
-Compare the production library implementation with the underlying mathematical formulation written from scratch in NumPy:
-
-<Tabs>
-  <TabItem value="sklearn" label="📦 Production (Scikit-Learn)" default>
-    <br/>
-    
-    ```python
-    import numpy as np
-    from sklearn.linear_model import LinearRegression
-
-    # Data must be 2D array for scikit-learn features
-    X = np.array([1, 2, 3, 4, 5]).reshape(-1, 1)
-    y = np.array([2, 4, 5, 4, 5])
-
-    # Initialize and fit
-    model = LinearRegression()
-    model.fit(X, y)
-
-    print(f"Slope (b1): {model.coef_[0]:.4f}")
-    print(f"Intercept (b0): {model.intercept_:.4f}")
-    ```
-  </TabItem>
-  <TabItem value="scratch" label="🧮 Mathematical (NumPy from Scratch)">
-    <br/>
-    
-    ```python
-    import numpy as np
-
-    X = np.array([1, 2, 3, 4, 5])
-    y = np.array([2, 4, 5, 4, 5])
-
-    x_mean, y_mean = X.mean(), y.mean()
-
-    # Sxy = Σ(x_i - x̄)(y_i - ȳ)
-    Sxy = np.sum((X - x_mean) * (y - y_mean))
-    
-    # Sxx = Σ(x_i - x̄)²
-    Sxx = np.sum((X - x_mean) ** 2)
-
-    # b1 = Sxy / Sxx
-    b1 = Sxy / Sxx
-    
-    # b0 = ȳ - b1 * x̄
-    b0 = y_mean - b1 * x_mean
-
-    print(f"Slope (b1): {b1:.4f}")
-    print(f"Intercept (b0): {b0:.4f}")
-    ```
-  </TabItem>
-</Tabs>
-
 ---
 
 ## 3. Common Mistakes
@@ -784,7 +736,7 @@ Compare the production library implementation with the underlying mathematical f
 
 :::
 
-**Next in this section:** [Multiple Linear Regression](./02-multiple-linear-regression.md) — more than one feature, the normal equations solved by hand, and what happens to a coefficient when two features carry the same information.
+**Next in this section:** [Multiple Linear Regression](./02-multiple-linear-regression.mdx) — more than one feature, the normal equations solved by hand, and what happens to a coefficient when two features carry the same information.
 
 ---
 

@@ -1,750 +1,560 @@
 ---
 sidebar_position: 4
 title: Expressions and Operators
-description: Arithmetic operators, PEMDAS precedence, and five ways to structure the same answer.
+description: Arithmetic operators, strict float division, right-to-left exponentiation, PEMDAS precedence, and structuring computations.
 tags: [python, basics, operators]
 toc_max_heading_level: 3
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import React from 'react';
 
 # Expressions and Operators
 
-> **Exercise —** Evaluate these five expressions: `15 + 25`, `30 / 5`, `10 * 6`,
-> `25 % 4`, `2 ** 5`.
+> **Topic —** An expression is any valid combination of values, variables, and operators that Python evaluates to produce a result. While arithmetic symbols look familiar from primary school mathematics, Python's runtime introduces critical computational nuances: **division (`/`) always returns a float**, **floor division (`//`) rounds toward negative infinity**, and **exponentiation (`**`) evaluates right-to-left**. This guide details operator mechanics, order of operations, and five ways to structure the same calculation.
 
 ---
 
-## What is an Expression?
+## 1. The Core Concept
 
-An expression is a combination of:
+Python divides arithmetic into seven core operations:
 
-- **values** — numbers, strings, etc.
-- **operators** — symbols like `+`, `-`, `*`, `/`
-- **variables** — names that hold values
+| Operator | Mathematical Name | Expression | Result | Return Type | Operational Behavior |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| `+` | Addition | `15 + 25` | `40` | `int` | Sum of operands |
+| `-` | Subtraction | `30 - 10` | `20` | `int` | Difference of operands |
+| `*` | Multiplication | `10 * 6` | `60` | `int` | Product / repeated scaling |
+| `/` | True Division | `30 / 5` | `6.0` | **`float`** | **Always produces a float**, even on exact division |
+| `//` | Floor Division | `23 // 5` | `4` | `int` | Rounds toward negative infinity |
+| `%` | Modulo | `25 % 4` | `1` | `int` | Remainder of division |
+| `**` | Exponentiation | `2 ** 5` | `32` | `int` | Power / repeated multiplication |
 
-When Python evaluates an expression, it produces a **result**.
+:::tip
 
-| Expression | Result |
-|---|---|
-| `15 + 25` | `40` |
-| `30 / 5` | `6.0` |
-| `10 * 6` | `60` |
-| `25 % 4` | `1` |
-| `2 ** 5` | `32` |
+**If you only take one thing from this page**
 
----
-
-## Arithmetic Operators
-
-| Operator | Name | Example | Result | Use case |
-|---|---|---|---|---|
-| `+` | Addition | `15 + 25` | `40` | Sum, total |
-| `-` | Subtraction | `30 - 10` | `20` | Difference |
-| `*` | Multiplication | `10 * 6` | `60` | Product |
-| `/` | Division | `30 / 5` | `6.0` | Quotient (**always float**) |
-| `//` | Floor division | `23 // 5` | `4` | Whole number only |
-| `%` | Modulo | `25 % 4` | `1` | Remainder |
-| `**` | Exponentiation | `2 ** 5` | `32` | Power |
-
----
-
-## Each Operator in Detail
-
-### `+` Addition
-
-Combines numbers together.
-
-```python
-print(15 + 25)        # → 40
-print(5 + 3 + 2)      # → 10   can chain multiple
-```
-
-### `-` Subtraction
-
-Finds the difference.
-
-```python
-print(30 - 10)        # → 20
-```
-
-### `*` Multiplication
-
-Repeated addition, or scaling.
-
-```python
-print(10 * 6)         # → 60   like adding 10 six times
-```
-
-### `/` Division
-
-Splits into parts. **Always returns a `float`**, even when the division is exact.
-
-```python
-print(30 / 5)         # → 6.0   note the .0
-print(10 / 2)         # → 5.0   not 5!
-print(type(10 / 2))   # → <class 'float'>
-```
-
-### `//` Floor division
-
-Divides and keeps only the whole-number part.
-
-```python
-print(23 // 5)        # → 4     ignores the decimal
-print(23 / 5)         # → 4.6   compare
-print(type(23 // 5))  # → <class 'int'>
-```
-
-:::warning
-
-`//` **floors** (rounds toward negative infinity), it does not truncate. For negatives
-this surprises people:
-
-```python
-print(-23 // 5)   # → -5, not -4
-```
-
-:::
-
-### `%` Modulo
-
-Returns the **remainder** after division.
-
-```python
-print(25 % 4)         # → 1
-```
-
-How: 4 goes into 25 exactly 6 times (`4 × 6 = 24`), with `1` left over (`25 - 24 = 1`).
-
-That relationship always holds:
-
-```text
-25 = 4 × 6 + 1
-dividend = divisor × quotient + remainder
-```
-
-Common uses:
-
-```python
-print(10 % 2)     # → 0   remainder 0 means EVEN
-print(11 % 2)     # → 1   remainder 1 means ODD
-print(17 % 5)     # → 2   plain remainder
-print(14 % 12)    # → 2   cycling — 14:00 is 2 o'clock
-```
-
-### `**` Exponentiation
-
-Raises to a power.
-
-```python
-print(2 ** 5)     # → 32    = 2 × 2 × 2 × 2 × 2
-```
-
-The powers of 2 are worth knowing — they turn up constantly in computing:
-
-| Expression | Result | Expression | Result |
-|---|---|---|---|
-| `2 ** 1` | `2` | `2 ** 6` | `64` |
-| `2 ** 2` | `4` | `2 ** 8` | `256` |
-| `2 ** 3` | `8` | `2 ** 10` | `1024` |
-| `2 ** 4` | `16` | `3 ** 3` | `27` |
-| `2 ** 5` | `32` | `10 ** 3` | `1000` |
-
----
-
-## Operator Precedence
-
-Python follows **PEMDAS**, same as maths:
-
-| Order | Operator | Notes |
-|---|---|---|
-| 1 | `()` Parentheses | evaluated first |
-| 2 | `**` Exponentiation | **right to left** |
-| 3 | `*` `/` `//` `%` | left to right |
-| 4 | `+` `-` | left to right |
-
-### Worked examples
-
-**`2 + 3 * 4`**
-
-```text
-Step 1: multiply    3 * 4 = 12
-Step 2: add         2 + 12 = 14
-```
-
-```python
-print(2 + 3 * 4)      # → 14
-```
-
-**`(2 + 3) * 4`** — parentheses change everything
-
-```text
-Step 1: parentheses  2 + 3 = 5
-Step 2: multiply     5 * 4 = 20
-```
-
-```python
-print((2 + 3) * 4)    # → 20
-```
-
-**`10 + 2 * 3 - 4`**
-
-```text
-Step 1: multiply     2 * 3 = 6
-Step 2: add          10 + 6 = 16
-Step 3: subtract     16 - 4 = 12
-```
-
-```python
-print(10 + 2 * 3 - 4)   # → 12
-```
-
-**`2 ** 3 + 4 * 5 - 2`**
-
-```text
-Step 1: exponent     2 ** 3 = 8
-Step 2: multiply     4 * 5 = 20
-Step 3: add          8 + 20 = 28
-Step 4: subtract     28 - 2 = 26
-```
-
-```python
-print(2 ** 3 + 4 * 5 - 2)   # → 26
-```
-
-:::danger
-
-**`**` groups right to left**
-
-Unlike every other arithmetic operator:
-
-```python
-print(2 ** 3 ** 2)      # → 512   because 3 ** 2 = 9, then 2 ** 9
-print((2 ** 3) ** 2)    # → 64    if you wanted left to right
-```
-
-This is the one exception worth memorising.
+In Python 3, single slash **`/` is True Division** and **always returns a `float`** (`10 / 2` evaluates to `5.0`, not `5`). Double slash **`//` is Floor Division** and rounds down toward $-\infty$. Exponentiation **`**` evaluates right-to-left** (`2 ** 3 ** 2 == 512`, not $64$).
 
 :::
 
 ---
 
-## Storing Results in Variables
+## 2. Interactive Operator & Precedence Sandbox
 
-```python
-sum_result  = 15 + 25     # → 40
-div_result  = 30 / 5      # → 6.0
-mult_result = 10 * 6      # → 60
-mod_result  = 25 % 4      # → 1
-exp_result  = 2 ** 5      # → 32
-```
+Select an expression below to inspect its step-by-step evaluation order, type resolution, and mathematical nuances live:
 
-The expression is evaluated **once**, at assignment time. The variable then holds the
-*result*, not the expression.
+export const OperatorPrecedenceSandbox = () => {
+  const [selectedKey, setSelectedKey] = React.useState('powerAssoc');
+
+  const expressions = {
+    add: {
+      code: '15 + 25',
+      result: '40',
+      type: 'int',
+      steps: ['1. Read operand 15 (int)', '2. Read operand 25 (int)', '3. Execute addition: 15 + 25 = 40'],
+      insight: 'Straightforward integer addition. Mixing int with float automatically widens the output to float (e.g. 15 + 25.0 == 40.0).'
+    },
+    divFloat: {
+      code: '30 / 5',
+      result: '6.0',
+      type: 'float',
+      steps: ['1. Read operand 30 (int)', '2. Read operand 5 (int)', '3. Execute true division: 30 / 5 = 6.0'],
+      insight: 'In Python 3, true division (/) ALWAYS returns a float, even if the division divides evenly with zero remainder!'
+    },
+    floorPos: {
+      code: '23 // 5',
+      result: '4',
+      type: 'int',
+      steps: ['1. Exact quotient is 4.6', '2. Apply floor (round down towards -infinity): floor(4.6) = 4'],
+      insight: 'Floor division rounds down to the nearest integer. For positive numbers, this feels like simply truncating the decimal part.'
+    },
+    floorNeg: {
+      code: '-23 // 5',
+      result: '-5',
+      type: 'int',
+      steps: ['1. Exact quotient is -4.6', '2. Apply floor (round down towards -infinity): floor(-4.6) = -5'],
+      insight: 'CRITICAL TRAP: // floors toward negative infinity, NOT toward zero! -4.6 rounded down becomes -5, not -4!'
+    },
+    moduloPos: {
+      code: '25 % 4',
+      result: '1',
+      type: 'int',
+      steps: ['1. 4 goes into 25 six times (4 * 6 = 24)', '2. Remaining remainder: 25 - 24 = 1'],
+      insight: 'Modulo computes the remainder. % has nothing to do with percentages!'
+    },
+    moduloNeg: {
+      code: '-25 % 4',
+      result: '3',
+      type: 'int',
+      steps: ['1. Formula: a % b = a - b * (a // b)', '2. -25 // 4 = -7', '3. -25 - (4 * -7) = -25 - (-28) = 3'],
+      insight: 'In Python, the modulo sign ALWAYS matches the divisor (b)! Because divisor 4 is positive, the result is +3.'
+    },
+    powerAssoc: {
+      code: '2 ** 3 ** 2',
+      result: '512',
+      type: 'int',
+      steps: ['1. Right-to-left associativity: evaluate 3 ** 2 first = 9', '2. Evaluate 2 ** 9 = 512'],
+      insight: 'Unlike all other binary operators that evaluate left-to-right, ** evaluates right-to-left! (2**3)**2 is 64, but 2**3**2 is 512.'
+    },
+    pemdasMult: {
+      code: '2 + 3 * 4',
+      result: '14',
+      type: 'int',
+      steps: ['1. Multiplication has higher precedence than addition: 3 * 4 = 12', '2. Execute addition: 2 + 12 = 14'],
+      insight: 'Follows PEMDAS / BODMAS hierarchy: multiplication binds tighter than addition.'
+    },
+    pemdasParen: {
+      code: '(2 + 3) * 4',
+      result: '20',
+      type: 'int',
+      steps: ['1. Parentheses have highest precedence: (2 + 3) = 5', '2. Execute multiplication: 5 * 4 = 20'],
+      insight: 'Parentheses override default operator precedence. When in doubt, use parentheses for clarity.'
+    },
+    strRep: {
+      code: '"5" * 3',
+      result: "'555'",
+      type: 'str',
+      steps: ['1. Identify string "5"', '2. Identify integer multiplier 3', '3. Execute sequence repetition: "5" repeated 3 times = "555"'],
+      insight: 'Multiplying a string by an integer executes sequence repetition. It does not perform mathematical multiplication.'
+    },
+    typeErrorTrap: {
+      code: '"5" + 5',
+      result: 'TypeError',
+      type: 'Exception',
+      steps: ['1. Identify string "5" (str)', '2. Identify integer 5 (int)', '3. Python rejects implicit string-to-number coercion: CRASH!'],
+      insight: 'Python is strongly typed! Unlike JavaScript, Python will NEVER implicitly convert between strings and numbers in addition.'
+    }
+  };
+
+  const curr = expressions[selectedKey];
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>🧮 Interactive Operator and Precedence Sandbox</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Select an expression to inspect its AST execution trace and mathematical quirks:
+      </p>
+
+      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '16px' }}>
+        <button
+          onClick={() => setSelectedKey('divFloat')}
+          style={{ padding: '5px 10px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selectedKey === 'divFloat' ? '#3182ce' : 'transparent', color: selectedKey === 'divFloat' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', fontFamily: 'monospace' }}
+        >
+          30 / 5 (Float)
+        </button>
+        <button
+          onClick={() => setSelectedKey('floorPos')}
+          style={{ padding: '5px 10px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selectedKey === 'floorPos' ? '#3182ce' : 'transparent', color: selectedKey === 'floorPos' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', fontFamily: 'monospace' }}
+        >
+          23 // 5 (Floor)
+        </button>
+        <button
+          onClick={() => setSelectedKey('floorNeg')}
+          style={{ padding: '5px 10px', borderRadius: '4px', border: '1px solid #e53e3e', backgroundColor: selectedKey === 'floorNeg' ? '#e53e3e' : 'transparent', color: selectedKey === 'floorNeg' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold', fontFamily: 'monospace' }}
+        >
+          -23 // 5 (Trap!)
+        </button>
+        <button
+          onClick={() => setSelectedKey('moduloNeg')}
+          style={{ padding: '5px 10px', borderRadius: '4px', border: '1px solid #e53e3e', backgroundColor: selectedKey === 'moduloNeg' ? '#e53e3e' : 'transparent', color: selectedKey === 'moduloNeg' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold', fontFamily: 'monospace' }}
+        >
+          -25 % 4 (Trap!)
+        </button>
+        <button
+          onClick={() => setSelectedKey('powerAssoc')}
+          style={{ padding: '5px 10px', borderRadius: '4px', border: '1px solid #805ad5', backgroundColor: selectedKey === 'powerAssoc' ? '#805ad5' : 'transparent', color: selectedKey === 'powerAssoc' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold', fontFamily: 'monospace' }}
+        >
+          2 ** 3 ** 2 (Right-Assoc)
+        </button>
+        <button
+          onClick={() => setSelectedKey('pemdasMult')}
+          style={{ padding: '5px 10px', borderRadius: '4px', border: '1px solid #38a169', backgroundColor: selectedKey === 'pemdasMult' ? '#38a169' : 'transparent', color: selectedKey === 'pemdasMult' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', fontFamily: 'monospace' }}
+        >
+          2 + 3 * 4 (PEMDAS)
+        </button>
+        <button
+          onClick={() => setSelectedKey('strRep')}
+          style={{ padding: '5px 10px', borderRadius: '4px', border: '1px solid #dd6b20', backgroundColor: selectedKey === 'strRep' ? '#dd6b20' : 'transparent', color: selectedKey === 'strRep' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', fontFamily: 'monospace' }}
+        >
+          "5" * 3 (Repetition)
+        </button>
+        <button
+          onClick={() => setSelectedKey('typeErrorTrap')}
+          style={{ padding: '5px 10px', borderRadius: '4px', border: '1px solid #e53e3e', backgroundColor: selectedKey === 'typeErrorTrap' ? '#e53e3e' : 'transparent', color: selectedKey === 'typeErrorTrap' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', fontFamily: 'monospace' }}
+        >
+          "5" + 5 (Crash!)
+        </button>
+      </div>
+
+      <div style={{ padding: '14px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)', marginBottom: '14px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+          <div>
+            <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)', textTransform: 'uppercase', fontWeight: 'bold' }}>
+              Evaluated Python Expression
+            </div>
+            <code style={{ fontSize: '16px', fontWeight: 'bold', color: '#3182ce' }}>{curr.code}</code>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <span style={{ fontSize: '12px', color: 'var(--ifm-color-emphasis-600)' }}>Result: </span>
+            <span style={{ fontSize: '18px', fontWeight: 'bold', color: curr.type === 'Exception' ? '#e53e3e' : '#38a169', marginLeft: '6px' }}>
+              {curr.result}
+            </span>
+            <span style={{ marginLeft: '8px', padding: '2px 8px', borderRadius: '4px', backgroundColor: 'rgba(148, 163, 184, 0.15)', fontSize: '11px', fontFamily: 'monospace' }}>
+              {curr.type}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)', marginBottom: '14px' }}>
+        <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)', textTransform: 'uppercase', fontWeight: 'bold', marginBottom: '6px' }}>
+          Step-by-Step Execution Trace
+        </div>
+        <div style={{ fontSize: '13px', lineHeight: '1.6' }}>
+          {curr.steps.map((s, idx) => (
+            <div key={idx} style={{ color: 'var(--ifm-color-emphasis-800)' }}>{s}</div>
+          ))}
+        </div>
+      </div>
+
+      <div style={{ padding: '10px 14px', borderRadius: '6px', backgroundColor: curr.type === 'Exception' ? 'rgba(229, 62, 62, 0.08)' : 'rgba(49, 130, 206, 0.08)', borderLeft: `4px solid ${curr.type === 'Exception' ? '#e53e3e' : '#3182ce'}`, fontSize: '13px', lineHeight: '1.5' }}>
+        💡 <b>Computational Insight:</b> {curr.insight}
+      </div>
+    </div>
+  );
+};
+
+<OperatorPrecedenceSandbox />
 
 ---
 
-## Complex Expressions
+## 3. Order of Precedence (PEMDAS Hierarchy)
 
-```python
-a, b, c = 10, 20, 5
-print((a + b) * c)        # → 150     (10 + 20) * 5 = 30 * 5
-```
+When an expression contains multiple operators, Python resolves them according to a strict binding hierarchy:
 
-```python
-x, y = 15, 3
-print(x ** 2 + y ** 2)    # → 234     225 + 9
-```
+| Level | Operator Category | Operators | Associativity |
+| :--- | :--- | :--- | :--- |
+| **1 (Highest)** | Parentheses | `( )` | Innermost first |
+| **2** | Exponentiation | `**` | **Right-to-Left** |
+| **3** | Unary signs | `+x`, `-x`, `~x` | Right-to-Left |
+| **4** | Multiplicative | `*`, `/`, `//`, `%` | Left-to-Right |
+| **5** | Additive | `+`, `-` | Left-to-Right |
+| **6** | Bitwise Shifts | `<<`, `>>` | Left-to-Right |
+| **7** | Bitwise AND / OR | `&`, `^`, `\|` | Left-to-Right |
+| **8** | Comparisons & Identity | `==`, `!=`, `<`, `<=`, `>`, `>=`, `is`, `in` | Chained |
+| **9** | Boolean NOT | `not` | Right-to-Left |
+| **10** | Boolean AND | `and` | Left-to-Right |
+| **11 (Lowest)** | Boolean OR | `or` | Left-to-Right |
 
-```python
-radius = 5
-area = 3.14159 * radius ** 2
-print(f"{area:.2f}")      # → 78.54
-```
+:::info
 
-Note the precedence in that last one: `radius ** 2` happens **before** the multiplication,
-so no parentheses are needed.
+**The Exponentiation Associativity Exception**
 
----
+Every binary arithmetic operator (`+`, `-`, `*`, `/`, `//`, `%`) is **left-associative** ($a - b - c$ is evaluated as $(a - b) - c$).
 
-## Type Conversion in Expressions
+The only exception is **`**` (Exponentiation)**, which is **right-associative**:
 
-**Mixing `int` and `float` gives a `float`:**
+$$2^{3^2} = 2^{(3^2)} = 2^9 = 512$$
 
-```python
-print(10 + 5.5)          # → 15.5
-print(type(10 + 5.5))    # → <class 'float'>
-```
-
-**Division always gives a `float`:**
-
-```python
-print(10 / 2)            # → 5.0
-print(type(10 / 2))      # → <class 'float'>
-```
-
-**Floor division of two ints gives an `int`:**
-
-```python
-print(10 // 2)           # → 5
-print(type(10 // 2))     # → <class 'int'>
-```
-
-| Expression | Result | Type |
-|---|---|---|
-| `10 + 5` | `15` | `int` |
-| `10 + 5.5` | `15.5` | `float` |
-| `10 / 2` | `5.0` | `float` |
-| `10 // 2` | `5` | `int` |
-| `10.0 // 3` | `3.0` | `float` — still a float! |
-
----
-
-## Five ways to structure the same answer
-
-The maths is fixed; how you *shape* the code is a separate choice. Same five expressions,
-five structures.
-
-<Tabs groupId="expression-shape">
-
-<TabItem value="direct" label="1 · Direct print" default>
-
-Simplest. Compute inside the f-string, print immediately, store nothing.
-
-```python
-print(f"15 + 25 = {15 + 25}")
-print(f"30 / 5 = {30 / 5}")
-print(f"10 * 6 = {10 * 6}")
-print(f"25 % 4 = {25 % 4}")
-print(f"2 ** 5 = {2 ** 5}")
-```
-
-```text title="Output"
-15 + 25 = 40
-30 / 5 = 6.0
-10 * 6 = 60
-25 % 4 = 1
-2 ** 5 = 32
-```
-
-**Trade-off:** shortest to write, but the results are thrown away — you can't reuse them,
-and the expression is duplicated between the label and the calculation.
-
-</TabItem>
-
-<TabItem value="variables" label="2 · Variables">
-
-```python
-addition       = 15 + 25
-division       = 30 / 5
-multiplication = 10 * 6
-modulo         = 25 % 4
-exponentiation = 2 ** 5
-
-print(f"Addition (15 + 25) = {addition}")
-print(f"Division (30 / 5) = {division}")
-print(f"Multiplication (10 * 6) = {multiplication}")
-print(f"Modulo (25 % 4) = {modulo}")
-print(f"Exponentiation (2 ** 5) = {exponentiation}")
-```
-
-```text title="Output"
-Addition (15 + 25) = 40
-Division (30 / 5) = 6.0
-Multiplication (10 * 6) = 60
-Modulo (25 % 4) = 1
-Exponentiation (2 ** 5) = 32
-```
-
-**Trade-off:** results are reusable and each has a meaningful name. But it's five
-near-identical `print` lines — repetitive if the list grows.
-
-</TabItem>
-
-<TabItem value="dict" label="3 · Dictionary">
-
-Pair each expression *as text* with its computed result.
-
-```python
-expressions = {
-    "15 + 25": 15 + 25,
-    "30 / 5":  30 / 5,
-    "10 * 6":  10 * 6,
-    "25 % 4":  25 % 4,
-    "2 ** 5":  2 ** 5,
-}
-
-for expression, result in expressions.items():
-    print(f"{expression} = {result}")
-```
-
-```text title="Output"
-15 + 25 = 40
-30 / 5 = 6.0
-10 * 6 = 60
-25 % 4 = 1
-2 ** 5 = 32
-```
-
-**Trade-off:** data separated from logic — adding a sixth expression means adding one
-line, not two. You can also look up a single result by name: `expressions["25 % 4"]`.
-
-:::warning
-
-Dictionary **keys must be unique**. If two expressions had the same text, the second would
-silently overwrite the first. The list-of-tuples shape avoids this.
+If you intend $(2^3)^2 = 8^2 = 64$, you must explicitly add parentheses: `(2 ** 3) ** 2`.
 
 :::
 
-</TabItem>
+---
 
-<TabItem value="tuples" label="4 · List of tuples">
+## 4. Five Ways to Structure the Same Calculation
 
-```python
-operations = [
-    ("15 + 25", 15 + 25),
-    ("30 / 5",  30 / 5),
-    ("10 * 6",  10 * 6),
-    ("25 % 4",  25 % 4),
-    ("2 ** 5",  2 ** 5),
-]
+Consider calculating the average of three exam scores ($85, 90, 92$):
 
-for operation, result in operations:
-    print(f"{operation} = {result}")
-```
+<Tabs>
+  <TabItem value="inline" label="1. Direct Inline Expression" default>
+    <br/>
+    
+    ```python
+    # Parentheses strictly required to prevent / from dividing only 92!
+    average = (85 + 90 + 92) / 3
+    print(f"Average: {average:.2f}")  # 89.00
+    ```
+    *   **Pros:** Compact one-liner.
+    *   **Cons:** Hardcoded values; not reusable.
+  </TabItem>
+  <TabItem value="variables" label="2. Intermediate Variables">
+    <br/>
+    
+    ```python
+    score1, score2, score3 = 85, 90, 92
+    total = score1 + score2 + score3
+    count = 3
+    average = total / count
+    print(f"Average: {average:.2f}")
+    ```
+    *   **Pros:** Self-documenting; easier to debug and step through.
+  </TabItem>
+  <TabItem value="collection" label="3. Collection Aggregation">
+    <br/>
+    
+    ```python
+    scores = [85, 90, 92]
+    average = sum(scores) / len(scores)
+    print(f"Average: {average:.2f}")
+    ```
+    *   **Pros:** Scales automatically to any number of scores without changing code.
+  </TabItem>
+  <TabItem value="function" label="4. Reusable Function">
+    <br/>
+    
+    ```python
+    def calculate_average(values: list[float]) -> float:
+        if not values:
+            return 0.0
+        return sum(values) / len(values)
 
-```text title="Output"
-15 + 25 = 40
-30 / 5 = 6.0
-10 * 6 = 60
-25 % 4 = 1
-2 ** 5 = 32
-```
+    print(calculate_average([85, 90, 92]))
+    ```
+    *   **Pros:** Encapsulates business logic with zero-division guardrails.
+  </TabItem>
+  <TabItem value="dataclass" label="5. Structured Class">
+    <br/>
+    
+    ```python
+    from dataclasses import dataclass
 
-**Trade-off:** like the dictionary, but **duplicates are allowed** and order is
-guaranteed. This is the most common shape in real code, and it extends naturally to three
-or more columns — which is exactly what the summary tables in these notes use.
+    @dataclass
+    class StudentRecord:
+        name: str
+        scores: list[float]
 
-</TabItem>
+        @property
+        def average(self) -> float:
+            return sum(self.scores) / len(self.scores) if self.scores else 0.0
 
-<TabItem value="submission" label="5 · Submission-ready">
-
-The bare, printable version — banner headings, numbered comments, one result per line.
-
-```python title="expressions.py"
-# Python Program - Expressions
-# Evaluate mathematical operations
-
-print("=" * 50)
-print("MATHEMATICAL EXPRESSIONS")
-print("=" * 50)
-
-# 1. Addition
-result1 = 15 + 25
-print(f"15 + 25 = {result1}")
-
-# 2. Division
-result2 = 30 / 5
-print(f"30 / 5 = {result2}")
-
-# 3. Multiplication
-result3 = 10 * 6
-print(f"10 * 6 = {result3}")
-
-# 4. Modulo (Remainder)
-result4 = 25 % 4
-print(f"25 % 4 = {result4}")
-
-# 5. Exponentiation (Power)
-result5 = 2 ** 5
-print(f"2 ** 5 = {result5}")
-
-print("=" * 50)
-```
-
-```text title="Output"
-==================================================
-MATHEMATICAL EXPRESSIONS
-==================================================
-15 + 25 = 40
-30 / 5 = 6.0
-10 * 6 = 60
-25 % 4 = 1
-2 ** 5 = 32
-==================================================
-```
-
-**Trade-off:** verbose and repetitive, but explicit and easy to mark. Fine for a lab
-submission, not what you'd write in production.
-
-</TabItem>
-
+    student = StudentRecord("Vettri", [85, 90, 92])
+    print(f"{student.name}: {student.average:.2f}")
+    ```
+    *   **Pros:** Production enterprise architecture binding data to behaviors.
+  </TabItem>
 </Tabs>
 
-### Which shape should you use?
+---
 
-| Shape | Best when | Avoid when |
-|---|---|---|
-| 1 — Direct | one-off throwaway output | you need the results later |
-| 2 — Variables | each result has a distinct meaning and gets reused | you have many similar items |
-| 3 — Dictionary | you need lookup by name | labels might repeat |
-| 4 — List of tuples | **general default** — ordered, duplicates fine, extends to more columns | you need name-based lookup |
-| 5 — Submission | teaching, documenting, marking | production code — too verbose |
+## 5. Implementation Lab
 
-**Rule of thumb:** reach for **shape 4**. It's the one that scales.
+:::tip
+
+**Lab Exercise: Expressions, Operators & Precedence Tracing**
+
+An interactive, fully functional Google Colab / Jupyter Notebook is available to evaluate the 5 foundational arithmetic operations, examine negative floor division quirks, verify right-to-left power associativity, and test string repetition live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/python/expressions_and_operators.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Run cells sequentially to benchmark operator precedence and string casting errors.
+
+**Key Experiments to Run:**
+*   **Experiment 1 (The Strict Float Rule):** Confirm that `30 / 5` returns float `6.0`, while `30 // 5` returns integer `6`.
+*   **Experiment 2 (Negative Floor Division):** Compare `23 // 5` ($4$) against `-23 // 5` ($-5$) to observe floor rounding toward negative infinity.
+*   **Experiment 3 (Exponentiation Associativity):** Empirically verify `2 ** 3 ** 2 == 512` vs. `(2 ** 3) ** 2 == 64`.
+
+:::
 
 ---
 
-## Real-World Uses
+## 6. Common Mistakes
 
-### Geometry — area of a rectangle
-
-```python
-length, width = 12, 8
-print(length * width)     # → 96
-```
-
-### Finance — total with discount
-
-```python
-unit_price = 25.50
-quantity = 4
-discount = 0.1                                    # 10%
-total = unit_price * quantity * (1 - discount)
-print(f"{total:.2f}")     # → 91.80
-```
-
-### Statistics — average
-
-```python
-scores = [85, 90, 78, 92, 88]
-average = sum(scores) / len(scores)
-print(f"{average:.2f}")   # → 86.60
-```
-
-The parentheses are **required** when you inline the sum — without them, only the last
-score would be divided:
-
-```python
-score1, score2, score3 = 85, 90, 92
-average = (score1 + score2 + score3) / 3
-print(f"{average:.2f}")   # → 89.00
-```
-
-### Percentage
-
-```python
-correct, total = 30, 40
-print((correct / total) * 100)   # → 75.0
-```
-
-### Time — minutes to hours
-
-This is the classic `//` and `%` pairing:
-
-```python
-total_minutes = 127
-hours = total_minutes // 60      # → 2
-minutes = total_minutes % 60     # → 7
-print(f"{total_minutes} minutes = {hours} hour(s) and {minutes} minute(s)")
-# → 127 minutes = 2 hour(s) and 7 minute(s)
-```
-
-### Even or odd
-
-```python
-num = 25
-if num % 2 == 0:
-    print(f"{num} is EVEN")
-else:
-    print(f"{num} is ODD")
-# → 25 is ODD
-```
-
-### Compound interest
-
-```python
-principal, rate, years = 1000, 5, 2
-amount = principal * (1 + rate / 100) ** years
-print(f"{amount:.2f}")          # → 1102.50
-```
-
-Precedence at work: `rate / 100` → `1 + 0.05` → `1.05 ** 2` → multiplied by `1000`.
-
-### Physics — velocity
-
-```python
-distance, time = 100, 5
-print(distance / time)    # → 20.0 m/s
-```
+<Tabs>
+  <TabItem value="m1" label="🚨 1. Ignoring Precedence in Divisions" default>
+    <br/>
+    
+    *   **The Misconception:** *"Writing `a + b + c / 3` computes the average of three numbers."*
+    *   **❌ Wrong Thinking:** Assuming addition happens left-to-right before division.
+    *   **✅ The Right Principle:** Division `/` has higher precedence than addition. Python evaluates `a + b + (c / 3)`. You must wrap the sum in parentheses: `(a + b + c) / 3`.
+  </TabItem>
+  <TabItem value="m2" label="🚨 2. Assuming // Truncates Toward Zero">
+    <br/>
+    
+    *   **The Misconception:** *"Floor division `//` just chops off the decimal part."*
+    *   **❌ Wrong Thinking:** Expecting `-10 // 3` to equal `-3`.
+    *   **✅ The Right Principle:** `//` rounds down toward **negative infinity** ($\lfloor x \rfloor$). Since $-10 / 3 = -3.333$, rounding down yields **`-4`**. To truncate toward zero, use `int(-10 / 3)`.
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. Misreading Modulo % as Percentage">
+    <br/>
+    
+    *   **The Misconception:** *"Calling `25 % 4` gives 25% of 4 (1.0)."*
+    *   **❌ Wrong Thinking:** Confusing the mathematical modulo operator with percentage calculation.
+    *   **✅ The Right Principle:** `%` returns the integer remainder after division ($25 = 4 \times 6 + 1 \implies 1$). To compute percentages, multiply the ratio by 100: `(num / total) * 100`.
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Assuming ** is Left-Associative">
+    <br/>
+    
+    *   **The Misconception:** *"2 ** 3 ** 2 evaluates as (2 ** 3) ** 2 = 64."*
+    *   **❌ Wrong Thinking:** Reading chained powers left to right.
+    *   **✅ The Right Principle:** `**` is right-associative: $2^{(3^2)} = 2^9 = 512$. Use explicit parentheses if you desire left-to-right evaluation.
+  </TabItem>
+  <TabItem value="m5" label="🚨 5. Implicit String and Integer Addition">
+    <br/>
+    
+    *   **The Misconception:** *"'5' + 5 will evaluate to '55' or 10."*
+    *   **❌ Wrong Thinking:** Expecting JavaScript-style type coercion.
+    *   **✅ The Right Principle:** Python is strictly typed. Adding string and integer raises `TypeError: can only concatenate str (not "int") to str`. Cast explicitly: `int('5') + 5` $\implies 10$ or `'5' + str(5)` $\implies '55'$.
+  </TabItem>
+</Tabs>
 
 ---
 
-## Common Mistakes
+## 7. Summary
 
-| # | Mistake | Wrong | Right |
-|---|---|---|---|
-| 1 | Ignoring precedence | `2 + 3 * 4` is not `20` | it's `14` — `3*4` first |
-| 2 | Mixing `/` and `//` | `10 / 3` → `3.333...` | `10 // 3` → `3` |
-| 3 | Misreading `%` | `25 % 4` is not `0.25` | it's `1` — a *remainder*, not a percentage |
-| 4 | Assuming `//` gives an int | `10.0 // 3` → `3.0`, still a float | `int(10.0 // 3)` → `3` |
-| 5 | Forgetting parentheses | `a + b * c` multiplies first | `(a + b) * c` to add first |
-| 6 | Assuming `**` is left-assoc | `2 ** 3 ** 2` is not `64` | it's `512` — right to left |
+<div className="row">
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🤖 Operator Mechanics</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>True Division (/):</b> Always produces `float` (`10/2 == 5.0`).</li>
+          <li><b>Floor Division (//):</b> Rounds toward $-\infty$ (`-23//5 == -5`).</li>
+          <li><b>Modulo (%):</b> Remainder; matches sign of divisor.</li>
+          <li><b>Exponentiation (**):</b> Right-to-left associativity (`2**3**2 == 512`).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🛠️ Precedence Best Practices</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>PEMDAS:</b> `()`, `**`, unary, `* / // %`, `+ -`, comparisons, `not`, `and`, `or`.</li>
+          <li><b>Parentheses are Free:</b> Use parentheses whenever precedence is not immediately obvious to human readers.</li>
+          <li><b>String Overloading:</b> `+` concatenates strings; `*` repeats sequences.</li>
+          <li><b>Pairing // and %:</b> Splitting quantities into units and leftovers (`mins // 60` and `mins % 60`).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
 
-Verified proof:
+<br/>
 
-```python
-print(2 + 3 * 4)        # → 14
-print((2 + 3) * 4)      # → 20      different results!
-print(10 / 3)           # → 3.3333333333333335
-print(10 // 3)          # → 3
-print(25 % 4)           # → 1
-print(10.0 // 3)        # → 3.0
-print(2 ** 3 ** 2)      # → 512
-```
+:::info
 
----
+**📌 Key Takeaways**
 
-## Summary
+*   **⚡ Division is always float:** In Python 3, single slash `/` will never return an `int`.
+*   **📉 Negative floor rounds down:** Remember that `//` floors toward $-\infty$, meaning `-10 // 3 == -4`.
+*   **🔄 Right-to-left power:** Exponentiation `**` evaluates right-to-left; always add parentheses if in doubt.
 
-| # | Expression | Operation | Result | Type |
-|---|---|---|---|---|
-| 1 | `15 + 25` | Addition | `40` | `int` |
-| 2 | `30 / 5` | Division | `6.0` | `float` |
-| 3 | `10 * 6` | Multiplication | `60` | `int` |
-| 4 | `25 % 4` | Modulo | `1` | `int` |
-| 5 | `2 ** 5` | Exponentiation | `32` | `int` |
+:::
 
-**Key takeaways**
-
-- `/` always produces a `float`; `//` keeps ints as ints
-- `%` gives a remainder — nothing to do with percentages
-- `**` associates **right to left**; everything else goes left to right
-- Parentheses are free — use them whenever precedence isn't obvious
-- `//` and `%` together split a quantity into units and leftovers
-- Wrap sums in parentheses before dividing: `(a + b + c) / 3`
-
-**See also:** [Values and Types](./01-values-and-types.md) for why `/` returns a float ·
-[F-Strings](./05-f-strings.md) for the formatting used throughout
-
----
-
-## Run It Yourself
-
-```python title="expressions.py"
-operations = [
-    ("15 + 25", "Addition",         15 + 25),
-    ("30 / 5",  "Division",         30 / 5),
-    ("10 * 6",  "Multiplication",   10 * 6),
-    ("25 % 4",  "Modulo/Remainder", 25 % 4),
-    ("2 ** 5",  "Exponentiation",   2 ** 5),
-]
-
-print(f"{'Expression':<12} {'Operation':<18} {'Result':<8} Type")
-print("-" * 48)
-for expr, op, result in operations:
-    print(f"{expr:<12} {op:<18} {result:<8} {type(result).__name__}")
-```
-
-```text title="Output"
-Expression   Operation          Result   Type
-------------------------------------------------
-15 + 25      Addition           40       int
-30 / 5       Division           6.0      float
-10 * 6       Multiplication     60       int
-25 % 4       Modulo/Remainder   1        int
-2 ** 5       Exponentiation     32       int
-```
+**Next Section:** [F-Strings](./05-f-strings.md) - mastering Python 3.6+ formatted string literals, alignment padding, and precision specifiers.
 
 ---
 
-## Practice Questions
+## 8. Active Recall
 
-*From the Unit 1 question bank. Tags and marks are explained on the
-[Python index](../index.md#practice-questions).*
+*Test your understanding by answering first, then clicking to reveal the underlying principles.*
 
-### Unit 1 § B — Expressions & Operators
+### Interactive Checkpoint Quiz
 
-**B1. [PROG]** Write a program that evaluates and displays each of these: `15 + 25`, `30 / 5`,
-`10 * 6`, `25 % 4`, `2 ** 5`. Label each result. `[5]`
+export const OperatorQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Right-Associative Exponentiation Trap</h4>
+      <p style={{ margin: '0 0 15px 0' }}>What is the evaluated output of the Python expression <code>2 ** 3 ** 2</code>?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>64 (Evaluated left-to-right as (2**3)**2)</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>512 (Evaluated right-to-left as 2**(3**2))</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>SyntaxError: Chained power operators require parentheses</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. In Python, ** is right-associative, not left-associative! (2**3)**2 would be 64, but 2**3**2 evaluates 3**2 first. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! In Python, exponentiation (**) is strictly right-associative. Python evaluates 3 ** 2 = 9 first, and then calculates 2 ** 9 = 512. Chained power operators do NOT require parentheses.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Chaining power operators is completely legal syntax in Python. Try again!</p>}
+    </div>
+  );
+};
 
-**B2. [OUT]** Work out the precedence by hand. `[2]`
+<OperatorQuiz />
 
-```python
-print(2 + 3 * 4 ** 2 - 6 / 3)
-```
+### Review Flashcards
 
-**B3. [OUT]** The two negative cases are the interesting ones. `[5]`
+<details>
+  <summary>❓ <b>1. [THEORY] Why does Python evaluate `-10 // 3` as `-4` rather than `-3`?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Floor Function Definition:** In mathematics and Python, floor division is defined by the mathematical floor operator:
+        $$\lfloor x \rfloor = \max \{ m \in \mathbb{Z} \mid m \le x \}$$
+    *   Exact quotient: $-10 / 3 = -3.3333\dots$
+    *   The largest integer less than or equal to $-3.3333\dots$ is **`-4`**.
+    *   Many languages (C/Java) truncate toward zero (yielding `-3`), but Python strictly floors toward negative infinity.
+  </div>
+</details>
 
-```python
-print(10 / 3)
-print(10 // 3)
-print(-10 // 3)
-print(10 % 3)
-print(-10 % 3)
-```
+<details>
+  <summary>❓ <b>2. [MATH] What is the exact output of `print(2 + 3 * 4 ** 2 - 6 / 3)`? Trace step by step.</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    1.  **Exponentiation:** $4^2 = 16$. Expression becomes: $2 + 3 \times 16 - 6 / 3$.
+    2.  **Multiplication & Division:**
+        *   $3 \times 16 = 48$
+        *   $6 / 3 = 2.0$ (Division produces float!)
+        *   Expression becomes: $2 + 48 - 2.0$.
+    3.  **Addition & Subtraction (Left-to-Right):**
+        *   $2 + 48 = 50$
+        *   $50 - 2.0 = \mathbf{48.0}$ (Float due to division operand).
+  </div>
+</details>
 
-**B4. [OUT]** Is `**` left- or right-associative? `[2]`
+<details>
+  <summary>❓ <b>3. [PRACTICE] How do you convert 127 minutes into hours and remaining minutes in two lines of code?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    ```python
+    total_minutes = 127
+    hours = total_minutes // 60      # 2 hours (whole units)
+    minutes = total_minutes % 60     # 7 minutes (remainder)
+    print(f"{hours}h {minutes}m")    # 2h 7m
+    ```
+    *   Alternatively, use Python's built-in `divmod`:
+    ```python
+    hours, minutes = divmod(127, 60) # (2, 7)
+    ```
+  </div>
+</details>
 
-```python
-print(2 ** 3 ** 2)
-print((2 ** 3) ** 2)
-```
+<details>
+  <summary>❓ <b>4. [ANALYZE] What happens when evaluating `5 > 3 and 2 > 4 or not False`? Trace precedence.</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    1.  **Relational Comparisons:**
+        *   `5 > 3` $\implies \text{True}$
+        *   `2 > 4` $\implies \text{False}$
+        *   Expression: `True and False or not False`.
+    2.  **Boolean `not`:** `not False` $\implies \text{True}$.
+        *   Expression: `True and False or True`.
+    3.  **Boolean `and`:** `True and False` $\implies \text{False}$.
+        *   Expression: `False or True`.
+    4.  **Boolean `or`:** `False or True` $\implies \mathbf{\text{True}}$.
+  </div>
+</details>
 
-**B5. [OUT]** `[3]`
-
-```python
-print(True + True + False)
-print(True * 10)
-print(int(True), int(False))
-```
-
-**B6. [OUT]** `[4]`
-
-```python
-print("5" + "5")
-print(5 + 5)
-print("5" * 3)
-print(5 * 3)
-```
-
-**B7. [OUT]** Name the error and explain why it happens. `[2]`
-
-```python
-print("5" + 5)
-```
-
-**B8. [OUT]** `[4]`
-
-```python
-print(5 > 3 and 2 > 4)
-print(5 > 3 or 2 > 4)
-print(not (5 > 3))
-print(5 > 3 and 2 > 4 or not False)
-```
-
-**B9. [OUT]** Trace the augmented assignments. `[4]`
-
-```python
-x = 10
-x += 5
-print(x)
-x -= 3
-print(x)
-x *= 2
-print(x)
-x //= 7
-print(x)
-x **= 2
-print(x)
-```
-
-**B10. [THEORY]** What is the difference between `=`, `==`, and `is`? Give a one-line code
-example of each. `[3]`
-
-### Viva
-
-1. What is the difference between `/` and `//`?
-2. Why does `print(type(7/2))` show `float` even though the numbers are integers?
+<details>
+  <summary>❓ <b>5. [THEORY] What is the difference between `=` (assignment), `==` (equality), and `is` (identity)?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   `=` **Assignment:** Binds a variable name to an object on the heap (`x = [1, 2]`).
+    *   `==` **Equality:** Checks whether two objects hold the same values/contents (`[1, 2] == [1, 2]` is `True`).
+    *   `is` **Identity:** Checks whether two variables reference the exact same object at the same memory address (`[1, 2] is [1, 2]` is `False`).
+  </div>
+</details>

@@ -1,0 +1,694 @@
+---
+sidebar_position: 2
+title: Multiple Linear Regression
+description: More than one feature — the normal equations solved by hand, why a coefficient changes when a correlated feature joins it, and the measurement showing Adjusted R² fails to penalise 100 columns of pure noise while cross-validation catches them cleanly.
+tags: [machine-learning, linear-regression, scikit-learn]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import React from 'react';
+
+# Multiple Linear Regression
+
+> **Topic —** The previous page fitted one feature and found something unresolved: `age` had a real effect of $-800$ that its marginal correlation of $-0.0392$ completely hid, and only became visible once `size`'s contribution was removed. Doing that removal automatically, for every feature at once, is what multiple regression *is*. This page works out how, and then asks which measure can be trusted to tell you whether an added feature helped.
+
+---
+
+## The model, and the meaning of one coefficient
+
+Each feature gets its own coefficient:
+
+$$y = b_0 + b_1 x_1 + b_2 x_2 + \dots + b_k x_k$$
+
+With one feature this is a line, with two a plane, with more a **hyperplane** — impossible to picture and no different algebraically.
+
+The definition of $b_i$ is the part that carries all the weight:
+
+> **Holding every other feature in the model constant**, one additional unit of $x_i$ is associated with a $b_i$ increase in $y$.
+
+Both qualifications are load-bearing, and the first one is not a caveat but a description of what the arithmetic actually does. **"Holding every other feature constant"** means $b_i$ is fitted on the variation in $x_i$ that the other features cannot explain — exactly the residual-then-refit operation the previous page did by hand. **"Is associated with"** is not "causes"; regression measures association, and nothing about fitting a hyperplane establishes direction.
+
+---
+
+## Solving for two coefficients by hand
+
+The two-feature case has a closed form small enough to compute on paper, and doing so shows where the "holding constant" behaviour comes from mechanically.
+
+Working in deviations from the means — $d_{1i} = x_{1i} - \bar{x}_1$, and so on — the least-squares coefficients satisfy two simultaneous equations, the **normal equations**:
+
+$$S_{11} \cdot b_1 + S_{12} \cdot b_2 = S_{1y}$$
+
+$$S_{12} \cdot b_1 + S_{22} \cdot b_2 = S_{2y}$$
+
+$$\text{where } S_{11} = \sum d_{1i}^2 \qquad S_{22} = \sum d_{2i}^2 \qquad S_{12} = \sum d_{1i}d_{2i}$$
+
+$$S_{1y} = \sum d_{1i}d_{yi} \qquad S_{2y} = \sum d_{2i}d_{yi}$$
+
+$S_{11}$ and $S_{22}$ measure how much each feature varies. $S_{12}$ measures how much they vary *together* — and it is the only term that couples the two equations. Set $S_{12} = 0$ and they decouple completely: $b_1 = S_{1y}/S_{11}$ and $b_2 = S_{2y}/S_{22}$, each identical to its simple-regression value. **Everything interesting about multiple regression lives in $S_{12}$.**
+
+---
+
+## 🛠️ The Collinearity & Determinant Solver {/* #worked-all-the-way-through */}
+
+Experiment with the interactive solver below. Modify the coupling term $S_{12}$ (covariance between features) and the individual variances $S_{11}, S_{22}$ to watch how the simultaneous normal equations couple and decouple, how the determinant shrinks, and how the coefficients $b_1, b_2$ behave.
+
+export const CollinearitySolver = () => {
+  const [s11, setS11] = React.useState(5.0);
+  const [s22, setS22] = React.useState(5.0);
+  const [s12, setS12] = React.useState(2.0);
+
+  // Constants as in the text example
+  const s1y = 8.0;
+  const s2y = 9.0;
+  const yMean = 9.5;
+  const x1Mean = 2.5;
+  const x2Mean = 2.5;
+
+  // Bound S12 to prevent division by zero or imaginary determinants
+  const maxS12 = Math.sqrt(s11 * s22) - 0.05;
+  const safeS12 = Math.max(-maxS12, Math.min(maxS12, s12));
+
+  const det = s11 * s22 - safeS12 ** 2;
+  const b1 = (s1y * s22 - safeS12 * s2y) / det;
+  const b2 = (s11 * s2y - safeS12 * s1y) / det;
+  const b0 = yMean - b1 * x1Mean - b2 * x2Mean;
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
+      <h4 style={{ margin: '0 0 15px 0' }}>🔌 Interactive Normal Equations Solver</h4>
+      
+      <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap', marginBottom: '15px' }}>
+        <div style={{ flex: '1', minWidth: '130px' }}>
+          <label style={{ fontSize: '12px', fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Feature 1 Var (S₁₁): <b>{s11.toFixed(1)}</b></label>
+          <input type="range" min="1.0" max="10.0" step="0.5" value={s11} onChange={(e) => setS11(parseFloat(e.target.value))} style={{ width: '100%' }} />
+        </div>
+        <div style={{ flex: '1', minWidth: '130px' }}>
+          <label style={{ fontSize: '12px', fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Feature 2 Var (S₂₂): <b>{s22.toFixed(1)}</b></label>
+          <input type="range" min="1.0" max="10.0" step="0.5" value={s22} onChange={(e) => setS22(parseFloat(e.target.value))} style={{ width: '100%' }} />
+        </div>
+        <div style={{ flex: '1.2', minWidth: '150px' }}>
+          <label style={{ fontSize: '12px', fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Coupling term (S₁₂): <b style={{ color: Math.abs(safeS12) >= 4.0 ? '#e53e3e' : '#3182ce' }}>{safeS12.toFixed(2)}</b></label>
+          <input type="range" min="-4.9" max="4.9" step="0.1" value={s12} onChange={(e) => setS12(parseFloat(e.target.value))} style={{ width: '100%' }} />
+        </div>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1.2fr 1fr', gap: '20px', flexWrap: 'wrap' }}>
+        {/* Equations Display */}
+        <div style={{ padding: '15px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'var(--ifm-background-color)' }}>
+          <h5 style={{ margin: '0 0 10px 0', fontSize: '13px' }}>The Coupled Normal Equations:</h5>
+          <div style={{ fontFamily: 'monospace', fontSize: '13px', margin: '5px 0' }}>
+            {s11.toFixed(1)}·b₁ {safeS12 >= 0 ? '+' : '−'} {Math.abs(safeS12).toFixed(2)}·b₂ = {s1y.toFixed(0)}
+          </div>
+          <div style={{ fontFamily: 'monospace', fontSize: '13px', margin: '5px 0' }}>
+            {safeS12 >= 0 ? '' : '−'}{Math.abs(safeS12).toFixed(2)}·b₁ + {s22.toFixed(1)}·b₂ = {s2y.toFixed(0)}
+          </div>
+
+          <div style={{ marginTop: '15px', fontSize: '12px' }}>
+            Determinant: <code style={{ fontSize: '12px' }}>det = S₁₁S₂₂ − S₁₂²</code>
+            <div style={{ fontSize: '16px', fontWeight: 'bold', margin: '5px 0', color: det < 1.0 ? '#e53e3e' : '#38a169' }}>
+              det = {det.toFixed(4)}
+            </div>
+          </div>
+        </div>
+
+        {/* Solved Coefficients */}
+        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div style={{ padding: '12px', borderLeft: '4px solid #3182ce', backgroundColor: 'rgba(49, 130, 206, 0.03)' }}>
+            <div style={{ fontSize: '13px', margin: '3px 0' }}>b₁ (Slope 1) = <b>{b1.toFixed(4)}</b></div>
+            <div style={{ fontSize: '13px', margin: '3px 0' }}>b₂ (Slope 2) = <b>{b2.toFixed(4)}</b></div>
+            <div style={{ fontSize: '13px', margin: '3px 0' }}>b₀ (Intercept) = <b>{b0.toFixed(4)}</b></div>
+            <div style={{ fontSize: '13px', margin: '3px 0' }}>Fitted: <code style={{ fontSize: '11px' }}>ŷ = {b0.toFixed(2)} + {b1.toFixed(2)}x₁ + {b2.toFixed(2)}x₂</code></div>
+          </div>
+        </div>
+      </div>
+
+      {Math.abs(safeS12) >= Math.sqrt(s11 * s22) - 0.2 && (
+        <div style={{ marginTop: '15px', padding: '10px 15px', borderRadius: '4px', backgroundColor: 'rgba(229, 62, 62, 0.08)', border: '1px solid #e53e3e', fontSize: '12px', color: '#e53e3e', fontWeight: 'bold' }}>
+          ⚠️ Extreme Collinearity! S₁₂² ({ (safeS12**2).toFixed(2) }) is nearly equal to S₁₁S₂₂ ({ (s11*s22).toFixed(2) }). The determinant is approaching zero, causing dividing-by-zero math instabilities. Small changes in inputs will make the coefficients swing wildly!
+        </div>
+      )}
+    </div>
+  );
+};
+
+<CollinearitySolver />
+
+:::tip
+
+**That determinant is the whole story of collinearity**
+
+`det = S₁₁S₂₂ − S₁₂²` sits in the denominator of both coefficients. $S_{12}$ is the coupling term, so as the two features become more alike, $S_{12}^2$ grows toward $S_{11}S_{22}$ and **the determinant heads to zero** — dividing by something arbitrarily small. This is the algebraic source of every instability later on this page, and at exactly $S_{12}^2 = S_{11}S_{22}$ the determinant is zero and there is no unique solution at all, which is [the next page](./03-the-matrix-formulation.mdx#three-ways-it-breaks)'s subject.
+
+:::
+
+The same structure generalises: with $k$ features you get $k$ simultaneous equations, which is unwieldy by hand and elegant in matrix form — hence the next page.
+
+---
+
+## What "holding all else constant" does to a coefficient
+
+A coefficient's value depends on **what else is in the model**. Two cases on the house-price data, where the truth is $\text{price} = 3000 \cdot \text{size} - 800 \cdot \text{age} + 50000$:
+
+```text title="Output"
+2. WHAT 'HOLDING ALL ELSE CONSTANT' DOES TO A COEFFICIENT
+   size's DIRECT effect is 3000 in both models.
+   but rooms = 2 + 0.05·size, so in the second model size ALSO acts
+   through rooms: 3000 + 5000×0.05 = 3250 is its total marginal effect.
+
+   pair              corr  size alone  size joint    shift
+   size, age       0.0614     3043.86     3062.84   +18.98
+   size, rooms     0.8244     3218.22     2921.04  -297.18
+```
+
+**With a near-orthogonal partner, the coefficient barely moves.** `size` and `age` correlate at $0.0614$, and `size`'s coefficient shifts by $+18.98$ — under 1% — between the solo and joint fits. $S_{12} \approx 0$, so the equations nearly decouple and each feature is estimated as though the other were not there.
+
+**With a correlated partner, it moves substantially and for a specific reason.** `rooms` is built as $2 + 0.05 \cdot \text{size}$, correlating with `size` at $0.8244$. Now `size` influences `price` through two channels: directly at $3000$, and through `rooms` at $5000 \times 0.05 = 250$. Its **total** marginal effect is therefore $3250$, and its **direct** effect is $3000$.
+
+### 🛠️ Total versus Direct Effect Sandbox
+
+Toggle the model partner below to watch how `size`'s coefficient transitions from measuring the **total effect** (when fitted alone) to measuring only the **direct effect** (when fitted jointly with `rooms`).
+
+export const TotalDirectSandbox = () => {
+  const [modelType, setModelType] = React.useState('solo');
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🎯 Total versus Direct Effect Sandbox</h4>
+      <p style={{ fontSize: '13px', margin: '0 0 15px 0', opacity: 0.9 }}>Toggle the model to see how holding `rooms` constant isolates the direct physical effect of home size.</p>
+
+      <div style={{ display: 'flex', gap: '10px', marginBottom: '15px' }}>
+        <button 
+          onClick={() => setModelType('solo')} 
+          style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: modelType === 'solo' ? '#3182ce' : 'transparent', color: modelType === 'solo' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontWeight: 'bold' }}
+        >
+          Model A: Size Alone (Total Effect)
+        </button>
+        <button 
+          onClick={() => setModelType('joint')} 
+          style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: modelType === 'joint' ? '#3182ce' : 'transparent', color: modelType === 'joint' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontWeight: 'bold' }}
+        >
+          Model B: Size + Rooms (Direct Effect)
+        </button>
+      </div>
+
+      <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+        {/* Diagram */}
+        <svg width="100%" height="160" style={{ flex: '1.2', minWidth: '280px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'var(--ifm-background-color)' }}>
+          {/* Node 1: Size */}
+          <rect x="20" y="60" width="80" height="40" rx="4" fill="#3182ce" opacity="0.15" stroke="#3182ce" strokeWidth="1.5" />
+          <text x="60" y="85" textAnchor="middle" fill="var(--ifm-font-color-base)" fontSize="12" fontWeight="bold">Size</text>
+
+          {/* Node 2: Rooms */}
+          {modelType === 'joint' ? (
+            <g>
+              <rect x="150" y="10" width="80" height="40" rx="4" fill="#e53e3e" opacity="0.15" stroke="#e53e3e" strokeWidth="1.5" />
+              <text x="190" y="35" textAnchor="middle" fill="var(--ifm-font-color-base)" fontSize="12" fontWeight="bold">Rooms</text>
+              
+              {/* Size -> Rooms correlation */}
+              <line x1="80" y1="60" x2="150" y2="30" stroke="#718096" strokeWidth="1.5" strokeDasharray="3,3" />
+              <text x="110" y="38" fill="#718096" fontSize="10">corr: 0.82</text>
+
+              {/* Size -> Price direct arrow */}
+              <line x1="100" y1="80" x2="280" y2="80" stroke="#38a169" strokeWidth="2.5" markerEnd="url(#arrow)" />
+              <text x="180" y="73" fill="#38a169" fontSize="11" fontWeight="bold">b₁ = 3000 (direct)</text>
+
+              {/* Rooms -> Price arrow */}
+              <line x1="230" y1="30" x2="280" y2="70" stroke="#e53e3e" strokeWidth="2" />
+              <text x="255" y="42" fill="#e53e3e" fontSize="10" fontWeight="bold">+5000</text>
+            </g>
+          ) : (
+            <g>
+              {/* Indirect rooms box is faded */}
+              <rect x="150" y="10" width="80" height="40" rx="4" fill="#718096" opacity="0.05" stroke="#718096" strokeWidth="1" />
+              <text x="190" y="35" textAnchor="middle" fill="#a0aec0" fontSize="12">Rooms</text>
+
+              {/* Size -> Price total arrow including room credit */}
+              <line x1="100" y1="80" x2="280" y2="80" stroke="#3182ce" strokeWidth="3" />
+              <text x="180" y="73" fill="#3182ce" fontSize="11" fontWeight="bold">b₁ = 3250 (total)</text>
+              
+              {/* Faded indirect arrow */}
+              <path d="M 80,60 Q 150,15 280,75" fill="none" stroke="#718096" strokeWidth="1.5" opacity="0.3" strokeDasharray="2,2" />
+              <text x="160" y="52" fill="#718096" fontSize="9" opacity="0.6">Indirect Room Credit (+250)</text>
+            </g>
+          )}
+
+          {/* Node 3: Price */}
+          <rect x="290" y="60" width="80" height="40" rx="4" fill="#38a169" opacity="0.15" stroke="#38a169" strokeWidth="1.5" />
+          <text x="330" y="85" textAnchor="middle" fill="var(--ifm-font-color-base)" fontSize="12" fontWeight="bold">Price</text>
+        </svg>
+
+        {/* Text Cards */}
+        <div style={{ flex: '1', minWidth: '240px', fontSize: '13px', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          {modelType === 'solo' ? (
+            <div style={{ padding: '12px', borderLeft: '4px solid #3182ce', backgroundColor: 'rgba(49, 130, 206, 0.05)' }}>
+              <b>📊 Model A: Size fitted alone</b>
+              <div style={{ margin: '5px 0' }}>Fitted Coefficient: <b>~3218.22</b></div>
+              <div style={{ opacity: 0.8, fontSize: '12px' }}>Because `rooms` is absent, `size` gets credit for both its direct value (3000) and the value of the extra rooms (5000 × 0.05 = 250) that larger size implies. It measures the <b>total marginal effect</b>.</div>
+            </div>
+          ) : (
+            <div style={{ padding: '12px', borderLeft: '4px solid #38a169', backgroundColor: 'rgba(56, 161, 105, 0.05)' }}>
+              <b>📊 Model B: Size fitted with Rooms</b>
+              <div style={{ margin: '5px 0' }}>Fitted Coefficient: <b>~2921.04</b></div>
+              <div style={{ opacity: 0.8, fontSize: '12px' }}>Because `rooms` is held constant, the model isolates only the <b>direct physical effect</b> of floor area. `rooms` is awarded its own independent coefficient (~5000).</div>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<TotalDirectSandbox />
+
+:::danger
+
+**A coefficient is not a property of a feature**
+
+It is a property of a feature **in a particular model**. Add or drop a correlated column and it changes — $3218.22$ to $2921.04$ here. Reporting "size is worth 3000 per unit" without stating what else was in the model is not a rounding-level imprecision; it is an incomplete statement.
+
+:::
+
+---
+
+## Marginal correlation is a poor screen
+
+The obvious way to choose features is to correlate them with the target. On this data that ranking is:
+
+*   $\text{corr(size, price)} = +0.9849$
+*   $\text{corr(age, price)} = -0.0392$
+*   $\text{corr(door\_colour, price)} = +0.0419$
+
+`age`, with a real effect of $-800$ per year, ranks **below** `door_colour`, which is pure noise. Any threshold that keeps `door_colour` keeps `age`, and any threshold that drops `age` drops nothing else of value — the screen simply carries no information about these two.
+
+Now fit them in combination:
+
+| Features | $k$ | Train $R^2$ | CV $R^2$ | Adjusted $R^2$ |
+|---|---|---|---|---|
+| size | 1 | `0.9700` | `0.9661` | `0.9698` |
+| size, age | 2 | `0.9800` | `0.9773` | `0.9797` |
+| size, age, door_colour | 3 | `0.9800` | `0.9766` | `0.9795` |
+| size, age + 20 noise | 22 | `0.9838` | `0.9732` | `0.9802` |
+
+Three readings, in increasing order of importance:
+
+**`age` genuinely helps.** CV $R^2$ rises $0.9661 \to 0.9773$ when it joins `size`, despite that marginal correlation of $-0.0392$. The joint fit finds the effect the screen missed: once `size` is accounted for, `age` correlates with what remains at $-0.5758$.
+
+**`door_colour` is harmless in small numbers.** Train $R^2$ unchanged at $0.9800$, CV $R^2$ down a hair to $0.9766$. One irrelevant column costs almost nothing.
+
+**Twenty noise columns raised train $R^2$ to $0.9838$ while CV $R^2$ fell to $0.9732$.** Both numbers moved, in opposite directions, from the same change.
+
+:::danger
+
+**Training $R^2$ never decreases when you add a feature**
+
+Not "rarely" — **never**, as a mathematical fact. The model can always set a new coefficient to zero and do exactly as well as before, so the best achievable fit is at least as good as it was. Twenty columns of noise bought $+0.0038$ of training $R^2$ and cost $-0.0041$ of measured out-of-sample performance.
+
+So training $R^2$ cannot be used to decide whether a feature belongs.
+
+:::
+
+The standard answer to that problem is Adjusted $R^2$, which penalises the model for the number of features it uses. Look at its column above: $0.9797$ for `size, age`, and **`0.9802`** for the same model plus twenty columns of pure noise. It ranks the noise model **higher**.
+
+---
+
+## Does Adjusted R² actually catch the noise?
+
+That single comparison could be luck, so here is the sweep: noise columns from 0 to 100 on $n = 120$ rows, every row averaged over 30 independent regenerations of both the data and the noise.
+
+### 🛠️ Adjusted R² vs. CV R² Noise Sweeper
+
+Adjust the slider below to add between 0 and 100 columns of pure Gaussian noise to the baseline `size, age` model. Watch how Training $R^2$, Adjusted $R^2$, and Cross-Validated $R^2$ behave in real-time.
+
+export const NoiseSweeper = () => {
+  const [noiseIdx, setNoiseIdx] = React.useState(0);
+
+  // Hardcoded exact averages from the 30-seed Monte Carlo simulation
+  const sweepData = [
+    { noise: 0, k: 2, tr: 0.9782, adj: 0.9779, cv: 0.9751 },
+    { noise: 5, k: 7, tr: 0.9792, adj: 0.9779, cv: 0.9737 },
+    { noise: 10, k: 12, tr: 0.9799, adj: 0.9777, cv: 0.9719 },
+    { noise: 20, k: 22, tr: 0.9817, adj: 0.9776, cv: 0.9675 },
+    { noise: 30, k: 32, tr: 0.9842, adj: 0.9783, cv: 0.9649 },
+    { noise: 40, k: 42, tr: 0.9857, adj: 0.9779, cv: 0.9537 },
+    { noise: 60, k: 62, tr: 0.9898, adj: 0.9787, cv: 0.9289 },
+    { noise: 80, k: 82, tr: 0.9931, adj: 0.9779, cv: 0.8184 },
+    { noise: 100, k: 102, tr: 0.9971, adj: 0.9794, cv: 0.5904 }
+  ];
+
+  const current = sweepData[noiseIdx];
+
+  // Helper for drawing SVG line charts (viewBox 0 0 400 150)
+  const mapX = (noiseVal) => 40 + (noiseVal / 100) * 320;
+  const mapY = (r2Val) => 130 - ((r2Val - 0.50) / 0.50) * 110; // scale 0.50 to 1.00
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
+      <h4 style={{ margin: '0' }}>🔌 Interactive Complexity Sweeper</h4>
+      <p style={{ fontSize: '13px', margin: '5px 0 15px 0', opacity: 0.9 }}>Add pure noise columns to watch Adjusted R² fail to penalize overfitting while CV R² catches it.</p>
+
+      <div style={{ marginBottom: '15px' }}>
+        <label style={{ fontSize: '13px', fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>Useless Noise Columns: <b style={{ color: current.noise >= 40 ? '#e53e3e' : 'var(--ifm-color-primary)' }}>{current.noise}</b> (k = {current.k} total features)</label>
+        <input type="range" min="0" max="8" step="1" value={noiseIdx} onChange={(e) => setNoiseIdx(parseInt(e.target.value))} style={{ width: '100%' }} />
+      </div>
+
+      <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+        {/* SVG Chart */}
+        <div style={{ flex: '1.2', minWidth: '280px' }}>
+          <svg width="100%" height="150" style={{ border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'var(--ifm-background-color)' }}>
+            {/* Horizontal scales */}
+            {[0.6, 0.8, 1.0].map(yVal => (
+              <line key={yVal} x1="40" y1={mapY(yVal)} x2="360" y2={mapY(yVal)} stroke="var(--ifm-color-emphasis-200)" strokeDasharray="2,2" />
+            ))}
+            
+            {/* Axis Labels */}
+            <text x="35" y={mapY(1.0) + 4} textAnchor="end" fill="var(--ifm-font-color-base)" fontSize="9">1.0</text>
+            <text x="35" y={mapY(0.8) + 4} textAnchor="end" fill="var(--ifm-font-color-base)" fontSize="9">0.8</text>
+            <text x="35" y={mapY(0.6) + 4} textAnchor="end" fill="var(--ifm-font-color-base)" fontSize="9">0.6</text>
+            <text x="200" y="145" textAnchor="middle" fill="var(--ifm-font-color-base)" fontSize="9">Noise Columns (0 to 100)</text>
+
+            {/* Train R² (Green, ascending) */}
+            <path d={`M ${sweepData.map(d => `${mapX(d.noise)},${mapY(d.tr)}`).join(' L ')}`} fill="none" stroke="#38a169" strokeWidth="2" />
+            
+            {/* Adjusted R² (Orange, flat) */}
+            <path d={`M ${sweepData.map(d => `${mapX(d.noise)},${mapY(d.adj)}`).join(' L ')}`} fill="none" stroke="#dd6b20" strokeWidth="2" />
+            
+            {/* CV R² (Red, collapsing) */}
+            <path d={`M ${sweepData.map(d => `${mapX(d.noise)},${mapY(d.cv)}`).join(' L ')}`} fill="none" stroke="#e53e3e" strokeWidth="2.5" />
+
+            {/* Current Selected Dots */}
+            <circle cx={mapX(current.noise)} cy={mapY(current.tr)} r="4" fill="#38a169" />
+            <circle cx={mapX(current.noise)} cy={mapY(current.adj)} r="4" fill="#dd6b20" />
+            <circle cx={mapX(current.noise)} cy={mapY(current.cv)} r="4" fill="#e53e3e" />
+          </svg>
+          <div style={{ display: 'flex', gap: '15px', justifyContent: 'center', marginTop: '5px', fontSize: '10px' }}>
+            <span><span style={{ color: '#38a169' }}>●</span> Train R²</span>
+            <span><span style={{ color: '#dd6b20' }}>●</span> Adjusted R²</span>
+            <span><span style={{ color: '#e53e3e' }}>●</span> CV R²</span>
+          </div>
+        </div>
+
+        {/* Explanatory stats cards */}
+        <div style={{ flex: '1', minWidth: '220px', display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center' }}>
+          <div style={{ padding: '8px 12px', borderLeft: '4px solid #38a169', backgroundColor: 'rgba(56, 161, 105, 0.03)', fontSize: '12px' }}>
+            Train R²: <b>{current.tr.toFixed(4)}</b> (Inflated by overfitting)
+          </div>
+          <div style={{ padding: '8px 12px', borderLeft: '4px solid #dd6b20', backgroundColor: 'rgba(221, 107, 32, 0.03)', fontSize: '12px' }}>
+            Adjusted R²: <b style={{ color: current.noise === 100 ? '#e53e3e' : 'inherit' }}>{current.adj.toFixed(4)}</b> (Tricked! Baseline was 0.9779)
+          </div>
+          <div style={{ padding: '8px 12px', borderLeft: '4px solid #e53e3e', backgroundColor: 'rgba(229, 62, 62, 0.03)', fontSize: '12px' }}>
+            CV R²: <b style={{ color: current.cv < 0.80 ? '#e53e3e' : '#38a169' }}>{current.cv.toFixed(4)}</b> (Collapsing!)
+          </div>
+        </div>
+      </div>
+
+      {current.noise === 100 && (
+        <div style={{ marginTop: '15px', padding: '10px 15px', borderRadius: '4px', backgroundColor: 'rgba(229, 62, 62, 0.08)', border: '1px solid #e53e3e', fontSize: '12px', color: '#e53e3e', fontWeight: 'bold' }}>
+          🚨 Overfitting Exposed! Adjusted R² read 0.9794 (above the 0.9779 baseline!)—grading the 102-feature noise model as superior to the clean 2-feature model. Meanwhile, out-of-sample CV R² fell from 0.9751 to 0.5904, exposing the extreme generalization crash.
+        </div>
+      )}
+    </div>
+  );
+};
+
+<NoiseSweeper />
+
+### Why the penalty fails
+
+Adjusted $R^2$ is:
+
+$$\text{adj } R^2 = 1 - (1 - R^2) \times \frac{n - 1}{n - k - 1}$$
+
+and the mechanism is a race between two quantities that happen to grow at similar rates. As $k$ rises, the penalty factor $\frac{n-1}{n-k-1}$ grows — at $k = 102, n = 120$ it is $119/17 = 7.0$, a sevenfold inflation of the unexplained variance. But $(1 - R^2)$ is *shrinking* at almost exactly the rate that offsets it, because spurious columns inflate train $R^2$: from $0.9782$ to $0.9971$, so $(1 - R^2)$ goes $0.0218 \to 0.0029$, a factor of **7.5**.
+
+Multiply the two and you get roughly what you started with. The penalty is real, correctly implemented, and almost exactly cancelled by the overfitting it is meant to expose.
+
+:::danger
+
+**Adjusted R² is not an overfitting guard**
+
+At $n = 120$ it failed to flag 100 columns of pure noise. It is a mild correction for the fact that $R^2$ cannot decrease — useful for comparing two models that differ by a feature or two, and no substitute for measuring out-of-sample performance.
+
+The number that worked here is **cross-validated $R^2$**, which fell monotonically and by $0.3847$. When train $R^2$ and CV $R^2$ diverge, the training number is the one lying — and Adjusted $R^2$ is close enough to a training number to lie with it.
+
+:::
+
+This is also why the honest form of the earlier claim matters: Adjusted $R^2$ and cross-validation are often presented as two interchangeable remedies for feature-count inflation. On this data they are not remotely interchangeable. Only one of them worked.
+
+---
+
+## When coefficients stop meaning anything
+
+The determinant warning from the hand-worked fit, measured. Two features, each with a true coefficient of exactly $3.00$, fitted 40 times at increasing correlation between them:
+
+| $\text{corr}(x_1, x_2)$ | Mean $coef_1$ | Mean $coef_2$ | Sum | SD of $coef_1$ |
+|---|---|---|---|---|
+| `0.000` | `2.9927` | `3.0017` | `5.9944` | **`0.0646`** |
+| `0.500` | `2.9918` | `3.0019` | `5.9937` | **`0.0718`** |
+| `0.900` | `2.9893` | `3.0038` | `5.9931` | **`0.1426`** |
+| `0.990` | `2.9810` | `3.0118` | `5.9928` | **`0.4500`** |
+| `0.999` | `2.9554` | `3.0373` | `5.9928` | **`1.4312`** |
+
+Read the columns carefully, because the result is subtle:
+
+*   **The means stay correct.** $2.9554$ and $3.0373$ at the extreme — still centred near $3.00$. Collinearity does **not** bias the coefficients.
+*   **The sum stays exact.** $5.9928$ in the last three rows, against a true total of $6.00$, and it barely moves across the whole table.
+*   **The spread explodes.** Standard deviation of the first coefficient goes $0.0646 \to 1.4312$ — **22× larger** — and most of that happens between $0.99$ and $0.999$.
+
+The interpretation is precise and worth stating carefully: when two features carry nearly the same information, the data determines their **combined** effect perfectly well and says almost nothing about how to **divide** it between them. Any individual fit picks a split more or less arbitrarily, and the next sample picks a different one.
+
+This is **multicollinearity**. Its consequences:
+
+| Affected | How |
+|---|---|
+| Predictions | **Barely** — the sum is what drives them, and the sum is stable |
+| Individual coefficients | **Severely** — unstable, and can even flip sign |
+| Interpretation | **Fatally** — "size adds 3000" is not a supportable claim |
+| Standard errors | Inflated, so significance tests fail to reject |
+
+### What ridge does about it
+
+Ridge regression adds a penalty on the size of the coefficients, which resolves the ambiguity by preferring the split that keeps them small. At $\text{corr} = 0.999$:
+
+| Model | Mean $coef_1$ | Mean $coef_2$ | SD of $coef_1$ | Sum | Test $R^2$ |
+|---|---|---|---|---|---|
+| LinearRegression | `3.2657` | `2.7314` | `1.8311` | `5.9971` | `0.9710` |
+| Ridge(alpha=1.0) | `3.0206` | `2.9563` | `0.2378` | `5.9769` | `0.9713` |
+
+**The stability gain is dramatic.** Coefficient spread drops $1.8311 \to 0.2378$, an **87% reduction**, and the split becomes even: the gap between the two means narrows from $0.5342$ to $0.0644$.
+
+**The prediction gain is nil.** Test $R^2$ goes $0.9710 \to 0.9713$ — an improvement of **`0.0003`**, which is nothing.
+
+That pairing is the lesson, and it confirms the thesis of the table above from the opposite direction: since collinearity was never damaging the predictions, fixing collinearity cannot improve them. What ridge buys is **coefficients you can report and reproduce**. Whether that is worth a small bias depends entirely on whether anyone is going to read the coefficients.
+
+:::note
+
+**Regularisation gets its own treatment later**
+
+Ridge appears here only as the direct answer to collinearity. The penalty term, choosing its strength, and the different behaviour of **lasso** — which drives coefficients to exactly zero rather than merely shrinking them — belong with **generalisation and model control**.
+
+:::
+
+---
+
+## 2. Implementation Lab
+
+:::tip 
+
+**Lab Exercise: Multiple Linear Regression**
+
+An interactive, fully-functional Google Colab / Jupyter Notebook is available to experiment with this concept live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/03-linear-regression/multiple_linear_regression.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Click **"Run all"** or execute cells individually using `Shift + Enter`.
+
+**Things to try inside the script:**
+*   **Experiment 1 (Determinant Crash):** In section 1, change `x2` to exactly `2 * x1`. Watch `det = 0` and OLS crash with a singular matrix division-by-zero, while Ridge handles it safely.
+*   **Experiment 2 (Spurious k/n ratios):** In section 4, raise $n$ from `120` to `2000` while keeping the noise counts. Find the ratio where Adjusted $R^2$ finally starts falling.
+*   **Experiment 3 (Ridge sweep):** In section 6, sweep `alpha` over `[0.01, 0.1, 1, 10, 100]` to find the perfect trade-off between coefficient stability and test $R^2$ score.
+
+:::
+
+---
+
+## 3. Common Mistakes
+
+<Tabs>
+  <TabItem value="m1" label="🚨 1. Absolute Coefficients" default>
+    <br/>
+    
+    *   **The Misconception:** *"A coefficient is an absolute property of a feature."*
+    *   **❌ Wrong Thinking:** Believing `size` is always worth 3000 per unit, regardless of what other columns (like `rooms`) are included in the fit.
+    *   **✅ The Right Principle:** A coefficient is a property of a feature **in a particular model context**. Adding or dropping correlated columns immediately shifts other weights (e.g., $3218.22 \to 2921.04$ once `rooms` joined) as credit is shared.
+  </TabItem>
+  <TabItem value="m2" label="🚨 2. Solo Correlation Screening">
+    <br/>
+    
+    *   **The Misconception:** *"I should drop features that have near-zero correlation with the target."*
+    *   **❌ Wrong Thinking:** Removing `age` because its solo correlation with house price is $-0.0392$.
+    *   **✅ The Right Principle:** Dominant features can completely mask secondary signals. Once dominant features (like `size`) are controlled for, hidden correlations become extremely clear (e.g., `age` partial correlation was $-0.5758$, significantly boosting CV $R^2$).
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. Trusting Adjusted R²">
+    <br/>
+    
+    *   **The Misconception:** *"Adjusted R² is a robust guard against overfitting."*
+    *   **❌ Wrong Thinking:** Adding 100 noise columns because Adjusted $R^2$ read $0.9794$ (higher than the clean 2-feature baseline of $0.9779$).
+    *   **✅ The Right Principle:** Adjusted $R^2$ is not an overfitting guard. Spurious columns inflate training $R^2$ so rapidly that the inflation nearly cancels out the feature-count penalty. Always trust out-of-sample Cross-Validation scoring.
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Collinearity biases fits">
+    <br/>
+    
+    *   **The Misconception:** *"Multicollinearity introduces a bias into our regression coefficients."*
+    *   **❌ Wrong Thinking:** Believing collinearity makes the averages of fitted coefficients drift away from the true values.
+    *   **✅ The Right Principle:** Collinearity does **not** bias coefficients—their means stay exactly correct. Instead, it makes coefficient **variance explode**, creating massive instability where individual weights swing wildly.
+  </TabItem>
+</Tabs>
+
+---
+
+## 4. Summary
+
+<div className="row">
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🤖 Core Theory</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Normal Equations:</b> Simultaneous equations satisfied by OLS weights. Coupled by the covariance term $S_{12}$.</li>
+          <li><b>Decoupling Rule:</b> If $S_{12} = 0$, the equations decouple, and multiple regression collapses into independent simple regressions.</li>
+          <li><b>Collinearity Root:</b> The determinant $S_{11}S_{22} - S_{12}^2$ sits in the denominator of OLS coefficients. As correlation climbs, determinant heads to zero, blowing up coefficient sizes.</li>
+          <li><b>Total vs. Direct Effect:</b> Solo fits capture total effects across all channels; joint fits isolate only the direct effect of each feature.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🛠️ Engineering Realities</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>R² Never Decreases:</b> Training $R^2$ is mathematically guaranteed to increase or stay constant as columns are added, making it useless for complexity evaluation.</li>
+          <li><b>Adjusted R² Flatness:</b> Adjusted $R^2$ fails completely under heavy noise columns because overfitting and degrees-of-freedom penalties cancel out.</li>
+          <li><b>Generalization general:</b> Out-of-sample Cross-Validated $R^2$ is the only metric that monotonically captures generalization collapse.</li>
+          <li><b>Ridge regularisation:</b> Ridge adds an L2 size penalty to coefficients, stabilizing their spread (variance) under extreme collinearity without biasing the means.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+:::info 
+
+**📌 Key Takeaways**
+
+*   **🔒 Sum Invariance:** Under multicollinearity, while individual coefficients are unstable and change wildly, their **combined sum remains perfectly stable** and predictions remain robust.
+*   **⚖️ Interpretation vs. Prediction:** Collinearity completely destroys model **interpretation** ("how much size adds"), but has almost no effect on **prediction** performance.
+*   **🛠️ Ridge trade-off:** Ridge regression does not improve accuracy (test $R^2$ stays flat); it buys reportable, stable, and reproducible coefficients.
+
+:::
+
+**Next in this section:** [The Matrix Formulation](./03-the-matrix-formulation.mdx) — the same solution for any number of features in one algebraic step, and what happens when correlation reaches exactly 1.0.
+
+---
+
+## 5. Active Recall
+
+*Attempt each question first, then click to reveal detailed answers, mathematical derivations, and sample explanations.*
+
+### Interactive Checkpoint Quiz
+
+export const PracticeQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Collinearity Conundrum</h4>
+      <p style={{ margin: '0 0 15px 0' }}>Under severe multicollinearity (e.g. $r = 0.999$), what happens to our model's predictions and its individual coefficients?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Both predictions and coefficients collapse completely</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Predictions stay highly stable; individual coefficients swing wildly</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Coefficients stay highly stable; predictions collapse completely</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The predictions do NOT collapse! Because the sum of the coefficients remains extremely stable, predictions are barely harmed by collinearity. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Collinearity completely destroys model interpretation because individual coefficients swing wildly and are highly unstable. However, because their combined sum remains stable, the model's actual predictions are barely affected.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. This is the exact opposite of what happens! Coefficients are the unstable part, whereas predictions remain robust. Re-read and try again!</p>}
+    </div>
+  );
+};
+
+<PracticeQuiz />
+
+### Review Flashcards
+
+<details>
+  <summary>❓ <b>1. [THEORY] What does $S_{12} = 0$ mean, and what happens to the simultaneous normal equations?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Covariance Rule:** $S_{12} = \sum d_{1i} d_{2i}$ measures the covariance (shared variation) between features $x_1$ and $x_2$.
+    *   If $S_{12} = 0$, the features are completely orthogonal (uncorrelated).
+    *   Substituting $S_{12} = 0$ into the simultaneous normal equations:
+        $$S_{11} b_1 + 0 = S_{1y} \implies b_1 = \frac{S_{1y}}{S_{11}}$$
+        $$0 + S_{22} b_2 = S_{2y} \implies b_2 = \frac{S_{2y}}{S_{22}}$$
+    *   The equations **decouple completely**. Multiple linear regression collapses into two completely independent simple linear regressions, with both slopes equal to their solo values.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>2. [ANALYZE] How does the determinant $S_{11}S_{22} - S_{12}^2$ head to zero, and why does this explode coefficient variance?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Math:** Solve the normal equations using Cramer's rule. The determinant sits in the denominator of both coefficients $b_1$ and $b_2$:
+        $$b_1 = \frac{S_{1y}S_{22} - S_{12}S_{2y}}{S_{11}S_{22} - S_{12}^2}$$
+    *   As features become more collinear, their covariance $S_{12}^2$ increases, heading towards the maximum limit $S_{11}S_{22}$ (where $r = 1.0$).
+    *   This forces the denominator (determinant) closer and closer to $0$. Dividing by an arbitrarily tiny number makes the calculated coefficient value extremely sensitive to minor fluctuations in target measurements ($S_{1y}, S_{2y}$), causing coefficient variance to explode.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>3. [THEORY] Why is it mathematically impossible for training $R^2$ to decrease when you add a feature?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Optimization Rule:** OLS operates by finding coefficients $b_j$ that minimize the Sum of Squared Errors (SSE):
+        $$\text{Minimize } \sum (y_i - b_0 - b_1 x_{1i} - \dots - b_k x_{ki})^2$$
+    *   If you add a new feature $x_{k+1}$, the optimizer has a new parameter $b_{k+1}$ to tune.
+    *   In the worst-case scenario where the new feature is completely useless noise, the optimizer can simply assign $b_{k+1} = 0$, achieving the exact same SSE (and thus the exact same $R^2$) as before.
+    *   Because the search space of the optimization has expanded, the minimum SSE can only stay the same or decrease, meaning training $R^2$ **can never decrease**.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>4. [ANALYZE] Why does Adjusted $R^2$ completely fail as an overfitting guard against multiple noise columns?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Formula:** $\text{adj } R^2 = 1 - (1 - R^2) \times \frac{n-1}{n-k-1}$.
+    *   Adding noise columns triggers a literal race between two opposing terms:
+        1.  As $k$ increases, the penalty ratio $\frac{n-1}{n-k-1}$ grows (at $k=102, n=120$, it inflates unexplained variance by **7.0×**).
+        2.  However, because of overfitting, the training unexplained variance $(1 - R^2)$ shrinks from $0.0218 \to 0.0029$ (a **7.5×** reduction).
+    *   **The Result:** The two factors nearly cancel each other out, making Adjusted $R^2$ remain completely flat and completely blind to the fact that the model is fitting pure noise.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>5. [THEORY] How does Ridge regularisation resolve coefficient instability without improving prediction accuracy?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Coefficient Stability:** Ridge regression adds an L2-norm penalty ($\alpha \sum b_j^2$) to the OLS cost function. When features are collinear, infinite splits of the coefficients yield the same prediction. OLS picks a split randomly, but Ridge enforces stability by picking the split that keeps both coefficients small and evenly distributed, cutting standard deviation by over 85%.
+    *   **No Prediction Gain:** Because OLS was already finding a stable combined sum, its predictions were already robust. Restricting the coefficients via Ridge does not change this sum—it merely changes the individual allocation, leaving prediction score virtually unchanged ($\approx +0.0003$ gain).
+  </div>
+</details>

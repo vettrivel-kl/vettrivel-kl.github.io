@@ -1,0 +1,537 @@
+---
+sidebar_position: 6
+title: Input and Output
+description: User input streams via input(), why input always returns a string, and custom print formatting with sep and end parameters.
+tags: [python, basics, io]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import React from 'react';
+
+# Input and Output
+
+> **Topic —** Interactive Python applications communicate with the outside world through standard input and output streams (`sys.stdin` and `sys.stdout`). While `input()` and `print()` appear deceptively simple, two fundamental rules govern their behavior: **`input()` strictly returns a string** (even if the user types digits), and **`print()` provides `sep` and `end` parameters** to customize delimiters and line terminations. This guide details stream mechanics, safe casting, and multi-value input parsing.
+
+---
+
+## 1. The Core Concept
+
+In Python, command-line I/O operates via two built-in functions:
+
+1.  **`input(prompt)` (Reading Input):** Pauses program execution, displays an optional prompt message on the terminal, waits for the user to press Enter, and returns the entered line.
+    *   **The Cardinal Rule:** `input()` **ALWAYS returns a `str`**.
+2.  **`print(*objects, sep=' ', end='\n')` (Writing Output):** Converts any number of positional arguments to text, inserts `sep` between them, appends `end` to the line, and flushes to the terminal screen.
+
+:::tip
+
+**If you only take one thing from this page**
+
+`input()` **never** returns a number. If a user types `25`, Python stores the string `"25"`. To perform mathematical arithmetic, you must explicitly cast: `age = int(input("Enter age: "))`.
+
+:::
+
+---
+
+## 2. Interactive Terminal I/O Simulator
+
+Experiment with interactive runtime inputs and explore how `print()` parameters (`sep` and `end`) customize console formatting:
+
+export const TerminalIOSimulator = () => {
+  const [ioMode, setIoMode] = React.useState('input');
+  const [userText, setUserText] = React.useState('25');
+
+  const [sepChar, setSepChar] = React.useState(', ');
+  const [endChar, setEndChar] = React.useState('\\n');
+
+  // Parse simulated input
+  let intResult = '';
+  let floatResult = '';
+  let isIntValid = true;
+
+  try {
+    const parsed = parseInt(userText, 10);
+    if (isNaN(parsed) || userText.includes('.')) {
+      isIntValid = false;
+      intResult = "ValueError: invalid literal for int() with base 10: '" + userText + "'";
+    } else {
+      intResult = String(parsed + 5);
+    }
+  } catch (e) {
+    isIntValid = false;
+    intResult = String(e);
+  }
+
+  try {
+    const parsedF = parseFloat(userText);
+    floatResult = isNaN(parsedF) ? 'ValueError' : parsedF.toFixed(2);
+  } catch (e) {
+    floatResult = 'ValueError';
+  }
+
+  // Print simulation
+  const items = ['Python', 'Java', 'C++'];
+  const sepActual = sepChar === '\\t' ? '\t' : sepChar;
+  const printedLine1 = items.join(sepActual);
+  const endActual = endChar === '\\n' ? '\n' : endChar;
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>💻 Virtual Python CLI Terminal</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Toggle between interactive user input streams and print parameter configuration:
+      </p>
+
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+        <button
+          onClick={() => setIoMode('input')}
+          style={{ padding: '6px 14px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: ioMode === 'input' ? '#3182ce' : 'transparent', color: ioMode === 'input' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold' }}
+        >
+          1. input() Stream Simulator
+        </button>
+        <button
+          onClick={() => setIoMode('print')}
+          style={{ padding: '6px 14px', borderRadius: '4px', border: '1px solid #805ad5', backgroundColor: ioMode === 'print' ? '#805ad5' : 'transparent', color: ioMode === 'print' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '13px', fontWeight: 'bold' }}
+        >
+          2. print(sep, end) Formatter
+        </button>
+      </div>
+
+      {ioMode === 'input' ? (
+        <div>
+          <div style={{ marginBottom: '14px' }}>
+            <label style={{ fontSize: '13px', fontWeight: 'bold' }}>
+              Simulate User Typing into Terminal:
+            </label>
+            <div style={{ display: 'flex', gap: '8px', marginTop: '6px' }}>
+              <input
+                type="text"
+                value={userText}
+                onChange={(e) => setUserText(e.target.value)}
+                style={{ flex: 1, padding: '8px 12px', fontSize: '15px', fontFamily: 'monospace', borderRadius: '4px', border: '1px solid var(--ifm-color-emphasis-400)' }}
+              />
+              <button
+                onClick={() => setUserText('25')}
+                style={{ padding: '4px 10px', fontSize: '12px', borderRadius: '4px', border: '1px solid var(--ifm-color-emphasis-400)', cursor: 'pointer', backgroundColor: 'transparent', color: 'var(--ifm-font-color-base)' }}
+              >
+                "25"
+              </button>
+              <button
+                onClick={() => setUserText('25.5')}
+                style={{ padding: '4px 10px', fontSize: '12px', borderRadius: '4px', border: '1px solid var(--ifm-color-emphasis-400)', cursor: 'pointer', backgroundColor: 'transparent', color: 'var(--ifm-font-color-base)' }}
+              >
+                "25.5"
+              </button>
+              <button
+                onClick={() => setUserText('hello')}
+                style={{ padding: '4px 10px', fontSize: '12px', borderRadius: '4px', border: '1px solid var(--ifm-color-emphasis-400)', cursor: 'pointer', backgroundColor: 'transparent', color: 'var(--ifm-font-color-base)' }}
+              >
+                "hello"
+              </button>
+            </div>
+          </div>
+
+          <div style={{ backgroundColor: '#1a202c', color: '#e2e8f0', borderRadius: '6px', padding: '16px', fontFamily: 'monospace', fontSize: '13px', lineHeight: '1.6' }}>
+            <div style={{ color: '#a0aec0', borderBottom: '1px solid #2d3748', paddingBottom: '6px', marginBottom: '10px' }}>
+              Python 3.11 Runtime Console
+            </div>
+            <div>&gt;&gt;&gt; raw = input("Enter value: ")</div>
+            <div style={{ color: '#68d391' }}>Enter value: {userText}</div>
+            <div style={{ marginTop: '8px' }}>&gt;&gt;&gt; type(raw)</div>
+            <div style={{ color: '#63b3ed' }}>&lt;class 'str'&gt;  # ALWAYS A STRING!</div>
+
+            <div style={{ marginTop: '8px' }}>&gt;&gt;&gt; raw * 2</div>
+            <div style={{ color: '#f6ad55' }}>'{userText + userText}'  # Sequence repetition!</div>
+
+            <div style={{ marginTop: '8px' }}>&gt;&gt;&gt; int(raw) + 5</div>
+            <div style={{ color: isIntValid ? '#68d391' : '#fc8181' }}>
+              {isIntValid ? intResult : intResult}
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '14px', marginBottom: '16px' }}>
+            <div>
+              <label style={{ fontSize: '12px', fontWeight: 'bold' }}>Separator Parameter (sep=)</label>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '6px' }}>
+                {[" ", ", ", " | ", "-", ""].map((s) => (
+                  <button
+                    key={s}
+                    onClick={() => setSepChar(s)}
+                    style={{ padding: '4px 10px', borderRadius: '4px', border: '1px solid #805ad5', backgroundColor: sepChar === s ? '#805ad5' : 'transparent', color: sepChar === s ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', fontFamily: 'monospace' }}
+                  >
+                    {s === " " ? "space" : s === "" ? "empty" : s}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div>
+              <label style={{ fontSize: '12px', fontWeight: 'bold' }}>Line Ending Parameter (end=)</label>
+              <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginTop: '6px' }}>
+                {["\\n", " ", " --> ", "!"].map((e) => (
+                  <button
+                    key={e}
+                    onClick={() => setEndChar(e)}
+                    style={{ padding: '4px 10px', borderRadius: '4px', border: '1px solid #805ad5', backgroundColor: endChar === e ? '#805ad5' : 'transparent', color: endChar === e ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', fontFamily: 'monospace' }}
+                  >
+                    {e}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          <div style={{ backgroundColor: '#1a202c', color: '#e2e8f0', borderRadius: '6px', padding: '16px', fontFamily: 'monospace', fontSize: '13px', lineHeight: '1.6' }}>
+            <div style={{ color: '#a0aec0', borderBottom: '1px solid #2d3748', paddingBottom: '6px', marginBottom: '10px' }}>
+              Console Stream Buffer
+            </div>
+            <div>&gt;&gt;&gt; print("Python", "Java", "C++", sep="{sepChar}", end="{endChar}")</div>
+            <div>&gt;&gt;&gt; print("NextCall")</div>
+            <div style={{ marginTop: '10px', color: '#68d391', backgroundColor: '#2d3748', padding: '8px', borderRadius: '4px' }}>
+              {endChar === '\\n' ? (
+                <span>{printedLine1}<br/>NextCall</span>
+              ) : (
+                <span>{printedLine1}{endChar === ' ' ? ' ' : endChar}NextCall</span>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+<TerminalIOSimulator />
+
+---
+
+## 3. The Multi-Value Input Pattern: split() and map()
+
+In data science, competitive programming, and automation scripts, inputs are often delivered as space-separated tokens on a single line (e.g. `"10 20 30"`):
+
+export const MultiValueInputParser = () => {
+  const [rawLine, setRawLine] = React.useState('10 20 30');
+
+  const tokens = rawLine.trim().split(/\s+/).filter(Boolean);
+  const parsedNums = tokens.map((t) => {
+    const n = parseInt(t, 10);
+    return isNaN(n) ? 'NaN' : n;
+  });
+
+  const sum = parsedNums.every((n) => typeof n === 'number')
+    ? parsedNums.reduce((a, b) => a + b, 0)
+    : 'Error';
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>⚡ Multi-Value Input Unpacking Pipeline</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Type space-separated values to trace the four-stage transformation pipeline:
+      </p>
+
+      <div style={{ marginBottom: '16px' }}>
+        <input
+          type="text"
+          value={rawLine}
+          onChange={(e) => setRawLine(e.target.value)}
+          placeholder="e.g. 10 20 30"
+          style={{ width: '100%', padding: '8px 12px', fontSize: '15px', fontFamily: 'monospace', borderRadius: '4px', border: '1px solid var(--ifm-color-emphasis-400)' }}
+        />
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px' }}>
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+          <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)', textTransform: 'uppercase', fontWeight: 'bold' }}>
+            Stage 1: raw = input()
+          </div>
+          <div style={{ fontSize: '14px', fontFamily: 'monospace', color: '#3182ce', marginTop: '4px' }}>
+            "{rawLine}"
+          </div>
+          <div style={{ fontSize: '11px', marginTop: '4px', color: 'var(--ifm-color-emphasis-500)' }}>Single string of characters</div>
+        </div>
+
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+          <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)', textTransform: 'uppercase', fontWeight: 'bold' }}>
+            Stage 2: tokens = raw.split()
+          </div>
+          <div style={{ fontSize: '14px', fontFamily: 'monospace', color: '#805ad5', marginTop: '4px' }}>
+            [{tokens.map((t) => `'${t}'`).join(', ')}]
+          </div>
+          <div style={{ fontSize: '11px', marginTop: '4px', color: 'var(--ifm-color-emphasis-500)' }}>List of string tokens</div>
+        </div>
+
+        <div style={{ padding: '12px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+          <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)', textTransform: 'uppercase', fontWeight: 'bold' }}>
+            Stage 3: a, b, c = map(int, tokens)
+          </div>
+          <div style={{ fontSize: '14px', fontFamily: 'monospace', color: '#38a169', marginTop: '4px' }}>
+            {parsedNums.join(', ')}
+          </div>
+          <div style={{ fontSize: '11px', marginTop: '4px', color: 'var(--ifm-color-emphasis-500)' }}>Converted into integers!</div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: '14px', padding: '10px 14px', borderRadius: '4px', backgroundColor: 'rgba(56, 161, 105, 0.08)', borderLeft: '4px solid #38a169', fontSize: '13px' }}>
+        ✓ <b>Canonical Python Idiom:</b> <code>a, b, c = map(int, input().split())</code> (Total Sum = <b>{sum}</b>).
+      </div>
+    </div>
+  );
+};
+
+<MultiValueInputParser />
+
+---
+
+## 4. Comparing Print Syntax Options
+
+Printing variables and text together in Python can be written in three distinct styles:
+
+<Tabs>
+  <TabItem value="fstring" label="1. F-Strings — Standard Best Practice" default>
+    <br/>
+    
+    ```python
+    student = "Vettri"
+    marks = 95
+    print(f"Student: {student} | Marks: {marks}")
+    ```
+    *   **Pros:** Cleanest, fastest, most readable; values sit exactly where they appear.
+    *   **Cons:** Python 3.6+ only.
+  </TabItem>
+  <TabItem value="commas" label="2. Comma Separation (*objects)">
+    <br/>
+    
+    ```python
+    student = "Vettri"
+    marks = 95
+    print("Student:", student, "| Marks:", marks)
+    ```
+    *   **Pros:** Converts non-strings automatically; no manual `str()` needed.
+    *   **Cons:** Automatically injects spaces between every argument.
+  </TabItem>
+  <TabItem value="concat" label="3. String Concatenation (+)">
+    <br/>
+    
+    ```python
+    student = "Vettri"
+    marks = 95
+    # Must explicitly wrap numbers with str()!
+    print("Student: " + student + " | Marks: " + str(marks))
+    ```
+    *   **Pros:** Works in all legacy Python versions.
+    *   **Cons:** Forgetting `str()` raises `TypeError`; tedious and unreadable.
+  </TabItem>
+</Tabs>
+
+---
+
+## 5. Implementation Lab
+
+:::tip
+
+**Lab Exercise: Input Streams, Print Customization & CLI I/O**
+
+An interactive, fully functional Google Colab / Jupyter Notebook is available to verify `input()` type behaviors, handle `ValueError` exceptions with try-except blocks, format tables with `sep` and `end`, and unpack multi-value inputs live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/python/input_output_streams.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Run cells sequentially to experiment with input streams, custom delimiters, and loop formatting.
+
+**Key Experiments to Run:**
+*   **Experiment 1 (The String Return Rule):** Confirm that `input()` returns a string even on digit inputs, and demonstrate the addition fix `int(text) + 5`.
+*   **Experiment 2 (Safe Numerical Parsing):** Wrap `int()` and `float()` inside a `try...except ValueError` block to handle arbitrary user text safely.
+*   **Experiment 3 (Multi-Value Input Parsing):** Parse a line of space-separated integers using `a, b, c = map(int, input().split())`.
+
+:::
+
+---
+
+## 6. Common Mistakes
+
+<Tabs>
+  <TabItem value="m1" label="🚨 1. Arithmetic on Raw input()" default>
+    <br/>
+    
+    *   **The Misconception:** *"If the user enters 25, calling `age + 5` equals 30."*
+    *   **❌ Wrong Thinking:** Forgetting that `input()` returns a string.
+    *   **✅ The Right Principle:** `"25" + 5` raises `TypeError: can only concatenate str to str`. You must wrap the input call: `age = int(input())`.
+  </TabItem>
+  <TabItem value="m2" label="🚨 2. int(input()) on Decimals">
+    <br/>
+    
+    *   **The Misconception:** *"int(input()) can parse numbers with decimals like '25.5'."*
+    *   **❌ Wrong Thinking:** Expecting `int()` to parse decimal points.
+    *   **✅ The Right Principle:** `int("25.5")` crashes with `ValueError`. If input can contain decimals, parse through `float(input())` first.
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. Concatenating Numbers with +">
+    <br/>
+    
+    *   **The Misconception:** *"Writing `print("Age: " + 30)` works like in JavaScript."*
+    *   **❌ Wrong Thinking:** Relying on implicit type coercion.
+    *   **✅ The Right Principle:** Python never converts integers to strings implicitly. Use commas `print("Age:", 30)` or f-strings `print(f"Age: {30}")`.
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Expecting sep Between Separate print() Calls">
+    <br/>
+    
+    *   **The Misconception:** *"Setting `sep=','` in one print statement separates it from the next print statement."*
+    *   **❌ Wrong Thinking:** Believing `sep` applies across lines.
+    *   **✅ The Right Principle:** `sep` only controls characters placed *between arguments within a single call*. To control how a call ends, customize `end`.
+  </TabItem>
+  <TabItem value="m5" label="🚨 5. Missing Bare print() After Loop">
+    <br/>
+    
+    *   **The Misconception:** *"Printing loop elements with `end=' '` terminates automatically."*
+    *   **❌ Wrong Thinking:** Leaving the terminal cursor hanging on the same line.
+    *   **✅ The Right Principle:** The next `print()` in your program will run directly onto the end of the loop output. Add a bare `print()` immediately after the loop to flush a newline.
+  </TabItem>
+</Tabs>
+
+---
+
+## 7. Summary
+
+<div className="row">
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🤖 input() Stream Rules</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Return Type:</b> Strictly returns `str`. Never returns numbers automatically.</li>
+          <li><b>Prompt Parameter:</b> Optional string displayed before waiting for the user.</li>
+          <li><b>Casting Rule:</b> Wrap in `int()` or `float()` before mathematical arithmetic.</li>
+          <li><b>Multi-Value Idiom:</b> `map(int, input().split())` parses space-separated lines.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🛠️ print() Customization</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Auto-Conversion:</b> Commas convert non-string arguments automatically.</li>
+          <li><b>sep=' ':</b> String delimiter inserted between arguments within the call.</li>
+          <li><b>end='\n':</b> String terminator appended after the final argument.</li>
+          <li><b>Loop Pattern:</b> Use `end=" "` inside loop, followed by closing `print()`.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+:::info
+
+**📌 Key Takeaways**
+
+*   **⌨️ input() is always str:** Always sanitize and cast inputs before passing them into numeric calculations.
+*   **🖨️ print() parameters are local:** `sep` joins arguments within a call; `end` terminates the call.
+*   **🎉 Fundamentals Complete:** Congratulations on mastering Values, Variables, Data Types, Expressions, F-Strings, and I/O!
+
+:::
+
+**Next Module:** [Control Flow](../02-control-flow/01-conditional-statements.md) - mastering `if-elif-else` branches, logical truthiness, and ternary expressions.
+
+---
+
+## 8. Active Recall
+
+*Test your understanding by answering first, then clicking to reveal the underlying principles.*
+
+### Interactive Checkpoint Quiz
+
+export const IOQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The input() Arithmetic Trap</h4>
+      <p style={{ margin: '0 0 15px 0' }}>A user enters <code>25</code> at the prompt: <code>val = input("Enter number: ")</code>. What is the output of <code>print(val + val)</code>?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>50 (Arithmetic addition)</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>'2525' (String concatenation)</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>TypeError: Cannot add input variables</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. input() ALWAYS returns a string! val holds "25", not integer 25. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Because input() strictly returns a string, val holds "25". The + operator on two strings executes string concatenation, producing '2525'! To perform mathematical addition (50), you must cast explicitly: int(val) + int(val).</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Adding two strings with + is completely valid syntax in Python. Try again!</p>}
+    </div>
+  );
+};
+
+<IOQuiz />
+
+### Review Flashcards
+
+<details>
+  <summary>❓ <b>1. [THEORY] Why does `print(1, 2, 3, sep="-", end="!\n")` output `1-2-3!`?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Arguments:** The three integers `1`, `2`, `3` are converted to text.
+    *   **`sep="-"`:** Placed between each argument, joining them into `1-2-3`.
+    *   **`end="!\n"`:** Placed after the last argument, appending the exclamation mark and newline terminator.
+    *   The combined output written to standard output is `1-2-3!\n`.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>2. [PRACTICE] How do you parse multiple integers from a single space-separated line in Python?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    ```python
+    a, b, c = map(int, input().split())
+    ```
+    *   `input()` returns a line like `"10 20 30"`.
+    *   `.split()` tokenizes by whitespace into `['10', '20', '30']`.
+    *   `map(int, ...)` applies `int()` to each token.
+    *   Tuple unpacking assigns `a=10`, `b=20`, `c=30`.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>3. [THEORY] What is the difference between `print("Age: " + str(30))` and `print("Age:", 30)`?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   `print("Age: " + str(30))` performs string concatenation in memory first, requiring explicit `str()` casting, and passes a single combined string to `print()`.
+    *   `print("Age:", 30)` passes two separate positional arguments. `print()` converts non-strings automatically and inserts the default space delimiter (`sep=' '`).
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>4. [PRACTICE] Why is a bare `print()` required after a loop using `print(i, end=" ")`?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   Setting `end=" "` overrides the default newline terminator `\n`.
+    *   At the end of the loop, the console cursor remains sitting on the same line after the last printed item.
+    *   A bare `print()` outputs the default `end='\n'`, cleanly moving the cursor to the beginning of the next line.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>5. [ANALYZE] Why does `int(input())` crash if the user enters `25.0`? How do you make it resilient?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Integer Parser Strictness:** `int()` cannot parse decimal points from strings; it expects pure base-10 digits.
+    *   **The Resilient Fix:** Route through `float` first:
+        ```python
+        val = int(float(input("Enter number: ")))
+        ```
+    *   This parses `"25.0"` into float `25.0`, and then truncates it into integer `25`.
+  </div>
+</details>

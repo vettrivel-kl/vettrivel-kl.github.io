@@ -12,12 +12,12 @@ tags: [python, ai-foundations]
 
 | Page | Covers |
 |---|---|
-| [Values and Types](./01-basics/01-values-and-types.md) | `type()` vs `isinstance()`, dynamic typing, casting, truthiness |
-| [Variables and Naming](./01-basics/02-variables-and-naming.md) | Identifier rules, the 35 keywords, PEP 8 conventions |
-| [Data Types](./01-basics/03-data-types.md) | All eight built-ins — `int` `float` `str` `bool` `list` `tuple` `dict` `set` |
+| [Values and Types](./01-basics/01-values-and-types.mdx) | `type()` vs `isinstance()`, dynamic typing, casting, truthiness |
+| [Variables and Naming](./01-basics/02-variables-and-naming.mdx) | Identifier rules, the 35 keywords, PEP 8 conventions |
+| [Data Types](./01-basics/03-data-types.mdx) | All eight built-ins — `int` `float` `str` `bool` `list` `tuple` `dict` `set` |
 | [Expressions and Operators](./01-basics/04-expressions-and-operators.mdx) | Arithmetic, precedence, and five ways to structure the same answer |
-| [F-Strings](./01-basics/05-f-strings.md) | Format specs, alignment, padding, debug mode |
-| [Input and Output](./01-basics/06-input-output.md) | `input()`, `print()` with `sep` and `end` |
+| [F-Strings](./01-basics/05-f-strings.mdx) | Format specs, alignment, padding, debug mode |
+| [Input and Output](./01-basics/06-input-output.mdx) | `input()`, `print()` with `sep` and `end` |
 
 ### 2 · Control Flow
 

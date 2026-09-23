@@ -1,0 +1,680 @@
+---
+sidebar_position: 3
+title: The Learning Rate
+description: The learning rate is your stride length, and there is an exact cutoff between working and exploding that you can compute instead of guess — verified to 3.3e-16. Also why an alpha 0.4% too large looks merely slow for a thousand iterations, why overshooting is the fastest regime rather than a fault, and why the textbook optimal alpha measured 2.20x slower than a slightly smaller one.
+tags: [machine-learning, optimisation, numpy]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import React from 'react';
+
+# The Learning Rate
+
+> **Topic —** One number, `α`, and it is the only free choice in plain gradient descent. The previous page left the ravine unresolved: the usable range for `α` shrank by a factor of a million when one feature was rescaled. This page shows that the boundaries of that range are *computable* from the Hessian rather than found by trial, that each failure mode has a readable signature, and that the conventional advice about which setting is fastest does not survive measurement.
+
+---
+
+## In plain words
+
+The learning rate `α` is your **stride length** while walking downhill in fog. It is the only thing you get to choose in plain gradient descent, and both extremes fail:
+
+- **Too short** and you take thousands of tiny shuffles to cross the room. Nothing looks broken; it is just never finished.
+- **Too long** and each step carries you past the bottom and *further up the other side* than you were before. Repeat that and you end up higher and higher — the run explodes.
+
+The useful and slightly surprising part is that there is a **sharp cutoff** between those two, and it is not something you have to discover by trial and error. You can compute it from your data in one line.
+
+### The one idea the whole page rests on
+
+Each step multiplies the distance you still have to travel by
+
+```
+1 − α·λ
+```
+
+where `λ` is how sharply the bowl curves. Everything else on this page is a consequence of reading that one expression, so it is worth walking through the cases. Think of it as aiming at a target on the floor:
+
+| `α·λ` | What one step does | Result |
+|---|---|---|
+| tiny | Moves you a sliver of the way there | Correct but glacial |
+| `1` | Lands you **exactly** on the target | Done in one step — but only when every direction curves identically, i.e. a perfectly round bowl |
+| between `1` and `2` | Overshoots the target, but ends up **closer than it started** | Still converges — and on a stretched bowl this is where the *fastest* settings live |
+| exactly `2` | Overshoots to the mirror-image spot, same distance out the other side | Bounces between two points forever, never arriving |
+| above `2` | Overshoots to somewhere **further out** than it started | Diverges, getting worse every step |
+
+Read the bottom two rows again, because they are the whole answer. The run survives as long as `α·λ < 2` — that is, as long as
+
+```
+α  <  2 / λ_max
+```
+
+using the *sharpest* curvature, since that is the direction that blows up first. This page measures that threshold and finds it exact to machine precision.
+
+Three practical consequences follow, and they are what to take away:
+
+1. **Overshooting is not a bug.** The `1 < α·λ < 2` row converges, and on any realistically shaped bowl it converges *fastest*. The common advice "reduce the learning rate until the parameters stop oscillating" throws away about half your speed.
+2. **The safe zone is lopsided.** Being somewhat too small costs you proportionally more steps. Being slightly too large falls off a cliff. So aim for roughly `0.9 × 2/λ_max` — near the fast end, with room to spare.
+3. **A learning rate is not portable.** `λ_max` is a property of *your data on its current scale*. Someone else's `α = 0.03` means nothing without their preprocessing, and rescaling one column can move the safe range by orders of magnitude.
+
+:::note
+
+**If you are unsure what `λ` and `κ` are**
+
+They were introduced on the [previous page](./02-gradient-descent.mdx#in-plain-words). Short version: `λ` (an **eigenvalue**) is how sharply the cost surface curves along one particular direction, `λ_max` is the sharpest and `λ_min` the shallowest, and `κ = λ_max / λ_min` says how squashed the bowl is — `1` for a perfect circle, large for a narrow ravine. All of them come out of one call to `np.linalg.eigvalsh((2/n) * X.T @ X)`.
+
+:::
+
+---
+
+## Every threshold comes from the Hessian
+
+`α` is usually presented as something to tune by hand. For a quadratic cost it isn't — the interesting values are determined by the curvature of the bowl, which takes one line to compute.
+
+Three thresholds matter, all read off `λ_min` and `λ_max`:
+
+| Value | Name | In plain terms |
+|---|---|---|
+| `1 / λ_max` | monotone limit | Below this you always approach the target **from one side**. Above it you start overshooting on every step — which, per the [table above](#the-one-idea-the-whole-page-rests-on), is fine |
+| `2 / (λ_max + λ_min)` | classical optimum | The textbook "best" `α`. It is optimal for a different quantity than the one you usually care about, and this page shows it losing badly |
+| `2 / λ_max` | divergence limit | The cliff edge. At or above this the run **cannot** converge, no matter how long you let it run |
+
+The last one is the load-bearing fact of this page. It is just the last two rows of that table restated: each step multiplies the remaining error by `(1 − α·λᵢ)` in every direction `i`, and you only make progress if every one of those factors is smaller than one in size — `|1 − α·λᵢ| < 1`, which rearranges to `0 < α < 2/λᵢ`. The direction that constrains you hardest is the sharpest-curving one, so:
+
+```
+α < 2 / λ_max
+```
+
+On a standardised single feature:
+
+```text title="Output"
+1. THE THRESHOLDS ARE COMPUTED, NOT GUESSED   (standardised feature, n = 200)
+   lambda_min = 2.0000   lambda_max = 2.0000   kappa = 1.00   J at optimum = 3.735305
+   1/lambda_max = 0.500000 (monotone limit)   2/(lam_max+lam_min) = 0.500000 (fastest)   2/lambda_max = 1.000000 (divergence)
+```
+
+:::tip
+
+**You can compute a safe `α` instead of searching for one**
+
+`np.linalg.eigvalsh((2 / n) * X.T @ X).max()` costs microseconds and hands you the exact ceiling. Starting from `0.9 × 2/λ_max` and working down beats starting from `0.01` and working up, and it removes the entire class of "why is nothing happening" debugging.
+
+For very large `p` where the eigendecomposition is too expensive, `λ_max ≤ trace(H) = (2/n)Σ‖xⱼ‖²` gives a conservative bound for free.
+
+:::
+
+---
+
+## 🛠️ The Interactive Learning Regimes Sandbox
+
+Experiment with the interactive sandbox below to visualize how different learning rates alter the descent path. Select a regime to watch how a single step-by-step update behaves on a convex 1D loss surface, mapping directly to our printed logs.
+
+export const LearningRegimesSandbox = () => {
+  const [alpha, setAlpha] = React.useState(0.3);
+  const [ballX, setBallX] = React.useState(-1.8);
+  const [path, setPath] = React.useState([ -1.8 ]);
+
+  // We optimize J(w) = w^2 (minimum is at w = 0)
+  // grad J = 2*w
+  // w_next = w - alpha * 2 * w = w * (1 - 2*alpha)
+  const resetBall = (val) => {
+    setAlpha(val);
+    setBallX(-1.8);
+    setPath([ -1.8 ]);
+  };
+
+  const takeStep = () => {
+    const current = path[path.length - 1];
+    if (Math.abs(current) > 10.0) return; // already exploded
+    const nextVal = current * (1 - 2 * alpha);
+    setPath([...path, nextVal]);
+  };
+
+  const currentW = path[path.length - 1];
+  const currentCost = currentW ** 2;
+
+  // Map coordinate [-2, 2] to SVG viewBox 0 0 300 120
+  const scaleX = (wVal) => 150 + wVal * 70;
+  const scaleY = (costVal) => 110 - (costVal / 4) * 90;
+
+  // Generate parabola path
+  const steps = Array.from({ length: 41 }, (_, i) => -2.0 + i * 0.1);
+  const parabolaPath = steps.map(v => `${scaleX(v)},${scaleY(v ** 2)}`).join(' L ');
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>📊 Learning Regimes Live Simulator</h4>
+      <p style={{ fontSize: '13px', margin: '0 0 15px 0', opacity: 0.9 }}>Select a learning rate `α` and click "Take Step" to trace the parameter's trajectory down the parabola.</p>
+
+      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '15px' }}>
+        <button onClick={() => resetBall(0.02)} style={{ padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', border: '1px solid #718096', backgroundColor: alpha === 0.02 ? '#3182ce' : 'transparent', color: alpha === 0.02 ? '#fff' : 'inherit' }}>α = 0.02 (Glacial)</button>
+        <button onClick={() => resetBall(0.30)} style={{ padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', border: '1px solid #718096', backgroundColor: alpha === 0.30 ? '#3182ce' : 'transparent', color: alpha === 0.30 ? '#fff' : 'inherit' }}>α = 0.30 (Monotone)</button>
+        <button onClick={() => resetBall(0.80)} style={{ padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', border: '1px solid #718096', backgroundColor: alpha === 0.80 ? '#3182ce' : 'transparent', color: alpha === 0.80 ? '#fff' : 'inherit' }}>α = 0.80 (Overshoot)</button>
+        <button onClick={() => resetBall(1.00)} style={{ padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', border: '1px solid #718096', backgroundColor: alpha === 1.00 ? '#3182ce' : 'transparent', color: alpha === 1.00 ? '#fff' : 'inherit' }}>α = 1.00 (Oscillating)</button>
+        <button onClick={() => resetBall(1.15)} style={{ padding: '4px 8px', borderRadius: '4px', cursor: 'pointer', fontSize: '11px', border: '1px solid #718096', backgroundColor: alpha === 1.15 ? '#3182ce' : 'transparent', color: alpha === 1.15 ? '#fff' : 'inherit' }}>α = 1.15 (Explosion!)</button>
+      </div>
+
+      <div style={{ display: 'flex', gap: '20px', flexWrap: 'wrap' }}>
+        {/* SVG Parabola */}
+        <div style={{ flex: '1.2', minWidth: '240px' }}>
+          <svg width="100%" height="120" style={{ border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'var(--ifm-background-color)' }}>
+            {/* Parabola line */}
+            <path d={`M ${parabolaPath}`} fill="none" stroke="var(--ifm-color-emphasis-200)" strokeWidth="1.5" opacity="0.6" />
+
+            {/* Minimum cross */}
+            <line x1="145" y1="110" x2="155" y2="110" stroke="#38a169" strokeWidth="2" />
+            <line x1="150" y1="105" x2="150" y2="115" stroke="#38a169" strokeWidth="2" />
+
+            {/* Path line */}
+            {path.length > 1 && Math.abs(currentW) <= 2.2 && (
+              <polyline 
+                fill="none" 
+                stroke={alpha >= 1.0 ? '#e53e3e' : '#3182ce'} 
+                strokeWidth="1.5" 
+                strokeDasharray="2,2"
+                points={path.map(p => `${scaleX(p)},${scaleY(p**2)}`).join(' ')} 
+              />
+            )}
+
+            {/* Ball */}
+            {Math.abs(currentW) <= 2.2 ? (
+              <circle cx={scaleX(currentW)} cy={scaleY(currentCost)} r="5.5" fill={alpha >= 1.0 ? '#e53e3e' : '#3182ce'} />
+            ) : (
+              <g>
+                <text x="150" y="60" textAnchor="middle" fill="#e53e3e" fontSize="12" fontWeight="bold">💥 BOUNCED OUT OF BANDS / EXPLODED!</text>
+              </g>
+            )}
+          </svg>
+        </div>
+
+        {/* Action Controls & Info */}
+        <div style={{ flex: '1', minWidth: '200px', display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center', fontSize: '13px' }}>
+          <div>Current Step: <b>{path.length - 1}</b></div>
+          <div>Parameter Value (w): <b>{Math.abs(currentW) > 5.0 ? 'Infinity' : currentW.toFixed(4)}</b></div>
+          <div>Remaining Error: <b>{Math.abs(currentW) > 5.0 ? 'Infinity' : Math.abs(currentW).toFixed(4)}</b></div>
+          <button 
+            onClick={takeStep} 
+            disabled={Math.abs(currentW) > 5.0 || currentW === 0}
+            style={{ padding: '6px 12px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', border: '1px solid #38a169', backgroundColor: '#38a169', color: '#fff', alignSelf: 'start' }}
+          >
+            Take Step
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<LearningRegimesSandbox />
+
+---
+
+## Four regimes, and what each looks like
+
+Same data, same start at `(0, 0)`, only `α` changed. The last column tracks the **sign** of `w − w*` over the first ten iterations, which is what distinguishes approaching from overshooting:
+
+```text title="Output"
+2. FOUR REGIMES   (same data, same start, only alpha differs)
+     alpha       J(0)        J(10)      J(50)     J(200)   sign(w−w*)   verdict
+     0.001   257.2903     247.3385   211.2870   117.5737   ----------   crawling
+     0.300   257.2903       3.7353     3.7353     3.7353   ----------   converged
+     0.800   257.2903       3.7446     3.7353     3.7353   -+-+-+-+-+   converged
+     1.000   257.2903     257.2903   257.2903   257.2903   -+-+-+-+-+   never moves
+     1.200   257.2903  212148.7747          —          —   -+-+-+-+-+   diverged at 26
+```
+
+**`α = 0.001` — too small.** After 200 iterations the cost is `117.5737` against an optimum of `3.735305`. It is working; it will get there; it needs tens of thousands of iterations. The signature is a cost curve that is *smooth, decreasing, and still visibly sloped* at the end of the run.
+
+**`α = 0.3` — sensible.** Reached `3.7353` by iteration 10 and did not move afterwards.
+
+**`α = 0.8` — above the monotone limit.** Note what did and did not happen. The sign column reads `-+-+-+-+-+`: the parameter error flips side on **every single step**, so this run genuinely overshoots. And yet the cost column is `3.7446 → 3.7353 → 3.7353`, still decreasing. It converged, one iteration later than `α = 0.3`.
+
+**`α = 1.0` — exactly the divergence limit.** `|1 − 1.0 × 2| = 1`, so the error is reflected with no shrinkage at all, and the iterate bounces between two points forever. The cost is **`257.2903` at iterations 0, 10, 50 and 200** — identical to four decimals. A run that is not diverging and not converging.
+
+**`α = 1.2` — past the limit.** `|1 − 2.4| = 1.4`, so the error grows by 40% per step. Cost passed `1e10` at **iteration 26**.
+
+:::danger
+
+**Overshooting is invisible in the cost curve on a well-conditioned problem**
+
+This is the trap in the standard "read the shape of your loss curve" advice. At `α = 0.8` the parameters alternate on every step — textbook overshoot — and the cost curve is a clean monotone decrease. It looks *identical* to the `α = 0.3` curve.
+
+The reason is `κ = 1`: both eigen-directions contract by the same `|1 − 0.8 × 2| = 0.6`, so the cost, which is a positively weighted sum of squared errors, is multiplied by `0.36` every step regardless of sign. Zigzag only becomes visible in the cost when the directions contract at *different* rates — that is, when the bowl is elongated.
+
+So a monotone cost curve does not mean `α` is below the monotone limit. If you want to know, look at a parameter's error sign, not the cost.
+
+:::
+
+---
+
+## The divergence threshold is a computable number
+
+The prediction is `2/λ_max = 1.0` exactly. Testing it is harder than it looks, and the reason is worth understanding because it will bite you in real debugging.
+
+An `α` a hair over the limit does not blow up dramatically — it grows the error by a tiny percentage each step. `1.008× per step` sounds harmless, and for hundreds of iterations it looks exactly like a run that is merely struggling with a hard problem. Only much later does compounding turn it into an explosion. That is what **asymptotic** means here: the failure is certain but slow to become visible. So a test asking "did it blow up within N steps?" is really measuring N, not the threshold. The test below instead asks "is the cost higher at the end than in the middle?", and bisects on that, with 20,000 iterations per trial:
+
+```text title="Output"
+3. THE DIVERGENCE THRESHOLD   (bisection on an asymptotic criterion)
+   predicted 2/lambda_max = 1.00000000   measured = 1.00000000   error = 3.3e-16
+   alpha = 1.004 is only 0.4% too large. Cost at iteration:
+     10: 3.011e+02   100: 1.252e+03   500: 7.322e+05   1000: 2.114e+09
+   first exceeds its own starting cost at iteration 1, passes 1e10 at iteration 1098
+```
+
+**Predicted `1.00000000`, measured `1.00000000`, agreeing to `3.3e-16`** — machine precision. The threshold is not approximately `2/λ_max`; it is `2/λ_max`.
+
+The second half of that output is the practically important part. `α = 1.004` is **0.4% over** the limit. It does not explode immediately: the cost sits at `3.011e+02` at iteration 10 and `1.252e+03` at iteration 100 — the same order of magnitude as the starting `257.29`. It looks like a run that is struggling, not one that is broken. It reaches `2.114e+09` by iteration 1000 and only passes `1e10` at **iteration 1098**.
+
+:::warning
+
+**A first attempt at this measurement got the wrong answer, for an instructive reason**
+
+Bisecting on "did the cost exceed `1e10` within 1000 iterations" measured the threshold as **`1.00439616`** and reported a 0.44% error against theory, which looks like a tolerable experimental discrepancy. It isn't a discrepancy at all — at `α = 1.004` the growth factor per step is `1.008`, and 1000 iterations only multiply the error by about `e⁸ ≈ 3000`, leaving the cost just under the `1e10` gate. The measurement was reporting **how long the run was given**, not where the threshold is.
+
+Changing the criterion from "got big" to "is asymptotically increasing" moved the answer from `1.00439616` to `1.00000000`. Any threshold measured with a time limit needs this check.
+
+:::
+
+The practical reading: **a diverging run is not always obvious from a short trace.** If the cost is rising slowly and erratically over a few hundred iterations, treat `α` as too large rather than assuming a hard problem. And note the `first exceeds its own starting cost at iteration 1` line — the very first step already made things worse, which is a far earlier signal than the eventual explosion.
+
+---
+
+## One step, on a round bowl
+
+When `κ = 1`, `α = 2/(λ_max + λ_min)` reduces to `1/λ` and the contraction factor becomes `|1 − α·λ| = 0`. The error is annihilated, not shrunk:
+
+```text title="Output"
+4. ONE STEP   (alpha = 2/(lambda_max+lambda_min), round bowl)
+   after 1 step: b = 14.81495320  w = 5.83713585
+   OLS optimum:  b = 14.81495320  w = 5.83713585   difference 1.8e-15, 0.0e+00
+```
+
+**One iteration, and the parameters are the OLS solution to `1.8e-15`** — the `w` difference is exactly zero. Gradient descent with a perfectly chosen `α` on a perfectly round bowl is not iterative at all; it is the closed-form solution reached in a single multiply.
+
+That is a boundary case rather than a technique — it needs `κ = 1`, which needs standardised, uncorrelated features — but it makes the mechanism unmistakable: `α` is not "a small number for safety". It is the factor that scales the gradient into a *displacement*, and `1/λ` is the value at which that displacement is exactly right.
+
+---
+
+## A worked convergence trace
+
+Everything above in one table, at `α = 0.3`, followed step by step:
+
+```text title="Output"
+5. WORKED TRACE   (alpha = 0.3)
+    iter          w          b      dJ/dw      dJ/db            J    delta w
+       0   0.000000   0.000000 -11.674272 -29.629906 257.29029809   3.502282
+       1   3.502282   8.888972  -4.669709 -11.851963  44.30410373   1.400913
+       2   4.903194  12.444561  -1.867883  -4.740785  10.22631263   0.560365
+       3   5.463559  13.866796  -0.747153  -1.896314   4.77386606   0.224146
+       4   5.687705  14.435690  -0.298861  -0.758526   3.90147460   0.089658
+       5   5.777364  14.663248  -0.119545  -0.303410   3.76189197   0.035863
+       6   5.813227  14.754271  -0.047818  -0.121364   3.73955875   0.014345
+       7   5.827572  14.790680  -0.019127  -0.048546   3.73598543   0.005738
+      10   5.836524  14.813400  -0.001224  -0.003107   3.73530759   0.000367
+      20   5.837136  14.814953  -0.000000  -0.000000   3.73530480   0.000000
+      50   5.837136  14.814953  -0.000000  -0.000000   3.73530480   0.000000
+   standardised coefficients: w = 5.8371, b = 14.8150
+   back on the original x scale: slope = 1.9844, intercept = 5.2104   (truth 2.0, 5.0)
+```
+
+Four things to follow across the rows.
+
+**Both gradients are negative throughout.** `w` and `b` both start below their optima, so the derivative of cost with respect to each is negative, and `−α·∇J` moves both upward. No parameter ever needs the algorithm to know which direction it is on; the sign of the derivative carries it.
+
+**`delta w` shrinks by exactly `0.4` per step.** `3.502282 → 1.400913 → 0.560365 → 0.224146` — each `0.4` of the last. That is `|1 − α·λ| = |1 − 0.3 × 2| = 0.4`, the same predictor as on the [previous page](./02-gradient-descent.mdx#the-braking-rate-is-predictable-in-advance), now visible in a single column.
+
+**The cost converges long before the parameters do.** By iteration 4, `J = 3.90147460` against a final `3.73530480` — within 4.5%. But `delta w` is still `0.089658`, and `w` has another `0.15` to travel. Cost is quadratic in the error, so the last stretch of parameter movement barely registers in `J`. Any stopping rule based on "the cost has stopped changing" stops with the parameters still moving.
+
+**The fitted numbers are `5.8371` and `14.8150`, not `2.0` and `5.0`.** The feature was standardised, so these are the coefficients in standardised space. Undoing the transform gives `slope = 1.9844` and `intercept = 5.2104` against the true `2.0` and `5.0` — recovered correctly, with the gap being noise in 200 samples rather than optimiser error.
+
+:::note
+
+**This demo is deliberately constructed to be readable**
+
+`n = 200`, a standardised single feature and `α = 0.3` were chosen so every column changes by a clean factor and the run finishes in a handful of rows. The next section removes the standardisation and the tidiness goes with it.
+
+:::
+
+---
+
+## Overshooting is not a failure mode — and the classical formula is not the answer
+
+Everything so far ran on `κ = 1`, where the monotone limit and the classical optimum coincide at `0.5` and there is nothing to choose between them. That coincidence is the *only* reason the well-conditioned case looks simple. Two features on wildly different scales — one spanning `0..10`, the other `0..0.3` — and the picture changes:
+
+```text title="Output"
+6. AN ILL-CONDITIONED BOWL   (two features on very different scales)
+   eigenvalues of H = [1.5141e-02 5.0447e-01 7.2536e+01]   kappa = 4791
+   1/lambda_max = 0.013786   2/(lam+lam) = 0.027567   2/lambda_max = 0.027573
+        alpha  x 1/lam_max  iters to 1e-6   regime
+     0.003447       0.2500          86755   monotone
+     0.006893       0.5000          43377   monotone
+     0.013786       1.0000          21688   monotone
+     0.017233       1.2500          17350   oscillating
+     0.020680       1.5000          14458   oscillating
+     0.024126       1.7500          12392   oscillating
+     0.026194       1.9000          11414   oscillating
+     0.026883       1.9500          11121   oscillating
+     0.027435       1.9900          10897   oscillating
+     0.027504       1.9950          10870   oscillating
+     0.027559       1.9990          11007   oscillating
+     0.027571       1.9999          99672   oscillating
+   fastest measured: 1.9950 x 1/lambda_max at 10870 iterations
+   textbook optimum 2/(lam_max+lam_min) = 0.027567 (1.9996 x 1/lambda_max) took 23876 iterations  -> 2.20x SLOWER than the measured best
+   sign(w1 − w1*) over 12 steps, fastest alpha:        -+-+-+-+-+-+
+   sign(w1 − w1*) over 12 steps, 0.5/lambda_max:       --++++++++++
+```
+
+Two findings here, and the second was not expected.
+
+**The fastest `α` is firmly in the "overshooting" regime.** Iterations fall monotonically as `α` rises past the monotone limit: `21688` at exactly `1/λ_max`, down to `10870` at `1.9950 × 1/λ_max` — **twice as fast as the largest non-overshooting setting.** The sign column confirms these are real overshoots: `-+-+-+-+-+-+` at the fastest `α` against `--++++++++++` at half the monotone limit, which crosses once and then approaches from one side.
+
+So "overshooting" belongs in the diagnostic table as a *description*, not a fault. On any bowl that is not round, the setting that converges fastest overshoots on every step. Advice to reduce `α` until the parameters stop oscillating will systematically leave you about **2× slower than necessary**.
+
+**The classical `α* = 2/(λ_max + λ_min)` was 2.20× slower than a slightly smaller `α`.** It took **23876** iterations against **10870**. That is not a small discrepancy and it is worth understanding, because the formula is not wrong — it is optimal for a different objective.
+
+The plain version. A stretched bowl has a sharp direction and a shallow one, and a single `α` has to serve both. The classical formula picks the `α` that makes **both directions finish at the same time** — a sensible-sounding fairness rule. But fairness is the wrong goal here, because the two directions are not worth the same. Cost is far more sensitive to error in the *sharp* direction than in the shallow one: here, `4791×` more sensitive. So handicapping the sharp direction in order to help the shallow one buys a tiny gain at a large price. The `α` that actually minimises cost fastest is the one that keeps the sharp direction moving, and lets the shallow one lag.
+
+The arithmetic behind it, for completeness: `α* = 2/(λ_max + λ_min)` balances the two extreme directions so both shrink at the same rate. With `κ = 4791`, `α*` lands at `1.9996 × 1/λ_max`, which makes the `λ_max` direction shrink by a factor of `|1 − 1.9996| = 0.0004` per step — that is, it barely moves the error there at all. Cost, though, weights each direction by its own `λ`: an error along `λ_max = 72.5` costs `4791×` more than the same error along `λ_min = 0.0151`. Deliberately stalling the stiffest direction to help the flattest one is a bad trade when the objective is cost.
+
+The last three rows show the resulting shape: `10870` at `1.9950`, `11007` at `1.9990`, then **`99672` at `1.9999`** — a 9× penalty for moving `α` by 0.02%.
+
+:::danger
+
+**The optimum is a cliff on one side and a gentle slope on the other**
+
+`α` between `1.5×` and `1.99×` the monotone limit all landed within 33% of the best result. Push to `1.9999×` and it costs **9×**. The cost of being too small is linear and forgiving; the cost of being too large is a cliff, and just past it lies non-convergence.
+
+Practical rule: aim for roughly `1.8 × 1/λ_max`, i.e. `0.9 × 2/λ_max`. It is close to the flat part of the curve and safely off the edge. **Do not** try to sit exactly on `2/λ_max`, and do not trust `2/(λ_max+λ_min)` when `κ` is large.
+
+:::
+
+---
+
+<details style={{ padding: '15px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
+  <summary style={{ cursor: 'pointer', fontWeight: 'bold' }}>🔌 <b>[ADVANCED DEEP-DIVE] Interactive Step-Shrinkage & Feature Scaling Sandboxes</b></summary>
+  <div className="answer-content">
+    <br/>
+
+    {/* Section A: Step-Shrinkage Explorer */}
+    <span style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: '8px', color: '#3182ce' }}>A. Automatic Step-Shrinkage Explorer</span>
+    <div style={{ padding: '15px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'var(--ifm-background-color)', marginBottom: '20px' }}>
+      <p style={{ fontSize: '12px', opacity: 0.9 }}>Braking is free. Choose a step number to watch how the displacement vector <b>‖Δθ‖ (Step Size)</b> contracts naturally purely because the gradient levels off, while contraction rate stays constant.</p>
+      
+        {/* We use a React state inline or locally scoped for these sliders, or just a small slider hook */}
+        {(() => {
+          const [sStep, setSStep] = React.useState(1);
+          const dist = 3.502282 * Math.pow(0.4, sStep - 1);
+          const prevDist = sStep === 1 ? null : 3.502282 * Math.pow(0.4, sStep - 2);
+          const grad = dist / 0.3;
+          return (
+            <div>
+              <div style={{ marginBottom: '10px' }}>
+                <label style={{ fontSize: '11px', fontWeight: 'bold' }}>Convergence Step: <b>{sStep}</b></label>
+                <input type="range" min="1" max="8" step="1" value={sStep} onChange={(e) => setSStep(parseInt(e.target.value))} style={{ width: '100%' }} />
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginTop: '10px', fontSize: '11px' }}>
+                <div style={{ padding: '8px', borderRadius: '4px', backgroundColor: 'rgba(49, 130, 206, 0.02)', border: '1px solid var(--ifm-color-emphasis-200)' }}>
+                  Gradient Length ‖∇J‖: <b>{grad.toFixed(4)}</b>
+                </div>
+                <div style={{ padding: '8px', borderRadius: '4px', backgroundColor: 'rgba(56, 161, 105, 0.02)', border: '1px solid var(--ifm-color-emphasis-200)' }}>
+                  Step Size ‖Δθ‖ (α·‖∇J‖): <b>{dist.toFixed(4)}</b> (α = 0.3)
+                </div>
+              </div>
+              <div style={{ fontSize: '10px', opacity: 0.8, marginTop: '5px', textAlign: 'center' }}>
+                Contraction Ratio: <b>{prevDist ? (dist / prevDist).toFixed(4) : '—'}</b> (Predicted exact contraction: <b>0.4000</b>)
+              </div>
+            </div>
+          );
+        })()}
+      </div>
+
+    {/* Section B: Scaling & Ceilings Explorer */}
+    <span style={{ fontSize: '12px', fontWeight: 'bold', textTransform: 'uppercase', letterSpacing: '0.5px', display: 'block', marginBottom: '8px', color: '#dd6b20' }}>B. Feature Scaling & Alpha Ceilings</span>
+    <div style={{ padding: '15px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'var(--ifm-background-color)' }}>
+      <p style={{ fontSize: '12px', opacity: 0.9 }}>Slide the feature scaling multiplier to watch how leaving variables on their raw unscaled boundaries dramatically collapses the stable learning rate window.</p>
+      
+      {(() => {
+        const [scale, setScale] = React.useState(1);
+        const lambdaMax = 2.0 * Math.pow(scale, 2);
+        const limit = 2.0 / lambdaMax;
+        const safeAlpha = 0.9 * limit;
+        return (
+          <div>
+            <div style={{ marginBottom: '10px' }}>
+              <label style={{ fontSize: '11px', fontWeight: 'bold' }}>Unscaled Column Multiplier: <b>{scale === 1 ? '1x (Standardised)' : `${scale}x (Raw Data)`}</b></label>
+              <input type="range" min="1" max="100" step="5" value={scale} onChange={(e) => setScale(parseInt(e.target.value))} style={{ width: '100%' }} />
+            </div>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '15px', marginTop: '10px', fontSize: '11px' }}>
+              <div style={{ padding: '8px', borderRadius: '4px', backgroundColor: 'rgba(221, 107, 32, 0.02)', border: '1px solid var(--ifm-color-emphasis-200)' }}>
+                Max Curvature λ_max: <b>{lambdaMax.toFixed(2)}</b>
+              </div>
+              <div style={{ padding: '8px', borderRadius: '4px', backgroundColor: 'rgba(229, 62, 62, 0.02)', border: '1px solid var(--ifm-color-emphasis-200)' }}>
+                Divergence Limit (2/λ_max): <b style={{ color: '#e53e3e' }}>{limit.toExponential(4)}</b>
+              </div>
+            </div>
+            <div style={{ fontSize: '11px', fontWeight: 'bold', color: '#38a169', marginTop: '8px', textAlign: 'center' }}>
+              Suggested Safe Learning Rate (0.9 × limit): {safeAlpha.toExponential(4)}
+            </div>
+          </div>
+        );
+      })()}
+    </div>
+    
+  </div>
+</details>
+
+---
+
+## Every threshold comes from the Hessian {/* #every-threshold-comes-from-the-hessian */}
+
+The printed thresholds on our single standardized feature matched exactly:
+
+*   **Monotone Limit ($1/\lambda_{max}$):** `0.500000` — Below this, the parameter always approaches the target from one side. Above it, we overshoot but still converge.
+*   **Classical Optimum ($2/(\lambda_{max}+\lambda_{min})$):** `0.500000` — Textbook best learning rate.
+*   **Divergence Limit ($2/\lambda_{max}$):** `1.000000` — The cliff edge.
+
+As we saw in the bisection trace, the divergence limit is exact: a learning rate of `1.004` (just 0.4% too large) is mathematically unstable, compounding slowly over hundreds of steps until it finally explodes to infinity at iteration `1098`.
+
+---
+
+## 2. Implementation Lab
+
+:::tip 
+
+**Lab Exercise: The Learning Rate**
+
+An interactive, fully-functional Google Colab / Jupyter Notebook is available to experiment with this concept live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/04-optimisation/gradient_descent.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Click **"Run all"** or execute cells individually using `Shift + Enter`.
+
+**Things to try inside the script:**
+*   **Experiment 1 (Convexity checklist):** Change `sig_cost`'s squared error in section 3 to cross-entropy log loss and run the chord test. Observe violations return to 0, isolating L2 as the non-convex culprit.
+*   **Experiment 2 (Braking rate):** Raise the learning rate in section 5 to `0.5` and watch the contraction factor head to exactly `0.0000`, landing on the OLS optimum in one step.
+*   **Experiment 3 (Rescaling speed):** In section 6, add `s = 10000` to the ladder. Compute the resulting condition number and iteration count before executing.
+
+:::
+
+---
+
+## 3. Common Mistakes
+
+<Tabs>
+  <TabItem value="m1" label="🚨 1. Hand-Tuning is the Only Path" default>
+    <br/>
+    
+    *   **The Misconception:** *"The learning rate is an arbitrary number that can only be found by extensive trial and error."*
+    *   **❌ Wrong Thinking:** Guessing random values like `0.1`, `0.01`, or `0.001` and hoping they don't explode.
+    *   **✅ The Right Principle:** The exact divergence limit is a computable property of your data. Calculating `2/λ_max` from the Hessian takes microseconds and hands you the absolute safe ceiling ($1.00000000$ predicted vs. $1.00000000$ measured to fifteen decimal places).
+  </TabItem>
+  <TabItem value="m2" label="🚨 2. Overshoot is a Bug">
+    <br/>
+    
+    *   **The Misconception:** *"Overshooting the target and causing parameters to oscillate is an optimization bug."*
+    *   **❌ Wrong Thinking:** Reducing the learning rate the moment you see coefficients flip signs.
+    *   **✅ The Right Principle:** Overshooting is the **fastest converging regime**. On any realistically squashed bowl, the setting that converges fastest overshoots on every step (e.g. `1.9950/λ_max` took **10,870** iterations, while the largest non-oscillating `α` took **21,688**). Reducing `α` systematically leaves you 2× slower.
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. Trusting Textbook Optimums">
+    <br/>
+    
+    *   **The Misconception:** *"The classical textbook optimum 2/(λ_max + λ_min) is always the fastest converging learning rate."*
+    *   **❌ Wrong Thinking:** Calculating the classical optimum and assuming it is mathematically superior.
+    *   **✅ The Right Principle:** The formula is optimal for parameter-space contraction, not cost. Because cost is thousands of times more sensitive to error in the sharp direction than the shallow one, slowing down the sharp direction to satisfy the flat one is a bad trade—taking **23,876** iterations instead of **10,870** (2.20× slower!).
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Safe Short Traces">
+    <br/>
+    
+    *   **The Misconception:** *"My cost decreases slowly for 500 steps, so my learning rate is perfectly stable."*
+    *   **❌ Wrong Thinking:** Believing any unstable learning rate will explode within the first few iterations.
+    *   **✅ The Right Principle:** Divergence is asymptotic. A learning rate only 0.4% too large ($1.004$) will look completely normal for hundreds of steps, compounding slowly until it finally explodes past $1e10$ at iteration **1098**.
+  </TabItem>
+</Tabs>
+
+---
+
+## 4. Summary
+
+<div className="row">
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🤖 Core Theory</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Monotone Limit:</b> $1/\lambda_{\max}$. Below this, parameters approach the minimum from one side. Above it, they alternate.</li>
+          <li><b>Divergence Limit:</b> Exactly $2/\lambda_{\max}$. At or above this, error contractions exceed 1.0 and cost explodes.</li>
+          <li><b>Asymmetric Optimum:</b> The safe cost curve has a lopsided shape—sloping gently on the low side, but dropping off a cliff on the high side.</li>
+          <li><b>Textbook Optimum:</b> $2/(\lambda_{\max} + \lambda_{\min})$ balances contractions across all axes, which can severely slow down cost convergence.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🛠️ Engineering Realities</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Asymptotic Growth:</b> Slightly unstable learning rates compound slowly, looking merely slow for over a thousand steps before exploding.</li>
+          <li><b>Geometric Decay:</b> Distance still to travel shrinks by exactly $\lvert 1 - \alpha \lambda \rvert$ per step. This yields a constant cost-per-digit.</li>
+          <li><b>Free Braking:</b> Cost-based stopping rules halt too early because cost is quadratic—flattening long before parameters reach OLS finality.</li>
+          <li><b>Preprocessing Scale:</b> Preprocessing determines the Hessian. Skipping standardisation shrinks the safe range for $\alpha$ by over 30×.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+:::info 
+
+**📌 Key Takeaways**
+
+*   **🔒 Bounded overshoots:** The overshooting regime ($1 < \alpha \lambda < 2$) converges and is the fastest path on any realistically stretched ravine cost surface.
+*   **⚖️ Non-portability:** A learning rate is entirely dependent on feature scaling. Someone else's $\alpha = 0.03$ is meaningless without knowing their preprocessing scales.
+*   **🛠️ Standard default:** Aim for roughly $1.8 \times 1/\lambda_{\max}$ (i.e. $0.9 \times 2/\lambda_{\max}$), sitting safely near the optimal flat zone while avoiding the divergence cliff edge.
+
+:::
+
+**Next in this section:** [Batch, Stochastic and Mini-Batch](./04-batch-stochastic-mini-batch.mdx) — how many rows each update is allowed to see, and whether the familiar ranking of the three survives a stopwatch.
+
+---
+
+## 5. Active Recall
+
+*Attempt each question first, then click to reveal detailed answers, mathematical derivations, and sample explanations.*
+
+### Interactive Checkpoint Quiz
+
+export const PracticeQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Overshooting Regime</h4>
+      <p style={{ margin: '0 0 15px 0' }}>If we are fitting a model on an elongated ravine (kappa = 4791), what is the fastest learning rate regime for cost convergence?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>The monotone regime (approaching smoothly from one side)</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>The overshooting/oscillating regime (flipping parameter signs on every step)</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>The divergence limit boundary</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The monotone limit (e.g. 1/λ_max) is extremely slow—taking **21,688** iterations compared to the oscillating regime's **10,870**. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! On stretched cost surfaces, the fastest converging learning rate lives firmly inside the overshooting regime (e.g. `1.9950/λ_max` took **10,870** iterations—exactly 2× faster!). Overshooting is a performance asset, not a model bug.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Sitting exactly on the divergence limit (2/λ_max) is a cliff edge where the model bounces forever and never moves toward the optimum. Re-read the choices and try again!</p>}
+    </div>
+  );
+};
+
+<PracticeQuiz />
+
+### Review Flashcards
+
+<details>
+  <summary>❓ <b>1. [THEORY] Derive the exact divergence limit $\alpha < 2/\lambda_{\max}$ from the contraction inequality.</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Contraction Factor:** Each step of gradient descent multiplies the remaining parameter error by the contraction factor:
+        $$e_{t+1} = (1 - \alpha \lambda) e_t$$
+    *   For the error to shrink (converge), the magnitude of this multiplier must be strictly less than one:
+        $$\lvert 1 - \alpha \lambda \rvert < 1$$
+    *   **Solving the Inequality:**
+        $$-1 < 1 - \alpha \lambda < 1 \implies -2 < -\alpha \lambda < 0$$
+    *   Dividing by $-\lambda$ (which is positive since $H$ is positive semi-definite):
+        $$0 < \alpha < \frac{2}{\lambda}$$
+    *   **The Constraint:** This must hold for every direction's curvature. The direction with the largest curvature ($\lambda_{\max}$) sets the most restrictive limit, yielding $\alpha < 2/\lambda_{\max}$ exactly.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>2. [ANALYZE] Why can a diverging learning rate look completely stable and normal for over a hundred steps?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Asymptotic Growth:** If $\alpha$ is only 0.4% over the limit ($1.004$), the error multiplier is $\lvert 1 - 1.004 \times 2 \rvert = 1.008$.
+    *   This means the error grows by only $0.8\%$ on each step.
+    *   **The Compounding Lag:** After 100 steps, $1.008^{100} \approx 2.22$—a minor increase that makes the cost look like it is merely struggling or flat (cost of $\approx 1252$ compared to start of $\approx 257$).
+    *   Only after hundreds of steps does geometric compounding turn this minor leak into a catastrophic explosion, passing $1e10$ at iteration **1098**. Divergence is asymptotic and slow to reveal itself.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>3. [THEORY] Why is overshooting (the $1 < \alpha \lambda < 2$ regime) the fastest path on a ravine, and why does the textbook optimum fail?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Textbook Optimum Bias:** The classical formula $2/(\lambda_{\max} + \lambda_{\min})$ balances both axes to shrink parameter error evenly.
+    *   **The Cost Asymmetry:** On an elongated ravine, cost is **4791×** more sensitive to the sharp axis ($\lambda_{\max}$) than the flat axis ($\lambda_{\min}$).
+    *   **The Fast Overshoot:** By selecting a larger $\alpha$ near $2/\lambda_{\max}$, we let the parameters overshoot wildly on the flat axis, while the highly sensitive sharp axis is resolved rapidly. Stalling the stiffest axis to satisfy the flattest one is a bad trade, taking **23,876** iterations compared to the fastest overshooting's **10,870**!
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>4. [ANALYZE] Why is overshooting invisible in the cost curve when $\kappa = 1.00$ (a perfectly round bowl)?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Isotropic Decay:** When $\kappa = 1.00$, both orthogonal axes curve identically ($\lambda_1 = \lambda_2 = 2.0$).
+    *   At $\alpha = 0.8$, the parameters overshoot and flip sign every step: $\lvert 1 - 0.8 \times 2 \rvert = -0.6$, so the parameter error alternates sign: $-+-+-+-+-+$.
+    *   **Monotone Cost:** However, because cost $J(\theta)$ is a weighted sum of the squared error along both axes, squaring the error removes the negative signs: $(-0.6)^2 = 0.36$. 
+    *   Thus, the cost decreases by exactly $64\%$ on **every step**, producing a perfectly smooth, monotone curve indistinguishable from a non-overshooting run!
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>5. [ANALYZE] How does feature standardisation change the safe learning rate range, and why are copied learning rates useless?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Scale Shift:** Curvature $\lambda_{\max}$ is directly proportional to the square of your feature's scale. Skipping standardisation on a $0..10$ feature expands $\lambda_{\max}$ from $2.0 \to 65.6$, shrinking the safe $\alpha$ window by **32.8×** (limit of $1.00 \to 0.03$).
+    *   **Non-Portability:** Because $\alpha$ is scaled by $1/\lambda_{\max}$, a learning rate is not a property of the algorithm—it is a property of your preprocessing scale. A copied $\alpha = 0.03$ is meaningless unless your features are scaled exactly the same way.
+  </div>
+</details>

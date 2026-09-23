@@ -1,0 +1,532 @@
+---
+sidebar_position: 2
+title: Variables and Naming
+description: What makes a Python identifier legal, the 35 reserved keywords, the danger of shadowing built-ins, and PEP 8 conventions.
+tags: [python, basics, pep8]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Heading from '@theme/Heading';
+import React from 'react';
+
+# Variables and Naming
+
+> **Topic —** In Python, variable names are **identifiers** that bind names to objects stored in memory. While the interpreter strictly rejects syntax errors like leading digits or hyphens, the greater danger lies in **naming anti-patterns**: accidentally shadowing built-in functions like `list` or `sum` without realizing it. This guide covers legal identifier syntax, the 35 reserved keywords, PEP 8 styling conventions, and the memory pointer model.
+
+---
+
+## 1. The Core Concept
+
+An identifier is a token used to name a variable, function, class, or module. In Python:
+
+| Status | Rule | Example |
+| :--- | :--- | :--- |
+| ✅ Allowed | Must **start with** a letter (`a-z`, `A-Z`) or an underscore (`_`) | `student`, `_private` |
+| ✅ Allowed | Can **contain** letters, digits (`0-9`), and underscores | `user_123`, `batch_size` |
+| ✅ Allowed | Case-sensitive (`age`, `Age`, `AGE` are 3 separate variables) | `age != Age != AGE` |
+| ❌ Forbidden | Cannot start with a digit | `2fast` (SyntaxError) |
+| ❌ Forbidden | Cannot contain spaces | `student name` (SyntaxError) |
+| ❌ Forbidden | Cannot contain hyphens or symbols (`-`, `@`, `#`, `$`, `%`) | `my-var`, `total$` |
+| ❌ Forbidden | Cannot be a Python keyword | `class`, `for`, `def` |
+| ⚠️ Warning | Should never shadow built-ins (`list`, `str`, `dict`, `sum`) | `list = [1, 2]` (Breaks `list()`) |
+
+:::tip
+
+**If you only take one thing from this page**
+
+In Python, **`-` is the subtraction operator, not a separator**. Writing `student-name` is parsed as *student minus name*, raising `SyntaxError: cannot assign to expression`. Always use underscores (`student_name`).
+
+:::
+
+---
+
+## 2. Interactive Variable Name Validator
+
+Type any candidate identifier into the input box below or click the preset buttons to check syntax legality, keyword collisions, built-in shadowing, and PEP 8 compliance live:
+
+export const VariableNameValidator = () => {
+  const [candidate, setCandidate] = React.useState('student_name');
+
+  const keywords = [
+    'False', 'None', 'True', 'and', 'as', 'assert', 'async', 'await',
+    'break', 'class', 'continue', 'def', 'del', 'elif', 'else', 'except',
+    'finally', 'for', 'from', 'global', 'if', 'import', 'in', 'is',
+    'lambda', 'nonlocal', 'not', 'or', 'pass', 'raise', 'return', 'try',
+    'while', 'with', 'yield'
+  ];
+
+  const builtins = [
+    'list', 'str', 'int', 'float', 'bool', 'dict', 'set', 'tuple',
+    'sum', 'min', 'max', 'id', 'type', 'input', 'print', 'len', 'open',
+    'range', 'abs', 'all', 'any', 'filter', 'map', 'zip'
+  ];
+
+  const trimmed = candidate.trim();
+
+  let status = 'valid';
+  let message = 'Legal Python identifier adhering to standard PEP 8 snake_case.';
+  let styleInfo = 'snake_case (Variables and Functions)';
+
+  if (!candidate || candidate.length === 0) {
+    status = 'neutral';
+    message = 'Enter a variable name above to test legality.';
+    styleInfo = 'None';
+  } else if (candidate.includes(' ')) {
+    status = 'invalid';
+    message = 'SyntaxError: whitespace separates tokens. Python sees multiple names instead of one.';
+    styleInfo = 'Illegal (Contains spaces)';
+  } else if (candidate.includes('-')) {
+    status = 'invalid';
+    message = "SyntaxError: hyphen '-' is parsed as the subtraction operator. Python reads 'a - b = 5', which is an invalid expression assignment!";
+    styleInfo = 'Illegal (kebab-case)';
+  } else if (/[@#$%^&*!~`+=?><,.;:'"|\\\/]/.test(candidate)) {
+    status = 'invalid';
+    message = 'SyntaxError: special operators (@, #, $, %, etc.) have dedicated syntactic meanings and cannot appear in variable names.';
+    styleInfo = 'Illegal (Contains symbols)';
+  } else if (/^[0-9]/.test(candidate)) {
+    status = 'invalid';
+    message = "SyntaxError: invalid decimal literal. Identifiers cannot begin with digits (0-9) because the lexer begins parsing them as numbers.";
+    styleInfo = 'Illegal (Leading digit)';
+  } else if (keywords.includes(candidate)) {
+    status = 'invalid';
+    message = `SyntaxError: '${candidate}' is one of Python's 35 reserved grammar keywords and cannot be repurposed as a variable name.`;
+    styleInfo = 'Reserved Keyword';
+  } else if (builtins.includes(candidate)) {
+    status = 'warning';
+    message = `⚠️ DANGEROUS: '${candidate}' is syntactically legal, but SHADOWS a core Python built-in function! This will break ${candidate}() for the rest of your program.`;
+    styleInfo = 'Shadows Built-in';
+  } else if (/^[A-Z0-9_]+$/.test(candidate) && candidate.length > 1) {
+    status = 'valid';
+    message = 'Legal Python identifier following the PEP 8 constant convention.';
+    styleInfo = 'UPPER_CASE (Constants)';
+  } else if (/^[A-Z][a-zA-Z0-9]*$/.test(candidate)) {
+    status = 'valid';
+    message = 'Legal Python identifier following the PEP 8 class naming convention.';
+    styleInfo = 'PascalCase (Classes)';
+  } else if (/^[a-z]+[A-Z]/.test(candidate)) {
+    status = 'valid';
+    message = 'Legal identifier, but camelCase is non-standard in Python. PEP 8 strongly prefers snake_case.';
+    styleInfo = 'camelCase (Non-standard in Python)';
+  }
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>🧪 Python Variable Name Validator</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Type a candidate variable name or test one of the common problem presets:
+      </p>
+
+      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '14px' }}>
+        <button
+          onClick={() => setCandidate('student_name')}
+          style={{ padding: '4px 10px', borderRadius: '4px', border: '1px solid #38a169', backgroundColor: candidate === 'student_name' ? '#38a169' : 'transparent', color: candidate === 'student_name' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+        >
+          student_name
+        </button>
+        <button
+          onClick={() => setCandidate('2fast')}
+          style={{ padding: '4px 10px', borderRadius: '4px', border: '1px solid #e53e3e', backgroundColor: candidate === '2fast' ? '#e53e3e' : 'transparent', color: candidate === '2fast' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+        >
+          2fast
+        </button>
+        <button
+          onClick={() => setCandidate('user-name')}
+          style={{ padding: '4px 10px', borderRadius: '4px', border: '1px solid #e53e3e', backgroundColor: candidate === 'user-name' ? '#e53e3e' : 'transparent', color: candidate === 'user-name' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+        >
+          user-name
+        </button>
+        <button
+          onClick={() => setCandidate('class')}
+          style={{ padding: '4px 10px', borderRadius: '4px', border: '1px solid #e53e3e', backgroundColor: candidate === 'class' ? '#e53e3e' : 'transparent', color: candidate === 'class' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+        >
+          class
+        </button>
+        <button
+          onClick={() => setCandidate('list')}
+          style={{ padding: '4px 10px', borderRadius: '4px', border: '1px solid #dd6b20', backgroundColor: candidate === 'list' ? '#dd6b20' : 'transparent', color: candidate === 'list' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
+        >
+          list (Shadowing)
+        </button>
+        <button
+          onClick={() => setCandidate('MAX_SPEED')}
+          style={{ padding: '4px 10px', borderRadius: '4px', border: '1px solid #805ad5', backgroundColor: candidate === 'MAX_SPEED' ? '#805ad5' : 'transparent', color: candidate === 'MAX_SPEED' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+        >
+          MAX_SPEED
+        </button>
+        <button
+          onClick={() => setCandidate('StudentProfile')}
+          style={{ padding: '4px 10px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: candidate === 'StudentProfile' ? '#3182ce' : 'transparent', color: candidate === 'StudentProfile' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+        >
+          StudentProfile
+        </button>
+      </div>
+
+      <div style={{ marginBottom: '16px' }}>
+        <input
+          type="text"
+          value={candidate}
+          onChange={(e) => setCandidate(e.target.value)}
+          placeholder="Type variable name..."
+          style={{ width: '100%', padding: '8px 12px', fontSize: '16px', borderRadius: '4px', border: '1px solid var(--ifm-color-emphasis-400)', fontFamily: 'monospace' }}
+        />
+      </div>
+
+      <div style={{ padding: '14px', borderRadius: '6px', backgroundColor: status === 'valid' ? 'rgba(56, 161, 105, 0.1)' : status === 'warning' ? 'rgba(221, 107, 32, 0.1)' : 'rgba(229, 62, 62, 0.1)', borderLeft: `4px solid ${status === 'valid' ? '#38a169' : status === 'warning' ? '#dd6b20' : '#e53e3e'}` }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '6px' }}>
+          <strong style={{ fontSize: '15px', color: status === 'valid' ? '#276749' : status === 'warning' ? '#c05621' : '#c53030' }}>
+            {status === 'valid' ? '✅ VALID PYTHON IDENTIFIER' : status === 'warning' ? '⚠️ LEGAL BUT HAZARDOUS' : '❌ INVALID IDENTIFIER (SYNTAX ERROR)'}
+          </strong>
+          <span style={{ fontSize: '12px', padding: '2px 8px', borderRadius: '4px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+            Style: {styleInfo}
+          </span>
+        </div>
+        <p style={{ margin: 0, fontSize: '13px', lineHeight: '1.5' }}>
+          {message}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+<VariableNameValidator />
+
+---
+
+<Heading as="h2" id="python-keywords">3. Python's 35 Reserved Keywords</Heading>
+
+Python 3.11 features **35 reserved keywords**. These are hardcoded into the language grammar and cannot be assigned as variable names:
+
+| Category | Reserved Keywords |
+| :--- | :--- |
+| **Control Flow** | `if`, `elif`, `else`, `for`, `while`, `break`, `continue`, `pass` |
+| **Functions & Classes** | `def`, `return`, `lambda`, `yield`, `class` |
+| **Imports & Modules** | `import`, `from`, `as` |
+| **Exception Handling** | `try`, `except`, `finally`, `raise`, `assert` |
+| **Logic & Identity** | `and`, `or`, `not`, `in`, `is` |
+| **Constants** | `True`, `False`, `None` |
+| **Scope & Memory** | `global`, `nonlocal`, `del` |
+| **Asynchronous & Context** | `with`, `async`, `await` |
+
+:::note
+
+**Soft Keywords**
+
+Python 3.10 introduced "soft keywords" (`match`, `case`, `type`, and `_`). These act as keywords inside pattern matching statements, but remain syntactically legal as variable names elsewhere. However, using them as variables confuses collaborators and linters; avoid them.
+
+:::
+
+---
+
+## 4. The Silent Hazard: Shadowing Built-ins
+
+Unlike keywords, Python's built-in functions (`list`, `str`, `int`, `dict`, `sum`, `id`, `type`, `input`, `min`, `max`) are **not reserved syntax tokens**. 
+
+Assigning `list = [1, 2, 3]` is syntactically legal. However, doing so **shadows** the built-in function in the local namespace:
+
+```python
+# ❌ THE SHADOWING TRAP
+list = [1, 2, 3]  # Legal, but 'list' now references an array instance!
+
+# Later in your codebase:
+new_items = list((4, 5))
+# TypeError: 'list' object is not callable
+```
+
+:::danger
+
+**Why Shadowing is Worse than a SyntaxError**
+
+A `SyntaxError` prevents your program from starting immediately. Built-in shadowing compiles cleanly and fails silently much later in unrelated modules when another function attempts to call `str()`, `sum()`, or `list()`.
+
+:::
+
+---
+
+## 5. Interactive Memory Pointer Model
+
+Variables in Python are **named labels pointing to objects on the heap**, not physical boxes containing data:
+
+export const VariablePointerSimulator = () => {
+  const [scenario, setScenario] = React.useState('mutable');
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>🏷️ Memory Pointer and Object Identity Simulator</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Select a scenario to visualize how variables reference objects in memory:
+      </p>
+
+      <div style={{ display: 'flex', gap: '8px', marginBottom: '16px' }}>
+        <button
+          onClick={() => setScenario('mutable')}
+          style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: scenario === 'mutable' ? '#3182ce' : 'transparent', color: scenario === 'mutable' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+        >
+          1. Mutable Aliasing: b = a; b.append(99)
+        </button>
+        <button
+          onClick={() => setScenario('immutable')}
+          style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #38a169', backgroundColor: scenario === 'immutable' ? '#38a169' : 'transparent', color: scenario === 'immutable' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+        >
+          2. Immutable Rebinding: y = x; y = y + 1
+        </button>
+      </div>
+
+      <div style={{ padding: '16px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+        {scenario === 'mutable' ? (
+          <div>
+            <strong style={{ color: '#3182ce', fontSize: '15px' }}>Mutable List Aliasing (Shared Object Reference)</strong>
+            <pre style={{ margin: '10px 0', padding: '10px', fontSize: '13px', borderRadius: '4px' }}>
+{`a = [1, 2, 3]
+b = a          # Both labels point to memory address 0x7f9a
+b.append(99)   # Modifies the object in-place!
+print(a)       # Output: [1, 2, 3, 99]`}
+            </pre>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '12px' }}>
+              <div style={{ padding: '10px', borderRadius: '4px', backgroundColor: 'rgba(49, 130, 206, 0.08)', textAlign: 'center' }}>
+                <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Label a</div>
+                <div style={{ fontSize: '16px', fontWeight: 'bold' }}>Points to [1, 2, 3, 99]</div>
+              </div>
+              <div style={{ padding: '10px', borderRadius: '4px', backgroundColor: 'rgba(49, 130, 206, 0.08)', textAlign: 'center' }}>
+                <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Label b</div>
+                <div style={{ fontSize: '16px', fontWeight: 'bold' }}>Points to [1, 2, 3, 99]</div>
+              </div>
+            </div>
+            <p style={{ margin: '10px 0 0 0', fontSize: '13px' }}>
+              💡 <b>Memory Mechanism:</b> Because lists are mutable, <code>b = a</code> does not duplicate the list. Both variable names point to the exact same heap memory location (<code>a is b == True</code>).
+            </p>
+          </div>
+        ) : (
+          <div>
+            <strong style={{ color: '#38a169', fontSize: '15px' }}>Immutable Integer Rebinding (New Object Created)</strong>
+            <pre style={{ margin: '10px 0', padding: '10px', fontSize: '13px', borderRadius: '4px' }}>
+{`x = 10
+y = x          # Both labels point to integer 10 at 0x1000
+y = y + 1      # Creates a NEW integer 11 at 0x1008!
+print(x)       # Output: 10 (Completely unaffected!)`}
+            </pre>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginTop: '12px' }}>
+              <div style={{ padding: '10px', borderRadius: '4px', backgroundColor: 'rgba(56, 161, 105, 0.08)', textAlign: 'center' }}>
+                <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Label x</div>
+                <div style={{ fontSize: '16px', fontWeight: 'bold' }}>Points to 10 (0x1000)</div>
+              </div>
+              <div style={{ padding: '10px', borderRadius: '4px', backgroundColor: 'rgba(56, 161, 105, 0.08)', textAlign: 'center' }}>
+                <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Label y</div>
+                <div style={{ fontSize: '16px', fontWeight: 'bold' }}>Points to 11 (0x1008)</div>
+              </div>
+            </div>
+            <p style={{ margin: '10px 0 0 0', fontSize: '13px' }}>
+              💡 <b>Memory Mechanism:</b> Integers are immutable. You cannot modify the number 10 in-place. Reassigning <code>y = y + 1</code> re-binds the tag <code>y</code> to a newly allocated integer object on the heap, leaving <code>x</code> pointing to 10.
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+<VariablePointerSimulator />
+
+---
+
+## 6. Implementation Lab
+
+:::tip
+
+**Lab Exercise: Identifiers, Built-in Shadowing & Memory Aliasing**
+
+An interactive, fully functional Google Colab / Jupyter Notebook is available to validate identifiers programmatically using `keyword.iskeyword()` and `str.isidentifier()`, inspect memory addresses with `id()`, and reproduce built-in shadowing live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/python/variables_and_naming.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Run cells sequentially to test identifier validation rules and memory aliasing.
+
+**Key Experiments to Run:**
+*   **Experiment 1 (Programmatic Legality):** Iterate over 10 candidate names using `str.isidentifier()` and `keyword.iskeyword()`.
+*   **Experiment 2 (The Built-in Shadowing Crash):** Assign a variable `sum = 300` and observe the subsequent `TypeError` when attempting to call `sum([10, 20])`. Restore the function using `del sum`.
+*   **Experiment 3 (Object Identity with id()):** Inspect `hex(id(a))` and `hex(id(b))` to empirically verify shared heap references.
+
+:::
+
+---
+
+## 7. Common Mistakes
+
+<Tabs>
+  <TabItem value="m1" label="🚨 1. Using Hyphens (Kebab-Case)" default>
+    <br/>
+    
+    *   **The Misconception:** *"HTML and CSS use `user-name`, so Python allows it."*
+    *   **❌ Wrong Thinking:** Typing `user-name = "Alex"`.
+    *   **✅ The Right Principle:** `-` is the subtraction operator. Python evaluates `user minus name = "Alex"`, which raises `SyntaxError: cannot assign to expression`. Always use underscores (`user_name`).
+  </TabItem>
+  <TabItem value="m2" label="🚨 2. Shadowing Built-in Functions">
+    <br/>
+    
+    *   **The Misconception:** *"Using `list = [1, 2]` or `max = 50` is fine because Python didn't raise a syntax error."*
+    *   **❌ Wrong Thinking:** Naming variables after built-in types or functions.
+    *   **✅ The Right Principle:** Python silently overwrites the built-in reference in your local scope, causing `list()` or `max()` to crash later with `TypeError: 'int' object is not callable`.
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. Starting Identifiers with Digits">
+    <br/>
+    
+    *   **The Misconception:** *"Naming a variable `1st_place` is clear and descriptive."*
+    *   **❌ Wrong Thinking:** Placing a number as the first character.
+    *   **✅ The Right Principle:** When the Python lexer encounters a digit, it enters numeric literal parsing mode. Hitting letters causes an immediate `SyntaxError: invalid decimal literal`. Use `first_place` or `place_1`.
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Believing UPPER_CASE Enforces Real Constants">
+    <br/>
+    
+    *   **The Misconception:** *"Defining `MAX_USERS = 100` prevents other code from reassigning it."*
+    *   **❌ Wrong Thinking:** Assuming Python has native compiler constants like `const` in C++ or JavaScript.
+    *   **✅ The Right Principle:** `UPPER_CASE` is strictly a PEP 8 human convention. Python's runtime does not protect constants; `MAX_USERS = 200` reassigns without error.
+  </TabItem>
+  <TabItem value="m5" label="🚨 5. Case-Sensitivity Confusion">
+    <br/>
+    
+    *   **The Misconception:** *"Typing `Age` or `age` references the same variable."*
+    *   **❌ Wrong Thinking:** Treating Python as case-insensitive like SQL.
+    *   **✅ The Right Principle:** Python is strictly case-sensitive. `age`, `Age`, and `AGE` are three completely independent variables in the namespace.
+  </TabItem>
+</Tabs>
+
+---
+
+## 8. Summary
+
+<div className="row">
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🤖 Syntactic Rules</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Valid First Character:</b> Letter (`a-z`, `A-Z`) or underscore (`_`).</li>
+          <li><b>Subsequent Characters:</b> Letters, digits (`0-9`), and underscores.</li>
+          <li><b>Forbidden:</b> Digits first, spaces, hyphens (`-`), symbols (`@`, `$`).</li>
+          <li><b>Reserved:</b> 35 Python grammar keywords (`class`, `def`, `for`).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🛠️ PEP 8 Style Conventions</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>snake_case:</b> Variables and functions (`student_name`, `calc_total`).</li>
+          <li><b>UPPER_CASE:</b> Constants (`MAX_RETRIES`, `DEFAULT_TIMEOUT`).</li>
+          <li><b>PascalCase:</b> Classes (`StudentProfile`, `LinearModel`).</li>
+          <li><b>_leading:</b> Internal / private scope hint (`_hidden_state`).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+:::info
+
+**📌 Key Takeaways**
+
+*   **🏷️ Variables are pointers:** Assignment binds a label to an object; mutable objects can be altered via any shared alias tag.
+*   **🚫 Never shadow built-ins:** Avoid using `list`, `str`, `dict`, `sum`, `id`, `type`, or `input` as variable names.
+*   **🐍 Follow PEP 8:** Use descriptive `snake_case` names rather than single-letter acronyms.
+
+:::
+
+**Next Section:** [Data Types](./03-data-types.md) - exploring the full catalog of Python's built-in numeric, sequence, mapping, and set data types.
+
+---
+
+## 9. Active Recall
+
+*Test your understanding by answering first, then clicking to reveal the underlying principles.*
+
+### Interactive Checkpoint Quiz
+
+export const NamingQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Identifying the Illegal Identifier</h4>
+      <p style={{ margin: '0 0 15px 0' }}>Which of the following variable assignments will cause an immediate Python <code>SyntaxError</code>?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>_private_score = 95</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>user-score = 95</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>list = [95, 80]</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Leading underscores are completely valid in Python (PEP 8 convention for private/internal variables). Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! In Python, '-' is the arithmetic subtraction operator. Python interprets 'user-score = 95' as 'user minus score = 95', raising SyntaxError: cannot assign to expression.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Assigning to 'list' is syntactically legal and does NOT raise a SyntaxError, although it is a dangerous practice because it shadows the built-in list() constructor. Try again!</p>}
+    </div>
+  );
+};
+
+<NamingQuiz />
+
+### Review Flashcards
+
+<details>
+  <summary>❓ <b>1. [THEORY] Why does Python raise a SyntaxError on `student-name = "Alex"`, but a NameError on `student#name = "Alex"`?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Hyphen (`-`):** Is parsed as the binary subtraction operator. Python sees an expression assignment (`student minus name = ...`), which is illegal syntax.
+    *   **Hash (`#`):** Marks the start of a code comment! Python completely ignores everything after `#` on that line, executing only `student`.
+    *   Because `student` has never been defined, Python raises `NameError: name 'student' is not defined`.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>2. [PRACTICE] What happens when you run `sum = 100` followed by `sum([1, 2, 3])`? How do you fix it?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Crash:** `TypeError: 'int' object is not callable`.
+    *   Assigning `sum = 100` binds the name `sum` to an integer object in your local namespace, shadowing the built-in function.
+    *   Attempting to call `sum(...)` now treats the integer `100` as a function!
+    *   **The Fix:** Delete the variable from the namespace: `del sum`. This restores access to the global built-in function.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>3. [THEORY] What does the `is` operator test compared to `==` in Python?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   `==` tests **Value Equality**: Does object A hold the same contents as object B?
+    *   `is` tests **Reference Identity**: Do labels A and B point to the exact same object at the same memory address (`id(A) == id(B)`)?
+    *   Example: `[1, 2] == [1, 2]` is `True`, but `[1, 2] is [1, 2]` is `False` (two distinct list instances).
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>4. [ANALYZE] Does Python have true constants like C++ `const` or JavaScript `const`?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **No:** Python has no language construct to prevent variable reassignment.
+    *   Writing `MAX_USERS = 100` is purely a PEP 8 signaling convention to human developers that the variable should not be changed.
+    *   If a developer executes `MAX_USERS = 200`, the interpreter rebinds the variable without any error.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>5. [THEORY] Why are leading underscores used in variable names like `_cache`?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **PEP 8 Privacy Convention:** A single leading underscore signals to other developers and IDEs that the variable or method is intended for internal use only.
+    *   **Wildcard Import Protection:** Names with a leading underscore are not imported when another module executes `from my_module import *`.
+  </div>
+</details>

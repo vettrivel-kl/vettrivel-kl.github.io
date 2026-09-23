@@ -461,7 +461,7 @@ print()
 ```
 
 Same result; the second does half the iterations. See
-[Input and Output](../01-basics/06-input-output.md) for what `end=" "` is doing.
+[Input and Output](../01-basics/06-input-output.mdx) for what `end=" "` is doing.
 
 ### Multiplication table
 
@@ -586,7 +586,7 @@ print()
 - Prefer `for item in items:` and `enumerate()` over `range(len(items))`
 
 **See also:** [Conditional Statements](./01-conditional-statements.md) for the conditions
-loops test · [Data Types](../01-basics/03-data-types.md) for the sequences you iterate
+loops test · [Data Types](../01-basics/03-data-types.mdx) for the sequences you iterate
 
 ---
 

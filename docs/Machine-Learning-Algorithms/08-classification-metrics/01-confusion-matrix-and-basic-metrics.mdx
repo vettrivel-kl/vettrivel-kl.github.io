@@ -1,0 +1,482 @@
+---
+sidebar_position: 1
+title: Confusion Matrix and Basic Metrics
+description: Understanding the 2x2 confusion matrix, extracting TP, TN, FP, FN, and diagnosing the dangerous Accuracy Paradox on imbalanced datasets.
+tags: [classification, precision, recall, threshold, scikit-learn]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import React from 'react';
+
+# Confusion Matrix and Basic Metrics
+
+> **Topic —** In classification, a single overall accuracy figure frequently conceals catastrophic systematic failures. When data is imbalanced, a trivial model that always predicts the majority class can boast a 99% accuracy score while failing to catch a single positive case. This guide explores the foundational **2x2 Confusion Matrix**, extracts the core counts (**TP, TN, FP, FN**), dissects the **Accuracy Paradox**, and establishes majority-class baseline benchmarks.
+
+---
+
+## 1. The Core Concept
+
+Every binary classification decision falls into one of four mutually exclusive outcomes formed by crossing the **Actual Ground Truth** with the **Model Prediction**:
+
+1.  **True Positive (TP):** Ground truth is Positive ($1$); model predicts Positive ($1$). Correct hit.
+2.  **True Negative (TN):** Ground truth is Negative ($0$); model predicts Negative ($0$). Correct rejection.
+3.  **False Positive (FP):** Ground truth is Negative ($0$); model predicts Positive ($1$). **Type I Error** (False Alarm).
+4.  **False Negative (FN):** Ground truth is Positive ($1$); model predicts Negative ($0$). **Type II Error** (Missed Detection).
+
+These four counts form the **Confusion Matrix**:
+
+$$\text{Total Observations } (N) = \text{TP} + \text{TN} + \text{FP} + \text{FN}$$
+
+:::tip
+
+**If you only take one thing from this page**
+
+The diagonal elements ($\text{TP} + \text{TN}$) represent correct classifications. The off-diagonal elements ($\text{FP} + \text{FN}$) represent errors. Never evaluate a classifier using accuracy alone without first verifying the **zero-rule majority baseline**.
+
+:::
+
+---
+
+## 2. Interactive Confusion Matrix & Metrics Calculator
+
+Experiment with different error distributions or click preset scenarios to see how Accuracy, Sensitivity, Specificity, and Precision update in real time:
+
+export const ConfusionMatrixCalculator = () => {
+  const [tp, setTp] = React.useState(42);
+  const [tn, setTn] = React.useState(45);
+  const [fp, setFp] = React.useState(5);
+  const [fn, setFn] = React.useState(8);
+
+  const applyPreset = (presetTp, presetTn, presetFp, presetFn) => {
+    setTp(presetTp);
+    setTn(presetTn);
+    setFp(presetFp);
+    setFn(presetFn);
+  };
+
+  const total = tp + tn + fp + fn;
+  const actualPos = tp + fn;
+  const actualNeg = tn + fp;
+  const predPos = tp + fp;
+  const predNeg = tn + fn;
+
+  const accuracy = total > 0 ? (tp + tn) / total : 0;
+  const baseline = total > 0 ? Math.max(actualPos, actualNeg) / total : 0;
+  const recall = actualPos > 0 ? tp / actualPos : 0;
+  const specificity = actualNeg > 0 ? tn / actualNeg : 0;
+  const precision = predPos > 0 ? tp / predPos : 0;
+
+  const isParadox = tp === 0 && actualPos > 0 && accuracy >= baseline;
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>🧮 Interactive 2x2 Matrix and Metrics Simulator</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Select a scenario preset or manually edit cell counts below:
+      </p>
+
+      <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', marginBottom: '18px' }}>
+        <button
+          onClick={() => applyPreset(42, 45, 5, 8)}
+          style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: '#3182ce', color: '#fff', cursor: 'pointer', fontSize: '12px' }}
+        >
+          Spam Filter (Balanced)
+        </button>
+        <button
+          onClick={() => applyPreset(0, 990, 0, 10)}
+          style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #e53e3e', backgroundColor: '#e53e3e', color: '#fff', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
+        >
+          Accuracy Paradox (1% Rare Disease)
+        </button>
+        <button
+          onClick={() => applyPreset(10, 850, 140, 0)}
+          style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #38a169', backgroundColor: '#38a169', color: '#fff', cursor: 'pointer', fontSize: '12px' }}
+        >
+          Aggressive Screening (Zero Misses)
+        </button>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '120px 1fr 1fr', gap: '8px', marginBottom: '16px', textAlign: 'center' }}>
+        <div style={{ padding: '8px', fontWeight: 'bold', fontSize: '12px' }}>Actual \ Predicted</div>
+        <div style={{ padding: '8px', fontWeight: 'bold', fontSize: '13px', backgroundColor: 'rgba(148, 163, 184, 0.15)', borderRadius: '4px' }}>
+          Predicted Positive (1)
+        </div>
+        <div style={{ padding: '8px', fontWeight: 'bold', fontSize: '13px', backgroundColor: 'rgba(148, 163, 184, 0.15)', borderRadius: '4px' }}>
+          Predicted Negative (0)
+        </div>
+
+        <div style={{ padding: '16px 8px', fontWeight: 'bold', fontSize: '13px', backgroundColor: 'rgba(148, 163, 184, 0.15)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          Actual Pos (1)
+        </div>
+        <div style={{ padding: '14px', borderRadius: '6px', border: '2px solid #38a169', backgroundColor: 'rgba(56, 161, 105, 0.12)' }}>
+          <div style={{ fontSize: '11px', color: '#276749', fontWeight: 'bold' }}>True Positive (TP)</div>
+          <input
+            type="number"
+            min="0"
+            value={tp}
+            onChange={(e) => setTp(Math.max(0, parseInt(e.target.value) || 0))}
+            style={{ width: '80px', marginTop: '6px', padding: '4px', fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }}
+          />
+        </div>
+        <div style={{ padding: '14px', borderRadius: '6px', border: '2px solid #e53e3e', backgroundColor: 'rgba(229, 62, 62, 0.12)' }}>
+          <div style={{ fontSize: '11px', color: '#9b2c2c', fontWeight: 'bold' }}>False Negative (FN - Type II)</div>
+          <input
+            type="number"
+            min="0"
+            value={fn}
+            onChange={(e) => setFn(Math.max(0, parseInt(e.target.value) || 0))}
+            style={{ width: '80px', marginTop: '6px', padding: '4px', fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }}
+          />
+        </div>
+
+        <div style={{ padding: '16px 8px', fontWeight: 'bold', fontSize: '13px', backgroundColor: 'rgba(148, 163, 184, 0.15)', borderRadius: '4px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          Actual Neg (0)
+        </div>
+        <div style={{ padding: '14px', borderRadius: '6px', border: '2px solid #dd6b20', backgroundColor: 'rgba(221, 107, 32, 0.12)' }}>
+          <div style={{ fontSize: '11px', color: '#9c4221', fontWeight: 'bold' }}>False Positive (FP - Type I)</div>
+          <input
+            type="number"
+            min="0"
+            value={fp}
+            onChange={(e) => setFp(Math.max(0, parseInt(e.target.value) || 0))}
+            style={{ width: '80px', marginTop: '6px', padding: '4px', fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }}
+          />
+        </div>
+        <div style={{ padding: '14px', borderRadius: '6px', border: '2px solid #38a169', backgroundColor: 'rgba(56, 161, 105, 0.12)' }}>
+          <div style={{ fontSize: '11px', color: '#276749', fontWeight: 'bold' }}>True Negative (TN)</div>
+          <input
+            type="number"
+            min="0"
+            value={tn}
+            onChange={(e) => setTn(Math.max(0, parseInt(e.target.value) || 0))}
+            style={{ width: '80px', marginTop: '6px', padding: '4px', fontSize: '16px', fontWeight: 'bold', textAlign: 'center' }}
+          />
+        </div>
+      </div>
+
+      {isParadox && (
+        <div style={{ padding: '12px 16px', borderRadius: '6px', backgroundColor: 'rgba(229, 62, 62, 0.15)', border: '1px solid #e53e3e', color: '#c53030', marginBottom: '16px', fontSize: '13px', fontWeight: 'bold' }}>
+          🚨 ACCURACY PARADOX DETECTED: The model scores {(accuracy * 100).toFixed(1)}% accuracy purely by predicting the majority class exclusively. It catches 0 true positives (Recall = 0.0%) and is completely useless!
+        </div>
+      )}
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px' }}>
+        <div style={{ padding: '10px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Overall Accuracy</div>
+          <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#3182ce', marginTop: '2px' }}>
+            {(accuracy * 100).toFixed(1)}%
+          </div>
+          <div style={{ fontSize: '10px', color: 'var(--ifm-color-emphasis-500)' }}>(TP + TN) / N</div>
+        </div>
+
+        <div style={{ padding: '10px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Majority Baseline</div>
+          <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#805ad5', marginTop: '2px' }}>
+            {(baseline * 100).toFixed(1)}%
+          </div>
+          <div style={{ fontSize: '10px', color: 'var(--ifm-color-emphasis-500)' }}>Zero-Rule Guess</div>
+        </div>
+
+        <div style={{ padding: '10px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Recall (Sensitivity)</div>
+          <div style={{ fontSize: '20px', fontWeight: 'bold', color: recall > 0.8 ? '#38a169' : '#e53e3e', marginTop: '2px' }}>
+            {(recall * 100).toFixed(1)}%
+          </div>
+          <div style={{ fontSize: '10px', color: 'var(--ifm-color-emphasis-500)' }}>TP / Actual Pos</div>
+        </div>
+
+        <div style={{ padding: '10px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Precision</div>
+          <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#3182ce', marginTop: '2px' }}>
+            {(precision * 100).toFixed(1)}%
+          </div>
+          <div style={{ fontSize: '10px', color: 'var(--ifm-color-emphasis-500)' }}>TP / Predicted Pos</div>
+        </div>
+
+        <div style={{ padding: '10px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)', textAlign: 'center' }}>
+          <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)' }}>Specificity</div>
+          <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#38a169', marginTop: '2px' }}>
+            {(specificity * 100).toFixed(1)}%
+          </div>
+          <div style={{ fontSize: '10px', color: 'var(--ifm-color-emphasis-500)' }}>TN / Actual Neg</div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<ConfusionMatrixCalculator />
+
+---
+
+## 3. Dissecting the Four Quadrants
+
+In scikit-learn (`sklearn.metrics.confusion_matrix`), the default axis orientation is:
+*   **Rows:** Actual True Class ($y$)
+*   **Columns:** Predicted Class ($\hat{y}$)
+
+<Tabs>
+  <TabItem value="tp" label="1. True Positive (TP)" default>
+    <br/>
+    
+    *   **The Scenario:** Model predicted $1$; Truth is $1$.
+    *   **Real-world Example:** A spam email correctly routed to the Junk folder, or a cancer patient correctly flagged for urgent oncology review.
+    *   **Goal:** Maximize TP.
+  </TabItem>
+  <TabItem value="tn" label="2. True Negative (TN)">
+    <br/>
+    
+    *   **The Scenario:** Model predicted $0$; Truth is $0$.
+    *   **Real-world Example:** A legitimate email placed into the Inbox, or a healthy patient cleared without invasive biopsies.
+    *   **Goal:** Maximize TN.
+  </TabItem>
+  <TabItem value="fp" label="3. False Positive (FP - Type I Error)">
+    <br/>
+    
+    *   **The Scenario:** Model predicted $1$; Truth is $0$.
+    *   **The Impact:** False Alarm. A critical job offer email flagged as spam, or a legitimate $50 credit card purchase declined at checkout.
+    *   **Cost Profile:** Creates friction and customer annoyance.
+  </TabItem>
+  <TabItem value="fn" label="4. False Negative (FN - Type II Error)">
+    <br/>
+    
+    *   **The Scenario:** Model predicted $0$; Truth is $1$.
+    *   **The Impact:** Missed Detection. A fraudulent $5,000 wire transfer approved as legitimate, or a malignant tumor overlooked on an MRI.
+    *   **Cost Profile:** Catastrophic failure in high-stakes domains.
+  </TabItem>
+</Tabs>
+
+---
+
+## 4. The Accuracy Paradox Deep-Dive
+
+**Accuracy** is defined as the proportion of total decisions that were correct:
+
+$$\text{Accuracy} = \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}} = \frac{\text{Correct}}{\text{Total}}$$
+
+While intuitive for balanced classes, accuracy fails on imbalanced distributions:
+
+### The 99% Useless Model
+
+Imagine a fraud detection system with 10,000 transactions where only 50 are fraudulent (0.5% fraud rate):
+*   A trivial model that **predicts non-fraudulent on every transaction** scores:
+    $$\text{Accuracy} = \frac{0 + 9950}{10000} = 99.5\%$$
+*   Despite its dazzling $99.5\%$ accuracy score, it missed every single fraudulent transaction ($\text{Recall} = 0\%$).
+
+### The Zero-Rule Baseline Rule
+
+Before accepting any accuracy figure, always compute the **Majority-Class Baseline**:
+
+$$\text{Baseline Accuracy} = \frac{\max(\text{Actual Positives}, \text{Actual Negatives})}{\text{Total}}$$
+
+A model is only providing real diagnostic utility if its accuracy significantly outperforms this zero-effort majority baseline.
+
+---
+
+## 5. Implementation Lab
+
+:::tip
+
+**Lab Exercise: Confusion Matrices & Baseline Comparisons**
+
+An interactive, fully functional Google Colab / Jupyter Notebook is available to compute confusion matrices via scikit-learn, extract quadrant counts, and evaluate the Accuracy Paradox live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/08-classification-metrics/confusion_matrix.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Run cells sequentially to extract counts and compute baseline comparisons.
+
+**Key Experiments to Run:**
+*   **Experiment 1 (Extracting Quadrants via cm.ravel()):** Extract $TN, FP, FN, TP$ from a 20-sample spam filter and verify diagonal accuracy.
+*   **Experiment 2 (The 1% Disease Paradox):** Benchmark a dummy classifier on 1,000 patients with a 1% prevalence rate to witness 99.0% accuracy with zero recalled positives.
+*   **Experiment 3 (Measuring Lift Over Baseline):** Calculate genuine lift over majority guessing on an exam dataset ($83.6\%$ accuracy vs $61.5\%$ baseline $\implies +22.1\%$ lift).
+
+:::
+
+---
+
+## 6. Common Mistakes
+
+<Tabs>
+  <TabItem value="m1" label="🚨 1. Swapping Axis Orientations" default>
+    <br/>
+    
+    *   **The Misconception:** *"True Positives are always located in the top-left corner of the confusion matrix."*
+    *   **❌ Wrong Thinking:** Assuming all software libraries use the same matrix layout.
+    *   **✅ The Right Principle:** Scikit-learn puts Actual rows on the vertical axis and Predicted columns on the horizontal axis ($y_{\text{true}}, y_{\text{pred}}$), meaning $\text{TN}$ is top-left and $\text{TP}$ is bottom-right. Medical literature often swaps this orientation. Always read the axis labels first!
+  </TabItem>
+  <TabItem value="m2" label="🚨 2. Trusting Unanchored Accuracy">
+    <br/>
+    
+    *   **The Misconception:** *"Our defect detection model achieved 98.2% accuracy, proving it is production-ready."*
+    *   **❌ Wrong Thinking:** Quoting accuracy without stating the underlying class prevalence.
+    *   **✅ The Right Principle:** If defects only occur on 1% of factory items, an accuracy of 98.2% is barely better than predicting 'no defect' for everything ($99.0\%$ baseline). Always report accuracy alongside majority baselines and recall.
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. Treating FP and FN as Equal Cost Errors">
+    <br/>
+    
+    *   **The Misconception:** *"Both False Positives and False Negatives are just 1 misclassification, so minimizing total errors is optimal."*
+    *   **❌ Wrong Thinking:** Assuming error symmetry in asymmetric business environments.
+    *   **✅ The Right Principle:** In autonomous driving, a false alarm (braking for a plastic bag) costs a few seconds of driver annoyance. A missed detection (failing to brake for a pedestrian) is fatal. Metric selection must prioritize the more dangerous failure mode.
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Confusing TP Rate with Overall Accuracy">
+    <br/>
+    
+    *   **The Misconception:** *"Accuracy measures what percentage of positive events were caught."*
+    *   **❌ Wrong Thinking:** Conflating Accuracy with Recall (Sensitivity).
+    *   **✅ The Right Principle:** Accuracy divides correct predictions by the total population. Recall divides correct positive hits by the actual positive population ($\frac{\text{TP}}{\text{TP} + \text{FN}}$).
+  </TabItem>
+  <TabItem value="m5" label="🚨 5. Inverting Class Label Assignments">
+    <br/>
+    
+    *   **The Misconception:** *"Labeling healthy as 1 and sick as 0 changes nothing about metric calculations."*
+    *   **❌ Wrong Thinking:** Arbitrarily assigning the positive class ($1$).
+    *   **✅ The Right Principle:** In statistical convention, the rare, actionable, or targeted event (fraud, disease, churn, defect) is assigned as the **Positive Class ($1$)**. Inverting labels flips Precision, Recall, and Sensitivity calculations.
+  </TabItem>
+</Tabs>
+
+---
+
+## 7. Summary
+
+<div className="row">
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🤖 Matrix Foundations</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Diagonal Elements:</b> $\text{TP}$ and $\text{TN}$ represent correct hits and correct rejections.</li>
+          <li><b>Type I Error (FP):</b> False alarm. Predicted positive for an actual negative.</li>
+          <li><b>Type II Error (FN):</b> Missed event. Predicted negative for an actual positive.</li>
+          <li><b>Accuracy Formula:</b> $\frac{\text{TP} + \text{TN}}{\text{Total}}$. Treats all error types identically.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🛠️ Practical Diagnostics</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Accuracy Paradox:</b> On imbalanced datasets, trivial majority guessing yields inflated accuracy with zero recall.</li>
+          <li><b>Baseline Anchor:</b> Always compare accuracy to $\frac{\max(P, N)}{\text{Total}}$.</li>
+          <li><b>Axis Check:</b> In scikit-learn, rows are actual true labels and columns are predictions.</li>
+          <li><b>Asymmetric Costs:</b> Real-world applications demand tracking Precision and Recall separately.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+:::info
+
+**📌 Key Takeaways**
+
+*   **📊 Confusion matrix is the source of truth:** All classification metrics (Precision, Recall, F1, Specificity, ROC-AUC) are derived directly from these four quadrant counts.
+*   **⚠️ Accuracy lies on imbalanced data:** When classes are skewed, high accuracy can coincide with a totally useless model.
+*   **🎯 Zero-Rule anchor:** A model must show statistically significant lift above the majority class prevalence to provide real engineering value.
+
+:::
+
+**Next Section:** [Precision and Recall](./02-precision-and-recall.md) - mastering the fundamental tradeoff between false alarms and missed detections.
+
+---
+
+## 8. Active Recall
+
+*Test your understanding by answering first, then clicking to reveal the underlying principles.*
+
+### Interactive Checkpoint Quiz
+
+export const ConfusionMatrixQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Diagnosing the Accuracy Paradox</h4>
+      <p style={{ margin: '0 0 15px 0' }}>A airport security scanner tests 100,000 carry-on bags. 50 bags contain prohibited weapons. The scanner predicts 'Safe' on all 100,000 bags. What is the scanner's accuracy, and what is its True Positive rate (Recall)?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Accuracy: 50.0% | Recall: 50.0%</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Accuracy: 99.95% | Recall: 0.0%</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Accuracy: 0.05% | Recall: 99.95%</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The scanner correctly identified 99,950 safe bags. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! The scanner correctly identified 99,950 safe bags as Safe (TN = 99,950). Its accuracy is 99,950 / 100,000 = 99.95%! However, it caught exactly zero weapons (TP = 0), so Recall = 0 / 50 = 0.0%. This demonstrates why accuracy is completely meaningless on safety-critical imbalanced tasks.</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. You inverted accuracy and error rate. Try again!</p>}
+    </div>
+  );
+};
+
+<ConfusionMatrixQuiz />
+
+### Review Flashcards
+
+<details>
+  <summary>❓ <b>1. [THEORY] How are the four quadrants of a confusion matrix mapped in scikit-learn when calling `cm.ravel()`?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   In scikit-learn, binary confusion matrices are ordered by class labels $[0, 1]$:
+        *   Row 0: Actual Negatives ($y=0$) $\implies$ Columns $[0, 1]$ are **$\text{TN}, \text{FP}$**.
+        *   Row 1: Actual Positives ($y=1$) $\implies$ Columns $[0, 1]$ are **$\text{FN}, \text{TP}$**.
+    *   Calling `tn, fp, fn, tp = confusion_matrix(y_true, y_pred).ravel()` unpacks them in exact row-major order:
+        $$\text{Index } 0 \to \text{TN}, \quad \text{Index } 1 \to \text{FP}, \quad \text{Index } 2 \to \text{FN}, \quad \text{Index } 3 \to \text{TP}$$
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>2. [ANALYZE] Why is a Type II error (False Negative) typically considered far more dangerous than a Type I error (False Positive) in medical diagnostics?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Type I Error (False Positive):** A healthy patient is flagged as potentially having disease. The consequence is a follow-up test, temporary anxiety, and slight medical expense.
+    *   **Type II Error (False Negative):** A patient with an aggressive tumor is told they are healthy. The consequence is missed treatment, disease progression, and avoidable mortality.
+    *   Because the cost of missing a true positive is catastrophic, diagnostic models prioritize high Recall (minimizing $\text{FN}$) over high Precision.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>3. [MATH] Given TN = 85, FP = 15, FN = 5, TP = 95, calculate Overall Accuracy and Specificity.</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Total Observations:** $N = 85 + 15 + 5 + 95 = 200$.
+    *   **Accuracy:**
+        $$\text{Accuracy} = \frac{\text{TP} + \text{TN}}{N} = \frac{95 + 85}{200} = \frac{180}{200} = 0.90 \quad (90.0\%)$$
+    *   **Specificity (True Negative Rate):**
+        $$\text{Specificity} = \frac{\text{TN}}{\text{Actual Negatives}} = \frac{\text{TN}}{\text{TN} + \text{FP}} = \frac{85}{85 + 15} = \frac{85}{100} = 0.85 \quad (85.0\%)$$
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>4. [PRACTICE] How do you compute the baseline accuracy of a dataset containing 850 non-churners and 150 churners?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Majority Class:** Non-churners with 850 samples.
+    *   **Total Samples:** $850 + 150 = 1000$.
+    *   **Baseline Zero-Rule Accuracy:**
+        $$\text{Baseline} = \frac{850}{1000} = 0.85 \quad (85.0\%)$$
+    *   A churn prediction model that achieves $86.0\%$ accuracy provides almost zero value (+1.0% lift over blind guessing).
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>5. [THEORY] Can accuracy ever be higher than both Precision and Recall simultaneously?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Yes:** If a dataset has heavy negative class dominance (e.g. 90% negatives) and the model accurately classifies negatives ($\text{TN}$ is high), while missing some positives ($\text{FN}$ is moderate) and making a few false alarms ($\text{FP}$ is low).
+    *   Accuracy will be buoyed by the large $\text{TN}$ count, even if Precision and Recall on the rare positive class are mediocre.
+  </div>
+</details>

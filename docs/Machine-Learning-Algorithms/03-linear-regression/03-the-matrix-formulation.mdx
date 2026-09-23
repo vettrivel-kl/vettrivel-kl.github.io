@@ -1,0 +1,580 @@
+---
+sidebar_position: 3
+title: The Matrix Formulation
+description: Solving for every coefficient in one algebraic step — the design matrix, the column of ones, the normal equation verified against scikit-learn, and the three situations where the inverse does not exist.
+tags: [machine-learning, linear-regression, numpy]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import React from 'react';
+
+# The Matrix Formulation
+
+> **Topic —** Linear regression has a **closed-form solution**. Not an approximation, not an iterative search — one line of linear algebra that returns the exact best-fit coefficients. This page derives it, verifies it against scikit-learn digit for digit, and then shows the three cases where it collapses.
+
+This is also where the linear algebra earns its place: matrices, transposes, inverses and rank all appear for a concrete reason rather than as background.
+
+---
+
+## From equations to matrices
+
+Multiple linear regression with two features and five samples is five equations:
+
+$$8 = b_0 + b_1(1) + b_2(2)$$
+
+$$7 = b_0 + b_1(2) + b_2(1)$$
+
+$$15 = b_0 + b_1(3) + b_2(4)$$
+
+$$14 = b_0 + b_1(4) + b_2(3)$$
+
+$$20 = b_0 + b_1(5) + b_2(5)$$
+
+Five equations, three unknowns. Writing them out one by one doesn't scale to 30 features and 20,000 rows, so they are stacked into matrices:
+
+```text title="Output"
+   X (5 samples x 2 features) =
+[[1. 2.]
+ [2. 1.]
+ [3. 4.]
+ [4. 3.]
+ [5. 5.]]
+   y = [ 8.  7. 15. 14. 20.]
+```
+
+The whole system becomes one statement:
+
+$$y = X \cdot \beta$$
+
+where $X$ holds the features, $\beta$ (beta) is the column of coefficients we want, and $y$ is the target.
+
+---
+
+## The column of ones
+
+There is a problem with $y = X \cdot \beta$ as written: the intercept $b_0$ has no feature to multiply. Every other coefficient is attached to a column of $X$; $b_0$ stands alone.
+
+The fix is to **give it a column** — one filled entirely with $1$s:
+
+```text title="Output"
+   prepend a column of ones -> the design matrix:
+[[1. 1. 2.]
+ [1. 2. 1.]
+ [1. 3. 4.]
+ [1. 4. 3.]
+ [1. 5. 5.]]
+   shape (5, 3): 3 unknowns to solve for (b0, b1, b2)
+```
+
+Now $b_0$ multiplies a column that is $1$ in every row, so it contributes $b_0 \times 1 = b_0$ to every prediction — exactly what an intercept does. The result is called the **design matrix**, and the intercept has become an ordinary coefficient.
+
+:::tip
+
+**Why this trick matters**
+
+It is not cosmetic. Once the intercept is inside $\beta$, there is **no special case** — one matrix equation solves for the intercept and all the slopes simultaneously. Every formula below works unchanged whether or not there is an intercept.
+
+The same device appears throughout machine learning; in a neural network the equivalent is called the **bias** term, and it is implemented the same way.
+
+:::
+
+Note the shape bookkeeping: $X$ is $(5, 3)$ and $\beta$ must be $(3,)$ for $X \cdot \beta$ to produce the $(5,)$ predictions. The number of coefficients equals the number of **columns**, including the ones column.
+
+---
+
+## The normal equation
+
+We want the $\beta$ that minimises the sum of squared errors. Because squared error is convex and differentiable, the minimum is where the derivative is zero — and solving that condition gives a formula directly:
+
+$$\beta = (X^T X)^{-1} X^T y$$
+
+This is the **normal equation**. Reading it right to left:
+
+| Piece | Shape here | What it is |
+|---|---|---|
+| $X^T$ | $(3, 5)$ | The transpose — rows become columns |
+| $X^T y$ | $(3,)$ | Each feature's correlation with the target, unnormalised |
+| $X^T X$ | $(3, 3)$ | Every feature against every other — the **Gram matrix** |
+| $(X^T X)^{-1}$ | $(3, 3)$ | Its inverse |
+| $\beta$ | $(3,)$ | The coefficients |
+
+Worked on our data:
+
+```text title="Output"
+   X^T X =
+[[ 5. 15. 15.]
+ [15. 55. 53.]
+ [15. 53. 55.]]
+   X^T y = [ 64. 223. 225.]
+
+   beta = [2.1333 1.2778 2.2778]
+   -> b0 = 2.1333, b1 = 1.2778, b2 = 2.2778
+```
+
+Two entries in $X^T X$ are worth naming. The top-left $5$ is the **number of samples** — it is the ones column dotted with itself. And $15$ appears three times: the sum of each feature column, which is that column dotted with the ones column.
+
+$X^T X$ is always **square** ($\text{features} \times \text{features}$) and **symmetric**, since the correlation of feature $i$ with $j$ equals that of $j$ with $i$. That symmetry is what makes the inverse tractable.
+
+### Verified against scikit-learn
+
+```text title="Output"
+   scikit-learn: intercept = 2.1333, coef = [1.2778 2.2778]
+   identical: True
+```
+
+Digit for digit. `LinearRegression` is not doing anything mysterious — it is solving this equation, and `np.allclose` confirms the agreement exactly.
+
+:::note
+
+**What the model *is***
+
+After fitting, a linear regression is **three numbers**. $b_0 = 2.1333$, $b_1 = 1.2778$, $b_2 = 2.2778$. Prediction is one dot product.
+
+That is the entire trained model — no stored training data, no tree structure, no iteration state. It's worth contrasting with 1-nearest-neighbour, which stores the whole training set and does all its work at prediction time. Linear regression is the opposite extreme: expensive to fit, trivial to deploy.
+
+:::
+
+---
+
+## 🛠️ The Gram Matrix & Collinearity Workbench {/* #three-ways-it-breaks */}
+
+Experiment with the interactive matrix calculator below. We blend Column 2 ($x_2$) from our original independent text data (`[2, 1, 4, 3, 5]`) to perfectly collinear data (`2 * x1` = `[2, 4, 6, 8, 10]`). Watch how the elements of the Gram matrix ($X^T X$), the determinant, and the matrix rank shift in real-time.
+
+export const GramMatrixVisualizer = () => {
+  const [collinearity, setCollinearity] = React.useState(1.0); // 1.0 = independent (original), 0.0 = perfectly collinear
+
+  const ones = [1, 1, 1, 1, 1];
+  const x1 = [1, 2, 3, 4, 5];
+  const base_x2 = [2, 1, 4, 3, 5];
+
+  // Blend x2 from original to collinear
+  const x2 = x1.map((v, i) => {
+    const rawVal = base_x2[i];
+    const collinearVal = 2 * v;
+    return collinearVal + (rawVal - collinearVal) * collinearity;
+  });
+
+  // Calculate Gram Matrix entries
+  const r00 = 5.0; // ones . ones
+  const r01 = 15.0; // ones . x1
+  const r02 = x2.reduce((a,b) => a+b, 0); // ones . x2
+  const r11 = 55.0; // x1 . x1
+  const r12 = x1.reduce((sum, v, i) => sum + v * x2[i], 0); // x1 . x2
+  const r22 = x2.reduce((sum, v) => sum + v ** 2, 0); // x2 . x2
+
+  // Determinant calculation of 3x3 symmetric matrix
+  const det = r00 * (r11 * r22 - r12 ** 2) - r01 * (r01 * r22 - r12 * r02) + r02 * (r01 * r12 - r11 * r02);
+  const rank = collinearity === 0.0 ? 2 : 3;
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
+      <h4 style={{ margin: '0' }}>📊 Gram Matrix & Collinearity Workbench</h4>
+      <p style={{ fontSize: '13px', margin: '5px 0 15px 0', opacity: 0.9 }}>Slide from left to right to watch Column 2 transition from perfect collinearity to full independence.</p>
+
+      <div style={{ marginBottom: '15px' }}>
+        <label style={{ fontSize: '13px', fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>
+          Column Independence Blending: <b style={{ color: collinearity === 0 ? '#e53e3e' : '#38a169' }}>{collinearity === 0 ? "Perfect Collinearity (x₂ = 2x₁)" : collinearity === 1 ? "100% Independent (Original)" : `Blending (${(collinearity * 100).toFixed(0)}%)`}</b>
+        </label>
+        <input type="range" min="0" max="1" step="0.05" value={collinearity} onChange={(e) => setCollinearity(parseFloat(e.target.value))} style={{ width: '100%' }} />
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', flexWrap: 'wrap' }}>
+        {/* Design Matrix & Gram Matrix */}
+        <div style={{ padding: '15px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '6px', backgroundColor: 'var(--ifm-background-color)' }}>
+          <h5 style={{ margin: '0 0 10px 0', fontSize: '12px' }}>Fitted Design Matrix X:</h5>
+          <div style={{ display: 'flex', gap: '30px', fontFamily: 'monospace', fontSize: '11px' }}>
+            <div>
+              <div style={{ fontWeight: 'bold', color: '#718096' }}>[1, x₁, x₂]</div>
+              <div>[1.0, 1.0, {x2[0].toFixed(2)}]</div>
+              <div>[1.0, 2.0, {x2[1].toFixed(2)}]</div>
+              <div>[1.0, 3.0, {x2[2].toFixed(2)}]</div>
+              <div>[1.0, 4.0, {x2[3].toFixed(2)}]</div>
+              <div>[1.0, 5.0, {x2[4].toFixed(2)}]</div>
+            </div>
+            <div>
+              <div style={{ fontWeight: 'bold', color: '#3182ce' }}>Gram Matrix (XᵀX):</div>
+              <div>[[{r00.toFixed(1)}, {r01.toFixed(1)}, {r02.toFixed(1)}],</div>
+              <div> [{r01.toFixed(1)}, {r11.toFixed(1)}, {r12.toFixed(1)}],</div>
+              <div> [{r02.toFixed(1)}, {r12.toFixed(1)}, {r22.toFixed(1)}]]</div>
+            </div>
+          </div>
+        </div>
+
+        {/* Matrix Diagnostics */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', justifyContent: 'center' }}>
+          <div style={{ padding: '12px', borderLeft: '4px solid #dd6b20', backgroundColor: 'rgba(221, 107, 32, 0.03)', fontSize: '12px' }}>
+            Determinant: <code style={{ fontSize: '12px' }}>det(XᵀX)</code>
+            <div style={{ fontSize: '18px', fontWeight: 'bold', margin: '3px 0', color: det < 1e-4 ? '#e53e3e' : '#38a169' }}>
+              {det < 1e-4 ? "0.0000" : det.toFixed(4)}
+            </div>
+            <span style={{ fontSize: '10px', opacity: 0.8 }}>Measures close-to-singular state.</span>
+          </div>
+
+          <div style={{ padding: '12px', borderLeft: '4px solid #3182ce', backgroundColor: 'rgba(49, 130, 206, 0.03)', fontSize: '12px' }}>
+            Design Matrix Rank:
+            <div style={{ fontSize: '18px', fontWeight: 'bold', margin: '3px 0', color: rank === 2 ? '#e53e3e' : '#3182ce' }}>
+              rank(X) = {rank}
+            </div>
+            <span style={{ fontSize: '10px', opacity: 0.8 }}>Must be equal to column count (3) for unique solution.</span>
+          </div>
+        </div>
+      </div>
+
+      {collinearity === 0.0 && (
+        <div style={{ marginTop: '15px', padding: '10px 15px', borderRadius: '4px', backgroundColor: 'rgba(229, 62, 62, 0.08)', border: '1px solid #e53e3e', fontSize: '12px', color: '#e53e3e', fontWeight: 'bold' }}>
+          🚨 Singular Matrix Crash! Under perfect collinearity, Column 3 is a scalar multiple of Column 2. The determinant is exactly zero, and rank drops from 3 to 2. Standard np.linalg.inv throws a crash error!
+        </div>
+      )}
+    </div>
+  );
+};
+
+<GramMatrixVisualizer />
+
+---
+
+## Three ways it breaks
+
+The formula requires $(X^T X)^{-1}$ to exist. A matrix has an inverse only if it is **full rank**, and there are three ordinary situations in which it isn't.
+
+### 1. Perfectly correlated features
+
+The previous page showed coefficients destabilising as correlation approached $1.0$. At exactly $1.0$, they stop existing:
+
+```text title="Output"
+   feature 2 = 2 x feature 1, exactly
+   det(X^T X) = 0.000e+00
+   rank(X) = 2, but X has 3 columns
+   np.linalg.inv -> LinAlgError: Singular matrix
+```
+
+**The determinant is exactly zero and the matrix is singular.** `rank(X) = 2` against 3 columns means one column carries no information the others don't already have — so the system has **infinitely many** solutions, all fitting equally well, and no basis for choosing among them.
+
+This is the endpoint of the collinearity story: at $\text{corr} = 0.999$ the coefficient split was arbitrary but unique; at $\text{corr} = 1.0$ it isn't even unique.
+
+### What scikit-learn does instead
+
+```text title="Output"
+   pseudo-inverse   = [-0.0015  0.5991  1.1982]
+   scikit-learn     = [-0.0015 0.5991 1.1982]
+   no exception — sklearn solves with lstsq/SVD, not an explicit inverse
+   the true effect of 3.0 is split across the identical columns:
+     0.5991 + 2 x 1.1982 = 2.9954
+```
+
+`LinearRegression` returned an answer where `np.linalg.inv` raised. It does not use an explicit inverse — it calls `scipy.linalg.lstsq`, which uses **SVD** and returns the **minimum-norm** solution when there are many: of all the equally-good answers, the one with the smallest coefficients.
+
+And look at the last line. The true effect was $3.0$, and the pseudo-inverse split it as $0.5991 + 2 \times 1.1982 = 2.9954$. **The total is recovered exactly** even though the individual coefficients are arbitrary — precisely the invariant the previous page measured.
+
+:::warning
+
+**No exception is not the same as no problem**
+
+`LinearRegression` will fit perfectly collinear data and report plausible-looking coefficients. Nothing warns you. The predictions are fine; the coefficients are one arbitrary choice from an infinite set, and any interpretation of them is meaningless.
+
+Check `np.linalg.matrix_rank(X)` against `X.shape[1]`, or look at the correlation matrix, before reading coefficients from any model.
+
+:::
+
+### 2. More features than samples
+
+```text title="Output"
+   X shape (3, 5) -> 5 unknowns from 3 equations
+   rank(X) = 3: infinitely many exact solutions
+   train R2 = 1.0000   <- meaningless
+```
+
+Three equations cannot pin down five unknowns. $X^T X$ is $(5, 5)$ with rank at most $3$, so it is singular for the same reason as above — and the model achieves a **perfect $R^2 = 1.0000$** on its training data by passing exactly through every point.
+
+That perfect score carries no information whatsoever. It is the [memorisation](../02-data-preprocessing/06-train-test-split.mdx#why-hold-anything-back) problem in its purest algebraic form: with $p \ge n$ an exact fit always exists.
+
+This case is common in practice — genomics, text with one column per word, and any wide one-hot encoding. It is one of the main reasons regularisation exists, since a penalty term makes $X^T X + \lambda I$ invertible even when $X^T X$ is not.
+
+### 3. A constant column
+
+A column with the same value in every row is a multiple of the ones column, so it too destroys independence. That is precisely why the [pre-flight audit](../02-data-preprocessing/01-loading-and-preparing-data.mdx#a-pre-flight-audit) checked for constant columns — the `Region` column that was `EU` in every row would have made the design matrix singular.
+
+| Failure | Cause | Detect with |
+|---|---|---|
+| Perfect collinearity | A column is a combination of others | `matrix_rank(X) < X.shape[1]` |
+| $p \ge n$ | Fewer samples than coefficients | `X.shape[0] <= X.shape[1]` |
+| Constant column | It duplicates the ones column | `df[c].nunique() <= 1` |
+
+---
+
+## Why anyone bothers with gradient descent
+
+If there is an exact formula, why does the next section spend its time on an iterative search?
+
+### 🛠️ Normal Equation vs. Gradient Descent Cost Comparison
+
+Adjust the slider below to change the number of features $p$ (assuming $n = 100,000$ samples and $100$ gradient descent epochs) to watch the computational operations (FLOPs) of matrix inversion explode.
+
+export const GDVsNormalCost = () => {
+  const [p, setP] = React.useState(100);
+
+  // Normal equation cost: O(p^3) + O(np^2)
+  const n = 100000;
+  const normalEqCost = p ** 3 + n * (p ** 2);
+  
+  // GD cost: O(n * p * epochs)
+  const epochs = 100;
+  const gdCost = n * p * epochs;
+
+  // Render on a logarithmic scale for display (max normal is ~ 1e12, max GD is 1e11)
+  const maxVal = 1e13;
+  const scaleBar = (val) => Math.min(100, Math.max(2, (Math.log10(val) / Math.log10(maxVal)) * 100));
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', margin: '20px 0', backgroundColor: 'rgba(148, 163, 184, 0.02)' }}>
+      <h4 style={{ margin: '0' }}>🔌 Normal Equation vs. Gradient Descent Cost</h4>
+      <p style={{ fontSize: '13px', margin: '5px 0 15px 0', opacity: 0.9 }}>See how the cubic scaling O(p³) of matrix inversion completely crushes the normal equation as dimensionality grows.</p>
+
+      <div style={{ marginBottom: '15px' }}>
+        <label style={{ fontSize: '13px', fontWeight: 'bold', display: 'block', marginBottom: '5px' }}>
+          Number of Features (p): <b style={{ color: p >= 1000 ? '#e53e3e' : 'var(--ifm-color-primary)' }}>{p.toLocaleString()}</b>
+        </label>
+        <input type="range" min="10" max="5000" step="50" value={p} onChange={(e) => setP(parseInt(e.target.value))} style={{ width: '100%' }} />
+      </div>
+
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+        {/* Normal Equation Bar */}
+        <div>
+          <div style={{ fontSize: '12px', display: 'flex', justifyContent: 'space-between' }}>
+            <span><b>Normal Equation (O(p³ + np²)):</b></span>
+            <span style={{ fontFamily: 'monospace' }}>~{normalEqCost.toExponential(2)} FLOPS</span>
+          </div>
+          <div style={{ width: '100%', height: '16px', backgroundColor: 'var(--ifm-color-emphasis-200)', borderRadius: '4px', overflow: 'hidden', marginTop: '4px' }}>
+            <div style={{ width: `${scaleBar(normalEqCost)}%`, height: '100%', backgroundColor: p >= 1000 ? '#e53e3e' : '#3182ce', transition: 'width 0.1s' }} />
+          </div>
+        </div>
+
+        {/* Gradient Descent Bar */}
+        <div>
+          <div style={{ fontSize: '12px', display: 'flex', justifyContent: 'space-between' }}>
+            <span><b>Gradient Descent (O(n · p · epochs)):</b></span>
+            <span style={{ fontFamily: 'monospace' }}>~{gdCost.toExponential(2)} FLOPS</span>
+          </div>
+          <div style={{ width: '100%', height: '16px', backgroundColor: 'var(--ifm-color-emphasis-200)', borderRadius: '4px', overflow: 'hidden', marginTop: '4px' }}>
+            <div style={{ width: `${scaleBar(gdCost)}%`, height: '100%', backgroundColor: '#38a169', transition: 'width 0.1s' }} />
+          </div>
+        </div>
+      </div>
+
+      <div style={{ fontSize: '12px', marginTop: '12px', opacity: 0.8, textAlign: 'center' }}>
+        💡 At <b>p = {p.toLocaleString()}</b> features, {p >= 1000 ? "Matrix inversion is ridiculously heavy and consumes massive amounts of RAM, making the normal equation completely unfeasible." : "Normal equation is highly optimal and executes near-instantly."}
+      </div>
+    </div>
+  );
+};
+
+<GDVsNormalCost />
+
+Two rows decide it. The $p^3$ cost makes the closed form impractical once features run to tens of thousands. And more fundamentally, **the closed form exists only for squared error** — logistic regression's log loss has no closed-form solution at all, which is why the very next algorithm needs an iterative method.
+
+So the normal equation is the right tool for the problem it solves, and gradient descent is what you use for everything else.
+
+---
+
+## 2. Implementation Lab
+
+:::tip 
+
+**Lab Exercise: The Matrix Formulation**
+
+An interactive, fully-functional Google Colab / Jupyter Notebook is available to experiment with this concept live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/03-linear-regression/matrix_formulation.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Click **"Run all"** or execute cells individually using `Shift + Enter`.
+
+**Things to try inside the script:**
+*   **Experiment 1 (Transpose Math):** Adjust the elements of the raw matrix and re-calculate $(X^T X)^{-1} X^T y$ manually to ensure floating point agreement with scikit-learn.
+*   **Experiment 2 (Singularity analysis):** Watch OLS crash during a perfect $r=1.0$ linear dependency, and observe how scikit-learn's internal SVD solvers bypass the exception.
+*   **Experiment 3 (Dimension trap):** Fit a model with fewer samples than features ($p \ge n$) and observe the empty $R^2 = 1.0000$ training score.
+
+:::
+
+---
+
+## 3. Common Mistakes
+
+<Tabs>
+  <TabItem value="m1" label="🚨 1. Forgetting Ones Column" default>
+    <br/>
+    
+    *   **The Misconception:** *"I can just pass raw features X directly to the normal equation."*
+    *   **❌ Wrong Thinking:** Believing the equation automatically fits an intercept without a ones column.
+    *   **✅ The Right Principle:** Without the ones column, the intercept is forced to $0$, meaning the fitted plane is mathematically constrained to pass through the origin $(0,0,\dots)$. Always prepend a column of $1$s.
+  </TabItem>
+  <TabItem value="m2" label="🚨 2. No error = No problem">
+    <br/>
+    
+    *   **The Misconception:** *"Scikit-Learn fitted the model without raising any error, so the coefficients are completely trustworthy."*
+    *   **❌ Wrong Thinking:** Believing a completed fit implies there are no collinearities or singular matrices.
+    *   **✅ The Right Principle:** Scikit-learn does **not** solve the equation via `inv(XtX)`. It uses SVD minimum-norm solutions, meaning it will happily fit perfectly collinear data and output arbitrary coefficients without warning you. Always check matrix rank beforehand.
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. Computing inv(XtX) explicitly">
+    <br/>
+    
+    *   **The Misconception:** *"I must write inv(X.T @ X) in my OLS numpy code."*
+    *   **❌ Wrong Thinking:** Assuming explicit matrix inversion is numerically stable.
+    *   **✅ The Right Principle:** Explicit matrix inversion is highly unstable. In production or scratch code, always use `np.linalg.solve(XtX, Xty)` or SVD solvers (`pinv` / `lstsq`) for superior numerical stability.
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Closed form universal applicability">
+    <br/>
+    
+    *   **The Misconception:** *"The closed-form normal equation can solve any linear regression variant, like Logistic Regression."*
+    *   **❌ Wrong Thinking:** Attempting to solve classification cost functions using matrix inversions.
+    *   **✅ The Right Principle:** The closed-form normal equation exists **only for squared error** (because its loss surface is perfectly quadratic/convex and has a single global minimum). Logistic regression uses logarithmic loss, which has no analytical closed-form solution and *must* be solved iteratively.
+  </TabItem>
+</Tabs>
+
+---
+
+## 4. Summary
+
+<div className="row">
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🤖 Core Theory</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Design Matrix:</b> The raw feature matrix $X$ with a column of $1$s prepended, merging the intercept as an ordinary coefficient.</li>
+          <li><b>Normal Equation:</b> $\beta = (X^T X)^{-1} X^T y$ is the unique analytical solution derived by setting the SSE derivative to zero.</li>
+          <li><b>Gram Matrix:</b> $X^T X$ is a square, symmetric matrix showing every feature against every other. Its top-left entry counts rows.</li>
+          <li><b>Full Rank Rule:</b> OLS requires $X$ to be full rank. Rank deficiency destroys matrix invertibility.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>🛠️ Engineering Realities</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>LinearRegression internal:</b> Uses SVD/lstsq solvers matching the pseudo-inverse (`pinv`) rather than standard OLS inversion (`inv`).</li>
+          <li><b>Unwarned collinearity:</b> Scikit-learn bypasses singular matrix errors, outputting arbitrary weights under perfect collinearity without alerting the user.</li>
+          <li><b>$p \ge n$ Trap:</b> Having fewer samples than features guarantees a meaningless $R^2 = 1.0000$ training score due to memorization.</li>
+          <li><b>Cubic Inversion scaling:</b> Inverting $X^T X$ scales as $O(p^3)$, completely ruling out the normal equation for wide datasets where gradient descent scales as $O(p)$.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+:::info 
+
+**📌 Key Takeaways**
+
+*   **⚡ Prediction overhead:** Once fit, a linear regression is merely a vector of coefficients. Prediction requires a single dot product—zero stored training data, zero iterative overhead.
+*   **🛠️ Regularisation fix:** Under the $p \ge n$ genomics/text wide-data trap, L2 regularization (adding $\lambda I$ to $X^T X$) forces the singular matrix to become invertible.
+*   **⚖️ Solver choice:** Use the Normal Equation for exact, rapid solutions on narrow datasets. Use Gradient Descent for wide, massive, or streaming datasets, or for non-squared-error losses.
+
+:::
+
+**Next in this section:** [Loss Functions](../04-optimisation/01-loss-functions.mdx) — the closed form exists only for squared error, so the next section begins by asking what else you might minimise, and what that choice costs.
+
+---
+
+## 5. Active Recall
+
+*Attempt each question first, then click to reveal detailed answers, mathematical derivations, and sample explanations.*
+
+### Interactive Checkpoint Quiz
+
+export const PracticeQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Pseudo-Inverse Partition</h4>
+      <p style={{ margin: '0 0 15px 0' }}>Under perfect collinearity (Column 3 = 2 × Column 2), the true coefficient effect of the features is exactly 3.0. Standard inversion crashes. What does Scikit-Learn's SVD solver return?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>It throws an exception and halts the process</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>It returns a stable minimum-norm split that preserves the total effect (3.0)</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>It sets both coefficients to zero</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Scikit-learn does NOT throw an exception! It uses SVD minimum-norm solvers to bypass standard singular matrix failures, returning a numerical answer without warnings. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Under perfect collinearity, scikit-learn's internal SVD solver outputs a stable, minimum-norm split (e.g. `[0.5991, 1.1982]`). While the individual coefficient division is arbitrary, the true combined total effect ($0.5991 + 2 \times 1.1982 = 2.9954 \approx 3.0$) is recovered perfectly!</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. It does not set them to zero, as that would ruin the predictions. Re-read the choices and try again!</p>}
+    </div>
+  );
+};
+
+<PracticeQuiz />
+
+### Review Flashcards
+
+<details>
+  <summary>❓ <b>1. [THEORY] Why do we prepend a column of ones to $X$, and what does this do algebraically to $b_0$?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Intercept Trick:** The linear equation $y = b_0 + b_1 x_1 + \dots$ has $b_0$ standing alone.
+    *   By prepending a column of $1$s to the feature matrix $X$ (forming the design matrix), $b_0$ now multiplies a feature value of $1.0$ in every single row.
+    *   This incorporates the intercept as an ordinary coefficient inside the parameter vector $\beta$:
+        $$\beta = \begin{bmatrix} b_0 & b_1 & \dots & b_k \end{bmatrix}^T$$
+    *   **The Benefit:** This eliminates the intercept as an algebraic special case. The same single matrix equation solves for both the intercept and all slope coefficients simultaneously.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>2. [THEORY] Why does the closed-form normal equation exist ONLY for squared error loss?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Derivation:** The Sum of Squared Errors loss is:
+        $$L = \sum (y_i - X_i \beta)^2 = (y - X\beta)^T (y - X\beta)$$
+    *   Because squared error is a **quadratic function**, its derivative with respect to $\beta$ is perfectly linear:
+        $$\frac{\partial L}{\partial \beta} = -2 X^T(y - X\beta) = 0 \implies X^T X \beta = X^T y$$
+    *   Because this first-order condition is perfectly linear, we can solve for $\beta$ analytically via a single matrix inversion:
+        $$\beta = (X^T X)^{-1} X^T y$$
+    *   **Other Losses:** For other losses (like absolute error or logistic log-loss), the loss derivative is not linear, meaning there is **no linear system to invert** and a closed-form analytical solution cannot exist.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>3. [ANALYZE] Why is a training score of $R^2 = 1.0000$ mathematically guaranteed when $p \ge n$?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **The Geometry:** In $n$-dimensional space, $n$ data points define a specific set of coordinates.
+    *   If the number of features (dimension parameters) $p$ is greater than or equal to $n$, we have more degrees of freedom (unknown variables) than coordinate constraints (equations).
+    *   In linear algebra, a system of linear equations with more unknowns than equations has **infinitely many exact solutions**.
+    *   This guarantees that a hyperplane can always be positioned to pass **exactly** through every single training point, yielding a perfect, yet completely overfitted and meaningless, $R^2 = 1.0000$.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>4. [ANALYZE] Why can't we use standard OLS matrix inversion on perfectly collinear data, and how does Scikit-Learn resolve it?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Standard Inversion Fail:** Under perfect collinearity, one column is a scalar multiple of another, meaning the design matrix columns are not linearly independent. This makes $X^T X$ singular, with a determinant of exactly $0.00$, making standard OLS inversion $(X^T X)^{-1}$ fail with a `Singular matrix` division error.
+    *   **The Scikit-Learn Solver:** Scikit-learn does not call standard matrix inversion `inv`. It uses Singular Value Decomposition (SVD) and calculates the **Moore-Penrose pseudo-inverse** ($X^+$), outputting the minimum-norm solution. While individual coefficients are arbitrary, they are numerically stable and the combined total effect is recovered perfectly.
+  </div>
+</details>
+
+<details>
+  <summary>❓ <b>5. [ANALYZE] At $p = 10,000$ features, why does the normal equation completely collapse in terms of computational scaling compared to Gradient Descent?</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    *   **Matrix Inversion Scaling:** Computing $(X^T X)^{-1}$ requires a matrix inversion that scales cubically as **$O(p^3)$**. 
+    *   At $p = 100$, $p^3 = 10^6$ operations (instantaneous).
+    *   At $p = 10,000$, $p^3 = 10^{12}$ (1 trillion operations), requiring extreme processing power and causing severe RAM/memory overheads.
+    *   **Gradient Descent Scaling:** Gradient descent requires calculating the gradient vector which scales linearly as **$O(n \cdot p)$** per iteration. For high-dimensional datasets ($p \ge 10,000$), gradient descent's linear complexity is the only computationally feasible approach.
+  </div>
+</details>
