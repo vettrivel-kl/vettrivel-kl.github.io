@@ -1,509 +1,416 @@
 ---
 sidebar_position: 3
 title: Types of Learning
-description: Features and the numeric/categorical divide, the positive class, and the four learning paradigms — supervised, unsupervised, semi-supervised, and self-supervised — separated by what your data actually contains.
-tags: [machine-learning, foundations, supervised, unsupervised, self-supervised]
+description: Features, numeric vs categorical subtypes, the positive class convention, and the four learning paradigms - supervised, unsupervised, semi-supervised, and self-supervised.
+tags: [machine-learning, foundations, supervised, unsupervised]
 toc_max_heading_level: 3
 ---
 
 import Tabs from '@theme/Tabs';
 import TabItem from '@theme/TabItem';
+import Heading from '@theme/Heading';
 import React from 'react';
 
 # Types of Learning
 
-> **Topic —** The previous page kept reaching the same fork: *do you have labels?* This page is that
-> fork, in full. It is the single most consequential fact about a dataset, because it decides which
-> paradigm you're in — and therefore which techniques are even available to you.
-
-Before the paradigms, two pieces of vocabulary that everything else is stated in.
+> **Topic —** The single most consequential architectural decision in machine learning is determined by one question: **Do you have target labels ($y$)?** The presence, absence, or scarcity of ground-truth labels determines your learning paradigm - supervised, unsupervised, semi-supervised, or self-supervised - and dictates which algorithms are mathematically valid.
 
 ---
 
-## Features and attributes
+<Heading as="h2" id="features-and-attributes">1. Feature Matrices vs. Target Vectors</Heading>
 
-Take a cancer dataset. The column names across the top — **Clump thickness**, **Uniformity of cell
-size**, **Uniformity of cell shape**, **Marginal adhesion**, and so on — are called **attributes**
-or **features**. The two words mean the same thing.
+In machine learning, data is represented by an input matrix $X$ and an optional target vector $y$:
 
-The standard layout, which almost every dataset you meet will follow:
-
-```
-              ┌──────────── features (X) ────────────┐   ┌─ target (y) ─┐
-              Clump      Uniformity   Marginal            Class
+```text
+              ┌──────────── Features (X) ────────────┐   ┌─ Target (y) ─┐
+              Clump      Uniformity   Marginal            Diagnosis
               thickness  of cell size adhesion
     sample 1      5            1          1               benign
     sample 2      5            4          5               benign
     sample 3      3            1          1               malignant
-       ...
 ```
 
-| Term | Also called | Meaning |
-|---|---|---|
-| **Sample** | row, instance, observation, record | One thing you're making a prediction about |
-| **Feature** | attribute, column, variable, predictor, input | One measured property of that thing |
-| **Target** | label, class, output, response, ground truth | The answer you want to predict |
-| **`X`** | feature matrix | All features — 2-D, samples × features |
-| **`y`** | target vector | The answers — 1-D, one per sample |
+| Mathematical Symbol | Industrial Term | Linear Algebra Shape | Description |
+| :--- | :--- | :--- | :--- |
+| **$X$** | **Feature Matrix** | 2-D: $(N \times d)$ | All measured predictor variables across $N$ samples and $d$ features. |
+| **$y$** | **Target Vector** | 1-D: $(N,)$ | Ground-truth labels or continuous outcomes we wish to predict. |
+| **Sample** | Row / Instance | 1-D: $(1 \times d)$ | A single observed entity (e.g. one patient or one transaction). |
+| **Feature** | Attribute / Predictor | Column | One measured property of that entity. |
 
-The `X` / `y` naming is a near-universal convention in code, capital `X` because it's a matrix and
-lowercase `y` because it's a vector.
+:::tip
 
-:::tip 
+**The Whole Paradigm Fork in One Question**
 
-**The whole paradigm question in one sentence**
-
-**Do you have a `y` column?** If yes $\to$ supervised. If no $	o$ unsupervised. If you have one for only some rows $\to$ semi-supervised.
+*   **Do you have a target column $y$ for all rows?** $\implies$ **Supervised Learning**.
+*   **Do you have NO target column $y$?** $\implies$ **Unsupervised Learning**.
+*   **Do you have a target column $y$ for only a small subset of rows?** $\implies$ **Semi-Supervised Learning**.
 
 :::
 
 ---
 
-## Numeric and categorical data
+<Heading as="h2" id="numeric-and-categorical-data">2. Interactive Feature Subtype Classifier</Heading>
 
-When dealing with machine learning, the two most commonly used kinds of data are **numeric** and
-**categorical**.
+Machine learning features split into **numeric (quantitative)** and **categorical (qualitative)** types, each branching into two crucial sub-types:
 
-| | Numeric | Categorical |
-|---|---|---|
-| Values | Numbers on a scale | Names from a set |
-| Example | `5.1`, `23`, `98.6` | `benign`, `red`, `Tamil Nadu` |
-| Arithmetic meaningful? | Yes — averages, differences | No |
-| Ordering meaningful? | Yes | Only sometimes |
+export const DataSubtypeClassifier = () => {
+  const [selectedVar, setSelectedVar] = React.useState('rating');
 
-Each splits further, and these four sub-types are what later decisions actually turn on:
+  const variables = {
+    rating: {
+      name: 'Customer Satisfaction ("Low", "Medium", "High")',
+      type: 'Categorical',
+      subtype: 'Ordinal',
+      arithmetic: 'No (cannot average)',
+      order: 'Yes (Low < Medium < High)',
+      encoding: 'OrdinalEncoder (0, 1, 2)',
+      trap: 'Ordinal categories have a real mathematical sequence, but the distance between steps is not fixed or measurable. Low/Medium/High can be safely encoded as integers 0, 1, 2.'
+    },
+    zipcode: {
+      name: 'Postal Zip Code ("90210", "10001", "60601")',
+      type: 'Categorical',
+      subtype: 'Nominal',
+      arithmetic: 'No (averaging zip codes produces nonsense)',
+      order: 'No (90210 is not "greater" than 10001)',
+      encoding: 'OneHotEncoder or Target Encoding',
+      trap: 'Even though zip codes are written as numbers, they are categorical nominal identifiers! Treating zip codes as continuous integers destroys spatial meaning and biases linear models.'
+    },
+    bedroom: {
+      name: 'Bedroom Count (1, 2, 3, 4 bedrooms)',
+      type: 'Numeric',
+      subtype: 'Discrete',
+      arithmetic: 'Yes (average bedrooms = 2.4)',
+      order: 'Yes (1 < 2 < 3)',
+      encoding: 'StandardScaler or raw numeric passthrough',
+      trap: 'Countable whole numbers. Discrete numeric variables can be passed directly into regression models.'
+    },
+    temp: {
+      name: 'Patient Temperature (98.6°F, 101.4°F)',
+      type: 'Numeric',
+      subtype: 'Continuous',
+      arithmetic: 'Yes (temperature differences and averages)',
+      order: 'Yes (real-number continuum)',
+      encoding: 'StandardScaler or MinMaxScaler',
+      trap: 'Continuous variables can take any infinitely fractional value within a physical continuum. Standardize before feeding into distance-based algorithms.'
+    },
+    color: {
+      name: 'Product Color ("Red", "Green", "Blue")',
+      type: 'Categorical',
+      subtype: 'Nominal',
+      arithmetic: 'No',
+      order: 'No natural order',
+      encoding: 'OneHotEncoder',
+      trap: 'DANGER: Encoding Red=0, Green=1, Blue=2 invents a fake mathematical sequence, asserting that Green sits between Red and Blue and that Blue is twice as large as Green! Always One-Hot encode nominal variables.'
+    }
+  };
 
-| Type | Sub-type | Meaning | Example |
-|---|---|---|---|
-| Numeric | **Continuous** | Any value in a range | Height `170.4 cm` |
-| Numeric | **Discrete** | Countable whole numbers | `3` bedrooms |
-| Categorical | **Nominal** | No natural order | `red`, `green`, `blue` |
-| Categorical | **Ordinal** | Has an order, but no fixed spacing | `low` &lt; `medium` &lt; `high` |
+  const curr = variables[selectedVar];
 
-The nominal/ordinal distinction matters more than it looks. `low`/`medium`/`high` can sensibly
-become `0`/`1`/`2` because the order is real. Doing the same to `red`/`green`/`blue` invents a claim
-that green sits between red and blue and that blue is "three times" red — which is why encoding
-choices are a topic of their own later.
-
-export const DataTypesQuiz = () => {
-  const [q1, setQ1] = React.useState(null);
-  const [q2, setQ2] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 15px 0' }}>🧠 Interactive Checkpoint: Classify Your Data</h4>
-      
-      <div style={{ marginBottom: '20px' }}>
-        <p style={{ margin: '0 0 10px 0' }}><b>Scenario 1:</b> A store customer leaves a rating of <i>"Highly Satisfied"</i>, <i>"Satisfied"</i>, or <i>"Dissatisfied"</i>. What subtype of data is this?</p>
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          <button onClick={() => setQ1('nominal')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q1 === 'nominal' ? '#e53e3e' : 'transparent', color: q1 === 'nominal' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Nominal</button>
-          <button onClick={() => setQ1('ordinal')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q1 === 'ordinal' ? '#38a169' : 'transparent', color: q1 === 'ordinal' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Ordinal</button>
-          <button onClick={() => setQ1('discrete')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q1 === 'discrete' ? '#e53e3e' : 'transparent', color: q1 === 'discrete' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Discrete</button>
-        </div>
-        {q1 === 'ordinal' && <p style={{ color: '#38a169', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>✅ Correct! It is Categorical Ordinal. The ratings have a natural sequence, but the mathematical spacing between them is not fixed or measurable.</p>}
-        {q1 && q1 !== 'ordinal' && <p style={{ color: '#e53e3e', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>❌ Try again! Although they are names, they have a natural sequential ranking, which points to a specific subtype.</p>}
+      <h4 style={{ margin: '0 0 12px 0' }}>🧪 Feature Data Subtype Classifier</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Select a real-world variable to inspect its mathematical properties and Scikit-Learn encoding strategy:
+      </p>
+
+      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '16px' }}>
+        <button
+          onClick={() => setSelectedVar('rating')}
+          style={{ padding: '5px 10px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selectedVar === 'rating' ? '#3182ce' : 'transparent', color: selectedVar === 'rating' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+        >
+          Customer Rating
+        </button>
+        <button
+          onClick={() => setSelectedVar('zipcode')}
+          style={{ padding: '5px 10px', borderRadius: '4px', border: '1px solid #e53e3e', backgroundColor: selectedVar === 'zipcode' ? '#e53e3e' : 'transparent', color: selectedVar === 'zipcode' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px', fontWeight: 'bold' }}
+        >
+          Zip Code (Trap!)
+        </button>
+        <button
+          onClick={() => setSelectedVar('bedroom')}
+          style={{ padding: '5px 10px', borderRadius: '4px', border: '1px solid #38a169', backgroundColor: selectedVar === 'bedroom' ? '#38a169' : 'transparent', color: selectedVar === 'bedroom' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+        >
+          Bedroom Count
+        </button>
+        <button
+          onClick={() => setSelectedVar('temp')}
+          style={{ padding: '5px 10px', borderRadius: '4px', border: '1px solid #805ad5', backgroundColor: selectedVar === 'temp' ? '#805ad5' : 'transparent', color: selectedVar === 'temp' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+        >
+          Patient Temperature
+        </button>
+        <button
+          onClick={() => setSelectedVar('color')}
+          style={{ padding: '5px 10px', borderRadius: '4px', border: '1px solid #dd6b20', backgroundColor: selectedVar === 'color' ? '#dd6b20' : 'transparent', color: selectedVar === 'color' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+        >
+          Color (Nominal Trap)
+        </button>
       </div>
 
-      <div>
-        <p style={{ margin: '0 0 10px 0' }}><b>Scenario 2:</b> You are tracking standard 5-digit US Zip Codes (e.g. <i>90210</i>) in a user registry. What data type is this?</p>
-        <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-          <button onClick={() => setQ2('numeric')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q2 === 'numeric' ? '#e53e3e' : 'transparent', color: q2 === 'numeric' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Numeric Discrete</button>
-          <button onClick={() => setQ2('nominal')} style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: q2 === 'nominal' ? '#38a169' : 'transparent', color: q2 === 'nominal' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer' }}>Categorical Nominal</button>
+      <div style={{ padding: '16px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+        <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#3182ce', marginBottom: '8px' }}>
+          {curr.name}
         </div>
-        {q2 === 'nominal' && <p style={{ color: '#38a169', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>✅ Correct! This is Categorical Nominal. Even though zip codes are written as numbers, performing arithmetic on them is meaningless (e.g., adding two zip codes does not yield a third logical region), and there is no logical quantitative spacing.</p>}
-        {q2 === 'numeric' && <p style={{ color: '#e53e3e', marginTop: '10px', fontSize: '14px', fontWeight: 'bold' }}>❌ Try again! Remember the golden test: is performing arithmetic (like computing an average zip code) meaningful?</p>}
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', margin: '12px 0' }}>
+          <div style={{ fontSize: '13px' }}>
+            <b>Primary Type:</b><br/>
+            <span style={{ color: curr.type === 'Numeric' ? '#38a169' : '#805ad5', fontWeight: 'bold' }}>{curr.type}</span>
+          </div>
+          <div style={{ fontSize: '13px' }}>
+            <b>Specific Subtype:</b><br/>
+            <span style={{ fontWeight: 'bold' }}>{curr.subtype}</span>
+          </div>
+          <div style={{ fontSize: '13px' }}>
+            <b>Arithmetic Meaningful?</b><br/>
+            <span>{curr.arithmetic}</span>
+          </div>
+          <div style={{ fontSize: '13px' }}>
+            <b>Recommended Encoder:</b><br/>
+            <code>{curr.encoding}</code>
+          </div>
+        </div>
+
+        <div style={{ padding: '10px 12px', borderRadius: '4px', backgroundColor: 'rgba(221, 107, 32, 0.08)', borderLeft: '4px solid #dd6b20', fontSize: '13px', lineHeight: '1.5' }}>
+          💡 <b>Statistical Rule:</b> {curr.trap}
+        </div>
       </div>
     </div>
   );
 };
 
-<DataTypesQuiz />
+<DataSubtypeClassifier />
 
-### The rule worth memorising
+<Heading as="h3" id="the-rule-worth-memorising">The Target Rule Worth Memorising</Heading>
 
-When dealing with **classification** problems:
+When setting up your data architecture:
 
-> The data used to make predictions — the **features** — can be **either numeric or categorical**.
-> But the output, the **class**, is **always categorical**.
-
-This gives a clean two-way grid. Look only at the **target** to name the technique:
-
-| Target is... | Technique | Example |
-|---|---|---|
-| **Numeric** | **Regression** | Predicting a house price |
-| **Categorical** | **Classification** | Predicting benign vs malignant |
-
-Features can be a mixture of both in either case. The target alone decides.
+> The data used to make predictions - the **features ($X$)** - can be a mixture of numeric and categorical variables. But the output - the **target ($y$)** - alone dictates the technique: if $y$ is continuous numeric, it is **Regression**; if $y$ is categorical, it is **Classification**.
 
 ---
 
-## Positive and negative class
+## 3. The Positive Class Convention in Binary Classification
 
-In binary classification the two classes are not treated symmetrically. One is designated the
-**positive class** and the other the **negative class**.
+In binary classification ($y \in \{0, 1\}$), the two classes are mathematically asymmetric:
 
-- **Positive class** — the outcome you are *looking for*, or trying to detect
-- **Negative class** — the ordinary, default, "nothing to report" outcome
-
-| Task | Positive class | Negative class |
-|---|---|---|
-| Disease detection | Has the disease | Healthy |
-| Spam filtering | Spam | Legitimate mail |
-| Fraud detection | Fraudulent | Legitimate |
-| Churn prediction | Will leave | Will stay |
-
-Two things about this that surprise people:
-
-**"Positive" has nothing to do with good.** Having cancer is the positive class. It's positive in
-the sense of *a positive test result* — the thing was found.
-
-**It is a choice, not a property of the data.** Nothing stops you designating "healthy" as positive.
-The convention is to pick the **rare and consequential** class, because everything downstream —
-precision, recall, and the whole confusion matrix — is defined *relative to* the positive class. Flip
-the choice and every one of those numbers changes meaning.
+*   **Positive Class ($1$):** The specific outcome you are **actively searching for** (e.g. presence of disease, fraudulent charge, spam email, customer cancellation).
+*   **Negative Class ($0$):** The baseline, ordinary, default "nothing to report" state (e.g. healthy, legitimate, non-spam, retained).
 
 :::danger
 
-**The default is frequently wrong**
+**The "Positive != Good" Trap and Library Defaults**
 
-Tools pick a positive class for you, and their guess follows label order, not your intent. In
-scikit-learn's built-in breast cancer data, label `1` is **`benign`** — so out of the box, the
-"positive class" is *not having cancer*. Every recall figure you compute is then answering "how well
-do we find healthy people?", which is almost never the question.
-
-Always check which class is `1`, and set `pos_label` explicitly when it isn't the one you mean.
+1.  **"Positive" has nothing to do with being socially or clinically good.** In medical oncology, having a malignant tumor is the *positive class* (a positive test result).
+2.  **Scikit-Learn defaults to alphanumeric sorting.** In Scikit-Learn's built-in Breast Cancer dataset, label `1` is assigned to **`benign`** (healthy) because "benign" comes before "malignant" alphabetically.
+3.  If you compute `recall_score()` without overriding `pos_label`, your model measures *how well it finds healthy patients*, completely missing the clinical question ("how well do we catch cancer?"). Always verify your label mapping.
 
 :::
 
 ---
 
-## The Learning Paradigms
+## 4. Interactive Label Supervision Spectrum
 
-| | **Supervised** | **Unsupervised** | **Semi-supervised** | **Self-supervised (Modern)** |
-|---|---|---|---|---|
-| **Labels** | Every row (human-labelled) | None | **A few** rows | **None** (derived from the data itself) |
-| **You are asking** | "Predict this $y$ target" | "What structure exists?" | "Predict cheaply" | "Learn representations" |
-| **Feedback** | Yes — compare prediction to $y$ | No | Partial | Yes — prediction of masked tokens |
-| **Techniques** | Classification, regression | Clustering, reduction | Hybrid co-training | Masking, Autoregressive modelling |
-| **Evaluation** | Straightforward | Hard, subjective | Partly | Structured (loss on mask) |
-| **Main cost** | Manual Annotation | None | A small annotation pool | High pre-training compute |
+Adjust the label availability slider to observe how machine learning paradigms transition from pure unsupervised exploration to fully supervised learning:
 
----
+export const LabelSupervisionSpectrum = () => {
+  const [labelPercent, setLabelPercent] = React.useState(10);
 
-## Supervised learning
+  let paradigmName = 'Semi-Supervised Learning';
+  let badgeColor = '#dd6b20';
+  let mechanism = 'A small pool of verified labels (1-20%) bootstraps a large pool of unlabeled data via self-training or pseudo-labeling.';
+  let evaluation = 'Evaluated against the holdout labeled test set. Success relies strictly on the cluster assumption.';
+  let realExample = 'Medical radiology: 50 expert-annotated tumor scans combined with 5,000 unannotated MRI scans.';
 
-**If you have labels in your data, it's supervised learning.**
+  if (labelPercent === 0) {
+    paradigmName = 'Unsupervised Learning (or Self-Supervised Pre-Training)';
+    badgeColor = '#805ad5';
+    mechanism = 'No ground-truth target vector y. Models discover latent clusters (KMeans), principal projections (PCA), or density distributions.';
+    evaluation = 'Subjective / intrinsic metrics (Silhouette score, explained variance). True prediction accuracy cannot be computed!';
+    realExample = 'Customer market segmentation, genome clustering, embedding pre-training.';
+  } else if (labelPercent >= 80) {
+    paradigmName = 'Fully Supervised Learning';
+    badgeColor = '#38a169';
+    mechanism = 'Every single training instance has a human-verified target label y. Directly optimizes empirical loss (MSE, Cross-Entropy).';
+    evaluation = 'Direct, objective evaluation metrics: Accuracy, Precision, Recall, ROC-AUC, R-squared.';
+    realExample = 'Autonomous vehicle steering angle prediction, historical loan default classification.';
+  }
 
-The flow is:
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>🎚️ Label Supervision Spectrum Explorer</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Move the slider to simulate varying levels of available ground-truth labels:
+      </p>
 
-```
-   labelled data  ──►  model training  ──►  prediction
-```
+      <div style={{ marginBottom: '16px' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 'bold' }}>
+          <span>Label Availability: {labelPercent}%</span>
+          <span style={{ color: badgeColor }}>{labelPercent === 0 ? 'Zero Labels' : labelPercent >= 80 ? 'Fully Labeled' : 'Partially Labeled'}</span>
+        </div>
+        <input
+          type="range"
+          min="0"
+          max="100"
+          step="5"
+          value={labelPercent}
+          onChange={(e) => setLabelPercent(parseInt(e.target.value))}
+          style={{ width: '100%', marginTop: '6px' }}
+        />
+      </div>
 
-You **teach the model with pre-defined data** — you already know the right answers, and you show
-them to the model so it can learn the relationship between features and answer. The name is literal:
-there is a supervisor, and the supervisor is your label column.
+      <div style={{ padding: '16px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap', gap: '8px' }}>
+          <div style={{ fontSize: '18px', fontWeight: 'bold', color: '#3182ce' }}>
+            {paradigmName}
+          </div>
+          <span style={{ padding: '4px 10px', borderRadius: '4px', backgroundColor: `${badgeColor}22`, color: badgeColor, fontSize: '12px', fontWeight: 'bold' }}>
+            {labelPercent}% Supervised
+          </span>
+        </div>
 
-Using the cancer data: you give the model Clump thickness, Uniformity of cell size and the rest,
-*together with* whether each sample turned out benign or malignant. It learns the mapping. Then you
-hand it a new sample with no answer attached, and it predicts.
+        <div style={{ fontSize: '13px', margin: '10px 0' }}>
+          <b>Operational Mechanism:</b><br/>
+          <span style={{ color: 'var(--ifm-color-emphasis-800)' }}>{mechanism}</span>
+        </div>
 
-The defining advantage: **you can tell whether it worked.** Compare predictions against known
-answers and you get a number. This sounds obvious, and it's the thing unsupervised learning cannot
-do.
+        <div style={{ fontSize: '13px', margin: '10px 0' }}>
+          <b>Validation Feasibility:</b><br/>
+          <span style={{ color: 'var(--ifm-color-emphasis-700)' }}>{evaluation}</span>
+        </div>
 
-### The two types of supervised learning
+        <div style={{ padding: '10px 12px', borderRadius: '4px', backgroundColor: 'rgba(49, 130, 206, 0.08)', borderLeft: '4px solid #3182ce', fontSize: '13px' }}>
+          🏭 <b>Production Case:</b> {realExample}
+        </div>
+      </div>
+    </div>
+  );
+};
 
-| | **Classification** | **Regression** |
-|---|---|---|
-| Predicts | A **category** | A **continuous value** |
-| Target type | Categorical | Numeric |
-| Output example | `malignant` | `52.4` |
-| "Close" counts? | No | Yes |
-| Example | Which disease is this? | What will this house sell for? |
-
-That's the entire taxonomy of supervised learning. Every supervised algorithm is doing one of these
-two things.
-
----
-
-## Unsupervised learning
-
-**The model works on its own to discover information.**
-
-We do **not** supervise the model — we let it work on its own to discover insights that **may not be
-visible to the human eye**. There is no label column, so there is no notion of a right answer to
-check against. The model reports structure it finds; whether that structure is *useful* is a judgement
-you make.
-
-Three families of task:
-
-### Clustering
-
-**Grouping data points or objects that are somehow similar.**
-
-Clustering uncovers patterns and structures within data by grouping similar items together. It does
-three distinct jobs:
-
-| Job | What it gives you |
-|---|---|
-| **Discovering structure** | What kinds of thing are in here? |
-| **Summarisation** | Describing a huge dataset as a handful of representative groups |
-| **Anomaly detection** | Points fitting no cluster well are outliers |
-
-**Example:** a bank's desire to **segment its customers** based on certain characteristics. Nobody
-defines the segments in advance — the algorithm proposes them, and the bank interprets them
-afterwards.
-
-That last job is worth noticing: clustering *doubles as* anomaly detection by highlighting data
-points that don't fit well into any cluster.
-
-### Dimensionality reduction
-
-**Reducing the number of features or variables in a dataset while retaining its essential
-information.**
-
-Fewer columns, same meaning. Makes models faster, sometimes more accurate, and makes plotting
-possible.
-
-### Density estimation
-
-**Figuring out how the data is spread out or distributed**, which lets you identify patterns and
-anomalies.
-
-Once you know what "normal" looks like as a distribution, anything improbable under it is by
-definition unusual — which is another route to anomaly detection.
+<LabelSupervisionSpectrum />
 
 ---
 
-## Supervised vs unsupervised
-
-| | Supervised | Unsupervised |
-|---|---|---|
-| Label column | Required | Absent |
-| Goal | **Predict** a known quantity | **Discover** unknown structure |
-| Supervision | A supervisor exists | None |
-| Evaluation | Straightforward — compare to truth | Hard, often subjective |
-| Guidance | You state what to learn | The model decides what's interesting |
-| Risk | Needs expensive labels | May find structure you don't care about |
-| Output | A prediction per new sample | A description of the data |
-| Techniques | Classification, regression | Clustering, dimensionality reduction, density estimation |
-
-:::note
-
-**Why unsupervised learning is genuinely harder**
-
-Not harder to *run* — harder to **know if you succeeded**. A classifier is 94% accurate or it isn't.
-A clustering has no accuracy; you get groups, and deciding whether they're the right groups is a
-judgement call. This is why unsupervised results usually need a domain expert to sign off, and why
-"we clustered the data" is a weaker claim than it sounds.
-
-:::
-
----
-
-## Semi-supervised learning
-
-**Semi-supervised learning falls between supervised and unsupervised learning.**
-
-The training data is a **combination of both labelled and unlabelled data** — it uses a **large
-amount of unlabelled data along with a small amount of labelled data** to improve learning accuracy.
-
-### Why it exists
-
-The main goal is to make the most out of the available data when **labelling is expensive or
-time-consuming**.
-
-That constraint is the whole motivation, and it is extremely common:
-
-- A radiologist must examine each scan — hours of specialist time per hundred images
-- Unlabelled scans, meanwhile, accumulate for free
-
-So it is commonly used where **unlabelled data is abundant**, such as **image classification** or
-**text classification** tasks. Scraping a million unlabelled images is easy; paying for a million
-labels is not.
-
-**Example algorithm:** Semi-Supervised Support Vector Machines.
-
-### How it actually works
-
-The common mechanism is **self-training**, and it's simple enough to state in four steps:
-
-1. Train a model on the few labelled rows
-2. Predict on the unlabelled rows
-3. Take the predictions it's **most confident** about and treat them as if they were real labels
-4. Retrain on the enlarged set, and repeat
-
-The bet being made is the **cluster assumption**: points close together in feature space probably
-share a label. When that holds, unlabelled data reveals the shape of the classes and helps. When it
-doesn't, step 3 injects confident mistakes and compounds them.
-
-:::warning
-
-**Semi-supervised learning is not free accuracy**
-
-In the worked demo below, 30 labels plus 396 unlabelled rows scored **0.921** against **0.918** for
-the same 30 labels alone — a gain of 0.003, essentially nothing.
-
-That is a real and typical result. Semi-supervised methods help when the unlabelled data reveals
-structure the labelled points miss; when the classes are already well separated, there is nothing
-left to reveal. In poorly configured cases it is actively **worse** than discarding the unlabelled
-data, because self-training amplifies its own early errors.
-
-Treat it as something to try and measure, never as a default.
-
-:::
-
----
-
-## Self-Supervised Learning (The Modern Paradigm)
-
-**Self-supervised learning (SSL) uses the internal structure of the data itself to construct pre-text labels, bypassing manual annotation entirely.**
-
-The core principle: **The data is its own label.** The model takes an unlabelled sample, hides or "masks" a portion of it, and is trained to predict the missing piece.
-
-```
-       unlabelled text ──► hide "mask" words ──► predict "mask" (loss on prediction)
-```
-
-This is the standard paradigm behind modern **foundational models and Large Language Models (LLMs)**.
-
-### How it actually works
-1.  **Masked Prediction (e.g. BERT):** The sentence *"The quick brown [MASK] jumps over the lazy dog"* is fed to the model. The model learns language semantics by predicting that the masked word is `fox`.
-2.  **Autoregressive Next-Token Prediction (e.g. GPT):** The model is given a prompt *"Once upon a..."* and must predict the single most probable next token (`time`).
-3.  **Representational Learning:** By completing billions of these "pre-text" tasks, the model develops deep internal representations of text, pixels, or audio.
-4.  **Fine-Tuning:** The model is then "fine-tuned" on a tiny supervised dataset for a specific task (e.g., sentiment analysis, classification) with extremely high accuracy, requiring a fraction of the labels a standard supervised model would need.
-
-| Feature | Unsupervised | Self-Supervised |
-|---|---|---|
-| **Core Goal** | Discover flat clusters or latent features | Build a general representation of syntax/features |
-| **Output** | Group IDs, principal components | A high-dimensional representation vector (embeddings) |
-| **Direct Application** | Customer segmentation, image compression | Foundational LLMs (GPT, Llama), computer vision backbone |
-
----
-
-## Choosing between them
-
-```
-Do you have a target column?
-│
-├─ Yes, for every row ──────────────► SUPERVISED
-│                                     │
-│                                     ├─ target numeric ─────► regression
-│                                     └─ target categorical ─► classification
-│
-├─ Yes, but only for a few rows ────► SEMI-SUPERVISED
-│    (and labelling more is expensive; measure against
-│     plain supervised on the few you have)
-│
-└─ No ──────────────────────────────► Can we derive labels from data?
-                                      │
-                                      ├─ Yes (predict masked data) ─► SELF-SUPERVISED
-                                      │                               (Foundational pre-training)
-                                      │
-                                      └─ No ─────────────────────────► UNSUPERVISED
-                                                                       │
-                                                                       ├─ want groups ──────► clustering
-                                                                       ├─ too many columns ► dimensionality reduction
-                                                                       └─ want the shape ──► density estimation
-```
-
-One practical note: if you have no labels but *need* predictions, the answer is usually not
-unsupervised learning — it's **go and get some labels**. Unsupervised learning answers a different
-question, not a cheaper version of the same one.
-
----
-
-## Common Mistakes
-
-Here are the most common conceptual pitfalls when mapping business problems to learning paradigms, compared with the correct engineering principles.
+## 5. The Four Learning Paradigms in Depth
 
 <Tabs>
-  <TabItem value="mistake1" label="🚨 Mistake 1: Positive = Good" default>
+  <TabItem value="sup" label="1. Supervised Learning" default>
     <br/>
-
-    *   **The Misconception:** *"The 'positive' class in binary classification refers to the good or desirable outcome."*
-    *   **❌ Wrong Thinking:** Designating the healthy class as positive simply because health is positive/good.
-    *   **✅ The Right Principle:** The **positive class** is the target outcome you are actively *looking for* or trying to detect (e.g., disease, spam, fraud), which is often rare and consequential. It has nothing to do with being clinically or socially good.
+    
+    *   **Data Requirement:** Every single training row contains input features $X$ and ground-truth answer $y$.
+    *   **The Workflow:** Fits mathematical weights by minimizing the residual loss between predicted $\hat{y}$ and true $y$.
+    *   **Key Advantage:** Direct, objective validation on an isolated test set ($R^2$, Accuracy, ROC-AUC).
+    *   **Core Branches:**
+        1.  **Classification:** Target is categorical ($y \in \{\text{Cat}, \text{Dog}\}$).
+        2.  **Regression:** Target is continuous ($y \in \mathbb{R}$).
   </TabItem>
-  <TabItem value="mistake2" label="🚨 Mistake 2: Default Class">
+  <TabItem value="unsup" label="2. Unsupervised Learning">
     <br/>
-
-    *   **The Misconception:** *"We can just accept whichever default positive class the ML library picks for us."*
-    *   **❌ Wrong Thinking:** Assuming the tool naturally knows which class is of interest, leading to incorrect calculations for recall/precision.
-    *   **✅ The Right Principle:** ML libraries typically sort labels alphanumerically and pick the last one or the first one depending on the library. In scikit-learn's breast cancer dataset, label `1` is `benign` (not having cancer), which is usually the opposite of what you want to evaluate. Always check your label mapping and set `pos_label` explicitly.
+    
+    *   **Data Requirement:** Contains only input features $X$. No target vector $y$ exists.
+    *   **The Workflow:** Discovers geometric patterns, high-density manifolds, and clusters.
+    *   **Core Families:**
+        1.  **Clustering:** Grouping rows into unnamed clusters (`KMeans`, `DBSCAN`).
+        2.  **Dimensionality Reduction:** Compressing wide feature spaces (`PCA`, `t-SNE`).
+        3.  **Density Estimation:** Modeling the probability density $P(X)$ to flag anomalies.
+    *   **Evaluation Challenge:** Has no objective accuracy. Groupings require domain expert sign-off.
   </TabItem>
-  <TabItem value="mistake3" label="🚨 Mistake 3: Feature vs. Target">
+  <TabItem value="semi" label="3. Semi-Supervised Learning">
     <br/>
-
-    *   **The Misconception:** *"If our features are numeric, we must use regression. If our features are categorical, we must use classification."*
-    *   **❌ Wrong Thinking:** Attempting to choose the machine learning technique based on the types of the features.
-    *   **✅ The Right Principle:** Features can be any mixture of numeric and categorical data. The **target** variable alone determines the technique: if the target is continuous numeric, it is a Regression problem; if the target is categorical, it is a Classification problem.
+    
+    *   **Data Requirement:** A small subset of labeled data $L$ combined with a massive pool of unlabeled data $U$.
+    *   **The Self-Training Loop:**
+        1. Train a model on the small labeled set $L$.
+        2. Predict on the unlabeled set $U$.
+        3. Select the most confident predictions and pseudo-label them.
+        4. Retrain on the expanded dataset and repeat.
+    *   **The Cluster Assumption:** Assumes data points close to each other in feature space share the same class label. If this fails, self-training amplifies its own errors!
   </TabItem>
-  <TabItem value="mistake4" label="🚨 Mistake 4: Regressor Output">
+  <TabItem value="self" label="4. Self-Supervised Learning (SSL)">
     <br/>
-
-    *   **The Misconception:** *"A regression model can output categories if we train it on numeric encodings of those categories."*
-    *   **❌ Wrong Thinking:** Training a regressor on encoded target classes (e.g., `benign=0`, `malignant=1`) and expecting it to output discrete categories or valid categorical decisions directly without custom thresholding.
-    *   **✅ The Right Principle:** Classification outputs are discrete categorical labels. Regression outputs are continuous numeric values. Attempting to use a standard regression model directly for classification outputs introduces incorrect assumptions of continuity and distance.
-  </TabItem>
-  <TabItem value="mistake5" label="🚨 Mistake 5: Encoding Nominal">
-    <br/>
-
-    *   **The Misconception:** *"We can encode nominal categorical categories like colors as sequential numbers (red=0, green=1, blue=2) to feed into our model."*
-    *   **❌ Wrong Thinking:** Converting non-ordered categorical values (Nominal) directly to integers, which invents a mathematical order and scale that doesn't exist.
-    *   **✅ The Right Principle:** Sequential integer encodings are only suited for **Ordinal** data (which has a natural rank/sequence, like low/medium/high). For **Nominal** data (no natural order), you must use techniques like one-hot encoding to avoid introducing spurious mathematical relationships (e.g., green is mathematically between red and blue).
-  </TabItem>
-  <TabItem value="mistake6" label="🚨 Mistake 6: Clustering vs. Classification">
-    <br/>
-
-    *   **The Misconception:** *"Clustering and classification are the same because they both group things together."*
-    *   **❌ Wrong Thinking:** Confusing unsupervised grouping of similar data with supervised prediction of pre-defined category labels.
-    *   **✅ The Right Principle:** Classification is a **supervised** task predicting pre-defined, human-labeled target categories ($y$). Clustering is an **unsupervised** task that finds natural, unlabeled groupings based purely on spatial or feature similarity in the data.
-  </TabItem>
-  <TabItem value="mistake7" label="🚨 Mistake 7: Clustering Accuracy">
-    <br/>
-
-    *   **The Misconception:** *"We can evaluate the performance of our clustering model by measuring its classification accuracy."*
-    *   **❌ Wrong Thinking:** Computing standard accuracy score directly against cluster IDs, assuming clusters map perfectly and statically to true classes without correction.
-    *   **✅ The Right Principle:** Unsupervised clustering has no pre-defined ground truth labels during training. Since cluster IDs are arbitrary (e.g., Cluster 0 and Cluster 1), standard accuracy is inappropriate and misleading. Instead, use metrics like Adjusted Rand Index (ARI) that measure pairwise similarity and correct for agreement by chance.
-  </TabItem>
-  <TabItem value="mistake8" label="🚨 Mistake 8: Semi-Supervised Lift">
-    <br/>
-
-    *   **The Misconception:** *"Using semi-supervised learning with extra unlabelled data will always improve model accuracy over using only the labelled data."*
-    *   **❌ Wrong Thinking:** Assuming more data always yields a performance lift in any setting.
-    *   **✅ The Right Principle:** Semi-supervised learning only provides accuracy gains if the dataset conforms to the **cluster assumption** (points close together share a label). If the classes are already well-separated or don't follow the assumption, self-training can introduce confident mistakes and actively degrade accuracy.
-  </TabItem>
-  <TabItem value="mistake9" label="🚨 Mistake 9: Labels Substitute">
-    <br/>
-
-    *   **The Misconception:** *"Since we don't have target labels, we will use clustering to perform classification."*
-    *   **❌ Wrong Thinking:** Using unsupervised models as a direct, cheaper substitute for a supervised classification task.
-    *   **✅ The Right Principle:** Unsupervised learning answers a different question (discovering unknown structure) rather than predicting a specific known label. If you absolutely need a classifier, clustering is rarely a substitute—you must obtain a subset of labeled training data.
-  </TabItem>
-  <TabItem value="mistake10" label="🚨 Mistake 10: Matrix Shapes">
-    <br/>
-
-    *   **The Misconception:** *"It doesn't matter if the target vector y is structured as a 1-D array or a 2-D single-column matrix."*
-    *   **❌ Wrong Thinking:** Passing `y` as a 2-D column matrix `(N, 1)` into ML libraries that expect a 1-D vector `(N,)`.
-    *   **✅ The Right Principle:** In standard ML libraries (like scikit-learn), the feature matrix `X` is always 2-D `(samples × features)`, while the target vector `y` is strictly 1-D `(samples,)`. Mixing these up leads to shape mismatches, runtime warnings, or silent broadcasting bugs.
+    
+    *   **The Modern Paradigm:** The foundation of modern Large Language Models (LLMs) and vision transformers.
+    *   **Mechanism (The Data is its own Label):**
+        *   **Masked Modeling (e.g. BERT):** Hides tokens in sentences and trains the network to predict the masked word.
+        *   **Autoregressive Generation (e.g. GPT):** Predicts the next token in sequence.
+    *   **Representational Learning:** Produces high-dimensional embeddings that are subsequently fine-tuned with a tiny supervised dataset.
   </TabItem>
 </Tabs>
 
 ---
 
-## Summary
+## 6. Implementation Lab
+
+:::tip
+
+**Lab Exercise: Three Paradigms on the Breast Cancer Dataset**
+
+An interactive, fully functional Google Colab / Jupyter Notebook is available to run Supervised, Starved Supervised (30 labels), Semi-Supervised (SelfTrainingClassifier), and Unsupervised (KMeans) on the exact same 426-patient dataset live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/01-foundations/paradigms_and_labels.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Run cells sequentially to benchmark accuracy across varying label counts.
+
+**Key Experiments to Run:**
+*   **Experiment 1 (The Starved Supervised Baseline):** Compare fully supervised accuracy ($95.8\%$, 426 labels) against starved supervised ($91.8\%$, 30 labels) to measure the value of 396 additional annotations.
+*   **Experiment 2 (Semi-Supervised Lift Test):** Run `SelfTrainingClassifier` on the 30 labels plus 396 unlabeled rows and observe why semi-supervised lift is small ($92.1\%$) on well-separated datasets.
+*   **Experiment 3 (Unsupervised Agreement vs. ARI):** Observe KMeans achieving $90.8\%$ raw agreement with zero labels, but check Adjusted Rand Index ($0.664$) to see why raw accuracy on clusters is misleading.
+
+:::
+
+---
+
+## 7. Common Mistakes
+
+<Tabs>
+  <TabItem value="m1" label="🚨 1. Believing Positive Means Good" default>
+    <br/>
+    
+    *   **The Misconception:** *"The positive class in binary classification represents the desirable medical or business outcome."*
+    *   **❌ Wrong Thinking:** Designating healthy patients as the positive class.
+    *   **✅ The Right Principle:** The **positive class** is the target condition you are actively seeking to detect (cancer, fraud, churn). It is named after a *positive test result*, not moral or medical goodness.
+  </TabItem>
+  <TabItem value="m2" label="🚨 2. Integer Encoding Nominal Categories">
+    <br/>
+    
+    *   **The Misconception:** *"We can encode colors as Red=0, Green=1, Blue=2 for linear regression."*
+    *   **❌ Wrong Thinking:** Imposing false ordinal relationships on nominal categories.
+    *   **✅ The Right Principle:** Only **Ordinal** variables (Low/Med/High) possess a natural rank. Nominal variables must be One-Hot encoded; otherwise, models assume Blue is twice as large as Green!
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. Measuring Accuracy on Unsupervised Clusters">
+    <br/>
+    
+    *   **The Misconception:** *"Our KMeans clustering model achieved 91% accuracy."*
+    *   **❌ Wrong Thinking:** Comparing arbitrary cluster IDs ($0, 1$) directly to true classes with standard classification accuracy.
+    *   **✅ The Right Principle:** Clustering has no predefined ground-truth labels. Cluster numbers are arbitrary. Use the **Adjusted Rand Index (ARI)** to evaluate pair-wise clustering alignment while correcting for random chance.
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Semi-Supervised Learning is Free Accuracy">
+    <br/>
+    
+    *   **The Misconception:** *"Adding unlabeled data to our training set will always improve model score."*
+    *   **❌ Wrong Thinking:** Expecting self-training to consistently lift performance.
+    *   **✅ The Right Principle:** Semi-supervised learning only succeeds when data conforms to the **cluster assumption**. If early pseudo-labels are incorrect, self-training reinforces its own errors and actively degrades accuracy.
+  </TabItem>
+</Tabs>
+
+---
+
+## 8. Summary
 
 <div className="row">
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Supervised & Semi-Supervised</h3>
+        <h3>🤖 Feature Subtypes</h3>
       </div>
       <div className="card__body">
         <ul>
-          <li><b>Supervised:</b> Full manual label column $y$. Evaluated directly via target accuracy/loss metrics.</li>
-          <li><b>Semi-Supervised:</b> A tiny labeled subset plus abundant cheap unlabeled data. Uses self-training loops.</li>
+          <li><b>Numeric Continuous:</b> Infinite precision scale (Height, Temperature).</li>
+          <li><b>Numeric Discrete:</b> Countable integers (Bedrooms, Ticket count).</li>
+          <li><b>Categorical Nominal:</b> Unordered labels (Color, Zip code). Needs One-Hot.</li>
+          <li><b>Categorical Ordinal:</b> Natural ranking (Low/Med/High). Integer encodable.</li>
         </ul>
       </div>
     </div>
@@ -511,12 +418,14 @@ Here are the most common conceptual pitfalls when mapping business problems to l
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>📊 Unsupervised & Self-Supervised</h3>
+        <h3>🛠️ The Four Paradigms</h3>
       </div>
       <div className="card__body">
         <ul>
-          <li><b>Unsupervised:</b> No label column. Finds latent customer clusters, projections, or distributions. Hard/subjective to validate.</li>
-          <li><b>Self-Supervised:</b> No manual labels; masks portions of the raw sample and learns to predict it. Powers modern LLM pre-training.</li>
+          <li><b>Supervised:</b> 100% labeled $(X, y)$. Classification & Regression.</li>
+          <li><b>Unsupervised:</b> 0% labels. Discovers clusters, projections (KMeans, PCA).</li>
+          <li><b>Semi-Supervised:</b> Few labels + abundant unlabeled data (Self-training).</li>
+          <li><b>Self-Supervised:</b> Pre-text prediction tasks on raw data (LLMs, BERT).</li>
         </ul>
       </div>
     </div>
@@ -525,503 +434,95 @@ Here are the most common conceptual pitfalls when mapping business problems to l
 
 <br/>
 
-:::info 
+:::info
 
-**📌 Key Takeaways: Types of Learning**
+**📌 Key Takeaways**
 
-*   **📏 Features vs. Target:** Features ($X$) are standard multi-dimensional matrices, while targets ($y$) are 1-D vectors. The target alone determines the technique.
-*   **📍 Nominal vs. Ordinal:** Nominal categories have no numeric weight or natural sequence (e.g. color), while Ordinal ratings have order (e.g. low/med/high) and can be scaled.
-*   **⚖️ The Positive Class is a Choice:** Always check binary outputs. Library defaults default to alphanumeric sorting, which routinely makes the negative class the positive target. Set `pos_label` explicitly.
-*   **🧪 Unlabelled Lift is Not Guaranteed:** Semi-supervised learning only yields accuracy lifts if data fits the cluster assumption. Otherwise, it compounds early errors.
-
-:::
-
-**Next in this section:** [Reinforcement Learning](./04-reinforcement-learning.mdx) — the paradigm
-that has no dataset at all · [The Toolkit and the Pipeline](./05-toolkit-and-pipeline.mdx)
-
-**See also:** [Applications and Major Techniques](./02-applications-and-techniques.mdx) for the eight
-techniques these paradigms unlock · [What is Machine Learning?](./01-what-is-machine-learning.mdx) for
-why labels beat hand-written rules
-
----
-
-## Implementation Lab
-
-:::tip 
-
-**Lab Exercise: Three Learning Paradigms on One Dataset**
-
-Run Supervised, Starved Supervised, Semi-Supervised, and Unsupervised models live on the exact same 426-patient Breast Cancer dataset. Tweak label visibility settings to watch how accuracy scales.
-
-<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/01-foundations/paradigms_and_labels.ipynb" target="_blank" rel="noopener noreferrer">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
-</a>
-
-**How to run the lab:**
-1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
-2. Run each cell sequentially (`Shift + Enter`).
-3. Tweak parameters (`N_LAB` to 5, 50, or 100) to trace learning efficiency curves.
+*   **🎯 Target Alone Decides:** Features ($X$) can be a mixture of numeric and categorical data; the target variable ($y$) alone dictates whether the problem is Classification or Regression.
+*   **⚠️ Watch pos_label:** Scikit-Learn defaults to alphabetical label ordering, which frequently maps the negative class to 1. Always set `pos_label` explicitly.
+*   **📊 Clustering != Classification:** Clustering proposes unnamed geometric segments; it cannot be evaluated using classification accuracy.
 
 :::
 
+**Next Section:** [Reinforcement Learning](./04-reinforcement-learning.mdx) - learning through environment states, actions, rewards, and policy optimization without a static dataset.
+
 ---
 
-## Practice Questions
+## 9. Active Recall
 
-*Test your understanding by working each problem out first, then click the card to reveal the detailed solution. Questions are tagged by type: **[THEORY]**, **[PROG]**, **[OUT]**, or **[ANALYZE]**.*
+*Test your understanding by answering first, then clicking to reveal the underlying principles.*
 
-### Features and data types
+### Interactive Checkpoint Quiz
 
-<details>
-  <summary>❓ <b>F1. [THEORY] In a cancer dataset with columns Clump thickness, Uniformity of cell size, Marginal adhesion and Class, identify the features and the target. What is the other name for "feature"?</b></summary>
-  <div className="answer-content">
-    <br/>
+export const ParadigmCheckQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Nominal Encoding Trap</h4>
+      <p style={{ margin: '0 0 15px 0' }}>A data scientist encodes postal Zip Codes (e.g. <code>90210</code>, <code>10001</code>) as standard continuous integers in a linear regression model. What is the fundamental statistical error?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Linear regression only supports floating-point numbers</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Zip Codes are Categorical Nominal; arithmetic and magnitude are meaningless</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>The model will fail to compile due to a syntax error</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Linear regression handles integers seamlessly. The flaw is conceptual and statistical! Try again.</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! Zip Codes are categorical nominal identifiers represented by digits. Performing arithmetic on them or assuming that 90210 is "9 times greater than 10001" creates severe mathematical bias. They must be encoded as categorical features!</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Scikit-learn will compile and fit without warning, producing silently biased coefficients! Try again.</p>}
+    </div>
+  );
+};
 
-    *   **Features (Attributes):** *Clump thickness*, *Uniformity of cell size*, and *Marginal adhesion*. These are the measured properties of each sample used to make predictions.
-    *   **Target (Label/Class):** *Class* (e.g., benign or malignant). This is the outcome or answer we want to predict.
-    *   **Other names for feature:** Attribute, column, variable, predictor, or input.
-  </div>
-</details>
+<ParadigmCheckQuiz />
 
-<details>
-  <summary>❓ <b>F2. [THEORY] Distinguish nominal from ordinal categorical data, and give an example of each. Why can only one of them be sensibly encoded as 0, 1, 2?</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **Nominal Categorical Data:** Categories with no natural order or ranking. Example: Colors (`red`, `green`, `blue`) or ZIP codes.
-    *   **Ordinal Categorical Data:** Categories that have a natural sequential ranking, but without mathematically fixed or measurable spacing between them. Example: Education level (`high school` < `bachelors` < `PhD`) or customer satisfaction ratings (`low` < `medium` < `high`).
-    *   **Why only one can be encoded as 0, 1, 2:** Ordinal data can be encoded sequentially (e.g., `low=0`, `medium=1`, `high=2`) because the mathematical order is preserved. Nominal data cannot be sensibly encoded this way because doing so invents a false ranking (e.g., encoding `red=0, green=1, blue=2` falsely claims that green is between red and blue, and that blue is "twice" as large as green, which biases distance-based ML models).
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>F3. [THEORY] State the rule about feature and output types in classification problems.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **The Rule:** The features (inputs) used to make predictions can be **either numeric or categorical** (or a mix of both). However, the output (target class) in classification problems is **always categorical**.
-  </div>
-</details>
+### Review Flashcards
 
 <details>
-  <summary>❓ <b>F4. [THEORY] A dataset's features are all numeric and its target is the text pass/fail. Which technique is this, and which column determined your answer?</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **Technique:** **Classification** (specifically binary classification).
-    *   **Determining column:** The **target** column containing `pass`/`fail`. Because the target contains discrete categorical labels, the technique is classification, regardless of whether the features are numeric.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>F5. [THEORY] Why is X written with a capital letter and y with a lowercase one?</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **X (Capital):** Denotes a **2-D matrix** (samples × features) holding all input features. In linear algebra, matrices are represented with uppercase letters.
-    *   **y (Lowercase):** Denotes a **1-D vector** (one target value per sample). In linear algebra, vectors are represented with lowercase letters.
-  </div>
-</details>
-
-### The positive class
-
-<details>
-  <summary>❓ <b>C1. [THEORY] Define the positive and negative class. For disease detection, spam filtering and churn prediction, state the positive class in each.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **Positive Class:** The rare, consequential, or specific outcome you are actively *looking for* or trying to detect.
-    *   **Negative Class:** The ordinary, baseline, default, or "nothing to report" outcome.
-    *   **Disease Detection:** Positive class = *Has the disease* / Negative class = *Healthy*.
-    *   **Spam Filtering:** Positive class = *Spam* / Negative class = *Legitimate mail*.
-    *   **Churn Prediction:** Positive class = *Will leave (churn)* / Negative class = *Will stay*.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>C2. [ANALYZE] "Positive class" sounds like it means the good outcome, but in disease detection the positive class is having the disease. Explain the sense in which it is "positive", and why the convention picks the rare class.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **The sense of "positive":** It refers to a **positive test result**—meaning the condition or entity was successfully found or detected, not that the outcome is socially or medically desirable.
-    *   **Why convention picks the rare class:** The class we want to detect is typically the rare and highly consequential one. Downstream evaluation metrics (such as precision and recall) are defined around the positive class to measure how effectively the model detects these critical events without raising too many false alarms.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>C3. [ANALYZE] In scikit-learn's breast cancer data, label 1 is benign. Explain precisely what goes wrong if you compute recall without noticing this, and what you would change.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **What goes wrong:** If label `1` represents `benign` (healthy), then standard binary classification metrics like recall will evaluate the model's ability to correctly find *healthy* patients. A recall score of 95% would mean "95% of healthy patients were found," while leaving the critical clinician question—"how well do we detect malignant tumors?"—completely unmeasured.
-    *   **What you would change:** When loading or formatting the data, you should map `malignant` to `1` and `benign` to `0`, or explicitly set the parameter `pos_label=0` in scikit-learn metrics functions (such as `recall_score(..., pos_label=0)`) to specify that `malignant` is the positive class.
-  </div>
-</details>
-
-### The learning paradigms
-
-<details>
-  <summary>❓ <b>P1. [THEORY] Name the four learning categories and state, for each, what the training data contains.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    1.  **Supervised Learning:** Every training sample contains both features ($X$) and a manually assigned target label ($y$).
-    2.  **Unsupervised Learning:** The training data contains only features ($X$) with absolutely no target labels ($y$).
-    3.  **Semi-Supervised Learning:** A combination of a small pool of labeled samples ($X$ and $y$) and a large pool of unlabeled samples (only $X$).
-    4.  **Self-Supervised Learning:** Unlabeled raw data samples (only $X$), where target labels are generated automatically from the data itself by hiding or masking a portion of each sample.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>P2. [THEORY] Draw the supervised learning flow in three stages, and explain what "teach the model with pre-defined data" means.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **Flow Chart:**
-        ```
-        Labelled Training Data ──► Model Training (Fitting) ──► Target Predictions on New Data
-        ```
-    *   **"Teach with pre-defined data":** This means the algorithm is shown both the input features and the correct ground-truth answers (labels) simultaneously. The algorithm learns the mapping or relationships between the features and the answers by minimizing its prediction errors against these known answers.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>P3. [THEORY] Name the two types of supervised learning and give the target type and an output example for each.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    1.  **Classification:**
-        *   **Target Type:** Categorical (discrete classes).
-        *   **Output Example:** `malignant`, `spam`, or `class_1`.
-    2.  **Regression:**
-        *   **Target Type:** Numeric (continuous scale).
-        *   **Output Example:** `250000.0` (house price) or `37.2` (temperature).
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>P4. [THEORY] Name the three families of unsupervised task, with a one-line description of each.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    1.  **Clustering:** Grouping similar data points together based purely on feature distances or spatial distributions.
-    2.  **Dimensionality Reduction:** Compressing the number of features (columns) in a dataset while preserving its core variance and underlying structure.
-    3.  **Density Estimation:** Modeling the underlying statistical probability distribution of the data to identify normal vs. abnormal regions.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>P5. [THEORY] Clustering does three distinct jobs. Name all three, and explain how one of them makes clustering usable for anomaly detection.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **The Three Jobs:**
-        1.  **Discovering Structure:** Revealing natural, hidden subgroups within the unlabeled data.
-        2.  **Summarisation:** Describing huge datasets by using a few representative cluster centroids.
-        3.  **Anomaly Detection:** Highlighting data points that do not fit well into any cluster.
-    *   **Usability for Anomaly Detection:** Points that lie far away from any cluster centroid (low cluster membership or high reconstruction error) represent anomalous outliers. By setting a distance threshold, you can identify these unusual points automatically.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>P6. [ANALYZE] Explain why unsupervised learning is harder to evaluate than supervised learning. Is it harder to run?</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **Why it's harder to evaluate:** Supervised learning has a definite, objective ground-truth label for each row, making it easy to calculate exact metrics (like 94% accuracy). Unsupervised learning has no target labels or ground truth. The model proposes groups or structures, but determining whether those groups are useful or meaningful is subjective and usually requires domain experts.
-    *   **Is it harder to run:** No, running unsupervised algorithms (e.g., `KMeans.fit()`) is computationally simple and requires the same or fewer lines of code as supervised learning. The difficulty is entirely in validation and interpretation.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>P7. [THEORY] Why does semi-supervised learning exist? Name the constraint that motivates it and two task areas where it is commonly used.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **Why it exists:** To leverage massive amounts of cheap, easily accessible unlabeled data to improve prediction accuracy without incurring the cost of labeling everything.
-    *   **Motivating Constraint:** **Labeling data is expensive, slow, or requires rare specialist time** (e.g., a radiologist labeling cancer scans), whereas unlabeled data is abundant and free.
-    *   **Two Task Areas:** Image classification and text classification (or document analysis) where scraping web pages or images is free, but paying humans to label them is expensive.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>P8. [THEORY] Describe the four steps of self-training, and name the assumption it depends on.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **The Four Steps of Self-Training:**
-        1.  Train a baseline model using only the small pool of labeled data rows.
-        2.  Predict labels for the large pool of unlabeled rows.
-        3.  Select the predictions that the model is **most confident** about and add them (with their predicted labels) to the labeled training pool.
-        4.  Retrain the model on the expanded labeled dataset, and repeat the process iteratively.
-    *   **The Cluster Assumption:** This process assumes that points close to each other in the feature space are highly likely to share the same target class label. If this assumption fails, the model will confidently self-label incorrectly and amplify its errors.
-  </div>
-</details>
-
-### Reading the output
-
-<details>
-  <summary>❓ <b>O1. [OUT] From the demo table output: How much accuracy did 396 extra labels buy? What did semi-supervised gain over starved supervised? What does row 4 achieving 0.908 with zero labels tell you?</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **Accuracy bought by 396 labels:** Going from starved supervised (30 labels, `0.918` accuracy) to fully supervised (all 426 labels, `0.958` accuracy) only bought **0.040 (or 4.0 percentage points)** of accuracy.
-    *   **Semi-supervised gain:** Gained only **0.003 (0.3 percentage points)** over the starved supervised baseline (`0.921` vs `0.918`).
-    *   **What Row 4 tells us:** Achieving `0.908` with KMeans (using zero labels) indicates that the two classes (benign and malignant) are **highly separable** in the standardized feature space. The natural structure of the data itself is strong enough that clustering almost perfectly recovers the actual classes without any human annotations.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>O2. [ANALYZE] A colleague concludes from row 4 that labelling was a waste of effort. Give two reasons this conclusion is unsafe.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    1.  **Dataset Simplicity / Separability:** This is an exceptionally easy, separable dataset. On harder real-world problems, unsupervised models often perform poorly or fail to align with the labels you care about, while supervised accuracy remains high.
-    2.  **Label Alignment & Evaluation:** Without labels, you have no objective way of knowing *which* features KMeans clustered on, or whether the clusters map to "cancer vs healthy" or some other pattern (e.g. scanner type, patient age group). Furthermore, without labels, you cannot compute accuracy or prove to stakeholders that the system is safe to deploy.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>O3. [ANALYZE] The starved and semi-supervised rows are averaged over 15 random label draws. Explain why reporting a single draw would have been misleading.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   With a small label sample size (only 30 rows out of 426), a single random split can vary wildly by chance. One draw might accidentally pick highly representative points, resulting in a very high accuracy. Another draw might pick unrepresentative outliers, resulting in terrible accuracy. Reporting a single draw would capture random noise instead of the true, expected performance of the algorithm. Averaging over 15 random seeds smooths out this sampling variance.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>O4. [OUT] KMeans reported agreement 0.908 but an adjusted Rand index of 0.664. Both describe the same clustering. Why do they differ, and which is the more honest figure?</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **Why they differ:** Standard agreement (accuracy) does not account for random chance; even a random binary clustering can achieve 50% agreement by luck. The **Adjusted Rand Index (ARI)** measures pairwise similarity and mathematically corrects for random alignment, resetting the expected score of a random clustering to exactly `0.0`.
-    *   **Which is more honest:** **Adjusted Rand Index (0.664)** is much more honest and rigorous because it corrects for chance and handles arbitrary cluster indexing properly.
-  </div>
-</details>
-
-### Applying it
-
-<details>
-  <summary>❓ <b>A1. [PROG] Load load_breast_cancer and print the number of samples, the number of features, and how many rows belong to each class.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    You can run the following standard Python script to load the data and extract these statistics:
-
-    ```python
-    import numpy as np
-    from sklearn.datasets import load_breast_cancer
-
-    data = load_breast_cancer()
-    X, y = data.data, data.target
-
-    print(f"Number of samples: {X.shape[0]}")
-    print(f"Number of features: {X.shape[1]}")
-    print(f"Class counts: malignant={np.sum(y == 0)}, benign={np.sum(y == 1)}")
-    ```
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>A2. [PROG] Fit a KMeans with n_clusters=2 on the standardised features without using y, then print its agreement with the true labels under both possible cluster-to-class mappings.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    You can standardize the features, fit the clustering model, and compute accuracy for both orientations using the following code:
-
-    ```python
-    from sklearn.datasets import load_breast_cancer
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.cluster import KMeans
-    from sklearn.metrics import accuracy_score
-
-    # Load and scale
-    data = load_breast_cancer()
-    X_scaled = StandardScaler().fit_transform(data.data)
-
-    # Fit unsupervised KMeans
-    km = KMeans(n_clusters=2, random_state=0, n_init=10).fit(X_scaled)
-    labels = km.labels_
-
-    # Evaluate both mappings
-    acc_direct = accuracy_score(data.target, labels)
-    acc_inverted = accuracy_score(data.target, 1 - labels)
-
-    print(f"Direct Mapping Accuracy: {acc_direct:.3f}")
-    print(f"Inverted Mapping Accuracy: {acc_inverted:.3f}")
-    print(f"Best Clustering Agreement: {max(acc_direct, acc_inverted):.3f}")
-    ```
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>A3. [PROG] Build a semi-supervised setup: keep 20 labels, set the rest to -1, fit a SelfTrainingClassifier, and print test accuracy.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    The following code trains and evaluates a semi-supervised self-training classifier:
-
-    ```python
-    import numpy as np
-    from sklearn.datasets import load_breast_cancer
-    from sklearn.model_selection import train_test_split
-    from sklearn.preprocessing import StandardScaler
-    from sklearn.linear_model import LogisticRegression
-    from sklearn.semi_supervised import SelfTrainingClassifier
-    from sklearn.pipeline import make_pipeline
-
-    # Load and split
-    data = load_breast_cancer()
-    X_train, X_test, y_train, y_test = train_test_split(
-        data.data, data.target, test_size=0.25, random_state=0, stratify=data.target
-    )
-
-    # Mask labels: keep only 20, set rest of train labels to -1
-    rng = np.random.RandomState(42)
-    masked_y = np.copy(y_train)
-    unlabeled_indices = rng.permutation(len(y_train))[20:]
-    masked_y[unlabeled_indices] = -1
-
-    # Create self-training pipeline
-    base_model = make_pipeline(StandardScaler(), LogisticRegression(max_iter=5000))
-    self_training = SelfTrainingClassifier(base_model)
-
-    # Fit and score
-    self_training.fit(X_train, masked_y)
-    acc = self_training.score(X_test, y_test)
-    print(f"Semi-Supervised Test Accuracy (20 labels): {acc:.3f}")
-    ```
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>A4. [ANALYZE] You have 500,000 unlabelled product reviews and budget to label 500. Name the paradigm, describe your plan, and state how you would tell whether the unlabelled reviews helped at all.</b></summary>
-  <div className="answer-content">
-    <br/>
-
-    *   **Paradigm:** Semi-supervised learning or Self-supervised learning (specifically, pre-training a transformer using SSL on all 500k reviews and fine-tuning on the 500 labeled ones).
-    *   **Plan:**
-        1.  Scrape all 500,000 unlabeled reviews.
-        2.  Pay domain experts or use high-quality workers to annotate exactly 500 reviews with target labels (e.g. sentiment classification: Positive/Negative).
-        3.  Split the 500 labeled reviews into a training set (e.g. 350) and a clean, isolated validation/test set (e.g. 150).
-        4.  Train a baseline supervised model (e.g. Logistic Regression on TF-IDF or fine-tuned BERT) on only the 350 training labels and evaluate it on the 150 test labels.
-        5.  Use a semi-supervised algorithm (like `SelfTrainingClassifier`) or a self-supervised model (pre-trained language representations from the 500,000 reviews, fine-tuned on the 350 labeled reviews) and train the classifier.
-        6.  Evaluate this final model on the exact same 150 test labels.
-    *   **How to tell if unlabeled reviews helped:** Compare the test accuracy of the baseline supervised model (trained on only 350 labels) against the test accuracy of the semi-supervised/self-supervised model. If the semi-supervised/self-supervised model's test accuracy is significantly and robustly higher, the unlabeled reviews successfully helped.
-  </div>
-</details>
-
-### Quick self-check
-
-<details>
-  <summary>❓ <b>1. What is another word for "feature"?</b></summary>
+  <summary>❓ <b>1. [THEORY] Why is the "positive class" in medical diagnostics designated as having the disease?</b></summary>
   <div className="answer-content">
     <br/>
     
-    Attribute, predictor, column, variable, or input.
+    *   **Positive Test Detection:** "Positive" refers to a positive detection outcome (the condition was detected), not moral goodness.
+    *   **Asymmetric Priority:** Having cancer is the rare, consequential event. Downstream evaluation metrics (like Precision, Recall, and F2-Score) are formulated around the positive class to measure how reliably critical cases are captured.
   </div>
 </details>
 
 <details>
-  <summary>❓ <b>2. What do X and y conventionally hold, and what shape is each?</b></summary>
+  <summary>❓ <b>2. [ANALYZE] In Scikit-Learn's built-in Breast Cancer dataset, label 1 is `benign`. What dangerous bug occurs if you evaluate recall without checking?</b></summary>
   <div className="answer-content">
     <br/>
     
-    *   **`X`** holds the **feature matrix** and has a 2-D shape `(samples × features)`.
-    *   **`y`** holds the **target vector** (ground truth answers) and has a 1-D shape `(samples,)`.
+    *   **The Inverted Evaluation:** Scikit-Learn treats label `1` as the default positive class.
+    *   Calling `recall_score(y_test, y_pred)` evaluates the model's ability to find **healthy (benign) patients**!
+    *   A high score ($96\%$) gives false confidence, while the critical life-or-death clinical question ("how many malignant tumors were caught?") remains completely unmeasured. Always specify `pos_label=0` or re-map labels.
   </div>
 </details>
 
 <details>
-  <summary>❓ <b>3. What are the two most common kinds of data?</b></summary>
+  <summary>❓ <b>3. [THEORY] What is the "cluster assumption" in semi-supervised learning, and what happens when it fails?</b></summary>
   <div className="answer-content">
     <br/>
     
-    **Numeric** and **Categorical** data.
+    *   **The Cluster Assumption:** Assumes that data points lying close together in feature space or within the same high-density cluster share the same class label.
+    *   **Failure Consequence:** If classes overlap or clusters do not align with target boundaries, self-training assigns pseudo-labels to incorrect points with high confidence, amplifying errors and producing accuracy *worse* than trained on the small labeled set alone.
   </div>
 </details>
 
 <details>
-  <summary>❓ <b>4. In classification, can features be categorical? Can the output be numeric?</b></summary>
+  <summary>❓ <b>4. [MATH] Why is standard accuracy misleading when evaluating KMeans clustering, and what metric should be used instead?</b></summary>
   <div className="answer-content">
     <br/>
     
-    *   **Features:** Yes, features can be categorical.
-    *   **Output:** No, the classification output (target class) must **always** be categorical.
+    *   **Arbitrary Indexing & Chance Agreement:** Clustering assigns arbitrary IDs (Cluster 0, Cluster 1) with no concept of ground-truth names. Standard accuracy does not account for label permutation or random alignment.
+    *   **The Solution:** Use the **Adjusted Rand Index (ARI)**. ARI evaluates whether pairs of samples are placed in the same or different clusters and corrects for chance agreement, ensuring random clustering scores exactly `0.0`.
   </div>
 </details>
 
 <details>
-  <summary>❓ <b>5. Which column decides whether a task is regression or classification?</b></summary>
+  <summary>❓ <b>5. [THEORY] How does Self-Supervised Learning (SSL) differ from traditional Unsupervised Learning?</b></summary>
   <div className="answer-content">
     <br/>
     
-    The **target** column (`y`) alone decides. If the target is continuous numeric, it is regression. If it is categorical, it is classification.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>6. Does "positive class" mean the good outcome?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    No. "Positive" refers to a **positive detection result** (the presence of the condition being searched for, like spam, fraud, or disease), not whether the outcome is socially or medically good.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>7. What single question separates supervised from unsupervised learning?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    **Do you have a target column (`y`) in your training data?** (If yes, it's supervised. If no, it's unsupervised).
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>8. Name the two types of supervised learning.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    **Classification** and **Regression**.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>9. Name the three families of unsupervised task.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    **Clustering**, **Dimensionality Reduction**, and **Density Estimation**.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>10. What are the three jobs clustering performs?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    1.  **Discovering Structure** (identifying underlying groupings).
-    2.  **Summarisation** (representing huge datasets by a few key groups).
-    3.  **Anomaly Detection** (identifying outliers that do not fit standard clusters).
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>11. Why does semi-supervised learning exist?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    Because manually **labeling data is expensive or time-consuming** (requiring specialist labor), whereas unlabeled data is extremely abundant and cheap.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>12. Which paradigm is hardest to evaluate, and why?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    **Unsupervised learning**, because there is no ground-truth target label to compare predictions against, making evaluation subjective and dependent on domain expertise.
+    *   **Unsupervised Learning:** Seeks to discover flat geometric clusters (KMeans) or low-dimensional projections (PCA) directly from raw features without predictive supervision.
+    *   **Self-Supervised Learning:** Automatically constructs predictive pretext tasks from the data itself (e.g. masking words in BERT or predicting the next token in GPT). It trains via supervised backpropagation against internal data structure to learn deep universal representations.
   </div>
 </details>

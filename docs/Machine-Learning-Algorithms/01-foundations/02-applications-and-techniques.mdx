@@ -1,7 +1,7 @@
 ---
 sidebar_position: 2
 title: Applications and Major Techniques
-description: The nine major machine learning techniques, the question each one answers, and how to read a real problem statement and work out which technique it is.
+description: The nine major machine learning techniques, the question each one answers, and how to map real-world business problems to algorithms.
 tags: [machine-learning, foundations]
 toc_max_heading_level: 3
 ---
@@ -12,371 +12,490 @@ import React from 'react';
 
 # Applications and Major Techniques
 
-> **Topic —** There are only about **nine** things machine learning does. Every application you've
-> heard of is one of them, or a few of them stacked. This page names all nine, and — more usefully
-> — teaches you to look at a sentence like *"we want to know which customers will leave"* and
-> immediately say **classification**.
-
-That translation step is the actual skill. Choosing an algorithm is easy once the technique is
-named; naming it wrong means every later decision is wrong.
+> **Topic —** Across all of artificial intelligence, machine learning performs about **nine core techniques**. Every industry application is either one of these nine or a combination of them. The essential skill of an ML engineer is **translating a business question into its corresponding technique** by inspecting the shape of the required output.
 
 ---
 
-## The nine techniques at a glance
+## 1. The Nine Techniques at a Glance
 
-The fastest way to identify a technique is to ask **what shape the answer is**.
+The fastest way to identify the correct technique is to examine **what shape the answer is**:
 
-| # | Technique | The question it answers | Output shape | Canonical example |
-|---|---|---|---|---|
-| 1 | **Regression / Estimation** | *How much? How many?* | A **continuous number** | Predicting a house's price |
-| 2 | **Classification** | *Which category?* | A **label** from a fixed set | Churn - yes or no |
-| 3 | **Clustering** | *What natural groups exist?* | A **group id** per row | Grouping customers with similar buying habits |
-| 4 | **Association** | *What co-occurs?* | **Rules** — if A then B | Market basket analysis |
-| 5 | **Anomaly detection** | *What doesn't belong?* | **Normal / outlier** | Credit-card fraud detection |
-| 6 | **Sequence mining** | *What comes next?* | The **next item** in an order | Click-stream - the next page a user visits |
-| 7 | **Dimensionality reduction** | *Can I say this with fewer columns?* | **Fewer features**, same information | PCA |
-| 8 | **Recommendation systems** | *What else would this person like?* | A **ranked list** of items | Suggesting books or movies |
-| 9 | **Generative AI (Generation)** | *Can we generate new data?* | A **novel asset** (text, image, audio) | GPT-4 generating text; DALL-E drawing |
+| # | Technique | Core Question | Output Shape | Canonical Scikit-Learn Class | Example Application |
+|---|---|---|---|---|---|
+| 1 | **Regression** | *How much? How many?* | Continuous number ($\mathbb{R}$) | `LinearRegression`, `Ridge` | Predicting house prices, demand forecasting |
+| 2 | **Classification** | *Which category?* | Discrete class label | `LogisticRegression`, `RandomForest` | Churn prediction, spam detection, medical triage |
+| 3 | **Clustering** | *What natural groups exist?* | Cluster ID per row | `KMeans`, `DBSCAN` | Customer segmentation, document grouping |
+| 4 | **Association** | *What co-occurs?* | "If A, then B" rules | `apriori` (mlxtend) | Market basket analysis (frequently bought together) |
+| 5 | **Anomaly Detection** | *What doesn't belong?* | Binary inlier/outlier flag | `IsolationForest`, `OneClassSVM` | Credit-card fraud, equipment sensor failure |
+| 6 | **Sequence Mining** | *What comes next?* | Next item in ordered chain | `MarkovModel`, `LSTM`, `RNN` | Clickstream tracking, predictive search queries |
+| 7 | **Dimensionality Reduction** | *Can I compress these columns?* | Lower-dimensional projection | `PCA`, `TSNE`, `UMAP` | Visualizing 100 features in 2D, noise reduction |
+| 8 | **Recommendation** | *What else would this user like?* | Ranked list per user | Collaborative Filtering, SVD | Netflix movie recommendations, Spotify playlists |
+| 9 | **Generative AI** | *Can we generate new assets?* | Novel text, audio, image | Transformers, Diffusion | Large Language Models (LLMs), image synthesis |
 
-:::tip 
+:::tip
 
-**The two-question shortcut**
+**The Two-Question Decision Shortcut**
 
-*   **Q1 - Do you have the answers already (labels)?** If yes, you're in 1, 2 or 6. If no, you're in 3, 4, 5, 7, 8 or 9.
-*   **Q2 - Is the answer a number or a name?** Number $\to$ **regression**. Name $	o$ **classification**.
-
-Those two questions resolve the majority of real problems. The rest of this page is the detail behind them.
+1.  **Do you have historical answers (labels)?**
+    *   **Yes:** You are in Supervised Learning (Regression, Classification, or Sequence Mining).
+    *   **No:** You are in Unsupervised Learning (Clustering, Association, Anomaly Detection, or PCA).
+2.  **If labeled, is the answer a continuous number or a discrete name?**
+    *   **Continuous number:** $\implies$ **Regression** (where numeric proximity matters).
+    *   **Discrete name / category:** $\implies$ **Classification** (where labels are distinct categories).
 
 :::
 
 ---
 
-## 1. Regression / Estimation
+## 2. Interactive Problem-to-Technique Decision Wizard
 
-**Predicting continuous values.**
+Step through the diagnostic tree below to identify the exact machine learning technique, evaluation metric, and Scikit-Learn model for your task:
 
-The defining property is that the output is a *number on a scale*, where being close counts.
-Predicting ₹52 lakh for a ₹50 lakh house is a good answer; predicting "cat" when the truth is
-"dog" is not partially right.
+export const ProblemTechniqueDecisionWizard = () => {
+  const [hasLabels, setHasLabels] = React.useState('yes');
+  const [supervisedType, setSupervisedType] = React.useState('numeric');
+  const [unsupervisedGoal, setUnsupervisedGoal] = React.useState('cluster');
 
-| | |
-|---|---|
-| **Application** | Predicting a house's price from size, location, number of bedrooms |
-| **Also** | Share-market analysis and prediction; forecasting revenue; estimating delivery time |
-| **Needs labels?** | Yes — you need past houses *with* their prices |
+  let result = {
+    technique: 'Regression',
+    question: 'How much? How many?',
+    output: 'Continuous real number (on a scale where closeness matters)',
+    model: 'LinearRegression, Ridge, GradientBoostingRegressor',
+    metric: 'RMSE, MAE, R-squared',
+    nuance: 'A predicted price of $520,000 for a $500,000 house is 96% accurate; continuous errors are smooth.'
+  };
 
-How to recognise it: the question starts with **how much**, **how many**, **how long**, or **what
-value**.
+  if (hasLabels === 'yes') {
+    if (supervisedType === 'numeric') {
+      result = {
+        technique: 'Regression / Estimation',
+        question: 'How much? How many? What value?',
+        output: 'Continuous real number (on a scale where closeness matters)',
+        model: 'LinearRegression, Ridge, GradientBoostingRegressor',
+        metric: 'RMSE, MAE, R-squared',
+        nuance: 'A predicted price of $520,000 for a $500,000 house is 96% accurate; continuous errors are smooth.'
+      };
+    } else if (supervisedType === 'category') {
+      result = {
+        technique: 'Classification',
+        question: 'Which discrete category from a fixed set?',
+        output: 'Categorical label (Binary 0/1 or Multiclass)',
+        model: 'LogisticRegression, DecisionTreeClassifier, SVC',
+        metric: 'ROC-AUC, Precision, Recall, F1-Score',
+        nuance: 'Predicting "Dog" when truth is "Cat" is 100% wrong. Output probabilities express confidence, not continuous values!'
+      };
+    } else {
+      result = {
+        technique: 'Sequence Mining',
+        question: 'What item or state follows next in order?',
+        output: 'Next sequential token in a temporal chain',
+        model: 'HiddenMarkovModel, LSTM, Transformer',
+        metric: 'Perplexity, Next-Token Accuracy',
+        nuance: 'Crucial test: shuffling row order completely destroys the problem! Order carries the information.'
+      };
+    }
+  } else {
+    if (unsupervisedGoal === 'cluster') {
+      result = {
+        technique: 'Clustering',
+        question: 'What natural, unnamed groups exist in the data?',
+        output: 'Cluster assignment ID per row (e.g. Cluster 0, 1, 2)',
+        model: 'KMeans, DBSCAN, AgglomerativeClustering',
+        metric: 'Silhouette Score, Davies-Bouldin Index',
+        nuance: 'Nobody tells the algorithm what the groups represent. You cannot measure "accuracy" because true group names do not exist.'
+      };
+    } else if (unsupervisedGoal === 'anomaly') {
+      result = {
+        technique: 'Anomaly Detection',
+        question: 'Which cases look abnormal, rare, or non-conforming?',
+        output: 'Inlier (+1) vs. Outlier (-1) binary flag',
+        model: 'IsolationForest, LocalOutlierFactor, EllipticEnvelope',
+        metric: 'Precision-Recall AUC on extreme tails',
+        nuance: 'Use when anomalies represent less than 0.1% of the data or when future attacks look nothing like past attacks.'
+      };
+    } else if (unsupervisedGoal === 'assoc') {
+      result = {
+        technique: 'Association Rules',
+        question: 'Which items frequently appear together in the same transaction?',
+        output: '"If Antecedent, then Consequent" rule set',
+        model: 'Apriori, FP-Growth (via mlxtend)',
+        metric: 'Support, Confidence, Lift',
+        nuance: 'Association describes relationships between ITEMS, not people. Individual customer identities are ignored.'
+      };
+    } else if (unsupervisedGoal === 'dim') {
+      result = {
+        technique: 'Dimensionality Reduction',
+        question: 'Can I compress these features into fewer columns with minimal information loss?',
+        output: 'Compressed feature matrix (e.g. 100 dimensions down to 10)',
+        model: 'PCA, IncrementalPCA, TSNE, UMAP',
+        metric: 'Cumulative Explained Variance Ratio',
+        nuance: 'Almost always a preprocessing step for downstream models or for 2D/3D visualization.'
+      };
+    } else {
+      result = {
+        technique: 'Recommendation Systems',
+        question: 'What specific ranked list of items will this individual user prefer?',
+        output: 'Personalized, ranked list of items tailored per user ID',
+        model: 'Collaborative Filtering, Matrix Factorization (SVD)',
+        metric: 'Mean Average Precision at K (MAP@K), NDCG',
+        nuance: 'Recommendation is about PEOPLE and their interaction history, unlike Association which is about co-occurring items.'
+      };
+    }
+  }
 
-## 2. Classification
-
-**Predicting the item or category of a case.**
-
-The output is one of a fixed, known set of labels. Two labels is **binary** classification; more is
-**multiclass**.
-
-| | |
-|---|---|
-| **Application** | Churn prediction — will this customer leave, yes or no |
-| **Also** | Predicting a disease from symptoms; spam or not spam; approving or refusing a loan |
-| **Needs labels?** | Yes — you need past cases *with* their correct category |
-
-How to recognise it: the answer is a **noun or a yes/no**, and you could write out the complete list
-of possible answers in advance.
-
-:::note
-
-**Same data, different technique**
-
-A bank predicting **the probability** a loan defaults (`0.83`) looks like regression, but it's
-classification — the *decision* is approve/refuse. Probability is how classifiers express
-confidence, not evidence that the task is regression. The giveaway is that the truth in your data is
-a category (`defaulted` / `did not`), never a number.
-
-:::
-
-## 3. Clustering
-
-**Finding the structure of data; summarisation.**
-
-Clustering groups data points that are somehow similar. Crucially, **nobody says what the groups
-should be** — this is unsupervised, and the algorithm proposes the groups itself.
-
-Three distinct uses:
-
-- **Discovering structure** — what kinds of customer do we actually have?
-- **Summarisation** — describing 100,000 rows as six representative groups
-- **Anomaly detection** — points that fit no cluster well are suspicious
-
-| | |
-|---|---|
-| **Application** | Grouping customers with similar buying habits |
-| **Also** | A bank segmenting customers by characteristics; organising documents by subject |
-| **Needs labels?** | **No** |
-
-How to recognise it: you want groups but **cannot name them in advance**. If you could name them,
-it's classification.
-
-## 4. Association
-
-**Associating frequently co-occurring items or events.**
-
-The output is a *rule*: **if** a basket contains bread and butter, **then** it likely contains jam.
-Notice this predicts nothing about a person — it describes a relationship between items.
-
-| | |
-|---|---|
-| **Application** | Market basket analysis |
-| **Also** | "Frequently bought together"; which symptoms appear jointly; page pairs visited in one session |
-| **Needs labels?** | **No** |
-
-How to recognise it: the question is about **items appearing together**, not about predicting an
-outcome for a row.
-
-## 5. Anomaly detection
-
-**Discovering abnormal and unusual cases.**
-
-You are looking for the rare thing. This matters because the interesting class is often a fraction
-of a percent of the data, which breaks the usual approach — a model that says "not fraud" every time
-is 99.9% accurate and completely useless.
-
-| | |
-|---|---|
-| **Application** | Credit-card fraud detection |
-| **Also** | Network intrusion; manufacturing defects; a sensor reading that can't be physically real |
-| **Needs labels?** | Often **no** — that's the point |
-
-How to recognise it: you want the **rare, unexpected** cases, and you may have few or no examples
-of them.
-
-:::warning 
-
-**Anomaly detection or classification?**
-
-*   **Supervised (Classification):** Use when you have a healthy, balanced dataset with many confirmed fraud examples.
-*   **Unsupervised (Anomaly Detection):** Use when fraud is unlabelled, extremely rare (less than 0.1%), or when tomorrow's attack vectors look nothing like yesterday's.
-
-The choice is about **class imbalance and labels**, not the word "fraud".
-
-:::
-
-## 6. Sequence mining
-
-**Predicting the next item in an ordered sequence.**
-
-What makes this its own technique is that **order carries the information**. Shuffle the rows and
-you destroy the signal — which is not true of the techniques above.
-
-| | |
-|---|---|
-| **Application** | Click-stream analysis — predicting the next page a user will visit from previous clicks |
-| **Also** | Predicting the next word (autocomplete); next likely purchase; genome sequences |
-| **Needs labels?** | Implicitly — the next item *is* the label |
-
-How to recognise it: the words **next**, **after**, or **then**, and reordering the data would break
-the problem.
-
-## 7. Dimensionality reduction
-
-**Reducing the size of the data.**
-
-Techniques reduce the number of features or variables while retaining as much relevant information as possible. 
-*   **Linear Reduction (PCA):** Principal Component Analysis projects data onto orthogonal axes of maximum variance.
-*   **Non-Linear Manifold Learning (t-SNE / UMAP):** Algorithms like t-SNE and UMAP preserve local and global neighborhood structures, making them essential for high-dimensional visualization in 2-D or 3-D.
-
-Note this is usually not the goal in itself — it's a step that makes another technique work better, faster, or possible at all.
-
-| | |
-|---|---|
-| **Application** | PCA on a wide dataset before clustering or classification |
-| **Also** | Visualizing high-dimensional genomic or image data in 2-D using t-SNE or UMAP |
-| **Needs labels?** | **No** |
-
-How to recognize it: you have **too many columns**, and you suspect they overlap.
-
-## 8. Recommendation systems
-
-**Associating people's preferences with others who have similar tastes, and recommending new items.**
-
-The output is a *ranked list personalized per user*, which is what separates it from classification.
-*   **Collaborative Filtering (User-User):** Recommends items based on the preferences of similar users (*"People who liked this also liked..."*).
-*   **Content-Based Filtering (Item-Item):** Recommends items based on their intrinsic features matching your history (*"Because you watched Inception, you may like Interstellar"*).
-
-| | |
-|---|---|
-| **Application** | Netflix and Amazon recommending videos, movies and TV shows |
-| **Also** | Suggested products; "people you may know"; a music discovery playlist |
-| **Needs labels?** | No labels, but it needs **user-item interaction history** |
-
-How to recognize it: the answer differs **per person**, and it's a list rather than one value.
-
----
-
-## Reading a problem statement
-
-Given a sentence, work down this path:
-
-```
-What shape is the answer?
-│
-├─ a number on a scale ─────────────────► REGRESSION
-│
-├─ one of a fixed set of names
-│   ├─ do you have labelled examples? ──► CLASSIFICATION
-│   └─ no labels, rare cases ───────────► ANOMALY DETECTION
-│
-├─ a group id, groups not named up front ► CLUSTERING
-│
-├─ the next thing in an order ───────────► SEQUENCE MINING
-│
-├─ "if A then B" about items ────────────► ASSOCIATION
-│
-├─ a ranked list, different per person ──► RECOMMENDATION
-│
-└─ the same rows with fewer columns ─────► DIMENSIONALITY REDUCTION
-```
-
-Worked examples:
-
-| Problem statement | Answer shape | Technique |
-|---|---|---|
-| "How many units will we sell next month?" | a number | Regression |
-| "Which of these transactions should we block?" | yes/no, labelled history | Classification |
-| "Which transactions look nothing like normal?" | rare/unusual, no labels | Anomaly detection |
-| "What types of user does our app have?" | unnamed groups | Clustering |
-| "What do people buy alongside coffee?" | item rules | Association |
-| "What will they search for next?" | next in order | Sequence mining |
-| "We have 200 columns and a slow model" | fewer columns | Dimensionality reduction |
-| "What should we put on their home page?" | ranked, per person | Recommendation |
-
-export const TechniqueQuiz = () => {
-  const [selected, setSelected] = React.useState(null);
   return (
     <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Match the Technique</h4>
-      <p style={{ margin: '0 0 15px 0' }}><b>Scenario:</b> An online grocery store wants to suggest alternative products to a customer based strictly on what is currently in their shopping cart (e.g. suggesting "ketchup" because they added "fries"). Which technique matches this task?</p>
-      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-        <button onClick={() => setSelected('assoc')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'assoc' ? '#38a169' : 'transparent', color: selected === 'assoc' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Association</button>
-        <button onClick={() => setSelected('reco')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'reco' ? '#e53e3e' : 'transparent', color: selected === 'reco' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Recommendation Systems</button>
+      <h4 style={{ margin: '0 0 12px 0' }}>🧙‍♂️ Problem-to-Technique Decision Wizard</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Select your problem constraints to determine the matching machine learning technique:
+      </p>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '14px', marginBottom: '16px' }}>
+        <div>
+          <label style={{ fontSize: '12px', fontWeight: 'bold' }}>1. Do you have historical target labels?</label>
+          <div style={{ display: 'flex', gap: '6px', marginTop: '6px' }}>
+            <button
+              onClick={() => setHasLabels('yes')}
+              style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: hasLabels === 'yes' ? '#3182ce' : 'transparent', color: hasLabels === 'yes' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+            >
+              Yes (Supervised)
+            </button>
+            <button
+              onClick={() => setHasLabels('no')}
+              style={{ padding: '6px 12px', borderRadius: '4px', border: '1px solid #805ad5', backgroundColor: hasLabels === 'no' ? '#805ad5' : 'transparent', color: hasLabels === 'no' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+            >
+              No (Unsupervised)
+            </button>
+          </div>
+        </div>
+
+        {hasLabels === 'yes' ? (
+          <div>
+            <label style={{ fontSize: '12px', fontWeight: 'bold' }}>2. Shape of the Target Variable:</label>
+            <div style={{ display: 'flex', gap: '6px', marginTop: '6px', flexWrap: 'wrap' }}>
+              <button
+                onClick={() => setSupervisedType('numeric')}
+                style={{ padding: '4px 10px', borderRadius: '4px', border: '1px solid var(--ifm-color-emphasis-400)', backgroundColor: supervisedType === 'numeric' ? 'var(--ifm-color-primary)' : 'transparent', color: supervisedType === 'numeric' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+              >
+                Continuous Number
+              </button>
+              <button
+                onClick={() => setSupervisedType('category')}
+                style={{ padding: '4px 10px', borderRadius: '4px', border: '1px solid var(--ifm-color-emphasis-400)', backgroundColor: supervisedType === 'category' ? 'var(--ifm-color-primary)' : 'transparent', color: supervisedType === 'category' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+              >
+                Discrete Category
+              </button>
+              <button
+                onClick={() => setSupervisedType('sequence')}
+                style={{ padding: '4px 10px', borderRadius: '4px', border: '1px solid var(--ifm-color-emphasis-400)', backgroundColor: supervisedType === 'sequence' ? 'var(--ifm-color-primary)' : 'transparent', color: supervisedType === 'sequence' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+              >
+                Ordered Sequence
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div>
+            <label style={{ fontSize: '12px', fontWeight: 'bold' }}>2. Primary Unsupervised Goal:</label>
+            <div style={{ display: 'flex', gap: '4px', marginTop: '6px', flexWrap: 'wrap' }}>
+              <button
+                onClick={() => setUnsupervisedGoal('cluster')}
+                style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid var(--ifm-color-emphasis-400)', backgroundColor: unsupervisedGoal === 'cluster' ? 'var(--ifm-color-primary)' : 'transparent', color: unsupervisedGoal === 'cluster' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '11px' }}
+              >
+                Find Clusters
+              </button>
+              <button
+                onClick={() => setUnsupervisedGoal('anomaly')}
+                style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid var(--ifm-color-emphasis-400)', backgroundColor: unsupervisedGoal === 'anomaly' ? 'var(--ifm-color-primary)' : 'transparent', color: unsupervisedGoal === 'anomaly' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '11px' }}
+              >
+                Find Anomalies
+              </button>
+              <button
+                onClick={() => setUnsupervisedGoal('assoc')}
+                style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid var(--ifm-color-emphasis-400)', backgroundColor: unsupervisedGoal === 'assoc' ? 'var(--ifm-color-primary)' : 'transparent', color: unsupervisedGoal === 'assoc' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '11px' }}
+              >
+                Item Rules
+              </button>
+              <button
+                onClick={() => setUnsupervisedGoal('dim')}
+                style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid var(--ifm-color-emphasis-400)', backgroundColor: unsupervisedGoal === 'dim' ? 'var(--ifm-color-primary)' : 'transparent', color: unsupervisedGoal === 'dim' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '11px' }}
+              >
+                Compress Features
+              </button>
+              <button
+                onClick={() => setUnsupervisedGoal('reco')}
+                style={{ padding: '4px 8px', borderRadius: '4px', border: '1px solid var(--ifm-color-emphasis-400)', backgroundColor: unsupervisedGoal === 'reco' ? 'var(--ifm-color-primary)' : 'transparent', color: unsupervisedGoal === 'reco' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '11px' }}
+              >
+                Recommend Items
+              </button>
+            </div>
+          </div>
+        )}
       </div>
-      {selected === 'assoc' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! This is Association (Market Basket Analysis). It maps relationships between items based on co-occurrence, without requiring a personalized history of the user.</p>}
-      {selected === 'reco' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Recommendation systems are personalized to a user's historical profile and tastes. Since this task is based strictly on co-occurring cart items, Association is the correct technique. Try again!</p>}
+
+      <div style={{ padding: '16px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px', flexWrap: 'wrap', gap: '8px' }}>
+          <div>
+            <span style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)', textTransform: 'uppercase', fontWeight: 'bold' }}>
+              Identified Technique
+            </span>
+            <div style={{ fontSize: '20px', fontWeight: 'bold', color: '#3182ce' }}>
+              {result.technique}
+            </div>
+          </div>
+          <span style={{ padding: '4px 8px', borderRadius: '4px', backgroundColor: hasLabels === 'yes' ? 'rgba(49, 130, 206, 0.15)' : 'rgba(128, 90, 213, 0.15)', color: hasLabels === 'yes' ? '#2b6cb0' : '#6b46c1', fontSize: '12px', fontWeight: 'bold' }}>
+            {hasLabels === 'yes' ? 'Supervised Learning' : 'Unsupervised Learning'}
+          </span>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', margin: '12px 0' }}>
+          <div style={{ fontSize: '13px' }}>
+            <b>Canonical Scikit-Learn Models:</b><br/>
+            <code>{result.model}</code>
+          </div>
+          <div style={{ fontSize: '13px' }}>
+            <b>Primary Evaluation Metrics:</b><br/>
+            <span style={{ color: 'var(--ifm-color-emphasis-700)' }}>{result.metric}</span>
+          </div>
+        </div>
+
+        <div style={{ padding: '10px 12px', borderRadius: '4px', backgroundColor: 'rgba(56, 161, 105, 0.08)', borderLeft: '4px solid #38a169', fontSize: '13px' }}>
+          💡 <b>Key Engineering Insight:</b> {result.nuance}
+        </div>
+      </div>
     </div>
   );
 };
 
-<TechniqueQuiz />
+<ProblemTechniqueDecisionWizard />
 
 ---
 
-## Applications you use every day
+## 3. One Dataset, Five Techniques
 
-Real systems are rarely one technique. These are the standard examples, with the techniques each
-one actually leans on.
+A frequent beginner misunderstanding is believing that datasets belong to a specific technique. In reality, **the business question, not the data, picks the technique**.
 
-### Recommendation — Netflix and Amazon
+Consider a single retail customer table:
+*   `tenure_months`: How many months they have been subscribed.
+*   `monthly_spend`: Average dollar expenditure per month.
+*   `support_tickets`: Number of help-desk calls logged.
+*   `churned`: Ground-truth historical label ($1 = \text{cancelled}, 0 = \text{retained}$).
 
-How do Netflix and Amazon recommend videos, movies and TV shows? They use machine learning to
-produce **suggestions you might enjoy** — associating your preferences with people of similar taste.
-→ *Recommendation systems*, usually with *clustering* behind it.
+export const OneDatasetFiveTechniquesSandbox = () => {
+  const [activeTech, setActiveTech] = React.useState('reg');
 
-### Banking — loan approval
+  const paradigms = {
+    reg: {
+      name: '1. Regression',
+      question: 'How much will this customer spend each month?',
+      target: 'monthly_spend (Continuous Numeric Y in R)',
+      code: `from sklearn.linear_model import LinearRegression
+reg = LinearRegression().fit(df[["tenure_months"]], df["monthly_spend"])
+print(f"R2 score: {reg.score(X, y):.3f}")  # R2 = 0.651`,
+      output: 'Fitted Line: spend = 2.45 * tenure + 22.10. Predicts $56.40 spend for 14-month tenure.',
+      insight: 'Notice how the two extreme spenders ($95 and $140) pull the OLS regression line upward, reducing R2 to 0.651.'
+    },
+    clf: {
+      name: '2. Classification',
+      question: 'Will this customer cancel their subscription (churn)?',
+      target: 'churned (Discrete Binary Y in {0, 1})',
+      code: `from sklearn.linear_model import LogisticRegression
+clf = LogisticRegression().fit(df[["tenure_months", "monthly_spend", "support_tickets"]], df["churned"])
+prob = clf.predict_proba([[3, 24, 5]])[0][1]`,
+      output: 'Prediction for new customer: CHURN (Probability = 0.94). Training accuracy: 100%.',
+      insight: 'The 0.94 probability is the classifier confidence score, NOT regression evidence. The true target was discrete (0 or 1).'
+    },
+    cluster: {
+      name: '3. Clustering',
+      question: 'What behavioral customer segments exist?',
+      target: 'None (Unsupervised; churned column is completely hidden)',
+      code: `from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+km = KMeans(n_clusters=3, random_state=0).fit(StandardScaler().fit_transform(X))`,
+      output: `Cluster 0 (At-Risk): Tenure 4.0 mo, 5.2 tickets (Matches churners!)
+Cluster 1 (Core):    Tenure 15.3 mo, 1.0 tickets
+Cluster 2 (VIP):     Tenure 33.0 mo, $110 spend`,
+      insight: 'Even without seeing the churned labels, KMeans discovered the churners because high ticket volume forms a natural mathematical cluster!'
+    },
+    anomaly: {
+      name: '4. Anomaly Detection',
+      question: 'Which customers exhibit unusual or suspicious behavior?',
+      target: 'None (Unsupervised density estimation)',
+      code: `from sklearn.ensemble import IsolationForest
+iso = IsolationForest(contamination=0.15, random_state=0).fit(X)
+df["anomaly"] = iso.predict(X)  # -1 = outlier, +1 = inlier`,
+      output: 'Flagged exactly 2 rows: (6 mo / $95 / 8 tickets) and (36 mo / $140 / 0 tickets).',
+      insight: 'The same two outlier rows that degraded our linear regression fit line are the exact rows isolated here. One technique noise is another technique answer!'
+    },
+    pca: {
+      name: '5. Dimensionality Reduction (PCA)',
+      question: 'Can we compress 3 customer features into 2D for visualization?',
+      target: 'None (Unsupervised orthogonal projection)',
+      code: `from sklearn.decomposition import PCA
+pca = PCA(n_components=2).fit(StandardScaler().fit_transform(X))
+print(pca.explained_variance_ratio_)`,
+      output: 'PC1: 75.0% variance | PC2: 22.9% variance | Total Explained: 97.9%',
+      insight: 'We compressed 3-dimensional customer space into 2D coordinates with only 2.1% information loss, enabling planar scatter plotting.'
+    }
+  };
 
-How does a bank decide when approving a loan application? It uses machine learning to **predict the
-probability of default** for each applicant, then approves or refuses based on that probability.
-→ *Classification*.
+  const curr = paradigms[activeTech];
 
-### Telecommunications — segmentation and churn
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>📊 One Dataset, Five Paradigms Sandbox</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Select a machine learning paradigm to see how the exact same customer table is processed:
+      </p>
 
-Telecom companies analyse customers' demographic data to:
+      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '16px' }}>
+        {Object.keys(paradigms).map((key) => (
+          <button
+            key={key}
+            onClick={() => setActiveTech(key)}
+            style={{
+              padding: '6px 12px',
+              borderRadius: '4px',
+              border: '1px solid #3182ce',
+              backgroundColor: activeTech === key ? '#3182ce' : 'transparent',
+              color: activeTech === key ? '#fff' : 'var(--ifm-font-color-base)',
+              cursor: 'pointer',
+              fontWeight: activeTech === key ? 'bold' : 'normal',
+              fontSize: '12px',
+              transition: '0.2s'
+            }}
+          >
+            {paradigms[key].name}
+          </button>
+        ))}
+      </div>
 
-- categorise them into **distinct groups** → *clustering* (segmentation)
-- forecast which customers are likely to **cancel their service** → *classification* (churn)
+      <div style={{ padding: '16px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+        <div style={{ fontSize: '15px', fontWeight: 'bold', color: '#3182ce', marginBottom: '6px' }}>
+          {curr.question}
+        </div>
+        <div style={{ fontSize: '12px', color: 'var(--ifm-color-emphasis-600)', marginBottom: '12px' }}>
+          Target Column: <b>{curr.target}</b>
+        </div>
 
-Two different techniques on one dataset, answering two different questions. This pairing is worth
-remembering — it's the clearest illustration that the *question*, not the data, picks the technique.
+        <pre style={{ margin: '8px 0', padding: '10px 12px', fontSize: '12px', borderRadius: '4px' }}>
+          <code>{curr.code}</code>
+        </pre>
 
-### Healthcare diagnostics
+        <div style={{ padding: '8px 12px', borderRadius: '4px', backgroundColor: 'rgba(148, 163, 184, 0.1)', fontFamily: 'monospace', fontSize: '12px', whiteSpace: 'pre-line', margin: '10px 0' }}>
+          {curr.output}
+        </div>
 
-Models analyse medical images — **X-rays** and **MRIs** — to assist in diagnosing diseases, roughly
-a thousand times faster than a human. Also personalising treatment, drug discovery, and clinical
-trial research.
-→ *Classification* on images, with *deep learning* doing the feature extraction.
+        <div style={{ padding: '10px 12px', borderRadius: '4px', backgroundColor: 'rgba(49, 130, 206, 0.08)', borderLeft: '4px solid #3182ce', fontSize: '13px' }}>
+          💡 <b>Mathematical Connection:</b> {curr.insight}
+        </div>
+      </div>
+    </div>
+  );
+};
 
-### Financial trading
-
-Machine learning analyses market data and trends to inform trading strategies, detect **market
-shifts**, assess **risk**, and **predict stock prices**.
-→ *Regression* for prices, *classification* for risk bands, *anomaly detection* for unusual activity.
-
-### Autonomous vehicles
-
-Self-driving cars use machine learning to **interpret sensor data**, **recognise objects**, make
-**real-time decisions**, and navigate safely.
-→ *Classification* for object recognition, plus *reinforcement learning* for the driving policy.
-
-### And the rest
-
-Chatbots; unlocking your phone; computer games using **face recognition**. Each uses different
-machine learning techniques and algorithms — there is no single "the" ML method behind everyday
-software.
+<OneDatasetFiveTechniquesSandbox />
 
 ---
 
-## Technique Overlap & Clarifications
+## 4. Key Distinctions & Boundary Traps
 
 <Tabs>
-  <TabItem value="seg" label="Segmentation vs. Churn" default>
+  <TabItem value="clf_reg" label="1. Classification vs. Regression" default>
     <br/>
     
-    *   **The Scenario:** Running analytics on a single telecom customer dataset.
-    *   **Customer Segmentation (Clustering):** Groups similar users into unnamed categories to find buying patterns. **Needs no labels.**
-    *   **Churn Prediction (Classification):** Forecasts whether a specific user will cancel their service. **Needs historical yes/no labels.**
-    *   *The Lesson:* The **business question**, not the dataset, determines the machine learning technique.
+    *   **The Trap:** *"Our loan default model outputs `0.83`, so it's regression."*
+    *   **The Principle:** In loan prediction, `0.83` is the model's posterior confidence probability $P(\text{Default} \mid X)$. The underlying ground truth is discrete ($\{0, 1\}$).
+    *   **The Litmus Test:** Does numeric proximity matter? If predicting $52$ for $50$ is partly right, it is **Regression**. If predicting Class B for Class A is completely wrong, it is **Classification**.
   </TabItem>
-  <TabItem value="assoc" label="Association vs. Recommendation">
+  <TabItem value="assoc_reco" label="2. Association vs. Recommendation">
     <br/>
     
-    *   **Association:** Learns static co-occurrence rules between items (*"Customers who bought coffee also bought sugar"*). Personal history of the shopper is irrelevant.
-    *   **Recommendation:** Builds a personalized, ranked list of items tailored strictly to a user's unique history, tastes, and user-item interactions (*"Because you liked Interstellar, you may like Inception"*).
+    *   **Association:** Operates on **items** (Market Basket Analysis: *"If a basket contains diapers, it contains beer with 60% confidence"*). The shopper's identity is completely ignored.
+    *   **Recommendation:** Operates on **people** (Collaborative Filtering: *"Because user Alex watched Interstellar and has similar watch histories to user Jordan, recommend Inception"*).
+  </TabItem>
+  <TabItem value="anom_clf" label="3. Anomaly Detection vs. Classification">
+    <br/>
+    
+    *   **When to use Classification:** When you possess balanced, confirmed labels for both normal and fraudulent events ($>1\%$ frequency).
+    *   **When to use Anomaly Detection:** When fraudulent events are unlabelled, extremely rare ($<0.1\%$), or when future attacks look nothing like past attacks.
   </TabItem>
 </Tabs>
 
-## Common Mistakes
+---
 
-Here are the most common conceptual pitfalls when mapping business problems to machine learning techniques, compared with the correct engineering principles.
+## 5. Implementation Lab
+
+:::tip
+
+**Lab Exercise: One Dataset, Five Techniques**
+
+An interactive, fully functional Google Colab / Jupyter Notebook is available to execute Linear Regression, Logistic Regression, KMeans Clustering, Isolation Forest Anomaly Detection, and PCA on the exact same customer dataset live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/01-foundations/one_dataset_five_techniques.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Run cells sequentially to benchmark all 5 Scikit-Learn models on identical input features.
+
+**Key Experiments to Run:**
+*   **Experiment 1 (Outlier Impact on Regression):** Inspect the OLS regression fit line with the 2 anomalous spenders ($R^2 = 0.651$), drop them, and watch $R^2$ jump!
+*   **Experiment 2 (Unsupervised Churn Discovery):** Examine KMeans cluster averages to see why Cluster 0 organically isolates the churned customers without ever receiving the churn label.
+*   **Experiment 3 (PCA Variance Preservation):** Verify that 2 principal components capture $97.9\%$ of total variance from the original 3-dimensional space.
+
+:::
+
+---
+
+## 6. Common Mistakes
 
 <Tabs>
-  <TabItem value="mistake1" label="🚨 Mistake 1: Subject vs. Data" default>
+  <TabItem value="m1" label="🚨 1. Confusing Output Format with Task Type" default>
     <br/>
-
-    *   **The Misconception:** *"Since we are building a fraud detector, we must use Anomaly Detection."*
-    *   **❌ Wrong Thinking:** Picking a technique based purely on the project title.
-    *   **✅ The Right Principle:** Check your **experience (E) labels** first. If you have plenty of balanced, confirmed fraud labels, treat it as a supervised **Classification** task (which is far more accurate). Only use Anomaly Detection if labels are missing or extremely rare.
+    
+    *   **The Misconception:** *"A probability output like 0.85 means the algorithm is performing regression."*
+    *   **❌ Wrong Thinking:** Judging a model by its mathematical floating-point format.
+    *   **✅ The Right Principle:** Check the **ground-truth target**. If the target in your training table is a discrete class (`defaulted` vs `paid`), the task is **Classification**.
   </TabItem>
-  <TabItem value="mistake2" label="🚨 Mistake 2: Probability = Regression?" default>
+  <TabItem value="m2" label="🚨 2. Labeling Datasets Instead of Questions">
     <br/>
-
-    *   **The Misconception:** *"Our model outputs a probability score between 0 and 1, so the task is Regression."*
-    *   **❌ Wrong Thinking:** Classifying a model based on the mathematical confidence score format.
-    *   **✅ The Right Principle:** Check the **ground truth**. If the target in your dataset is a binary label (defaulted / did not), the task is **Classification**. The probability score is just the classifier's level of confidence, not regression evidence.
+    
+    *   **The Misconception:** *"This customer dataset is a classification dataset."*
+    *   **❌ Wrong Thinking:** Believing a dataset is locked to a single technique.
+    *   **✅ The Right Principle:** Datasets are neutral containers. You can run Regression on `monthly_spend`, Classification on `churned`, and Clustering on unlabeled demographic features. The business question picks the technique.
+  </TabItem>
+  <TabItem value="m3" label="🚨 3. Assuming Shuffling Never Matters">
+    <br/>
+    
+    *   **The Misconception:** *"Shuffling dataset rows has no impact on model training."*
+    *   **❌ Wrong Thinking:** Treating all data as independent and identically distributed (i.i.d.).
+    *   **✅ The Right Principle:** In **Sequence Mining** and time-series forecasting, temporal order carries the informational signal. Shuffling rows completely destroys the transition dynamics.
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Association vs. Personalized Recommendations">
+    <br/>
+    
+    *   **The Misconception:** *"Market basket analysis gives personalized product suggestions to users."*
+    *   **❌ Wrong Thinking:** Confusing co-occurrence with individual taste profiling.
+    *   **✅ The Right Principle:** Association rules are global to the checkout basket (*"If coffee, then sugar"*). True recommendation systems require user interaction history to personalize suggestions.
   </TabItem>
 </Tabs>
 
-## Summary
+---
+
+## 7. Summary
 
 <div className="row">
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Supervised Techniques</h3>
+        <h3>🤖 Supervised Paradigms</h3>
       </div>
       <div className="card__body">
         <ul>
-          <li><b>Regression:</b> Predicts continuous numeric values (How much/many? Closeness counts).</li>
-          <li><b>Classification:</b> Predicts categorical labels from a fixed set (Which category? Yes/No).</li>
-          <li><b>Sequence Mining:</b> Predicts the next ordered item (Order carries the signal).</li>
+          <li><b>Regression:</b> Continuous numeric targets ($\mathbb{R}$). Proximity matters ($R^2$, RMSE).</li>
+          <li><b>Classification:</b> Discrete categorical targets. Exact class matching (ROC-AUC, F1).</li>
+          <li><b>Sequence Mining:</b> Next item in temporal chain. Shuffling breaks signal.</li>
         </ul>
       </div>
     </div>
@@ -384,14 +503,14 @@ Here are the most common conceptual pitfalls when mapping business problems to m
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>📊 Unsupervised Techniques</h3>
+        <h3>📊 Unsupervised Paradigms</h3>
       </div>
       <div className="card__body">
         <ul>
-          <li><b>Clustering:</b> Groups similar data points into unnamed segments (No labels required).</li>
-          <li><b>Association:</b> Finds co-occurring item rules (If A, then B).</li>
-          <li><b>Anomaly Detection:</b> Identifies rare, abnormal outliers (Normal vs. Defect).</li>
-          <li><b>Dimensionality Reduction:</b> Compresses column sizes while retaining maximum variance.</li>
+          <li><b>Clustering:</b> Groups similar unlabeled rows (KMeans, Silhouette).</li>
+          <li><b>Association:</b> Co-occurring item rules in baskets (Support, Lift).</li>
+          <li><b>Anomaly Detection:</b> Flags rare outliers ($<0.1\%$, IsolationForest).</li>
+          <li><b>Dimensionality Reduction:</b> Projects wide feature spaces into 2D/3D (PCA).</li>
         </ul>
       </div>
     </div>
@@ -400,406 +519,95 @@ Here are the most common conceptual pitfalls when mapping business problems to m
 
 <br/>
 
-:::info 
+:::info
 
-**📌 Key Takeaways: Applications & Techniques**
+**📌 Key Takeaways**
 
-*   **🎯 Output Shape Rules:** Always identify the machine learning technique by the **shape of the answer**, never by the industry subject matter (e.g. Fraud can be Classification or Anomaly Detection).
-*   **🖼️ The Core Questions:** Settle most tasks by asking: *Do I have labels?* (Supervised vs. Unsupervised) and *Is the answer a number or a name?* (Regression vs. Classification).
-*   **🔄 Sequence Ordering:** In sequence mining, **shuffling the rows destroys the problem** (whereas row order is irrelevant in other techniques).
-*   **🛠️ Technique Stacking:** Real-world applications rarely use just one technique; autonomous driving stacks classification (for objects) with reinforcement learning (for policies).
-
-:::
-
-**Next in this section:** [Types of Learning](./03-types-of-learning.mdx) — the labels-or-not divide these techniques keep turning on · [Reinforcement Learning](./04-reinforcement-learning.mdx) · [The Toolkit and the Pipeline](./05-toolkit-and-pipeline.mdx)
-
-**See also:** [What is Machine Learning?](./01-what-is-machine-learning.mdx) for why any of this beats hand-written rules
-
----
-
-## Implementation Lab
-
-:::tip 
-
-**Lab Exercise: One Dataset, Five Techniques**
-
-An interactive, fully-functional Google Colab / Jupyter Notebook is available to run all five machine learning techniques (Regression, Classification, Clustering, Anomaly Detection, and PCA) live on the exact same customer dataset.
-
-<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/01-foundations/one_dataset_five_techniques.ipynb" target="_blank" rel="noopener noreferrer">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
-</a>
-
-**How to run the lab:**
-1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
-2. Run each cell individually (`Shift + Enter`) or run all to see how different questions yield different outputs on identical customer rows.
-
-**Things to try inside the script:**
-*   **Tweak Clustering:** Change `n_clusters` to 2 and then 4. Note how the cluster averages redistribute. Notice why clustering has no single "correct" score.
-*   **Surgically clean Regression:** Observe how the two anomalous rows pull off the OLS regression fit line. Drop them and re-run to watch $R^2$ jump!
-*   **Check feature importances:** Observe which variables are discarded by PCA vs. which ones dominate your IsolationForest anomalies.
+*   **🎯 Output Shape Dictates Technique:** Always identify the technique by what the answer looks like (continuous number, discrete label, cluster ID, or ranked list).
+*   **🛠️ Data Does Not Pick the Technique:** A single customer dataset can simultaneously support regression, classification, clustering, anomaly detection, and PCA.
+*   **⚠️ The 0.83 Probability Trap:** Output probabilities express confidence in classification; they do not turn the problem into regression.
 
 :::
 
----
-
-## Practice Questions
-
-*Test your understanding by working each problem out first, then click the card to reveal the detailed solution. Questions are tagged by type: **[THEORY]**, **[PROG]**, **[OUT]**, or **[ANALYZE]**.*
-
-### Naming the technique
-
-<details>
-  <summary>❓ <b>T1. [THEORY] List the nine major machine learning techniques, and for each give the question it answers in one phrase.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    1.  **Regression / Estimation:** *"How much? How many? (predicts continuous numbers)"*
-    2.  **Classification:** *"Which category? (predicts discrete labels)"*
-    3.  **Clustering:** *"What natural groups exist? (groups rows without names)"*
-    4.  **Association:** *"What co-occurs? (if A then B rules)"*
-    5.  **Anomaly Detection:** *"What doesn't belong? (normal vs. rare outlier)"*
-    6.  **Sequence Mining:** *"What comes next? (next item in an ordered chain)"*
-    7.  **Dimensionality Reduction:** *"Can I represent this with fewer columns? (retains maximum variance)"*
-    8.  **Recommendation Systems:** *"What else would this specific person like? (ranked list personalized per user)"*
-    9.  **Generative AI (Generation):** *"Can we generate new data matching the source distribution? (creates novel text, pixels, or audio)"*
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>T2. [THEORY] For each of the following, name the technique and justify it in one sentence: predicting a house's price · churn yes/no · grouping customers with similar buying habits · market basket analysis · credit-card fraud · the next page a user visits · reducing 200 columns to 10 · suggesting a film.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Predicting a house's price:** **Regression**, because the target is a continuous numeric value where numeric proximity determines performance.
-    *   **Churn yes/no:** **Classification**, because the prediction is a discrete category (yes or no) from a predefined, finite set of outcomes.
-    *   **Grouping customers with similar buying habits:** **Clustering**, because you are discovering natural, unnamed customer segments in the data without predefined labels.
-    *   **Market basket analysis:** **Association**, because we are learning co-occurrence relationships and "if A then B" rules between item sets, rather than individual user profiles.
-    *   **Credit-card fraud:** Either **Anomaly Detection** (if fraud examples are unlabelled, rare, and dynamic) or **Classification** (if we have balanced, labelled historical fraud instances).
-    *   **The next page a user visits:** **Sequence Mining**, because the order of the clicks carries the informational signal, and row shuffling destroys the problem.
-    *   **Reducing 200 columns to 10:** **Dimensionality Reduction**, because we are compressing a wide column space into fewer features while retaining maximum variance.
-    *   **Suggesting a film:** **Recommendation Systems**, because we are producing a ranked list personalized to a specific user's historical interactions.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>T3. [THEORY] State the two questions that resolve most technique choices, and explain what each one rules out.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    1.  **Do you have the answers already (labels)?**
-        *   If **Yes (Supervised)**: Rules out clustering, association, and purely unsupervised anomaly detection.
-        *   If **No (Unsupervised)**: Rules out supervised regression and classification.
-    2.  **Is the answer a number or a name?**
-        *   If **Number (Continuous)**: Rules out classification.
-        *   If **Name/Category (Discrete)**: Rules out regression.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>T4. [THEORY] Which technique becomes impossible if you shuffle the order of your rows? Why?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Sequence Mining** becomes impossible when rows are shuffled.
-    *   **Why:** In sequence mining, the order of events carries the crucial signal. Shuffling the rows completely destroys the temporal or positional progression, making it impossible for the model to learn the transitions from one state to the next.
-  </div>
-</details>
-
-### The tricky distinctions
-
-<details>
-  <summary>❓ <b>D1. [ANALYZE] A bank's model outputs 0.83 for a loan applicant. A colleague says this is regression because the output is a number. Explain why they are wrong, and state what you'd inspect to settle it.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Why they are wrong:** The numerical value `0.83` is a *probability score* expressing the classifier's level of confidence in the default category, not a continuous target scale. The business decision is a discrete choice (approve or refuse).
-    *   **What to inspect:** Inspect the **ground truth target** in the training database. If the target column contains discrete classes like `defaulted` and `did not` (or binary `1` and `0` representations), then the task is **Classification**. If the target were a continuous numeric scale, such as "monetary loss in dollars," it would be Regression.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>D2. [ANALYZE] "Fraud detection is anomaly detection." Under what circumstances is this correct, and under what circumstances should you use classification instead? What does the choice depend on?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **When it is correct (Anomaly Detection):** Use when fraud is unlabelled, extremely rare (e.g., less than 0.1% of transactions), or when future fraud attacks look completely different from past patterns.
-    *   **When to use Classification instead:** Use when you have a healthy, balanced dataset with ample, verified, and labelled examples of both fraudulent and legitimate transactions.
-    *   **What it depends on:** The choice depends strictly on **class imbalance and the presence of labels**, never on the subject-matter word "fraud".
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>D3. [THEORY] Distinguish clustering from classification using a single test question.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **The test question:** *"Can we explicitly name and list the target categories/groups in advance?"*
-    *   If **Yes**, the task is **Classification** (supervised).
-    *   If **No**, the task is **Clustering** (unsupervised, where the algorithm proposes unnamed groupings).
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>D4. [THEORY] Distinguish association from recommendation. Which is about items and which is about people?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Association** is about **items**; it determines static relationships and co-occurrence rules between objects in any transaction basket (e.g., *"If coffee, then sugar"*), regardless of who the individual customer is.
-    *   **Recommendation Systems** are about **people**; they synthesize a unique, personalized, ranked list of suggestions based on an individual's historical tastes and interactions (e.g., *"Because you watched Inception, we recommend Interstellar"*).
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>D5. [ANALYZE] A telecom company runs both segmentation and churn prediction on one customer dataset. Name the technique for each, and explain what this shows about the relationship between data and technique.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Segmentation:** Uses **Clustering** (unsupervised grouping).
-    *   **Churn Prediction:** Uses **Classification** (supervised binary classification).
-    *   **What this shows:** This shows that the **business question**, not the dataset, determines the machine learning technique. You can run completely different machine learning operations on identical data depending on the question you seek to answer.
-  </div>
-</details>
-
-### Reading the output
-
-<details>
-  <summary>❓ <b>O1. [OUT] In the worked demo, the churned column was used by only one of the five techniques. Which one, and what does that fact illustrate?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Which technique:** **Classification** (Logistic Regression).
-    *   **What it illustrates:** This illustrates the **supervised versus unsupervised divide**. Supervised models require explicit target labels to learn, while unsupervised algorithms (clustering, anomaly detection, PCA) discover intrinsic patterns, boundaries, or features without any label guidance.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>O2. [OUT] Analyzing unsupervised KMeans cluster outputs on customer data.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    **KMeans Summary Output:**
-    ```text
-             tenure_months  monthly_spend  support_tickets
-    segment
-    0                  4.0           38.4              5.2
-    1                 15.3           55.3              1.0
-    2                 33.0          110.0              0.5
-    ```
-    
-    **Questions:**
-    *   Describe each segment in business terms.
-    *   Explain what it means that segment 0 corresponds to the churners.
-    
-    <br/>
-    
-    **Detailed Answer:**
-    
-    *   **Segment 0 (At-Risk / New Users):** Low average tenure (4.0 months), high support load (5.2 tickets), and moderate spend ($38.4).
-    *   **Segment 1 (Core / Stable Users):** Mid-range tenure (15.3 months), low support load (1.0 ticket), and healthy spend ($55.3).
-    *   **Segment 2 (High-Value / Loyal VIPs):** High average tenure (33.0 months), minimal support load (0.5 tickets), and very high spend ($110.0).
-    *   **What it means that segment 0 corresponds to churners:** It shows that the natural feature variables (tenure, spend, and support tickets) contain extremely strong clustering signals. Even without being handed the `churned` targets, KMeans discovered the exact boundaries of the churned group because their behavior was mathematically distinct.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>O3. [ANALYZE] Regression scored R² = 0.651 while anomaly detection flagged exactly two rows. Explain the connection between those two results.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **The connection:** The linear regression model is dragged off its fit line by the two unusual extreme spenders (6 months / $95 and 36 months / $140), leading to a mediocre $R^2 = 0.651$.
-    *   **The insight:** The same two outlier rows that degrade the linear regression are the exact rows flagged by anomaly detection. *One technique's noise is another technique's answer.*
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>O4. [ANALYZE] The classifier reported 100% training accuracy. Give two reasons this number should not reassure you.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    1.  **Overfitting:** The model likely memorized the small training set perfectly instead of finding generalizable boundary thresholds.
-    2.  **Lack of Separate Validation:** The accuracy is evaluated on the exact same 14 rows it trained on. Without an independent train/test split or cross-validation, training accuracy is a deceptive metric of future success.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>O5. [OUT] PCA reported 75.0% and 22.9% for its two components. What does the sum mean, and what has been given up in exchange?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **What the sum (97.9%) means:** It means that the first two principal components capture and preserve **97.9%** of the total variance (information) of the original three-dimensional dataset.
-    *   **What was given up:** We have discarded **2.1%** of the original variance and lost the intuitive interpretability of our original column names, as the principal components are abstract linear combinations of the original features.
-  </div>
-</details>
-
-### Applying it
-
-<details>
-  <summary>❓ <b>P1. [PROG] Using the demo dataset, fit a KMeans model with n_clusters=2 and print the mean of each feature per cluster.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    ```python
-    import pandas as pd
-    from sklearn.cluster import KMeans
-    from sklearn.preprocessing import StandardScaler
-
-    df = pd.DataFrame({
-        "tenure_months":  [2, 3, 4, 5, 8, 10, 12, 15, 18, 20, 24, 30,  6, 36],
-        "monthly_spend":  [20, 25, 22, 30, 40, 45, 50, 55, 62, 65, 70, 80, 95, 140],
-        "support_tickets": [5, 4, 6, 3, 2, 1, 2, 1, 0, 1, 0, 1,  8,  0],
-    })
-    X = df[["tenure_months", "monthly_spend", "support_tickets"]]
-    Xs = StandardScaler().fit_transform(X)
-
-    km = KMeans(n_clusters=2, random_state=0, n_init=10).fit(Xs)
-    df["cluster"] = km.labels_
-    print(df.groupby("cluster").mean().round(1))
-    ```
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>P2. [PROG] Write code that fits a regression predicting monthly_spend from both tenure_months and support_tickets, and print the two coefficients.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    ```python
-    import pandas as pd
-    from sklearn.linear_model import LinearRegression
-
-    df = pd.DataFrame({
-        "tenure_months":  [2, 3, 4, 5, 8, 10, 12, 15, 18, 20, 24, 30,  6, 36],
-        "monthly_spend":  [20, 25, 22, 30, 40, 45, 50, 55, 62, 65, 70, 80, 95, 140],
-        "support_tickets": [5, 4, 6, 3, 2, 1, 2, 1, 0, 1, 0, 1,  8,  0],
-    })
-    X = df[["tenure_months", "support_tickets"]]
-    y = df["monthly_spend"]
-
-    reg = LinearRegression().fit(X, y)
-    print(f"Coefficients: tenure_months: {reg.coef_[0]:.3f}, support_tickets: {reg.coef_[1]:.3f}")
-    ```
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>P3. [PROG] Use IsolationForest with contamination=0.3 and print how many rows are flagged. Explain what contamination controls.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    ```python
-    import pandas as pd
-    from sklearn.ensemble import IsolationForest
-
-    df = pd.DataFrame({
-        "tenure_months":  [2, 3, 4, 5, 8, 10, 12, 15, 18, 20, 24, 30,  6, 36],
-        "monthly_spend":  [20, 25, 22, 30, 40, 45, 50, 55, 62, 65, 70, 80, 95, 140],
-        "support_tickets": [5, 4, 6, 3, 2, 1, 2, 1, 0, 1, 0, 1,  8,  0],
-    })
-    X = df[["tenure_months", "monthly_spend", "support_tickets"]]
-
-    iso = IsolationForest(contamination=0.3, random_state=0).fit(X)
-    flags = iso.predict(X)
-    print(f"Number of anomalies flagged: {sum(flags == -1)}")
-    ```
-    *   **What `contamination` controls:** It specifies the expected proportion of outliers in the dataset. In this case, setting `contamination=0.3` instructs the algorithm to flag the top 30% of rows (most isolated data points) as anomalous.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>P4. [ANALYZE] You're asked: "Which of our 50,000 products should we show on the home page?" The data is a log of every purchase, with no labels. Name the technique, say what you'd need, and name one other technique that could support it.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Primary Technique:** **Recommendation Systems** (collaborative filtering), which output a personalized, ranked list of items tailored to each unique user.
-    *   **What you'd need:** You'd need a **user-item transaction log** mapping past purchases to specific user IDs to compute user-user or item-item similarities.
-    *   **Supporting Technique:** **Association** (to find universal, non-personalized co-purchase patterns like *"frequently bought together"*) or **Clustering** (to group users into coarse behavioral archetypes if detailed user histories are not available yet).
-  </div>
-</details>
+**Next Section:** [Types of Learning](./03-types-of-learning.mdx) - supervised, unsupervised, and semi-supervised learning paradigms.
 
 ---
 
-## Quick self-check
+## 8. Active Recall
 
-Test your knowledge with these rapid-fire active recall questions.
+*Test your understanding by answering first, then clicking to reveal the underlying principles.*
 
-<details className="quiz-card">
-  <summary>🧠 1. Name the nine major techniques.</summary>
+### Interactive Checkpoint Quiz
+
+export const TechniqueCheckQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Loan Default Probability Trap</h4>
+      <p style={{ margin: '0 0 15px 0' }}>A bank builds an ML model that outputs <code>0.83</code> for a mortgage applicant. A junior developer claims this is a <b>Regression</b> task because 0.83 is a continuous number. Is this claim correct?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Yes: The output is a continuous floating-point number</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>No: The ground-truth target is a discrete label (Default vs. Paid)</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>No: It is an Anomaly Detection task</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. The 0.83 value is merely the classifier's posterior probability confidence score. The actual business task and ground truth target are discrete! Try again.</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! In loan prediction, the ground truth in the historical database is a discrete category: defaulted (1) or did not default (0). The floating-point number 0.83 represents the classifier's confidence probability, not a continuous scale of measurement!</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Banks have extensive labeled histories of defaulters, making standard supervised Classification the proper framework. Try again.</p>}
+    </div>
+  );
+};
+
+<TechniqueCheckQuiz />
+
+### Review Flashcards
+
+<details>
+  <summary>❓ <b>1. [THEORY] How do you distinguish between Association Rules and Recommendation Systems?</b></summary>
   <div className="answer-content">
     <br/>
-    The nine major techniques are: Regression, Classification, Clustering, Association, Anomaly Detection, Sequence Mining, Dimensionality Reduction, Recommendation Systems, and Generative AI.
+    
+    *   **Association:** Learns global co-occurrence rules between **items** (*"If coffee in basket, then sugar with 70% confidence"*). The specific individual shopper is ignored.
+    *   **Recommendation Systems:** Builds personalized ranked lists tailored to **people** based on their unique individual history and taste similarity to other users.
   </div>
 </details>
 
-<details className="quiz-card">
-  <summary>🧠 2. What shape is a regression output? A classification output?</summary>
+<details>
+  <summary>❓ <b>2. [ANALYZE] Why did KMeans clustering identify the churned customers without ever seeing the `churned` labels?</b></summary>
   <div className="answer-content">
     <br/>
-    *   **Regression output:** A continuous numeric value on a scale where closeness/proximity matters.
-    *   **Classification output:** A discrete label or category from a pre-defined, known set of answers.
+    
+    *   **Natural Behavioral Separation:** The input features (`tenure_months` and `support_tickets`) had natural mathematical boundaries.
+    *   The churned customers had short tenure ($<6$ months) and high support calls ($>4$ tickets).
+    *   Because their feature vectors formed an isolated cluster in coordinate space, KMeans grouped them together purely from geometric proximity without needing a label!
   </div>
 </details>
 
-<details className="quiz-card">
-  <summary>🧠 3. Which two questions identify most techniques?</summary>
+<details>
+  <summary>❓ <b>3. [THEORY] Which machine learning technique becomes impossible if you shuffle the order of your dataset rows? Why?</b></summary>
   <div className="answer-content">
     <br/>
-    1. *Do you have the answers already (labels)?* (Supervised vs. Unsupervised)  
-    2. *Is the answer a number or a name?* (Regression vs. Classification)
+    
+    *   **Sequence Mining:** (and time-series forecasting).
+    *   **Why:** In sequence mining, the temporal order of events carries the primary informational signal (e.g. click $A \to$ click $B \to$ purchase). Shuffling rows breaks the transition probabilities, making sequential modeling impossible.
   </div>
 </details>
 
-<details className="quiz-card">
-  <summary>🧠 4. What separates clustering from classification?</summary>
+<details>
+  <summary>❓ <b>4. [PRACTICE] In our customer lab, linear regression scored $R^2 = 0.651$ while Isolation Forest flagged exactly two rows. Explain the connection.</b></summary>
   <div className="answer-content">
     <br/>
-    **Predefined Labels.** Classification is supervised learning mapping inputs to known categories. Clustering is unsupervised learning that groups data points into unnamed segments proposed by the algorithm.
+    
+    *   **One technique's noise is another technique's answer:** The linear regression model was dragged off its fit line by the two extreme spenders ($6$mo/\$95 and $36$mo/\$140), depressing $R^2$.
+    *   The exact same extreme spenders were identified by Isolation Forest as statistical outliers. Removing them would restore the linear regression $R^2$ to $>0.90$.
   </div>
 </details>
 
-<details className="quiz-card">
-  <summary>🧠 5. When is fraud detection not anomaly detection?</summary>
+<details>
+  <summary>❓ <b>5. [THEORY] What does PCA mean when it reports that PC1 captures 75.0% and PC2 captures 22.9% of variance? What was sacrificed?</b></summary>
   <div className="answer-content">
     <br/>
-    When you possess a robust, balanced historical dataset containing ample confirmed labels of both "fraud" and "normal" cases, making it a supervised **Classification** task instead.
-  </div>
-</details>
-
-<details className="quiz-card">
-  <summary>🧠 6. Which technique depends on the order of the data?</summary>
-  <div className="answer-content">
-    <br/>
-    **Sequence Mining.** Shuffling the rows completely destroys the temporal or sequential signals required to predict what occurs next.
-  </div>
-</details>
-
-<details className="quiz-card">
-  <summary>🧠 7. Is dimensionality reduction usually a goal or a step?</summary>
-  <div className="answer-content">
-    <br/>
-    It is almost always a **pre-processing step** designed to optimize downstream operations (making them faster, less memory-intensive, or visualizable in 2-D/3-D).
-  </div>
-</details>
-
-<details className="quiz-card">
-  <summary>🧠 8. What does association describe that recommendation doesn't?</summary>
-  <div className="answer-content">
-    <br/>
-    Association describes global relationships and co-occurrence rules between **items** (independent of the specific user), while recommendation generates a personalized list of items tailored to **a person's** historical taste profile.
-  </div>
-</details>
-
-<details className="quiz-card">
-  <summary>🧠 9. Why did clustering find the churners without being given labels?</summary>
-  <div className="answer-content">
-    <br/>
-    Because the underlying behavioral features (short tenure and extremely high support tickets) naturally separated the churned customers into a mathematically distinct cluster.
-  </div>
-</details>
-
-<details className="quiz-card">
-  <summary>🧠 10. Why is 100% training accuracy not good news?</summary>
-  <div className="answer-content">
-    <br/>
-    It typically implies severe **overfitting** (memorizing the training patterns), and evaluating on training data provides zero guarantee of performance on unseen future data.
+    
+    *   **Preserved Variance:** The first two principal components together retain $75.0\% + 22.9\% = \mathbf{97.9\%}$ of the original 3-dimensional data variance.
+    *   **Sacrificed:** We discarded $2.1\%$ of information (noise/minor variation) and sacrificed direct human interpretability, as PC1 and PC2 are abstract linear combinations of the original column names.
   </div>
 </details>

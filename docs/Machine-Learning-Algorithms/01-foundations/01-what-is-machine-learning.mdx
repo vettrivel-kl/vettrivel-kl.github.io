@@ -1,7 +1,7 @@
 ---
 sidebar_position: 1
 title: What is Machine Learning?
-description: Learning without being explicitly programmed — why the rule-based approach collapsed, what replaced it, why the idea only became practical recently, and how AI, ML and DL nest.
+description: Learning without being explicitly programmed - why rule-based systems collapsed, the paradigm inversion, Mitchell's T-P-E framework, and AI vs ML vs DL taxonomy.
 tags: [machine-learning, foundations]
 toc_max_heading_level: 3
 ---
@@ -12,255 +12,298 @@ import React from 'react';
 
 # What is Machine Learning?
 
-> **Topic —** Every other page in this section is a *technique*. This page is the **argument** for
-> why those techniques exist at all: there is a class of problem that ordinary programming
-> genuinely cannot solve, and this is what it looks like.
-
-## The one-sentence definition
-
-> **Machine learning is the field of study that gives computers the ability to learn without being
-> explicitly programmed.**
-> — Arthur Samuel, 1959
-
-The load-bearing phrase is **"without being explicitly programmed"**. Everything on this page is an
-unpacking of those five words.
-
-Tom Mitchell (1997) sharpened it into a definition you can actually test a system against:
-
-> A computer program **learns** from experience `E` with respect to task `T` and performance
-> measure `P`, if its performance at `T`, as measured by `P`, improves with `E`.
-
-Three things must be nameable, or it isn't learning. Click the tabs below to explore how they interact mathematically and operationally:
-
-<Tabs>
-  <TabItem value="task" label="🎯 Task (T)" default>
-    <br/>
-    
-    *   **The Operational Definition:** The specific problem, action, or prediction you want the computer to solve.
-    *   **In our Cats-and-Dogs lab below:** Labeling an animal photo as either a **cat**, **dog**, or **bird**.
-    *   **Mathematical Note:** The task is represented mathematically as a mapping function from input features to categorical targets: $f(X) \to Y$.
-  </TabItem>
-  <TabItem value="exp" label="📊 Experience (E)">
-    <br/>
-    
-    *   **The Operational Definition:** The historical, empirical data that the system is allowed to analyze and train on.
-    *   **In our Cats-and-Dogs lab below:** 10 already-labeled animal rows containing their physical measurements.
-    *   **Mathematical Note:** Experience is represented as a dataset $D = \{(x_1, y_1), (x_2, y_2), ..., (x_n, y_n)\}$ drawn from an underlying data distribution.
-  </TabItem>
-  <TabItem value="perf" label="📈 Performance (P)">
-    <br/>
-    
-    *   **The Operational Definition:** The objective mathematical metric used to measure whether the system has actually "learned" or improved.
-    *   **In our Cats-and-Dogs lab below:** The fraction (accuracy) of *new, unseen* animals labeled correctly.
-    *   **Mathematical Note:** Performance must be measured on a **separate test set** to ensure we evaluate generalization rather than memorization.
-  </TabItem>
-</Tabs>
-
-:::tip
-
-**Use this as a checklist**
-
-If you can't name `T`, `E` and `P` for something, it is not a machine learning problem yet — and
-that is usually the real reason a project stalls. `P` is the one people skip, and it is the one
-that decides whether you ever find out you succeeded.
-
-:::
+> **Topic —** Every subsequent algorithm in machine learning is a specialized *technique*. This page establishes the foundational **argument** for why those techniques exist: there is an entire class of real-world problems that traditional, deterministic programming fundamentally cannot solve.
 
 ---
 
-## What "explicitly programmed" means
+## 1. The Core Concept
 
-In **traditional programming**, a developer writes code giving specific instructions that tell the
-computer exactly what to do in every situation.
+In 1959, Arthur Samuel defined machine learning with five load-bearing words:
 
-Take a calculator. You explicitly code how to handle addition, subtraction, multiplication and
-division:
+> **"Machine learning is the field of study that gives computers the ability to learn without being explicitly programmed."**
+> - Arthur Samuel, 1959
+
+In 1997, computer scientist Tom Mitchell formalized this into an operational engineering framework:
+
+> **"A computer program is said to learn from experience $E$ with respect to some class of tasks $T$ and performance measure $P$, if its performance at tasks in $T$, as measured by $P$, improves with experience $E$."**
+> - Tom Mitchell, 1997
+
+If you cannot identify $T$, $E$, and $P$ for a business problem, it is **not** a machine learning problem yet.
+
+---
+
+## 2. Interactive Mitchell Framework Explorer
+
+Select a domain below to inspect how Task ($T$), Experience ($E$), and Performance Measure ($P$) interact in real-world ML engineering:
+
+export const MitchellFrameworkExplorer = () => {
+  const [activeTask, setActiveTask] = React.useState('loan');
+
+  const cases = {
+    loan: {
+      title: 'Credit Risk: Loan Default Prediction',
+      T: 'Predict whether a loan applicant will default (binary classification: 0 = Repaid, 1 = Default).',
+      E: 'Historical database of 500,000 past borrowers, including income, credit scores, debt-to-income ratios, and verified repayment outcomes.',
+      P: 'Recall on defaulters (capturing risky loans to prevent bank losses) and ROC-AUC score, evaluated on a separate holdout test set.',
+      trap: 'Using simple Accuracy as P fails due to class imbalance: if only 2% of applicants default, a dummy model predicting "No Default" achieves 98% accuracy while causing massive financial losses.'
+    },
+    vision: {
+      title: 'Medical Imaging: Malignant Tumor Detection',
+      T: 'Segment and classify microscopic biopsy images as benign or malignant tissue.',
+      E: 'Dataset of 50,000 pathologically verified MRI and histology scans with pixel-level ground truth masks from expert oncologists.',
+      P: 'False Negative Rate (must be near zero) and F2-Score, weighting recall much higher than precision to prevent missing cancer.',
+      trap: 'A human cannot explicitly program pixel brightness rules because tumors vary wildly in shape, texture, lighting, and tissue density.'
+    },
+    car: {
+      title: 'Autonomous Robotics: Self-Driving Steering',
+      T: 'Steer the vehicle safely along highway lanes while avoiding obstacles and pedestrians.',
+      E: 'Millions of hours of video camera streams, LiDAR point clouds, GPS traces, and corresponding human steering wheel angles.',
+      P: 'Mean Distance Between Interventions (MDBI) and mean squared error between model steering angle and expert human driver.',
+      trap: 'Writing hand-crafted if-statements for every possible street scenario requires billions of permutations and fails immediately in unexpected weather.'
+    },
+    chess: {
+      title: 'Strategic Games: AlphaZero Chess AI',
+      T: 'Select the optimal chess move in any legal board configuration to win the game.',
+      E: 'Self-play experience generated by simulating 44 million games against itself from scratch using Monte Carlo Tree Search.',
+      P: 'Win-rate and ELO rating against world-champion chess engines (e.g. Stockfish).',
+      trap: 'Unlike classical chess engines that use hand-tuned board evaluation heuristics, ML learns positional valuation entirely from match outcomes.'
+    }
+  };
+
+  const current = cases[activeTask];
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>🎯 Tom Mitchell's T-E-P Architecture Explorer</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Select a machine learning problem to break down its operational components:
+      </p>
+
+      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '16px' }}>
+        <button
+          onClick={() => setActiveTask('loan')}
+          style={{ padding: '5px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: activeTask === 'loan' ? '#3182ce' : 'transparent', color: activeTask === 'loan' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+        >
+          1. Loan Default Prediction
+        </button>
+        <button
+          onClick={() => setActiveTask('vision')}
+          style={{ padding: '5px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: activeTask === 'vision' ? '#3182ce' : 'transparent', color: activeTask === 'vision' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+        >
+          2. Medical Tumor Detection
+        </button>
+        <button
+          onClick={() => setActiveTask('car')}
+          style={{ padding: '5px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: activeTask === 'car' ? '#3182ce' : 'transparent', color: activeTask === 'car' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+        >
+          3. Self-Driving Vehicle
+        </button>
+        <button
+          onClick={() => setActiveTask('chess')}
+          style={{ padding: '5px 12px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: activeTask === 'chess' ? '#3182ce' : 'transparent', color: activeTask === 'chess' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', fontSize: '12px' }}
+        >
+          4. AlphaZero Chess AI
+        </button>
+      </div>
+
+      <div style={{ padding: '16px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+        <div style={{ fontSize: '16px', fontWeight: 'bold', color: '#3182ce', marginBottom: '12px' }}>
+          {current.title}
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '12px', marginBottom: '14px' }}>
+          <div style={{ padding: '10px 12px', borderRadius: '4px', backgroundColor: 'rgba(49, 130, 206, 0.08)' }}>
+            <div style={{ fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase', color: '#2b6cb0' }}>
+              🎯 Task (T)
+            </div>
+            <div style={{ fontSize: '13px', marginTop: '4px' }}>{current.T}</div>
+          </div>
+
+          <div style={{ padding: '10px 12px', borderRadius: '4px', backgroundColor: 'rgba(56, 161, 105, 0.08)' }}>
+            <div style={{ fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase', color: '#276749' }}>
+              📊 Experience (E)
+            </div>
+            <div style={{ fontSize: '13px', marginTop: '4px' }}>{current.E}</div>
+          </div>
+
+          <div style={{ padding: '10px 12px', borderRadius: '4px', backgroundColor: 'rgba(128, 90, 213, 0.08)' }}>
+            <div style={{ fontSize: '11px', fontWeight: 'bold', textTransform: 'uppercase', color: '#6b46c1' }}>
+              📈 Performance Measure (P)
+            </div>
+            <div style={{ fontSize: '13px', marginTop: '4px' }}>{current.P}</div>
+          </div>
+        </div>
+
+        <div style={{ padding: '10px 14px', borderRadius: '4px', backgroundColor: 'rgba(221, 107, 32, 0.08)', borderLeft: '4px solid #dd6b20', fontSize: '13px' }}>
+          ⚠️ <b>Engineering Nuance:</b> {current.trap}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+<MitchellFrameworkExplorer />
+
+---
+
+## 3. The Collapse of Explicit Programming
+
+In **traditional programming**, a human developer dictates explicit conditional instructions for every possible branch:
 
 ```python
 def calculate(a, b, op):
-    if op == "+":
-        return a + b
-    if op == "-":
-        return a - b
-    if op == "*":
-        return a * b
-    if op == "/":
-        return a / b
+    if op == "+": return a + b
+    if op == "-": return a - b
+    if op == "*": return a * b
+    if op == "/": return a / b
 ```
 
-This is a *complete* and *correct* program, and it will be correct forever. Note **why** that
-works:
+This works cleanly because:
+1.  The mathematical rules were completely known **before** writing the code.
+2.  The input cases are finite and countable (only 4 operations).
+3.  A human can state each rule precisely in a single line.
 
-- The rules of arithmetic were known **before** the program was written
-- There are **four** cases, and they are all listed
-- A human could state each rule precisely in one line
+However, consider distinguishing between **cats and dogs** from photos.
 
-Traditional programming is the right tool whenever those three conditions hold. Most software ever
-written satisfies them. Machine learning is for the problems that don't.
-
----
-
-## The task that breaks explicit programming
-
-Here is the scenario that makes the problem concrete.
-
-You have a dataset of images of animals — say **cats and dogs** — and you want to build an
-application that can recognise and tell them apart.
-
-The first thing you must do is interpret each image as a **set of features**:
-
-- Does the image show the animal's eyes? If so, what size?
-- Does it have ears?
-- What about a tail?
-- How many legs?
-- Does it have wings?
-
-So an image becomes a row of numbers. That step is unavoidable in either approach — it's the
-subject of the **data preprocessing** notes later on. The question is what you do *next*.
-
-### The rule-based attempt
-
-Traditionally, we had to write down rules or methods to make the application "intelligent" enough
-to detect the animals:
+### The Rule-Based Failure
+If you attempt to write explicit if-else rules based on physical features:
 
 ```python
 def what_animal(has_wings, num_legs, weight_kg):
     if has_wings:
         return "bird"
-    if num_legs == 4 and weight_kg < 10:
+    if num_legs == 4 and weight_kg < 10:   # Human intuition: "small = cat"
         return "cat"
-    if num_legs == 4 and weight_kg >= 10:
+    if num_legs == 4 and weight_kg >= 10:  # Human intuition: "large = dog"
         return "dog"
     return "unknown"
 ```
 
-**It was a failure.** Not "inefficient" — it did not work. There are three separate reasons, and
-they compound.
+This explicit system breaks immediately for three compounding reasons:
+1.  **Combinatorial Explosion:** Each additional feature multiplies the required rule combinations exponentially ($k^d$).
+2.  **Sample-Dependent Thresholds:** The `10 kg` threshold is an arbitrary human guess. The moment a **Chihuahua** ($2.5\text{ kg}$, dog) or **Maine Coon** ($12\text{ kg}$, cat) arrives, the rules produce complete misclassifications.
+3.  **Zero Generalization:** Real-world distributions drift continuously. In traditional programming, every new outlier becomes a fresh bug report requiring endless manual rule patching.
 
 ---
 
-## Why the rule-based attempt failed
+## 4. Interactive Combinatorial Explosion Calculator
 
-### 1. It needed too many rules
+See how quickly manual rule-writing collapses as you add features and possible values:
 
-The features above give six questions. Suppose each has just **three** possible answers
-(no / small / large). The number of distinct feature combinations you'd have to cover is:
+export const CombinatorialExplosionVisualizer = () => {
+  const [numFeatures, setNumFeatures] = React.useState(6);
+  const [statesPerFeature, setStatesPerFeature] = React.useState(3);
 
+  const totalRules = Math.pow(statesPerFeature, numFeatures);
+  const humanDailyCapacity = 20; // rules written per day
+  const daysToCode = Math.ceil(totalRules / humanDailyCapacity);
+
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 12px 0' }}>💥 The Combinatorial Explosion Calculator</h4>
+      <p style={{ margin: '0 0 14px 0', fontSize: '14px' }}>
+        Adjust feature counts to observe exponential growth in required manual rules:
+      </p>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px', marginBottom: '16px' }}>
+        <div>
+          <label style={{ fontSize: '12px', fontWeight: 'bold' }}>
+            Number of Features (d): {numFeatures}
+          </label>
+          <input
+            type="range"
+            min="2"
+            max="10"
+            value={numFeatures}
+            onChange={(e) => setNumFeatures(parseInt(e.target.value))}
+            style={{ width: '100%', marginTop: '4px' }}
+          />
+        </div>
+        <div>
+          <label style={{ fontSize: '12px', fontWeight: 'bold' }}>
+            States per Feature (k): {statesPerFeature}
+          </label>
+          <input
+            type="range"
+            min="2"
+            max="4"
+            value={statesPerFeature}
+            onChange={(e) => setStatesPerFeature(parseInt(e.target.value))}
+            style={{ width: '100%', marginTop: '4px' }}
+          />
+        </div>
+      </div>
+
+      <div style={{ padding: '16px', borderRadius: '6px', backgroundColor: 'var(--ifm-background-surface-color)', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '10px' }}>
+          <div>
+            <div style={{ fontSize: '11px', color: 'var(--ifm-color-emphasis-600)', textTransform: 'uppercase', fontWeight: 'bold' }}>
+              Formula: k^d Combinations
+            </div>
+            <div style={{ fontSize: '24px', fontWeight: 'bold', color: totalRules > 1000 ? '#e53e3e' : '#3182ce', fontFamily: 'monospace' }}>
+              {statesPerFeature}^{numFeatures} = {totalRules.toLocaleString()} Rules
+            </div>
+          </div>
+          <div style={{ textAlign: 'right' }}>
+            <span style={{ fontSize: '12px', color: 'var(--ifm-color-emphasis-600)' }}>Human Dev Writing Time:</span>
+            <div style={{ fontSize: '18px', fontWeight: 'bold', color: daysToCode > 30 ? '#e53e3e' : '#38a169' }}>
+              {daysToCode > 365 ? (daysToCode / 365).toFixed(1) + ' Years' : daysToCode + ' Days'}
+            </div>
+          </div>
+        </div>
+
+        <div style={{ marginTop: '12px', height: '10px', width: '100%', backgroundColor: 'rgba(148, 163, 184, 0.2)', borderRadius: '5px', overflow: 'hidden' }}>
+          <div
+            style={{
+              height: '100%',
+              width: `${Math.min(100, (totalRules / 50000) * 100)}%`,
+              backgroundColor: totalRules > 5000 ? '#e53e3e' : '#3182ce',
+              transition: 'width 0.3s ease'
+            }}
+          />
+        </div>
+      </div>
+
+      <p style={{ margin: '12px 0 0 0', fontSize: '13px' }}>
+        💡 <b>The Core Bottleneck:</b> Human rule-writing capacity scales linearly ($O(d)$), while the problem state-space expands exponentially ($O(k^d)$). You cannot out-hire an exponential curve.
+      </p>
+    </div>
+  );
+};
+
+<CombinatorialExplosionVisualizer />
+
+---
+
+## 5. The Paradigm Inversion
+
+Machine learning resolves the combinatorial collapse by **inverting the inputs and outputs of software**:
+
+```mermaid
+flowchart LR
+    subgraph Traditional ["Traditional Programming"]
+        direction LR
+        Data1["Data"] & Rules1["Hand-Written Rules"] --> Computer1["Computer Engine"] --> Answers1["Answers"]
+    end
+
+    subgraph ML ["Machine Learning"]
+        direction LR
+        Data2["Data"] & Answers2["Historical Answers (Labels)"] --> Algorithm2["Learning Algorithm"] --> Model2["Rules / Model Parameters"]
+    end
 ```
-3 × 3 × 3 × 3 × 3 × 3  =  3⁶  =  729
-```
 
-729 rules — for six coarse features and *three* animals. Add one more feature and it becomes
-`3⁷ = 2187`. Add fur texture, ear shape, and tail length and you are past 19,000.
+| Dimension | Traditional Programming | Machine Learning |
+| :--- | :--- | :--- |
+| **Human Developer Supplies** | **The Rules** (Explicit logic) | **The Examples** (Data + Labels) |
+| **Input to Computer** | Rules + Data | Data + Answers |
+| **Output Produced** | Answers | **The Rules** (Statistical Model Parameters) |
+| **Handling New Variations** | Manually rewrite or patch if-statements | Ingest more data and re-train |
+| **Decision Boundaries** | Guessed by human intuition | Mathematically derived from covariance |
 
-This is the **combinatorial explosion**, and it is not an engineering problem you can outwork. The
-rules grow *exponentially* in the number of features while your ability to write them grows, at
-best, linearly.
+### The Cat-and-Dog Verification
+When a Decision Tree was trained on real animal data with 5 features (`has_wings`, `legs`, `weight`, `snout`, `retractable_claws`), it completely ignored `weight`:
 
-### 2. It was highly dependent on the current dataset
-
-Look again at `weight_kg < 10` in the rule above. Where did `10` come from? **A human guessed
-it.** It was chosen by looking at the cats and dogs that happened to be in the dataset at the time.
-
-So the moment reality supplies:
-
-- a **Chihuahua** at 2.5 kg — a dog, under the line → classified `cat`
-- a **Maine Coon** at 11 kg — a cat, over the line → classified `dog`
-
-...the rule is wrong, and no amount of care in writing it would have helped. The threshold encodes
-an accident of the sample, not a fact about animals.
-
-### 3. It did not generalise to new samples
-
-Points 1 and 2 combine into the fatal one. A rule set is only ever correct on the cases its author
-imagined. The world keeps producing cases nobody imagined. Since the program cannot revise itself,
-**every new animal is a new bug report** — and each fix risks breaking an earlier rule.
-
-:::danger
-
-**The real cost isn't accuracy, it's maintenance**
-
-A rule-based system's error rate doesn't just start high — it *grows* over time as the world drifts
-away from the dataset the rules were tuned on. The only repair is a human rewriting rules forever.
-
-:::
-
----
-
-## How machine learning does it instead
-
-Machine learning lets us **build a model** that looks at all the feature sets and their
-corresponding animal types, and **learns the pattern** of each animal.
-
-Nothing is written down by hand. The model is produced by a **machine learning algorithm**, and it
-detects the animal **without being explicitly programmed to do so**.
-
-The shift is in what the human supplies:
-
-| | Traditional programming | Machine learning |
-|---|---|---|
-| Human writes | **the rules** | **the examples** |
-| Computer receives | rules + data | data + answers |
-| Computer produces | answers | **the rules** (the model) |
-| To handle new cases | rewrite the rules | add data, retrain |
-| Thresholds like `10 kg` | guessed by a human | derived from the data |
-
-Read the third row twice. It is the whole inversion: in machine learning, **the rules are the
-output, not the input.**
-
-### The four-year-old analogy
-
-Machine learning follows the same process a **four-year-old child** uses to learn, understand and
-differentiate animals. Nobody hands a child 729 rules. The child sees animals, is told what they
-are, gets some wrong, and adjusts.
-
-So machine learning algorithms, inspired by the human learning process, **iteratively learn from
-data** and allow machines to find hidden insights.
-
-"Iteratively" matters — it is the mechanism behind **gradient descent**, covered later.
-Learning is not one calculation; it is a loop of *guess → measure the error → adjust*.
-
----
-
-## Seeing the difference in code
-
-Same task, same features, two approaches. 
-
-Compare the implementation code for both paradigms:
-
-<Tabs>
-  <TabItem value="traditional" label="❌ Traditional Rules (Hand-Written)" default>
-    <br/>
-    
-    The hand-written rules rely on human intuition (e.g., guessing that "body weight" represents the major difference):
-
-    ```python
-    def rule_based(row):
-        has_wings, legs, weight, snout, claws = row
-        if has_wings:
-            return "bird"
-        if weight < 10:          # the human's guess: "small means cat"
-            return "cat"
-        return "dog"
-    ```
-  </TabItem>
-  <TabItem value="ml" label="✅ Learned Model (Scikit-Learn)">
-    <br/>
-    
-    The learned model is given absolutely no rules—only the raw dataset matrix `X_train` and target vectors `y_train` to fit against:
-
-    ```python
-    from sklearn.tree import DecisionTreeClassifier
-    
-    # Model derives all feature splits and decision boundaries autonomously
-    tree = DecisionTreeClassifier(random_state=0).fit(X_train, y_train)
-    ```
-  </TabItem>
-</Tabs>
-
-Now ask what the model taught itself:
-
-```text title="Output"
+```text title="Model Output"
 |--- retractable_claws <= 0.50
 |   |--- has_wings <= 0.50
 |   |   |--- class: dog
@@ -270,65 +313,13 @@ Now ask what the model taught itself:
 |   |--- class: cat
 ```
 
-**It never used weight.** Given the same five features, the algorithm found that
-`retractable_claws` separates cats from dogs perfectly, and discarded the feature the human built
-their entire rule set around.
-
-On four animals neither approach had seen:
-
-```text title="Output"
-  animal         truth   rules    tree
-  cat   6.0 kg   cat     cat      cat
-  dog   8.0 kg   dog     cat  X   dog
-  cat  13.0 kg   cat     dog  X   cat
-  bird  1.2 kg   bird    bird     bird
-
-  hand-written rules  50%
-  learned tree        100%
-```
-
-The two failures are exactly the Chihuahua and Maine Coon cases predicted above — the mid-size dog
-under the 10 kg line, and the heavy cat over it.
-
-:::note
-
-**What this demo does and doesn't prove**
-
-It **does** show that an algorithm can identify a better feature than a human's first instinct, and
-that hand-tuned thresholds fail on new data.
-
-It **does not** show that ML always wins. The training set was deliberately built to contain a
-heavy cat *and* a light dog, so weight genuinely couldn't separate them. Had it contained only
-small cats and large dogs, the tree would have happily split on weight and failed the same way the
-rules did — an early glimpse of why **representative data and honest validation** matter more than
-the choice of algorithm.
-
-:::
+The algorithm autonomously discovered that `retractable_claws` cleanly separates cats from dogs with $100\%$ accuracy, completely avoiding the human's fragile weight threshold error on Chihuahuas and Maine Coons.
 
 ---
 
-## Why now, if the idea is from the 1960s?
+## 6. AI vs. ML vs. DL Taxonomy
 
-The core ideas are old — Samuel's self-improving checkers program was **1959**, Rosenblatt's
-perceptron **1958**. So why did machine learning only become popular recently?
-
-Three things changed, and all three were necessary:
-
-| | What changed | Why it mattered |
-|---|---|---|
-| **1** | The rise of **big data** and the **internet** | Learning needs `E`. The internet made labelled examples abundant for the first time — text, images, clicks, transactions |
-| **2** | **Improved computation power** | Training is an iterative loop over the whole dataset. GPUs made runs that would have taken months finish in hours |
-| **3** | **New algorithms and techniques** to better handle and learn from data | Better optimisation, regularisation and architectures — the methods that let large models train *stably* |
-
-The useful takeaway: the bottleneck was never the *idea*. It was `E` and the compute to consume it.
-That is also why "get more/better data" so often beats "try a fancier algorithm" in practice.
-
----
-
-## AI vs ML vs DL
-
-These three get used interchangeably in conversation and they are **not** interchangeable. They
-nest, strictly:
+The terms AI, Machine Learning, and Deep Learning are not interchangeable; they form a strictly nested taxonomy:
 
 <div style={{
   border: '2px dashed var(--ifm-color-emphasis-300)',
@@ -337,119 +328,120 @@ nest, strictly:
   backgroundColor: 'rgba(148, 163, 184, 0.05)',
   marginBottom: '20px'
 }}>
-  <h4 style={{ margin: '0 0 10px 0', color: 'var(--ifm-color-primary)' }}>🤖 Artificial Intelligence</h4>
-  <p style={{ fontSize: '14px', margin: '0 0 15px 0', opacity: 0.9 }}>Any system that behaves autonomously without direct human intervention (including rule-based expert systems).</p>
+  <h4 style={{ margin: '0 0 8px 0', color: 'var(--ifm-color-primary)' }}>🤖 Artificial Intelligence (Broadest Umbrella)</h4>
+  <div style={{ fontSize: '13px', margin: '0 0 14px 0', opacity: 0.9 }}>
+    Any computational system exhibiting autonomous, goal-directed behavior without direct real-time human intervention (includes classical search heuristics, minimax game trees, and rule-based expert systems).
+  </div>
   
   <div style={{
     border: '2px solid #3182ce',
     borderRadius: '8px',
-    padding: '20px',
-    backgroundColor: 'rgba(49, 130, 206, 0.05)'
+    padding: '16px',
+    backgroundColor: 'rgba(49, 130, 206, 0.05)',
+    marginBottom: '10px'
   }}>
-    <h4 style={{ margin: '0 0 10px 0', color: '#3182ce' }}>📊 Machine Learning</h4>
-    <p style={{ fontSize: '14px', margin: '0 0 15px 0', opacity: 0.9 }}>A subset of AI that learns patterns and rules directly from data using statistical models (e.g. Linear Regression, Decision Trees).</p>
+    <h4 style={{ margin: '0 0 8px 0', color: '#3182ce' }}>📊 Machine Learning (Statistical Subset)</h4>
+    <div style={{ fontSize: '13px', margin: '0 0 14px 0', opacity: 0.9 }}>
+      Systems that learn decision boundaries and continuous functions directly from empirical data ($E$) using statistical algorithms (e.g. Linear Models, Decision Trees, SVMs, Random Forests).
+    </div>
     
     <div style={{
       border: '2px solid #319795',
       borderRadius: '8px',
-      padding: '20px',
+      padding: '16px',
       backgroundColor: 'rgba(49, 151, 149, 0.05)'
     }}>
-      <h4 style={{ margin: '0 0 10px 0', color: '#319795' }}>🧠 Deep Learning</h4>
-      <p style={{ fontSize: '14px', margin: '0', opacity: 0.9 }}>A subset of ML that learns hierarchical representations automatically using multi-layered networks (e.g. Transformers, Large Language Models, Generative AI).</p>
+      <h4 style={{ margin: '0 0 8px 0', color: '#319795' }}>🧠 Deep Learning (Hierarchical Representation Subset)</h4>
+      <div style={{ fontSize: '13px', margin: '0', opacity: 0.9 }}>
+        Multi-layered neural architectures (Transformers, CNNs, Diffusion models) that automatically extract raw hierarchical representations from unstructured data (audio, raw pixels, natural language tokens).
+      </div>
     </div>
   </div>
 </div>
 
-| | Artificial Intelligence | Machine Learning | Deep Learning |
-|---|---|---|---|
-| **Scope** | The whole field | **Subset of AI** | **Subset of ML** |
-| **Defining idea** | A system does its own task **without human intervention** | Learns from data using **statistical tools** | **Hierarchical representation learning** using multi-layered networks |
-| **Typical use** | End-to-end autonomous behaviour | Tabular prediction, forecasting, classification | Perception and generation — images, audio, Transformers, LLMs, GenAI |
-| **Needs hand-designed features?** | - | Usually yes | No, it automatically learns features and representations |
-| **Data needed** | - | Works on modest datasets | Very large datasets (requires mass scale) |
-| **Example** | Self-driving car; Netflix recommending a title | Predicting loan default from applicant data | GPT-4 generating text; recognizing a face in a photo |
-| **Covered in these notes** | As context | **The whole focus** | No |
-
-Note that **AI does not require learning at all**. A rule-based chess engine is AI. That is why the
-`what_animal` function above was a legitimate attempt at AI — a bad one, but AI.
-
-export const AIQuiz = () => {
-  const [selected, setSelected] = React.useState(null);
-  return (
-    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
-      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: Testing Your Taxonomy</h4>
-      <p style={{ margin: '0 0 15px 0' }}>A rule-based expert system (like a classical chess engine that contains no statistical learning) belongs in which category?</p>
-      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-        <button onClick={() => setSelected('ai')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'ai' ? '#3182ce' : 'transparent', color: selected === 'ai' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Artificial Intelligence (AI)</button>
-        <button onClick={() => setSelected('ml')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'ml' ? '#e53e3e' : 'transparent', color: selected === 'ml' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Machine Learning (ML)</button>
-        <button onClick={() => setSelected('dl')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'dl' ? '#e53e3e' : 'transparent', color: selected === 'dl' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Deep Learning (DL)</button>
-      </div>
-      {selected === 'ai' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! AI is the broad umbrella covering any system acting autonomously without human intervention. Standard search trees and expert rules are AI, even if they never learn from data.</p>}
-      {selected === 'ml' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. ML is a subset of AI requiring statistical learning from experience (E). An expert chess engine uses static search rules, not statistical learning. Try again!</p>}
-      {selected === 'dl' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. DL is a subset of ML utilizing multi-layered neural networks. An expert rule-based engine is at the outermost AI layer. Try again!</p>}
-    </div>
-  );
-};
-
-<AIQuiz />
-
-### Why the job titles don't map to different fields
-
-Whether you are an **ML developer**, a **DL developer**, a **CV** (computer vision) developer or an
-**AI engineer** — at the end of the day, you are building an **AI application**. The labels
-describe which layer of the diagram you spend your time in, not different professions.
-
-Worked example of the layers cooperating: **Netflix → movie genre → recommendation.**
-Deep learning may extract features from artwork and trailers; machine learning predicts what you'll
-watch from your history; the AI application is the fact that a page of recommendations appears with
-nobody at Netflix choosing it for you.
+| Attribute | Artificial Intelligence (AI) | Machine Learning (ML) | Deep Learning (DL) |
+| :--- | :--- | :--- | :--- |
+| **Hierarchical Scope** | The entire encompassing field | **Strict subset of AI** | **Strict subset of ML** |
+| **Requires Learning?** | **No** (Rule engines, Minimax are AI) | **Yes** (Statistical optimization) | **Yes** (Backpropagation in neural networks) |
+| **Feature Engineering** | Manual specification | Usually required (Tabular features) | **Autonomous representation learning** |
+| **Sample Efficiency** | N/A (Rules are deterministic) | Effective on small/medium tabular datasets | Requires massive scale ($10^5$ to $10^{11}$ samples) |
+| **Handbook Focus** | General context | **Core engineering curriculum** | Advanced specialized extension |
 
 ---
 
-## Common Mistakes
+## 7. Implementation Lab
 
-Here are the most common conceptual pitfalls when starting out in Machine Learning, compared with the correct engineering principles.
+:::tip
+
+**Lab Exercise: Rules vs. Learning Contest**
+
+An interactive, fully functional Google Colab / Jupyter Notebook is available to evaluate the rule-based approach against an autonomous Decision Tree classifier using real animal measurements live in your browser.
+
+<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/01-foundations/rules_vs_learning.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+**How to run the lab:**
+1. Click the **"Open In Colab"** badge above to launch the interactive notebook.
+2. Run cells sequentially to benchmark hand-crafted thresholds against Scikit-Learn's `DecisionTreeClassifier`.
+
+**Key Experiments to Run:**
+*   **Experiment 1 (The Chihuahua/Maine Coon Test):** Run the handwritten rule set on the test set and observe accuracy drop to $50\%$ on outlier weights.
+*   **Experiment 2 (Inspect Learned Features):** Print `tree.feature_importances_` to verify that the decision tree completely ignored `weight_kg` and selected `retractable_claws` instead.
+*   **Experiment 3 (Feature Ablation):** Remove `retractable_claws` from the training data and retrain to observe the tree fall back to weight thresholds and reproduce human error.
+
+:::
+
+---
+
+## 8. Common Mistakes
 
 <Tabs>
-  <TabItem value="mistake1" label="🚨 Mistake 1: Does ML Write Code?" default>
+  <TabItem value="m1" label="🚨 1. Does ML Write Programming Code?" default>
     <br/>
-
-    *   **The Misconception:** *"Machine Learning means the computer writes its own programming code to solve the problem."*
-    *   **❌ Wrong Thinking:** Expecting the model to emit a `.py` file or a set of explicit rule structures.
-    *   **✅ The Right Principle:** The computer fits **numeric parameters** (weights and thresholds) of a statistical model whose mathematical architecture (like a Decision Tree or Neural Network) was chosen and restricted by *you*.
+    
+    *   **The Misconception:** *"Machine Learning means the computer writes Python code to solve the problem."*
+    *   **❌ Wrong Thinking:** Expecting a model to generate `.py` files or readable procedural scripts.
+    *   **✅ The Right Principle:** The model fits **numeric weight parameters** and matrix operations inside a fixed mathematical architecture chosen by the engineer.
   </TabItem>
-  <TabItem value="mistake2" label="🚨 Mistake 2: Rules vs. ML" default>
+  <TabItem value="m2" label="🚨 2. Using ML When Rules Are Known">
     <br/>
-
-    *   **The Misconception:** *"Since Machine Learning is modern, we should use it to build everything—even calculators or tax estimators."*
-    *   **❌ Wrong Thinking:** Applying a model where the rules are 100% known and countable (e.g., standard addition or legal tax brackets).
-    *   **✅ The Right Principle:** If the rules are known, static, and finite, **just write the code**. Machine Learning is for domains where the rules are either too complex to state (images, speech) or are dynamically changing.
+    
+    *   **The Misconception:** *"ML is newer and more advanced, so we should build our tax calculator and password validator with ML."*
+    *   **❌ Wrong Thinking:** Introducing statistical probabilities to problems governed by exact, countable, static laws.
+    *   **✅ The Right Principle:** If the rules are 100% known and countable, **write standard code**. ML introduces stochastic error and should only be used when rules are impossible to write manually.
   </TabItem>
-  <TabItem value="mistake3" label="🚨 Mistake 3: Features & Scaling" default>
+  <TabItem value="m3" label="🚨 3. More Features Always Equals Better Models">
     <br/>
-
-    *   **The Misconception:** *"Adding more features and columns to a dataset always improves model accuracy."*
-    *   **❌ Wrong Thinking:** Dumping uncleaned columns into the model, assuming the algorithm will sift out the noise.
-    *   **✅ The Right Principle:** Features multiply the dimension of the feature space exponentially ($3^6 \to 3^7$). Too many features relative to your sample size (`E`) leads to the **curse of dimensionality** and severe overfitting.
+    
+    *   **The Misconception:** *"Adding 50 more columns to our dataset will always improve predictive accuracy."*
+    *   **❌ Wrong Thinking:** Dumping uncleaned, collinear features into a model.
+    *   **✅ The Right Principle:** Features multiply the dimension of the space exponentially ($k^d$), causing the **curse of dimensionality** and severe overfitting unless balanced by exponential sample size ($E$).
+  </TabItem>
+  <TabItem value="m4" label="🚨 4. Confusing AI with Statistical Learning">
+    <br/>
+    
+    *   **The Misconception:** *"If a system does not use neural networks or statistical training, it cannot be called AI."*
+    *   **❌ Wrong Thinking:** Restricting AI to learning systems only.
+    *   **✅ The Right Principle:** AI encompasses all autonomous software. A classical chess program using Minimax search trees and hardcoded heuristics is genuine AI, even though it contains zero machine learning.
   </TabItem>
 </Tabs>
 
 ---
 
-## Summary
+## 9. Summary
 
 <div className="row">
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🤖 Definitions & Core Frameworks</h3>
+        <h3>🤖 Foundational Definitions</h3>
       </div>
       <div className="card__body">
         <ul>
-          <li><b>Conceptual:</b> Learning without being explicitly programmed (Samuel, 1959).</li>
-          <li><b>Operational:</b> Performance at <code>T</code>, measured by <code>P</code>, improves with experience <code>E</code> (Mitchell, 1997).</li>
-          <li><b>The Inversion:</b> In traditional programming, rules are the input. In machine learning, <b>rules are the output</b>.</li>
+          <li><b>Arthur Samuel (1959):</b> Learning without being explicitly programmed.</li>
+          <li><b>Tom Mitchell (1997):</b> Performance at task $T$, measured by metric $P$, improves with experience $E$.</li>
+          <li><b>The Inversion:</b> In ML, rules are the <b>output</b>, not the input.</li>
         </ul>
       </div>
     </div>
@@ -457,13 +449,13 @@ Here are the most common conceptual pitfalls when starting out in Machine Learni
   <div className="col col--6">
     <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
       <div className="card__header">
-        <h3>🚨 Why Traditional Rules Fail</h3>
+        <h3>🛠️ Why Explicit Rules Collapsed</h3>
       </div>
       <div className="card__body">
         <ul>
-          <li><b>Combinatorial Explosion:</b> Rules grow exponentially ($3^6 = 729$), making manual rule sets unscalable.</li>
-          <li><b>Sample Dependency:</b> Hard-coded thresholds (like <code>weight_kg &lt; 10</code>) encode accidents of the current sample, failing on edge cases (Maine Coons, Chihuahuas).</li>
-          <li><b>Maintenance Trap:</b> In a drifting world, every new sample becomes a new bug report.</li>
+          <li><b>Combinatorial Explosion:</b> Rule count scales as $k^d$, easily outpacing human coding ability.</li>
+          <li><b>Fragile Thresholds:</b> Hand-coded boundaries fail on unseen edge cases (Chihuahuas, Maine Coons).</li>
+          <li><b>Drift and Maintenance:</b> Real-world data shifts continuously, rendering static rules obsolete.</li>
         </ul>
       </div>
     </div>
@@ -472,209 +464,98 @@ Here are the most common conceptual pitfalls when starting out in Machine Learni
 
 <br/>
 
-:::info 
+:::info
 
-**📌 Key Takeaways: What is Machine Learning?**
+**📌 Key Takeaways**
 
-*   **🎯 The Inversion:** Traditional programming runs on hand-written rules. In Machine Learning, **rules are the output**, derived autonomously from data.
-*   **🖼️ Preprocessing != Learning:** Translating raw inputs (like photos) into a matrix of numerical features is required for *both* approaches—feature extraction itself is not the statistical "learning" step.
-*   **🔄 The Iterative Loop:** ML algorithms do not learn in a single step; they learn through a continuous optimization loop: **Guess $\to$ Measure Error $\to$ Adjust**.
-*   **📦 Nested Taxonomy:** Deep Learning is a nested subset of Machine Learning, which is a nested subset of Artificial Intelligence ($DL \subset ML \subset AI$).
-
-:::
-
-**Next in this section:** [Applications and Major Techniques](./02-applications-and-techniques.mdx)
-— the eight things ML actually does, and where each gets used ·
-[Types of Learning](./03-types-of-learning.mdx) — how `E` differs by paradigm ·
-[The Toolkit and the Pipeline](./05-toolkit-and-pipeline.mdx) — the code that implements it
-
----
-
-## Implementation Lab
-
-:::tip 
-
-**Lab Exercise: Rules vs. Learning**
-
-An interactive, fully-functional Google Colab / Jupyter Notebook is available to experiment with this rules-vs-learning contest live in your browser.
-
-<a href="https://colab.research.google.com/github/vettrivel-kl/vettrivel-kl.github.io/blob/master/static/labs/01-foundations/rules_vs_learning.ipynb" target="_blank" rel="noopener noreferrer">
-  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
-</a>
-
-**How to run the lab:**
-1. Click the **"Open In Colab"** badge above to launch the interactive notebook instantly in your browser.
-2. Click **"Run all"** or execute cells individually using `Shift + Enter` to see the output.
-
-**Things to try inside the script:**
-*   **Delete `retractable_claws`** from the features list and re-fit. The tree will be forced back onto body weight—watch it fail exactly like the human's rules did!
-*   **Remove the Maine Coon and Chihuahua rows** from training, then re-fit and test. This demonstrates the *unrepresentative-sample* failure—the single most common real-world ML bug!
-*   **Explore feature importances:** Print `tree.feature_importances_` alongside `FEATURES` to see the discarded features score exactly `0.0`.
+*   **🔄 The Inversion:** Traditional programming runs on hand-written rules; Machine Learning generates mathematical rules and weights autonomously from data.
+*   **🎯 Mitchell's Trinity:** Always define Task ($T$), Experience ($E$), and Performance ($P$) before beginning any ML project.
+*   **📦 Nested Hierarchy:** $DL \subset ML \subset AI$. Deep learning learns features hierarchically; machine learning fits statistical boundaries; AI includes all autonomous systems.
 
 :::
 
----
-
-## Practice Questions
-
-*Test your understanding by working each problem out first, then click the card to reveal the detailed solution. Questions are tagged by type: **[THEORY]**, **[PROG]**, **[OUT]**, or **[ANALYZE]**.*
-
-### Definitions
-
-<details>
-  <summary>❓ <b>A1. [THEORY] State the definition of machine learning, and explain what the phrase "without being explicitly programmed" rules out.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Arthur Samuel's Definition (1959):** *"Machine learning is the field of study that gives computers the ability to learn without being explicitly programmed."*
-    *   **What it rules out:** It rules out writing hand-crafted, hard-coded conditional logic or decision matrices (e.g., `if-else` loops) by humans. Instead of a human dictating the boundaries (rules), the algorithm learns the boundary weights directly from data (experience `E`).
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>A2. [THEORY] Mitchell's definition names T, E and P. Identify all three for the task "predict whether a bank customer will default on a loan".</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Task (T):** Classify or predict whether a customer will default (Yes/No) or predict their probability of defaulting on a loan.
-    *   **Experience (E):** Historical customer profile databases, financial logs, credit histories, and known past loan repayment outcomes.
-    *   **Performance Measure (P):** Classification evaluation metrics—such as **Precision** (avoiding false alarms on trustworthy clients) or **Recall** (capturing as many default risks as possible to avoid financial losses).
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>A3. [THEORY] Give two examples of software that should NOT be built with machine learning, and justify each.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    1.  **A Simple Calculator / Tax Estimator:** The rules of arithmetic and standard tax brackets are 100% known, finite, and static. Using ML introduces unnecessary statistical error to a problem that can be solved with perfect, explicit `if-else` code.
-    2.  **User Authentication / Password Validator:** Passwords must match exactly. Introducing a statistical model (which predicts a probability of a match) would introduce false positives, severely compromising security. Explicit string matching is mandatory.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>A4. [THEORY] Why is a rule-based chess engine still considered AI, despite containing no learning?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **The Taxonomy:** **Artificial Intelligence** is the broad umbrella field that describes *any* system capable of acting autonomously without human intervention.
-    *   **The Chess Engine:** A rule-based chess engine uses hand-written heuristics, minimax trees, and search algorithms to make intelligent chess decisions autonomously. It solves an intelligent problem without human help, satisfying the definition of AI, even though it contains no statistical learning (ML).
-  </div>
-</details>
-
-### Why rules fail
-
-<details>
-  <summary>❓ <b>B1. [THEORY] A feature set has 6 features, each taking 3 possible values. How many distinct combinations exist? Show the calculation, then state what happens when a 7th feature is added.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Calculation:** $3^6 = 729$ distinct combinations.
-    *   **When adding a 7th feature:** It multiplies the space by 3, resulting in $3^7 = 2,187$ combinations.
-    *   **The Lesson:** This illustrates **combinatorial explosion**. Writing rules manually grows linearly with effort, but the state-space of rules grows *exponentially* with features, making explicit programming unscalable.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>B2. [ANALYZE] The rule "if weight_kg < 10: return 'cat'" classified the training data correctly. Explain precisely why it is nonetheless a defective rule, and name two real animals that break it.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Why it is defective:** The threshold (`10 kg`) is a hard-coded human guess tuned exclusively to the accidents of the small, local sample dataset. It represents overfitting to a sample's weight distribution, not an invariant biological fact.
-    *   **Two breakers:**
-        1.  **Maine Coon Cat:** Can easily weigh 11+ kg (classified as a dog under the rule).
-        2.  **Chihuahua Dog:** Weighs only 2.5 kg (classified as a cat under the rule).
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>B3. [THEORY] List the three reasons the rule-based approach to animal recognition failed, and explain which of the three is the direct consequence of the other two.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    1.  **Needed too many rules** (combinatorial explosion).
-    2.  **Highly dependent on current dataset** (fragile, guessed thresholds).
-    3.  **Complete failure to generalize to new samples** (the ultimate consequence).
-    *   **The Consequence:** The third failure (failure to generalize) is the direct consequence of 1 & 2. Because the rules are too sample-dependent and cannot realistically scale to cover the variety of the real world, the model breaks the moment it meets new data.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>B4. [ANALYZE] "We can fix the rule-based system by hiring more developers to write more rules." Argue against this using the growth rate of the rule count.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **The Argument:** Hiring more developers is a linear solution to an exponential problem. Developer rule-writing capabilities scale linearly ($O(N)$ with budget/headcount), while the feature state-space scales exponentially ($O(k^d)$ where $d$ is features). The exponential growth will always outpace linear capacity, causing the rule set to fall behind and collapse under technical debt.
-  </div>
-</details>
-
-### The inversion
-
-<details>
-  <summary>❓ <b>C2. [OUT] A decision tree trained on five features produces this rules output: claws > 0.5 → cat, has_wings > 0.5 → bird. Which features did the model actually use, which did the human pick, and what does this show?</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **Features Used:** The model chose `retractable_claws` and `has_wings` and ignored body weight entirely.
-    *   **The Human's Choice:** The human rule-based approach relied heavily on `weight_kg`.
-    *   **The Lesson:** This shows that human intuition regarding feature importance is often flawed and biased towards what looks obvious, whereas machine learning algorithms can analyze the complete covariance of features and discover optimal, non-obvious classification parameters.
-  </div>
-</details>
-
-<details>
-  <summary>❓ <b>C4. [ANALYZE] In the worked demo the hand-written rules scored 80% on training data but 50% on unseen data, while the tree scored 100% on both. Explain what the gap between the two columns measures, and why the rules' gap is the more worrying result.</b></summary>
-  <div className="answer-content">
-    <br/>
-    
-    *   **What the gap measures:** It measures the **generalization error** (the drop in performance between data the model saw during training vs. new, unseen data).
-    *   **Why the rules' gap is worrying:** The rules' performance dropped from 80% to 50% (random guess levels!). This massive drop indicates that the rules did not capture true features—they merely memorized an accident of the training sample. The tree's 100%/100% performance indicates true, robust generalization.
-  </div>
-</details>
+**Next Section:** [Applications and Techniques](./02-applications-and-techniques.mdx) - mapping real-world business problems to regression, classification, clustering, and dimensionality reduction.
 
 ---
 
-## Quick self-check
+## 10. Active Recall
 
-Test your knowledge with these rapid-fire active recall questions.
+*Test your understanding by answering first, then clicking to reveal the underlying principles.*
 
-<details className="quiz-card">
-  <summary>🧠 1. Define machine learning in one sentence.</summary>
+### Interactive Checkpoint Quiz
+
+export const FoundationQuiz = () => {
+  const [selected, setSelected] = React.useState(null);
+  return (
+    <div style={{ padding: '20px', border: '1px solid var(--ifm-color-emphasis-200)', borderRadius: '8px', backgroundColor: 'rgba(148, 163, 184, 0.05)', margin: '20px 0' }}>
+      <h4 style={{ margin: '0 0 10px 0' }}>🧠 Interactive Checkpoint: The Paradigm Inversion</h4>
+      <p style={{ margin: '0 0 15px 0' }}>In machine learning, what are the primary <b>inputs</b> provided to the learning algorithm?</p>
+      <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
+        <button onClick={() => setSelected('opt1')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt1' ? '#e53e3e' : 'transparent', color: selected === 'opt1' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Data + Hand-Written Rules</button>
+        <button onClick={() => setSelected('opt2')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt2' ? '#38a169' : 'transparent', color: selected === 'opt2' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Data + Historical Answers (Labels)</button>
+        <button onClick={() => setSelected('opt3')} style={{ padding: '8px 16px', borderRadius: '4px', border: '1px solid #3182ce', backgroundColor: selected === 'opt3' ? '#e53e3e' : 'transparent', color: selected === 'opt3' ? '#fff' : 'var(--ifm-font-color-base)', cursor: 'pointer', transition: '0.2s' }}>Hand-Written Rules + Performance Metrics</button>
+      </div>
+      {selected === 'opt1' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Supplying Data + Rules is the definition of Traditional Programming, which outputs Answers. Try again!</p>}
+      {selected === 'opt2' && <p style={{ color: '#38a169', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>✅ Correct! In machine learning, the human provides empirical Data + historical Answers (labels). The algorithm processes them to output the Rules (the statistical model weights and decision boundaries)!</p>}
+      {selected === 'opt3' && <p style={{ color: '#e53e3e', marginTop: '15px', fontWeight: 'bold', fontSize: '14px', marginBottom: '0' }}>❌ Incorrect. Machine learning eliminates the requirement for hand-written rules. Try again!</p>}
+    </div>
+  );
+};
+
+<FoundationQuiz />
+
+### Review Flashcards
+
+<details>
+  <summary>❓ <b>1. [THEORY] Mitchell's definition identifies T, E, and P. Formulate these three for an automated credit card fraud detector.</b></summary>
   <div className="answer-content">
     <br/>
-    The field of study that gives computers the ability to learn from data without being explicitly programmed.
+    
+    *   **Task ($T$):** Classify individual incoming credit card transactions in real time as legitimate or fraudulent ($0$ or $1$).
+    *   **Experience ($E$):** A historical database of credit card transactions containing transaction amounts, merchant IDs, geo-locations, cardholder purchase frequency, and verified fraud chargebacks.
+    *   **Performance Measure ($P$):** Precision-Recall AUC (PR-AUC) or Recall at a fixed low False Positive Rate (e.g. capturing $95\%$ of fraud while flagging less than $0.1\%$ of legitimate transactions).
   </div>
 </details>
 
-<details className="quiz-card">
-  <summary>🧠 2. What does "explicitly programmed" mean?</summary>
+<details>
+  <summary>❓ <b>2. [MATH] Why does adding a 7th feature to a dataset with 3 values per feature cause a combinatorial explosion for rule-based systems?</b></summary>
   <div className="answer-content">
     <br/>
-    A human developer manually writing hard-coded logic and conditional loops (like `if-else` blocks) to decide outputs.
+    
+    *   With $6$ features taking $3$ states, the required state-space of rules is:
+        $$3^6 = 729 \text{ combinations}$$
+    *   Adding a 7th feature multiplies the entire state space by $3$:
+        $$3^7 = 2,187 \text{ combinations}$$
+    *   While human developer rule-writing capacity scales **linearly** ($O(d)$), the required rule combinations scale **exponentially** ($O(k^d)$).
   </div>
 </details>
 
-<details className="quiz-card">
-  <summary>🧠 3. In Mitchell's definition, what are T, E, and P?</summary>
+<details>
+  <summary>❓ <b>3. [THEORY] Why is a rule-based expert system or Minimax chess engine considered AI, even if it contains no Machine Learning?</b></summary>
   <div className="answer-content">
     <br/>
-    *   **T (Task):** The job you want the system to perform.
-    *   **E (Experience):** The historical data/examples the model learns from.
-    *   **P (Performance):** The metric used to evaluate how well the system does the task.
+    
+    *   **Artificial Intelligence** is the broad encompassing category of any computing system that performs autonomous, goal-directed tasks without direct human intervention.
+    *   A Minimax search engine autonomously evaluates chess positions and chooses optimal strategic moves. It exhibits autonomous decision-making without learning from data ($E$), satisfying the definition of AI.
   </div>
 </details>
 
-<details className="quiz-card">
-  <summary>🧠 4. Why did the rule-based animal classifier fail?</summary>
+<details>
+  <summary>❓ <b>4. [PRACTICE] Why did the Decision Tree in our lab ignore body weight and choose `retractable_claws` instead?</b></summary>
   <div className="answer-content">
     <br/>
-    Because it suffered from combinatorial explosion, used fragile guessed thresholds, and completely failed to generalize on unseen dogs and cats.
+    
+    *   **Human Cognitive Bias:** Humans pick obvious continuous attributes like `weight_kg` based on intuition ("dogs are heavy, cats are light").
+    *   **Covariance and Invariance:** The decision tree evaluates the mathematical information gain of every feature across all training samples. It discovered that while heavy cats (Maine Coons) and light dogs (Chihuahuas) violate weight boundaries, `retractable_claws` provided an invariant biological separator ($100\%$ pure split).
   </div>
 </details>
 
-<details className="quiz-card">
-  <summary>🧠 5. In machine learning, are the rules an input or an output?</summary>
+<details>
+  <summary>❓ <b>5. [ANALYZE] Name two software applications where Machine Learning should NEVER be used, and explain why.</b></summary>
   <div className="answer-content">
     <br/>
-    Rules are the **output** of a machine learning pipeline (whereas they are the *input* of traditional programming).
+    
+    1.  **Salary & Tax Calculations:** Tax laws and mathematical addition are exact, static, and deterministic. Using a statistical model introduces probabilistic approximation errors to a problem requiring $100\%$ precision.
+    2.  **Cryptographic Password Verification:** Passwords require exact byte-level matching. An ML model would predict a probability of a match, introducing false positives that compromise security.
   </div>
 </details>
