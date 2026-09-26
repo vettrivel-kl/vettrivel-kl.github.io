@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 4
 title: Theoretical Concepts
 description: Rigorous academic definitions for CT1 theoretical questions
 tags: [sampling, definitions, skewness, kurtosis, ct-exam]

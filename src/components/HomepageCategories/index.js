@@ -73,22 +73,22 @@ const SUBJECTS = [
     categories: [
       {
         label: 'Batch 1: Descriptive Stats',
-        href: '/docs/category/batch-1-descriptive-stats',
+        href: '/docs/Exam-Prep/Inferential-Statistics/CT-1/descriptive-stats-batch',
         description: 'Descriptive statistics, covariance, and correlation.',
       },
       {
         label: 'Batch 2: Fundamental Probability',
-        href: '/docs/category/batch-2-fundamental-probability',
+        href: '/docs/Exam-Prep/Inferential-Statistics/CT-1/fundamental-probability-batch',
         description: 'Fundamental probability and the addition/multiplication rules.',
       },
       {
         label: 'Batch 3: Probability Distributions',
-        href: '/docs/category/batch-3-probability-distributions',
+        href: '/docs/Exam-Prep/Inferential-Statistics/CT-1/probability-distributions-batch',
         description: 'Probability distributions and Bayes’ theorem.',
       },
       {
         label: 'Batch 4: Theoretical Concepts',
-        href: '/docs/category/batch-4-theoretical-concepts',
+        href: '/docs/Exam-Prep/Inferential-Statistics/CT-1/theory-batch',
         description: 'Theoretical frameworks for sampling, probability, and metrics.',
       },
     ],

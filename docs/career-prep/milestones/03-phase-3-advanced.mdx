@@ -1,0 +1,179 @@
+---
+title: Phase 3 - Advanced Topics & Distributed Systems (Sprints 25-36)
+description: Weekly tracking checklist for Phase 3 advanced topics and distributed systems.
+displayed_sidebar: careerSidebar
+---
+
+# Phase 3: Advanced Topics & Distributed Systems (Sprints 25-36)
+
+[Back to Master Dashboard](../index.mdx)
+
+:::info
+
+**Phase Goal**
+
+Reach senior-level system design maturity by mastering distributed systems theory (CAP, Consensus, Partitioning, Replication) and event-driven patterns (Kafka, Saga). Concurrently, master advanced Java concurrency, JVM internals, and advanced React architecture.
+
+:::
+
+---
+
+## Stage 7: Distributed Foundations & Multithreading
+
+### Sprint 25: 2D Dynamic Programming & The CAP Theorem
+#### Track A: Advanced DSA & Concurrency
+- [ ] Problem: Unique Paths (Grid 2D DP)
+- [ ] Problem: Longest Common Subsequence
+- [ ] Java Concurrency: `java.util.concurrent.locks.ReentrantLock` vs `synchronized`
+
+#### Track B: Distributed Systems Theory
+- [ ] Distributed Systems: The CAP Theorem and PACELC Theorem defined with real-world examples
+- [ ] Consistency Models: Linearizable vs Sequential vs Causal vs Eventual Consistency
+- [ ] Trade-offs: Latency and availability impacts of synchronous replication
+
+---
+
+### Sprint 26: Shortest Paths & Replication Strategies
+#### Track A: Advanced DSA & Concurrency
+- [ ] Problem: Network Delay Time (Dijkstra's Algorithm with Priority Queue)
+- [ ] Problem: Cheapest Flights Within K Stops (Bellman-Ford / BFS)
+- [ ] Java Concurrency: `ReadWriteLock` and thread-safe caches
+
+#### Track B: Distributed Systems Theory
+- [ ] Replication: Single-Leader (Active-Passive) Replication and failover mechanics
+- [ ] Replication: Multi-Leader Replication and conflict resolution strategies (LWW, CRDTs)
+- [ ] Replication: Leaderless Replication (Dynamo-style) and Quorum math ($R + W > N$)
+
+---
+
+### Sprint 27: Concurrency Utilities & Sharding Strategies
+#### Track A: Advanced DSA & Concurrency
+- [ ] Problem: Course Schedule III
+- [ ] Java Concurrency: Atomic primitives (`AtomicInteger`, `AtomicReference`, Compare-And-Swap)
+- [ ] Java Concurrency: `CountDownLatch`, `CyclicBarrier`, and `Semaphore`
+
+#### Track B: Distributed Systems Theory
+- [ ] Partitioning: Range Partitioning vs Hash Partitioning
+- [ ] Data Rebalancing: Dynamic partitioning and mitigating Hot Spot partitions
+- [ ] Distributed Coordination: Consensus algorithms high-level overview (Raft / Paxos) and Apache ZooKeeper / etcd
+
+---
+
+### Sprint 28: CompletableFuture & Target Domain Deep Dive
+#### Track A: Advanced DSA & Concurrency
+- [ ] Problem: Longest Increasing Subsequence ($O(N \log N)$ approach)
+- [ ] Java Concurrency: Asynchronous pipelines using `CompletableFuture`
+- [ ] Concurrency Practice: Implement a thread-safe bounded Blocking Queue from scratch
+
+#### Track B: Domain Deep Dive
+- [ ] Domain Analysis: Deconstruct the business and monetization model of target companies (Google, Meta, etc.)
+- [ ] High-Scale Bottlenecks: How advertising auctions or social graphs dictate infrastructure choices
+- [ ] Architecture Mapping: Compare your current company's system topology with FAANG-scale requirements
+
+---
+
+## Stage 8: Event-Driven Systems & Framework Runtimes
+
+### Sprint 29: Advanced React & Distributed Messaging
+#### Track A: React Internals & Frontend
+- [ ] Problem: Word Ladder (Bidirectional BFS)
+- [ ] React Internals: The Fiber Architecture and the two-phase commit pipeline
+- [ ] React Internals: Concurrent Mode, Time-Slicing, and `useTransition`
+
+#### Track B: Messaging & Event Streaming
+- [ ] Messaging Paradigms: Message Queues (RabbitMQ/SQS) vs Log-Based Brokers (Apache Kafka)
+- [ ] Kafka Architecture: Topics, Partitions, Offsets, Consumer Groups, and CommitLog
+- [ ] Delivery Guarantees: At-least-once, At-most-once, and Exactly-once semantics
+
+---
+
+### Sprint 30: Frontend State & Event-Driven Architecture
+#### Track A: React Architecture & State
+- [ ] Problem: Alien Dictionary (Topological Sort on strings)
+- [ ] React State: Redux Toolkit (RTK) architecture, middleware, and normalized state
+- [ ] React Server State: RTK Query / TanStack Query (Caching, invalidation, polling)
+
+#### Track B: Event-Driven Design Patterns
+- [ ] Pattern: The Transactional Outbox Pattern and Change Data Capture (Debezium)
+- [ ] Pattern: Event Sourcing and Command Query Responsibility Segregation (CQRS)
+- [ ] Reliability: Dead-Letter Queues (DLQ), Exponential Backoff, and Jitter
+
+---
+
+### Sprint 31: Spring Boot Internals & Distributed Transactions
+#### Track A: Spring Boot Internals
+- [ ] Spring Core: Inversion of Control (IoC), Bean Lifecycle, and Bean Scopes
+- [ ] Spring Core: Dependency Injection mechanics and Circular Dependency resolution
+- [ ] Spring AOP: Dynamic Proxies (JDK vs CGLIB) and how `@Transactional` works under the hood
+
+#### Track B: Distributed Transactions
+- [ ] The Problem: Why Two-Phase Commit (2PC) creates blocking bottlenecks in microservices
+- [ ] Pattern: The Saga Pattern (Choreography vs Orchestration)
+- [ ] Consistency: Compensating transactions and managing eventual consistency in payment flows
+
+---
+
+### Sprint 32: Spring Data JPA & Advanced System Design Problem 4
+#### Track A: Persistence Internals
+- [ ] Hibernate/JPA: Entity Lifecycle (Transient, Managed, Detached, Removed)
+- [ ] Hibernate/JPA: First-Level Cache vs Second-Level Cache
+- [ ] Concurrency: Optimistic Locking (`@Version`) vs Pessimistic Locking in JPA
+
+#### Track B: System Design Problem 4
+- [ ] HLD Problem: Design a Real-Time Chat Application (e.g., WhatsApp / Slack)
+- [ ] Protocols: WebSockets vs Long Polling vs Server-Sent Events (SSE)
+- [ ] Architecture: Connection management servers, presence servers, message storage, and push notifications
+
+---
+
+## Stage 9: JVM Internals, Machine Coding & Complex Systems
+
+### Sprint 33: JVM Memory Management & System Design Problem 5
+#### Track A: JVM Internals
+- [ ] JVM Architecture: ClassLoaders, Metaspace, Heap (Eden, Survivor, Old Gen), and Thread Stacks
+- [ ] Garbage Collection: Generational hypothesis, G1GC, and ZGC mechanics
+- [ ] Troubleshooting: Diagnosing `OutOfMemoryError` (Heap vs Metaspace) and reading GC logs
+
+#### Track B: System Design Problem 5
+- [ ] HLD Problem: Design a Distributed Social Media News Feed (e.g., Twitter / Instagram)
+- [ ] Fan-out Models: Fan-out-on-write (Push) vs Fan-out-on-read (Pull) vs Hybrid for celebrities
+- [ ] Storage & Caching: Feed generation pipeline and multi-tier Redis caching
+
+---
+
+### Sprint 34: Spring Security & System Design Problem 6
+#### Track A: Backend Security
+- [ ] Spring Security: Security Filter Chain architecture
+- [ ] Authentication: JWT structure, signature verification, and secure storage
+- [ ] Authorization: OAuth 2.0 and OpenID Connect flows (Authorization Code Grant with PKCE)
+
+#### Track B: System Design Problem 6
+- [ ] HLD Problem: Design an E-Commerce Platform / Flash Sale System
+- [ ] Inventory Management: Preventing overselling using distributed locks and atomic database decrements
+- [ ] Payment Pipeline: Idempotency keys, third-party payment gateway integration, and webhook retries
+
+---
+
+### Sprint 35: Machine Coding & System Design Problem 7
+#### Track A: Machine Coding Practice
+- [ ] Timed Machine Coding (90 mins): Implement an In-Memory LRU Cache with TTL support
+- [ ] Verification: Unit tests using JUnit 5, thread-safety verification, and clean separation of concerns
+- [ ] Evaluation: Self-grade on extensibility, error handling, and memory footprint
+
+#### Track B: System Design Problem 7
+- [ ] HLD Problem: Design a Ride-Sharing Service (e.g., Uber / Lyft)
+- [ ] Geospatial Indexing: QuadTrees vs Geohashing vs Google S2 geometry library
+- [ ] Dispatch Engine: Driver-rider matching, real-time location streaming, and surge pricing calculation
+
+---
+
+### Sprint 36: Phase 3 Consolidation & Buffer
+#### Track A: Review & Self-Assessment
+- [ ] Java Concurrency Review: Review ThreadPool sizing formulas and Executor configurations
+- [ ] Spring Boot Checkpoint: Review common career questions on Spring transactions and beans
+- [ ] Buffer: Catch up on any missed topics from Sprints 25-35
+
+#### Track B: Review & Self-Assessment
+- [ ] Systems Design Recap: Compare News Feed, Chat, and Ride-Sharing architectural patterns
+- [ ] Diagramming: Draw complete end-to-end architectures in Mermaid.js
+- [ ] Retrospective: Evaluate readiness for final career preparation phase (Q4)

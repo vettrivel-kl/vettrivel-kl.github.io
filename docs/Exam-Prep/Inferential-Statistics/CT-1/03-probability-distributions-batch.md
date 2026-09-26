@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 3
 title: Probability Distributions & Bayes
 description: Complete step-by-step solutions for CT1 Probability Distribution questions
 tags: [poisson, binomial, hypergeometric, bayes, ct-exam]

@@ -1,5 +1,5 @@
 ---
-sidebar_position: 1
+sidebar_position: 2
 title: Fundamental Probability
 description: Complete step-by-step solutions for CT1 Fundamental Probability questions
 tags: [probability, bayes, contingency-tables, ct-exam]

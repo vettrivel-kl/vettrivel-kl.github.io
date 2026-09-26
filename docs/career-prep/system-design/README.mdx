@@ -1,0 +1,34 @@
+---
+title: System Design & Architecture Notes
+description: High-level design, distributed systems, and low-level design notes.
+displayed_sidebar: careerSidebar
+---
+
+# System Design & Architecture Notes
+
+[Back to Master Dashboard](../index.mdx)
+
+:::info
+
+**Design Standards**
+
+Use standard Docusaurus Mermaid code fences (````mermaid`) for all diagrams. Ensure node labels are enclosed in double quotes. Ground capacity estimations in standard hardware assumptions.
+
+:::
+
+## Standard System Design Career Framework
+
+Follow this 12-step structured progression for High-Level Design careers:
+
+1. **Clarify Requirements:** Establish functional scope (user workflows) and non-functional requirements (throughput, latency, availability, consistency).
+2. **Define Boundaries:** What is explicitly out of scope for the current design?
+3. **Capacity Estimation:** Compute QPS (read/write ratio), peak traffic, network bandwidth, and storage growth over 5 years.
+4. **API Design:** Define clear endpoints (REST/gRPC), request payloads, and status codes.
+5. **High-Level Architecture:** Draw core client-to-server dataflow (Client -> CDN -> Load Balancer -> API Gateway -> Services -> Database).
+6. **Data Modeling:** Schema definitions, primary keys, indexing strategies, and choosing SQL vs NoSQL.
+7. **Component Deep Dive:** Drill down into critical bottlenecks (e.g., custom hashing algorithms, feed generation workers).
+8. **Scalability & Partitioning:** Sharding keys, read replicas, caching layers (Redis), and consistent hashing.
+9. **Failure Modes & Resiliency:** Circuit breakers, retries with backoff, dead-letter queues, failover strategies, and graceful degradation.
+10. **Data Consistency:** Managing transactions across services (Saga, Outbox pattern, eventual consistency).
+11. **Security & Compliance:** Rate limiting, authentication (OAuth2/JWT), data encryption at rest and in transit.
+12. **Observability & Metrics:** Distributed tracing, error budgets, SLIs/SLOs, and operational health alerting.
