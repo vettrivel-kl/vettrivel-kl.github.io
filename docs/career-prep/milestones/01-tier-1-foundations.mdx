@@ -1,0 +1,143 @@
+---
+title: Tier 1 - Foundations & Core Idioms (Sprints 1-12)
+description: Staff-level recalibration of computational reasoning, core systems, web architecture, and leadership stories.
+displayed_sidebar: careerSidebar
+---
+
+# Tier 1: Foundations & Core Idioms (Sprints 1-12)
+
+[Back to Master Dashboard](../index.mdx)
+
+:::info
+
+**Tier 1 Strategic Goal**
+
+Elevate foundational engineering knowledge from senior-level familiarity to Staff-level mastery across all 5 tracks:
+- **DSA:** Invariant proofs, 45-minute execution pace, and scale bridges.
+- **Backend HLD:** Capacity math, RDBMS vs NoSQL access patterns, and single-region topologies.
+- **Frontend HLD:** Client state taxonomy, relational entity normalization, and DOM virtualization.
+- **LLD:** Clean OOD domain models, SOLID principles, and Java concurrency primitives.
+- **Leadership:** Mining 10 authentic stories from 12 years of experience into STAR+ format.
+
+:::
+
+---
+
+## Sprints 1-3: Core Patterns, Data Modeling & Story Excavation
+
+### Track 01 — DSA & Computational Reasoning
+- [ ] Pattern: Arrays & Hashing (Frequency maps, lookup optimization)
+- [ ] Invariant derivation: Two Sum (Hash Map complement lookup in $O(N)$ time, $O(N)$ space)
+- [ ] Edge cases: Integer overflow, duplicate keys, null/empty arrays
+- [ ] Multi-language comparison: Java `HashMap` vs TypeScript `Map` vs Python `dict`
+
+### Track 02 — Backend System Design
+- [ ] Capacity Math: Rapid back-of-the-envelope estimation for QPS, daily storage, and network bandwidth
+- [ ] Storage Selection: Relational B-Tree indexes vs LSM-Tree storage engines
+- [ ] Problem: Design a Distributed URL Shortener (Hash generation, base62 encoding, collision handling)
+
+### Track 03 — Frontend System Design
+- [ ] Client State Taxonomy: Server Cache vs Global App State vs Transient UI State vs URL State
+- [ ] Entity Normalization: Designing flattened entity dictionary schemas for relational API payloads
+- [ ] Problem: Design an Autocomplete Search Box (Debouncing, AbortController cancellation, local LRU cache)
+
+### Track 04 — Low-Level Design & Concurrency
+- [ ] SOLID in Practice: Decoupling domain entities from persistence and transport layers
+- [ ] Java Memory Model: Understanding CPU cache lines, memory visibility, and the `volatile` keyword
+- [ ] Problem: Design a Clean Parking Lot Domain Model with pluggable spot allocation strategies
+
+### Track 05 — Leadership & Written Artifacts
+- [ ] Career Excavation: Document raw technical details for 3 major past projects (Architecture, Scale, Personal role)
+- [ ] The "I vs We" Rule: Rewriting project summaries using active leadership verbs
+- [ ] Competency Focus: Defining Technical Vision & Strategy
+
+---
+
+## Sprints 4-6: Windowing, Caching, Virtualization & Locks
+
+### Track 01 — DSA & Computational Reasoning
+- [ ] Pattern: Two Pointers (Opposite-direction, fast-and-slow, Dutch National Flag partitioning)
+- [ ] Pattern: Sliding Window (Fixed size, dynamic condition, At-Most-K to Exactly-K reduction)
+- [ ] Pattern: Prefix Sum & Difference Arrays (2D range sum queries, range update tricks)
+- [ ] Distributed Bridge: How sliding window algorithms map to Sliding Window Log rate limiters
+
+### Track 02 — Backend System Design
+- [ ] Caching Topologies: Cache-Aside, Read-Through, Write-Through, Write-Behind
+- [ ] Cache Pitfalls: Dog-piling / Thundering Herd mitigation, Jittered TTLs, Bloom filters
+- [ ] Problem: Design a Distributed Rate Limiter & API Gateway (Token bucket, Redis cluster sync)
+
+### Track 03 — Frontend System Design
+- [ ] 60fps Frame Budget: 16.6ms anatomy (JS execution, Style, Layout, Paint, Composite)
+- [ ] DOM Virtualization: Implementing windowing algorithms for 100,000 items with dynamic row heights
+- [ ] Core Web Vitals: Largest Contentful Paint (LCP) and Interaction to Next Paint (INP) optimization
+
+### Track 04 — Low-Level Design & Concurrency
+- [ ] Java Concurrency Primitives: `ReentrantLock` vs `synchronized`, lock timeouts (`tryLock`)
+- [ ] Multi-threaded Condition Variables: `await()` and `signalAll()` for thread synchronization
+- [ ] Problem: Implement a Thread-Safe Bounded BlockingQueue without using `java.util.concurrent`
+
+### Track 05 — Leadership & Written Artifacts
+- [ ] Career Excavation: Document 3 past cross-team initiatives or platform migrations
+- [ ] STAR+ Refinement: Adding explicit Reflection (+) and architectural lessons to mined stories
+- [ ] Competency Focus: Influence Without Authority (Aligning skeptical teams on shared APIs)
+
+---
+
+## Sprints 7-9: Search, Sharding, Real-Time & Atomics
+
+### Track 01 — DSA & Computational Reasoning
+- [ ] Pattern: Binary Search & Monotonic Predicates (Boundary search, search in rotated sorted array)
+- [ ] Pattern: Binary Search on continuous answer spaces ($f(x) \ge target$)
+- [ ] Pattern: Monotonic Stack (Next greater/smaller element, Largest rectangle in histogram)
+- [ ] Pattern: Monotonic Queue (Sliding window maximum/minimum in amortized $O(1)$)
+
+### Track 02 — Backend System Design
+- [ ] Partitioning & Sharding: Range-based vs Hash-based sharding, Consistent Hashing rings
+- [ ] Hot Partitions: Key salting, virtual nodes, zero-downtime resharding pipelines
+- [ ] Problem: Design a Scalable Notification Service (Priority queues, provider failover, rate limits)
+
+### Track 03 — Frontend System Design
+- [ ] Real-Time Client Protocols: WebSockets vs Server-Sent Events (SSE) vs Long Polling
+- [ ] Connection Management: Reconnection with exponential backoff, heartbeats, message deduplication
+- [ ] Problem: Design an Infinite Scroll Media Feed (Prefetching, virtualization, memory leak defense)
+
+### Track 04 — Low-Level Design & Concurrency
+- [ ] Atomic Primitives: `AtomicInteger`, `AtomicReference`, Compare-And-Swap (CAS) loops
+- [ ] Deadlock Prevention: Enforcing global resource lock acquisition ordering
+- [ ] Problem: Implement a Thread-Safe In-Memory LRU Cache with $O(1)$ access and TTL expiration
+
+### Track 05 — Leadership & Written Artifacts
+- [ ] Story Formatting: Structuring high-stakes technical disagreement narratives
+- [ ] Artifact Draft: Writing an Architecture Decision Record (ADR) for a real past technical decision
+- [ ] Competency Focus: High-Stakes Disagreement & Resolving Architectural Deadlocks
+
+---
+
+## Sprints 10-12: Heaps, Trees, Kafka & Tier 1 Review
+
+### Track 01 — DSA & Computational Reasoning
+- [ ] Pattern: Heaps & Priority Queues (Top-K elements, K-way merge, dual-heap running median)
+- [ ] Pattern: Binary Trees & BSTs (LCA, serialization/deserialization, tree diameter)
+- [ ] Distributed Bridge: Mapping Heaps to distributed priority task schedulers and Top-K streams
+- [ ] Diagnostic Mock: 45-minute timed interview simulation on an unseen Tier 1 problem
+
+### Track 02 — Backend System Design
+- [ ] Messaging Semantics: Log-based streaming (Kafka) vs discrete queues (RabbitMQ, SQS)
+- [ ] Event Delivery: At-most-once, at-least-once, idempotent consumers, head-of-line blocking
+- [ ] Problem: Design a Distributed Unique ID Generator (Snowflake architecture, clock skew handling)
+- [ ] Diagnostic Mock: 60-minute system design whiteboarding simulation with written ADR
+
+### Track 03 — Frontend System Design
+- [ ] Offline-First Architecture: Service Workers, Cache API, and IndexedDB storage engines
+- [ ] Background Sync: Storing offline mutations in IndexedDB outbox with idempotent replays
+- [ ] Problem: Design a Resumable File Upload Engine (Chunking, checksums, pause/resume)
+
+### Track 04 — Low-Level Design & Concurrency
+- [ ] Read-Write Optimization: `ReentrantReadWriteLock` vs `StampedLock` optimistic reading
+- [ ] 90-Minute Machine Coding Simulation: Build a Thread-Safe Rate Limiter Library
+- [ ] Requirement Twist Defense: Extending the rate limiter to support multi-tier tenant quotas
+
+### Track 05 — Leadership & Written Artifacts
+- [ ] Full 10-Story Bank Complete: All 10 core competencies documented with validated STAR+ format
+- [ ] Mock Behavioral Loop: 45-minute Staff-level behavioral mock with adversarial cross-examination
+- [ ] Written Artifact: 1-Page Executive Pitch to VP/CTO justifying a technical debt initiative

@@ -1,0 +1,126 @@
+---
+title: Track 02 - Backend System Design & Distributed Systems
+sidebar_label: Backend System Design
+sidebar_position: 1
+description: Distributed systems architecture, capacity estimations, and failure-first design.
+displayed_sidebar: careerSidebar
+---
+
+# Track 02: Backend System Design & Distributed Systems
+
+[Back to Master Dashboard](../index.mdx)
+
+:::info
+
+**Architectural Philosophy & Staff Standard**
+
+Architecture is not the accumulation of trendy technologies. Architecture is the art of making explicit, justified trade-offs between **latency, throughput, consistency, availability, operational complexity, and cost**.
+
+Every component introduced into a design must be justified by an architectural driver.
+
+:::
+
+---
+
+## The 14-Step Systematic Design Framework
+
+In Staff-level system design evaluations, follow this structured reasoning chain:
+
+```text
+[1]  Clarify Business Problem & User Workflows (Functional Scope)
+     ↓
+[2]  Non-Functional Drivers & SLAs (99.99% Availability, P99 Latency, Consistency)
+     ↓
+[3]  Capacity & Hardware Envelope (QPS, Read/Write Ratio, Storage, Bandwidth, Memory)
+     ↓
+[4]  Domain Modeling & Entity Boundaries (Aggregates, Invariants, State Machines)
+     ↓
+[5]  API & Interface Contracts (REST, gRPC, Protobuf, Idempotency Keys)
+     ↓
+[6]  Data Architecture & Partitioning Strategy (SQL vs NoSQL, Sharding Key, Hot Keys)
+     ↓
+[7]  High-Level System Topology (Clients, Gateways, Services, Storage, Caching, Event Mesh)
+     ↓
+[8]  Deep Dive into Critical Path Workflows (Read Path vs Write Path)
+     ↓
+[9]  Distributed Concurrency & Transactions (Saga, Outbox, Distributed Locks, 2PC)
+     ↓
+[10] Failure-Mode & Resilience Analysis (Network partitions, Cascading failures, Degradation)
+     ↓
+[11] Scalability & Bottleneck Evolution (10x -> 100x scale, Rebalancing, Throttling)
+     ↓
+[12] Security & Trust Boundaries (AuthN/AuthZ, Data at Rest/Transit, Blast Radius)
+     ↓
+[13] Observability & Incident Telemetry (Distributed Tracing, Metrics, SLO Alerts)
+     ↓
+[14] Cost Modeling & Architectural Evolution (ADR: Why this and not alternatives?)
+```
+
+---
+
+## Numbers Every Distributed Systems Architect Must Know
+
+Ground all capacity calculations in real-world hardware and network physics:
+
+| Operation | Typical Latency | Scale Reference |
+|---|---|---|
+| L1 cache reference | 0.5 ns | - |
+| L2 cache reference | 7 ns | 14x L1 |
+| Main memory reference (RAM) | 100 ns | 200x L1 |
+| Compress 1KB with Snappy/ZSTD | 1-3 µs | - |
+| Send 1KB over 10 Gbps network | 1 µs | - |
+| Read 1MB sequentially from RAM | 250 µs | - |
+| Read 1MB sequentially from SSD | 1 ms | 4x RAM read |
+| Round trip within same datacenter | 500 µs | - |
+| SSD random read (4KB IOPS) | 50-100 µs | ~10k-100k IOPS per disk |
+| HDD seek (rotational disk) | 10 ms | 100,000x RAM |
+| Read 1MB sequentially from network | 10 ms | - |
+| Cross-continent round trip (US East to West) | 60-80 ms | Speed of light in fiber |
+| Transatlantic round trip (US East to Europe) | 100-150 ms | - |
+
+---
+
+## Architecture Decision Record (ADR) Deliverable Standard
+
+Every major system design practice culminates in a 1-page written ADR:
+
+```markdown
+# ADR-001: [Title of Architecture Decision]
+
+## Status
+[Proposed | Accepted | Superseded]
+
+## Context & Problem Statement
+What technical, business, and scale pressures necessitate this decision?
+
+## Decision Drivers & Hard Constraints
+- Driver 1 (e.g., Sub-50ms P99 global latency)
+- Driver 2 (e.g., Strict zero-data-loss durability for financial ledgers)
+
+## Considered Options
+1. Option A: [Brief description]
+2. Option B: [Brief description]
+
+## Decision Outcome & Justification
+Chosen Option: [Option Name]
+Why: [Clear explanation of why this option uniquely satisfies constraints]
+
+## Positive Consequences & Gains
+- [Throughput scales linearly with partition keys]
+- [Operational overhead minimized via managed storage]
+
+## Negative Consequences & Trade-offs
+- [Eventual consistency window requires client-side optimistic UI]
+- [Cross-partition queries require secondary index synchronization]
+
+## Validation & Compliance
+How we verify that service implementations adhere to this decision.
+```
+
+---
+
+## Subdirectory Structure
+
+- `cheat-sheets/`: Storage selection matrix, capacity math formulas, and latency cheats.
+- `patterns/`: Saga, Outbox, CQRS, Consistent Hashing, and Rate Limiter blueprints.
+- `adr-portfolio/`: Comprehensive case studies and verified Architecture Decision Records.

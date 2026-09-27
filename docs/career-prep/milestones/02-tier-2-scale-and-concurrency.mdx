@@ -1,0 +1,135 @@
+---
+title: Tier 2 - Scale & Concurrency (Sprints 13-24)
+description: Production scale, non-linear reasoning, multithreaded systems, and cross-team alignment.
+displayed_sidebar: careerSidebar
+---
+
+# Tier 2: Scale & Concurrency (Sprints 13-24)
+
+[Back to Master Dashboard](../index.mdx)
+
+:::info
+
+**Tier 2 Strategic Goal**
+
+Move from single-component fundamentals to production-scale distributed complexity:
+- **DSA:** Graphs, Topological Sort, Union-Find, Intervals, and non-linear data structures.
+- **Backend HLD:** Distributed transactions, Saga orchestration, Outbox pattern, and geospatial indexing.
+- **Frontend HLD:** Real-time collaboration, CRDTs, client outbox queues, and performance profiling.
+- **LLD:** Multithreaded systems in Java, in-memory event buses, and complex state machines.
+- **Leadership:** Handling deep architectural disagreements, mentoring leads, and driving cross-team adoption.
+
+:::
+
+---
+
+## Sprints 13-15: Graphs, Geospatial Indexing & State Machines
+
+### Track 01 — DSA & Computational Reasoning
+- [ ] Pattern: Graphs (Adjacency list representation, BFS for shortest path, DFS for connectivity)
+- [ ] Pattern: Topological Sort (Kahn's algorithm, in-degree arrays, cycle detection in DAGs)
+- [ ] Distributed Bridge: How DAG topological sort governs build systems (Bazel) and workflow DAGs (Airflow)
+
+### Track 02 — Backend System Design
+- [ ] Geospatial Indexing: GeoHash vs Google S2 vs Uber H3 hierarchical hexagonal spatial indexes
+- [ ] High-Throughput Write Ingestion: Ingesting millions of driver coordinate pings per second
+- [ ] Problem: Design a Global Ride-Sharing Backend (Uber / Lyft: Matching engine, Trip state machine)
+
+### Track 03 — Frontend System Design
+- [ ] Real-Time Collaboration: Conflict-Free Replicated Data Types (CRDTs) vs Operational Transformation (OT)
+- [ ] Rich Text Representation: Abstract Syntax Trees (ASTs), cursor presence tracking over WebSockets
+- [ ] Problem: Design a Real-Time Collaborative Document Editor (Google Docs / Notion)
+
+### Track 04 — Low-Level Design & Concurrency
+- [ ] State Pattern in Practice: Designing complex entity lifecycles with state transition guards
+- [ ] Concurrent Collections: `ConcurrentHashMap` internals (node bin locking, resizing mechanics)
+- [ ] Problem: Design a Multi-Floor Elevator System with optimal dispatch algorithms (LOOK / SCAN)
+
+### Track 05 — Leadership & Written Artifacts
+- [ ] Disagreement Simulation: Resolving a deep architectural split between two engineering teams
+- [ ] Written Artifact: Draft an ADR for introducing an asynchronous event-driven architecture
+- [ ] Competency Focus: High-Stakes Disagreement & Creating Cross-Team Consensus
+
+---
+
+## Sprints 16-18: Disjoint Sets, Distributed Transactions & Pub-Sub
+
+### Track 01 — DSA & Computational Reasoning
+- [ ] Pattern: Union-Find (Disjoint Set Union with path compression and union by rank)
+- [ ] Applications: Redundant connection detection, network connectivity, minimum spanning tree (Kruskal)
+- [ ] Pattern: Intervals (Sweep-line algorithm, Meeting Rooms II, interval intersection)
+
+### Track 02 — Backend System Design
+- [ ] Distributed Transactions: Two-Phase Commit (2PC) limitations vs Saga pattern (Choreography vs Orchestration)
+- [ ] Transactional Outbox Pattern: Change Data Capture (CDC via Debezium) to eliminate dual-write hazards
+- [ ] Problem: Design a Resilient Distributed Payment Gateway & Ledger System (Idempotency, Double-entry)
+
+### Track 03 — Frontend System Design
+- [ ] High-Frequency Stream Handling: Processing hundreds of WebSocket ticks per second in the browser
+- [ ] UI Throttling: `requestAnimationFrame` render loops, canvas/WebGL vs SVG/DOM for data density
+- [ ] Problem: Design a Real-Time Financial Trading / Metrics Dashboard
+
+### Track 04 — Low-Level Design & Concurrency
+- [ ] Thread Pools & Worker Queues: Tuning `ThreadPoolExecutor`, rejection policies (`CallerRunsPolicy`)
+- [ ] Multi-Threaded Event Bus: Topic routing, regex wildcard subscriptions, and retry dead-letter queues
+- [ ] Problem: Build a Thread-Safe In-Memory Pub-Sub / Event Bus in Java
+
+### Track 05 — Leadership & Written Artifacts
+- [ ] Mentorship Narrative: Guiding a senior engineer through their first major architectural ownership
+- [ ] Executive Communication: Translating complex technical risk into executive business impact
+- [ ] Competency Focus: Mentoring & Scaling Senior Engineering Talent
+
+---
+
+## Sprints 19-21: Tries, Media Pipelines & Micro-Frontends
+
+### Track 01 — DSA & Computational Reasoning
+- [ ] Pattern: Tries (Prefix Trees: insert, search, startsWith, memory optimization)
+- [ ] Advanced Trie: Bitwise XOR Trie for maximum XOR subarray queries
+- [ ] Distributed Bridge: How Tries power search engine autocomplete and edge router path tables
+
+### Track 02 — Backend System Design
+- [ ] Media Ingestion & Chunking: Multipart upload, object storage (S3), CDN origin shield
+- [ ] Distributed Transcoding Pipeline: DAG-based worker queue for multi-resolution encoding (HLS/DASH)
+- [ ] Problem: Design a Video Streaming & Ingestion Platform (YouTube / Netflix Backend)
+
+### Track 03 — Frontend System Design
+- [ ] Micro-Frontends: Webpack Module Federation, dynamic remote container loading, shared dependency deduplication
+- [ ] Cross-Application Contracts: Shared event bus, isolated routing, style encapsulation (CSS Modules)
+- [ ] Problem: Design an Enterprise Micro-Frontend SaaS Platform
+
+### Track 04 — Low-Level Design & Concurrency
+- [ ] Priority-Based Execution: DelayQueue, scheduled thread pools, job lease management
+- [ ] Resilience: Exponential backoff with full jitter in concurrent workers
+- [ ] Problem: Build an In-Memory Task Scheduler (Cron Engine) with priority queues and retries
+
+### Track 05 — Leadership & Written Artifacts
+- [ ] Crisis Leadership: Structuring a real Sev-1 production incident recovery story
+- [ ] Post-Mortem Draft: Writing a formal blameless post-mortem with root causes and SLA action items
+- [ ] Competency Focus: Crisis & Incident Command
+
+---
+
+## Sprints 22-24: Greedy, High-Scale Mocks & Tier 2 Review
+
+### Track 01 — DSA & Computational Reasoning
+- [ ] Pattern: Greedy Algorithms (Greedy-choice property proofs, interval scheduling, task assignment)
+- [ ] Diagnostic Mock: 45-minute timed interview simulation on non-linear graph / interval problem
+- [ ] Multi-Language Verification: Solving a complex graph problem in both Java and TypeScript
+
+### Track 02 — Backend System Design
+- [ ] High-Scale Whiteboard Mock: 60-minute ride-sharing or video streaming design simulation
+- [ ] Failure Injection: Live drill handling 10x traffic surge and primary database partition
+- [ ] Written Artifact: Deliver complete Architecture Decision Record (ADR) under timed conditions
+
+### Track 03 — Frontend System Design
+- [ ] Diagnostic Mock: 60-minute collaborative editor or trading dashboard design simulation
+- [ ] Edge Case Drill: Handling intermittent network drops, conflict resolution, and memory pressure
+
+### Track 04 — Low-Level Design & Concurrency
+- [ ] 90-Minute Timed Machine Coding: Build a Multi-Floor Elevator System or In-Memory Pub-Sub
+- [ ] Requirement Twist Defense: Accommodating unexpected priority/tenant override requirements
+
+### Track 05 — Leadership & Written Artifacts
+- [ ] Behavioral Simulation: 45-minute Staff-level behavioral mock covering conflict and failure
+- [ ] Written Artifact: Draft a complete Request for Comments (RFC) for a cross-team platform initiative
