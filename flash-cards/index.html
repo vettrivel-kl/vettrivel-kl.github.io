@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light">
+<base href="/flash-cards/">
+<title>Picture Flash Cards</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ctext%20y='.9em'%20font-size='88'%3E%F0%9F%96%BC%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="styles.css">
+</head>
+<!-- Starts on "loading" because the word files load asynchronously; app.js
+     switches to "start" (or "error") once they're in. -->
+<body data-screen="loading">
+
+<!-- ============ LOADING ============ -->
+<main class="screen" id="screen-loading">
+  <p class="tagline">Getting the words ready&hellip;</p>
+</main>
+
+<!-- ============ START ============ -->
+<main class="screen" id="screen-start">
+  <h1 class="title">Picture Flash&nbsp;Cards</h1>
+  <p class="tagline">Look at the picture.<br>Can you say the word?</p>
+
+  <div class="set-picker" id="set-picker" role="group" aria-label="Choose a word group"></div>
+
+  <label class="shuffle-row">
+    <input type="checkbox" id="shuffle-toggle" checked>
+    <span>Mix up the order</span>
+  </label>
+
+  <button class="btn btn-primary btn-big" id="start-btn">Start</button>
+
+  <!-- Only shown when a word file had a problem, so a broken file isn't
+       invisible. Deliberately small and calm: the app still works. -->
+  <p class="notice" id="start-notice" hidden></p>
+</main>
+
+<!-- ============ CARD ============ -->
+<main class="screen" id="screen-card">
+  <header class="card-top">
+    <button class="btn btn-icon" id="quit-btn" aria-label="Back to the start screen">&times;</button>
+    <div class="progress">
+      <span class="progress-text" id="progress-text"></span>
+      <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    </div>
+  </header>
+
+  <div class="card" id="card" role="button" tabindex="0" aria-label="Show the word">
+    <!-- Only for cards that carry a "prompt" — a question instead of (or above)
+         a picture. With no picture the prompt becomes the whole front. -->
+    <p class="card-prompt" id="card-prompt" hidden></p>
+
+    <div class="picture-wrap">
+      <img class="picture" id="card-img" alt="">
+      <div class="picture-spinner" id="picture-spinner" hidden aria-hidden="true"></div>
+      <div class="picture-fallback" id="picture-fallback" hidden>
+        <span class="picture-fallback-icon">&#128444;&#65039;</span>
+        <span class="picture-fallback-text">The picture didn&rsquo;t load</span>
+      </div>
+    </div>
+
+    <div class="word-zone">
+      <p class="word-hint" id="word-hint">Tap to see the word</p>
+      <div class="word-shown" id="word-shown" hidden>
+        <div class="word-row">
+          <span class="word-text" id="word-text"></span>
+          <button class="btn btn-speak" id="speak-btn" aria-label="Say the word again">
+            <!-- inline SVG rather than an emoji: renders identically everywhere -->
+            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M3.8 9.3h3l4.6-3.7v12.8l-4.6-3.7h-3a.9.9 0 0 1-.9-.9v-3.6a.9.9 0 0 1 .9-.9Z" fill="currentColor"/>
+              <path d="M14.8 8.9a4.3 4.3 0 0 1 0 6.2M17.6 6.3a8 8 0 0 1 0 11.4"
+                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </button>
+        </div>
+        <p class="word-sentence" id="word-sentence" hidden></p>
+      </div>
+    </div>
+  </div>
+
+  <nav class="card-nav">
+    <button class="btn btn-quiet" id="back-btn">&larr; Back</button>
+    <button class="btn btn-primary btn-big" id="next-btn">Next &rarr;</button>
+  </nav>
+</main>
+
+<!-- ============ DONE ============ -->
+<main class="screen" id="screen-done">
+  <div class="done-emoji">&#127881;</div>
+  <h2 class="title">You did it!</h2>
+  <p class="tagline" id="done-count"></p>
+  <button class="btn btn-primary btn-big" id="again-btn">Play again</button>
+  <button class="btn btn-quiet" id="choose-btn">Choose another group</button>
+</main>
+
+<!-- ============ ERROR ============ -->
+<main class="screen" id="screen-error">
+  <h2 class="title error-title">&#9888;&#65039; Can&rsquo;t read the word list</h2>
+  <pre class="error-detail" id="error-detail"></pre>
+  <p class="error-help">
+    Open <code>words.js</code> and check it &mdash; a missing comma or bracket is
+    the usual cause. The browser console (View &rsaquo; Developer &rsaquo; JavaScript
+    Console) names the exact line.
+  </p>
+</main>
+
+<!-- words.js must load first: it defines WORD_SETS that app.js reads. -->
+<script src="words.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
