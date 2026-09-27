@@ -1,0 +1,179 @@
+---
+sidebar_position: 1
+title: Module 4 Exam Prep Checklist & Formula Guide
+description: High-yield revision checklist, core definitions, and complete mathematical formula sheet for Module 4 (Design of Experiments & Optimization).
+tags: [research-methodology, exam-prep, checklist, formulas, anova, taguchi, optimization]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Heading from '@theme/Heading';
+import React from 'react';
+
+# Module 4 Exam Prep Checklist & Formula Guide
+
+> **Quick Summary -** High-yield exam revision package for **Module 4: Design of Experiments and Optimization Methods**. Use this checklist and master formula sheet for rapid self-assessment, memory consolidation, and formula verification prior to university examinations.
+
+---
+
+## 1. High-Yield Conceptual Checklist
+
+Review each syllabus topic below. Click the topic titles to jump directly to the detailed theoretical lectures and derivations.
+
+### Section A: DOE Principles & Standard Designs
+- [ ] **[Foundations of Experimental Design](../../../ResearchMethodology/Module4/01-foundations-of-doe.mdx):**
+  - [ ] Define **Factor**, **Level**, **Response**, **Treatment**, and **Experimental Unit**.
+  - [ ] State and explain Fisher's 3 Fundamental Principles: **Replication**, **Randomization**, and **Local Control (Blocking)**.
+  - [ ] Differentiate between *true replication* and *repeated measurements*.
+  - [ ] Memorize the 7-step sequence of designing a valid scientific experiment.
+- [ ] **[Standard Experimental Designs & ANOVA](../../../ResearchMethodology/Module4/02-standard-experimental-designs.mdx):**
+  - [ ] Understand conditions for **Completely Randomized Design (CRD)** (homogeneous units, 1-way ANOVA).
+  - [ ] Understand conditions for **Randomized Block Design (RBD)** (1 nuisance gradient, 2-way ANOVA).
+  - [ ] Understand conditions for **Latin Square Design (LSD)** (2 orthogonal nuisance sources, $p \times p$ matrix, 3-way ANOVA without interactions).
+  - [ ] Construct ANOVA tables from scratch (Degrees of freedom, Sum of Squares, Mean Squares, and $F_{\text{cal}}$).
+  - [ ] Master the **ANOVA Decision Rule**: If $F_{\text{cal}} > F_{\text{tab}}(\alpha, \text{df}_1, \text{df}_2)$, reject $H_0$.
+  - [ ] Full Factorial $2^k$ designs: Compute contrasts ($C$), estimated effects ($C / 2^{k-1}r$), and sum of squares ($C^2 / 2^k r$).
+
+---
+
+### Section B: Taguchi Methodology & Robust Parameter Design
+- [ ] **[Fractional Factorials & Taguchi Robust Design](../../../ResearchMethodology/Module4/03-fractional-factorials-and-taguchi.mdx):**
+  - [ ] Explain drawbacks of Full Factorials ($N = L^k$ run explosion, sparsity of effects).
+  - [ ] Define Fractional Factorial designs ($2^{k-p}$) and confounding/aliasing.
+  - [ ] State Dr. Genichi Taguchi's definition of **Quality** ("Loss imparted to society from shipment").
+  - [ ] Write and calculate Taguchi's **Quality Loss Function (QLF)**: $L(y) = k(y - m)^2$.
+  - [ ] Contrast traditional "goalpost" tolerances with Taguchi continuous quadratic loss.
+  - [ ] Explain the 3-step design method: **System Design**, **Parameter Design**, **Tolerance Design**.
+  - [ ] Differentiate **Control Factors**, **Noise Factors**, and **Signal Factors**.
+  - [ ] Define **Orthogonal Arrays (OAs)** ($L_4, L_8, L_9, L_{16}, L_{27}$) and identify why factor level balances eliminate correlation.
+  - [ ] Memorize the 3 Signal-to-Noise ($S/N$) ratio formulas:
+    - Larger-the-better (LTB)
+    - Smaller-the-better (STB)
+    - Nominal-the-best (NTB)
+  - [ ] Remember: **Always MAXIMIZE the $S/N$ ratio**, regardless of objective.
+  - [ ] Execute an $L_9$ response table, identify optimal factor combinations, and project predicted optimum performance:
+    $$\overline{S/N}_{\text{pred}} = \overline{S/N} + \sum (\overline{S/N}_{\text{opt}} - \overline{S/N})$$
+
+---
+
+### Section C: Response Surface Methodology & Optimization
+- [ ] **[RSM Fundamentals & First-Order Modeling](../../../ResearchMethodology/Module4/04-rsm-fundamentals-and-first-order.mdx):**
+  - [ ] Memorize the **Canonical 10-Step Methodological Framework of RSM**:
+    1. Define the Problem (Objective: Maximize, Minimize, or Target).
+    2. Select Response Variable(s) ($Y$).
+    3. Identify Factors and Levels (Coded levels: Low $-1$, Center $0$, High $+1$).
+    4. Select Experimental Design (CCD / BBD).
+    5. Conduct Experiments according to design matrix and record responses.
+    6. Fit the Mathematical Model ($Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2$).
+    7. Analyze the Model using statistical tests (ANOVA, $F$-value, $p$-value, $R^2$, Adjusted $R^2$, Lack-of-Fit).
+    8. Study the Response Surface (Contour plots, 3D surface plots).
+    9. Determine the Optimum Conditions (Steepest ascent path / stationary point $\mathbf{x}_0$).
+    10. Conduct Confirmation Experiments (Validate predicted vs. actual responses).
+  - [ ] Calculate 1st-order regression coefficients ($\beta_0 = \frac{\sum Y}{N}, \beta_j = \frac{\sum X_j Y}{N}$).
+  - [ ] Execute the **Method of Steepest Ascent** along gradient $\nabla Y = [\beta_1, \beta_2]^T$ with proportional step conversions.
+- [ ] **[RSM Designs: Central Composite & Box-Behnken](../../../ResearchMethodology/Module4/05-rsm-designs-ccd-and-bbd.mdx):**
+  - [ ] Understand Central Composite Design (CCD) point structure: Factorial ($2^k$) + Star ($2k$) + Center ($n_c$).
+  - [ ] Calculate total runs in CCD: $N = 2^k + 2k + n_c$ (e.g., $k=2, n_c=5 \implies N = 13$).
+  - [ ] Derive star distance for rotatability: $\alpha = (2^k)^{1/4}$ ($\sqrt{2} \approx 1.414$ for $k=2$).
+  - [ ] Convert coded star coordinates $(\pm \alpha)$ into physical engineering settings.
+  - [ ] Understand Box-Behnken Design (BBD): Edge midpoints with strictly 3 levels ($-1, 0, +1$).
+  - [ ] Calculate total runs in BBD: $N = 2k(k - 1) + n_c$ (e.g., $k=3, n_c=3 \implies N = 15$).
+  - [ ] Explain why BBD is safer for hazardous processes (omits extreme factorial corners and out-of-range star points).
+  - [ ] Reproduce the comparison matrix between CCD and BBD.
+- [ ] **[RSM: Multi-Response Optimization (MRO)](../../../ResearchMethodology/Module4/06-rsm-multi-response-optimization.mdx):**
+  - [ ] Formulate linear desirability functions for Larger-the-better ($d_Y = \frac{Y - Y_{\min}}{Y_{\max} - Y_{\min}}$) and Smaller-the-better ($d_R = \frac{R_{\max} - R}{R_{\max} - R_{\min}}$).
+  - [ ] Compute overall composite desirability via geometric mean: $D = (d_1 \times \dots \times d_k)^{1/k}$.
+  - [ ] Explain the Zero-Product Rule: if any $d_i = 0$, $D = 0$.
+  - [ ] Solve multi-response trade-off problems balancing competing criteria (e.g., Yield vs. Roughness).
+- [ ] **[Global Optimization & Metaheuristics Taxonomy](../../../ResearchMethodology/Module4/07-global-optimization-and-taxonomy.mdx):**
+  - [ ] Define the 5 components of an optimization problem: Decision Variables, Objective Function, Constraints, Parameters, and Algorithm.
+  - [ ] Differentiate between a **Local Optimum** and a **Global Optimum**.
+  - [ ] Define Heuristic vs. Metaheuristic; explain the balance between **Exploration (Diversification)** and **Exploitation (Intensification)**.
+  - [ ] Reproduce the 5-Branch Taxonomy Tree:
+    1. *Evolutionary:* GA, DE, GP, ES.
+    2. *Physics-Based:* SA, GSA, HS, MA.
+    3. *Swarm-Based:* PSO, ACO, ABC, FSA.
+    4. *Bio-Inspired:* AIS, BFO, DCA, KHA.
+    5. *Nature-Inspired:* CS, FA, BA, IWO.
+- [ ] **[Genetic Algorithms (GA)](../../../ResearchMethodology/Module4/08-genetic-algorithms.mdx):**
+  - [ ] Explain Darwin's "Survival of the Fittest", chromosomes, genes, and population.
+  - [ ] Detail the 7 execution stages: Chromosome formation, population init, fitness evaluation, selection, crossover, mutation, and elitist replacement.
+  - [ ] Perform a manual 1-generation GA calculation maximizing $f(x) = x^2$ with 5-bit strings.
+- [ ] **[Physics & Swarm Algorithms: SA & PSO](../../../ResearchMethodology/Module4/09-physics-and-swarm-algorithms.mdx):**
+  - [ ] **Simulated Annealing (SA):** Physical metallurgy analogy (Heating, Isothermal, Cooling), Metropolis acceptance probability:
+    $$P = \exp\left(-\frac{\Delta E}{T}\right)$$
+    Geometric cooling schedule ($T \leftarrow \alpha T$).
+  - [ ] **Particle Swarm Optimization (PSO):** Swarm dynamics, personal best ($\mathbf{pbest}_i$), global best ($\mathbf{gbest}$), velocity update equation ($w$, $c_1$, $c_2$), position update equation.
+
+---
+
+## 2. Master Formula Cheatsheet
+
+### 1. Analysis of Variance (ANOVA) Layouts
+
+$$\text{Correction Factor: } CF = \frac{G^2}{N}, \quad \text{Total SS: } \text{SST} = \sum y^2 - CF$$
+
+| Experimental Design | Treatment SS ($\text{SSTreat}$) | Blocking / Gradient SS | Error SS ($\text{SSE}$) | Error Degrees of Freedom ($\text{df}_{\text{Error}}$) |
+| :--- | :--- | :--- | :--- | :--- |
+| **CRD** ($t$ treat, $r$ rep) | $\sum \frac{T_i^2}{r} - CF$ | None | $\text{SST} - \text{SSTreat}$ | $N - t = t(r - 1)$ |
+| **RBD** ($t$ treat, $r$ blocks) | $\sum \frac{T_i^2}{r} - CF$ | $\text{SSBlock} = \sum \frac{B_j^2}{t} - CF$ | $\text{SST} - \text{SSTreat} - \text{SSBlock}$ | $(t - 1)(r - 1)$ |
+| **LSD** ($p \times p$ square) | $\sum \frac{T_i^2}{p} - CF$ | $\text{SSRow} = \sum \frac{R_j^2}{p} - CF$<br/>$\text{SSCol} = \sum \frac{C_k^2}{p} - CF$ | $\text{SST} - \text{SSTreat} - \text{SSRow} - \text{SSCol}$ | $(p - 1)(p - 2)$ |
+
+*Test Statistic:* $F_{\text{cal}} = \frac{\text{MSTreat}}{\text{MSE}} = \frac{\text{SSTreat} / \text{df}_{\text{Treat}}}{\text{SSE} / \text{df}_{\text{Error}}}$
+
+---
+
+### 2. $2^k$ Full Factorial Design Formulas
+
+$$\text{Contrast: } C = \sum_{i=1}^{2^k} \pm y_{i+}, \quad \text{Estimated Effect: } \hat{E} = \frac{C}{2^{k-1} \cdot r}, \quad \text{Sum of Squares: } \text{SS}_E = \frac{C^2}{2^k \cdot r}$$
+
+---
+
+### 3. Taguchi Robust Design Formulas
+
+*   **Quality Loss Function:**
+    $$L(y) = k(y - m)^2, \quad \text{where } k = \frac{\text{Cost at Specification Limit}}{\Delta^2}$$
+*   **Signal-to-Noise Ratios (dB):**
+    *   **Larger-the-Better (LTB):**
+        $$\eta = -10 \log_{10}\left(\frac{1}{n}\sum_{i=1}^n \frac{1}{y_i^2}\right) \quad \xrightarrow{n=1} \quad 20 \log_{10}(y)$$
+    *   **Smaller-the-Better (STB):**
+        $$\eta = -10 \log_{10}\left(\frac{1}{n}\sum_{i=1}^n y_i^2\right)$$
+    *   **Nominal-the-Best (NTB):**
+        $$\eta = 10 \log_{10}\left(\frac{\bar{y}^2}{s^2}\right)$$
+*   **Predicted Optimum Performance:**
+    $$\overline{S/N}_{\text{pred}} = \overline{S/N}_{\text{overall}} + \sum_{j=1}^k \left(\overline{S/N}_{j, \text{opt}} - \overline{S/N}_{\text{overall}}\right)$$
+
+---
+
+### 4. Response Surface & Desirability Formulas
+
+*   **First-Order Planar Model & Orthogonal Coefficient Estimation:**
+    $$Y = \beta_0 + \sum_{i=1}^k \beta_i X_i, \quad \beta_0 = \frac{\sum Y_i}{N}, \quad \beta_j = \frac{\sum X_{ji} Y_i}{N}$$
+*   **Steepest Ascent Gradient Direction:**
+    $$\nabla Y = \begin{bmatrix} \beta_1 & \beta_2 & \dots & \beta_k \end{bmatrix}^T$$
+*   **Second-Order Quadratic Model:**
+    $$y = \beta_0 + \sum_{i=1}^k \beta_i x_i + \sum_{i=1}^k \beta_{ii} x_i^2 + \sum_{i < j} \beta_{ij} x_i x_j + \epsilon$$
+*   **Derringer-Suich Overall Desirability:**
+    $$D = \left(d_1 \times d_2 \times \dots \times d_m\right)^{\frac{1}{m}} = \left(\prod_{i=1}^m d_i\right)^{\frac{1}{m}}$$
+
+---
+
+### 5. Metaheuristic Governing Formulas
+
+*   **Simulated Annealing Metropolis Criterion:**
+    $$\Delta E = E_{\text{new}} - E_{\text{current}}, \quad P = \begin{cases} 1 & \text{if } \Delta E \le 0 \\ \exp\left(-\frac{\Delta E}{T}\right) & \text{if } \Delta E > 0 \end{cases}$$
+    $$\text{Cooling Schedule: } T_{k+1} = \alpha T_k \quad (0.8 \le \alpha < 1)$$
+*   **Particle Swarm Optimization (PSO) Updates:**
+    $$\mathbf{V}_i^{t+1} = w \mathbf{V}_i^t + c_1 r_1 \left(\mathbf{pbest}_i - \mathbf{X}_i^t\right) + c_2 r_2 \left(\mathbf{gbest} - \mathbf{X}_i^t\right)$$
+    $$\mathbf{X}_i^{t+1} = \mathbf{X}_i^t + \mathbf{V}_i^{t+1}$$
+
+---
+
+:::tip
+
+**Next Step for Practice**
+
+Proceed to the [Module 4 Solved Practice Problems](./02-practice-problems.mdx) to test your calculation speed on complete numerical examination questions.
+
+:::

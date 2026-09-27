@@ -1,0 +1,466 @@
+---
+sidebar_position: 2
+title: Module 4 Solved Practice Problems
+description: Seven comprehensive hand-calculated numerical examination problems covering CRD, RBD, LSD, 2^2 Factorials, Taguchi L9 arrays, GA, and Response Surface Methodology (RSM) with collapsible solutions.
+tags: [research-methodology, exam-prep, practice-problems, anova, taguchi, ga, rsm]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Heading from '@theme/Heading';
+import React from 'react';
+
+# Module 4 Solved Practice Problems
+
+> **Exam Practice -** Work through each problem by hand first using scratch paper and a scientific calculator. Click **"View Step-by-Step Solution"** to verify your arithmetic, ANOVA partition tables, and final statistical decisions.
+
+---
+
+## Problem 1: Completely Randomized Design (CRD)
+
+### Problem Statement
+Three fertilizer compounds ($A, B, C$) are applied to 12 homogeneous experimental plots ($t = 3, r = 4, N = 12$). The measured crop yields (in kg) are:
+*   **Fertilizer A:** $18, 20, 19, 22$
+*   **Fertilizer B:** $24, 22, 21, 23$
+*   **Fertilizer C:** $26, 25, 27, 28$
+
+Test at the $\alpha = 0.05$ significance level whether there is a statistically significant difference in mean yield among the three fertilizers. (Given: Critical $F_{0.05}(2, 9) \approx 4.26$).
+
+<details>
+  <summary><b>View Step-by-Step Solution</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    #### 1. Hypothesis Formulation
+    *   **Null Hypothesis ($H_0$):** $\mu_A = \mu_B = \mu_C$ (The mean yields of all three fertilizers are equal).
+    *   **Alternative Hypothesis ($H_1$):** At least one fertilizer mean yield is different.
+
+    #### 2. Totals & Correction Factor ($CF$)
+    *   $T_A = 18 + 20 + 19 + 22 = 79$
+    *   $T_B = 24 + 22 + 21 + 23 = 90$
+    *   $T_C = 26 + 25 + 27 + 28 = 106$
+    *   $\text{Grand Total } G = 79 + 90 + 106 = 275$
+    *   $$CF = \frac{G^2}{N} = \frac{275^2}{12} = \frac{75625}{12} \approx 6302.0833$$
+
+    #### 3. Sum of Squares Computations
+    *   $$\sum y_{ij}^2 = 18^2 + 20^2 + 19^2 + 22^2 + 24^2 + 22^2 + 21^2 + 23^2 + 26^2 + 25^2 + 27^2 + 28^2 = 6413$$
+    *   $$\text{SST} = \sum y_{ij}^2 - CF = 6413 - 6302.0833 = 110.9167$$
+    *   $$\text{SSTreat} = \frac{79^2 + 90^2 + 106^2}{4} - CF = \frac{6241 + 8100 + 11236}{4} - 6302.0833 = 6394.25 - 6302.0833 = 92.1667$$
+    *   $$\text{SSE} = \text{SST} - \text{SSTreat} = 110.9167 - 92.1667 = 18.7500$$
+
+    #### 4. CRD ANOVA Table
+
+    | Source | $\text{df}$ | $\text{SS}$ | $\text{MS}$ | Calculated $F$ | Tabulated $F_{0.05}$ |
+    | :--- | :--- | :--- | :--- | :--- | :--- |
+    | **Fertilizers (Treatments)** | $3 - 1 = 2$ | $92.1667$ | $\frac{92.1667}{2} = 46.0833$ | $\frac{46.0833}{2.0833} \approx 22.12$ | $4.26$ |
+    | **Error (Residual)** | $12 - 3 = 9$ | $18.7500$ | $\frac{18.7500}{9} = 2.0833$ | - | - |
+    | **Total** | $12 - 1 = 11$ | $110.9167$ | - | - | - |
+
+    #### 5. Decision & Academic Conclusion
+    *   **Comparison:** $F_{\text{cal}} = 22.12 > F_{\text{tab}} = 4.26$.
+    *   **Decision:** Reject $H_0$ at the $5\%$ level of significance.
+    *   **Conclusion:** "Since the calculated $F$-value ($22.12$) is greater than the tabulated $F$-value ($4.26$) at the $5\%$ level of significance, the null hypothesis ($H_0$) is rejected, indicating that there is a statistically significant difference in mean yield among the three fertilizers."
+  </div>
+</details>
+
+---
+
+## Problem 2: Randomized Block Design (RBD)
+
+### Problem Statement
+An experiment measures cholesterol content (%) across 4 different diet foods ($D_1, D_2, D_3, D_4$) tested across 4 distinct laboratories ($A, B, C, D$) to control for inter-laboratory testing bias ($t = 4, r = 4, N = 16$).
+
+| Laboratory (Block) | $D_1$ | $D_2$ | $D_3$ | $D_4$ |
+| :--- | :--- | :--- | :--- | :--- |
+| **A** | 2 | 5 | 4 | 3 |
+| **B** | 3 | 7 | 4 | 2 |
+| **C** | 5 | 5 | 6 | 4 |
+| **D** | 5 | 5 | 8 | 5 |
+
+Analyze the data using RBD and state your conclusion at $\alpha = 0.05$. (Given: Critical $F_{0.05}(3, 9) = 3.86$).
+
+<details>
+  <summary><b>View Step-by-Step Solution</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    #### 1. Totals Calculation
+    *   **Treatment Totals ($T_i$):**
+        *   $T_{D1} = 2 + 3 + 5 + 5 = 15$
+        *   $T_{D2} = 5 + 7 + 5 + 5 = 22$
+        *   $T_{D3} = 4 + 4 + 6 + 8 = 22$
+        *   $T_{D4} = 3 + 2 + 4 + 5 = 14$
+    *   **Block Totals ($B_j$):**
+        *   $B_A = 2 + 5 + 4 + 3 = 14$
+        *   $B_B = 3 + 7 + 4 + 2 = 16$
+        *   $B_C = 5 + 5 + 6 + 4 = 20$
+        *   $B_D = 5 + 5 + 8 + 5 = 23$
+    *   $\text{Grand Total } G = 15 + 22 + 22 + 14 = 73$
+    *   $$CF = \frac{G^2}{N} = \frac{73^2}{16} = \frac{5329}{16} = 333.0625$$
+
+    #### 2. Sum of Squares Partitioning
+    *   $$\sum y_{ij}^2 = 4 + 25 + 16 + 9 + 9 + 49 + 16 + 4 + 25 + 25 + 36 + 16 + 25 + 25 + 64 + 25 = 373$$
+    *   $$\text{SST} = 373 - 333.0625 = 39.9375$$
+    *   $$\text{SSTreat} = \frac{15^2 + 22^2 + 22^2 + 14^2}{4} - CF = \frac{1389}{4} - 333.0625 = 347.25 - 333.0625 = 14.1875$$
+    *   $$\text{SSBlock} = \frac{14^2 + 16^2 + 20^2 + 23^2}{4} - CF = \frac{1381}{4} - 333.0625 = 345.25 - 333.0625 = 12.1875$$
+    *   $$\text{SSE} = \text{SST} - \text{SSTreat} - \text{SSBlock} = 39.9375 - 14.1875 - 12.1875 = 13.5625$$
+
+    #### 3. RBD ANOVA Table
+
+    | Source | $\text{df}$ | $\text{SS}$ | $\text{MS}$ | Calculated $F$ | Critical $F_{0.05}$ |
+    | :--- | :--- | :--- | :--- | :--- | :--- |
+    | **Diets (Treatments)** | $4 - 1 = 3$ | $14.1875$ | $\frac{14.1875}{3} \approx 4.7292$ | $\frac{4.7292}{1.5069} \approx 3.14$ | $3.86$ |
+    | **Labs (Blocks)** | $4 - 1 = 3$ | $12.1875$ | $\frac{12.1875}{3} \approx 4.0625$ | - | - |
+    | **Error** | $(4-1)(4-1)=9$ | $13.5625$ | $\frac{13.5625}{9} \approx 1.5069$ | - | - |
+    | **Total** | $16 - 1 = 15$ | $39.9375$ | - | - | - |
+
+    #### 4. Conclusion
+    *   $F_{\text{cal}} = 3.14 < F_{\text{tab}} = 3.86$.
+    *   **Fail to reject $H_0$**. At the $5\%$ level of significance, there is no statistically significant difference in cholesterol content among the four diet foods after controlling for laboratory variation.
+  </div>
+</details>
+
+---
+
+## Problem 3: Latin Square Design (LSD)
+
+### Problem Statement
+Four treatments ($A, B, C, D$) are allocated in a $4 \times 4$ Latin square to control for two independent nuisance sources (e.g., Row = Machine, Column = Operator). The experimental layout and observations are:
+*   **Row 1:** $A(18), B(22), C(25), D(28)$
+*   **Row 2:** $B(21), C(24), D(26), A(20)$
+*   **Row 3:** $C(19), D(23), A(22), B(25)$
+*   **Row 4:** $D(20), A(21), B(23), C(27)$
+
+Test at $\alpha = 0.05$ whether treatment differences are significant. (Given: Critical $F_{0.05}(3, 6) = 4.76$, $\sum y^2 = 8408$).
+
+<details>
+  <summary><b>View Step-by-Step Solution</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    #### 1. Totals Calculation ($p = 4, N = 16$)
+    *   **Treatment Totals:**
+        *   $T_A = 18 + 20 + 22 + 21 = 81$
+        *   $T_B = 22 + 21 + 25 + 23 = 91$
+        *   $T_C = 25 + 24 + 19 + 27 = 95$
+        *   $T_D = 28 + 26 + 23 + 20 = 97$
+    *   **Row Totals:**
+        *   $R_1 = 18 + 22 + 25 + 28 = 93$
+        *   $R_2 = 21 + 24 + 26 + 20 = 91$
+        *   $R_3 = 19 + 23 + 22 + 25 = 89$
+        *   $R_4 = 20 + 21 + 23 + 27 = 91$
+    *   **Column Totals:**
+        *   $C_1 = 18 + 21 + 19 + 20 = 78$
+        *   $C_2 = 22 + 24 + 23 + 21 = 90$
+        *   $C_3 = 25 + 26 + 22 + 23 = 96$
+        *   $C_4 = 28 + 20 + 25 + 27 = 100$
+    *   $G = 364$
+    *   $$CF = \frac{364^2}{16} = 8281.0$$
+
+    #### 2. Sum of Squares Partitioning
+    *   $$\text{SST} = 8408.0 - 8281.0 = 127.0$$
+    *   $$\text{SSTreat} = \frac{81^2 + 91^2 + 95^2 + 97^2}{4} - 8281.0 = \frac{33276}{4} - 8281.0 = 8319.0 - 8281.0 = 38.0$$
+    *   $$\text{SSRow} = \frac{93^2 + 91^2 + 89^2 + 91^2}{4} - 8281.0 = \frac{33132}{4} - 8281.0 = 8283.0 - 8281.0 = 2.0$$
+    *   $$\text{SSCol} = \frac{78^2 + 90^2 + 96^2 + 100^2}{4} - 8281.0 = \frac{33400}{4} - 8281.0 = 8350.0 - 8281.0 = 69.0$$
+    *   $$\text{SSE} = 127.0 - 38.0 - 2.0 - 69.0 = 18.0$$
+
+    #### 3. LSD ANOVA Table
+
+    | Source | $\text{df}$ | $\text{SS}$ | $\text{MS}$ | Calculated $F$ | Critical $F_{0.05}$ |
+    | :--- | :--- | :--- | :--- | :--- | :--- |
+    | **Rows** | $4 - 1 = 3$ | $2.0$ | $0.6667$ | - | - |
+    | **Columns** | $4 - 1 = 3$ | $69.0$ | $23.0000$ | - | - |
+    | **Treatments** | $4 - 1 = 3$ | $38.0$ | $12.6667$ | $\frac{12.6667}{3.0000} \approx 4.222$ | $4.76$ |
+    | **Error** | $(4-1)(4-2)=6$ | $18.0$ | $3.0000$ | - | - |
+    | **Total** | $16 - 1 = 15$ | $127.0$ | - | - | - |
+
+    #### 4. Conclusion
+    *   $F_{\text{cal}} = 4.222 < F_{\text{tab}} = 4.76$.
+    *   **Fail to reject $H_0$**. After adjusting for row and column effects, there is no statistically significant treatment effect at the $5\%$ level.
+  </div>
+</details>
+
+---
+
+## Problem 4: $2^2$ Full Factorial Design
+
+### Problem Statement
+A chemical engineer investigates the effect of Temperature ($A$) and Pressure ($B$) on product yield (%). Both factors are set at two coded levels: Low ($-1$) and High ($+1$) with $r=2$ replicates ($N = 2^2 \times 2 = 8$).
+
+| Run | Factor A (Temp) | Factor B (Pressure) | Replicate 1 | Replicate 2 |
+| :--- | :--- | :--- | :--- | :--- |
+| **1** | $-1$ | $-1$ | 42 | 43 |
+| **2** | $+1$ | $-1$ | 50 | 49 |
+| **3** | $-1$ | $+1$ | 46 | 45 |
+| **4** | $+1$ | $+1$ | 62 | 61 |
+
+Perform a complete $2^2$ factorial analysis: compute contrasts, main effects, interaction effect, construct the ANOVA table, and test for significance at $\alpha = 0.05$. (Given: Critical $F_{0.05}(1, 4) = 7.708$).
+
+<details>
+  <summary><b>View Step-by-Step Solution</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    #### 1. Treatment Totals
+    *   Run 1 ($-1, -1$): $y_1 = 42 + 43 = 85$
+    *   Run 2 ($+1, -1$): $y_2 = 50 + 49 = 99$
+    *   Run 3 ($-1, +1$): $y_3 = 46 + 45 = 91$
+    *   Run 4 ($+1, +1$): $y_4 = 62 + 61 = 123$
+    *   $\text{Grand Total } G = 85 + 99 + 91 + 123 = 398$
+
+    #### 2. Contrasts & Effects ($2^{k-1} \cdot r = 2^{2-1} \cdot 2 = 4$)
+    *   $$C_A = -85 + 99 - 91 + 123 = 46 \implies \hat{A} = \frac{46}{4} = 11.5$$
+    *   $$C_B = -85 - 99 + 91 + 123 = 30 \implies \hat{B} = \frac{30}{4} = 7.5$$
+    *   $$C_{AB} = +85 - 99 - 91 + 123 = 18 \implies \widehat{AB} = \frac{18}{4} = 4.5$$
+
+    #### 3. Sum of Squares ($2^k \cdot r = 8$)
+    *   $$\text{SS}_A = \frac{46^2}{8} = 264.5$$
+    *   $$\text{SS}_B = \frac{30^2}{8} = 112.5$$
+    *   $$\text{SS}_{AB} = \frac{18^2}{8} = 40.5$$
+    *   $$\sum y^2 = 42^2 + 43^2 + \dots + 61^2 = 20220$$
+    *   $$CF = \frac{398^2}{8} = 19800.5 \implies \text{SST} = 20220 - 19800.5 = 419.5$$
+    *   $$\text{SSE} = \text{SST} - (\text{SS}_A + \text{SS}_B + \text{SS}_{AB}) = 419.5 - (264.5 + 112.5 + 40.5) = 2.0$$
+
+    #### 4. Factorial ANOVA Table
+
+    | Source | $\text{df}$ | $\text{SS}$ | $\text{MS}$ | Calculated $F$ | Critical $F_{0.05}$ | Decision |
+    | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+    | **A (Temperature)** | 1 | $264.5$ | $264.5$ | $\frac{264.5}{0.5} = 529.0$ | $7.708$ | Reject $H_0$ |
+    | **B (Pressure)** | 1 | $112.5$ | $112.5$ | $\frac{112.5}{0.5} = 225.0$ | $7.708$ | Reject $H_0$ |
+    | **AB (Interaction)** | 1 | $40.5$ | $40.5$ | $\frac{40.5}{0.5} = 81.0$ | $7.708$ | Reject $H_0$ |
+    | **Error (Residual)** | 4 | $2.0$ | $\text{MSE} = 0.5$ | - | - | - |
+    | **Total** | 7 | $419.5$ | - | - | - | - |
+
+    #### 5. Conclusion
+    All factors ($A, B,$ and interaction $AB$) are statistically significant at $p < 0.001$. Temperature increases yield by $11.5\%$, Pressure increases yield by $7.5\%$, and positive interaction indicates the benefits of temperature are greatest when paired with high pressure.
+  </div>
+</details>
+
+---
+
+## Problem 5: Taguchi $L_9$ Orthogonal Array Optimization
+
+### Problem Statement
+A manufacturing engineer seeks to optimize three 3-level parameters to maximize tensile strength ($y$ in $\text{MPa}$):
+*   **Factor A (Temperature):** Level 1 = $200^\circ\text{C}$, Level 2 = $220^\circ\text{C}$, Level 3 = $240^\circ\text{C}$
+*   **Factor B (Holding Time):** Level 1 = $10\,\text{min}$, Level 2 = $20\,\text{min}$, Level 3 = $30\,\text{min}$
+*   **Factor C (Pressure):** Level 1 = $5\,\text{bar}$, Level 2 = $7\,\text{bar}$, Level 3 = $9\,\text{bar}$
+
+The measured single-run responses in an $L_9$ array are:
+*   Run 1: (1, 1, 1) $\implies y = 42\,\text{MPa}$
+*   Run 2: (1, 2, 2) $\implies y = 48\,\text{MPa}$
+*   Run 3: (1, 3, 3) $\implies y = 50\,\text{MPa}$
+*   Run 4: (2, 1, 2) $\implies y = 55\,\text{MPa}$
+*   Run 5: (2, 2, 3) $\implies y = 60\,\text{MPa}$
+*   Run 6: (2, 3, 1) $\implies y = 58\,\text{MPa}$
+*   Run 7: (3, 1, 3) $\implies y = 65\,\text{MPa}$
+*   Run 8: (3, 2, 1) $\implies y = 62\,\text{MPa}$
+*   Run 9: (3, 3, 2) $\implies y = 59\,\text{MPa}$
+
+Using the **Larger-the-better** $S/N$ ratio formulation:
+1. Compute the $S/N$ ratio for each trial.
+2. Build the factor-level response table and rank the factors.
+3. Determine the optimal parameter combination.
+4. Predict the optimum tensile strength performance.
+
+<details>
+  <summary><b>View Step-by-Step Solution</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    #### 1. S/N Computation ($S/N = 20 \log_{10}(y)$)
+    *   $\text{Run 1}: 20 \log_{10}(42) = 32.4650\,\text{dB}$
+    *   $\text{Run 2}: 20 \log_{10}(48) = 33.6248\,\text{dB}$
+    *   $\text{Run 3}: 20 \log_{10}(50) = 33.9794\,\text{dB}$
+    *   $\text{Run 4}: 20 \log_{10}(55) = 34.8073\,\text{dB}$
+    *   $\text{Run 5}: 20 \log_{10}(60) = 35.5630\,\text{dB}$
+    *   $\text{Run 6}: 20 \log_{10}(58) = 35.2686\,\text{dB}$
+    *   $\text{Run 7}: 20 \log_{10}(65) = 36.2583\,\text{dB}$
+    *   $\text{Run 8}: 20 \log_{10}(62) = 35.8478\,\text{dB}$
+    *   $\text{Run 9}: 20 \log_{10}(59) = 35.4170\,\text{dB}$
+    *   **Overall Average:** $\overline{S/N} = 34.8035\,\text{dB}$
+
+    #### 2. Factor-Level S/N Response Table
+    *   **Factor A (Temp):**
+        *   Level 1: $\frac{32.4650 + 33.6248 + 33.9794}{3} = 33.3564\,\text{dB}$
+        *   Level 2: $\frac{34.8073 + 35.5630 + 35.2686}{3} = 35.2130\,\text{dB}$
+        *   Level 3: $\frac{36.2583 + 35.8478 + 35.4170}{3} = 35.8410\,\text{dB}$
+        *   $\Delta_A = 35.8410 - 33.3564 = 2.4846\,\text{dB}$ (Rank 1)
+    *   **Factor B (Time):**
+        *   Level 1: $\frac{32.4650 + 34.8073 + 36.2583}{3} = 34.5102\,\text{dB}$
+        *   Level 2: $\frac{33.6248 + 35.5630 + 35.8478}{3} = 35.0119\,\text{dB}$
+        *   Level 3: $\frac{33.9794 + 35.2686 + 35.4170}{3} = 34.8883\,\text{dB}$
+        *   $\Delta_B = 35.0119 - 34.5102 = 0.5017\,\text{dB}$ (Rank 3)
+    *   **Factor C (Pressure):**
+        *   Level 1: $\frac{32.4650 + 35.2686 + 35.8478}{3} = 34.5271\,\text{dB}$
+        *   Level 2: $\frac{33.6248 + 34.8073 + 35.4170}{3} = 34.6164\,\text{dB}$
+        *   Level 3: $\frac{33.9794 + 35.5630 + 36.2583}{3} = 35.2669\,\text{dB}$
+        *   $\Delta_C = 35.2669 - 34.5271 = 0.7398\,\text{dB}$ (Rank 2)
+
+    #### 3. Optimal Setting Selection
+    Always pick the level with the highest mean $S/N$:
+    *   Factor A: **Level 3** ($240^\circ\text{C}$)
+    *   Factor B: **Level 2** ($20\,\text{min}$)
+    *   Factor C: **Level 3** ($9\,\text{bar}$)
+    *   **Optimal Setting:** **$A_3 B_2 C_3$**
+
+    #### 4. Predicted Optimum Performance
+    $$\overline{S/N}_{\text{pred}} = 34.8035 + (35.8410 - 34.8035) + (35.0119 - 34.8035) + (35.2669 - 34.8035) = 36.5128\,\text{dB}$$
+    $$\text{Predicted Tensile Strength: } \hat{y} = 10^{\frac{36.5128}{20}} \approx 66.93\,\text{MPa}$$
+  </div>
+</details>
+
+---
+
+## Problem 6: Genetic Algorithm Optimization
+
+### Problem Statement
+A Genetic Algorithm is used to maximize the function $f(x) = x^2$ over the integer domain $0 \le x \le 31$ encoded as 5-bit binary strings. The initial random population consists of:
+*   $C_1 = 10110_2$
+*   $C_2 = 00101_2$
+*   $C_3 = 11100_2$
+*   $C_4 = 01011_2$
+
+Perform one full generation of the algorithm:
+1. Decode each chromosome to decimal and evaluate its fitness.
+2. Select the top two chromosomes as parents.
+3. Perform single-point crossover after the 2nd bit to produce two children.
+4. Mutate the last bit of Child 2.
+5. Form the next generation using the children and the top two elite parents from the original generation, and compute the new average population fitness.
+
+<details>
+  <summary><b>View Step-by-Step Solution</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    #### 1. Decoding & Fitness ($f(x) = x^2$)
+    *   $C_1 = 10110_2 = 16 + 4 + 2 = 22 \implies f(22) = 22^2 = 484$
+    *   $C_2 = 00101_2 = 4 + 1 = 5 \implies f(5) = 5^2 = 25$
+    *   $C_3 = 11100_2 = 16 + 8 + 4 = 28 \implies f(28) = 28^2 = 784$
+    *   $C_4 = 01011_2 = 8 + 2 + 1 = 11 \implies f(11) = 11^2 = 121$
+    *   **Gen 0 Average Fitness:** $\bar{f}_0 = \frac{484 + 25 + 784 + 121}{4} = 353.5$
+
+    #### 2. Parent Selection
+    The two highest fitness individuals are:
+    *   Parent 1: $C_3 = 11100$ ($x = 28, f = 784$)
+    *   Parent 2: $C_1 = 10110$ ($x = 22, f = 484$)
+
+    #### 3. Crossover (Cut after Bit 2)
+    *   $\text{Parent 1: } [11 \mid 100]$
+    *   $\text{Parent 2: } [10 \mid 110]$
+    *   $\text{Child 1: } [11 \mid 110] = 11110_2 = 30 \implies f(30) = 30^2 = 900$
+    *   $\text{Child 2: } [10 \mid 100] = 10100_2 = 20 \implies f(20) = 20^2 = 400$
+
+    #### 4. Mutation
+    Flip the 5th bit of Child 2 ($10100 \to 10101$):
+    *   $\text{Mutated Child 2} = 10101_2 = 21 \implies f(21) = 21^2 = 441$
+
+    #### 5. New Generation Formation (Elitism)
+    1.  Child 1: $11110_2 \implies x = 30, f = 900$
+    2.  Mutated Child 2: $10101_2 \implies x = 21, f = 441$
+    3.  Elite Parent 1: $11100_2 \implies x = 28, f = 784$
+    4.  Elite Parent 2: $10110_2 \implies x = 22, f = 484$
+    *   **Gen 1 Average Fitness:**
+        $$\bar{f}_1 = \frac{900 + 441 + 784 + 484}{4} = \frac{2609}{4} = 652.25$$
+    *   **Improvement:** Average fitness increased by $\frac{652.25 - 353.5}{353.5} \times 100\% \approx 84.5\%$.
+  </div>
+</details>
+
+---
+
+## Problem 7: Response Surface Methodology (RSM) Optimization
+
+### Problem Statement
+A chemical company wants to **maximize product yield ($Y$, in $\%$)**. Two continuous factors are investigated:
+*   **Temperature ($X_1$):** Low level ($-1$) = $100^\circ\text{C}$, High level ($+1$) = $140^\circ\text{C}$ (Center point $0 = 120^\circ\text{C}$).
+*   **Pressure ($X_2$):** Low level ($-1$) = $10\,\text{psi}$, High level ($+1$) = $20\,\text{psi}$ (Center point $0 = 15\,\text{psi}$).
+
+The experimental results from an initial $2^2$ factorial design matrix are:
+
+| Run | $X_1$ (Temperature) | $X_2$ (Pressure) | Yield $Y$ (%) |
+| :--- | :--- | :--- | :--- |
+| **1** | $-1$ | $-1$ | 70 |
+| **2** | $-1$ | $+1$ | 76 |
+| **3** | $+1$ | $-1$ | 80 |
+| **4** | $+1$ | $+1$ | 86 |
+
+Perform the following:
+1.  Assume a first-order model $Y = \beta_0 + \beta_1 X_1 + \beta_2 X_2$ and calculate the coefficients $\beta_0, \beta_1, \beta_2$.
+2.  Write the fitted mathematical model.
+3.  Verify the model at run $(X_1 = +1, X_2 = +1)$.
+4.  Predict the yield at the center point $(X_1 = 0, X_2 = 0)$.
+5.  Determine the direction of improvement and identify which factor has the stronger effect.
+6.  Execute the **Method of Steepest Ascent**: determine the direction vector and list the coded and physical factor coordinates for the first 3 steps using step increments $\Delta X_1 = 0.5$ and $\Delta X_2 = 0.3$.
+7.  Suppose subsequent trials exhibit curvature and a second-order model is fitted:
+    $$Y = 90 + 4X_1 + 3X_2 - 2X_1 X_2 - 5X_1^2 - 4X_2^2$$
+    If mathematical optimization predicts an optimum at $(X_1 = 0.4, X_2 = 0.3)$ yielding $92\%$, validate the model if an actual confirmation trial produces $91.5\%$.
+
+<details>
+  <summary><b>View Step-by-Step Solution</b></summary>
+  <div className="answer-content">
+    <br/>
+    
+    #### 1. Calculate First-Order Regression Coefficients
+    Using the orthogonal properties of the $2^2$ coded matrix ($N = 4$):
+
+    *   **Calculate $\beta_0$ (Intercept / Average Response):**
+        $$\beta_0 = \frac{\sum Y_i}{N} = \frac{70 + 76 + 80 + 86}{4} = \frac{312}{4} = 78$$
+        $$\boxed{\beta_0 = 78}$$
+
+    *   **Calculate $\beta_1$ (Main Effect of Temperature $X_1$):**
+        $$\beta_1 = \frac{\sum X_{1i} Y_i}{N} = \frac{(-1)(70) + (-1)(76) + (+1)(80) + (+1)(86)}{4} = \frac{-70 - 76 + 80 + 86}{4} = \frac{20}{4} = 5$$
+        $$\boxed{\beta_1 = 5}$$
+
+    *   **Calculate $\beta_2$ (Main Effect of Pressure $X_2$):**
+        $$\beta_2 = \frac{\sum X_{2i} Y_i}{N} = \frac{(-1)(70) + (+1)(76) + (-1)(80) + (+1)(86)}{4} = \frac{-70 + 76 - 80 + 86}{4} = \frac{12}{4} = 3$$
+        $$\boxed{\beta_2 = 3}$$
+
+    #### 2. Write the Fitted Mathematical Model
+    $$\boxed{Y = 78 + 5X_1 + 3X_2}$$
+    where:
+    *   $78$ = Intercept (baseline expected yield at the center point $X_1 = 0, X_2 = 0$).
+    *   $5$ = Main effect coefficient of Temperature ($X_1$).
+    *   $3$ = Main effect coefficient of Pressure ($X_2$).
+
+    #### 3. Verify the Model
+    Substitute $X_1 = 1, X_2 = 1$ (Run 4):
+    $$\hat{Y} = 78 + 5(1) + 3(1) = 78 + 5 + 3 = 86$$
+    *   **Observed value:** $86\%$
+    *   **Predicted value:** $86\%$
+    *   **Residual:** $e = 86 - 86 = 0$.
+    *   **Conclusion:** The model fits the orthogonal factorial data points perfectly.
+
+    #### 4. Predict Response at Center Point
+    Substitute $X_1 = 0, X_2 = 0$ (Temperature $= 120^\circ\text{C}$, Pressure $= 15\,\text{psi}$):
+    $$\hat{Y} = 78 + 5(0) + 3(0) = 78$$
+    *   **Predicted yield at center point:** $\mathbf{78\%}$.
+
+    #### 5. Direction of Improvement & Factor Significance
+    *   **Coefficients:** Both $\beta_1 = +5$ and $\beta_2 = +3$ are positive.
+    *   **Direction:** Increase both Temperature and Pressure to increase yield.
+    *   **Relative Strength:** Since $5 > 3$, **Temperature has a stronger positive effect** on yield than Pressure.
+
+    #### 6. Method of Steepest Ascent
+    Move in the direction of the gradient vector:
+    $$\nabla Y = (5, 3)$$
+    Taking step increments proportional to the $(5 : 3)$ ratio with $\Delta X_1 = 0.5$ and $\Delta X_2 = 0.3$:
+
+    | Step | Coded $X_1$ | Coded $X_2$ | Physical Temp ($^\circ\text{C}$) | Physical Pressure ($\text{psi}$) |
+    | :--- | :--- | :--- | :--- | :--- |
+    | **Start** | 0.0 | 0.0 | $120.0^\circ\text{C}$ | $15.0\,\text{psi}$ |
+    | **1** | 0.5 | 0.3 | $130.0^\circ\text{C}$ | $16.5\,\text{psi}$ |
+    | **2** | 1.0 | 0.6 | $140.0^\circ\text{C}$ | $18.0\,\text{psi}$ |
+    | **3** | 1.5 | 0.9 | $150.0^\circ\text{C}$ | $19.5\,\text{psi}$ |
+
+    Continue running experiments along this path until observed yield ceases to increase.
+
+    #### 7. Second-Order Model & Confirmation Experiment
+    *   **Second-Order Model:** When curvature exists, the quadratic model accounts for diminishing returns ($-5X_1^2, -4X_2^2$) and factor interaction ($-2X_1 X_2$):
+        $$Y = 90 + 4X_1 + 3X_2 - 2X_1 X_2 - 5X_1^2 - 4X_2^2$$
+    *   **Confirmation Trial:**
+        *   Predicted Yield: $\hat{Y} = 92\%$ at $(X_1 = 0.4, X_2 = 0.3)$.
+        *   Actual Experimental Yield: $Y_{\text{actual}} = 91.5\%$.
+    *   **Validation Decision:** Since the actual experimental yield ($91.5\%$) closely matches the model prediction ($92\%$) within experimental uncertainty, the fitted model is validated.
+  </div>
+</details>
