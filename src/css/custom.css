@@ -15,6 +15,16 @@
   --ifm-color-primary-lightest: #3cad6e;
   --ifm-code-font-size: 95%;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+
+  /* Mermaid Diagram Theming - Light Mode */
+  --mermaid-container-bg: #f2faf5;
+  --mermaid-container-border: #c8e8d5;
+  --mermaid-node-bg: #e2f7ec;
+  --mermaid-node-border: #2e8555;
+  --mermaid-node-text: #133e2b;
+  --mermaid-edge-color: #277148;
+  --mermaid-cluster-bg: rgba(242, 250, 245, 0.75);
+  --mermaid-cluster-border: #9dd4b7;
 }
 
 /* For readability concerns, you should choose a lighter palette in dark mode. */
@@ -27,6 +37,16 @@
   --ifm-color-primary-lighter: #32d8b4;
   --ifm-color-primary-lightest: #4fddbf;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+
+  /* Mermaid Diagram Theming - Dark Mode */
+  --mermaid-container-bg: #091a13;
+  --mermaid-container-border: #1a4736;
+  --mermaid-node-bg: #0e3324;
+  --mermaid-node-border: #25c2a0;
+  --mermaid-node-text: #e6fffa;
+  --mermaid-edge-color: #38d9b4;
+  --mermaid-cluster-bg: rgba(14, 51, 36, 0.45);
+  --mermaid-cluster-border: #1d6b4f;
 }
 
 /* Chart PNGs have white backgrounds. Give them a light card so they read as
@@ -49,9 +69,77 @@
   display: flex;
   justify-content: center;
   margin: 1.5rem 0;
+  padding: 1.25rem;
+  background-color: var(--mermaid-container-bg);
+  border: 1px solid var(--mermaid-container-border);
+  border-radius: 12px;
+  overflow-x: auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
 
 .docusaurus-mermaid-container svg {
   max-width: 100%;
   height: auto;
+}
+
+/* Node shapes: rectangles, circles, diamonds, polygons */
+.docusaurus-mermaid-container .node rect,
+.docusaurus-mermaid-container .node circle,
+.docusaurus-mermaid-container .node ellipse,
+.docusaurus-mermaid-container .node polygon,
+.docusaurus-mermaid-container .node path:not(.flowchart-link) {
+  fill: var(--mermaid-node-bg) !important;
+  stroke: var(--mermaid-node-border) !important;
+  stroke-width: 1.5px !important;
+}
+
+/* Node label typography */
+.docusaurus-mermaid-container .node .label,
+.docusaurus-mermaid-container .node text,
+.docusaurus-mermaid-container .node span,
+.docusaurus-mermaid-container .node p,
+.docusaurus-mermaid-container .node div,
+.docusaurus-mermaid-container .node tspan,
+.docusaurus-mermaid-container .nodeLabel,
+.docusaurus-mermaid-container .label text,
+.docusaurus-mermaid-container .label span {
+  fill: var(--mermaid-node-text) !important;
+  color: var(--mermaid-node-text) !important;
+  font-weight: 500;
+}
+
+/* Subgraphs / Clusters */
+.docusaurus-mermaid-container .cluster rect {
+  fill: var(--mermaid-cluster-bg) !important;
+  stroke: var(--mermaid-cluster-border) !important;
+  stroke-dasharray: 4, 4;
+}
+
+.docusaurus-mermaid-container .cluster text,
+.docusaurus-mermaid-container .cluster span {
+  fill: var(--mermaid-node-text) !important;
+  color: var(--mermaid-node-text) !important;
+}
+
+/* Flowchart connecting lines and arrow markers */
+.docusaurus-mermaid-container .edgePath path,
+.docusaurus-mermaid-container .flowchart-link {
+  stroke: var(--mermaid-edge-color) !important;
+}
+
+.docusaurus-mermaid-container .marker,
+.docusaurus-mermaid-container marker path {
+  fill: var(--mermaid-edge-color) !important;
+  stroke: var(--mermaid-edge-color) !important;
+}
+
+/* Edge labels */
+.docusaurus-mermaid-container .edgeLabel {
+  background-color: var(--mermaid-container-bg) !important;
+  color: var(--mermaid-node-text) !important;
+}
+
+.docusaurus-mermaid-container .edgeLabel rect {
+  fill: var(--mermaid-container-bg) !important;
+  opacity: 0.9;
 }

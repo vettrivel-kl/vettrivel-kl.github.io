@@ -31,10 +31,6 @@ These five libraries are not competing alternatives. They represent a modular, h
 
 ```mermaid
 flowchart TD
-    classDef base fill:#f8fafc,stroke:#3b82f6,stroke-width:2px;
-    classDef mid fill:#f8fafc,stroke:#8b5cf6,stroke-width:2px;
-    classDef top fill:#f8fafc,stroke:#10b981,stroke-width:2px;
-
     DL["PyTorch / TensorFlow (Deep Learning & Autograd)"]
     ML["scikit-learn (Classical Machine Learning)"]
     SC["SciPy (Numerical Solvers & Optimization)"]
@@ -49,10 +45,6 @@ flowchart TD
     PD --> NP
     PLT -. "Visualizes" .-> NP
     PLT -. "Visualizes" .-> PD
-
-    class NP base;
-    class SC,PD mid;
-    class ML,DL,PLT top;
 ```
 
 ### Architectural Role of Each Layer
@@ -288,9 +280,6 @@ Every classical machine learning project follows seven sequential steps. In mode
 
 ```mermaid
 flowchart TD
-    classDef dev fill:#f8fafc,stroke:#3b82f6,stroke-width:2px;
-    classDef ops fill:#f8fafc,stroke:#10b981,stroke-width:2px;
-
     subgraph DevPipeline ["Classical 7-Step Modeling Pipeline"]
         S1["1. Preprocess (Clean, Impute, Encode)"]
         S2["2. Train / Test Split (Isolate Validation Bounds)"]
@@ -312,9 +301,6 @@ flowchart TD
         S7 --> M8 --> M9 --> M10 --> M11
         M11 -. "Retriggers Training Loop" .-> S1
     end
-
-    class S1,S2,S3,S4,S5,S6,S7 dev;
-    class M8,M9,M10,M11 ops;
 ```
 
 ---

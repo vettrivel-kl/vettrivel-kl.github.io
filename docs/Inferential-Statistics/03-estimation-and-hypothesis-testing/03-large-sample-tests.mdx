@@ -1,0 +1,194 @@
+---
+sidebar_position: 3
+title: Large Sample Tests
+description: One-sample and two-sample Z-tests, decision rules across critical values, p-values, and confidence intervals with Python implementations.
+tags: [hypothesis-testing, z-test, large-sample, normality-test, p-value]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Heading from '@theme/Heading';
+import React from 'react';
+
+# Large Sample Tests
+
+> **Topic -** When the sample size is large ($n \ge 30$), the Central Limit Theorem guarantees that the sampling distribution of the sample mean follows a normal distribution. In this regime, the Z-test provides the standard analytical tool to test hypotheses regarding single population means and differences between two independent population means.
+
+---
+
+## 1. Assumptions for Large Sample Z-Tests
+
+To ensure that inference using the standard normal distribution is valid, the following conditions must be satisfied:
+
+1.  **Continuous Data:** The metric of interest must be continuous numerical data.
+2.  **Simple Random Sampling:** Observations are independent and identically distributed (i.i.d.).
+3.  **Large Sample Size ($n \ge 30$):** By the Central Limit Theorem, the distribution of $\bar{X}$ is normal. If the population standard deviation $\sigma$ is unknown, we substitute the sample standard deviation $s$ without needing Student's t-distribution.
+4.  **Normality Verification:** For moderate samples, normality of the data can be validated using the **Shapiro-Wilk test** (`scipy.stats.shapiro`).
+
+---
+
+## 2. One-Sample Z-Test for Population Mean
+
+Tests whether a single population mean $\mu$ equals a hypothesized baseline value $\mu_0$.
+
+### Test Statistic Formulation
+
+$$Z_{\text{calc}} = \frac{\bar{X} - \mu_0}{\sigma / \sqrt{n}}$$
+
+If population standard deviation $\sigma$ is unknown and $n \ge 30$, we substitute sample standard deviation $s$:
+
+$$Z_{\text{calc}} = \frac{\bar{X} - \mu_0}{s / \sqrt{n}}, \quad \text{where } s = \sqrt{\frac{1}{n-1}\sum_{i=1}^n (x_i - \bar{x})^2}$$
+
+### Decision Rules across All Three Tails
+
+| Test Type | Hypotheses | Critical Value Rule | P-Value Rule | Confidence Interval Rule |
+| :--- | :--- | :--- | :--- | :--- |
+| **Two-Tailed** | $H_0: \mu = \mu_0$<br/>$H_1: \mu \neq \mu_0$ | Reject $H_0$ if $\lvert Z_{\text{calc}} \rvert > z_{\alpha/2}$ | Reject $H_0$ if $p \le \alpha$<br/>($p = 2 \cdot P(Z > \lvert Z_{\text{calc}} \rvert)$) | Reject $H_0$ if $\mu_0 \notin \bar{X} \pm z_{\alpha/2}\frac{s}{\sqrt{n}}$ |
+| **Left-Tailed** | $H_0: \mu \ge \mu_0$<br/>$H_1: \mu < \mu_0$ | Reject $H_0$ if $Z_{\text{calc}} < -z_{\alpha}$ | Reject $H_0$ if $p \le \alpha$<br/>($p = P(Z < Z_{\text{calc}})$) | N/A (One-sided bound) |
+| **Right-Tailed** | $H_0: \mu \le \mu_0$<br/>$H_1: \mu > \mu_0$ | Reject $H_0$ if $Z_{\text{calc}} > z_{\alpha}$ | Reject $H_0$ if $p \le \alpha$<br/>($p = P(Z > Z_{\text{calc}})$) | N/A (One-sided bound) |
+
+---
+
+## 3. Two-Sample Z-Test for Independent Means
+
+Compares the means of two independent populations ($\mu_1$ vs. $\mu_2$) from two samples ($n_1 \ge 30, n_2 \ge 30$).
+
+### Hypotheses
+*   **Two-tailed:** $H_0: \mu_1 = \mu_2 \iff \mu_1 - \mu_2 = 0$ against $H_1: \mu_1 \neq \mu_2$
+*   **One-tailed:** $H_0: \mu_1 \le \mu_2$ against $H_1: \mu_1 > \mu_2$
+
+### Test Statistic
+
+$$Z_{\text{calc}} = \frac{(\bar{X}_1 - \bar{X}_2) - (\mu_1 - \mu_2)}{\sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}}$$
+
+When $\sigma_1^2, \sigma_2^2$ are unknown:
+
+$$Z_{\text{calc}} = \frac{\bar{X}_1 - \bar{X}_2}{\sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}}}$$
+
+### Equal Variance Check (Levene's Test)
+Before conducting two-sample tests, evaluate whether population variances are equal using **Levene's test** (`scipy.stats.levene`):
+*   $H_0: \sigma_1^2 = \sigma_2^2$ vs. $H_1: \sigma_1^2 \neq \sigma_2^2$
+*   If $p \ge 0.05$, fail to reject $H_0$ and assume equal variances.
+
+---
+
+## 4. End-to-End Problem Scenarios from Course Material
+
+### Scenario 1: Two-Tailed Test (Car Mileage Claim)
+**Problem:** A car manufacturer claims the mileage of their new car is $\mu = 25\text{ km/L}$ with $\sigma = 2.5\text{ km/L}$. A sample of $n = 45$ cars gives a mean of $\bar{X} = 24\text{ km/L}$. Is there evidence to claim that the mean mileage differs from $25\text{ km/L}$? Use $\alpha = 0.01$.
+
+1.  **Formulate Hypotheses:**
+    $$H_0: \mu = 25 \quad \text{vs.} \quad H_1: \mu \neq 25 \quad (\text{Two-Tailed})$$
+2.  **Calculate Test Statistic:**
+    $$Z_{\text{calc}} = \frac{\bar{X} - \mu_0}{\sigma / \sqrt{n}} = \frac{24 - 25}{2.5 / \sqrt{45}} = \frac{-1}{2.5 / 6.708} = \frac{-1}{0.3727} \approx -2.683$$
+3.  **Method A (Critical Value):**
+    For $\alpha = 0.01$, $z_{\alpha/2} = z_{0.005} = 2.575$.
+    Since $|Z_{\text{calc}}| = |-2.683| = 2.683 > 2.575$, we **Reject $H_0$**.
+4.  **Method B (P-Value):**
+    $$p = 2 \cdot P(Z < -2.683) = 2 \cdot 0.00366 = 0.0073$$
+    Since $p\text{-value} = 0.0073 < 0.01$, we **Reject $H_0$**.
+5.  **Method C (Confidence Interval):**
+    $$\text{CI}_{99\%} = 24 \pm 2.575 \cdot 0.3727 = 24 \pm 0.960 = [23.04, \; 24.96]$$
+    Since hypothesized mean $\mu_0 = 25$ does not lie within $[23.04, 24.96]$, we **Reject $H_0$**.
+6.  **Conclusion:** There is statistically significant evidence at $\alpha = 0.01$ to conclude the mean mileage is different from $25\text{ km/L}$.
+
+---
+
+### Scenario 2: Left-Tailed Test (PVC Pipe Thickness)
+**Problem:** A sample of $n = 900$ PVC pipes has a mean thickness of $\bar{X} = 12.5\text{ mm}$. Test whether the sample comes from a population with mean $\mu \ge 13\text{ mm}$ against the claim that it is less than $13\text{ mm}$, given $\sigma = 1\text{ mm}$ at $\alpha = 0.05$.
+
+1.  **Formulate Hypotheses:**
+    $$H_0: \mu \ge 13 \quad \text{vs.} \quad H_1: \mu < 13 \quad (\text{Left-Tailed})$$
+2.  **Calculate Test Statistic:**
+    $$Z_{\text{calc}} = \frac{\bar{X} - \mu_0}{\sigma / \sqrt{n}} = \frac{12.5 - 13}{1 / \sqrt{900}} = \frac{-0.5}{1 / 30} = -0.5 \cdot 30 = -15.0$$
+3.  **Decision:**
+    Critical value for left-tailed test at $\alpha = 0.05$ is $-z_{0.05} = -1.645$.
+    Since $Z_{\text{calc}} = -15.0 < -1.645$ (and $p\text{-value} \approx 0.000$), we **Reject $H_0$**.
+4.  **Conclusion:** Significant evidence indicates average thickness is less than $13\text{ mm}$.
+
+---
+
+### Scenario 3: Right-Tailed Test (Food Delivery Time)
+**Problem:** An e-commerce food app claims delivery time is at most 60 minutes ($\mu \le 60$) with $\sigma = 30$ minutes. A sample of $n = 45$ orders yields a mean of $\bar{X} = 75$ minutes. Test the claim at $\alpha = 0.05$.
+
+1.  **Formulate Hypotheses:**
+    $$H_0: \mu \le 60 \quad \text{vs.} \quad H_1: \mu > 60 \quad (\text{Right-Tailed})$$
+2.  **Calculate Test Statistic:**
+    $$Z_{\text{calc}} = \frac{\bar{X} - \mu_0}{\sigma / \sqrt{n}} = \frac{75 - 60}{30 / \sqrt{45}} = \frac{15}{4.472} \approx +3.35$$
+3.  **Decision:**
+    Critical value for right-tailed test at $\alpha = 0.05$ is $+z_{0.05} = +1.645$.
+    $p\text{-value} = P(Z > 3.35) = 0.0004$.
+    Since $p\text{-value} < 0.05$ and $Z_{\text{calc}} > 1.645$, we **Reject $H_0$**.
+4.  **Conclusion:** Strong evidence that the mean delivery time exceeds 60 minutes.
+
+---
+
+### Scenario 4: Two-Sample Test (Hemoglobin Levels)
+**Problem:** A blood study evaluates hemoglobin levels for males and females:
+*   Males: $n_1 = 160$, $\bar{X}_1 = 13\text{ g/dL}$, $s_1 = 4.1\text{ g/dL}$
+*   Females: $n_2 = 180$, $\bar{X}_2 = 15\text{ g/dL}$, $s_2 = 3.5\text{ g/dL}$
+Test whether population mean hemoglobin levels differ between men and women at $\alpha = 0.01$.
+
+1.  **Formulate Hypotheses:**
+    $$H_0: \mu_1 = \mu_2 \quad \text{vs.} \quad H_1: \mu_1 \neq \mu_2 \quad (\text{Two-Tailed})$$
+2.  **Calculate Test Statistic:**
+    $$\text{SE}_{\text{diff}} = \sqrt{\frac{s_1^2}{n_1} + \frac{s_2^2}{n_2}} = \sqrt{\frac{4.1^2}{160} + \frac{3.5^2}{180}} = \sqrt{\frac{16.81}{160} + \frac{12.25}{180}} = \sqrt{0.1051 + 0.0681} = \sqrt{0.1732} \approx 0.4161$$
+    $$Z_{\text{calc}} = \frac{\bar{X}_1 - \bar{X}_2}{\text{SE}_{\text{diff}}} = \frac{13 - 15}{0.4161} = \frac{-2}{0.4161} \approx -4.807$$
+3.  **Decision:**
+    Critical value at $\alpha = 0.01$ is $z_{0.005} = 2.575$.
+    Since $|Z_{\text{calc}}| = |-4.807| = 4.807 > 2.575$ (and $p\text{-value} < 0.0001$), we **Reject $H_0$**.
+4.  **Conclusion:** There is strong empirical evidence that average hemoglobin levels differ significantly between men and women.
+
+---
+
+## 5. Implementation Lab
+
+Execute large sample Z-tests in Python utilizing `statsmodels` and `scipy.stats`.
+
+<a href="/labs/inferential-statistics/03-estimation-and-hypothesis-testing/large_sample_ztests.ipynb" target="_blank" rel="noopener noreferrer">
+  <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab" style={{ height: '48px', width: 'auto', display: 'block', margin: '15px 0' }} />
+</a>
+
+```python
+import numpy as np
+from scipy import stats
+from statsmodels.stats.weightstats import ztest
+
+# 1. One-Sample Z-Test Function
+def manual_z_test(samp_mean, pop_mean, std_dev, n, alternative='two-sided'):
+    z_stat = (samp_mean - pop_mean) / (std_dev / np.sqrt(n))
+    if alternative == 'two-sided':
+        p_val = 2 * (1 - stats.norm.cdf(np.abs(z_stat)))
+    elif alternative == 'smaller':
+        p_val = stats.norm.cdf(z_stat)
+    elif alternative == 'larger':
+        p_val = 1 - stats.norm.cdf(z_stat)
+    return z_stat, p_val
+
+# Car Mileage Scenario (Two-Tailed)
+z_calc, p_val = manual_z_test(samp_mean=24, pop_mean=25, std_dev=2.5, n=45, alternative='two-sided')
+print(f"Car Mileage Z-Stat: {z_calc:.3f}, P-Value: {p_val:.5f}")
+
+# 2. Two-Sample Z-Test Function (Hemoglobin Scenario)
+def two_sample_z_test(m1, s1, n1, m2, s2, n2):
+    se_diff = np.sqrt((s1**2 / n1) + (s2**2 / n2))
+    z_stat = (m1 - m2) / se_diff
+    p_val = 2 * (1 - stats.norm.cdf(np.abs(z_stat)))
+    return z_stat, p_val
+
+z_hemo, p_hemo = two_sample_z_test(13, 4.1, 160, 15, 3.5, 180)
+print(f"Hemoglobin Z-Stat: {z_hemo:.3f}, P-Value: {p_hemo:.6f}")
+```
+
+<br/>
+
+:::info
+
+**Key Takeaways**
+
+*   **Z-Test Criterion:** Appropriate whenever $n \ge 30$ due to asymptotic normality from the Central Limit Theorem.
+*   **Three Equivalent Paths:** For two-tailed tests, Critical Value ($|Z| > z_{\alpha/2}$), P-value ($p \le \alpha$), and Confidence Interval ($\mu_0 \notin \text{CI}$) always agree.
+*   **Two-Sample Variance Pooling:** If variances are unknown but sample sizes are large ($n_1, n_2 \ge 30$), substituting individual sample variances $s_1^2$ and $s_2^2$ is asymptotically exact.
+
+:::

@@ -41,9 +41,6 @@ Before calling `pd.read_csv`, understand how data serialization layouts affect c
 
 ```mermaid
 flowchart TD
-    classDef box fill:#f8fafc,stroke:#3b82f6,stroke-width:2px;
-    classDef col fill:#f8fafc,stroke:#10b981,stroke-width:2px;
-
     subgraph RowBased ["Row-Oriented Layout (CSV / JSON)"]
         R1["Row 1: [ID_1, Country_1, Age_1, Salary_1]"]
         R2["Row 2: [ID_2, Country_2, Age_2, Salary_2]"]
@@ -58,9 +55,6 @@ flowchart TD
         C4["Chunk 'Salary': [72000, 48000, 54000]"]
         C1 --> C2 --> C3 --> C4
     end
-
-    class R1,R2,R3 box;
-    class C1,C2,C3,C4 col;
 ```
 
 *   **Row-Oriented Formats (CSV / JSON):** Store records sequentially on disk row by row (`Row 1, Row 2...`). Ideal for transactional writes, but disastrous for wide analytics: retrieving a single column requires scanning the entire file from disk into RAM.

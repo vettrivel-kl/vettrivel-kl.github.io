@@ -1,0 +1,199 @@
+---
+sidebar_position: 2
+title: Hypothesis Testing Foundations
+description: The logic of hypothesis testing, formulating null and alternative claims, Type I and Type II errors, test power, and decision rules.
+tags: [hypothesis-testing, type-1-error, type-2-error, power-of-test, p-value]
+toc_max_heading_level: 3
+---
+
+import Tabs from '@theme/Tabs';
+import TabItem from '@theme/TabItem';
+import Heading from '@theme/Heading';
+import React from 'react';
+
+# Hypothesis Testing Foundations
+
+> **Topic -** A hypothesis is a formal, testable claim regarding an unknown population parameter. Hypothesis testing provides an objective statistical protocol to assess whether empirical sample data provides strong enough evidence to refute a baseline status-quo assumption.
+
+---
+
+## 1. Formulating Hypotheses
+
+Hypothesis testing sets up a contest between two contrasting statements:
+
+### The Null Hypothesis ($H_0$)
+The hypothesis of **no effect**, **no difference**, or **status quo**. It represents the baseline assumption that is presumed true unless the sample evidence proves overwhelmingly otherwise.
+*   Contains an equality condition ($=$, $\ge$, or $\le$).
+*   Example: A manufacturing plant claims battery lifespan is 25,500 hours ($H_0: \mu = 25500$).
+
+### The Alternative Hypothesis ($H_1$ or $H_a$)
+The **research hypothesis** or claim of interest. It represents the claim that there is a genuine effect, difference, or change.
+*   Directly contradicts the null hypothesis.
+*   Contains a strict inequality ($\neq$, $<$, or $>$).
+*   Example: A consumer watchdog claims the battery lifespan is less than 25,500 hours ($H_1: \mu < 25500$).
+
+```mermaid
+flowchart TD
+    A["Statistical Claim"] --> B{"Nature of Claim"}
+    B -->|Equality / Status Quo| C["Null Hypothesis H0 (e.g. μ = μ0)"]
+    B -->|Difference / Improvement| D["Alternative Hypothesis H1 (e.g. μ ≠ μ0, μ &gt; μ0)"]
+```
+
+---
+
+## 2. The Decision Paradigm: "Fail to Reject" vs. "Accept"
+
+In scientific hypothesis testing, we **never "accept" the null hypothesis**. We either:
+1.  **Reject $H_0$:** The sample evidence is sufficiently extreme that the null hypothesis is highly unlikely to be true.
+2.  **Fail to Reject $H_0$:** There is insufficient sample evidence to conclude that the null hypothesis is false.
+
+:::tip
+
+**The Legal Analogy: Presumption of Innocence**
+
+In a criminal trial, the defendant is presumed innocent until proven guilty ($H_0$: Innocent, $H_1$: Guilty). If evidence is lacking, the jury returns a verdict of **"Not Guilty"**, not **"Innocent"**. Failing to prove guilt does not prove innocence; it merely reflects an absence of conclusive evidence beyond a reasonable doubt.
+
+:::
+
+---
+
+## 3. Errors in Hypothesis Testing
+
+Because sample statistics fluctuate due to random sampling variability, decisions are subject to two fundamental types of error:
+
+```mermaid
+flowchart TD
+    A["Test Decision"] --> B["Reject H0"]
+    A --> C["Fail to Reject H0"]
+    
+    B -->|When H0 is True| D["Type I Error (α)<br/>False Positive"]
+    B -->|When H0 is False| E["Correct Decision (Power = 1 - β)"]
+    
+    C -->|When H0 is True| F["Correct Decision (Confidence = 1 - α)"]
+    C -->|When H0 is False| G["Type II Error (β)<br/>False Negative"]
+```
+
+### The Error Matrix
+
+| Reality | Decision: Reject $H_0$ | Decision: Fail to Reject $H_0$ |
+| :--- | :--- | :--- |
+| **$H_0$ is Actually True** | **Type I Error ($\alpha$)**<br/>False Alarm (convicting an innocent person) | **Correct Decision ($1 - \alpha$)**<br/>Confidence Level |
+| **$H_0$ is Actually False** | **Correct Decision ($1 - \beta$)**<br/>Statistical Power | **Type II Error ($\beta$)**<br/>Missed Detection (letting a guilty person walk free) |
+
+### Tradeoffs and Error Control
+*   $\alpha$ (**Significance Level**): The maximum probability of committing a Type I error that the researcher is willing to tolerate (typically set to $0.05$ or $0.01$).
+*   $\beta$: The probability of committing a Type II error.
+*   **The Inversion:** For a fixed sample size $n$, lowering $\alpha$ (making it harder to reject $H_0$) automatically increases $\beta$ (increasing the chance of missing a real effect). Both errors cannot be minimized simultaneously without **increasing the sample size $n$**.
+
+### Power of the Test ($1 - \beta$)
+The probability of correctly rejecting a false null hypothesis. High power ($> 80\%$) indicates that the test is sensitive enough to detect true effects.
+
+---
+
+## 4. Number of Tails
+
+The mathematical direction in $H_1$ determines the placement of the rejection region under the null sampling distribution:
+
+<Tabs>
+  <TabItem value="two" label="Two-Tailed Test (≠)" default>
+    <br/>
+    
+    *   **Hypothesis:** $H_0: \mu = \mu_0$ vs. $H_1: \mu \neq \mu_0$
+    *   **Rejection Region:** Split equally into both tails ($\alpha / 2$ in each tail).
+    *   **Use Case:** Testing whether average output differs in either direction (e.g., machine filling bottles: both underfilling and overfilling are defects).
+  </TabItem>
+  <TabItem value="left" label="Left-Tailed Test (<)">
+    <br/>
+    
+    *   **Hypothesis:** $H_0: \mu \ge \mu_0$ vs. $H_1: \mu < \mu_0$
+    *   **Rejection Region:** Entire significance area $\alpha$ is concentrated in the left (lower) tail.
+    *   **Use Case:** Testing for reductions (e.g., drug reducing recovery time, algorithm reducing API response latency).
+  </TabItem>
+  <TabItem value="right" label="Right-Tailed Test (>)">
+    <br/>
+    
+    *   **Hypothesis:** $H_0: \mu \le \mu_0$ vs. $H_1: \mu > \mu_0$
+    *   **Rejection Region:** Entire significance area $\alpha$ is concentrated in the right (upper) tail.
+    *   **Use Case:** Testing for increases (e.g., campaign increasing sales, engine increasing fuel efficiency).
+  </TabItem>
+</Tabs>
+
+---
+
+## 5. Three Decision-Making Criteria
+
+There are three mathematically equivalent methods for deciding whether to reject $H_0$:
+
+```mermaid
+flowchart LR
+    A["Sample Data"] --> B["Compute Test Statistic Z_calc"]
+    
+    B --> C["1. Critical Value Method<br/>Compare |Z_calc| to Z_crit"]
+    B --> D["2. P-Value Method<br/>Compare p-value to α"]
+    B --> E["3. Confidence Interval Method<br/>Check if μ0 lies in CI"]
+```
+
+### 1. The Critical Region (Rejection Region) Approach
+*   Determine critical cutoff $z_{\text{crit}}$ from the normal distribution table for the chosen $\alpha$.
+*   **Two-tailed:** Reject $H_0$ if $|Z_{\text{calc}}| > z_{\alpha/2}$.
+*   **Left-tailed:** Reject $H_0$ if $Z_{\text{calc}} < -z_{\alpha}$.
+*   **Right-tailed:** Reject $H_0$ if $Z_{\text{calc}} > z_{\alpha}$.
+
+### 2. The P-Value Approach
+The **$p$-value** is the probability, assuming $H_0$ is true, of observing a test statistic as extreme as, or more extreme than, the value obtained from our sample.
+*   **Decision Rule:**
+    $$\text{If } p\text{-value} \le \alpha \implies \text{Reject } H_0$$
+    $$\text{If } p\text{-value} > \alpha \implies \text{Fail to Reject } H_0$$
+*   *"If the p-value is low, the null must go. If the p-value is high, the null will fly."*
+
+### 3. The Confidence Interval Approach (Two-Tailed Tests)
+Construct the $100(1 - \alpha)\%$ confidence interval around the sample mean $\bar{x}$.
+*   If the hypothesized population parameter $\mu_0$ **does not lie inside** the confidence interval, **Reject $H_0$** at significance level $\alpha$.
+*   If $\mu_0$ falls within the interval, **Fail to Reject $H_0$**.
+
+---
+
+## 6. Synthesis & Review
+
+<div className="row">
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>Testing Principles</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Directionality:</b> Direction of $H_1$ determines the critical tail. $\neq$ yields two tails; $&lt;$ yields left tail; $&gt;$ yields right tail.</li>
+          <li><b>Equivalence:</b> The Critical Region, P-value, and Confidence Interval approaches always yield identical statistical decisions for two-tailed tests.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div className="col col--6">
+    <div className="card" style={{ height: '100%', marginBottom: '15px' }}>
+      <div className="card__header">
+        <h3>Common Traps</h3>
+      </div>
+      <div className="card__body">
+        <ul>
+          <li><b>Never say 'Accept H0':</b> Lack of evidence against the null is not proof of the null.</li>
+          <li><b>Do not change tails post-hoc:</b> Formulate $H_0$ and $H_1$ before observing the sample data to avoid p-hacking.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br/>
+
+:::info
+
+**Key Takeaways**
+
+*   **Alpha ($\alpha$):** The false-positive threshold, set by design prior to experimentation.
+*   **P-Value:** A measure of evidence against $H_0$. Smaller $p$-values indicate stronger evidence against the null hypothesis.
+*   **Statistical Power ($1 - \beta$):** The ability of an experiment to detect an actual effect when one exists. Higher sample sizes increase power.
+
+:::
+
+**Next Section:** [Large Sample Tests](./03-large-sample-tests.mdx) - implementing one-sample and two-sample Z-tests in Python.

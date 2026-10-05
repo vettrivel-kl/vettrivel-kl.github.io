@@ -633,9 +633,6 @@ To prevent production pipeline crashes:
 
 ```mermaid
 graph TD
-    classDef step fill:#f8fafc,stroke:#3b82f6,stroke-width:2px;
-    classDef choice fill:#f8fafc,stroke:#10b981,stroke-width:2px;
-
     A["Categorical Column"] --> B{"Is it the target y?"}
     B -- "Yes" --> C["LabelEncoder"]
     B -- "No" --> D{"Is data genuinely Ordinal?"}
@@ -643,9 +640,6 @@ graph TD
     D -- "No" --> F{"Is Cardinality High? (k > 50)"}
     F -- "No" --> G["OneHotEncoder(handle_unknown='ignore')"]
     F -- "Yes" --> H["TargetEncoder in a Pipeline"]
-
-    class B,D,F choice;
-    class C,E,G,H step;
 ```
 
 ---

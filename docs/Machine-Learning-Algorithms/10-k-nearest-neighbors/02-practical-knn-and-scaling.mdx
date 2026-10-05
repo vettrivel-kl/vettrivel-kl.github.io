@@ -29,13 +29,9 @@ If feature $x_1$ represents **Annual Income** (ranging from 20,000 to 250,000) w
 
 ```mermaid
 flowchart LR
-    classDef step fill:#f9f,stroke:#333,stroke-width:2px;
-    
     A["Unscaled Space<br/>Income: [20k, 250k]<br/>Age: [18, 80]"] -->|Dominates Metric| B["Elliptical Isocontours<br/>Age is effectively ignored"]
     
     C["Standardized Space<br/>Income ~ N(0,1)<br/>Age ~ N(0,1)"] -->|Equally Weighted| D["Spherical Isocontours<br/>Both features contribute fairly"]
-    
-    class A,B,C,D step;
 ```
 
 ---
@@ -103,8 +99,6 @@ Computing pairwise distances to all $N$ points becomes intractable as datasets g
 
 ```mermaid
 flowchart TD
-    classDef opt fill:#e1f5fe,stroke:#0288d1,stroke-width:2px;
-    
     A["Nearest Neighbor Search Strategy"] --> B["Brute Force (linear scan)"]
     A --> C["KD-Tree (Axis-Aligned Bisection)"]
     A --> D["Ball Tree (Hyperspherical Partitioning)"]
@@ -112,8 +106,6 @@ flowchart TD
     B -.-> E["O(N) search. Best for small N or very high d."]
     C -.-> F["O(log N) search. Best for d &lt; 20."]
     D -.-> G["O(log N) search. Handles higher d and complex metrics."]
-    
-    class B,C,D,E,F,G opt;
 ```
 
 *   **Brute Force (`algorithm='brute'`):** Evaluates all Euclidean distances directly. Ideal when $d$ is very large ($d > 30$) because tree structures lose their pruning efficiency in high dimensions.

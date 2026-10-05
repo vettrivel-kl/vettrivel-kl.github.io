@@ -431,9 +431,6 @@ export const PracticeQuiz = () => {
 
 ```mermaid
 graph TD
-    classDef step fill:#f8fafc,stroke:#3b82f6,stroke-width:2px;
-    classDef choice fill:#f8fafc,stroke:#10b981,stroke-width:2px;
-
     A["Detected Outlier Row"] --> B{"Is it a Confirmed Data Entry Error?"}
     B -- "Yes" --> C["Delete Row or Impute Feature"]
     B -- "No" --> D{"Is it a Genuine Extreme?"}
@@ -442,9 +439,6 @@ graph TD
     E -- "No" --> G["Apply log1p Transform or RobustScaler"]
     D -- "No" --> H{"Is it a Fraud / Novelty Signal?"}
     H -- "Yes" --> I["Keep Unchanged (Primary Predictive Signal)"]
-
-    class B,D,E,H choice;
-    class C,F,G,I step;
 ```
 
 :::danger

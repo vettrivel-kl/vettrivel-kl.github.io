@@ -1,0 +1,44 @@
+---
+title: "Pattern 01: Arrays & Hashing"
+sidebar_label: "Overview"
+sidebar_position: 1
+---
+
+# Pattern 01: Arrays & Hashing
+
+Arrays and Hash Maps form the bedrock of algorithmic problem solving. They are fundamentally about **space-time trade-offs**: spending additional memory ($O(N)$ space) to achieve lightning-fast, constant-time lookups ($O(1)$ amortized time).
+
+---
+
+## Pattern Anatomy & Big-O Invariants
+
+At a hardware and memory level, arrays and hash tables exhibit unique properties:
+
+| Data Structure | Access Time | Search (Key/Val) | Insertion | Deletion | Space Complexity |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Static Array** | $O(1)$ | $O(N)$ | $O(N)$ | $O(N)$ | $O(N)$ contiguous |
+| **Dynamic Array (ArrayList/List)** | $O(1)$ | $O(N)$ | $O(1)$ amortized | $O(N)$ | $O(N)$ contiguous |
+| **Hash Table (Map/Set)** | N/A | $O(1)$ avg / $O(N)$ worst | $O(1)$ avg / $O(N)$ worst | $O(1)$ avg / $O(N)$ worst | $O(N)$ sparse |
+
+---
+
+## The Core Invariants of Arrays & Hashing
+
+Rather than memorizing arbitrary LeetCode problems, master the three foundational invariants that govern nearly all array and hash-table algorithms:
+
+### 1. [Frequency Counters & State Compression](./01-frequency-counters.mdx)
+* **The Invariant:** A hash map or fixed-size array can track state, counts, or parity in $O(1)$ time, transforming an $O(N^2)$ nested search into a linear $O(N)$ pass.
+* **Signals:** "Check if anagram", "Find most frequent element", "Verify unique characters", "Can characters be rearranged to form a palindrome".
+
+### 2. [Historical Prefix & Complement Lookups](./02-prefix-state-hashing.mdx)
+* **The Invariant:** By storing past states (e.g., target complement $T - x$, or cumulative sum $\sum_{i=0}^k A[i]$) as you iterate, you can query whether a valid predecessor state exists in $O(1)$ time without backtracking.
+* **Signals:** "Find pair that sums to target", "Continuous subarray sum equals $K$", "Subarray with equal number of 0s and 1s".
+
+---
+
+## Roadmap
+
+Dive into each invariant below to learn the underlying mechanics and work through progressive, multi-language examples:
+
+* **[Invariant 1: Frequency Counters & State Compression](./01-frequency-counters.mdx)**
+* **[Invariant 2: Historical Prefix & Complement Lookups](./02-prefix-state-hashing.mdx)**

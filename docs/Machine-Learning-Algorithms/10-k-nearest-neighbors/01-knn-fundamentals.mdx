@@ -30,15 +30,11 @@ Unlike eager learners (such as Logistic Regression or Neural Networks) which opt
 
 ```mermaid
 flowchart TD
-    classDef step fill:#f9f,stroke:#333,stroke-width:2px;
-    
     A["Query Vector x*"] --> B["Compute Distances to all N Training Samples"]
     B --> C["Sort Distances in Ascending Order"]
     C --> D["Identify Top-k Closest Instances"]
     D --> E["Aggregate Labels (Plurality Voting or Weighted Mean)"]
     E --> F["Predicted Class y*"]
-    
-    class A,B,C,D,E,F step;
 ```
 
 ---

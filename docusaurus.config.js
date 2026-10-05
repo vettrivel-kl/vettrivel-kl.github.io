@@ -65,54 +65,6 @@ const config = {
           sidebarPath: './sidebars.js',
           remarkPlugins: [remarkMath],
           rehypePlugins: [rehypeKatex],
-          sidebarItemsGenerator: async function ({
-            defaultSidebarItemsGenerator,
-            ...args
-          }) {
-            const sidebarItems = await defaultSidebarItemsGenerator(args);
-            if (args.item.dirName === '.') {
-              function isCareerPrep(item) {
-                if (item.type === 'doc') {
-                  return item.id.toLowerCase().includes('career-prep');
-                }
-                if (item.type === 'category') {
-                  if (item.link && item.link.id && item.link.id.toLowerCase().includes('career-prep')) {
-                    return true;
-                  }
-                  const label = item.label.toLowerCase();
-                  if (label.includes('career-prep') || label.includes('career prep') || label.includes('career preparation')) {
-                    return true;
-                  }
-                  if (item.items && item.items.length > 0 && item.items.every(isCareerPrep)) {
-                    return true;
-                  }
-                }
-                return false;
-              }
-
-              function filterHidden(items) {
-                return items
-                  .filter((item) => !isCareerPrep(item))
-                  .map((item) => {
-                    if (item.type === 'category' && item.items) {
-                      return {
-                        ...item,
-                        items: filterHidden(item.items),
-                      };
-                    }
-                    return item;
-                  })
-                  .filter((item) => {
-                    if (item.type === 'category') {
-                      return item.items && item.items.length > 0;
-                    }
-                    return true;
-                  });
-              }
-              return filterHidden(sidebarItems);
-            }
-            return sidebarItems;
-          },
         },
         blog: false,
         theme: {
@@ -123,8 +75,43 @@ const config = {
           anonymizeIP: true,
         },
         sitemap: {
-          ignorePatterns: ['**/career-prep/**', '**/Career-Prep/**'],
+          ignorePatterns: [
+            '**/career-prep/**',
+            '**/Career-Prep/**',
+            '/career-prep/**',
+            '/career-prep',
+            '**/dsa/**',
+            '/dsa/**',
+            '**/dsa',
+          ],
         },
+      }),
+    ],
+  ],
+
+  plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      /** @type {import('@docusaurus/plugin-content-docs').Options} */
+      ({
+        id: 'dsa',
+        path: 'dsa',
+        routeBasePath: 'dsa',
+        sidebarPath: './sidebarsDsa.js',
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [rehypeKatex],
+      }),
+    ],
+    [
+      '@docusaurus/plugin-content-docs',
+      /** @type {import('@docusaurus/plugin-content-docs').Options} */
+      ({
+        id: 'career-prep',
+        path: 'career-prep',
+        routeBasePath: 'career-prep',
+        sidebarPath: './sidebarsCareerPrep.js',
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [rehypeKatex],
       }),
     ],
   ],
@@ -136,6 +123,12 @@ const config = {
       image: 'img/vettri/vettri-384x384.png',
       colorMode: {
         respectPrefersColorScheme: true,
+      },
+      mermaid: {
+        theme: {
+          light: 'forest',
+          dark: 'dark',
+        },
       },
       navbar: {
         title: "Vettri's Notes",
