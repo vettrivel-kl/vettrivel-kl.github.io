@@ -86,6 +86,18 @@ Given an array of integers `nums` and an integer `target`, return indices of the
 #### Invariant Application
 Equation: $A[i] + A[j] = \text{Target}$. Isolated historical state: $A[j] = \text{Target} - A[i]$. As we scan index $i$, check if the complement has been recorded in the hash map. If so, return $(H[\text{Target} - A[i]], i)$. Otherwise, record $H[A[i]] = i$.
 
+#### Detailed Explanation
+- **Intuition & Mental Model:** The naive approach uses nested loops to inspect all possible pairs $(i, j)$, consuming $O(N^2)$ time. Instead of searching *forward* in the array for an element's partner, we record elements into a hash table as we encounter them and look *backward*. For any current value $x$ at index $i$, there is exactly one value $y$ that can satisfy the equation: $y = \text{target} - x$. If $y$ is already in our table, we have discovered the solution pair in $O(1)$ lookup time.
+- **Step-by-Step Walkthrough:**
+  1. **Allocate State Map:** Initialize an empty hash table `seen` mapping `number_value -> index`.
+  2. **Linear Iteration:** Traverse the array with pointer $i$ from $0$ to $N - 1$.
+  3. **Calculate Complement:** At index $i$, calculate `complement = target - nums[i]`.
+  4. **Probe Historical Cache:**
+     - If `seen.containsKey(complement)` is true, return the indices `[seen.get(complement), i]`.
+     - If not found, insert the current element and its index into the map: `seen.put(nums[i], i)`.
+  5. **Sequential Guarding:** Because we query the hash map *before* inserting `nums[i]`, an element cannot erroneously pair with itself.
+- **Edge Cases & Failure Modes:** Negative numbers (algebraically transparent, e.g., target $-3$, current $-5 \implies \text{complement} = 2$), duplicate values (if `nums = [3, 3]` and target is 6, the first 3 is stored at index 0, and the second 3 matches it immediately at index 1), and large inputs up to $10^9$ where arithmetic bounds must be respected.
+
 <Tabs>
 <TabItem value="java" label="Java">
 
@@ -196,6 +208,23 @@ Given an array of integers `nums` and an integer `k`, return the total number of
 #### Invariant Application
 Let $\text{current\_sum} = \sum_{m=0}^i \text{nums}[m]$. We need to find previous indices $j$ such that $\text{current\_sum} - \text{prefix\_sum}[j] = k$, which means $\text{prefix\_sum}[j] = \text{current\_sum} - k$.
 We store the **frequency** of each seen prefix sum in a hash table. Initialize the table with $\{0: 1\}$ to handle subarrays starting at index 0.
+
+#### Detailed Explanation
+- **Intuition & Mental Model:** The sum of elements between indices $j + 1$ and $i$ equals the difference between two prefix sums:
+  $$\text{Sum}(j+1 \dots i) = \text{Prefix}[i] - \text{Prefix}[j]$$
+  Setting this subarray sum equal to $k$ yields:
+  $$\text{Prefix}[i] - \text{Prefix}[j] = k \iff \text{Prefix}[j] = \text{Prefix}[i] - k$$
+  Instead of enumerating all $O(N^2)$ candidate subarrays, we maintain a running prefix sum $\text{Prefix}[i]$ and query a frequency hash map for how many times the required prior state $\text{Prefix}[i] - k$ has appeared. Each occurrence corresponds to a valid subarray ending exactly at index $i$.
+- **Step-by-Step Walkthrough:**
+  1. **Initialize State Tracker:** Allocate integer variables `count = 0` and `currentSum = 0`. Create a hash table `prefixCounts` storing `prefix_sum -> frequency`.
+  2. **The Zero-Prefix Base Case:** Seed the map with `prefixCounts.put(0, 1)`. If `currentSum == k` at any point, `neededPrefix = k - k = 0`. Without the initial `{0: 1}`, subarrays starting at the very beginning of the array (index 0) would be omitted.
+  3. **Linear Accumulation:** Iterate through `num` in `nums`:
+     - Accumulate `currentSum += num`.
+     - Calculate the required past prefix: `neededPrefix = currentSum - k`.
+     - Retrieve its recorded count: `count += prefixCounts.getOrDefault(neededPrefix, 0)`.
+     - Record the new prefix sum: increment `prefixCounts[currentSum]` by 1.
+  4. **Return Total Count:** Return `count`.
+- **Why Two-Pointer / Sliding Window Fails Here:** A classic sliding window assumes monotonicity: adding elements increases the window sum, and removing elements decreases it. Because `nums` can contain negative numbers and zeros, the prefix sum oscillates non-monotonically. Only prefix state hashing can handle negative values in strict $O(N)$ time.
 
 <Tabs>
 <TabItem value="java" label="Java">
@@ -317,6 +346,24 @@ Given a binary array `nums`, return the maximum length of a contiguous subarray 
 Transform the problem domain: replace each `0` with `-1`. Now, an equal number of `0`s and `1`s translates to a contiguous subarray sum of **zero**:
 $$\text{Prefix}[i] - \text{Prefix}[j] = 0 \iff \text{Prefix}[i] = \text{Prefix}[j]$$
 We store the **first index** at which each prefix sum was seen. To maximize length $(i - j)$, we keep early indices and never overwrite existing map entries.
+
+#### Detailed Explanation
+- **Intuition & Mental Model:** Tracking counts of 0s and 1s simultaneously appears to demand two-dimensional state tracking. However, an algebraic substitution collapses the problem to one dimension: transform every `0` into `-1` while leaving `1` as `+1`. In this transformed space, a subarray with equal counts of 0s and 1s has a net sum of zero:
+  $$\sum_{m=j+1}^i \text{val}[m] = 0 \iff \text{Prefix}[i] - \text{Prefix}[j] = 0 \iff \text{Prefix}[i] = \text{Prefix}[j]$$
+  The problem simplifies to: find the maximum distance between two identical prefix sum values.
+- **Step-by-Step Walkthrough:**
+  1. **Allocate Index Map:** Create a hash table `firstSeen` mapping `running_sum -> earliest_index`.
+  2. **Initialize Boundary Anchor:** Store `firstSeen.put(0, -1)`. If a balanced subarray starts at index 0 and extends through index $i$, the running sum will equal 0 at index $i$. The length is $i - (-1) = i + 1$.
+  3. **Linear Sweep with State Update:**
+     - Initialize `runningSum = 0` and `maxLength = 0`.
+     - For each index $i$ from 0 to $N - 1$:
+       - Add $+1$ if `nums[i] == 1`, else $-1$.
+       - Check if `runningSum` is already recorded in `firstSeen`:
+         - If **seen**: A zero-sum subarray spans from `firstSeen.get(runningSum) + 1` to $i$. Calculate length $i - \text{firstSeen.get(runningSum)}$ and update `maxLength = Math.max(maxLength, length)`.
+         - If **not seen**: Insert the pair `firstSeen.put(runningSum, i)`.
+  4. **The Greedy Non-Overwriting Invariant:** Crucially, never update `firstSeen` if `runningSum` already exists. To maximize subarray length $(i - j)$, the anchor index $j$ must remain as small (as far to the left) as possible.
+  5. **Return Result:** Return `maxLength`.
+- **Edge Cases & Failure Modes:** Arrays containing exclusively 0s or exclusively 1s (prefix sum grows strictly monotonically; no matches found, returns 0), perfectly alternating arrays (`[0, 1, 0, 1]` $\to$ returns full length 4), and minimal input sizes (`[0, 1]` $\to$ returns 2).
 
 <Tabs>
 <TabItem value="java" label="Java">
@@ -446,6 +493,23 @@ Given an integer array `nums` and an integer `k`, return the number of non-empty
 Two prefix sums have a difference divisible by $K$ if and only if they share the same remainder when divided by $K$:
 $$(\text{Prefix}[i] - \text{Prefix}[j]) \pmod K = 0 \iff \text{Prefix}[i] \pmod K \equiv \text{Prefix}[j] \pmod K$$
 Because Python handles negative modulo natively while Java and TypeScript yield negative results for negative dividends, we normalize remainder calculations via `((sum % k) + k) % k`.
+
+#### Detailed Explanation
+- **Intuition & Mental Model:** According to modular congruence, if two integers $A$ and $B$ leave the identical remainder when divided by $K$, their difference $A - B$ is strictly divisible by $K$:
+  $$A \equiv B \pmod K \iff (A - B) \equiv 0 \pmod K$$
+  Since a contiguous subarray sum is $\text{Prefix}[i] - \text{Prefix}[j]$, any two indices $i$ and $j$ ($j < i$) whose prefix sums share the same remainder modulo $K$ form a subarray divisible by $K$. Thus, instead of storing raw prefix sums, we track the *frequency of remainders modulo $K$*.
+- **Step-by-Step Walkthrough:**
+  1. **Allocate Remainder Counter:** Create a hash table (or fixed-size array of size $K$) `remainderCounts` mapping `remainder -> frequency`.
+  2. **Initialize Zero-Remainder Base Case:** Insert `remainderCounts.put(0, 1)`. A prefix sum that is itself a multiple of $K$ (remainder 0) forms a valid subarray beginning at index 0.
+  3. **Linear Accumulation with Modulo Normalization:**
+     - Initialize `count = 0` and `runningSum = 0`.
+     - For each `num` in `nums`:
+       - Add `runningSum += num`.
+       - Compute canonical remainder: `int remainder = ((runningSum % k) + k) % k`.
+       - Add previously recorded matches: `count += remainderCounts.getOrDefault(remainder, 0)`.
+       - Update tally: increment `remainderCounts[remainder]` by 1.
+  4. **Return Total Count:** Return `count`.
+- **The Critical Negative Modulo Pitfall:** In languages like Java, C++, and TypeScript, the `%` operator computes truncated remainder rather than mathematical modulo. For example, `-7 % 5 == -2`. However, in modular arithmetic, $-7 \equiv 3 \pmod 5$ (since $-7 = (-2) \times 5 + 3$). If negative remainders are not normalized to the range $[0, K-1]$ using `((val % k) + k) % k`, identical remainder classes will be split into positive and negative keys, resulting in silent undercounting.
 
 <Tabs>
 <TabItem value="java" label="Java">

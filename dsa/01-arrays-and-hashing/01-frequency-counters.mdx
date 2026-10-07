@@ -67,6 +67,17 @@ Given two strings `s` and `t`, return `true` if `t` is an anagram of `s`, and `f
 #### Invariant Application
 Maintain a single frequency array of size 26. Increment counts for characters in `s`, and decrement for characters in `t`. If all slots in the frequency array return to zero, the invariant $F_s(x) = F_t(x)$ holds.
 
+#### Detailed Explanation
+- **Intuition & Mental Model:** Two strings are anagrams if and only if they possess identical character counts across every unique letter. While sorting both strings achieves grouping in $O(N \log N)$ time, a frequency counter achieves the tally in linear $O(N)$ time. Because the character universe is restricted to lowercase English letters (`'a'` through `'z'`), an array of 26 integers provides constant-time $O(1)$ indexing with minimal cache overhead.
+- **Step-by-Step Walkthrough:**
+  1. **Dimension Check:** Compare `s.length()` and `t.length()`. If their lengths differ, they cannot be anagrams; exit early with `false`.
+  2. **Allocate Fixed Counter:** Instantiate a 26-element integer array `counts` initialized to zero.
+  3. **Simultaneous Balanced Scan:** Iterate through the strings from index $0$ to $N - 1$. For each index $i$:
+     - Increment `counts[s.charAt(i) - 'a']`.
+     - Decrement `counts[t.charAt(i) - 'a']`.
+  4. **Evaluate Conservation Invariant:** Iterate through all 26 elements in `counts`. If any slot is non-zero, a character surplus or deficit exists; return `false`. If all 26 slots evaluate to zero, return `true`.
+- **Edge Cases & Failure Modes:** Strings with unequal lengths (guarded at step 1), strings of length 1 (`s = "a"`, `t = "a"` $\to$ `true`), identical strings, and character mismatches where lengths match (`s = "ab"`, `t = "ac"` $\to$ `false`).
+
 <Tabs>
 <TabItem value="java" label="Java">
 
@@ -172,6 +183,16 @@ Given an array of strings `strs`, group the anagrams together. You can return th
 
 #### Invariant Application
 Each anagram group has identical character frequencies. We compute the frequency tuple of length 26 for each string, convert that invariant state into a serialized hash key (e.g., `#1#0#2...`), and map it to a list of matching words.
+
+#### Detailed Explanation
+- **Intuition & Mental Model:** Every word in an anagram group shares an identical canonical signature. Sorting each word individually costs $O(K \log K)$ per string (where $K$ is maximum word length), leading to an aggregate cost of $O(N \cdot K \log K)$. By directly tallying the 26 character frequencies in $O(K)$ time and using that frequency signature as a hash key, we reduce total execution time to $O(N \cdot K)$.
+- **Step-by-Step Walkthrough:**
+  1. **Initialize State Map:** Create a hash table mapping canonical serialized keys to lists of strings (`Map<String, List<String>>`).
+  2. **Compute 26-Bin Signature:** For each string `s` in the input array `strs`, instantiate an integer array `count` of size 26. Iterate over each character `c` in `s` and increment `count[c - 'a']`.
+  3. **Serialize the Frequency Key:** Convert the 26 counts into a unique, unambiguous string key. In Python, `tuple(count)` is natively hashable. In Java and TypeScript, serialize with an explicit delimiter (e.g., `#1#0#0...`).
+  4. **Bucket Insertion:** Insert the original string `s` into the bucket corresponding to its serialized key: `map.computeIfAbsent(key, k -> new ArrayList<>()).add(s)`.
+  5. **Construct Output:** Return all grouped list values from the hash table as `new ArrayList<>(map.values())`.
+- **Why the Delimiter is Architecturally Essential:** Without an explicit delimiter like `#`, counts for different bins bleed into each other. For example, a word with 1 'a' and 11 'b's would produce digits `1110...`, which is identical to the digits produced by a word with 11 'a's and 1 'b' (`1110...`), creating catastrophic false collisions. The delimiter `#1#11#0...` vs `#11#1#0...` strictly separates dimension boundaries.
 
 <Tabs>
 <TabItem value="java" label="Java">
@@ -296,6 +317,16 @@ Given an integer array `nums` and an integer `k`, return the `k` most frequent e
 
 #### Invariant Application
 Count frequencies in $O(N)$ with a hash map. Notice the invariant: the frequency of any element in an array of size $N$ is strictly bounded within $[1, N]$. We can invert the mapping using **Bucket Sort** (an array where index = frequency) to collect elements in $O(N)$ time, bypassing the $O(N \log K)$ heap approach.
+
+#### Detailed Explanation
+- **Intuition & Mental Model:** The conventional approach tallies elements and pushes them into a size-$K$ Min-Heap, taking $O(N \log K)$ time. However, in an array of length $N$, an element cannot possibly appear more than $N$ times or less than $1$ time. Because the range of possible frequencies is discrete and strictly bounded by $[1, N]$, we can apply **Bucket Sort** by treating the frequency itself as an array index. This collapses sorting to $O(N)$ time.
+- **Step-by-Step Walkthrough:**
+  1. **Build Frequency Map:** Iterate over `nums` and count frequencies using a hash map `countMap`.
+  2. **Construct Inverted Frequency Buckets:** Allocate an array of lists `buckets` of length $N + 1$, where `buckets[f]` will store all numbers that appeared with frequency $f$.
+  3. **Populate Buckets:** For each entry `(num, freq)` in `countMap`, append `num` into `buckets[freq]`.
+  4. **Reverse Linear Sweep:** Scan the `buckets` array from right to left (index $N$ down to $1$). Higher indices represent higher occurrence rates.
+  5. **Extract Top K:** Iterate through the elements at each non-empty bucket, appending values into the result array until exactly $K$ numbers are gathered.
+- **Algorithmic Guarantees:** Allocating the bucket array takes $O(N)$ space. Distributing unique keys into buckets takes $O(U) \le O(N)$ time. The reverse sweep inspects $N + 1$ bucket slots and halts immediately after collecting $K$ items. The overall process executes strictly in $O(N)$ time and $O(N)$ auxiliary space.
 
 <Tabs>
 <TabItem value="java" label="Java">
@@ -433,6 +464,18 @@ Given a string `s` which consists of lowercase or uppercase letters, return the 
 
 #### Invariant Application
 In any palindrome, all characters except at most one must appear an **even** number of times. As we count frequencies, every pair of identical characters ($count \pmod 2 == 0$) adds 2 to our length budget. If any character frequency remains odd at the end, we can center exactly one odd element ($+1$).
+
+#### Detailed Explanation
+- **Intuition & Mental Model:** A palindrome mirrors itself around its midpoint. For every character on the left side of the mirror, an identical character must exist on the right side. Consequently, any character appearing with an even count $2k$ can be distributed symmetrically into the palindrome. If a character appears with an odd count $2k + 1$, its largest even portion ($2k$) can still be placed symmetrically. Finally, a palindrome can accommodate at most *one* single character directly in its center.
+- **Step-by-Step Walkthrough:**
+  1. **Tally Frequencies:** Use a 128-element integer array (to capture standard ASCII uppercase and lowercase letters) or a hash map to count character frequencies.
+  2. **Initialize Accumulators:** Set `length = 0` and a boolean flag `hasOdd = false`.
+  3. **Greedy Even Extraction:** Iterate through each character's count $c$:
+     - Add `(c / 2) * 2` (or `c & ~1`) to `length`. This extracts all symmetrical pairs.
+     - If `c % 2 != 0`, set `hasOdd = true` (identifying that an unused odd character remains available for the center).
+  4. **Center Character Bonus:** After evaluating all character counts, if `hasOdd` is `true`, increment `length` by 1.
+  5. **Return Result:** Return `length`.
+- **Edge Cases & Failure Modes:** Strings where all characters are distinct (`"abcdef"` $\to$ all counts 1, length is $0 + 1 = 1$), strings where all character counts are even (`"aabb"` $\to$ counts 2,2, `hasOdd` is false, length is 4), and single-character strings (`"a"` $\to$ length 1).
 
 <Tabs>
 <TabItem value="java" label="Java">
