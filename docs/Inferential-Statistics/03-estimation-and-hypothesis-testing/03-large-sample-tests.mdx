@@ -142,6 +142,21 @@ Test whether population mean hemoglobin levels differ between men and women at $
 
 ---
 
+### Scenario 5: One-Sample Test with $\sigma$ Unknown (Protein Powder Packaging)
+**Problem:** The packaging process manager at a protein powder manufacturing plant wants to verify whether the packing line is in statistical control. The specified mean weight per box is $\mu = 350\text{ grams}$. A random sample of $n = 80$ boxes yields a mean of $\bar{X} = 354.5\text{ grams}$ with a sample standard deviation of $s = 15\text{ grams}$. At $\alpha = 0.05$, is there evidence that the packaging weight differs from $350\text{ grams}$?
+
+1.  **Formulate Hypotheses:**
+    $$H_0: \mu = 350 \quad \text{vs.} \quad H_1: \mu \neq 350 \quad (\text{Two-Tailed})$$
+2.  **Calculate Test Statistic:**
+    Because $n = 80 \ge 30$, the sample standard deviation $s$ serves as an unbiased substitute for $\sigma$:
+    $$Z_{\text{calc}} = \frac{\bar{X} - \mu_0}{s / \sqrt{n}} = \frac{354.5 - 350}{15 / \sqrt{80}} = \frac{4.5}{15 / 8.9443} = \frac{4.5}{1.677} \approx +2.683$$
+3.  **Decision:**
+    Critical value for two-tailed test at $\alpha = 0.05$ is $z_{\alpha/2} = z_{0.025} = 1.960$.
+    Since $|Z_{\text{calc}}| = 2.683 > 1.960$ (and $p\text{-value} = 2 \cdot P(Z > 2.683) \approx 0.0073 < 0.05$), we **Reject $H_0$**.
+4.  **Conclusion:** There is statistically significant evidence to conclude that the packing process is out of control and the average filling weight differs from $350\text{ grams}$.
+
+---
+
 ## 5. Implementation Lab
 
 Execute large sample Z-tests in Python utilizing `statsmodels` and `scipy.stats`.

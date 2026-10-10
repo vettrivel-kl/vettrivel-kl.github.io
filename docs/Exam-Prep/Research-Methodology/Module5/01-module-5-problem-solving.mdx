@@ -1,0 +1,420 @@
+---
+title: "Module 5: Data Analysis Problem Solving & Solutions"
+description: "Exam-oriented problem-solving guide covering probability distributions, sampling, hypothesis testing, model validation, and machine learning."
+sidebar_position: 1
+tags: [research-methodology, exam-prep, probability, hypothesis-testing, anova]
+---
+
+# Module 5: Data Analysis - Problem Solving & Solutions
+
+This document provides a comprehensive, exam-oriented set of scenario-based problem-solving questions and step-by-step solutions for **Module 5: Data Analysis** in Research Methodology.
+
+---
+
+## 1. Discrete Probability Distributions
+
+### Question 1: Quality Control in Manufacturing (Binomial Distribution)
+
+**Context:**
+An electronics manufacturer produces microchips. Historically, the probability of any individual microchip being defective is 3% ($p = 0.03$). A quality assurance engineer randomly selects a batch of 50 microchips for inspection ($n = 50$).
+
+1. State the Probability Mass Function (PMF) that models this scenario.
+2. Formulate the equation to find the probability of finding **exactly 3 defective** microchips in this batch.
+3. Formulate the equation to find the probability that **all microchips** in the batch are non-defective (i.e., 0 defective).
+
+#### Solution
+
+**1. Probability Mass Function (PMF):**
+The scenario follows a **Binomial Distribution** because it consists of a fixed number of independent Bernoulli trials ($n = 50$) with a constant probability of success/failure ($p = 0.03$).
+
+$$P(X = k) = \binom{n}{k} p^k (1 - p)^{n - k}$$
+
+Where:
+- $n = 50$ (number of trials / sample size)
+- $p = 0.03$ (probability of finding a defective component)
+- $k$ is the number of defective components observed.
+
+**2. Probability of exactly 3 defective microchips ($k = 3$):**
+
+$$P(X = 3) = \binom{50}{3} (0.03)^3 (1 - 0.03)^{50 - 3}$$
+
+$$P(X = 3) = \binom{50}{3} (0.03)^3 (0.97)^{47}$$
+
+**3. Probability of 0 defective microchips ($k = 0$):**
+
+$$P(X = 0) = \binom{50}{0} (0.03)^0 (0.97)^{50}$$
+
+Since $\binom{50}{0} = 1$ and $(0.03)^0 = 1$:
+
+$$P(X = 0) = (0.97)^{50}$$
+
+:::info
+
+**Engineer's Perspective: Quality Thresholds**
+
+In manufacturing pipelines, $P(X = 0)$ represents the likelihood of an uninterrupted, clean batch. If $P(X \geq \text{threshold})$ exceeds a predefined risk budget (e.g., 5%), automated sorting systems flag the entire lot for secondary manual inspection. The Binomial model provides a defensible statistical threshold for acceptance sampling.
+
+:::
+
+---
+
+### Question 2: Modeling Server Breaches (Poisson Distribution)
+
+**Context:**
+A network server experiences random security breach attempts. Historically, these breaches occur independently at a constant average rate of 4 incidents per month ($\lambda = 4$). The IT security team wants to allocate response resources based on incident probabilities.
+
+1. Identify the appropriate probability distribution and write down its Probability Mass Function (PMF).
+2. Calculate the probability of observing **exactly 2 breaches** in a given month.
+3. Calculate the probability of observing **no breaches** in a month. What does this indicate for security readiness?
+
+#### Solution
+
+**1. Distribution and PMF:**
+The scenario models the count of rare, independent events occurring within a fixed interval of time at a known average rate. It follows the **Poisson Distribution**.
+
+$$P(X = k) = \frac{\lambda^k e^{-\lambda}}{k!}$$
+
+Where:
+- $\lambda = 4$ (average rate of occurrences per interval)
+- $k$ is the observed count of breaches.
+
+**2. Probability of exactly 2 breaches ($k = 2$):**
+
+$$P(X = 2) = \frac{4^2 e^{-4}}{2!} = \frac{16 e^{-4}}{2} = 8 e^{-4}$$
+
+Using $e^{-4} \approx 0.0183$:
+
+$$P(X = 2) \approx 8 \times 0.0183 \approx 0.1464 \quad (14.64\%)$$
+
+**3. Probability of no breaches ($k = 0$):**
+
+$$P(X = 0) = \frac{4^0 e^{-4}}{0!} = \frac{1 \cdot e^{-4}}{1} = e^{-4} \approx 0.0183 \quad (1.83\%)$$
+
+**Interpretation:**
+There is only approximately a 1.8% chance that a month will pass with zero breach attempts. The security operations center (SOC) cannot assume quiet periods and must staff continuous monitoring rotations.
+
+---
+
+### Question 3: Geometric & Hypergeometric Sampling
+
+**Context A (Lead Conversion):**
+A sales representative has a 10% chance ($p = 0.10$) of closing a deal on any independent phone call.
+- Identify the distribution used to model the number of calls required until the **first successful sale**, write its PMF, and formulate the probability that the first successful deal occurs on the **5th call**.
+
+**Context B (Battery Audit Without Replacement):**
+A warehouse receives a shipment of $N = 100$ high-capacity batteries. An inspection reveals that $K = 10$ of them are depleted. An auditor selects a random sample of $n = 5$ batteries **without replacement**.
+- Identify the probability distribution that models this sampling process and state its general formula.
+
+#### Solution
+
+**Part A: Geometric Distribution**
+- **Distribution:** Geometric Distribution (models the number of Bernoulli trials needed to achieve the first success).
+- **PMF:**
+
+$$P(X = k) = (1 - p)^{k - 1} p$$
+
+- **Probability that the first success is on call 5 ($k = 5$):**
+
+$$P(X = 5) = (1 - 0.10)^{5 - 1} (0.10) = (0.90)^4 (0.10) = 0.6561 \times 0.10 \approx 0.0656 \quad (6.56\%)$$
+
+**Part B: Hypergeometric Distribution**
+- **Distribution:** Hypergeometric Distribution (models sampling from a finite population without replacement where probability shifts after each draw).
+- **PMF:**
+
+$$P(X = k) = \frac{\binom{K}{k} \binom{N - K}{n - k}}{\binom{N}{n}}$$
+
+Where:
+- $N = 100$ (total population size)
+- $K = 10$ (total defective items in population)
+- $n = 5$ (sample size drawn)
+- $k$ is the number of defective items observed in the sample.
+
+---
+
+## 2. Continuous Probability Distributions
+
+### Question 4: Conveyor Belt Lifetime (Exponential Distribution)
+
+**Context:**
+A manufacturing assembly line uses industrial conveyor belts. The time between operational failures follows an exponential distribution with an average mean time between failures ($\text{MTBF}$) of 200 hours. The failure rate is strictly constant and independent of the belt's operating age.
+
+1. Determine the rate parameter ($\lambda$). State the core property that justifies using the exponential distribution.
+2. Formulate the Cumulative Distribution Function (CDF) and compute the probability that the belt breaks down in **less than or equal to 150 hours**.
+3. Calculate the probability that the belt runs for **at least 300 hours** without breakdown.
+
+#### Solution
+
+**1. Rate Parameter ($\lambda$) and Justifying Property:**
+The rate parameter is the reciprocal of the mean:
+
+$$\lambda = \frac{1}{\text{Mean}} = \frac{1}{200} = 0.005 \text{ failures per hour}$$
+
+- **Property:** The **Memoryless Property**. Mathematically, $P(X > t + s \mid X > s) = P(X > t)$. The future survival probability does not depend on how long the belt has already been running.
+
+**2. Probability of failure within 150 hours ($X \leq 150$):**
+The CDF of the exponential distribution is:
+
+$$F(x) = P(X \leq x) = 1 - e^{-\lambda x} \quad (x \geq 0)$$
+
+Substitute $\lambda = 0.005$ and $x = 150$:
+
+$$P(X \leq 150) = 1 - e^{-0.005 \times 150} = 1 - e^{-0.75} \approx 1 - 0.4724 = 0.5276 \quad (52.76\%)$$
+
+**3. Probability of lasting at least 300 hours ($X \geq 300$):**
+
+$$P(X \geq 300) = 1 - P(X < 300) = 1 - (1 - e^{-\lambda \times 300}) = e^{-0.005 \times 300} = e^{-1.5} \approx 0.2231 \quad (22.31\%)$$
+
+:::note
+
+**Engineer's Perspective: When Memorylessness Fails**
+
+Assuming memorylessness is valid only when failures are caused by purely external, Poisson-distributed shocks (e.g., sudden voltage spikes). If mechanical wear, abrasion, or chemical degradation occurs, the failure rate increases over time, and the Exponential model must be replaced with a Weibull distribution.
+
+:::
+
+---
+
+### Question 5: Predictive Maintenance of Brake Pads (Weibull Distribution)
+
+**Context:**
+An automotive research lab evaluates a fleet of brake pads. Time-to-failure data indicates that degradation fits a Weibull distribution with a shape parameter $k = 2.0$ (wear-out phase) and a scale parameter $\lambda = 20{,}000\text{ miles}$.
+
+1. Explain the mechanical and statistical meaning of the shape parameter $k = 2.0$ relative to $k < 1$ and $k = 1$.
+2. Using the Weibull CDF $F(x) = 1 - e^{-(x/\lambda)^k}$, calculate the probability that a brake pad fails within the **first 15,000 miles**.
+3. Formulate the algebraic steps to compute the exact mileage $t$ by which **90% of the brake pads will have failed** ($F(t) = 0.90$).
+
+#### Solution
+
+**1. Interpretation of Shape Parameter $k$:**
+- **$k < 1$ (Decreasing Failure Rate):** "Infant mortality" period; items with manufacturing defects fail early.
+- **$k = 1$ (Constant Failure Rate):** Reduces strictly to the Exponential Distribution ($\lambda_{\text{eff}} = 1/\lambda$).
+- **$k > 1$ (Increasing Failure Rate):** Characteristic wear-out behavior. Since $k = 2.0 > 1$, the hazard rate increases as operating mileage increases due to mechanical friction and material thinning.
+
+**2. Probability of failure within 15,000 miles ($x = 15{,}000$):**
+
+$$F(15000) = 1 - e^{-\left(\frac{15000}{20000}\right)^2} = 1 - e^{-(0.75)^2} = 1 - e^{-0.5625}$$
+
+Using $e^{-0.5625} \approx 0.5698$:
+
+$$F(15000) \approx 1 - 0.5698 = 0.4302 \quad (43.02\%)$$
+
+**3. Expected mileage for 90% component failure ($F(t) = 0.90$):**
+
+$$1 - e^{-\left(\frac{t}{20000}\right)^2} = 0.90$$
+
+$$e^{-\left(\frac{t}{20000}\right)^2} = 0.10$$
+
+Take natural logarithm ($\ln$) on both sides:
+
+$$-\left(\frac{t}{20000}\right)^2 = \ln(0.10) \implies \left(\frac{t}{20000}\right)^2 = -\ln(0.10)$$
+
+$$\frac{t}{20000} = \sqrt{-\ln(0.10)}$$
+
+$$t = 20000 \times \sqrt{-\ln(0.10)} \approx 20000 \times \sqrt{2.3026} \approx 20000 \times 1.5174 \approx 30{,}348\text{ miles}$$
+
+---
+
+### Question 6: Identification of Continuous Distributions
+
+Match each scientific modeling scenario to the appropriate continuous distribution and state its Probability Density Function (PDF):
+
+1. **Scenario 1:** Modeling user click-through rates or class probabilities restricted to the bounded domain $[0, 1]$.
+2. **Scenario 2:** Modeling the total waiting time until $k$ successive events occur in a Poisson process.
+3. **Scenario 3:** Modeling a hardware component simulation where every value inside interval $[a, b]$ has equal likelihood.
+
+#### Solution
+
+1. **Beta Distribution (Scenario 1):**
+   - **Use Case:** Proportions and probabilities bounded strictly on $[0, 1]$.
+   - **PDF:**
+
+   $$f(x) = \frac{x^{\alpha - 1} (1 - x)^{\beta - 1}}{B(\alpha, \beta)} \quad (0 \leq x \leq 1)$$
+
+2. **Gamma Distribution (Scenario 2):**
+   - **Use Case:** Time until $k$ Poisson events occur.
+   - **PDF:**
+
+   $$f(x) = \frac{x^{k - 1} e^{-x/\theta}}{\theta^k \Gamma(k)} \quad (x \geq 0)$$
+
+3. **Uniform Distribution (Scenario 3):**
+   - **Use Case:** Constant, equal density across bounded interval $[a, b]$.
+   - **PDF:**
+
+   $$f(x) = \frac{1}{b - a} \quad (a \leq x \leq b)$$
+
+---
+
+## 3. Sampling Techniques & Sample Size
+
+### Question 7: Determining Sample Size for Survey Research
+
+**Context:**
+A public health researcher wants to estimate the proportion of city residents who favor a municipal health policy. The researcher establishes:
+- Confidence Level: $95\%$ ($Z = 1.96$)
+- Margin of Error ($E$): $5\%$ ($0.05$)
+- Preliminary estimate of the population proportion ($p$): $0.40$
+
+1. State the formula for the sample size $n$ for proportion estimation.
+2. Calculate the minimum sample size required.
+3. Explain what adjustment must be made if the expected population proportion $p$ is completely unknown prior to data collection.
+
+#### Solution
+
+**1. Sample Size Formula:**
+
+$$n = \frac{Z^2 \cdot p \cdot (1 - p)}{E^2}$$
+
+Where:
+- $Z$ is the critical value for the specified confidence level ($1.96$ for $95\%$).
+- $p$ is the estimated proportion.
+- $E$ is the acceptable margin of error ($0.05$).
+
+**2. Calculation:**
+
+$$n = \frac{(1.96)^2 \cdot 0.40 \cdot (1 - 0.40)}{(0.05)^2}$$
+
+$$n = \frac{3.8416 \times 0.40 \times 0.60}{0.0025} = \frac{3.8416 \times 0.24}{0.0025} = \frac{0.921984}{0.0025} \approx 368.79$$
+
+Rounding up to ensure the target margin of error is satisfied:
+
+$$n \approx 369\text{ respondents}$$
+
+**3. Unknown Proportion Adjustment:**
+If $p$ is completely unknown, researchers set $p = 0.50$. The product $p(1 - p) = 0.50 \times 0.50 = 0.25$ represents the point of maximum variance, which guarantees a conservatively large sample size sufficient for any true proportion.
+
+---
+
+## 4. Hypothesis Testing & ANOVA
+
+### Question 8: Comparing Agricultural Yields (One-Way ANOVA)
+
+**Context:**
+An agricultural team tests three distinct fertilizer formulations ($k = 3$: Fertilizer A, B, and C) on plant growth across $N = 15$ total experimental plots (5 plots per group). The analysis yields:
+- Sum of Squares Between groups ($SSB$): $60$
+- Sum of Squares Within groups ($SSW$): $45$
+
+1. State the Null ($H_0$) and Alternative ($H_a$) hypotheses.
+2. Determine the degrees of freedom between groups ($df_b$) and within groups ($df_w$).
+3. Compute the Mean Square Between ($MSB$) and Mean Square Within ($MSW$).
+4. Compute the $F$-statistic and describe the decision rule.
+
+#### Solution
+
+**1. Hypotheses:**
+- **Null Hypothesis ($H_0$):** All group population means are equal ($\mu_A = \mu_B = \mu_C$).
+- **Alternative Hypothesis ($H_a$):** At least one group mean is significantly different from the others.
+
+**2. Degrees of Freedom:**
+- Between groups: $df_b = k - 1 = 3 - 1 = 2$
+- Within groups: $df_w = N - k = 15 - 3 = 12$
+
+**3. Mean Squares:**
+
+$$MSB = \frac{SSB}{df_b} = \frac{60}{2} = 30$$
+
+$$MSW = \frac{SSW}{df_w} = \frac{45}{12} = 3.75$$
+
+**4. $F$-Statistic Calculation & Decision Rule:**
+
+$$F = \frac{MSB}{MSW} = \frac{30}{3.75} = 8.0$$
+
+- **Decision Rule:** Compare the calculated $F$-statistic ($8.0$) against the critical value from the $F$-distribution table $F_{\alpha}(df_b, df_w) = F_{0.05}(2, 12) \approx 3.89$.
+- **Conclusion:** Since $F_{\text{calc}} = 8.0 > 3.89$, we reject the null hypothesis $H_0$ at the $5\%$ significance level. The fertilizer types result in statistically significant differences in plant growth rates.
+
+---
+
+### Question 9: Checking Die Fairness (Chi-Square Goodness-of-Fit Test)
+
+**Context:**
+A six-sided die is rolled $N = 60$ times to determine if it is biased. The observed counts across faces 1 through 6 are:
+
+| Face | 1 | 2 | 3 | 4 | 5 | 6 |
+| :--- | :-: | :-: | :-: | :-: | :-: | :-: |
+| **Observed Frequency ($O_i$)** | 8 | 10 | 9 | 12 | 11 | 10 |
+
+1. Formulate the Null and Alternative hypotheses.
+2. Compute the Expected Frequency ($E_i$) for each face under the fairness assumption.
+3. Calculate the Chi-Square test statistic ($\chi^2$) and identify the degrees of freedom ($df$).
+
+#### Solution
+
+**1. Hypotheses:**
+- **$H_0$:** The die is fair (the observed distribution matches a discrete uniform distribution where $P(i) = 1/6$ for all $i$).
+- **$H_a$:** The die is biased (the distribution differs significantly from a uniform distribution).
+
+**2. Expected Frequency:**
+For a fair die rolled 60 times across 6 equal outcomes:
+
+$$E_i = \frac{N}{k} = \frac{60}{6} = 10 \quad \text{for each face } i \in \{1, 2, 3, 4, 5, 6\}$$
+
+**3. Chi-Square Statistic ($\chi^2$):**
+
+$$\chi^2 = \sum_{i=1}^k \frac{(O_i - E_i)^2}{E_i}$$
+
+| Face ($i$) | $O_i$ | $E_i$ | $O_i - E_i$ | $(O_i - E_i)^2$ | $\frac{(O_i - E_i)^2}{E_i}$ |
+| :--- | :-: | :-: | :-: | :-: | :-: |
+| 1 | 8 | 10 | -2 | 4 | 0.4 |
+| 2 | 10 | 10 | 0 | 0 | 0.0 |
+| 3 | 9 | 10 | -1 | 1 | 0.1 |
+| 4 | 12 | 10 | 2 | 4 | 0.4 |
+| 5 | 11 | 10 | 1 | 1 | 0.1 |
+| 6 | 10 | 10 | 0 | 0 | 0.0 |
+| **Total** | **60** | **60** | **0** | **-** | **1.0** |
+
+$$\chi^2 = 0.4 + 0.0 + 0.1 + 0.4 + 0.1 + 0.0 = 1.0$$
+
+- **Degrees of Freedom:** $df = k - 1 = 6 - 1 = 5$.
+- **Decision:** The critical value $\chi^2_{0.05, 5} \approx 11.07$. Since $\chi^2_{\text{calc}} = 1.0 < 11.07$, we fail to reject $H_0$. There is insufficient evidence to suggest the die is biased.
+
+---
+
+## 5. Model Verification vs. Validation
+
+### Question 10: Manufacturing Simulation Quality Assurance
+
+**Context:**
+An engineering consultant builds a computer simulation model of an automated automotive assembly line to estimate daily throughput and identify bottlenecks before purchasing physical robotics.
+
+1. Distinguish between the primary question answered by **Model Verification** versus **Model Validation**.
+2. Identify two technical methods to verify the simulation model.
+3. Identify two empirical methods to validate the simulation model.
+
+#### Solution
+
+**1. Conceptual Distinction:**
+- **Verification:** *"Are we building the model correctly?"* Evaluates whether the computer program and mathematical equations conform precisely to the software specifications and design blueprints without coding defects.
+- **Validation:** *"Are we building the right model?"* Evaluates whether the simulation accurately mimics the actual physics, operations, and behavior of the real-world manufacturing line.
+
+**2. Methods for Model Verification:**
+- **Unit and Component Testing:** Writing automated tests for individual subroutines (e.g., verifying that a single robotic arm cycle time logic computes accurately given arbitrary load inputs).
+- **Code Reviews and Algorithm Walkthroughs:** Peer-reviewing source code to ensure equations, event queues, and state transitions are bug-free.
+
+**3. Methods for Model Validation:**
+- **Comparison with Historical/Real Data:** Running the simulation with parameter inputs from an existing plant and comparing simulated cycle times against actual logged cycle times.
+- **Sensitivity Analysis:** Perturbing input variables (e.g., introducing a 10% delay in part arrival) to verify that the simulated throughput drops in a manner consistent with physical manufacturing operations.
+
+---
+
+## 6. Machine Learning & Multivariate Analysis
+
+### Question 11: Machine Learning Algorithm Selection
+
+**Context:**
+A data science team is tasked with four distinct analytical projects. For each scenario:
+- Classify whether it requires **Supervised** or **Unsupervised** learning.
+- State the specific **Technique** (Regression, Classification, Clustering, or Factor Analysis).
+- Recommend an appropriate **Algorithm / Method**.
+
+1. **Task A:** Predicting the sale price of residential properties based on square footage, location coordinates, and construction year.
+2. **Task B:** Automatically grouping customer transactional profiles into distinct behavioral segments without pre-existing labels.
+3. **Task C:** Classifying customer support emails as either "Urgent Escalation" or "General Inquiry" based on historical labeled transcripts.
+4. **Task D:** Condensing a 40-item employee satisfaction survey into 3 primary underlying constructs representing morale, compensation, and leadership.
+
+#### Solution
+
+| Task | Learning Paradigm | Technique | Recommended Algorithm / Method |
+| :--- | :--- | :--- | :--- |
+| **A (House Prices)** | Supervised Learning | Regression (continuous target) | Multiple Linear Regression / Ridge Regression |
+| **B (Customer Segments)** | Unsupervised Learning | Cluster Analysis | $k$-Means Clustering / DBSCAN |
+| **C (Email Triaging)** | Supervised Learning | Classification (discrete categorical) | Naive Bayes / Support Vector Machines (SVM) |
+| **D (Survey Condensation)** | Unsupervised / Multivariate | Factor Analysis | Exploratory Factor Analysis (Principal Axis Factoring) |

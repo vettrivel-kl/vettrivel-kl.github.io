@@ -366,24 +366,25 @@ $$r_{X_2, Y} = \frac{\sum (x_{2,i} - \bar{X}_2)(y_i - \bar{Y})}{\sqrt{\sum (x_{2
 
 ---
 
-## Quick-Facts & Formula Sheet (Descriptive Statistics & Correlation - Population Model)
+## Quick-Facts & Formula Sheet: Population Parameters vs. Sample Statistics
 
-| Metric / Parameter | Mathematical Formula |
-| :--- | :--- |
-| **Arithmetic Mean** | $$\mu = \frac{1}{N} \sum_{i=1}^N x_i$$ |
-| **Median ($N$ is odd)** | $$M = x_{\left(\frac{N+1}{2}\right)}$$ |
-| **Median ($N$ is even)** | $$M = \frac{x_{\left(\frac{N}{2}\right)} + x_{\left(\frac{N}{2}+1\right)}}{2}$$ |
-| **Quartile Position** | $$P(Q_k) = \frac{k(N+1)}{4}$$ |
-| **Quartile Deviation (QD)**| $$QD = \frac{Q_3 - Q_1}{2}$$ |
-| **Coeff of QD** | $$\text{Coeff of QD} = \frac{Q_3 - Q_1}{Q_3 + Q_1}$$ |
-| **Variance** | $$\sigma^2 = \frac{1}{N} \sum_{i=1}^N (x_i - \mu)^2$$ |
-| **Standard Deviation** | $$\sigma = \sqrt{\sigma^2}$$ |
-| **Coeff of SD** | $$\text{Coeff of SD} = \frac{\sigma}{\mu}$$ |
-| **Coeff of Variation (CV)** | $$CV = \left( \frac{\sigma}{\mu} \right) \times 100\%$$ |
-| **Pearson's Skewness ($S_{k,P}$)**| $$S_{k,P} = \frac{3(\mu - M_d)}{\sigma}$$ |
-| **Moment-Based Skewness** | $$\mu_k = \frac{1}{N}\sum(x_i-\mu)^k \implies \gamma_1 = \frac{\mu_3}{\mu_2^{1.5}}$$ |
-| **Pearson's Kurtosis ($\beta_2$)** | $$\beta_2 = \frac{\mu_4}{\mu_2^2}$$ |
-| **Excess Kurtosis ($\gamma_2$)** | $$\gamma_2 = \beta_2 - 3$$ |
-| **Covariance** | $$\sigma_{XY} = \frac{1}{N}\sum(x_i - \mu_X)(y_i - \mu_Y)$$ |
-| **Pearson Correlation ($r$)** | $$r = \frac{\sigma_{XY}}{\sigma_X \sigma_Y} = \frac{\sum(x_i-\mu_X)(y_i-\mu_Y)}{\sqrt{\sum(x_i-\mu_X)^2 \sum(y_i-\mu_Y)^2}}$$ |
-| **Spearman's Rank Correlation** | $$\rho = 1 - \frac{6 \sum d_i^2}{N(N^2 - 1)}$$ |
+| Statistical Measure | Population Parameter Formula | Sample Statistic Formula | Key Mathematical Distinction |
+| :--- | :--- | :--- | :--- |
+| **Arithmetic Mean** | $\mu = \frac{1}{N} \sum_{i=1}^N x_i$ | $\bar{x} = \frac{1}{n} \sum_{i=1}^n x_i$ | $\bar{x}$ is an unbiased estimator of $\mu$ ($\mathbb{E}[\bar{x}] = \mu$). |
+| **Median (Odd Count)** | $M = x_{\left(\frac{N+1}{2}\right)}$ | $M = x_{\left(\frac{n+1}{2}\right)}$ | Position is based on sample size $n$ rather than population size $N$. |
+| **Median (Even Count)** | $M = \frac{x_{(N/2)} + x_{(N/2 + 1)}}{2}$ | $M = \frac{x_{(n/2)} + x_{(n/2 + 1)}}{2}$ | Arithmetic average of the two central ordered items. |
+| **Quartile Position ($Q_k$)** | $P(Q_k) = \frac{k(N+1)}{4}$ | $P(Q_k) = \frac{k(n+1)}{4}$ | Continuous interpolation position index for $k \in \{1, 2, 3\}$. |
+| **Quartile Deviation (QD)** | $QD = \frac{Q_3 - Q_1}{2}$ | $QD = \frac{Q_3 - Q_1}{2}$ | Semi-interquartile range; identical formulation on sample quartiles. |
+| **Coefficient of QD** | $\text{Coeff of QD} = \frac{Q_3 - Q_1}{Q_3 + Q_1}$ | $\text{Coeff of QD} = \frac{Q_3 - Q_1}{Q_3 + Q_1}$ | Relative scale-free measure of dispersion based on quartiles. |
+| **Variance** | $\sigma^2 = \frac{1}{N} \sum_{i=1}^N (x_i - \mu)^2$ | $s^2 = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2$ | **Bessel's Correction ($n-1$):** Dividing by $n-1$ removes systematic negative bias ($\mathbb{E}[s^2] = \sigma^2$). |
+| **Standard Deviation** | $\sigma = \sqrt{\frac{1}{N} \sum_{i=1}^N (x_i - \mu)^2}$ | $s = \sqrt{\frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})^2}$ | Measured in the original physical units of the underlying variable. |
+| **Coefficient of SD** | $\text{Coeff of SD} = \frac{\sigma}{\mu}$ | $\text{Coeff of SD} = \frac{s}{\bar{x}}$ | Relative dispersion normalized by the mean. |
+| **Coefficient of Variation (CV)** | $CV = \left( \frac{\sigma}{\mu} \right) \times 100\%$ | $CV = \left( \frac{s}{\bar{x}} \right) \times 100\%$ | Percentage metric used to evaluate consistency and reliability across cohorts. |
+| **Pearson's Skewness ($S_{k,P}$)** | $S_{k,P} = \frac{3(\mu - M_d)}{\sigma}$ | $S_{k,P} = \frac{3(\bar{x} - M_d)}{s}$ | Evaluates directional asymmetry around the central location. |
+| **$k$-th Central Moment** | $\mu_k = \frac{1}{N} \sum_{i=1}^N (x_i - \mu)^k$ | $m_k = \frac{1}{n} \sum_{i=1}^n (x_i - \bar{x})^k$ | Mean-centered moments describing distribution geometry. |
+| **Moment Skewness ($\gamma_1$)** | $\gamma_1 = \frac{\mu_3}{\mu_2^{1.5}} = \frac{\mu_3}{\sigma^3}$ | $g_1 = \frac{m_3}{m_2^{1.5}} \approx \frac{m_3}{s^3}$ | Measures asymmetry; $\gamma_1 > 0$ right-skewed, $\gamma_1 < 0$ left-skewed. |
+| **Pearson's Kurtosis ($\beta_2$)** | $\beta_2 = \frac{\mu_4}{\mu_2^2} = \frac{\mu_4}{\sigma^4}$ | $b_2 = \frac{m_4}{m_2^2} \approx \frac{m_4}{s^4}$ | Measures peakedness and tail thickness relative to the normal curve. |
+| **Excess Kurtosis ($\gamma_2$)** | $\gamma_2 = \beta_2 - 3$ | $g_2 = b_2 - 3$ | $\gamma_2 > 0$ Leptokurtic, $\gamma_2 = 0$ Mesokurtic, $\gamma_2 < 0$ Platykurtic. |
+| **Covariance** | $\sigma_{XY} = \frac{1}{N} \sum_{i=1}^N (x_i - \mu_X)(y_i - \mu_Y)$ | $s_{XY} = \frac{1}{n-1} \sum_{i=1}^n (x_i - \bar{x})(y_i - \bar{y})$ | Bivariate joint directional variability; sample divides by $n-1$. |
+| **Pearson Correlation ($r$)** | $\rho = \frac{\sigma_{XY}}{\sigma_X \sigma_Y} = \frac{\sum (x_i - \mu_X)(y_i - \mu_Y)}{\sqrt{\sum (x_i - \mu_X)^2 \sum (y_i - \mu_Y)^2}}$ | $r = \frac{s_{XY}}{s_X s_Y} = \frac{\sum (x_i - \bar{x})(y_i - \bar{y})}{\sqrt{\sum (x_i - \bar{x})^2 \sum (y_i - \bar{y})^2}}$ | Scale-invariant linear dependency bounded strictly in $[-1, +1]$. |
+| **Spearman's Rank Correlation** | $\rho_s = 1 - \frac{6 \sum d_i^2}{N(N^2 - 1)}$ | $r_s = 1 - \frac{6 \sum d_i^2}{n(n^2 - 1)}$ | Non-parametric monotonic association between ranked sequences. |
