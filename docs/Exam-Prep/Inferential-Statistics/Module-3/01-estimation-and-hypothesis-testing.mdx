@@ -517,6 +517,66 @@ $$Z_{\text{calc}} = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}} = \frac{24 - 25}{0
 
 ---
 
+### Comparative Variant: One-Tailed Formulation (Car Mileage Underperformance)
+
+**Alternative Question Framing:** What if consumer advocates claimed specifically that the new car **fails to achieve** the advertised 25 kmph (i.e. mean mileage is strictly less than 25 kmph)?
+
+#### 1. Hypothesis Formulation (Left-Tailed)
+*   **Null Hypothesis ($H_0$):** $\mu \ge 25 \text{ kmph}$ (Car meets or exceeds advertised mileage)
+*   **Alternative Hypothesis ($H_1$):** $\mu < 25 \text{ kmph}$ (Car underperforms advertised mileage)
+*   **Significance Level:** $\alpha = 0.01$ (concentrated entirely in the lower tail).
+
+#### 2. Test Statistic ($Z_{\text{calc}}$)
+The test statistic formula and value remain identical because sample data has not changed:
+$$Z_{\text{calc}} = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}} = \frac{24 - 25}{2.5 / \sqrt{45}} \approx \mathbf{-2.683}$$
+
+#### 3. One-Tailed Distribution & Critical Region Graph
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    {/* Base Axis */}
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    
+    {/* Shaded Left Rejection Region (α = 0.01, z = -2.326 at x = 125) */}
+    <path d="M 50 170 C 80 170 105 162 125 140 L 125 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    
+    {/* Shaded Acceptance Region */}
+    <path d="M 125 170 L 125 140 C 160 90 190 35 250 35 C 320 35 370 110 450 170 L 125 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    
+    {/* Bell Curve Outline */}
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    
+    {/* Critical Cutoff Line */}
+    <line x1="125" y1="140" x2="125" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    
+    {/* Calculated Z Marker (Z_calc = -2.683 falls at x = 100) */}
+    <line x1="100" y1="115" x2="100" y2="170" stroke="#3b82f6" strokeWidth="2.5" />
+    <polygon points="100,115 95,105 105,105" fill="#3b82f6" />
+    <text x="100" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#3b82f6">Z_calc = -2.68</text>
+    
+    {/* Text Labels */}
+    <text x="275" y="110" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H0)</text>
+    <text x="125" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">-z_α = -2.326</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">μ0 = 25 kmph (Z = 0)</text>
+    <text x="80" y="152" textAnchor="middle" fontSize="10" fill="#ef4444">Rejection (α = 0.01)</text>
+  </svg>
+</div>
+
+#### 4. Comparison of Two-Tailed vs. One-Tailed Evaluation
+
+| Decision Dimension | Two-Tailed Test ($H_1: \mu \neq 25$) | One-Tailed Left Test ($H_1: \mu < 25$) | Analytical Insight |
+| :--- | :--- | :--- | :--- |
+| **Significance Level ($\alpha$)** | $\alpha = 0.01$ split: $\alpha/2 = 0.005$ per tail | Full $\alpha = 0.01$ in the left tail | All risk is concentrated in the hypothesized direction. |
+| **Critical Cutoff Value** | $\pm z_{0.005} = \pm 2.575$ | $-z_{0.01} = -2.326$ | The critical boundary moves **closer to the mean** (easier to reject). |
+| **Rejection Criterion** | Reject if $\lvert Z_{\text{calc}} \rvert > 2.575$ | Reject if $Z_{\text{calc}} < -2.326$ | Observed $Z = -2.683$ satisfies both rules. |
+| **P-Value** | $p = 2 \cdot P(Z < -2.683) = \mathbf{0.0073}$ | $p = P(Z < -2.683) = \mathbf{0.00365}$ | **One-tailed p-value is exactly half** the two-tailed p-value. |
+| **Statistical Decision** | **Reject $H_0$** | **Reject $H_0$** | Even stronger statistical significance ($p = 0.365\% \ll 1\%$). |
+
+> **Key Rule of Thumb:** When switching from a two-tailed to a directional one-tailed test that aligns with the observed direction of the sample difference, the **$p$-value is halved**, increasing the power to detect the hypothesized effect.
+
+---
+
 ## Question 11: One-Sample Left-Tailed Z-Test (PVC Pipe Thickness)
 
 ### Question Details

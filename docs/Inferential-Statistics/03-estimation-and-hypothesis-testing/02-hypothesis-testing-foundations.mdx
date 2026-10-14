@@ -26,17 +26,17 @@ The hypothesis of **no effect**, **no difference**, or **status quo**. It repres
 *   Contains an equality condition ($=$, $\ge$, or $\le$).
 *   Example: A manufacturing plant claims battery lifespan is 25,500 hours ($H_0: \mu = 25500$).
 
-### The Alternative Hypothesis ($H_1$ or $H_a$)
-The **research hypothesis** or claim of interest. It represents the claim that there is a genuine effect, difference, or change.
+### The Alternative Hypothesis ($H_a$)
+The **research hypothesis** or claim of interest (also denoted $H_1$ in some literature, but standardized as $H_a$ throughout these notes). It represents the claim that there is a genuine effect, difference, or change.
 *   Directly contradicts the null hypothesis.
 *   Contains a strict inequality ($\neq$, $<$, or $>$).
-*   Example: A consumer watchdog claims the battery lifespan is less than 25,500 hours ($H_1: \mu < 25500$).
+*   Example: A consumer watchdog claims the battery lifespan is less than 25,500 hours ($H_a: \mu < 25500$).
 
 ```mermaid
 flowchart TD
     A["Statistical Claim"] --> B{"Nature of Claim"}
     B -->|Equality / Status Quo| C["Null Hypothesis H0 (e.g. μ = μ0)"]
-    B -->|Difference / Improvement| D["Alternative Hypothesis H1 (e.g. μ ≠ μ0, μ &gt; μ0)"]
+    B -->|Difference / Improvement| D["Alternative Hypothesis Ha (e.g. μ ≠ μ0, μ &gt; μ0)"]
 ```
 
 ---
@@ -51,7 +51,7 @@ In scientific hypothesis testing, we **never "accept" the null hypothesis**. We 
 
 **The Legal Analogy: Presumption of Innocence**
 
-In a criminal trial, the defendant is presumed innocent until proven guilty ($H_0$: Innocent, $H_1$: Guilty). If evidence is lacking, the jury returns a verdict of **"Not Guilty"**, not **"Innocent"**. Failing to prove guilt does not prove innocence; it merely reflects an absence of conclusive evidence beyond a reasonable doubt.
+In a criminal trial, the defendant is presumed innocent until proven guilty ($H_0$: Innocent, $H_a$: Guilty). If evidence is lacking, the jury returns a verdict of **"Not Guilty"**, not **"Innocent"**. Failing to prove guilt does not prove innocence; it merely reflects an absence of conclusive evidence beyond a reasonable doubt.
 
 :::
 
@@ -92,27 +92,27 @@ The probability of correctly rejecting a false null hypothesis. High power ($> 8
 
 ## 4. Number of Tails
 
-The mathematical direction in $H_1$ determines the placement of the rejection region under the null sampling distribution:
+The mathematical direction in $H_a$ determines the placement of the rejection region under the null sampling distribution:
 
 <Tabs>
   <TabItem value="two" label="Two-Tailed Test (≠)" default>
     <br/>
     
-    *   **Hypothesis:** $H_0: \mu = \mu_0$ vs. $H_1: \mu \neq \mu_0$
+    *   **Hypothesis:** $H_0: \mu = \mu_0$ vs. $H_a: \mu \neq \mu_0$
     *   **Rejection Region:** Split equally into both tails ($\alpha / 2$ in each tail).
     *   **Use Case:** Testing whether average output differs in either direction (e.g., machine filling bottles: both underfilling and overfilling are defects).
   </TabItem>
   <TabItem value="left" label="Left-Tailed Test (<)">
     <br/>
     
-    *   **Hypothesis:** $H_0: \mu \ge \mu_0$ vs. $H_1: \mu < \mu_0$
+    *   **Hypothesis:** $H_0: \mu \ge \mu_0$ vs. $H_a: \mu < \mu_0$
     *   **Rejection Region:** Entire significance area $\alpha$ is concentrated in the left (lower) tail.
     *   **Use Case:** Testing for reductions (e.g., drug reducing recovery time, algorithm reducing API response latency).
   </TabItem>
   <TabItem value="right" label="Right-Tailed Test (>)">
     <br/>
     
-    *   **Hypothesis:** $H_0: \mu \le \mu_0$ vs. $H_1: \mu > \mu_0$
+    *   **Hypothesis:** $H_0: \mu \le \mu_0$ vs. $H_a: \mu > \mu_0$
     *   **Rejection Region:** Entire significance area $\alpha$ is concentrated in the right (upper) tail.
     *   **Use Case:** Testing for increases (e.g., campaign increasing sales, engine increasing fuel efficiency).
   </TabItem>
@@ -122,13 +122,13 @@ The mathematical direction in $H_1$ determines the placement of the rejection re
 
 | Business Scenario | Formulated Hypotheses | Test Type | Tail Placement |
 | :--- | :--- | :--- | :--- |
-| **Bolt Production:** A company claims that the average number of bolts manufactured daily is 60. | $H_0: \mu = 60$<br/>$H_1: \mu \neq 60$ | **Two-Tailed** | Split equally across both tails ($\alpha / 2$) |
-| **Virus Testing Kit:** A new testing kit takes less time than the standard kit that takes 34 hours for results. | $H_0: \mu \ge 34$<br/>$H_1: \mu < 34$ | **Left-Tailed** | Concentrated entirely in the lower tail ($\alpha$) |
-| **Stock Outperformance:** An analyst tests whether Apple Inc. stock outperformed in 2019 by more than 13.5%. | $H_0: \mu \le 13.5$<br/>$H_1: \mu > 13.5$ | **Right-Tailed** | Concentrated entirely in the upper tail ($\alpha$) |
+| **Bolt Production:** A company claims that the average number of bolts manufactured daily is 60. | $H_0: \mu = 60$<br/>$H_a: \mu \neq 60$ | **Two-Tailed** | Split equally across both tails ($\alpha / 2$) |
+| **Virus Testing Kit:** A new testing kit takes less time than the standard kit that takes 34 hours for results. | $H_0: \mu \ge 34$<br/>$H_a: \mu < 34$ | **Left-Tailed** | Concentrated entirely in the lower tail ($\alpha$) |
+| **Stock Outperformance:** An analyst tests whether Apple Inc. stock outperformed in 2019 by more than 13.5%. | $H_0: \mu \le 13.5$<br/>$H_a: \mu > 13.5$ | **Right-Tailed** | Concentrated entirely in the upper tail ($\alpha$) |
 
 ### Practice Check: Identifying Test Types
 
-| Objective | Null Hypothesis ($H_0$) | Alternative Hypothesis ($H_1$) | Classification |
+| Objective | Null Hypothesis ($H_0$) | Alternative Hypothesis ($H_a$) | Classification |
 | :--- | :--- | :--- | :--- |
 | Mean diastolic blood pressure for 85 adults is less than 90 mm | $\mu \ge 90$ | $\mu < 90$ | **Left-Tailed Test** |
 | Tensile strength of an alloy is more than 500 Pa | $\mu \le 500$ | $\mu > 500$ | **Right-Tailed Test** |
@@ -180,7 +180,7 @@ Construct the $100(1 - \alpha)\%$ confidence interval around the sample mean $\b
       </div>
       <div className="card__body">
         <ul>
-          <li><b>Directionality:</b> Direction of $H_1$ determines the critical tail. $\neq$ yields two tails; $&lt;$ yields left tail; $&gt;$ yields right tail.</li>
+          <li><b>Directionality:</b> Direction of $H_a$ determines the critical tail. $\neq$ yields two tails; $&lt;$ yields left tail; $&gt;$ yields right tail.</li>
           <li><b>Equivalence:</b> The Critical Region, P-value, and Confidence Interval approaches always yield identical statistical decisions for two-tailed tests.</li>
         </ul>
       </div>
@@ -194,7 +194,7 @@ Construct the $100(1 - \alpha)\%$ confidence interval around the sample mean $\b
       <div className="card__body">
         <ul>
           <li><b>Never say 'Accept H0':</b> Lack of evidence against the null is not proof of the null.</li>
-          <li><b>Do not change tails post-hoc:</b> Formulate $H_0$ and $H_1$ before observing the sample data to avoid p-hacking.</li>
+          <li><b>Do not change tails post-hoc:</b> Formulate $H_0$ and $H_a$ before observing the sample data to avoid p-hacking.</li>
         </ul>
       </div>
     </div>

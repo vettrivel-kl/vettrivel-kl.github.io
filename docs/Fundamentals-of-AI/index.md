@@ -71,6 +71,14 @@ tags: [python, ai-foundations]
 | [Seaborn](./07-visualization/03-seaborn.md) | `data=`/`x=`/`y=`, box, violin, heatmap, pair plot |
 | [Plotly](./07-visualization/04-plotly.md) | Interactive charts, `hover_data`, bubble charts, exporting |
 
+### 8 · AI & Search Techniques
+
+| Page | Covers |
+|---|---|
+| [Introduction to AI](./08-intro-to-ai-and-search/01-introduction-to-ai.mdx) | Definitions, Turing Test, historical timeline, and AI classifications |
+| [Intelligent Agents](./08-intro-to-ai-and-search/02-intelligent-agents.mdx) | PEAS framework, task environment properties, agent architectures |
+| [Problem Solving & State Space](./08-intro-to-ai-and-search/03-problem-solving-and-formulation.mdx) | State space formulation, 7 problem characteristics, toy and real-world problems |
+
 ## Practice questions {#practice-questions}
 
 Most pages end with a **Practice Questions** section, drawn from the Unit 1 and Unit 2
