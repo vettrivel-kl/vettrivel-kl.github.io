@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkvettrivel_com=self.webpackChunkvettrivel_com||[]).push([["3017"],{37632(e,c,r){r.d(c,{createWardleyServices:()=>t.J});var t=r(9427);r(4954)}}]);

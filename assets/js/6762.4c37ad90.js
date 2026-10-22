@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkvettrivel_com=self.webpackChunkvettrivel_com||[]).push([["6762"],{37089(e,c,t){t.d(c,{createArchitectureServices:()=>r.S});var r=t(45796);t(4954)}}]);
