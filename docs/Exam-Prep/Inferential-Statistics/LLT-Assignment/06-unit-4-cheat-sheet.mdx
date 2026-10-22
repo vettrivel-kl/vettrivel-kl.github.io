@@ -30,7 +30,7 @@ This cheat sheet is explicitly divided:
 
 The first step in any hypothesis test is translating the English claim into mathematical symbols to determine the direction of the test:
 
-| Question Keyword | Alternative Hypothesis ($H_1$) | Test Direction | Rejection Region |
+| Question Keyword | Alternative Hypothesis ($H_a$) | Test Direction | Rejection Region |
 | :--- | :---: | :--- | :--- |
 | *"Is different from," "has changed," "is not equal"* | $\mu \neq \mu_0$ | **Two-Tailed** | Split across both tails ($\alpha/2$) |
 | *"Is greater than," "has increased," "lasts longer"* | $\mu > \mu_0$ | **Right-Tailed** | Upper tail only ($\alpha$) |
@@ -85,7 +85,7 @@ Regardless of whether you use a $Z$ or $t$ test, the decision logic is always id
 #### Archetype 1: One-Sample $Z$-Test (Two-Tailed)
 > **Scenario:** Claim: average sugar content is $15\text{g}$ with $\sigma = 3\text{g}$. A sample of $n = 50$ cans has mean $\bar{x} = 14\text{g}$. Test at $\alpha = 0.05$.
 
-1.  **Hypotheses:** $H_0: \mu = 15$ vs $H_1: \mu \neq 15$ ($\alpha/2 = 0.025$).
+1.  **Hypotheses:** $H_0: \mu = 15$ vs $H_a: \mu \neq 15$ ($\alpha/2 = 0.025$).
 2.  **Standard Error & Test Statistic:**
     $$SE = \frac{3}{\sqrt{50}} \approx 0.4243 \implies Z_{\text{cal}} = \frac{14 - 15}{0.4243} \approx \mathbf{-2.36}$$
 3.  **Critical Region Method:** $Z_{\text{crit}} = \pm 1.96$. Since $-2.36 < -1.96 \implies$ **Reject $H_0$**.
@@ -97,7 +97,7 @@ Regardless of whether you use a $Z$ or $t$ test, the decision logic is always id
 #### Archetype 2: One-Sample $t$-Test (One-Tailed)
 > **Scenario:** Manufacturer claims battery life is at least $20\text{ hours}$. Sample of $n = 30$ has $\bar{x} = 18\text{ hours}$ and $s = 4\text{ hours}$. Test at $\alpha = 0.05$.
 
-1.  **Hypotheses:** $H_0: \mu \ge 20$ vs $H_1: \mu < 20$ (Left-tailed, $df = 30 - 1 = 29$).
+1.  **Hypotheses:** $H_0: \mu \ge 20$ vs $H_a: \mu < 20$ (Left-tailed, $df = 30 - 1 = 29$).
 2.  **Standard Error & Test Statistic:**
     $$SE = \frac{4}{\sqrt{30}} \approx 0.7303 \implies t_{\text{cal}} = \frac{18 - 20}{0.7303} \approx \mathbf{-2.74}$$
 3.  **Critical Region Method:** Left-tailed $t_{\text{crit}} = -1.699$. Since $-2.74 < -1.699 \implies$ **Reject $H_0$**.
@@ -109,7 +109,7 @@ Regardless of whether you use a $Z$ or $t$ test, the decision logic is always id
 #### Archetype 3: Two-Sample Independent $Z$-Test
 > **Scenario:** Battery A ($n_1 = 50, \bar{x}_1 = 280\text{h}, s_1 = 20\text{h}$) vs Battery B ($n_2 = 40, \bar{x}_2 = 260\text{h}, s_2 = 25\text{h}$). Test if Battery A lasts longer at $\alpha = 0.05$.
 
-1.  **Hypotheses:** $H_0: \mu_A \le \mu_B$ vs $H_1: \mu_A > \mu_B$ (Right-tailed, $\alpha = 0.05$).
+1.  **Hypotheses:** $H_0: \mu_A \le \mu_B$ vs $H_a: \mu_A > \mu_B$ (Right-tailed, $\alpha = 0.05$).
 2.  **Standard Error & Test Statistic:**
     $$SE_{\text{diff}} = \sqrt{\frac{20^2}{50} + \frac{25^2}{40}} = \sqrt{8 + 15.625} \approx 4.8606$$
     $$Z_{\text{cal}} = \frac{280 - 260}{4.8606} \approx \mathbf{+4.11}$$

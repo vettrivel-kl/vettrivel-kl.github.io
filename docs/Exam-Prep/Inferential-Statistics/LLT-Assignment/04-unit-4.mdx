@@ -41,7 +41,7 @@ A beverage company claims that the average sugar content in their new energy dri
 
 ##### Hypotheses & Given Parameters
 *   **Null Hypothesis ($H_0$):** $\mu = 15\text{ g}$
-*   **Alternative Hypothesis ($H_1$):** $\mu \neq 15\text{ g}$ (Two-tailed test, $\alpha = 0.05 \implies \alpha/2 = 0.025$)
+*   **Alternative Hypothesis ($H_a$):** $\mu \neq 15\text{ g}$ (Two-tailed test, $\alpha = 0.05 \implies \alpha/2 = 0.025$)
 *   **Parameters:** $\mu_0 = 15\text{ g}, \, \bar{x} = 14\text{ g}, \, \sigma = 3\text{ g}, \, n = 50\text{ cans}$ ($n \ge 30 \implies Z$-test)
 
 ##### Standard Error & Test Statistic
@@ -59,10 +59,10 @@ $$Z_{\text{cal}} = \frac{\bar{x} - \mu_0}{SE} = \frac{14 - 15}{0.4243} \approx \
     {/* Base Axis */}
     <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
     
-    {/* Shaded Left Rejection Region (H1) */}
+    {/* Shaded Left Rejection Region (Ha) */}
     <path d="M 50 170 C 80 170 100 162 120 145 L 120 170 Z" fill="rgba(239, 68, 68, 0.35)" />
     
-    {/* Shaded Right Rejection Region (H1) */}
+    {/* Shaded Right Rejection Region (Ha) */}
     <path d="M 380 145 C 400 162 420 170 450 170 L 380 170 Z" fill="rgba(239, 68, 68, 0.35)" />
     
     {/* Shaded Acceptance Region (H0) */}
@@ -123,7 +123,7 @@ An electronics manufacturer claims that the average battery life of their latest
 
 ##### Hypotheses & Given Parameters
 *   **Null Hypothesis ($H_0$):** $\mu \ge 20\text{ hours}$
-*   **Alternative Hypothesis ($H_1$):** $\mu < 20\text{ hours}$ (Left-tailed test, $\alpha = 0.05$)
+*   **Alternative Hypothesis ($H_a$):** $\mu < 20\text{ hours}$ (Left-tailed test, $\alpha = 0.05$)
 *   **Parameters:** $\mu_0 = 20\text{ h}, \, \bar{x} = 18\text{ h}, \, s = 4\text{ h}, \, n = 30 \implies df = 30 - 1 = \mathbf{29}$
 
 ##### Standard Error & Test Statistic
@@ -141,7 +141,7 @@ $$t_{\text{cal}} = \frac{\bar{x} - \mu_0}{SE} = \frac{18 - 20}{0.7303} \approx \
     {/* Base Axis */}
     <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
     
-    {/* Shaded Left Rejection Region (H1) */}
+    {/* Shaded Left Rejection Region (Ha) */}
     <path d="M 50 170 C 80 170 115 160 145 130 L 145 170 Z" fill="rgba(239, 68, 68, 0.35)" />
     
     {/* Shaded Acceptance Region (H0) */}
@@ -199,7 +199,7 @@ A health organization states that the average daily intake of water for adults s
 
 ##### Hypotheses & Given Parameters
 *   **Null Hypothesis ($H_0$):** $\mu \ge 3.0\text{ liters}$
-*   **Alternative Hypothesis ($H_1$):** $\mu < 3.0\text{ liters}$ (Left-tailed test, $\alpha = 0.01$)
+*   **Alternative Hypothesis ($H_a$):** $\mu < 3.0\text{ liters}$ (Left-tailed test, $\alpha = 0.01$)
 *   **Parameters:** $\mu_0 = 3.0\text{ L}, \, \bar{x} = 2.5\text{ L}, \, s = 0.8\text{ L}, \, n = 40 \implies df = \mathbf{39}$
 
 ##### Standard Error & Test Statistic
@@ -260,7 +260,7 @@ A bakery claims that their average weight of a dozen cookies is 300 grams. To te
 ### Solution 4
 
 ##### Hypotheses & Parameters
-*   $H_0: \mu = 300\text{ g}$ vs $H_1: \mu \neq 300\text{ g}$ (Two-tailed, $\alpha = 0.05$)
+*   $H_0: \mu = 300\text{ g}$ vs $H_a: \mu \neq 300\text{ g}$ (Two-tailed, $\alpha = 0.05$)
 *   $\mu_0 = 300\text{ g}, \, \bar{x} = 295\text{ g}, \, s = 10\text{ g}, \, n = 20 \implies df = \mathbf{19}$
 *   $SE = \frac{10}{\sqrt{20}} \approx \mathbf{2.2361\text{ g}}$
 
@@ -311,7 +311,7 @@ A manufacturer of light bulbs claims that their bulbs last at least 1000 hours o
 ### Solution 5
 
 ##### Hypotheses & Parameters
-*   $H_0: \mu \ge 1000\text{ hrs}$ vs $H_1: \mu < 1000\text{ hrs}$ (Left-tailed, $\alpha = 0.01$)
+*   $H_0: \mu \ge 1000\text{ hrs}$ vs $H_a: \mu < 1000\text{ hrs}$ (Left-tailed, $\alpha = 0.01$)
 *   $\mu_0 = 1000\text{ h}, \, \bar{x} = 950\text{ h}, \, s = 50\text{ h}, \, n = 15 \implies df = \mathbf{14}$
 *   $SE = \frac{50}{\sqrt{15}} \approx \mathbf{12.91\text{ hrs}}$
 *   $t_{\text{cal}} = \frac{950 - 1000}{12.91} \approx \mathbf{-3.873}$
@@ -358,7 +358,7 @@ A new fitness program claims that participants lose an average of at least 4 kg 
 ### Solution 6
 
 ##### Hypotheses & Parameters
-*   $H_0: \mu \le 4\text{ kg}$ vs $H_1: \mu > 4\text{ kg}$ (Right-tailed, $\alpha = 0.05$)
+*   $H_0: \mu \le 4\text{ kg}$ vs $H_a: \mu > 4\text{ kg}$ (Right-tailed, $\alpha = 0.05$)
 *   $\mu_0 = 4\text{ kg}, \, \bar{x} = 5.5\text{ kg}, \, s = 1.5\text{ kg}, \, n = 12 \implies df = \mathbf{11}$
 *   $SE = \frac{1.5}{\sqrt{12}} \approx \mathbf{0.4330\text{ kg}}$
 *   $t_{\text{cal}} = \frac{5.5 - 4.0}{0.4330} \approx \mathbf{+3.464}$
@@ -373,7 +373,7 @@ A new fitness program claims that participants lose an average of at least 4 kg 
     {/* Base Axis */}
     <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
     
-    {/* Shaded Right Rejection Region (H1) */}
+    {/* Shaded Right Rejection Region (Ha) */}
     <path d="M 355 130 C 385 160 420 170 450 170 L 355 170 Z" fill="rgba(239, 68, 68, 0.35)" />
     
     {/* Shaded Acceptance Region (H0) */}
@@ -426,7 +426,7 @@ A school claims that at least 30% of its students participate in extracurricular
 ### Solution 7
 
 ##### Hypotheses & Parameters
-*   $H_0: p \ge 0.30$ vs $H_1: p < 0.30$ (Left-tailed, $\alpha = 0.01$)
+*   $H_0: p \ge 0.30$ vs $H_a: p < 0.30$ (Left-tailed, $\alpha = 0.01$)
 *   $p_0 = 0.30, \, q_0 = 0.70, \, n = 200, \, x = 50 \implies \hat{p} = \frac{50}{200} = \mathbf{0.25}$
 *   $SE_0 = \sqrt{\frac{0.30 \times 0.70}{200}} \approx \mathbf{0.0324}$
 *   $Z_{\text{cal}} = \frac{0.25 - 0.30}{0.0324} \approx \mathbf{-1.54}$
@@ -441,7 +441,7 @@ A school claims that at least 30% of its students participate in extracurricular
     {/* Base Axis */}
     <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
     
-    {/* Shaded Left Rejection Region (H1) */}
+    {/* Shaded Left Rejection Region (Ha) */}
     <path d="M 50 170 C 75 170 95 165 110 150 L 110 170 Z" fill="rgba(239, 68, 68, 0.35)" />
     
     {/* Shaded Acceptance Region (H0) */}
@@ -494,7 +494,7 @@ A recent survey found that 60% of people prefer coffee over tea. To test this cl
 ### Solution 8
 
 ##### Hypotheses & Parameters
-*   $H_0: p = 0.60$ vs $H_1: p \neq 0.60$ (Two-tailed, $\alpha = 0.05$)
+*   $H_0: p = 0.60$ vs $H_a: p \neq 0.60$ (Two-tailed, $\alpha = 0.05$)
 *   $p_0 = 0.60, \, q_0 = 0.40, \, n = 150, \, x = 70 \implies \hat{p} = \frac{70}{150} \approx \mathbf{0.4667}$
 *   $SE_0 = \sqrt{\frac{0.60 \times 0.40}{150}} = \mathbf{0.0400}$
 *   $Z_{\text{cal}} = \frac{0.4667 - 0.60}{0.0400} \approx \mathbf{-3.33}$
@@ -552,7 +552,7 @@ A health department claims that more than 25% of adults in a city are physically
 ### Solution 9
 
 ##### Hypotheses & Parameters
-*   $H_0: p \le 0.25$ vs $H_1: p > 0.25$ (Right-tailed, $\alpha = 0.05$)
+*   $H_0: p \le 0.25$ vs $H_a: p > 0.25$ (Right-tailed, $\alpha = 0.05$)
 *   $p_0 = 0.25, \, q_0 = 0.75, \, n = 400, \, x = 120 \implies \hat{p} = \frac{120}{400} = \mathbf{0.30}$
 *   $SE_0 = \sqrt{\frac{0.25 \times 0.75}{400}} \approx \mathbf{0.02165}$
 *   $Z_{\text{cal}} = \frac{0.30 - 0.25}{0.02165} \approx \mathbf{+2.31}$
@@ -616,7 +616,7 @@ A manufacturer produces two types of batteries and claims that the new battery (
 ### Solution 10
 
 ##### Hypotheses & Parameters
-*   $H_0: \mu_A \le \mu_B$ vs $H_1: \mu_A > \mu_B$ (Right-tailed, $\alpha = 0.05$)
+*   $H_0: \mu_A \le \mu_B$ vs $H_a: \mu_A > \mu_B$ (Right-tailed, $\alpha = 0.05$)
 *   Battery A: $n_A = 50, \, \bar{x}_A = 280\text{ h}, \, s_A = 20\text{ h}$
 *   Battery B: $n_B = 40, \, \bar{x}_B = 260\text{ h}, \, s_B = 25\text{ h}$
 *   $$SE_{\text{diff}} = \sqrt{\frac{20^2}{50} + \frac{25^2}{40}} = \sqrt{8.0 + 15.625} \approx \mathbf{4.8606\text{ hours}}$$
@@ -681,7 +681,7 @@ A nutritional study is conducted to compare the average sugar content in two dif
 ### Solution 11
 
 ##### Hypotheses & Parameters
-*   $H_0: \mu_X = \mu_Y$ vs $H_1: \mu_X \neq \mu_Y$ (Two-tailed, $\alpha = 0.01$)
+*   $H_0: \mu_X = \mu_Y$ vs $H_a: \mu_X \neq \mu_Y$ (Two-tailed, $\alpha = 0.01$)
 *   Brand X: $n_X = 30, \, \bar{x}_X = 12\text{ g}, \, s_X = 3\text{ g}$
 *   Brand Y: $n_Y = 25, \, \bar{x}_Y = 10\text{ g}, \, s_Y = 4\text{ g}$
 *   $$SE_{\text{diff}} = \sqrt{\frac{3^2}{30} + \frac{4^2}{25}} = \sqrt{0.30 + 0.64} \approx \mathbf{0.9695\text{ g}}$$
@@ -732,7 +732,7 @@ A company wants to compare the effectiveness of two different promotional strate
 ### Solution 12
 
 ##### Hypotheses & Sample Metrics
-*   $H_0: \mu_1 = \mu_2$ vs $H_1: \mu_1 \neq \mu_2$ (Two-tailed, $\alpha = 0.01, \, df = 5 + 5 - 2 = \mathbf{8}$)
+*   $H_0: \mu_1 = \mu_2$ vs $H_a: \mu_1 \neq \mu_2$ (Two-tailed, $\alpha = 0.01, \, df = 5 + 5 - 2 = \mathbf{8}$)
 *   Strategy 1: $\bar{x}_1 = 50.0, \, \sum (x_{1i} - \bar{x}_1)^2 = 250.0$
 *   Strategy 2: $\bar{x}_2 = 59.8, \, \sum (x_{2i} - \bar{x}_2)^2 = 62.8$
 *   Pooled Variance: $s_p^2 = \frac{250.0 + 62.8}{8} = \mathbf{39.10}$
@@ -795,7 +795,7 @@ At a significance level of 0.01, is there sufficient evidence to conclude that t
 ### Solution 13
 
 ##### Hypotheses & Differences Metrics
-*   Let $d = \text{After} - \text{Before}$. $H_0: \mu_d \le 0$ vs $H_1: \mu_d > 0$ (Right-tailed, $\alpha = 0.01, \, df = \mathbf{14}$)
+*   Let $d = \text{After} - \text{Before}$. $H_0: \mu_d \le 0$ vs $H_a: \mu_d > 0$ (Right-tailed, $\alpha = 0.01, \, df = \mathbf{14}$)
 
 | Metric | Values |
 | :--- | :--- |
@@ -856,7 +856,7 @@ At a 0.05 significance level, is there enough evidence to suggest that the healt
 ### Solution 14
 
 ##### Hypotheses & Loss Metrics
-*   Let $d = \text{Before} - \text{After}$. $H_0: \mu_d \le 0$ vs $H_1: \mu_d > 0$ (Right-tailed, $\alpha = 0.05, \, df = \mathbf{9}$)
+*   Let $d = \text{Before} - \text{After}$. $H_0: \mu_d \le 0$ vs $H_a: \mu_d > 0$ (Right-tailed, $\alpha = 0.05, \, df = \mathbf{9}$)
 
 | Metric | Values |
 | :--- | :--- |
@@ -914,7 +914,7 @@ A local health department claims that the proportion of smokers in City A is hig
 ### Solution 15
 
 ##### Hypotheses & Parameters
-*   $H_0: p_A \le p_B$ vs $H_1: p_A > p_B$ (Right-tailed, $\alpha = 0.05$)
+*   $H_0: p_A \le p_B$ vs $H_a: p_A > p_B$ (Right-tailed, $\alpha = 0.05$)
 *   City A: $n_A = 200, \, x_A = 80 \implies \hat{p}_A = \mathbf{0.40}$
 *   City B: $n_B = 250, \, x_B = 50 \implies \hat{p}_B = \mathbf{0.20}$
 *   Pooled Proportion: $\bar{p} = \frac{80 + 50}{200 + 250} = \frac{130}{450} \approx \mathbf{0.2889}, \quad \bar{q} = \mathbf{0.7111}$
@@ -1022,7 +1022,7 @@ A new marketing campaign is launched in two different regions to promote a new p
 ### Solution 17
 
 ##### Hypotheses & Parameters
-*   $H_0: p_1 = p_2$ vs $H_1: p_1 \neq p_2$ (Two-tailed, $\alpha = 0.01$)
+*   $H_0: p_1 = p_2$ vs $H_a: p_1 \neq p_2$ (Two-tailed, $\alpha = 0.01$)
 *   Region 1: $\hat{p}_1 = \frac{150}{500} = \mathbf{0.30}$
 *   Region 2: $\hat{p}_2 = \frac{180}{600} = \mathbf{0.30}$
 *   Observed Difference: $\hat{p}_1 - \hat{p}_2 = 0.30 - 0.30 = \mathbf{0.00} \implies Z_{\text{cal}} = \mathbf{0.00}$
