@@ -105,6 +105,10 @@ $$Z_{\text{cal}} = \frac{\bar{x} - \mu_0}{SE} = \frac{14 - 15}{0.4243} \approx \
 *   **95% CI:** $\bar{x} \pm (1.96 \times SE) = 14 \pm (1.96 \times 0.4243) = 14 \pm 0.8316 = \mathbf{[13.17\text{ g}, \, 14.83\text{ g}]}$
 *   **Decision:** The claimed mean of $15\text{ g}$ lies outside the interval ($15 \notin [13.17, 14.83]$) $\implies$ **Reject $H_0$**.
 
+##### Table Derivation Breakdown
+*   **Critical Value ($Z_{\text{crit}}$):** From Table A.1 shortcut box: Two-tailed $\alpha = 0.05 \implies \alpha/2 = 0.025 \implies Z_{\text{crit}} = \mathbf{\pm 1.96}$.
+*   **P-Value:** Look up $|Z_{\text{cal}}| = 2.36$ in Table A.1 (Row `2.3`, Col `.06`) $\implies \Phi(2.36) = 0.9909$. Tail area $= 1 - 0.9909 = 0.0091$. Since two-tailed: $p = 2 \times 0.0091 = \mathbf{0.0182}$.
+
 ---
 
 ## Question 2
@@ -181,6 +185,10 @@ $$t_{\text{cal}} = \frac{\bar{x} - \mu_0}{SE} = \frac{18 - 20}{0.7303} \approx \
 *   **95% Upper Bound:** $\bar{x} + (t_{\alpha, \, df} \times SE) = 18 + (1.699 \times 0.7303) = \mathbf{19.24\text{ hours}}$
 *   **Decision:** Claimed $20\text{ hours} > 19.24\text{ hours}$ (lies above the 95% upper limit) $\implies$ **Reject $H_0$**.
 
+##### Table Derivation Breakdown
+*   **Critical Value ($t_{\text{crit}}$):** From Table A.2: Row $df = 29$, Col 'One-tailed test: 5%' gives $1.699$. Negative sign applied because left-tailed: $H_a: \mu < 20 \implies t_{\text{crit}} = \mathbf{-1.699}$.
+*   **P-Value:** On Table A.2 row $df = 29$, $|t_{\text{cal}}| = 2.74$ sits between Col 1% ($2.462$) and Col 0.5% ($2.756$) $\implies \mathbf{0.005 < p < 0.01}$ (exact $p = 0.0052$).
+
 ---
 
 ## Question 3
@@ -243,6 +251,10 @@ $$t_{\text{cal}} = \frac{\bar{x} - \mu_0}{SE} = \frac{2.5 - 3.0}{0.1265} \approx
 *   **99% Upper Bound:** $2.5 + (2.426 \times 0.1265) = \mathbf{2.81\text{ liters}}$
 *   **Decision:** Claimed $3.0\text{ liters} > 2.81\text{ liters}$ $\implies$ **Reject $H_0$**.
 
+##### Table Derivation Breakdown
+*   **Critical Value ($t_{\text{crit}}$):** From Table A.2: Row $df = 39$ (or $df = 40$), Col 'One-tailed test: 1%' gives $2.426$. Negative sign applied because left-tailed: $H_a: \mu < 3.0 \implies t_{\text{crit}} = \mathbf{-2.426}$.
+*   **P-Value:** On Table A.2 row $df = 40$, $|t_{\text{cal}}| = 3.95 > 3.551$ (Col 0.05%) $\implies \mathbf{p < 0.0005}$ (exact $p = 0.00016$).
+
 ---
 
 ## Question 4
@@ -294,6 +306,10 @@ A bakery claims that their average weight of a dozen cookies is 300 grams. To te
 *   **95% CI:** $295 \pm 4.68 = \mathbf{[290.32\text{ g}, \, 299.68\text{ g}]}$
 *   **Decision:** Since $300\text{ g} \notin [290.32, 299.68] \implies$ **Reject $H_0$**. Average cookie weight is significantly different from 300g (underweight).
 
+##### Table Derivation Breakdown
+*   **Critical Value ($t_{\text{crit}}$):** From Table A.2: Row $df = 19$, Col 'Two-tailed test: 5%' gives $t_c = \mathbf{\pm 2.093}$.
+*   **P-Value:** On Table A.2 row $df = 19$, $|t_{\text{cal}}| = 2.24$ sits between Col Two-tailed 5% ($2.093$) and Col Two-tailed 2% ($2.539$) $\implies \mathbf{0.02 < p < 0.05}$ (exact $p = 0.0375$).
+
 ---
 
 ## Question 5
@@ -340,6 +356,10 @@ A manufacturer of light bulbs claims that their bulbs last at least 1000 hours o
 </div>
 
 *   **Decision:** $t_{\text{cal}} = -3.873 < -2.624 \implies$ **Reject $H_0$**. Average lifespan is significantly less than 1000 hours ($\alpha = 0.01$).
+
+##### Table Derivation Breakdown
+*   **Critical Value ($t_{\text{crit}}$):** From Table A.2: Row $df = 14$, Col 'One-tailed test: 1%' gives $2.624$. Negative sign applied because left-tailed: $H_a: \mu < 1000 \implies t_{\text{crit}} = \mathbf{-2.624}$.
+*   **P-Value:** On Table A.2 row $df = 14$, $|t_{\text{cal}}| = 3.873$ sits between Col One-tailed 0.1% ($3.787$) and Col One-tailed 0.05% ($4.140$) $\implies \mathbf{0.0005 < p < 0.001}$ (exact $p = 0.00084$).
 
 ---
 
@@ -400,6 +420,10 @@ A new fitness program claims that participants lose an average of at least 4 kg 
 </div>
 
 *   **Decision:** $p\text{-value} = 0.0026 \le 0.05 \implies$ **Reject $H_0$**. Average weight loss is significantly greater than 4 kg.
+
+##### Table Derivation Breakdown
+*   **Critical Value ($t_{\text{crit}}$):** From Table A.2: Row $df = 11$, Col 'One-tailed test: 5%' gives $1.796$. Positive sign because right-tailed: $H_a: \mu > 4 \implies t_{\text{crit}} = \mathbf{+1.796}$.
+*   **P-Value:** On Table A.2 row $df = 11$, $t_{\text{cal}} = 3.464$ sits between Col One-tailed 0.5% ($3.106$) and Col One-tailed 0.1% ($4.025$) $\implies \mathbf{0.001 < p < 0.005}$ (exact $p = 0.0026$).
 
 ---
 
@@ -469,6 +493,10 @@ A school claims that at least 30% of its students participate in extracurricular
 
 *   **Decision:** $Z_{\text{cal}} = -1.54 > -2.33 \implies$ **Fail to Reject $H_0$**. Insufficient evidence that participation is less than 30% ($\alpha = 0.01$).
 
+##### Table Derivation Breakdown
+*   **Critical Value ($Z_{\text{crit}}$):** From Table A.1: Left-tailed $\alpha = 0.01 \implies A(z) = 0.0100 \implies Z_{\text{crit}} = \mathbf{-2.326 \approx -2.33}$.
+*   **P-Value:** Look up $Z = 1.54$ in Table A.1 (Row `1.5`, Col `.04`) $\implies \Phi(1.54) = 0.9382$. Left tail $P(Z < -1.54) = 1 - 0.9382 = \mathbf{0.0618}$.
+
 ---
 
 ## Question 8 (Proportion Test - Excluded from Cycle Test)
@@ -526,6 +554,10 @@ A recent survey found that 60% of people prefer coffee over tea. To test this cl
   </svg>
 </div>
 *   **Decision:** $|Z_{\text{cal}}| = 3.33 > 1.96 \implies$ **Reject $H_0$**. Coffee preference is significantly different from 60% ($\alpha = 0.05$).
+
+##### Table Derivation Breakdown
+*   **Critical Value ($Z_{\text{crit}}$):** From Table A.1 shortcut box: Two-tailed $\alpha = 0.05 \implies Z_{\text{crit}} = \mathbf{\pm 1.96}$.
+*   **P-Value:** Look up $Z = 3.33$ in Table A.1 (Row `3.3`, Col `.03`) $\implies \Phi(3.33) = 0.9996$. Two-tailed $p = 2 \times (1 - 0.9996) = \mathbf{0.0008}$.
 
 ---
 
@@ -599,6 +631,10 @@ A health department claims that more than 25% of adults in a city are physically
 </div>
 *   **Decision:** $Z_{\text{cal}} = +2.31 > +1.645 \implies$ **Reject $H_0$**. Proportion of physically active adults is significantly greater than 25%.
 
+##### Table Derivation Breakdown
+*   **Critical Value ($Z_{\text{crit}}$):** From Table A.1 shortcut box: Right-tailed $\alpha = 0.05 \implies Z_{\text{crit}} = \mathbf{+1.645}$.
+*   **P-Value:** Look up $Z = 2.31$ in Table A.1 (Row `2.3`, Col `.01`) $\implies \Phi(2.31) = 0.9896$. Right tail $P(Z > 2.31) = 1 - 0.9896 = \mathbf{0.0104}$.
+
 ---
 
 ## Question 10
@@ -664,6 +700,10 @@ A manufacturer produces two types of batteries and claims that the new battery (
 </div>
 *   **Decision:** $Z_{\text{cal}} = +4.11 > +1.645 \implies$ **Reject $H_0$**. Battery A lasts significantly longer than Battery B.
 
+##### Table Derivation Breakdown
+*   **Critical Value ($Z_{\text{crit}}$):** From Table A.1 shortcut box: Right-tailed $\alpha = 0.05 \implies Z_{\text{crit}} = \mathbf{+1.645}$.
+*   **P-Value:** $Z_{\text{cal}} = 4.11$ exceeds Table A.1 maximum ($Z = 3.69 \implies \Phi = 0.9999$) $\implies p = P(Z > 4.11) \ll 0.0001 \approx \mathbf{0.00002}$.
+
 ---
 
 ## Question 11
@@ -714,6 +754,10 @@ A nutritional study is conducted to compare the average sugar content in two dif
   </svg>
 </div>
 *   **Decision:** $|Z_{\text{cal}}| = 2.06 < 2.576 \implies$ **Fail to Reject $H_0$**. Insufficient evidence of a difference in average sugar content at $\alpha = 0.01$.
+
+##### Table Derivation Breakdown
+*   **Critical Value ($Z_{\text{crit}}$):** From Table A.1 shortcut box: Two-tailed $\alpha = 0.01 \implies \alpha/2 = 0.005 \implies Z_{\text{crit}} = \mathbf{\pm 2.576}$.
+*   **P-Value:** Look up $Z = 2.06$ in Table A.1 (Row `2.0`, Col `.06`) $\implies \Phi(2.06) = 0.9803$. Two-tailed $p = 2 \times (1 - 0.9803) = \mathbf{0.0394}$.
 
 ---
 
@@ -766,6 +810,10 @@ A company wants to compare the effectiveness of two different promotional strate
   </svg>
 </div>
 *   **Decision:** $|t_{\text{cal}}| = 2.48 < 3.355 \implies$ **Fail to Reject $H_0$**. Sales do not differ significantly between the two strategies at $\alpha = 0.01$.
+
+##### Table Derivation Breakdown
+*   **Critical Value ($t_{\text{crit}}$):** From Table A.2: Row $df = n_1 + n_2 - 2 = 8$, Col 'Two-tailed test: 1%' gives $t_{\text{crit}} = \mathbf{\pm 3.355}$.
+*   **P-Value:** On Table A.2 row $df = 8$, $|t_{\text{cal}}| = 2.48$ sits between Col Two-tailed 5% ($2.306$) and Col Two-tailed 2% ($2.896$) $\implies \mathbf{0.02 < p < 0.05}$ (exact $p = 0.0381$).
 
 ---
 
@@ -828,6 +876,10 @@ At a significance level of 0.01, is there sufficient evidence to conclude that t
 </div>
 *   **Decision:** $t_{\text{cal}} = +13.13 > +2.624 \implies$ **Reject $H_0$**. The new study technique significantly improves test scores.
 
+##### Table Derivation Breakdown
+*   **Critical Value ($t_{\text{crit}}$):** From Table A.2: Row $df = n - 1 = 14$, Col 'One-tailed test: 1%' gives $2.624$. Positive sign because right-tailed: $H_a: \mu_d > 0 \implies t_{\text{crit}} = \mathbf{+2.624}$.
+*   **P-Value:** On Table A.2 row $df = 14$, $t_{\text{cal}} = 13.13 \gg 4.140$ (Col 0.05%) $\implies \mathbf{p < 0.0005}$ (exact $p \approx 3 \times 10^{-9}$).
+
 ---
 
 ## Question 14 (Paired t-Test - Excluded from Cycle Test)
@@ -889,6 +941,10 @@ At a 0.05 significance level, is there enough evidence to suggest that the healt
 </div>
 *   **Decision:** $t_{\text{cal}} = +6.71 > +1.833 \implies$ **Reject $H_0$**. The health program produces statistically significant weight loss.
 
+##### Table Derivation Breakdown
+*   **Critical Value ($t_{\text{crit}}$):** From Table A.2: Row $df = n - 1 = 9$, Col 'One-tailed test: 5%' gives $1.833$. Positive sign because right-tailed: $H_a: \mu_d > 0 \implies t_{\text{crit}} = \mathbf{+1.833}$.
+*   **P-Value:** On Table A.2 row $df = 9$, $t_{\text{cal}} = 6.71 \gg 4.781$ (Col 0.05%) $\implies \mathbf{p < 0.0005}$ (exact $p = 0.00004$).
+
 ---
 
 ## Question 15 (Two-Sample Proportion Test - Excluded from Cycle Test)
@@ -945,6 +1001,10 @@ A local health department claims that the proportion of smokers in City A is hig
 </div>
 *   **Decision:** $Z_{\text{cal}} = +4.65 > +1.645 \implies$ **Reject $H_0$**. The proportion of smokers in City A is significantly higher than in City B.
 
+##### Table Derivation Breakdown
+*   **Critical Value ($Z_{\text{crit}}$):** From Table A.1 shortcut box: Right-tailed $\alpha = 0.05 \implies Z_{\text{crit}} = \mathbf{+1.645}$.
+*   **P-Value:** $Z_{\text{cal}} = 4.65 > 3.69 \implies p = P(Z > 4.65) \ll 0.0001 \approx \mathbf{1.65 \times 10^{-6}}$.
+
 ---
 
 ## Question 16 (Two-Sample Proportion Test - Excluded from Cycle Test)
@@ -996,6 +1056,10 @@ $$Z_{\text{cal}} = \frac{0.40 - 0.20}{0.0430} = \mathbf{+4.65}$$
   </svg>
 </div>
 *   **Decision:** $p\text{-value} \ll 0.05 \implies$ **Reject $H_0$**. The proportion of smokers in City A is significantly higher than in City B.
+
+##### Table Derivation Breakdown
+*   **Critical Value ($Z_{\text{crit}}$):** Right-tailed $\alpha = 0.05 \implies Z_{\text{crit}} = \mathbf{+1.645}$.
+*   **P-Value:** From Table A.1: $Z_{\text{cal}} = 4.65$ is off-table ($Z > 3.69 \implies \Phi = 0.9999$) $\implies p = P(Z > 4.65) \ll 0.0001 \approx \mathbf{1.65 \times 10^{-6}}$.
 
 ---
 
@@ -1053,5 +1117,9 @@ A new marketing campaign is launched in two different regions to promote a new p
   </svg>
 </div>
 *   **Decision:** $p\text{-value} = 1.0000 \gg 0.01 \implies$ **Fail to Reject $H_0$**. There is no difference in positive opinion proportions between Region 1 and Region 2.
+
+##### Table Derivation Breakdown
+*   **Critical Value ($Z_{\text{crit}}$):** From Table A.1 shortcut box: Two-tailed $\alpha = 0.01 \implies Z_{\text{crit}} = \mathbf{\pm 2.576}$.
+*   **P-Value:** From Table A.1: For $Z_{\text{cal}} = 0.00$, $\Phi(0.00) = 0.5000$. Two-tailed $p = 2 \times (1 - 0.5000) = \mathbf{1.0000}$.
 
 ---
