@@ -1,0 +1,439 @@
+---
+sidebar_position: 2
+title: Unit 2 - Probability & Distributions
+description: LLT Component Unit 2 questions and comprehensive model solutions covering permutations, combinations, conditional probability, Bayes' theorem, odds ratios, Binomial, Poisson, and Normal distributions.
+tags: [inferential-statistics, exam-prep, unit-2, probability, distributions]
+toc_max_heading_level: 3
+---
+
+# Unit 2: Probability & Distributions
+
+> **Course -** Inferential Statistics  
+> **Component -** LLT Assignment  
+> **Unit -** Unit 2
+
+---
+
+## Question 1
+
+:::info
+
+**Question Statement**
+
+A security system requires users to create a 5-character access code using the letters A-Z (uppercase only). Each character in the code must be a letter, and letters cannot be repeated.
+
+:::
+
+---
+
+### Solution 1
+
+1.  **Identify Parameters & Counting Principle:**
+    *   Total available uppercase English letters: $n = 26$ ($A$ through $Z$).
+    *   Length of access code: $r = 5$.
+    *   Constraint: Characters **cannot be repeated** (sampling without replacement).
+    *   Order significance: In an access code/password, the sequence matters (e.g., $ABCDE \neq EDCBA$). Hence, this is a **Permutation** problem.
+
+2.  **Permutation Formula:**
+    $$P(n, r) = {}^n P_r = \frac{n!}{(n - r)!}$$
+
+3.  **Calculation:**
+    $${}^{26}P_5 = \frac{26!}{(26 - 5)!} = \frac{26!}{21!} = 26 \times 25 \times 24 \times 23 \times 22$$
+    *   $26 \times 25 = 650$
+    *   $650 \times 24 = 15,600$
+    *   $15,600 \times 23 = 358,800$
+    *   $358,800 \times 22 = \mathbf{7,893,600}$
+
+4.  **Conclusion:**
+    The security system can generate exactly **$7,893,600$** unique 5-character access codes.
+
+---
+
+## Question 2
+
+:::info
+
+**Question Statement**
+
+You are organizing a speaker panel for a conference and need to select 4 speakers from a pool of 10 applicants. The order in which the speakers are selected does not matter.
+
+:::
+
+---
+
+### Solution 2
+
+1.  **Identify Parameters & Counting Principle:**
+    *   Total applicant pool size: $n = 10$.
+    *   Number of speakers to select: $r = 4$.
+    *   Constraint: **"The order in which the speakers are selected does not matter."**
+    *   Because sequence is irrelevant to panel membership, this is a **Combination** problem.
+
+2.  **Combination Formula:**
+    $$C(n, r) = \binom{n}{r} = \frac{n!}{r!(n - r)!}$$
+
+3.  **Calculation:**
+    $$\binom{10}{4} = \frac{10!}{4!(10 - 4)!} = \frac{10!}{4! \times 6!} = \frac{10 \times 9 \times 8 \times 7}{4 \times 3 \times 2 \times 1}$$
+    *   Numerator: $10 \times 9 \times 8 \times 7 = 5,040$
+    *   Denominator: $4 \times 3 \times 2 \times 1 = 24$
+    $$\binom{10}{4} = \frac{5,040}{24} = \mathbf{210}$$
+
+4.  **Conclusion:**
+    There are exactly **$210$** distinct ways to select the 4-member speaker panel.
+
+---
+
+## Question 3
+
+:::info
+
+**Question Statement**
+
+A company produces three types of beverages: A, B, and C. The probability of a beverage being defective is as follows:The probability of a beverage being defective for A is 0.02, The probability of a beverage being defective for B is 0.05. The probability of a beverage being defective for C is 0.01, The conditional probabilities that a defective beverage comes from each type are : The probability that a defective beverage is of type A is 0.2, The probability that a defective beverage is of type B is 0.3, The probability that a defective beverage is of type C is 0.35. If a defective beverage is discovered, what is the most likely type of beverage (A, B, or C) that it is?
+
+:::
+
+---
+
+### Solution 3
+
+Let $D$ denote the event that a beverage is **defective**, and $A, B, C$ denote the beverage types.
+
+*   **Priors (Production Shares):** $P(A) = 0.20, \; P(B) = 0.30, \; P(C) = 0.35$
+*   **Likelihoods (Defect Rates):** $P(D \mid A) = 0.02, \; P(D \mid B) = 0.05, \; P(D \mid C) = 0.01$
+
+##### 1. Joint Defect Probabilities $P(\text{Type} \cap D)$
+*   $P(A \cap D) = 0.20 \times 0.02 = \mathbf{0.0040}$
+*   $P(B \cap D) = 0.30 \times 0.05 = \mathbf{0.0150}$
+*   $P(C \cap D) = 0.35 \times 0.01 = \mathbf{0.0035}$
+
+##### 2. Total Probability of Defect $P(D)$
+$$P(D) = 0.0040 + 0.0150 + 0.0035 = \mathbf{0.0225}$$
+
+##### 3. Posterior Probabilities (Bayes' Rule)
+$$P(\text{Type} \mid D) = \frac{P(\text{Type} \cap D)}{P(D)}$$
+*   $P(A \mid D) = \frac{0.0040}{0.0225} \approx \mathbf{17.78\%}$
+*   $P(B \mid D) = \frac{0.0150}{0.0225} \approx \mathbf{66.67\%}$
+*   $P(C \mid D) = \frac{0.0035}{0.0225} \approx \mathbf{15.56\%}$
+
+**Conclusion:** Comparing posterior probabilities ($66.67\% > 17.78\% > 15.56\%$), **Type B** is overwhelmingly the most likely defective beverage.
+
+---
+
+## Question 4
+
+:::info
+
+**Question Statement**
+
+A community center offers three types of sports activities: Swimming (S), Volleyball (V), and Table Tennis (TT). The participation data is summarized in the table below, categorized by age groups.
+
+| | Swimming (S) | Volleyball (V) | Table Tennis (TT) |
+| :--- | :---: | :---: | :---: |
+| **Adult** | 80 | 50 | 40 |
+| **Teen** | 30 | 60 | 20 |
+| **Child** | 40 | 30 | 70 |
+
+i. What is the probability that a randomly chosen participant is enrolled in Volleyball (V)?  
+ii. What is the probability that a randomly chosen participant is a Child?  
+iii. What is the probability that a randomly chosen participant is an Adult enrolled in Swimming (S)?  
+iv. What is the probability that a randomly chosen participant is a Teen enrolled in Table Tennis (TT)?  
+v. What is the probability that a participant is an Adult given that the participant is enrolled in Volleyball (V)?
+
+:::
+
+---
+
+### Solution 4
+
+##### Contingency Table with Marginal Totals
+
+First, construct the full marginal table to determine the total sample space ($N$):
+
+| Age Group | Swimming (S) | Volleyball (V) | Table Tennis (TT) | **Row Total** |
+| :--- | :---: | :---: | :---: | :---: |
+| **Adult ($A$)** | 80 | 50 | 40 | **170** |
+| **Teen ($T$)** | 30 | 60 | 20 | **110** |
+| **Child ($C$)** | 40 | 30 | 70 | **140** |
+| **Column Total** | **150** | **140** | **130** | **Total $N = 420$** |
+
+*   Grand Total: $N = 170 + 110 + 140 = 150 + 140 + 130 = \mathbf{420}$.
+
+---
+
+##### Subpart Evaluations
+
+*   **i. Probability that a participant is enrolled in Volleyball (V):**
+    $$P(V) = \frac{\text{Total enrolled in Volleyball}}{\text{Grand Total}} = \frac{140}{420} = \frac{1}{3} \approx \mathbf{0.3333}\text{ (}33.33\%\text{)}$$
+
+*   **ii. Probability that a participant is a Child:**
+    $$P(\text{Child}) = \frac{\text{Total Children}}{\text{Grand Total}} = \frac{140}{420} = \frac{1}{3} \approx \mathbf{0.3333}\text{ (}33.33\%\text{)}$$
+
+*   **iii. Probability that a participant is an Adult enrolled in Swimming (S):**
+    This is the joint intersection $P(\text{Adult} \cap S)$:
+    $$P(\text{Adult} \cap S) = \frac{n(\text{Adult} \cap S)}{N} = \frac{80}{420} = \frac{4}{21} \approx \mathbf{0.1905}\text{ (}19.05\%\text{)}$$
+
+*   **iv. Probability that a participant is a Teen enrolled in Table Tennis (TT):**
+    This is the joint intersection $P(\text{Teen} \cap TT)$:
+    $$P(\text{Teen} \cap TT) = \frac{n(\text{Teen} \cap TT)}{N} = \frac{20}{420} = \frac{1}{21} \approx \mathbf{0.0476}\text{ (}4.76\%\text{)}$$
+
+*   **v. Probability that a participant is an Adult given that they are enrolled in Volleyball (V):**
+    This is a conditional probability $P(\text{Adult} \mid V)$:
+    $$P(\text{Adult} \mid V) = \frac{P(\text{Adult} \cap V)}{P(V)} = \frac{n(\text{Adult} \cap V)}{n(V)} = \frac{50}{140} = \frac{5}{14} \approx \mathbf{0.3571}\text{ (}35.71\%\text{)}$$
+
+---
+
+## Question 5
+
+:::info
+
+**Question Statement**
+
+A traffic safety study examines the effect of seatbelt usage on accident outcomes. In the study, the results show the following: Drivers involved in accidents who were wearing seatbelts and had a minor injury: 15, Drivers involved in accidents who were wearing seatbelts and had a serious injury: 5, Drivers involved in accidents who were not wearing seatbelts and had a minor injury: 10, Drivers involved in accidents who were not wearing seatbelts and had a serious injury: 20.
+
+i) What are the odds in favor of a driver sustaining a minor injury while wearing a seatbelt compared to sustaining a serious injury?  
+ii) What are the odds against a driver sustaining a minor injury while not wearing a seatbelt?  
+iii) What is the probability of a driver sustaining a minor injury while wearing a seatbelt?  
+iv) Calculate the odds ratio of sustaining a minor injury while wearing a seatbelt compared to the odds of sustaining a minor injury without a seatbelt.  
+v) What does this odds ratio indicate about the effectiveness of wearing a seatbelt in minimizing injury severity during a traffic accident?
+
+:::
+
+---
+
+### Solution 5
+
+##### Summary Contingency Table
+
+| Status | Minor Injury ($M$) | Serious Injury ($S$) | **Total** |
+| :--- | :---: | :---: | :---: |
+| **Wearing Seatbelt ($W$)** | 15 | 5 | **20** |
+| **Not Wearing Seatbelt ($NW$)** | 10 | 20 | **30** |
+| **Total** | **25** | **25** | **50** |
+
+---
+
+##### Subpart Evaluations
+
+*   **i) Odds in favor of sustaining a minor injury while wearing a seatbelt compared to sustaining a serious injury:**
+    $$\text{Odds}_{\text{wearing}} = \frac{n(\text{Minor} \cap \text{Wearing})}{n(\text{Serious} \cap \text{Wearing})} = \frac{15}{5} = \frac{3}{1} = \mathbf{3.0}\quad (\text{or } 3:1)$$
+
+*   **ii) Odds against sustaining a minor injury while not wearing a seatbelt:**
+    *   Odds in favor of minor injury without seatbelt: $\frac{n(\text{Minor} \cap NW)}{n(\text{Serious} \cap NW)} = \frac{10}{20} = 0.5$ (or $1:2$).
+    *   Odds **against** minor injury without seatbelt:
+        $$\text{Odds against} = \frac{n(\text{Serious} \cap NW)}{n(\text{Minor} \cap NW)} = \frac{20}{10} = \frac{2}{1} = \mathbf{2.0}\quad (\text{or } 2:1)$$
+
+*   **iii) Probability of a driver sustaining a minor injury while wearing a seatbelt:**
+    $$P(\text{Minor} \mid \text{Wearing}) = \frac{n(\text{Minor} \cap \text{Wearing})}{n(\text{Wearing})} = \frac{15}{15 + 5} = \frac{15}{20} = \mathbf{0.75}\text{ (}75\%\text{)}$$
+
+*   **iv) Odds Ratio (OR) of minor injury wearing vs not wearing seatbelt:**
+    $$\text{Odds Ratio} = \frac{\text{Odds of Minor Injury (Wearing)}}{\text{Odds of Minor Injury (Not Wearing)}} = \frac{15 / 5}{10 / 20} = \frac{3.0}{0.5} = \mathbf{6.0}$$
+    *(Cross-product shortcut: $\frac{15 \times 20}{5 \times 10} = \frac{300}{50} = \mathbf{6.0}$)*
+
+*   **v) Practical interpretation of the Odds Ratio:**
+    *   An Odds Ratio of **$6.0$** indicates that the odds of sustaining only a minor injury (rather than a serious injury) are **$6$ times higher** for drivers wearing seatbelts compared to drivers not wearing seatbelts.
+    *   This provides robust statistical evidence that wearing a seatbelt is highly effective in significantly reducing injury severity during vehicular accidents.
+
+---
+
+## Question 6
+
+:::info
+
+**Question Statement**
+
+In a volleyball training camp, data was collected on the serving accuracy of a player. From 20 serves, the player successfully hit the target 14 times. Considering the same player, what is the probability that out of 60 serves
+
+**Questions:**  
+i. Calculate the probability of hitting the target for five serves.  
+ii. Calculate the probability of hitting the target for 45 serves.  
+iii. determine the probability of hitting at most 55 serves will hit the target.  
+iv. Calculate the probability of hitting at least 2 serves
+
+:::
+
+---
+
+### Solution 6
+
+##### Step 1: Model Identification & Parameters
+
+*   **Observed Accuracy from Training Camp:**
+    $$p = P(\text{Hit Target}) = \frac{14}{20} = \mathbf{0.70}\quad (70\%)$$
+    $$q = 1 - p = 1 - 0.70 = \mathbf{0.30}\quad (30\%)$$
+*   **Number of Independent Trials:** $n = \mathbf{60\text{ serves}}$
+*   **Distribution Model:** Since each serve has a binary outcome (success/failure), constant success probability $p = 0.70$, and mutually independent trials, the random variable $X$ (number of targets hit) follows a **Binomial Distribution**:
+    $$X \sim B(n = 60, \, p = 0.70)$$
+
+##### Step 2: Distribution Baseline Properties
+
+*   **Expected Value (Mean):**
+    $$\mu = n \cdot p = 60 \times 0.70 = \mathbf{42.0\text{ serves}}$$
+*   **Standard Deviation:**
+    $$\sigma = \sqrt{n \cdot p \cdot q} = \sqrt{60 \times 0.70 \times 0.30} = \sqrt{12.60} \approx \mathbf{3.55\text{ serves}}$$
+
+##### Step 3: Binomial Probability Mass Function (PMF)
+
+$$P(X = k) = \binom{n}{k} p^k q^{n - k} = \binom{60}{k} (0.70)^k (0.30)^{60 - k}$$
+
+---
+
+##### Subpart Evaluations
+
+*   **i. Probability of hitting the target for exactly 5 serves ($k = 5$):**
+    $$P(X = 5) = \binom{60}{5} (0.70)^5 (0.30)^{55}$$
+    *   $\binom{60}{5} = \frac{60!}{5! \times 55!} = \mathbf{5,461,512}$
+    *   $(0.70)^5 = \mathbf{0.16807}$
+    *   $(0.30)^{55} \approx \mathbf{1.7445 \times 10^{-29}}$
+    $$P(X = 5) \approx 5,461,512 \times 0.16807 \times (1.7445 \times 10^{-29}) \approx \mathbf{1.60 \times 10^{-23}}\quad (\approx \mathbf{0.00\%})$$
+    *   *Understanding:* Because the expected average is $\mu = 42$ serves, hitting only $5$ serves lies over $10$ standard deviations below the mean ($Z \approx -10.4$), making this outcome virtually impossible under normal conditions.
+
+---
+
+*   **ii. Probability of hitting the target for exactly 45 serves ($k = 45$):**
+    $$P(X = 45) = \binom{60}{45} (0.70)^{45} (0.30)^{15}$$
+    *   $\binom{60}{45} = \binom{60}{15} = \mathbf{53,194,089,192,720}\quad (\approx 5.319 \times 10^{13})$
+    *   $(0.70)^{45} \approx \mathbf{1.0701 \times 10^{-7}}$
+    *   $(0.30)^{15} \approx \mathbf{1.4349 \times 10^{-8}}$
+    $$P(X = 45) \approx 5.3194 \times 10^{13} \times 1.0701 \times 10^{-7} \times 1.4349 \times 10^{-8} \approx \mathbf{0.0817}\quad (\mathbf{8.17\%})$$
+    *   *Understanding:* Since $45$ is close to the expected center of $\mu = 42$ ($Z \approx +0.85$), it represents a highly realistic single-game performance that occurs roughly once every 12 matches.
+
+---
+
+*   **iii. Probability of hitting at most 55 serves ($X \le 55$):**
+    Direct summation of $56$ terms ($k = 0$ to $55$) is inefficient. We apply the **Complement Rule**:
+    $$P(X \le 55) = 1 - P(X \ge 56) = 1 - [P(X=56) + P(X=57) + P(X=58) + P(X=59) + P(X=60)]$$
+
+    ###### Upper Tail Probabilities Breakdown:
+
+    | $k$ | Binomial Term $\binom{60}{k} (0.70)^k (0.30)^{60 - k}$ | Exact Probability |
+    | :---: | :---: | :---: |
+    | **56** | $\binom{60}{56} (0.70)^{56} (0.30)^4$ | $0.0000083574$ |
+    | **57** | $\binom{60}{57} (0.70)^{57} (0.30)^3$ | $0.0000013685$ |
+    | **58** | $\binom{60}{58} (0.70)^{58} (0.30)^2$ | $0.0000001652$ |
+    | **59** | $\binom{60}{59} (0.70)^{59} (0.30)^1$ | $0.0000000131$ |
+    | **60** | $\binom{60}{60} (0.70)^{60} (0.30)^0$ | $0.0000000005$ |
+    | **Total $\sum P(X \ge 56)$** | | **$0.0000099046$** |
+
+    *   **Final Subtraction:**
+        $$P(X \le 55) = 1 - 0.0000099046 = \mathbf{0.9999900954}\quad (\approx \mathbf{99.999\%})$$
+    *   *Understanding:* Hitting $56$ or more targets out of $60$ demands an extraordinary accuracy rate of $\ge 93.3\%$. The player is essentially $99.999\%$ certain to hit at most $55$ serves.
+
+---
+
+*   **iv. Probability of hitting at least 2 serves ($X \ge 2$):**
+    Using the **Complement Rule**:
+    $$P(X \ge 2) = 1 - P(X \le 1) = 1 - [P(X = 0) + P(X = 1)]$$
+    *   **Probability of 0 hits ($k = 0$):**
+        $$P(X = 0) = \binom{60}{0} (0.70)^0 (0.30)^{60} = (0.30)^{60} \approx \mathbf{4.24 \times 10^{-32}} \approx \mathbf{0}$$
+    *   **Probability of 1 hit ($k = 1$):**
+        $$P(X = 1) = \binom{60}{1} (0.70)^1 (0.30)^{59} = 60 \times 0.70 \times (0.30)^{59} \approx \mathbf{5.93 \times 10^{-30}} \approx \mathbf{0}$$
+    *   **Sum of Lower Tail:**
+        $$P(X \le 1) = P(X = 0) + P(X = 1) \approx 5.98 \times 10^{-30} \approx \mathbf{0}$$
+    *   **Final Probability:**
+        $$P(X \ge 2) = 1 - 0 = \mathbf{1.0000}\quad (\mathbf{100\%\text{ certainty}})$$
+    *   *Understanding:* For a player with 70% accuracy, missing 59 or 60 consecutive serves is statistically impossible under normal play. Hitting at least 2 targets is guaranteed.
+
+---
+
+##### Summary of Results for Question 6
+
+| Question Part | Condition | Formula Representation | Evaluated Result | Practical Interpretation |
+| :--- | :---: | :---: | :---: | :--- |
+| **i. Exactly 5 serves** | $P(X = 5)$ | $\binom{60}{5}(0.7)^5(0.3)^{55}$ | $\approx \mathbf{1.60 \times 10^{-23}}$ | Astronomically rare ($> 10\sigma$ below mean). |
+| **ii. Exactly 45 serves** | $P(X = 45)$ | $\binom{60}{45}(0.7)^{45}(0.3)^{15}$ | $\mathbf{0.0817\text{ (}8.17\%\text{)}}$ | Highly realistic single-game score near $\mu = 42$. |
+| **iii. At most 55 serves** | $P(X \le 55)$ | $1 - \sum_{k=56}^{60} P(X = k)$ | $\mathbf{0.99999\text{ (}99.999\%\text{)}}$ | Almost guaranteed upper ceiling for the player. |
+| **iv. At least 2 serves** | $P(X \ge 2)$ | $1 - [P(0) + P(1)]$ | $\mathbf{1.0000\text{ (}100\%\text{)}}$ | Absolute certainty; missing $\ge 59$ serves is impossible. |
+
+---
+
+## Question 7
+
+:::info
+
+**Question Statement**
+
+A local coffee shop receives an average of 15 customer arrivals per hour. The shop manager wants to determine the probabilities associated with customer arrivals to optimize staffing and inventory.
+
+i) What is the likelihood of receiving exactly 12 customer arrivals in a particular hour?  
+ii) What is the probability of receiving no more than 3 customer arrivals during the same hour?  
+iii) Additionally, the manager is interested in the overall probability of receiving more than 5 customer arrivals during the busiest 2-hour period of the day.
+
+:::
+
+---
+
+### Solution 7
+
+##### Step 1: Model Identification
+
+Arrivals occur independently over a continuous time interval at a known average rate $\lambda = 15$ arrivals/hour. Therefore, the number of arrivals follows a **Poisson Distribution**:
+
+$$P(X = k) = \frac{e^{-\lambda} \lambda^k}{k!}$$
+
+---
+
+##### Subpart Evaluations
+
+*   **i) Likelihood of exactly 12 arrivals in a particular 1-hour period ($\lambda = 15, k = 12$):**
+    $$P(X = 12) = \frac{e^{-15} \cdot 15^{12}}{12!}$$
+    *   $e^{-15} \approx 3.05902 \times 10^{-7}$
+    *   $15^{12} \approx 1.29746 \times 10^{14}$
+    *   $12! = 479,001,600$
+    $$P(X = 12) = \frac{(3.05902 \times 10^{-7}) \times (1.29746 \times 10^{14})}{479,001,600} \approx \mathbf{0.0829}\text{ (}8.29\%\text{)}$$
+
+*   **ii) Probability of receiving no more than 3 customer arrivals during the same hour ($X \le 3$):**
+    $$P(X \le 3) = \sum_{k=0}^{3} \frac{e^{-15} \cdot 15^k}{k!} = e^{-15} \left( \frac{15^0}{0!} + \frac{15^1}{1!} + \frac{15^2}{2!} + \frac{15^3}{3!} \right)$$
+    $$= e^{-15} \left( 1 + 15 + \frac{225}{2} + \frac{3375}{6} \right) = e^{-15} (1 + 15 + 112.5 + 562.5) = e^{-15} \times 691$$
+    $$P(X \le 3) \approx (3.05902 \times 10^{-7}) \times 691 \approx \mathbf{0.000211}\text{ (}0.0211\%\text{)}$$
+
+*   **iii) Overall probability of receiving more than 5 arrivals during a 2-hour period:**
+    For a 2-hour time frame ($t = 2$), the adjusted arrival parameter is:
+    $$\lambda_{2\text{hr}} = 15 \times 2 = 30\text{ arrivals}$$
+    Let $Y$ be the number of arrivals in 2 hours: $Y \sim \text{Poisson}(\lambda = 30)$.
+    $$P(Y > 5) = 1 - P(Y \le 5) = 1 - \sum_{k=0}^{5} \frac{e^{-30} \cdot 30^k}{k!}$$
+    *   $\sum_{k=0}^{5} \frac{e^{-30} \cdot 30^k}{k!} = e^{-30} \left( 1 + 30 + 450 + 4500 + 33750 + 202500 \right) = e^{-30} \times 241231$
+    *   $e^{-30} \approx 9.3576 \times 10^{-14}$
+    *   $P(Y \le 5) \approx (9.3576 \times 10^{-14}) \times 241231 \approx 2.26 \times 10^{-8}$
+    $$P(Y > 5) = 1 - 2.26 \times 10^{-8} \approx \mathbf{0.99999998} \approx \mathbf{1.0000}\text{ (}100\%\text{)}$$
+
+---
+
+## Question 8
+
+:::info
+
+**Question Statement**
+
+The yearly salaries of employees at a tech company are assumed to be normally distributed with a mean of \$75,000 and a variance of \$4,000,000.
+
+I) What is the probability that a randomly selected employee has a salary of more than \$78,000?  
+II) What is the probability that a randomly selected employee has a salary of less than \$73,000?
+
+:::
+
+---
+
+### Solution 8
+
+*   **Parameters:** $X \sim N(\mu = 75,000, \, \sigma^2 = 4,000,000 \implies \sigma = \sqrt{4,000,000} = \mathbf{2,000})$
+*   **Standard Normal Transformation:** $Z = \frac{X - \mu}{\sigma} = \frac{X - 75,000}{2,000}$
+
+##### Step-by-Step Probability Calculations
+
+*   **I) Probability that a salary is more than \$78,000 ($P(X > 78,000)$):**
+    $$Z = \frac{78,000 - 75,000}{2,000} = \mathbf{+1.50}$$
+    $$P(X > 78,000) = P(Z > +1.50) = 1 - \Phi(1.50) = 1 - 0.9332 = \mathbf{0.0668}\quad (\mathbf{6.68\%})$$
+
+*   **II) Probability that a salary is less than \$73,000 ($P(X < 73,000)$):**
+    $$Z = \frac{73,000 - 75,000}{2,000} = \mathbf{-1.00}$$
+    $$P(X < 73,000) = P(Z < -1.00) = \Phi(-1.00) = 1 - \Phi(1.00) = 1 - 0.8413 = \mathbf{0.1587}\quad (\mathbf{15.87\%})$$
+
+##### Summary Table
+
+| Question Condition | $Z$-Score Calculation | $Z$-Table Area Lookup | Final Probability |
+| :--- | :---: | :---: | :---: |
+| **i) More than \$78,000** | $Z = \frac{78,000 - 75,000}{2,000} = +1.50$ | $1 - 0.9332$ | $\mathbf{0.0668}\text{ (}6.68\%\text{)}$ |
+| **ii) Less than \$73,000** | $Z = \frac{73,000 - 75,000}{2,000} = -1.00$ | $1 - 0.8413$ | $\mathbf{0.1587}\text{ (}15.87\%\text{)}$ |
+
+---

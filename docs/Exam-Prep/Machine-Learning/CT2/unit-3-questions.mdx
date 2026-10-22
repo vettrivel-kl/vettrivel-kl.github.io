@@ -1,0 +1,349 @@
+---
+sidebar_position: 1
+title: Unit 3 - Classification & Instance-Based Learning
+description: Exact question wordings and comprehensive, mark-oriented model answers for Unit 3 Continuous Test 2 covering Naïve Bayes and K-Nearest Neighbors.
+tags: [machine-learning, exam-prep, ct-exam, unit-3]
+toc_max_heading_level: 3
+---
+
+# Unit 3: Classification & Instance-Based Learning
+
+> **Course -** Machine Learning Algorithms (21CSC555J)  
+> **Assessment -** Continuous Test 2 (CT-2)  
+> **Unit -** Unit 3: Naïve Bayes & K-Nearest Neighbors  
+> **Total Weightage -** 40 Marks (Question 1.a: 15 Marks; Question 1.b: 5 Marks; Question 2: 20 Marks)
+
+---
+
+## Question 1.a: Naïve Bayes Spam Filtering (15 Marks)
+
+:::info
+
+**Question Statement**
+
+An email filtering system uses Naïve Bayes to classify messages as Spam or Not Spam. Given the training dataset:
+
+**Training Dataset for Spam Classification**
+
+| Email | Contains 'Offer' | Contains 'Win' | Spam |
+| :--- | :---: | :---: | :---: |
+| E1 | Yes | Yes | Yes |
+| E2 | No | Yes | Yes |
+| E3 | Yes | No | No |
+| E4 | No | No | No |
+
+* **i)** Calculate the conditional probabilities (5 marks)  
+  $P(\text{Offer} \mid \text{Spam})$, $P(\text{Win} \mid \text{Spam})$, $P(\text{Offer} \mid \text{NotSpam})$, $P(\text{Win} \mid \text{NotSpam})$.
+* **ii)** For a new email with "Offer = Yes, Win = Yes", compute (5 marks)  
+  $P(\text{Spam} \mid \text{Email})$ and $P(\text{NotSpam} \mid \text{Email})$
+* **iii)** Predict the class and briefly explain the independence assumption. (5 marks)
+
+:::
+
+---
+
+### Solution 1.a
+
+#### 📝 Exam-Ready Answer (Structured for 15 Marks)
+
+##### (i) Calculate Conditional Probabilities (5 Marks)
+
+1. **Step 1: Dataset Partitioning & Class Totals (1 Mark)**
+   * Total number of training samples: $N = 4$
+   * Total Spam emails ($C = \text{Spam}$): $N_{\text{Spam}} = 2$ (Emails: E1, E2)
+   * Total Not Spam emails ($C = \text{NotSpam}$): $N_{\text{NotSpam}} = 2$ (Emails: E3, E4)
+
+2. **Step 2: General Formula for Maximum Likelihood Conditional Probability (1 Mark)**
+   $$P(X_i = x \mid C = c) = \frac{\text{Count}(X_i = x \text{ and } C = c)}{\text{Count}(C = c)}$$
+
+3. **Step 3: Evaluate Conditional Probabilities for Spam Class (1.5 Marks)**
+   * *For feature 'Offer' = Yes:*
+     $$P(\text{Offer} = \text{Yes} \mid \text{Spam}) = \frac{\text{Count}(\text{Offer}=\text{Yes} \text{ and } \text{Spam})}{\text{Count}(\text{Spam})} = \frac{1}{2} = \mathbf{0.5}$$
+     *(Email E1 has Offer=Yes; E2 has Offer=No)*
+   * *For feature 'Win' = Yes:*
+     $$P(\text{Win} = \text{Yes} \mid \text{Spam}) = \frac{\text{Count}(\text{Win}=\text{Yes} \text{ and } \text{Spam})}{\text{Count}(\text{Spam})} = \frac{2}{2} = \mathbf{1.0}$$
+     *(Both emails E1 and E2 have Win=Yes)*
+
+4. **Step 4: Evaluate Conditional Probabilities for Not Spam Class (1.5 Marks)**
+   * *For feature 'Offer' = Yes:*
+     $$P(\text{Offer} = \text{Yes} \mid \text{NotSpam}) = \frac{\text{Count}(\text{Offer}=\text{Yes} \text{ and } \text{NotSpam})}{\text{Count}(\text{NotSpam})} = \frac{1}{2} = \mathbf{0.5}$$
+     *(Email E3 has Offer=Yes; E4 has Offer=No)*
+   * *For feature 'Win' = Yes:*
+     $$P(\text{Win} = \text{Yes} \mid \text{NotSpam}) = \frac{\text{Count}(\text{Win}=\text{Yes} \text{ and } \text{NotSpam})}{\text{Count}(\text{NotSpam})} = \frac{0}{2} = \mathbf{0.0}$$
+     *(Neither E3 nor E4 has Win=Yes)*
+
+###### Conditional Probability Summary Table
+
+| Feature ($X_i$) | Value | $P(X_i \mid \text{Spam})$ | $P(X_i \mid \text{NotSpam})$ |
+| :--- | :---: | :---: | :---: |
+| **Contains 'Offer'** | Yes | $1/2 = \mathbf{0.5}$ | $1/2 = \mathbf{0.5}$ |
+| **Contains 'Win'** | Yes | $2/2 = \mathbf{1.0}$ | $0/2 = \mathbf{0.0}$ |
+
+---
+
+##### (ii) Compute Probabilities for New Email: $\mathbf{X}_{\text{new}} = (\text{Offer} = \text{Yes}, \text{Win} = \text{Yes})$ (5 Marks)
+
+1. **Step 1: Compute Prior Class Probabilities (1 Mark)**
+   $$P(\text{Spam}) = \frac{N_{\text{Spam}}}{N} = \frac{2}{4} = \mathbf{0.5}$$
+   $$P(\text{NotSpam}) = \frac{N_{\text{NotSpam}}}{N} = \frac{2}{4} = \mathbf{0.5}$$
+
+2. **Step 2: State Bayes' Posterior Formula with Conditional Independence (1 Mark)**
+   $$P(C \mid \mathbf{X}) = \frac{P(\mathbf{X} \mid C) \cdot P(C)}{P(\mathbf{X})} = \frac{P(\text{Offer}=\text{Yes} \mid C) \cdot P(\text{Win}=\text{Yes} \mid C) \cdot P(C)}{P(\mathbf{X})}$$
+
+3. **Step 3: Calculate Unnormalized Joint Likelihoods (1.5 Marks)**
+   * *For class Spam:*
+     $$\mathcal{L}(\text{Spam}) = P(\text{Offer}=\text{Yes} \mid \text{Spam}) \times P(\text{Win}=\text{Yes} \mid \text{Spam}) \times P(\text{Spam})$$
+     $$\mathcal{L}(\text{Spam}) = 0.5 \times 1.0 \times 0.5 = \mathbf{0.25}$$
+
+   * *For class Not Spam:*
+     $$\mathcal{L}(\text{NotSpam}) = P(\text{Offer}=\text{Yes} \mid \text{NotSpam}) \times P(\text{Win}=\text{Yes} \mid \text{NotSpam}) \times P(\text{NotSpam})$$
+     $$\mathcal{L}(\text{NotSpam}) = 0.5 \times 0.0 \times 0.5 = \mathbf{0.0}$$
+
+4. **Step 4: Compute Evidence (Marginal Probability $P(\mathbf{X})$) (0.5 Marks)**
+   $$P(\mathbf{X}) = \mathcal{L}(\text{Spam}) + \mathcal{L}(\text{NotSpam}) = 0.25 + 0.0 = \mathbf{0.25}$$
+
+5. **Step 5: Normalize to Obtain Final Posterior Probabilities (1 Mark)**
+   $$P(\text{Spam} \mid \text{Email}) = \frac{\mathcal{L}(\text{Spam})}{P(\mathbf{X})} = \frac{0.25}{0.25} = \mathbf{1.0} \quad (100\%)$$
+   $$P(\text{NotSpam} \mid \text{Email}) = \frac{\mathcal{L}(\text{NotSpam})}{P(\mathbf{X})} = \frac{0.0}{0.25} = \mathbf{0.0} \quad (0\%)$$
+
+---
+
+##### (iii) Class Prediction & Explanation of Independence Assumption (5 Marks)
+
+1. **Step 1: Class Prediction by Maximum A Posteriori (MAP) Rule (2 Marks)**
+   $$\hat{y} = \arg\max_{c \in \{\text{Spam}, \text{NotSpam}\}} P(C = c \mid \mathbf{X})$$
+   $$\text{Since } P(\text{Spam} \mid \text{Email}) = 1.0 > P(\text{NotSpam} \mid \text{Email}) = 0.0$$
+   $$\hat{y} = \text{\textbf{Spam}}$$
+   * **Conclusion:** The new email is classified as **Spam**.
+
+2. **Step 2: Formal Statement of Class-Conditional Independence Assumption (1.5 Marks)**
+   * The Naïve Bayes classifier assumes that all features $X_1, X_2, \dots, X_d$ are **mutually conditionally independent** given the class label $C$:
+     $$P(X_1, X_2, \dots, X_d \mid C) = \prod_{j=1}^d P(X_j \mid C)$$
+   * In this problem context, it assumes that the presence of the word **'Offer'** is completely independent of the presence of the word **'Win'**, once we know whether the email is Spam or Not Spam.
+
+3. **Step 3: Real-World Validity & Trade-offs (1.5 Marks)**
+   * *Why it is "Naïve":* In natural language, promotional keywords are strongly correlated (e.g., an email containing "Offer" is far more likely to also contain "Win"). Treating them as conditionally independent is mathematically unrealistic.
+   * *Why it is preferred in practice:* Despite this violated assumption, the classifier performs remarkably well because it only needs the correct probability **ranking** ($\arg\max$), not perfectly calibrated probabilities. It reduces computational complexity from $O(2^d)$ parameters to $O(d)$ parameters, preventing overfitting on small training corpuses.
+
+---
+
+## Question 1.b: Comparative Analysis of Classifiers on Medical Data (5 Marks)
+
+:::info
+
+**Question Statement**
+
+A data scientist is working on three models for classifying medical test results:
+* KNN ($k=5$)
+* Gaussian Naïve Bayes
+* SVM with RBF kernel
+
+Assume given is a small dataset with numeric features:
+* **a.** Which algorithm handles non-linear boundaries best and why? *(2 Marks)*
+* **b.** Which algorithm is most sensitive to irrelevant features? *(1.5 Marks)*
+* **c.** Which algorithm performs better when data is small and has missing values? *(1.5 Marks)*
+
+:::
+
+---
+
+### Solution 1.b
+
+#### 📝 Exam-Ready Answer (Structured for 5 Marks)
+
+##### (a) Best Algorithm for Non-Linear Decision Boundaries (2 Marks)
+
+* **Selected Algorithm:** **Support Vector Machine (SVM) with RBF (Radial Basis Function) Kernel**.
+* **Technical Justification:**
+  1. *Kernel Trick:* The RBF (Gaussian) kernel mathematically computes inner products in an **infinite-dimensional Hilbert feature space**:
+     $$K(\mathbf{x}, \mathbf{x}') = \exp\left( -\gamma \|\mathbf{x} - \mathbf{x}'\|^2 \right)$$
+  2. *Linear Hyperplane $\to$ Non-linear Boundary:* A linear separating hyperplane constructed in this infinite-dimensional space maps back to smooth, arbitrarily complex, non-linear decision contours in the original input space.
+  3. *Superiority over KNN & Gaussian NB:* While KNN can form piecewise non-linear boundaries, it suffers from noise and irregular boundary jaggedness. Gaussian Naïve Bayes can only construct linear or quadratic (ellipsoidal) boundaries under normal distributions. SVM with RBF provides the optimal margin and continuous non-linear separation.
+
+##### (b) Algorithm Most Sensitive to Irrelevant Features (1.5 Marks)
+
+* **Selected Algorithm:** **K-Nearest Neighbors (KNN, $k=5$)**.
+* **Technical Justification:**
+  1. *Uniform Distance Computation:* KNN computes spatial proximity (e.g., Euclidean distance) across all $D$ feature dimensions uniformly:
+     $$d(\mathbf{x}, \mathbf{y}) = \sqrt{\sum_{j=1}^D (x_j - y_j)^2}$$
+  2. *Curse of Dimensionality:* Irrelevant or noisy features contribute random variance to the distance sum equally with relevant features. As irrelevant dimensions increase, all pairwise distances converge to the same value ($d_{\max} \approx d_{\min}$), completely destroying the neighborhood structure.
+  3. *Comparison:* SVM learns small or zero weights ($\alpha_i$) for non-informative dimensions, and Naïve Bayes only computes feature-wise marginal products without distance coupling.
+
+##### (c) Algorithm Performing Better with Small Datasets and Missing Values (1.5 Marks)
+
+* **Selected Algorithm:** **Gaussian Naïve Bayes**.
+* **Technical Justification:**
+  1. *Small Dataset Robustness (High Bias, Low Variance):* With few samples, high-capacity models (SVM with RBF) are prone to severe overfitting, and KNN ($k=5$) suffers from sparse sample density. Gaussian Naïve Bayes requires estimating only two parameters per feature (mean $\mu_j$ and variance $\sigma_j^2$), converging to its asymptotic error much faster with small sample sizes $N$.
+  2. *Native Missing Value Handling (Marginalization):* Naïve Bayes naturally handles missing feature values during inference by simply omitting the missing attribute from the conditional probability product:
+     $$P(\mathbf{x}_{\text{obs}} \mid C) = \prod_{j \in \text{observed}} P(x_j \mid C)$$
+     In contrast, standard SVM and KNN cannot evaluate dot products or distance vectors when attributes contain `NaN` without requiring synthetic imputation.
+
+###### Comparative Summary Matrix
+
+| Evaluation Criterion | KNN ($k=5$) | Gaussian Naïve Bayes | SVM (RBF Kernel) | Winner |
+| :--- | :--- | :--- | :--- | :---: |
+| **Non-Linear Boundary** | Piecewise, noisy | Quadratic / Ellipsoidal | Infinite-dimensional projection | **SVM (RBF)** |
+| **Irrelevant Features** | Highly vulnerable (distance noise) | Moderate | Robust (max-margin regularization) | **KNN** *(Most Sensitive)* |
+| **Small $N$ + Missing Data** | Fails distance computation | Optimal (rapid convergence + native omission) | Fails kernel computation | **Gaussian NB** |
+
+---
+
+## Question 2: K-Nearest Neighbors Customer Spending Classification (20 Marks)
+
+:::info
+
+**Question Statement**
+
+A company wants to classify new customers as "High Spender" or "Low Spender" based on their income and average monthly spending.
+
+**Training data:**
+
+| Customer | Income (₹1000s) | Spending (₹1000s) | Class |
+| :--- | :---: | :---: | :---: |
+| C1 | 20 | 5 | Low |
+| C2 | 25 | 7 | Low |
+| C3 | 50 | 20 | High |
+| C4 | 55 | 22 | High |
+| C5 | 30 | 10 | Low |
+
+* **(a)** For a new customer with $\text{Income} = 40$ and $\text{Spending} = 15$, calculate the Euclidean distance from each training point. *(5 Marks)*
+* **(b)** Predict the class when $K=3$. Show all steps clearly. *(5 Marks)*
+* **(c)** Recalculate distances using the Manhattan distance metric and compare the result. *(5 Marks)*
+* **(d)** Explain: How feature scaling/normalization affects KNN results, and what happens when $K$ is too small or too large. *(3 Marks)*
+* **(e)** Mention one real-world application where KNN is used and why it is preferred there. *(2 Marks)*
+
+:::
+
+---
+
+### Solution 2
+
+#### 📝 Exam-Ready Answer (Structured for 20 Marks)
+
+Let the query point for the new customer be:
+$$\mathbf{X}_{\text{new}} = (x_1, x_2) = (40, 15)$$
+where $x_1$ represents Income (in ₹1000s) and $x_2$ represents Spending (in ₹1000s).
+
+---
+
+##### (a) Euclidean Distance Calculation (5 Marks)
+
+1. **Step 1: Formula Definition (1 Mark)**
+   The Euclidean distance ($L_2$ norm) between $\mathbf{X}_{\text{new}} = (40, 15)$ and training point $\mathbf{X}_i = (x_{i1}, x_{i2})$ is:
+   $$d_E(\mathbf{X}_{\text{new}}, \mathbf{X}_i) = \sqrt{(40 - x_{i1})^2 + (15 - x_{i2})^2}$$
+
+2. **Step 2: Individual Distance Computations (3 Marks)**
+   * **For Customer C1 $(20, 5)$:**
+     $$d_E(\mathbf{X}, C_1) = \sqrt{(40 - 20)^2 + (15 - 5)^2} = \sqrt{20^2 + 10^2} = \sqrt{400 + 100} = \sqrt{500} \approx \mathbf{22.36}$$
+
+   * **For Customer C2 $(25, 7)$:**
+     $$d_E(\mathbf{X}, C_2) = \sqrt{(40 - 25)^2 + (15 - 7)^2} = \sqrt{15^2 + 8^2} = \sqrt{225 + 64} = \sqrt{289} = \mathbf{17.00}$$
+
+   * **For Customer C3 $(50, 20)$:**
+     $$d_E(\mathbf{X}, C_3) = \sqrt{(40 - 50)^2 + (15 - 20)^2} = \sqrt{(-10)^2 + (-5)^2} = \sqrt{100 + 25} = \sqrt{125} \approx \mathbf{11.18}$$
+
+   * **For Customer C4 $(55, 22)$:**
+     $$d_E(\mathbf{X}, C_4) = \sqrt{(40 - 55)^2 + (15 - 22)^2} = \sqrt{(-15)^2 + (-7)^2} = \sqrt{225 + 49} = \sqrt{274} \approx \mathbf{16.55}$$
+
+   * **For Customer C5 $(30, 10)$:**
+     $$d_E(\mathbf{X}, C_5) = \sqrt{(40 - 30)^2 + (15 - 10)^2} = \sqrt{10^2 + 5^2} = \sqrt{100 + 25} = \sqrt{125} \approx \mathbf{11.18}$$
+
+3. **Step 3: Distance Summary Table (1 Mark)**
+
+| Customer | Income ($x_{i1}$) | Spending ($x_{i2}$) | Class | $(40-x_{i1})^2$ | $(15-x_{i2})^2$ | Sum of Squares | Euclidean Distance ($d_E$) |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **C1** | 20 | 5 | Low | 400 | 100 | 500 | $\approx \mathbf{22.36}$ |
+| **C2** | 25 | 7 | Low | 225 | 64 | 289 | $\mathbf{17.00}$ |
+| **C3** | 50 | 20 | High | 100 | 25 | 125 | $\approx \mathbf{11.18}$ |
+| **C4** | 55 | 22 | High | 225 | 49 | 274 | $\approx \mathbf{16.55}$ |
+| **C5** | 30 | 10 | Low | 100 | 25 | 125 | $\approx \mathbf{11.18}$ |
+
+---
+
+##### (b) Predict Class When $K=3$ (5 Marks)
+
+1. **Step 1: Rank Distances in Ascending Order (1.5 Marks)**
+
+| Rank | Customer | Euclidean Distance ($d_E$) | Class Label | Included in $K=3$? |
+| :---: | :---: | :---: | :---: | :---: |
+| **1** | C3 | $11.18$ | High | Yes |
+| **2** | C5 | $11.18$ | Low | Yes |
+| **3** | C4 | $16.55$ | High | Yes |
+| 4 | C2 | $17.00$ | Low | No |
+| 5 | C1 | $22.36$ | Low | No |
+
+2. **Step 2: Identify the $K=3$ Nearest Neighbors (1.5 Marks)**
+   * Nearest Neighbor 1: **C3** with $d_E = 11.18$ $\implies$ Class = **High**
+   * Nearest Neighbor 2: **C5** with $d_E = 11.18$ $\implies$ Class = **Low**
+   * Nearest Neighbor 3: **C4** with $d_E = 16.55$ $\implies$ Class = **High**
+
+3. **Step 3: Majority Voting & Posterior Probability (1 Mark)**
+   * Vote count for Class **High**: $2$ (from C3, C4)
+   * Vote count for Class **Low**: $1$ (from C5)
+   * Empirical class probability:
+     $$P(\text{High} \mid \mathbf{X}) = \frac{2}{3} \approx 66.67\%$$
+     $$P(\text{Low} \mid \mathbf{X}) = \frac{1}{3} \approx 33.33\%$$
+
+4. **Step 4: Final Prediction Statement (1 Mark)**
+   * By majority voting rule ($2 > 1$), the new customer with $\text{Income} = 40$ and $\text{Spending} = 15$ is predicted as:
+   $$\hat{y} = \text{\textbf{High Spender}}$$
+
+---
+
+##### (c) Recalculate Distances Using Manhattan Metric & Compare (5 Marks)
+
+1. **Step 1: Formula Definition (1 Mark)**
+   The Manhattan distance ($L_1$ norm / Taxicab distance) is:
+   $$d_M(\mathbf{X}_{\text{new}}, \mathbf{X}_i) = \lvert 40 - x_{i1} \rvert + \lvert 15 - x_{i2} \rvert$$
+
+2. **Step 2: Individual Computations (2 Marks)**
+   * **For C1 $(20, 5)$:** $d_M = \lvert 40 - 20 \rvert + \lvert 15 - 5 \rvert = 20 + 10 = \mathbf{30}$
+   * **For C2 $(25, 7)$:** $d_M = \lvert 40 - 25 \rvert + \lvert 15 - 7 \rvert = 15 + 8 = \mathbf{23}$
+   * **For C3 $(50, 20)$:** $d_M = \lvert 40 - 50 \rvert + \lvert 15 - 20 \rvert = 10 + 5 = \mathbf{15}$
+   * **For C4 $(55, 22)$:** $d_M = \lvert 40 - 55 \rvert + \lvert 15 - 22 \rvert = 15 + 7 = \mathbf{22}$
+   * **For C5 $(30, 10)$:** $d_M = \lvert 40 - 30 \rvert + \lvert 15 - 10 \rvert = 10 + 5 = \mathbf{15}$
+
+3. **Step 3: Metric Comparison Table (1 Mark)**
+
+| Customer | Class | Euclidean Distance ($d_E$) | Euclidean Rank | Manhattan Distance ($d_M$) | Manhattan Rank |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| **C3** | High | $11.18$ | **1 (Tie)** | $15$ | **1 (Tie)** |
+| **C5** | Low | $11.18$ | **1 (Tie)** | $15$ | **1 (Tie)** |
+| **C4** | High | $16.55$ | **3** | $22$ | **3** |
+| **C2** | Low | $17.00$ | 4 | $23$ | 4 |
+| **C1** | Low | $22.36$ | 5 | $30$ | 5 |
+
+4. **Step 4: Analytical Comparison & Conclusion (1 Mark)**
+   * **Set Invariance:** The set of $K=3$ nearest neighbors under Manhattan distance is identical: $\{C_3, C_5, C_4\}$.
+   * **Tally & Outcome:** The majority vote remains $2 \text{ High}$ vs $1 \text{ Low}$.
+   * **Conclusion:** The prediction remains unchanged as **High Spender**. This demonstrates that the local neighborhood around query point $(40, 15)$ is topologically stable across both $L_1$ and $L_2$ geometric norms.
+
+---
+
+##### (d) Theoretical Analysis: Feature Scaling & Choice of K (3 Marks)
+
+1. **Impact of Feature Scaling / Normalization (1.5 Marks)**
+   * *Problem of Dominance:* Distance metrics (Euclidean and Manhattan) assume all feature axes are isotropic (equal weight per numeric unit). If one feature has a vastly larger scale (e.g., Annual Income in raw rupees: ₹40,000 to ₹55,000) compared to monthly spending (₹5 to ₹22), the difference in income will mathematically dominate the distance sum:
+     $$(40,000 - 20,000)^2 \gg (15 - 5)^2$$
+     This effectively reduces the 2D feature space to a 1D space, ignoring the spending feature.
+   * *Remedy:* Standardizing features using **Min-Max Normalization** ($x' = \frac{x - x_{\min}}{x_{\max} - x_{\min}} \in [0, 1]$) or **Z-Score Standardization** ($z = \frac{x - \mu}{\sigma}$) ensures every feature contributes proportionally to the distance calculation.
+
+2. **Effects of Parameter $K$ Selection (1.5 Marks)**
+
+| Parameter Setting | Model Complexity | Bias vs Variance | Risk / Behavior |
+| :--- | :--- | :--- | :--- |
+| **$K$ is too small ($K = 1$)** | Overly complex, jagged decision boundaries | **Low Bias, High Variance** | Highly vulnerable to training noise and outliers; easily leads to **Overfitting**. |
+| **$K$ is too large ($K \to N$)** | Overly smooth, rigid boundaries | **High Bias, Low Variance** | Ignores local spatial structure; degenerates into predicting the global majority class (**Underfitting**). |
+
+* *Rule of Thumb:* Choose an odd value for $K$ in binary classification to prevent ties, commonly setting $K \approx \sqrt{N}$ and tuning via cross-validation.
+
+---
+
+##### (e) Real-World Application of KNN (2 Marks)
+
+1. **Application Domain (1 Mark):**
+   * **E-Commerce & Streaming Collaborative Filtering Recommender Systems** (e.g., Amazon product suggestions, Spotify playlist recommendations, or Netflix movie matching).
+
+2. **Why KNN is Preferred There (1 Mark):**
+   * *Instance-Based Simplicity (Lazy Learning):* It requires no expensive training phase. New users and items can be ingested dynamically in real time without retraining a global model.
+   * *Natural Neighborhood Intuition:* Recommending items liked by users with similar consumption profiles (nearest neighbors in feature embedding space) is highly interpretable, intuitive, and effective without requiring complex parametric assumptions.

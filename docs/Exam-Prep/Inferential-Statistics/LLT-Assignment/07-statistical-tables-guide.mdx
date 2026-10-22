@@ -1,0 +1,199 @@
+---
+sidebar_position: 7
+title: How to Read Statistical Tables - Beginner's Guide
+description: An intuitive, visual, beginner-friendly guide on how to read the Standard Normal (Z) and t-distribution tables from the exam PDF, with step-by-step examples from Units 3 and 4.
+tags: [inferential-statistics, exam-prep, unit-3, unit-4, distributions, t-test]
+toc_max_heading_level: 3
+---
+
+# How to Read Statistical Tables: A Beginner's Visual Guide
+
+When opening a statistical table PDF for the first time, seeing thousands of decimal numbers can feel overwhelming. 
+
+This guide breaks down the tables into **simple, repeatable visual recipes** so you can find the exact value you need during an exam in under 15 seconds.
+
+:::tip
+
+**Official Statistical Tables Reference**
+
+Open or download the reference tables PDF to follow along with the examples in this guide:  
+**[Open / Download Statistical Tables PDF](/StatistialTables.pdf)**
+
+:::
+
+---
+
+## 1. The Core Mental Model (Why Tables Exist)
+
+Statistical tables are essentially **translation dictionaries**. They convert back and forth between two languages:
+
+1.  **Distances on the X-Axis ($Z$ or $t$ values):** How many standard errors an observation sits away from the center.
+2.  **Areas Under the Curve (Probabilities / $\alpha$):** The percentage of data or probability contained in a tail.
+
+```
+       Language 1: Z or t score  <----[ Table ]---->  Language 2: Probability / Area (p-value, α)
+```
+
+### The Symmetry Secret
+Because normal and $t$ curves are **perfectly mirror-symmetric around zero**, statistical tables **only print positive values**. You determine whether the value is positive ($+$) or negative ($-$) based on whether your problem is on the right tail or the left tail.
+
+---
+
+## 2. Table A.1: The Standard Normal $Z$-Table (Page 2)
+
+Table A.1 is used whenever sample sizes are large ($n \ge 30$) or when dealing with proportions.
+
+### Anatomy of the $Z$-Table Grid
+The table tells you the **area to the left** of a given $Z$-score: $A(z) = P(Z \le z)$.
+
+*   **Left Vertical Column:** Gives the integer and the first decimal (e.g., `1.9`).
+*   **Top Horizontal Row:** Gives the second decimal place (e.g., `.06`).
+*   **Intersection Cell:** Gives the cumulative probability area ($0.5000$ to $0.9999$).
+
+```
+           0.00    0.01    ...    0.06    ...
+   ...     ...     ...            ...
+   1.9    .9713   .9719   ...   [.9750]  <--- Intersection: P(Z ≤ 1.96) = 0.9750 (97.5%)
+   2.0    .9772   .9778   ...    .9803
+```
+
+---
+
+### Direction 1: Finding Critical Values ($Z_{\text{crit}}$) for Confidence Intervals & Tests
+
+> **The Exam Secret:** You almost **never** need to search the main grid for common critical $Z$-values!
+
+Look at the **top right corner of Page 2** in your PDF. There is a shortcut box labeled:  
+`Values of z of particular importance:`
+
+| What Your Question Asks For | Confidence Level | Alpha ($\alpha$) | What to Look Up | Exact Table A.1 Value |
+| :--- | :---: | :---: | :---: | :---: |
+| **90% Confidence Interval** | $90\%$ | $0.10$ | Right tail $5\%$ ($0.05$) | **$Z = \pm 1.645$** |
+| **95% Confidence Interval** | $95\%$ | $0.05$ | Right tail $2.5\%$ ($0.025$) | **$Z = \pm 1.960$** |
+| **99% Confidence Interval** | $99\%$ | $0.01$ | Right tail $0.5\%$ ($0.005$) | **$Z = \pm 2.576$** |
+| **1-Tailed Test at 1%** | - | $0.01$ | Right tail $1\%$ ($0.01$) | **$Z = 2.326$** (or $\pm 2.33$) |
+
+#### Worked Example (Unit 3, Question 1 & 2):
+*   **Problem:** Calculate a $95\%$ confidence interval.
+*   **Action:** Go to Page 2 $\to$ look at the shortcut box $\to$ find $95\%$ (right tail $2.5\%$) $\to$ read **$Z = 1.960$**. Done!
+
+---
+
+### Direction 2: Finding a P-Value from a Calculated $Z$-Score
+
+When you calculate a test statistic (like $Z_{\text{cal}} = -2.36$ in Unit 4, Question 1) and need to find the $p$-value:
+
+#### Step-by-Step Visual Recipe:
+1.  **Drop the negative sign** (due to symmetry): $Z = 2.36$.
+2.  **Split the number:** $2.36 = \mathbf{2.3} + \mathbf{0.06}$.
+3.  **Trace the Grid:**
+    *   Find row **`2.3`** on the left.
+    *   Find column **`.06`** on the top.
+    *   Read the intersection cell: **`0.9909`**.
+4.  **Find the Single Tail Area:**  
+    Subtract from $1$ because the table gives the area to the left:
+    $$\text{Tail Area} = 1 - 0.9909 = \mathbf{0.0091}$$
+5.  **Check Test Type:**
+    *   *If One-Tailed:* $p\text{-value} = 0.0091$.
+    *   *If Two-Tailed:* Multiply by 2:
+        $$p\text{-value} = 2 \times 0.0091 = \mathbf{0.0182}$$
+
+---
+
+## 3. Table A.2: The $t$-Distribution Table (Page 3)
+
+The $t$-table is used whenever sample size is small ($n < 30$) and population standard deviation $\sigma$ is unknown.
+
+### The Two-Row Header Decoder (The Most Common Trap)
+Look closely at the column headers at the top of Page 3:
+
+```
+Degrees of    Two-tailed test:   10%      5%      2%      1%      0.2%    0.1%
+ freedom      One-tailed test:    5%     2.5%     1%     0.5%     0.1%    0.05%
+```
+
+Notice that each column has **two labels**:
+*   A two-tailed $5\%$ test splits into two $2.5\%$ tails. That is why **Two-tailed: 5%** sits in the exact same column as **One-tailed: 2.5%**!
+
+#### The "No-Brainer" Rule for Picking the Right Column:
+*   **Rule 1:** If your problem is a **Confidence Interval** OR a **Two-Tailed Test** ($\neq$):  
+    $\implies$ **Look ONLY at the top header row (`Two-tailed test:`)**.
+*   **Rule 2:** If your problem is a **One-Tailed Test** ($>$ or $<$):  
+    $\implies$ **Look ONLY at the second header row (`One-tailed test:`)**.
+
+---
+
+### Step-by-Step Lookup Examples Mapped from Your Notes
+
+#### Example 1: Confidence Interval (Unit 3, Question 3)
+*   **Problem:** $95\%$ Confidence Interval with sample size $n = 15$.
+*   **Step 1 (Degrees of Freedom):** $df = n - 1 = 15 - 1 = \mathbf{14}$.
+*   **Step 2 (Select Header):** Confidence intervals have two tails. Look at row 1: **`Two-tailed test: 5%`** (Column 2).
+*   **Step 3 (Find Value):** Go down row $df = 14$ to Column 2:
+    $$\text{Value} = \mathbf{2.145}$$
+*   **Result:** $t_c = 2.145$.
+
+---
+
+#### Example 2: Left-Tailed Test (Unit 4, Question 2)
+*   **Problem:** Left-tailed test ($H_1: \mu < 20$) at $\alpha = 0.05$ with $n = 30$.
+*   **Step 1 (Degrees of Freedom):** $df = 30 - 1 = \mathbf{29}$.
+*   **Step 2 (Select Header):** This is a one-tailed test. Look at row 2: **`One-tailed test: 5%`** (Column 1).
+*   **Step 3 (Find Value):** Go down row $df = 29$ to Column 1:
+    $$\text{Magnitude} = 1.699$$
+*   **Step 4 (Pick the Sign):** Since it is a **left-tailed test** ($<$), the rejection region is on the negative side:
+    $$t_{\text{crit}} = \mathbf{-1.699}$$
+
+---
+
+#### Example 3: Right-Tailed Test (Unit 4, Question 6)
+*   **Problem:** Right-tailed test ($H_1: \mu > 4$) at $\alpha = 0.05$ with $n = 12$.
+*   **Step 1 (Degrees of Freedom):** $df = 12 - 1 = \mathbf{11}$.
+*   **Step 2 (Select Header):** One-tailed test $\implies$ **`One-tailed test: 5%`** (Column 1).
+*   **Step 3 (Find Value):** Go down row $df = 11$ to Column 1:
+    $$\text{Magnitude} = 1.796$$
+*   **Step 4 (Pick the Sign):** Since it is a **right-tailed test** ($>$), keep it positive:
+    $$t_{\text{crit}} = \mathbf{+1.796}$$
+
+---
+
+#### Example 4: Two-Sample Independent $t$-Test (Unit 4, Question 12)
+*   **Problem:** Two strategies with $n_1 = 5$ and $n_2 = 5$, two-tailed test at $\alpha = 0.01$.
+*   **Step 1 (Degrees of Freedom):**
+    $$df = n_1 + n_2 - 2 = 5 + 5 - 2 = \mathbf{8}$$
+*   **Step 2 (Select Header):** Two-tailed test $\implies$ **`Two-tailed test: 1%`** (Column 4).
+*   **Step 3 (Find Value):** Go down row $df = 8$ to Column 4:
+    $$t_{\text{crit}} = \mathbf{\pm 3.355}$$
+
+---
+
+## 4. Quick Overview: Table A.3 ($F$-Table) & Table A.4 ($\chi^2$-Table)
+
+These tables appear in Pages 4 to 10 of your PDF and are used in later units (ANOVA and Contingency Tables):
+
+### Table A.3 ($F$-Distribution, Pages 4–9)
+Used when comparing two variances or conducting ANOVA:
+*   **Numerator $df$ ($\nu_1$):** Read across the **top horizontal columns** ($1, 2, 3, \dots$).
+*   **Denominator $df$ ($\nu_2$):** Read down the **left vertical rows** ($1, 2, 3, \dots$).
+*   *Pages are separated by $\alpha$:* Page 4 is for $5\%$ ($\alpha = 0.05$), Page 6 is for $1\%$ ($\alpha = 0.01$).
+
+### Table A.4 ($\chi^2$-Distribution, Page 10)
+Used for tests of independence in contingency tables:
+*   Calculate degrees of freedom: $df = (\text{rows} - 1)(\text{columns} - 1)$.
+*   Locate your $df$ row, and match with the $\alpha$ column ($5\%$ or $1\%$).
+
+---
+
+## 5. Master 10-Second Exam Decision Matrix
+
+Whenever you encounter a table question, follow this direct routing chart:
+
+| What the Exam Asks For | Target Table | Row to Locate | Column to Locate | Sign to Use |
+| :--- | :---: | :---: | :---: | :---: |
+| **Large Sample Mean / Proportion CI** | **Table A.1 (p. 2)** | Shortcut Box | $90\% \to 1.645, \; 95\% \to 1.960, \; 99\% \to 2.576$ | $\pm$ |
+| **Small Sample Mean CI** | **Table A.2 (p. 3)** | $df = n - 1$ | `Two-tailed test:` match $1 - \text{Confidence}$ | $\pm$ |
+| **Two-Tailed $t$-Test** | **Table A.2 (p. 3)** | $df$ | `Two-tailed test:` match $\alpha$ ($10\%, 5\%, 1\%$) | $\pm$ |
+| **Right-Tailed $t$-Test** | **Table A.2 (p. 3)** | $df$ | `One-tailed test:` match $\alpha$ ($5\%, 1\%$) | **$+$** |
+| **Left-Tailed $t$-Test** | **Table A.2 (p. 3)** | $df$ | `One-tailed test:` match $\alpha$ ($5\%, 1\%$) | **$-$** |
+| **Two-Sample Independent $t$-Test** | **Table A.2 (p. 3)** | $df = n_1 + n_2 - 2$ | Match test direction and $\alpha$ | $\pm$ (or $+$ / $-$) |
+| **Paired $t$-Test** | **Table A.2 (p. 3)** | $df = n_{\text{pairs}} - 1$ | Match test direction and $\alpha$ | $+$ or $-$ |

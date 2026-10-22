@@ -1,0 +1,386 @@
+---
+sidebar_position: 1
+title: Unit 1 - Descriptive Statistics & Relationships
+description: LLT Component Unit 1 questions and comprehensive model solutions covering central tendency, dispersion, consistency, skewness, kurtosis, and Pearson correlation.
+tags: [inferential-statistics, exam-prep, unit-1, descriptive-statistics, correlation]
+toc_max_heading_level: 3
+---
+
+# Unit 1: Descriptive Statistics & Relationships
+
+> **Course -** Inferential Statistics  
+> **Component -** LLT Assignment  
+> **Unit -** Unit 1
+
+---
+
+## Question 1
+
+:::info
+
+**Question Statement**
+
+A company wants to evaluate the performance of two teams (Team X and Team Y). The performance score is measured on a scale from 1 to 100, and productivity data for 6 employees from each team is provided below.
+
+**Data:**  
+* **Team X:** 88, 92, 85, 79, 90, 95  
+* **Team Y:** 82, 75, 78, 80, 70, 85  
+*(Note : consider it as population data)*
+
+**Questions:**  
+i. Calculate the mean, median, and mode (if any) for both teams to understand the central tendency of performance scores.  
+ii. Compute the range, variance, standard deviation , coefficient of variation for both teams to assess the dispersion of performance scores.  
+iii. Based on your analysis, which team shows higher consistency in employee performance? Provide a statistical justification for your conclusion.  
+iv. Find skewness and kurtosis for given data.
+
+:::
+
+---
+
+### Solution 1
+
+##### (i) Measures of Central Tendency
+
+Given population size $N = 6$ for both teams.
+
+###### 1. Team X Calculations
+*   **Raw Data:** $\{88, 92, 85, 79, 90, 95\}$
+*   **Sorted Data:** $\{79, 85, 88, 90, 92, 95\}$
+*   **Mean ($\mu_X$):**
+    $$\mu_X = \frac{\sum X}{N} = \frac{79 + 85 + 88 + 90 + 92 + 95}{6} = \frac{529}{6} = \mathbf{88.17}$$
+*   **Median:** Average of the 3rd and 4th terms:
+    $$\text{Median}_X = \frac{88 + 90}{2} = \mathbf{89.00}$$
+*   **Mode:**
+    *   *By Inspection:* Each value appears exactly once $\implies$ **No unique mode**.
+    *   *By Karl Pearson's Empirical Formula:*
+        $$\text{Mode}_X = 3(\text{Median}) - 2(\text{Mean}) = 3(89.0) - 2(88.17) = 267 - 176.34 = \mathbf{90.66}$$
+
+###### 2. Team Y Calculations
+*   **Raw Data:** $\{82, 75, 78, 80, 70, 85\}$
+*   **Sorted Data:** $\{70, 75, 78, 80, 82, 85\}$
+*   **Mean ($\mu_Y$):**
+    $$\mu_Y = \frac{\sum Y}{N} = \frac{70 + 75 + 78 + 80 + 82 + 85}{6} = \frac{470}{6} = \mathbf{78.33}$$
+*   **Median:** Average of the 3rd and 4th terms:
+    $$\text{Median}_Y = \frac{78 + 80}{2} = \mathbf{79.00}$$
+*   **Mode:**
+    *   *By Inspection:* Each value appears exactly once $\implies$ **No unique mode**.
+    *   *By Karl Pearson's Empirical Formula:*
+        $$\text{Mode}_Y = 3(\text{Median}) - 2(\text{Mean}) = 3(79.0) - 2(78.33) = 237 - 156.66 = \mathbf{80.34}$$
+
+###### Central Tendency Summary Table
+
+| Team | Mean ($\mu$) | Median | Mode (Empirical) |
+| :--- | :---: | :---: | :---: |
+| **Team X** | 88.17 | 89.00 | 90.66 |
+| **Team Y** | 78.33 | 79.00 | 80.34 |
+
+---
+
+##### (ii) Measures of Dispersion (Population Data: $N = 6$)
+
+###### 1. Team X Dispersion Table
+*   $\text{Range}_X = \text{Maximum} - \text{Minimum} = 95 - 79 = \mathbf{16}$
+
+| Team X ($X$) | Deviation $(X - \mu_X)$ | Squared Deviation $(X - \mu_X)^2$ |
+| :---: | :---: | :---: |
+| 88 | $88 - 88.17 = -0.17$ | $0.03$ |
+| 92 | $92 - 88.17 = 3.83$ | $14.67$ |
+| 85 | $85 - 88.17 = -3.17$ | $10.05$ |
+| 79 | $79 - 88.17 = -9.17$ | $84.09$ |
+| 90 | $90 - 88.17 = 1.83$ | $3.35$ |
+| 95 | $95 - 88.17 = 6.83$ | $46.65$ |
+| **Total ($\sum$)** | **$0.00$** | **$158.84$** |
+
+*   **Population Variance ($\sigma_X^2$):**
+    $$\sigma_X^2 = \frac{\sum (X - \mu_X)^2}{N} = \frac{158.84}{6} = \mathbf{26.47}$$
+*   **Population Standard Deviation ($\sigma_X$):**
+    $$\sigma_X = \sqrt{\sigma_X^2} = \sqrt{26.47} = \mathbf{5.15}$$
+    *(Note: If evaluated using sample degrees of freedom $s^2 = \frac{158.84}{6-1} = 31.77 \implies s = 5.64$)*
+*   **Coefficient of Variation ($CV_X$):**
+    $$CV_X = \left( \frac{\sigma_X}{\mu_X} \right) \times 100\% = \left( \frac{5.15}{88.17} \right) \times 100\% = \mathbf{5.84\%}$$
+
+---
+
+###### 2. Team Y Dispersion Table
+*   $\text{Range}_Y = \text{Maximum} - \text{Minimum} = 85 - 70 = \mathbf{15}$
+
+| Team Y ($Y$) | Deviation $(Y - \mu_Y)$ | Squared Deviation $(Y - \mu_Y)^2$ |
+| :---: | :---: | :---: |
+| 70 | $70 - 78.33 = -8.33$ | $69.39$ |
+| 75 | $75 - 78.33 = -3.33$ | $11.09$ |
+| 78 | $78 - 78.33 = -0.33$ | $0.11$ |
+| 80 | $80 - 78.33 = 1.67$ | $2.79$ |
+| 82 | $82 - 78.33 = 3.67$ | $13.47$ |
+| 85 | $85 - 78.33 = 6.67$ | $44.49$ |
+| **Total ($\sum$)** | **$0.00$** | **$141.34$** |
+
+*   **Population Variance ($\sigma_Y^2$):**
+    $$\sigma_Y^2 = \frac{\sum (Y - \mu_Y)^2}{N} = \frac{141.34}{6} = \mathbf{23.56}$$
+*   **Population Standard Deviation ($\sigma_Y$):**
+    $$\sigma_Y = \sqrt{\sigma_Y^2} = \sqrt{23.56} = \mathbf{4.85}$$
+    *(Note: If evaluated using sample degrees of freedom $s^2 = \frac{141.34}{6-1} = 28.27 \implies s = 5.32$)*
+*   **Coefficient of Variation ($CV_Y$):**
+    $$CV_Y = \left( \frac{\sigma_Y}{\mu_Y} \right) \times 100\% = \left( \frac{4.85}{78.33} \right) \times 100\% = \mathbf{6.20\%}$$
+
+---
+
+###### Dispersion Summary Table
+
+| Team | Range | Variance ($\sigma^2$) | Standard Deviation ($\sigma$) | Coefficient of Variation (CV) |
+| :--- | :---: | :---: | :---: | :---: |
+| **Team X** | 16 | 26.47 | 5.15 | 5.84% |
+| **Team Y** | 15 | 23.56 | 4.85 | 6.20% |
+
+---
+
+##### (iii) Consistency Analysis & Statistical Justification
+
+*   **Conclusion:** **Team X shows higher consistency** in employee performance.
+*   **Statistical Justification Table:**
+
+| Metrics | Team X | Team Y | Determination of Consistency |
+| :--- | :---: | :---: | :--- |
+| **Mean (Average)** | 88.17 | 78.33 | Team X performs higher on average. |
+| **Standard Deviation ($\sigma$)** | 5.15 | 4.85 | Measures absolute dispersion only; sensitive to mean baseline. |
+| **Coefficient of Variation (CV)** | **5.84%** | **6.20%** | **Lower CV indicates higher consistency.** |
+
+*   **Analytical Reasoning:**  
+    While Team Y has a slightly lower absolute standard deviation ($4.85$ vs $5.15$), the two teams have vastly different average production scores ($88.17$ vs $78.33$). Standard deviation alone cannot measure consistency across groups with unequal baselines. The **Coefficient of Variation ($CV = \frac{\sigma}{\mu} \times 100\%$)** measures relative dispersion. Because $CV_X = 5.84\% < CV_Y = 6.20\%$, Team X exhibits less variability relative to its mean performance level, proving statistically superior consistency.
+
+---
+
+##### (iv) Skewness and Kurtosis
+
+###### 1. Team X Moment Computation Table ($d = X - 88.17$)
+
+| $X$ | $d = (X - 88.17)$ | $d^2$ | $d^3$ | $d^4$ |
+| :---: | :---: | :---: | :---: | :---: |
+| 88 | -0.17 | 0.03 | -0.05 | 0.001 |
+| 92 | 3.83 | 14.67 | 56.18 | 215.18 |
+| 85 | -3.17 | 10.05 | -31.85 | 100.97 |
+| 79 | -9.17 | 84.09 | -771.09 | 7070.93 |
+| 90 | 1.83 | 3.35 | 6.13 | 11.22 |
+| 95 | 6.83 | 46.65 | 318.61 | 2176.08 |
+| **$\sum$** | **0.00** | **158.84** | **-420.02** | **9574.38** |
+
+*   **Central Moments:**
+    *   $m_2 = \frac{\sum d^2}{N} = \frac{158.84}{6} = \mathbf{26.47}$
+    *   $m_3 = \frac{\sum d^3}{N} = \frac{-420.02}{6} = \mathbf{-70.00}$
+    *   $m_4 = \frac{\sum d^4}{N} = \frac{9574.38}{6} = \mathbf{1595.73}$
+*   **Skewness:**
+    *   *Karl Pearson's Skewness:*
+        $$S_k = \frac{3(\text{Mean} - \text{Median})}{\sigma} = \frac{3(88.17 - 89.00)}{5.15} = \frac{-2.49}{5.15} = \mathbf{-0.48}$$
+    *   *Moment Coefficient of Skewness ($\gamma_1$):*
+        $$\gamma_1 = \frac{m_3}{(m_2)^{3/2}} = \frac{-70.00}{(26.47)^{1.5}} = \frac{-70.00}{136.20} = \mathbf{-0.51}$$
+*   **Kurtosis:**
+    *   $$\beta_2 = \frac{m_4}{(m_2)^2} = \frac{1595.73}{(26.47)^2} = \frac{1595.73}{700.66} = \mathbf{2.28}$$
+    *   *Excess Kurtosis ($\gamma_2$):*
+        $$\gamma_2 = \beta_2 - 3 = 2.28 - 3 = \mathbf{-0.72}$$
+
+---
+
+###### 2. Team Y Moment Computation Table ($d = Y - 78.33$)
+
+| $Y$ | $d = (Y - 78.33)$ | $d^2$ | $d^3$ | $d^4$ |
+| :---: | :---: | :---: | :---: | :---: |
+| 82 | 3.67 | 13.47 | 49.43 | 181.41 |
+| 75 | -3.33 | 11.09 | -36.93 | 122.98 |
+| 78 | -0.33 | 0.11 | -0.04 | 0.01 |
+| 80 | 1.67 | 2.79 | 4.66 | 7.78 |
+| 70 | -8.33 | 69.39 | -578.01 | 4814.80 |
+| 85 | 6.67 | 44.49 | 296.74 | 1979.25 |
+| **$\sum$** | **0.00** | **141.34** | **-264.15** | **7106.23** |
+
+*   **Central Moments:**
+    *   $m_2 = \frac{\sum d^2}{N} = \frac{141.34}{6} = \mathbf{23.56}$
+    *   $m_3 = \frac{\sum d^3}{N} = \frac{-264.15}{6} = \mathbf{-44.03}$
+    *   $m_4 = \frac{\sum d^4}{N} = \frac{7106.23}{6} = \mathbf{1184.37}$
+*   **Skewness:**
+    *   *Karl Pearson's Skewness:*
+        $$S_k = \frac{3(\text{Mean} - \text{Median})}{\sigma} = \frac{3(78.33 - 79.00)}{4.85} = \frac{-2.01}{4.85} = \mathbf{-0.41}$$
+    *   *Moment Coefficient of Skewness ($\gamma_1$):*
+        $$\gamma_1 = \frac{m_3}{(m_2)^{3/2}} = \frac{-44.03}{(23.56)^{1.5}} = \frac{-44.03}{114.33} = \mathbf{-0.39}$$
+*   **Kurtosis:**
+    *   $$\beta_2 = \frac{m_4}{(m_2)^2} = \frac{1184.37}{(23.56)^2} = \frac{1184.37}{555.07} = \mathbf{2.13}$$
+    *   *Excess Kurtosis ($\gamma_2$):*
+        $$\gamma_2 = \beta_2 - 3 = 2.13 - 3 = \mathbf{-0.87}$$
+
+---
+
+###### Shape Interpretation
+*   **Skewness:** Both datasets have a negative skewness value ($S_{k, X} = -0.48$, $S_{k, Y} = -0.41$), which reveals both distributions are **left-skewed**. A few lower scores pull the tail towards the lower end while the majority of values sit at the higher end.
+*   **Kurtosis:** Both teams have excess kurtosis less than zero ($\gamma_{2, X} = -0.72$, $\gamma_{2, Y} = -0.87$). This indicates **platykurtic** distributions with flatter peaks and lighter tails compared to a standard normal curve.
+
+---
+
+## Question 2
+
+:::info
+
+**Question Statement**
+
+A school psychologist is examining the effects of two factors, "Study Hours" and "Sleep Duration," on students’ "Exam Scores." The following data has been collected for 5 students over a specific academic term: (Note : consider it as population data)
+
+| Individual | Study Hours | Sleep Duration (hours) | Exam Score (%) |
+| :---: | :---: | :---: | :---: |
+| 1 | 10 | 7 | 85 |
+| 2 | 8 | 6 | 78 |
+| 3 | 12 | 5 | 90 |
+| 4 | 6 | 8 | 74 |
+| 5 | 9 | 6 | 80 |
+
+a) Compute the mean,median,mode, range, variance, and standard deviation for both independent variables to analyze the dispersion of study hours and sleep duration.  
+b) Determine which independent variable (Study Hours or Sleep Duration) has a stronger relationship with Exam Scores. Use statistical techniques to justify your analysis.  
+c) Find skewness and kurtosis for all last three columns.  
+d) Compute the correlation and coefficient between dependent and independent variables.
+
+:::
+
+---
+
+### Solution 2
+
+##### (a) Central Tendency and Dispersion of Independent Variables ($N = 5$)
+
+###### 1. Calculation for Study Hours ($X_1$)
+*   **Dataset:** $\{10, 8, 12, 6, 9\}$
+*   **Sorted:** $\{6, 8, 9, 10, 12\}$
+*   **Mean ($\mu_{X_1}$):**
+    $$\mu_{X_1} = \frac{10 + 8 + 12 + 6 + 9}{5} = \frac{45}{5} = \mathbf{9.0\text{ hours}}$$
+*   **Median:** The middle (3rd) value is **$9.0\text{ hours}$**.
+*   **Mode:**
+    *   *By Inspection:* All values appear once $\implies$ **No unique mode**.
+    *   *By Empirical Formula:* $\text{Mode} = 3(9.0) - 2(9.0) = \mathbf{9.0\text{ hours}}$.
+*   **Range:** $\text{Maximum} - \text{Minimum} = 12 - 6 = \mathbf{6\text{ hours}}$.
+*   **Population Variance ($\sigma_{X_1}^2$):**
+    $$\sum (X_1 - \mu)^2 = (10 - 9)^2 + (8 - 9)^2 + (12 - 9)^2 + (6 - 9)^2 + (9 - 9)^2 = 1 + 1 + 9 + 9 + 0 = \mathbf{20.00}$$
+    $$\sigma_{X_1}^2 = \frac{20.00}{5} = \mathbf{4.00}$$
+*   **Population Standard Deviation ($\sigma_{X_1}$):**
+    $$\sigma_{X_1} = \sqrt{4.00} = \mathbf{2.00\text{ hours}}$$
+
+---
+
+###### 2. Calculation for Sleep Duration ($X_2$)
+*   **Dataset:** $\{7, 6, 5, 8, 6\}$
+*   **Sorted:** $\{5, 6, 6, 7, 8\}$
+*   **Mean ($\mu_{X_2}$):**
+    $$\mu_{X_2} = \frac{7 + 6 + 5 + 8 + 6}{5} = \frac{32}{5} = \mathbf{6.4\text{ hours}}$$
+*   **Median:** The middle (3rd) value is **$6.0\text{ hours}$**.
+*   **Mode:** **$6.0\text{ hours}$** (appears twice).
+*   **Range:** $\text{Maximum} - \text{Minimum} = 8 - 5 = \mathbf{3.0\text{ hours}}$.
+*   **Population Variance ($\sigma_{X_2}^2$):**
+    $$\sum (X_2 - \mu)^2 = (7 - 6.4)^2 + (6 - 6.4)^2 + (5 - 6.4)^2 + (8 - 6.4)^2 + (6 - 6.4)^2$$
+    $$= 0.36 + 0.16 + 1.96 + 2.56 + 0.16 = \mathbf{5.20}$$
+    $$\sigma_{X_2}^2 = \frac{5.20}{5} = \mathbf{1.04}$$
+*   **Population Standard Deviation ($\sigma_{X_2}$):**
+    $$\sigma_{X_2} = \sqrt{1.04} = \mathbf{1.02\text{ hours}}$$
+
+---
+
+###### Independent Variables Summary Table
+
+| Variable | Mean ($\mu$) | Median | Mode | Variance ($\sigma^2$) | Std Dev ($\sigma$) | Range |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Study Hours** | 9.0 | 9.0 | 9.0 | 4.00 | 2.00 | 6 |
+| **Sleep Duration** | 6.4 | 6.0 | 6.0 | 1.04 | 1.02 | 3 |
+
+---
+
+##### (b) & (d) Correlation and Relationship Strength Analysis
+
+Given baseline data for dependent variable **Exam Score ($Y$)**: $\{85, 78, 90, 74, 80\}$.
+*   **Mean ($\mu_Y$):**
+    $$\mu_Y = \frac{85 + 78 + 90 + 74 + 80}{5} = \frac{407}{5} = \mathbf{81.4\%}$$
+*   **Sum of Squared Deviations $\sum (Y - \mu_Y)^2$:**
+    $$\sum (Y - \mu_Y)^2 = (85 - 81.4)^2 + (78 - 81.4)^2 + (90 - 81.4)^2 + (74 - 81.4)^2 + (80 - 81.4)^2$$
+    $$= 12.96 + 11.56 + 73.96 + 54.76 + 1.96 = \mathbf{155.20}$$
+*   $$\sigma_Y^2 = \frac{155.20}{5} = 31.04 \implies \sigma_Y = \sqrt{31.04} \approx 5.57\%$$
+
+---
+
+###### 1. Relationship Between Study Hours ($X_1$) vs Exam Scores ($Y$)
+
+| Student | $(X_1 - \mu_{X_1})$ | $(Y - \mu_Y)$ | Product: $(X_1 - \mu_{X_1})(Y - \mu_Y)$ |
+| :---: | :---: | :---: | :---: |
+| 1 | $10 - 9 = 1.0$ | $85 - 81.4 = 3.6$ | $1.0 \times 3.6 = 3.6$ |
+| 2 | $8 - 9 = -1.0$ | $78 - 81.4 = -3.4$ | $(-1.0) \times (-3.4) = 3.4$ |
+| 3 | $12 - 9 = 3.0$ | $90 - 81.4 = 8.6$ | $3.0 \times 8.6 = 25.8$ |
+| 4 | $6 - 9 = -3.0$ | $74 - 81.4 = -7.4$ | $(-3.0) \times (-7.4) = 22.2$ |
+| 5 | $9 - 9 = 0.0$ | $80 - 81.4 = -1.4$ | $0.0 \times (-1.4) = 0.0$ |
+| **Total ($\sum$)** | | | **$55.0$** |
+
+*   **Pearson Correlation ($r_{\text{study}}$):**
+    $$r_{\text{study}} = \frac{\sum (X_1 - \mu_{X_1})(Y - \mu_Y)}{\sqrt{\sum (X_1 - \mu_{X_1})^2 \cdot \sum (Y - \mu_Y)^2}} = \frac{55.0}{\sqrt{20.0 \times 155.2}} = \frac{55.0}{\sqrt{3104}} = \mathbf{+0.9872}$$
+*   **Coefficient of Determination ($R^2$):**
+    $$R^2 = (0.9872)^2 = 0.9746\quad (\mathbf{97.46\%})$$
+
+---
+
+###### 2. Relationship Between Sleep Duration ($X_2$) vs Exam Scores ($Y$)
+
+| Student | $(X_2 - \mu_{X_2})$ | $(Y - \mu_Y)$ | Product: $(X_2 - \mu_{X_2})(Y - \mu_Y)$ |
+| :---: | :---: | :---: | :---: |
+| 1 | $7 - 6.4 = 0.6$ | $85 - 81.4 = 3.6$ | $0.6 \times 3.6 = 2.16$ |
+| 2 | $6 - 6.4 = -0.4$ | $78 - 81.4 = -3.4$ | $(-0.4) \times (-3.4) = 1.36$ |
+| 3 | $5 - 6.4 = -1.4$ | $90 - 81.4 = 8.6$ | $(-1.4) \times 8.6 = -12.04$ |
+| 4 | $8 - 6.4 = 1.6$ | $74 - 81.4 = -7.4$ | $1.6 \times (-7.4) = -11.84$ |
+| 5 | $6 - 6.4 = -0.4$ | $80 - 81.4 = -1.4$ | $(-0.4) \times (-1.4) = 0.56$ |
+| **Total ($\sum$)** | | | **$-19.80$** |
+
+*   **Pearson Correlation ($r_{\text{sleep}}$):**
+    $$r_{\text{sleep}} = \frac{\sum (X_2 - \mu_{X_2})(Y - \mu_Y)}{\sqrt{\sum (X_2 - \mu_{X_2})^2 \cdot \sum (Y - \mu_Y)^2}} = \frac{-19.80}{\sqrt{5.2 \times 155.2}} = \frac{-19.80}{\sqrt{807.04}} = \mathbf{-0.6970}$$
+*   **Coefficient of Determination ($R^2$):**
+    $$R^2 = (-0.6970)^2 = 0.4858\quad (\mathbf{48.58\%})$$
+
+---
+
+###### Stronger Relationship Justification
+Comparing the absolute values of the two correlation coefficients:
+$$|r_{\text{study}}| = |+0.9872| = \mathbf{0.9872}$$
+$$|r_{\text{sleep}}| = |-0.6970| = \mathbf{0.6970}$$
+
+*   **Conclusion:** **Study Hours** has an almost perfect positive linear relationship with final exam performance ($r = +0.9872$). Since $|0.9872| > |0.6970|$, **Study Hours serves as a significantly stronger predictor** for Exam Scores than Sleep Duration. Furthermore, $97.46\%$ of score variation is explained by study hours alone, compared to only $48.58\%$ by sleep duration.
+
+---
+
+##### (c) Skewness and Kurtosis for All Last Three Columns
+
+###### Computation Summary Table
+
+| Metric | Study Hours ($X_1$) | Sleep Duration ($X_2$) | Exam Score ($Y$) |
+| :--- | :---: | :---: | :---: |
+| **Deviations $(x - \mu)$** | $1, -1, 3, -3, 0$ | $0.6, -0.4, -1.4, 1.6, -0.4$ | $3.6, -3.4, 8.6, -7.4, -1.4$ |
+| **$\sum (x - \mu)^2$** | $20.00$ | $5.20$ | $155.20$ |
+| **$\sum (x - \mu)^4$** | $164.00$ | $10.56$ | $8774.15$ |
+| **$m_2 = \frac{\sum d^2}{N}$** | $4.00$ | $1.04$ | $31.04$ |
+| **$m_4 = \frac{\sum d^4}{N}$** | $32.80$ | $2.1152$ | $1754.83$ |
+
+---
+
+###### 1. Study Hours
+*   **Skewness:**
+    $$S_k = \frac{3(\mu - \text{Median})}{\sigma} = \frac{3(9.0 - 9.0)}{2.0} = \mathbf{0.00}\quad (\text{Perfect symmetry})$$
+*   **Kurtosis ($\beta_2$):**
+    $$\beta_2 = \frac{m_4}{(m_2)^2} = \frac{32.80}{(4.00)^2} = \frac{32.80}{16.00} = \mathbf{2.05}$$
+*   **Excess Kurtosis ($\gamma_2$):**
+    $$\gamma_2 = \beta_2 - 3 = 2.05 - 3 = \mathbf{-0.95}\quad (\text{Platykurtic})$$
+
+###### 2. Sleep Duration
+*   **Skewness:**
+    $$S_k = \frac{3(\mu - \text{Median})}{\sigma} = \frac{3(6.4 - 6.0)}{1.02} = \frac{1.20}{1.02} = \mathbf{+1.18}\quad (\text{Right-skewed})$$
+    *(Moment skewness: $\gamma_1 = \frac{m_3}{\sigma^3} = \frac{0.288}{1.060} = \mathbf{+0.27}$)*
+*   **Kurtosis ($\beta_2$):**
+    $$\beta_2 = \frac{m_4}{(m_2)^2} = \frac{2.1152}{(1.04)^2} = \frac{2.1152}{1.0816} = \mathbf{1.96}$$
+*   **Excess Kurtosis ($\gamma_2$):**
+    $$\gamma_2 = \beta_2 - 3 = 1.96 - 3 = \mathbf{-1.04}\quad (\text{Platykurtic})$$
+
+###### 3. Exam Score Calculations
+*   **Skewness:**
+    $$S_k = \frac{3(\mu - \text{Median})}{\sigma} = \frac{3(81.4 - 80.0)}{5.57} = \frac{4.20}{5.57} = \mathbf{+0.75}\quad (\text{Moderately right-skewed})$$
+    *(Moment skewness: $\gamma_1 = \frac{47.088}{172.93} = \mathbf{+0.27}$)*
+*   **Kurtosis ($\beta_2$):**
+    $$\beta_2 = \frac{m_4}{(m_2)^2} = \frac{1754.83}{(31.04)^2} = \frac{1754.83}{963.48} = \mathbf{1.82}$$
+*   **Excess Kurtosis ($\gamma_2$):**
+    $$\gamma_2 = \beta_2 - 3 = 1.82 - 3 = \mathbf{-1.18}\quad (\text{Platykurtic})$$
+
+---

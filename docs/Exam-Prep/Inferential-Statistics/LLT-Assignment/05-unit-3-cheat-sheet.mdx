@@ -1,0 +1,150 @@
+---
+sidebar_position: 5
+title: Unit 3 Cheat Sheet - Sampling & Estimation
+description: High-signal, rapid-revision cheat sheet and problem-mapping blueprint for Unit 3 covering confidence intervals, finite population correction, Z vs t distributions, and worked archetypal examples.
+tags: [inferential-statistics, exam-prep, unit-3, estimation, confidence-intervals]
+toc_max_heading_level: 3
+---
+
+# Unit 3 Cheat Sheet: Sampling & Estimation
+
+This cheat sheet provides a **practical mapping framework** to translate raw exam questions into correct parameters, select the appropriate formula, and compute exact confidence intervals.
+
+---
+
+## 1. Quick-Glance Decision Rules
+
+*   **Proportions ($p$):** Always use the **$Z$-distribution** ($SE = \sqrt{\frac{\hat{p}\hat{q}}{n}}$).
+*   **Means ($\mu$):**
+    *   If $n \ge 30$ or $\sigma$ is known $\implies$ **$Z$-distribution** ($SE = \frac{\sigma}{\sqrt{n}}$).
+    *   If $n < 30$ and $\sigma$ is unknown $\implies$ **$t$-distribution** with $df = n - 1$ ($SE = \frac{s}{\sqrt{n}}$).
+*   **Finite Population Correction (FPC):** If total population $N$ is given and $\frac{n}{N} > 0.05$ ($5\%$) $\implies$ Multiply $SE$ by $\sqrt{\frac{N - n}{N - 1}}$.
+
+---
+
+## 2. Problem-Clue Mapping Matrix
+
+Use this table to map keywords in exam questions directly to mathematical symbols:
+
+| Question Keyword / Clue | Mathematical Meaning | Extracted Symbol | Action Required |
+| :--- | :--- | :---: | :--- |
+| *"Sample of 36 employees..."* | Sample size | $n = 36$ | If $n \ge 30$, use $Z$-distribution. |
+| *"Sample of 15 students..."* | Small sample size | $n = 15$ | If $\sigma$ unknown, use $t$-distribution ($df = 14$). |
+| *"Population standard deviation of 6..."* | Known population variance | $\sigma = 6$ | Use $Z = \frac{\bar{x} - \mu}{\sigma/\sqrt{n}}$. |
+| *"Sample standard deviation of 10..."* | Sample standard deviation only | $s = 10$ | Use $t = \frac{\bar{x} - \mu}{s/\sqrt{n}}$ if $n < 30$. |
+| *"180 reported satisfied out of 300..."* | Sample proportion successes | $x = 180, \, n = 300$ | Compute $\hat{p} = \frac{180}{300} = 0.60, \, \hat{q} = 0.40$. |
+| *"Assuming a total of 1000 customers..."* | Finite population size | $N = 1000$ | Check $\frac{n}{N} = \frac{300}{1000} = 0.30 > 0.05 \implies$ Apply FPC. |
+| *"At a 95% confidence level..."* | Confidence level ($1 - \alpha$) | $1 - \alpha = 0.95$ | Lookup $Z_{\alpha/2} = 1.960$ or $t_{0.025, df}$. |
+
+---
+
+## 3. The "Golden" Critical Values Table
+
+Memorize these two-tailed critical values for instant exam calculations:
+
+| Confidence Level ($1 - \alpha$) | Alpha ($\alpha$) | Tail Area ($\alpha/2$) | Normal Critical Value ($Z_{\text{crit}}$) |
+| :---: | :---: | :---: | :---: |
+| **90%** | $0.10$ | $0.05$ | **$\pm 1.645$** |
+| **95%** | $0.05$ | $0.025$ | **$\pm 1.960$** |
+| **99%** | $0.01$ | $0.005$ | **$\pm 2.576$** |
+
+*(Note: For $t$-values, always locate the column $\alpha/2$ matching your row $df = n - 1$. Refer to the [Statistical Tables Guide](./statistical-tables-guide) or view the [Statistical Tables PDF](/StatistialTables.pdf).)*
+
+---
+
+## 4. Worked Problem Archetypes
+
+Every Unit 3 problem maps to one of the following three templates.
+
+### Archetype 1: Population Mean with Known $\sigma$ or Large Sample ($Z$-Interval)
+
+> **Exam Scenario:** A random sample of $36$ employees spends an average of $22\text{ hours}$ on training with a population standard deviation of $6\text{ hours}$. Construct a $95\%$ confidence interval for the true mean training time.
+
+#### How to Map the Problem
+
+1.  **Extract Parameters:**
+    *   $\bar{x} = 22\text{ hours}$
+    *   $\sigma = 6\text{ hours}$ (population standard deviation is known)
+    *   $n = 36$ ($n \ge 30 \implies$ Normal $Z$-distribution applies)
+    *   $95\%\text{ confidence} \implies Z_{0.025} = \mathbf{1.960}$
+2.  **Calculate Standard Error ($SE$):**
+    $$SE = \frac{\sigma}{\sqrt{n}} = \frac{6}{\sqrt{36}} = \frac{6}{6} = \mathbf{1.0\text{ hour}}$$
+3.  **Calculate Margin of Error ($ME$):**
+    $$ME = Z_{\alpha/2} \times SE = 1.960 \times 1.0 = \mathbf{1.960\text{ hours}}$$
+4.  **Construct Confidence Interval:**
+    $$\text{CI} = \bar{x} \pm ME = 22 \pm 1.960 = \mathbf{[20.040, \, 23.960]\text{ hours}}$$
+
+---
+
+### Archetype 2: Population Mean with Small Sample & Unknown $\sigma$ ($t$-Interval)
+
+> **Exam Scenario:** A researcher tests $15$ students using a new study method. The sample mean test score is $78$ with a sample standard deviation of $10$. Construct a $95\%$ confidence interval for the true average score.
+
+#### How to Map the Problem
+
+1.  **Extract Parameters:**
+    *   $\bar{x} = 78$
+    *   $s = 10$ ($\sigma$ is unknown)
+    *   $n = 15$ ($n < 30 \implies$ Small sample, requires $t$-distribution)
+    *   **Degrees of Freedom:** $df = n - 1 = 15 - 1 = \mathbf{14}$
+2.  **Lookup $t$-Critical Value:**
+    *   For $95\%$ confidence ($\alpha/2 = 0.025$) with $df = 14$:
+        $$t_{0.025, 14} = \mathbf{2.145}$$
+3.  **Calculate Standard Error ($SE$):**
+    $$SE = \frac{s}{\sqrt{n}} = \frac{10}{\sqrt{15}} \approx \frac{10}{3.873} \approx \mathbf{2.582}$$
+4.  **Calculate Margin of Error ($ME$):**
+    $$ME = t_c \times SE = 2.145 \times 2.582 \approx \mathbf{5.538}$$
+5.  **Construct Confidence Interval:**
+    $$\text{CI} = 78 \pm 5.538 = \mathbf{[72.46, \, 83.54]}$$
+
+---
+
+### Archetype 3: Proportion with Finite Population Correction ($p$ + FPC)
+
+> **Exam Scenario:** Out of $1,000$ registered retail customers, a random sample of $300$ is surveyed. $180$ report being satisfied. Construct a $95\%$ confidence interval for the true proportion of satisfied customers.
+
+#### How to Map the Problem
+
+1.  **Extract Parameters:**
+    *   $N = 1000$ (Total population)
+    *   $n = 300$ (Sample size)
+    *   $x = 180$ (Success count)
+    *   $\hat{p} = \frac{180}{300} = \mathbf{0.60}, \quad \hat{q} = 1 - 0.60 = \mathbf{0.40}$
+    *   $95\%\text{ confidence} \implies Z_{0.025} = \mathbf{1.960}$
+2.  **Check the FPC Condition:**
+    $$\frac{n}{N} = \frac{300}{1000} = 0.30\text{ (}30\%\text{)} > 0.05 \implies \text{\textbf{Must apply FPC!}}$$
+3.  **Calculate FPC Multiplier:**
+    $$\text{FPC} = \sqrt{\frac{N - n}{N - 1}} = \sqrt{\frac{1000 - 300}{1000 - 1}} = \sqrt{\frac{700}{999}} \approx \mathbf{0.837079}$$
+4.  **Calculate Unadjusted and Adjusted Standard Error:**
+    $$SE = \sqrt{\frac{\hat{p}\hat{q}}{n}} = \sqrt{\frac{0.60 \times 0.40}{300}} = \sqrt{0.0008} \approx \mathbf{0.028284}$$
+    $$SE_{\text{adj}} = SE \times \text{FPC} = 0.028284 \times 0.837079 \approx \mathbf{0.023676}$$
+5.  **Calculate Margin of Error & Interval:**
+    $$ME = 1.960 \times 0.023676 \approx \mathbf{0.0464}$$
+    $$\text{CI} = 0.60 \pm 0.0464 = \mathbf{[0.5536, \, 0.6464]}\quad (\mathbf{[55.36\%, \, 64.64\%]})$$
+
+---
+
+## 5. Universal Execution Checklist for Exams
+
+When solving any estimation problem, write down these 4 numbered steps on your exam script to ensure full method marks:
+
+1.  **Step 1: Identify Parameters:** List $n, \bar{x}\text{ (or } \hat{p}), \sigma\text{ (or } s), N\text{ (if given)}$.
+2.  **Step 2: Justify Distribution Choice:** State *"Since $n \ge 30$, we use the $Z$-distribution"* OR *"Since $n < 30$ and $\sigma$ is unknown, we use the $t$-distribution with $df = n - 1$"*.
+3.  **Step 3: State & Compute $SE$ and $ME$:** Show the standard error formula and multiply by the critical value.
+4.  **Step 4: State Final Interval with Units:** $\text{Lower Limit} = \text{Estimate} - ME$, $\text{Upper Limit} = \text{Estimate} + ME$.
+
+---
+
+## 6. Exam Traps & Pro-Tips
+
+:::danger
+
+**Common Traps to Avoid**
+
+1.  **Standard Deviation vs. Standard Error:** Never use $\sigma$ or $s$ directly as your margin of error. You must always divide by $\sqrt{n}$ to obtain the Standard Error ($SE$) before multiplying by the critical value.
+2.  **Forgetting FPC:** If a question explicitly specifies a total population size (e.g., *"Assuming a total of 1000 customers..."*), it is an intentional signal to test whether you calculate and apply the FPC factor.
+3.  **Hypothesis Testing via Confidence Interval (Duality):** When an exam question asks whether a claimed value $\mu_0$ is supported by the sample data:
+    *   If $\mu_0$ falls **inside** the $(1 - \alpha)$ interval $\implies$ Fail to reject $H_0$ (Claim is plausible).
+    *   If $\mu_0$ falls **outside** the $(1 - \alpha)$ interval $\implies$ Reject $H_0$ (Claim is significantly different).
+
+:::

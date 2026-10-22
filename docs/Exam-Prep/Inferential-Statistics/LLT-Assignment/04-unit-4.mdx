@@ -1,0 +1,1057 @@
+---
+sidebar_position: 4
+title: Unit 4 - Hypothesis Testing
+description: LLT Component Unit 4 questions and comprehensive model solutions covering one-sample Z and t tests, proportion tests, two-sample independent and paired tests, critical region, p-value, and confidence interval techniques.
+tags: [inferential-statistics, exam-prep, unit-4, hypothesis-testing, z-test, t-test]
+toc_max_heading_level: 3
+---
+
+# Unit 4: Hypothesis Testing
+
+> **Course -** Inferential Statistics  
+> **Component -** LLT Assignment  
+> **Unit -** Unit 4
+
+:::info
+
+**Cycle Test Scope Notice**
+
+*   **In Scope for Cycle Test (Means):** Questions 1 - 6 (One-sample means) and Questions 10 - 12 (Two-sample independent means).
+*   **Excluded from Cycle Test:** Questions 7, 8, 9, 15, 16, 17 (**Proportion Tests**) and Questions 13, 14 (**Paired $t$-Tests**).
+
+Each excluded question is explicitly tagged with a warning callout box below so you can bypass them during cycle test revision.
+
+:::
+
+---
+
+## Question 1
+
+:::info
+
+**Question Statement**
+
+A beverage company claims that the average sugar content in their new energy drink is 15 grams per can with a standard deviation of 3 grams. A random sample of 50 cans is tested, and the sample mean sugar content is found to be 14 grams. Is there sufficient evidence at the 0.05 significance level to conclude that the mean sugar content is different from 15 grams? Use the critical region technique, p-value technique, and confidence interval technique to test the claim.
+
+:::
+
+---
+
+### Solution 1
+
+##### Hypotheses & Given Parameters
+*   **Null Hypothesis ($H_0$):** $\mu = 15\text{ g}$
+*   **Alternative Hypothesis ($H_1$):** $\mu \neq 15\text{ g}$ (Two-tailed test, $\alpha = 0.05 \implies \alpha/2 = 0.025$)
+*   **Parameters:** $\mu_0 = 15\text{ g}, \, \bar{x} = 14\text{ g}, \, \sigma = 3\text{ g}, \, n = 50\text{ cans}$ ($n \ge 30 \implies Z$-test)
+
+##### Standard Error & Test Statistic
+$$SE = \frac{\sigma}{\sqrt{n}} = \frac{3}{\sqrt{50}} \approx \mathbf{0.4243\text{ g}}$$
+$$Z_{\text{cal}} = \frac{\bar{x} - \mu_0}{SE} = \frac{14 - 15}{0.4243} \approx \mathbf{-2.36}$$
+
+---
+
+##### Method 1: Critical Region Technique
+*   **Critical Values:** $Z_{\text{crit}} = \mathbf{\pm 1.96}$
+*   **Rejection Rule:** Reject $H_0$ if $Z_{\text{cal}} < -1.96$ or $Z_{\text{cal}} > +1.96$.
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    {/* Base Axis */}
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    
+    {/* Shaded Left Rejection Region (H1) */}
+    <path d="M 50 170 C 80 170 100 162 120 145 L 120 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    
+    {/* Shaded Right Rejection Region (H1) */}
+    <path d="M 380 145 C 400 162 420 170 450 170 L 380 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    
+    {/* Shaded Acceptance Region (H0) */}
+    <path d="M 120 170 L 120 145 C 150 100 180 35 250 35 C 320 35 350 100 380 145 L 380 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    
+    {/* Bell Curve Outline */}
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    
+    {/* Critical Boundary Lines (Z_crit = +-1.96) */}
+    <line x1="120" y1="145" x2="120" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="380" y1="145" x2="380" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    
+    {/* Calculated Test Statistic Marker (Z_cal = -2.36) */}
+    <line x1="95" y1="115" x2="95" y2="170" stroke="#3b82f6" strokeWidth="2.5" />
+    <polygon points="95,115 90,105 100,105" fill="#3b82f6" />
+    <text x="95" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#3b82f6">Z_cal = -2.36</text>
+    
+    {/* Text Labels */}
+    <text x="250" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 95%)</text>
+    <text x="95" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">-Z_crit = -1.96</text>
+    <text x="405" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">+Z_crit = +1.96</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">μ₀ = 15g (H₀ Center)</text>
+    <text x="80" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α/2 = 0.025)</text>
+    <text x="420" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α/2 = 0.025)</text>
+  </svg>
+</div>
+
+*   **Decision:** $Z_{\text{cal}} = -2.36 < -1.96 \implies$ **Reject $H_0$**. Mean sugar content is significantly different from 15g ($\alpha = 0.05$).
+
+---
+
+##### Method 2: P-Value Technique
+*   **Calculation:** $p\text{-value} = 2 \times P(Z < -2.36) = 2 \times 0.0091 = \mathbf{0.0182}$
+*   **Decision:** $p\text{-value} = 0.0182 \le 0.05 \implies$ **Reject $H_0$**. The difference is statistically significant.
+
+---
+
+##### Method 3: Confidence Interval Technique
+*   **95% CI:** $\bar{x} \pm (1.96 \times SE) = 14 \pm (1.96 \times 0.4243) = 14 \pm 0.8316 = \mathbf{[13.17\text{ g}, \, 14.83\text{ g}]}$
+*   **Decision:** The claimed mean of $15\text{ g}$ lies outside the interval ($15 \notin [13.17, 14.83]$) $\implies$ **Reject $H_0$**.
+
+---
+
+## Question 2
+
+:::info
+
+**Question Statement**
+
+An electronics manufacturer claims that the average battery life of their latest smartphone model is at least 20 hours. A random sample of 30 smartphones shows a mean battery life of 18 hours with a standard deviation of 4 hours. At a significance level of 0.05, is there enough evidence to support the claim that the average battery life is less than 20 hours? Test this claim using the critical region technique, p-value technique, and confidence interval technique.
+
+:::
+
+---
+
+### Solution 2
+
+##### Hypotheses & Given Parameters
+*   **Null Hypothesis ($H_0$):** $\mu \ge 20\text{ hours}$
+*   **Alternative Hypothesis ($H_1$):** $\mu < 20\text{ hours}$ (Left-tailed test, $\alpha = 0.05$)
+*   **Parameters:** $\mu_0 = 20\text{ h}, \, \bar{x} = 18\text{ h}, \, s = 4\text{ h}, \, n = 30 \implies df = 30 - 1 = \mathbf{29}$
+
+##### Standard Error & Test Statistic
+$$SE = \frac{s}{\sqrt{n}} = \frac{4}{\sqrt{30}} \approx \mathbf{0.7303\text{ hours}}$$
+$$t_{\text{cal}} = \frac{\bar{x} - \mu_0}{SE} = \frac{18 - 20}{0.7303} \approx \mathbf{-2.74}$$
+
+---
+
+##### Method 1: Critical Region Technique
+*   **Critical Value:** $t_{\text{crit}} = \mathbf{-1.699}$ ($df = 29, \alpha = 0.05$)
+*   **Rejection Rule:** Reject $H_0$ if $t_{\text{cal}} < -1.699$.
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    {/* Base Axis */}
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    
+    {/* Shaded Left Rejection Region (H1) */}
+    <path d="M 50 170 C 80 170 115 160 145 130 L 145 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    
+    {/* Shaded Acceptance Region (H0) */}
+    <path d="M 145 170 L 145 130 C 180 85 210 35 250 35 C 330 35 390 160 450 170 L 145 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    
+    {/* Bell Curve Outline */}
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    
+    {/* Critical Boundary Line (t_crit = -1.699) */}
+    <line x1="145" y1="130" x2="145" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    
+    {/* Calculated Test Statistic Marker (t_cal = -2.74) */}
+    <line x1="90" y1="115" x2="90" y2="170" stroke="#3b82f6" strokeWidth="2.5" />
+    <polygon points="90,115 85,105 95,105" fill="#3b82f6" />
+    <text x="90" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#3b82f6">t_cal = -2.74</text>
+    
+    {/* Text Labels */}
+    <text x="290" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 95%)</text>
+    <text x="145" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">-t_crit = -1.699</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">μ₀ = 20h (H₀ Center)</text>
+    <text x="95" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α = 0.05)</text>
+  </svg>
+</div>
+
+*   **Decision:** $t_{\text{cal}} = -2.74 < -1.699 \implies$ **Reject $H_0$**. Average battery life is significantly less than 20 hours ($\alpha = 0.05$).
+
+---
+
+##### Method 2: P-Value Technique
+*   **Calculation:** $p\text{-value} = P(t_{29} < -2.74) \approx \mathbf{0.0052}$
+*   **Decision:** $p\text{-value} = 0.0052 \le 0.05 \implies$ **Reject $H_0$**.
+
+---
+
+##### Method 3: Confidence Interval Technique
+*   **95% Upper Bound:** $\bar{x} + (t_{\alpha, \, df} \times SE) = 18 + (1.699 \times 0.7303) = \mathbf{19.24\text{ hours}}$
+*   **Decision:** Claimed $20\text{ hours} > 19.24\text{ hours}$ (lies above the 95% upper limit) $\implies$ **Reject $H_0$**.
+
+---
+
+## Question 3
+
+:::info
+
+**Question Statement**
+
+A health organization states that the average daily intake of water for adults should be at least 3 liters. However, in a study of 40 adults, the average daily intake was found to be 2.5 liters with a standard deviation of 0.8 liters. At a significance level of 0.01, can we conclude that the average daily intake of water is less than the recommended 3 liters? Use the critical region technique, p-value technique, and confidence interval technique to support your answer.
+
+:::
+
+---
+
+### Solution 3
+
+##### Hypotheses & Given Parameters
+*   **Null Hypothesis ($H_0$):** $\mu \ge 3.0\text{ liters}$
+*   **Alternative Hypothesis ($H_1$):** $\mu < 3.0\text{ liters}$ (Left-tailed test, $\alpha = 0.01$)
+*   **Parameters:** $\mu_0 = 3.0\text{ L}, \, \bar{x} = 2.5\text{ L}, \, s = 0.8\text{ L}, \, n = 40 \implies df = \mathbf{39}$
+
+##### Standard Error & Test Statistic
+$$SE = \frac{s}{\sqrt{n}} = \frac{0.8}{\sqrt{40}} \approx \mathbf{0.1265\text{ liters}}$$
+$$t_{\text{cal}} = \frac{\bar{x} - \mu_0}{SE} = \frac{2.5 - 3.0}{0.1265} \approx \mathbf{-3.95}$$
+
+---
+
+##### Method 1: Critical Region Technique
+*   **Critical Value:** $t_{\text{crit}} = \mathbf{-2.426}$ ($df = 39, \alpha = 0.01$)
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    <path d="M 50 170 C 75 170 95 165 110 150 L 110 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 110 170 L 110 150 C 150 95 190 35 250 35 C 330 35 390 160 450 170 L 110 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    <line x1="110" y1="150" x2="110" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    <line x1="70" y1="115" x2="70" y2="170" stroke="#3b82f6" strokeWidth="2.5" />
+    <polygon points="70,115 65,105 75,105" fill="#3b82f6" />
+    <text x="70" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#3b82f6">t_cal = -3.95</text>
+    <text x="290" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 99%)</text>
+    <text x="110" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">-t_crit = -2.426</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">μ₀ = 3.0L (H₀ Center)</text>
+    <text x="75" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α = 0.01)</text>
+  </svg>
+</div>
+
+*   **Decision:** $t_{\text{cal}} = -3.95 < -2.426 \implies$ **Reject $H_0$**. Average water intake is significantly less than 3 liters.
+
+---
+
+##### Method 2: P-Value Technique
+*   **Calculation:** $p\text{-value} = P(t_{39} < -3.95) \approx \mathbf{0.00016}$
+*   **Decision:** $p\text{-value} = 0.00016 \le 0.01 \implies$ **Reject $H_0$**.
+
+---
+
+##### Method 3: Confidence Interval Technique
+*   **99% Upper Bound:** $2.5 + (2.426 \times 0.1265) = \mathbf{2.81\text{ liters}}$
+*   **Decision:** Claimed $3.0\text{ liters} > 2.81\text{ liters}$ $\implies$ **Reject $H_0$**.
+
+---
+
+## Question 4
+
+:::info
+
+**Question Statement**
+
+A bakery claims that their average weight of a dozen cookies is 300 grams. To test this claim, a quality control manager randomly weighs 20 batches of cookies and finds that the mean weight is 295 grams with a standard deviation of 10 grams. At a 0.05 significance level, is there evidence to suggest that the average weight of the cookies is the same as 300 grams? . Use the (critical region technique, p-value technique, and confidence interval) any one technique to support your answer.
+
+:::
+
+---
+
+### Solution 4
+
+##### Hypotheses & Parameters
+*   $H_0: \mu = 300\text{ g}$ vs $H_1: \mu \neq 300\text{ g}$ (Two-tailed, $\alpha = 0.05$)
+*   $\mu_0 = 300\text{ g}, \, \bar{x} = 295\text{ g}, \, s = 10\text{ g}, \, n = 20 \implies df = \mathbf{19}$
+*   $SE = \frac{10}{\sqrt{20}} \approx \mathbf{2.2361\text{ g}}$
+
+---
+
+##### Technique Selected: Confidence Interval Technique
+*   **Critical Value ($t_c$):** $t_{0.025, 19} = \mathbf{2.0930}$
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    <path d="M 50 170 C 80 170 100 162 120 145 L 120 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 380 145 C 400 162 420 170 450 170 L 380 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 120 170 L 120 145 C 150 100 180 35 250 35 C 320 35 350 100 380 145 L 380 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    <line x1="120" y1="145" x2="120" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="380" y1="145" x2="380" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    <line x1="100" y1="115" x2="100" y2="170" stroke="#3b82f6" strokeWidth="2.5" />
+    <polygon points="100,115 95,105 105,105" fill="#3b82f6" />
+    <text x="100" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#3b82f6">t_cal = -2.24</text>
+    <text x="250" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 95%)</text>
+    <text x="100" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">-t_crit = -2.093</text>
+    <text x="400" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">+t_crit = +2.093</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">μ₀ = 300g (H₀ Center)</text>
+    <text x="80" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α/2 = 0.025)</text>
+    <text x="420" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α/2 = 0.025)</text>
+  </svg>
+</div>
+*   **Margin of Error:** $ME = 2.0930 \times 2.2361 \approx \mathbf{4.68\text{ g}}$
+*   **95% CI:** $295 \pm 4.68 = \mathbf{[290.32\text{ g}, \, 299.68\text{ g}]}$
+*   **Decision:** Since $300\text{ g} \notin [290.32, 299.68] \implies$ **Reject $H_0$**. Average cookie weight is significantly different from 300g (underweight).
+
+---
+
+## Question 5
+
+:::info
+
+**Question Statement**
+
+A manufacturer of light bulbs claims that their bulbs last at least 1000 hours on average. To test this claim, an inspector randomly tests 15 bulbs and records a mean lifespan of 950 hours with a standard deviation of 50 hours. At a significance level of 0.01, is there sufficient evidence to conclude that the average lifespan of the bulbs is less than 1000 hours? Use the (critical region technique, p-value technique, and confidence interval) any one technique to support your answer.
+
+:::
+
+---
+
+### Solution 5
+
+##### Hypotheses & Parameters
+*   $H_0: \mu \ge 1000\text{ hrs}$ vs $H_1: \mu < 1000\text{ hrs}$ (Left-tailed, $\alpha = 0.01$)
+*   $\mu_0 = 1000\text{ h}, \, \bar{x} = 950\text{ h}, \, s = 50\text{ h}, \, n = 15 \implies df = \mathbf{14}$
+*   $SE = \frac{50}{\sqrt{15}} \approx \mathbf{12.91\text{ hrs}}$
+*   $t_{\text{cal}} = \frac{950 - 1000}{12.91} \approx \mathbf{-3.873}$
+
+---
+
+##### Technique Selected: Critical Region Technique
+*   **Critical Value:** $t_{\text{crit}} = \mathbf{-2.624}$ ($df = 14, \alpha = 0.01$)
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    <path d="M 50 170 C 75 170 95 165 110 150 L 110 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 110 170 L 110 150 C 150 95 190 35 250 35 C 330 35 390 160 450 170 L 110 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    <line x1="110" y1="150" x2="110" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    <line x1="75" y1="115" x2="75" y2="170" stroke="#3b82f6" strokeWidth="2.5" />
+    <polygon points="75,115 70,105 80,105" fill="#3b82f6" />
+    <text x="75" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#3b82f6">t_cal = -3.87</text>
+    <text x="290" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 99%)</text>
+    <text x="110" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">-t_crit = -2.624</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">μ₀ = 1000h (H₀ Center)</text>
+    <text x="75" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α = 0.01)</text>
+  </svg>
+</div>
+
+*   **Decision:** $t_{\text{cal}} = -3.873 < -2.624 \implies$ **Reject $H_0$**. Average lifespan is significantly less than 1000 hours ($\alpha = 0.01$).
+
+---
+
+## Question 6
+
+:::info
+
+**Question Statement**
+
+A new fitness program claims that participants lose an average of at least 4 kg over a month. An independent study tests 12 participants, finding that the average weight loss is 5.5 kg with a standard deviation of 1.5 kg. At a 0.05 significance level, is there enough evidence to support the claim that the average weight loss is greater than 4 kg? Conduct a right-tailed t-test to evaluate this.Use the (critical region technique, p-value technique, and confidence interval) any one technique to support your answer.
+
+:::
+
+---
+
+### Solution 6
+
+##### Hypotheses & Parameters
+*   $H_0: \mu \le 4\text{ kg}$ vs $H_1: \mu > 4\text{ kg}$ (Right-tailed, $\alpha = 0.05$)
+*   $\mu_0 = 4\text{ kg}, \, \bar{x} = 5.5\text{ kg}, \, s = 1.5\text{ kg}, \, n = 12 \implies df = \mathbf{11}$
+*   $SE = \frac{1.5}{\sqrt{12}} \approx \mathbf{0.4330\text{ kg}}$
+*   $t_{\text{cal}} = \frac{5.5 - 4.0}{0.4330} \approx \mathbf{+3.464}$
+
+---
+
+##### Technique Selected: P-Value Technique
+*   **P-Value:** $p\text{-value} = P(t_{11} > 3.464) \approx \mathbf{0.0026}$
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    {/* Base Axis */}
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    
+    {/* Shaded Right Rejection Region (H1) */}
+    <path d="M 355 130 C 385 160 420 170 450 170 L 355 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    
+    {/* Shaded Acceptance Region (H0) */}
+    <path d="M 50 170 C 110 160 170 35 250 35 C 290 35 320 85 355 130 L 355 170 L 50 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    
+    {/* Bell Curve Outline */}
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    
+    {/* Critical Boundary Line (t_crit = +1.796) */}
+    <line x1="355" y1="130" x2="355" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    
+    {/* Calculated Test Statistic Marker (t_cal = +3.46) */}
+    <line x1="410" y1="115" x2="410" y2="170" stroke="#3b82f6" strokeWidth="2.5" />
+    <polygon points="410,115 405,105 415,105" fill="#3b82f6" />
+    <text x="410" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#3b82f6">t_cal = +3.46</text>
+    
+    {/* Text Labels */}
+    <text x="210" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 95%)</text>
+    <text x="355" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">+t_crit = +1.796</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">μ₀ = 4kg (H₀ Center)</text>
+    <text x="405" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α = 0.05)</text>
+  </svg>
+</div>
+
+*   **Decision:** $p\text{-value} = 0.0026 \le 0.05 \implies$ **Reject $H_0$**. Average weight loss is significantly greater than 4 kg.
+
+---
+
+## Question 7 (Proportion Test - Excluded from Cycle Test)
+
+:::warning
+
+**Excluded from Cycle Test: Proportion Test**
+
+This problem tests a **one-sample proportion ($p$)**, which is excluded from the upcoming cycle test syllabus. Retained for comprehensive semester examination reference.
+
+:::
+
+:::info
+
+**Question Statement**
+
+A school claims that at least 30% of its students participate in extracurricular activities. A random sample of 200 students shows that 50 students participate in extracurricular activities.At a 0.01 significance level, is there sufficient evidence to conclude that the proportion of students participating in extracurricular activities is less than 30%?. Use the (critical region technique, p-value technique, and confidence interval) any one technique to support your answer.
+
+:::
+
+---
+
+### Solution 7
+
+##### Hypotheses & Parameters
+*   $H_0: p \ge 0.30$ vs $H_1: p < 0.30$ (Left-tailed, $\alpha = 0.01$)
+*   $p_0 = 0.30, \, q_0 = 0.70, \, n = 200, \, x = 50 \implies \hat{p} = \frac{50}{200} = \mathbf{0.25}$
+*   $SE_0 = \sqrt{\frac{0.30 \times 0.70}{200}} \approx \mathbf{0.0324}$
+*   $Z_{\text{cal}} = \frac{0.25 - 0.30}{0.0324} \approx \mathbf{-1.54}$
+
+---
+
+##### Technique Selected: Critical Region Technique
+*   **Critical Value:** $Z_{\text{crit}} = \mathbf{-2.33}$
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    {/* Base Axis */}
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    
+    {/* Shaded Left Rejection Region (H1) */}
+    <path d="M 50 170 C 75 170 95 165 110 150 L 110 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    
+    {/* Shaded Acceptance Region (H0) */}
+    <path d="M 110 170 L 110 150 C 150 95 190 35 250 35 C 330 35 390 160 450 170 L 110 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    
+    {/* Bell Curve Outline */}
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    
+    {/* Critical Boundary Line (Z_crit = -2.33) */}
+    <line x1="110" y1="150" x2="110" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    
+    {/* Calculated Test Statistic Marker (Z_cal = -1.54, Falls in Acceptance Region) */}
+    <line x1="160" y1="95" x2="160" y2="170" stroke="#10b981" strokeWidth="2.5" />
+    <polygon points="160,95 155,85 165,85" fill="#10b981" />
+    <text x="160" y="78" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#10b981">Z_cal = -1.54 (Inside H₀)</text>
+    
+    {/* Text Labels */}
+    <text x="290" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 99%)</text>
+    <text x="110" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">-Z_crit = -2.33</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">p₀ = 0.30 (H₀ Center)</text>
+    <text x="75" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α = 0.01)</text>
+  </svg>
+</div>
+
+*   **Decision:** $Z_{\text{cal}} = -1.54 > -2.33 \implies$ **Fail to Reject $H_0$**. Insufficient evidence that participation is less than 30% ($\alpha = 0.01$).
+
+---
+
+## Question 8 (Proportion Test - Excluded from Cycle Test)
+
+:::warning
+
+**Excluded from Cycle Test: Proportion Test**
+
+This problem tests a **one-sample proportion ($p$)**, which is excluded from the upcoming cycle test syllabus. Retained for comprehensive semester examination reference.
+
+:::
+
+:::info
+
+**Question Statement**
+
+A recent survey found that 60% of people prefer coffee over tea. To test this claim, a market researcher randomly samples 150 people and finds that 70 of them prefer coffee. At a 0.05 significance level, is there evidence to suggest that the proportion of people who prefer coffee is different from 60%?. Use the (critical region technique, p-value technique, and confidence interval) any one technique to support your answer.
+
+:::
+
+---
+
+### Solution 8
+
+##### Hypotheses & Parameters
+*   $H_0: p = 0.60$ vs $H_1: p \neq 0.60$ (Two-tailed, $\alpha = 0.05$)
+*   $p_0 = 0.60, \, q_0 = 0.40, \, n = 150, \, x = 70 \implies \hat{p} = \frac{70}{150} \approx \mathbf{0.4667}$
+*   $SE_0 = \sqrt{\frac{0.60 \times 0.40}{150}} = \mathbf{0.0400}$
+*   $Z_{\text{cal}} = \frac{0.4667 - 0.60}{0.0400} \approx \mathbf{-3.33}$
+
+---
+
+##### Technique Selected: Critical Region Technique
+*   **Critical Values:** $Z_{\text{crit}} = \mathbf{\pm 1.96}$
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    <path d="M 50 170 C 80 170 100 162 120 145 L 120 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 380 145 C 400 162 420 170 450 170 L 380 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 120 170 L 120 145 C 150 100 180 35 250 35 C 320 35 350 100 380 145 L 380 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    <line x1="120" y1="145" x2="120" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="380" y1="145" x2="380" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    <line x1="75" y1="115" x2="75" y2="170" stroke="#3b82f6" strokeWidth="2.5" />
+    <polygon points="75,115 70,105 80,105" fill="#3b82f6" />
+    <text x="75" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#3b82f6">Z_cal = -3.33</text>
+    <text x="250" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 95%)</text>
+    <text x="100" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">-Z_crit = -1.96</text>
+    <text x="400" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">+Z_crit = +1.96</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">p₀ = 0.60 (H₀ Center)</text>
+    <text x="80" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α/2 = 0.025)</text>
+    <text x="420" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α/2 = 0.025)</text>
+  </svg>
+</div>
+*   **Decision:** $|Z_{\text{cal}}| = 3.33 > 1.96 \implies$ **Reject $H_0$**. Coffee preference is significantly different from 60% ($\alpha = 0.05$).
+
+---
+
+## Question 9 (Proportion Test - Excluded from Cycle Test)
+
+:::warning
+
+**Excluded from Cycle Test: Proportion Test**
+
+This problem tests a **one-sample proportion ($p$)**, which is excluded from the upcoming cycle test syllabus. Retained for comprehensive semester examination reference.
+
+:::
+
+:::info
+
+**Question Statement**
+
+A health department claims that more than 25% of adults in a city are physically active. A study surveyed 400 adults and found that 120 of them reported being physically active. At a significance level of 0.05, is there enough evidence to support the claim that the proportion of physically active adults is greater than 25%?. Use the (critical region technique, p-value technique, and confidence interval) any one technique to support your answer.
+
+:::
+
+---
+
+### Solution 9
+
+##### Hypotheses & Parameters
+*   $H_0: p \le 0.25$ vs $H_1: p > 0.25$ (Right-tailed, $\alpha = 0.05$)
+*   $p_0 = 0.25, \, q_0 = 0.75, \, n = 400, \, x = 120 \implies \hat{p} = \frac{120}{400} = \mathbf{0.30}$
+*   $SE_0 = \sqrt{\frac{0.25 \times 0.75}{400}} \approx \mathbf{0.02165}$
+*   $Z_{\text{cal}} = \frac{0.30 - 0.25}{0.02165} \approx \mathbf{+2.31}$
+
+---
+
+##### Technique Selected: Critical Region Technique
+*   **Critical Value:** $Z_{\text{crit}} = \mathbf{+1.645}$
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    <path d="M 355 130 C 385 160 420 170 450 170 L 355 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 50 170 C 110 160 170 35 250 35 C 290 35 320 85 355 130 L 355 170 L 50 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    <line x1="355" y1="130" x2="355" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    <line x1="425" y1="115" x2="425" y2="170" stroke="#3b82f6" strokeWidth="2.5" />
+    <polygon points="425,115 420,105 430,105" fill="#3b82f6" />
+    <text x="425" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#3b82f6">Z_cal = +4.11</text>
+    <text x="210" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 95%)</text>
+    <text x="355" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">+Z_crit = +1.645</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">μ_A - μ_B = 0 (Center)</text>
+    <text x="405" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α = 0.05)</text>
+  </svg>
+</div>
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    <path d="M 355 130 C 385 160 420 170 450 170 L 355 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 50 170 C 110 160 170 35 250 35 C 290 35 320 85 355 130 L 355 170 L 50 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    <line x1="355" y1="130" x2="355" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    <line x1="390" y1="115" x2="390" y2="170" stroke="#3b82f6" strokeWidth="2.5" />
+    <polygon points="390,115 385,105 395,105" fill="#3b82f6" />
+    <text x="390" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#3b82f6">Z_cal = +2.31</text>
+    <text x="210" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 95%)</text>
+    <text x="355" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">+Z_crit = +1.645</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">p₀ = 0.25 (H₀ Center)</text>
+    <text x="405" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α = 0.05)</text>
+  </svg>
+</div>
+*   **Decision:** $Z_{\text{cal}} = +2.31 > +1.645 \implies$ **Reject $H_0$**. Proportion of physically active adults is significantly greater than 25%.
+
+---
+
+## Question 10
+
+:::info
+
+**Question Statement**
+
+A manufacturer produces two types of batteries and claims that the new battery (Battery A) lasts longer than the older version (Battery B). A random sample of 50 Battery A units shows a mean lifespan of 280 hours with a standard deviation of 20 hours. For Battery B, a sample of 40 units shows a mean lifespan of 260 hours with a standard deviation of 25 hours. At a significance level of 0.05, is there enough evidence to support the claim that Battery A lasts longer than Battery B?. Use the (critical region technique, p-value technique, and confidence interval) any one technique to support your answer.
+
+:::
+
+---
+
+### Solution 10
+
+##### Hypotheses & Parameters
+*   $H_0: \mu_A \le \mu_B$ vs $H_1: \mu_A > \mu_B$ (Right-tailed, $\alpha = 0.05$)
+*   Battery A: $n_A = 50, \, \bar{x}_A = 280\text{ h}, \, s_A = 20\text{ h}$
+*   Battery B: $n_B = 40, \, \bar{x}_B = 260\text{ h}, \, s_B = 25\text{ h}$
+*   $$SE_{\text{diff}} = \sqrt{\frac{20^2}{50} + \frac{25^2}{40}} = \sqrt{8.0 + 15.625} \approx \mathbf{4.8606\text{ hours}}$$
+*   $$Z_{\text{cal}} = \frac{280 - 260}{4.8606} \approx \mathbf{+4.11}$$
+
+---
+
+##### Technique Selected: Critical Region Technique
+*   **Critical Value:** $Z_{\text{crit}} = \mathbf{+1.645}$
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    <path d="M 355 130 C 385 160 420 170 450 170 L 355 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 50 170 C 110 160 170 35 250 35 C 290 35 320 85 355 130 L 355 170 L 50 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    <line x1="355" y1="130" x2="355" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    <line x1="425" y1="115" x2="425" y2="170" stroke="#3b82f6" strokeWidth="2.5" />
+    <polygon points="425,115 420,105 430,105" fill="#3b82f6" />
+    <text x="425" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#3b82f6">Z_cal = +4.11</text>
+    <text x="210" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 95%)</text>
+    <text x="355" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">+Z_crit = +1.645</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">μ_A - μ_B = 0 (Center)</text>
+    <text x="405" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α = 0.05)</text>
+  </svg>
+</div>
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    <path d="M 355 130 C 385 160 420 170 450 170 L 355 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 50 170 C 110 160 170 35 250 35 C 290 35 320 85 355 130 L 355 170 L 50 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    <line x1="355" y1="130" x2="355" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    <line x1="390" y1="115" x2="390" y2="170" stroke="#3b82f6" strokeWidth="2.5" />
+    <polygon points="390,115 385,105 395,105" fill="#3b82f6" />
+    <text x="390" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#3b82f6">Z_cal = +2.31</text>
+    <text x="210" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 95%)</text>
+    <text x="355" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">+Z_crit = +1.645</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">p₀ = 0.25 (H₀ Center)</text>
+    <text x="405" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α = 0.05)</text>
+  </svg>
+</div>
+*   **Decision:** $Z_{\text{cal}} = +4.11 > +1.645 \implies$ **Reject $H_0$**. Battery A lasts significantly longer than Battery B.
+
+---
+
+## Question 11
+
+:::info
+
+**Question Statement**
+
+A nutritional study is conducted to compare the average sugar content in two different brands of cereal. A sample of 30 boxes of Brand X shows a mean sugar content of 12 grams with a standard deviation of 3 grams, while a sample of 25 boxes of Brand Y shows a mean sugar content of 10 grams with a standard deviation of 4 grams. At a 0.01 significance level, is there evidence to suggest that the average sugar content is different between Brand X and Brand Y? Use the (critical region technique, p-value technique, and confidence interval) any one technique to support your answer.
+
+:::
+
+---
+
+### Solution 11
+
+##### Hypotheses & Parameters
+*   $H_0: \mu_X = \mu_Y$ vs $H_1: \mu_X \neq \mu_Y$ (Two-tailed, $\alpha = 0.01$)
+*   Brand X: $n_X = 30, \, \bar{x}_X = 12\text{ g}, \, s_X = 3\text{ g}$
+*   Brand Y: $n_Y = 25, \, \bar{x}_Y = 10\text{ g}, \, s_Y = 4\text{ g}$
+*   $$SE_{\text{diff}} = \sqrt{\frac{3^2}{30} + \frac{4^2}{25}} = \sqrt{0.30 + 0.64} \approx \mathbf{0.9695\text{ g}}$$
+*   $$Z_{\text{cal}} = \frac{12 - 10}{0.9695} \approx \mathbf{+2.06}$$
+
+---
+
+##### Technique Selected: Critical Region Technique
+*   **Critical Values:** $Z_{\text{crit}} = \mathbf{\pm 2.576}$
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    <path d="M 50 170 C 75 170 95 165 110 150 L 110 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 390 150 C 405 165 425 170 450 170 L 390 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 110 170 L 110 150 C 150 95 190 35 250 35 C 310 35 350 95 390 150 L 390 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    <line x1="110" y1="150" x2="110" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="390" y1="150" x2="390" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    <line x1="360" y1="115" x2="360" y2="170" stroke="#10b981" strokeWidth="2.5" />
+    <polygon points="360,115 355,105 365,105" fill="#10b981" />
+    <text x="360" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#10b981">Z_cal = +2.06 (Inside H₀)</text>
+    <text x="250" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 99%)</text>
+    <text x="100" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">-Z_crit = -2.576</text>
+    <text x="400" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">+Z_crit = +2.576</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">μ_X - μ_Y = 0 (Center)</text>
+    <text x="75" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α/2 = 0.005)</text>
+    <text x="425" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α/2 = 0.005)</text>
+  </svg>
+</div>
+*   **Decision:** $|Z_{\text{cal}}| = 2.06 < 2.576 \implies$ **Fail to Reject $H_0$**. Insufficient evidence of a difference in average sugar content at $\alpha = 0.01$.
+
+---
+
+## Question 12
+
+:::info
+
+**Question Statement**
+
+A company wants to compare the effectiveness of two different promotional strategies on sales. The sales figures (in thousands) from the first strategy were reported as: 45, 50, 55, 40, and 60, while the sales figures from the second strategy were: 55, 60, 65, 57, and 62. At a 0.01 significance level, is there sufficient evidence to support the claim that one promotional strategy leads to higher average sales than the other? Use the critical region technique to support your answer.
+
+:::
+
+---
+
+### Solution 12
+
+##### Hypotheses & Sample Metrics
+*   $H_0: \mu_1 = \mu_2$ vs $H_1: \mu_1 \neq \mu_2$ (Two-tailed, $\alpha = 0.01, \, df = 5 + 5 - 2 = \mathbf{8}$)
+*   Strategy 1: $\bar{x}_1 = 50.0, \, \sum (x_{1i} - \bar{x}_1)^2 = 250.0$
+*   Strategy 2: $\bar{x}_2 = 59.8, \, \sum (x_{2i} - \bar{x}_2)^2 = 62.8$
+*   Pooled Variance: $s_p^2 = \frac{250.0 + 62.8}{8} = \mathbf{39.10}$
+*   $$SE = \sqrt{39.10 \times \left(\frac{1}{5} + \frac{1}{5}\right)} \approx \mathbf{3.9547}$$
+*   $$t_{\text{cal}} = \frac{50.0 - 59.8}{3.9547} \approx \mathbf{-2.48}$$
+
+---
+
+##### Critical Region Evaluation
+*   **Critical Values:** $t_{\text{crit}} = \mathbf{\pm 3.355}$ ($df = 8, \alpha = 0.01$)
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    <path d="M 50 170 C 65 170 80 167 95 158 L 95 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 405 158 C 420 167 435 170 450 170 L 405 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 95 170 L 95 158 C 140 110 190 35 250 35 C 310 35 360 110 405 158 L 405 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    <line x1="95" y1="158" x2="95" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="405" y1="158" x2="405" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    <line x1="150" y1="115" x2="150" y2="170" stroke="#10b981" strokeWidth="2.5" />
+    <polygon points="150,115 145,105 155,105" fill="#10b981" />
+    <text x="150" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#10b981">t_cal = -2.48 (Inside H₀)</text>
+    <text x="250" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 99%)</text>
+    <text x="90" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">-t_crit = -3.355</text>
+    <text x="410" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">+t_crit = +3.355</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">μ₁ - μ₂ = 0 (Center)</text>
+    <text x="70" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α/2 = 0.005)</text>
+    <text x="430" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α/2 = 0.005)</text>
+  </svg>
+</div>
+*   **Decision:** $|t_{\text{cal}}| = 2.48 < 3.355 \implies$ **Fail to Reject $H_0$**. Sales do not differ significantly between the two strategies at $\alpha = 0.01$.
+
+---
+
+## Question 13 (Paired t-Test - Excluded from Cycle Test)
+
+:::warning
+
+**Excluded from Cycle Test: Paired t-Test**
+
+This problem tests a **paired sample $t$-test (dependent before/after observations)**, which is excluded from the upcoming cycle test syllabus. Retained for comprehensive semester examination reference.
+
+:::
+
+:::info
+
+**Question Statement**
+
+A researcher is testing the effectiveness of a new study technique. She records the test scores of 15 students before and after they use the new technique:  
+**Before:** 70, 75, 80, 85, 90, 65, 75, 80, 85, 78, 88, 92, 84, 76, 82  
+**After:** 78, 80, 85, 90, 94, 70, 80, 84, 89, 82, 90, 95, 88, 80, 86  
+At a significance level of 0.01, is there sufficient evidence to conclude that the new study technique improves students' test scores? Use the critical region technique to support your answer.
+
+:::
+
+---
+
+### Solution 13
+
+##### Hypotheses & Differences Metrics
+*   Let $d = \text{After} - \text{Before}$. $H_0: \mu_d \le 0$ vs $H_1: \mu_d > 0$ (Right-tailed, $\alpha = 0.01, \, df = \mathbf{14}$)
+
+| Metric | Values |
+| :--- | :--- |
+| **Differences ($d$)** | $+8, +5, +5, +5, +4, +5, +5, +4, +4, +4, +2, +3, +4, +4, +4$ |
+| **Mean Difference ($\bar{d}$)** | $\frac{66}{15} = \mathbf{+4.40\text{ points}}$ |
+| **Std Dev ($s_d$) & $SE_{\bar{d}}$** | $s_d = \mathbf{1.2984}, \quad SE_{\bar{d}} = \frac{1.2984}{\sqrt{15}} \approx \mathbf{0.3352}$ |
+| **Test Statistic ($t_{\text{cal}}$)** | $t_{\text{cal}} = \frac{4.40}{0.3352} \approx \mathbf{+13.13}$ |
+
+---
+
+##### Critical Region Evaluation
+*   **Critical Value:** $t_{\text{crit}} = \mathbf{+2.624}$ ($df = 14, \alpha = 0.01$)
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    <path d="M 370 145 C 390 160 420 170 450 170 L 370 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 50 170 C 110 160 170 35 250 35 C 300 35 340 95 370 145 L 370 170 L 50 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    <line x1="370" y1="145" x2="370" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    <line x1="435" y1="115" x2="435" y2="170" stroke="#3b82f6" strokeWidth="2.5" />
+    <polygon points="435,115 430,105 440,105" fill="#3b82f6" />
+    <text x="435" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#3b82f6">t_cal = +13.13</text>
+    <text x="210" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 99%)</text>
+    <text x="370" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">+t_crit = +2.624</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">μ_d = 0 (H₀ Center)</text>
+    <text x="415" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α = 0.01)</text>
+  </svg>
+</div>
+*   **Decision:** $t_{\text{cal}} = +13.13 > +2.624 \implies$ **Reject $H_0$**. The new study technique significantly improves test scores.
+
+---
+
+## Question 14 (Paired t-Test - Excluded from Cycle Test)
+
+:::warning
+
+**Excluded from Cycle Test: Paired t-Test**
+
+This problem tests a **paired sample $t$-test (dependent before/after observations)**, which is excluded from the upcoming cycle test syllabus. Retained for comprehensive semester examination reference.
+
+:::
+
+:::info
+
+**Question Statement**
+
+A health program is designed to help participants reduce their weight. Ten participants' weights are measured before and after the program, yielding the following results (in kg):  
+**Before:** 80, 75, 90, 85, 70, 95, 88, 82, 77, 92  
+**After:** 78, 74, 85, 82, 68, 91, 86, 80, 75, 90  
+At a 0.05 significance level, is there enough evidence to suggest that the health program has resulted in a significant weight loss? Conduct a paired sample t-test to analyze the results.
+
+:::
+
+---
+
+### Solution 14
+
+##### Hypotheses & Loss Metrics
+*   Let $d = \text{Before} - \text{After}$. $H_0: \mu_d \le 0$ vs $H_1: \mu_d > 0$ (Right-tailed, $\alpha = 0.05, \, df = \mathbf{9}$)
+
+| Metric | Values |
+| :--- | :--- |
+| **Weight Losses ($d$)** | $+2, +1, +5, +3, +2, +4, +2, +2, +2, +2\text{ kg}$ |
+| **Mean Loss ($\bar{d}$)** | $\frac{25}{10} = \mathbf{+2.50\text{ kg}}$ |
+| **Std Dev ($s_d$) & $SE_{\bar{d}}$** | $s_d = \mathbf{1.1785\text{ kg}}, \quad SE_{\bar{d}} = \frac{1.1785}{\sqrt{10}} \approx \mathbf{0.3727\text{ kg}}$ |
+| **Test Statistic ($t_{\text{cal}}$)** | $t_{\text{cal}} = \frac{2.50}{0.3727} \approx \mathbf{+6.71}$ |
+
+---
+
+##### Decision & Conclusion
+*   **Critical Value:** $t_{\text{crit}} = \mathbf{+1.833}$ ($df = 9, \alpha = 0.05$)
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    <path d="M 355 130 C 385 160 420 170 450 170 L 355 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 50 170 C 110 160 170 35 250 35 C 290 35 320 85 355 130 L 355 170 L 50 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    <line x1="355" y1="130" x2="355" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    <line x1="425" y1="115" x2="425" y2="170" stroke="#3b82f6" strokeWidth="2.5" />
+    <polygon points="425,115 420,105 430,105" fill="#3b82f6" />
+    <text x="425" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#3b82f6">t_cal = +6.71</text>
+    <text x="210" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 95%)</text>
+    <text x="355" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">+t_crit = +1.833</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">μ_d = 0 (H₀ Center)</text>
+    <text x="405" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α = 0.05)</text>
+  </svg>
+</div>
+*   **Decision:** $t_{\text{cal}} = +6.71 > +1.833 \implies$ **Reject $H_0$**. The health program produces statistically significant weight loss.
+
+---
+
+## Question 15 (Two-Sample Proportion Test - Excluded from Cycle Test)
+
+:::warning
+
+**Excluded from Cycle Test: Two-Sample Proportion Test**
+
+This problem tests a **two-sample pooled proportion ($p_1$ vs $p_2$)**, which is excluded from the upcoming cycle test syllabus. Retained for comprehensive semester examination reference.
+
+:::
+
+:::info
+
+**Question Statement**
+
+A local health department claims that the proportion of smokers in City A is higher than in City B. A survey conducted in City A finds that out of 200 residents, 80 are smokers. In City B, a survey of 250 residents shows that 50 are smokers. At a 0.05 significance level, is there enough evidence to support the claim that the proportion of smokers in City A is higher than in City B?. Use the critical region technique to support your answer.
+
+:::
+
+---
+
+### Solution 15
+
+##### Hypotheses & Parameters
+*   $H_0: p_A \le p_B$ vs $H_1: p_A > p_B$ (Right-tailed, $\alpha = 0.05$)
+*   City A: $n_A = 200, \, x_A = 80 \implies \hat{p}_A = \mathbf{0.40}$
+*   City B: $n_B = 250, \, x_B = 50 \implies \hat{p}_B = \mathbf{0.20}$
+*   Pooled Proportion: $\bar{p} = \frac{80 + 50}{200 + 250} = \frac{130}{450} \approx \mathbf{0.2889}, \quad \bar{q} = \mathbf{0.7111}$
+*   $$SE_{\text{pool}} = \sqrt{(0.2889)(0.7111)\left(\frac{1}{200} + \frac{1}{250}\right)} \approx \mathbf{0.0430}$$
+*   $$Z_{\text{cal}} = \frac{0.40 - 0.20}{0.0430} \approx \mathbf{+4.65}$$
+
+---
+
+##### Critical Region Evaluation
+*   **Critical Value:** $Z_{\text{crit}} = \mathbf{+1.645}$
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    <path d="M 355 130 C 385 160 420 170 450 170 L 355 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 50 170 C 110 160 170 35 250 35 C 290 35 320 85 355 130 L 355 170 L 50 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    <line x1="355" y1="130" x2="355" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    <line x1="430" y1="115" x2="430" y2="170" stroke="#3b82f6" strokeWidth="2.5" />
+    <polygon points="430,115 425,105 435,105" fill="#3b82f6" />
+    <text x="430" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#3b82f6">Z_cal = +4.65</text>
+    <text x="210" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 95%)</text>
+    <text x="355" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">+Z_crit = +1.645</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">p_A - p_B = 0 (Center)</text>
+    <text x="405" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α = 0.05)</text>
+  </svg>
+</div>
+*   **Decision:** $Z_{\text{cal}} = +4.65 > +1.645 \implies$ **Reject $H_0$**. The proportion of smokers in City A is significantly higher than in City B.
+
+---
+
+## Question 16 (Two-Sample Proportion Test - Excluded from Cycle Test)
+
+:::warning
+
+**Excluded from Cycle Test: Two-Sample Proportion Test**
+
+This problem tests a **two-sample pooled proportion ($p_1$ vs $p_2$)**, which is excluded from the upcoming cycle test syllabus. Retained for comprehensive semester examination reference.
+
+:::
+
+:::info
+
+**Question Statement**
+
+A local health department claims that the proportion of smokers in City A is higher than in City B. A survey conducted in City A finds that out of 200 residents, 80 are smokers. In City B, a survey of 250 residents shows that 50 are smokers. At a 0.05 significance level, is there enough evidence to support the claim that the proportion of smokers in City A is higher than in City B?. Use the pvalue technique to support your answer.
+
+:::
+
+---
+
+### Solution 16
+
+##### Parameters & Test Statistic
+*(Using data from Question 15: $\hat{p}_A = 0.40, \, \hat{p}_B = 0.20, \, SE_{\text{pool}} \approx 0.0430$)*
+$$Z_{\text{cal}} = \frac{0.40 - 0.20}{0.0430} = \mathbf{+4.65}$$
+
+---
+
+##### P-Value Evaluation
+*   **P-Value:** $p\text{-value} = P(Z > +4.65) \approx \mathbf{0.00000165}$
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    <path d="M 355 130 C 385 160 420 170 450 170 L 355 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 50 170 C 110 160 170 35 250 35 C 290 35 320 85 355 130 L 355 170 L 50 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    <line x1="355" y1="130" x2="355" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="var(--ifm-color-emphasis-400)" strokeWidth="1" strokeDasharray="2 2" />
+    <line x1="430" y1="115" x2="430" y2="170" stroke="#3b82f6" strokeWidth="2.5" />
+    <polygon points="430,115 425,105 435,105" fill="#3b82f6" />
+    <text x="430" y="98" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#3b82f6">Z_cal = +4.65</text>
+    <text x="210" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 95%)</text>
+    <text x="355" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">+Z_crit = +1.645</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">p_A - p_B = 0 (Center)</text>
+    <text x="405" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α = 0.05)</text>
+  </svg>
+</div>
+*   **Decision:** $p\text{-value} \ll 0.05 \implies$ **Reject $H_0$**. The proportion of smokers in City A is significantly higher than in City B.
+
+---
+
+## Question 17 (Two-Sample Proportion Test - Excluded from Cycle Test)
+
+:::warning
+
+**Excluded from Cycle Test: Two-Sample Proportion Test**
+
+This problem tests a **two-sample pooled proportion ($p_1$ vs $p_2$)**, which is excluded from the upcoming cycle test syllabus. Retained for comprehensive semester examination reference.
+
+:::
+
+:::info
+
+**Question Statement**
+
+A new marketing campaign is launched in two different regions to promote a new product. In Region 1, out of 500 individuals surveyed, 150 expressed a positive opinion about the product. In Region 2, out of 600 individuals surveyed, 180 reported a positive opinion. At a significance level of 0.01, is there evidence to suggest that the proportions of individuals expressing a positive opinion about the product differ between the two regions?. Use the pvalue technique to support your answer.
+
+:::
+
+---
+
+### Solution 17
+
+##### Hypotheses & Parameters
+*   $H_0: p_1 = p_2$ vs $H_1: p_1 \neq p_2$ (Two-tailed, $\alpha = 0.01$)
+*   Region 1: $\hat{p}_1 = \frac{150}{500} = \mathbf{0.30}$
+*   Region 2: $\hat{p}_2 = \frac{180}{600} = \mathbf{0.30}$
+*   Observed Difference: $\hat{p}_1 - \hat{p}_2 = 0.30 - 0.30 = \mathbf{0.00} \implies Z_{\text{cal}} = \mathbf{0.00}$
+
+---
+
+##### P-Value Evaluation
+*   **P-Value:** $p\text{-value} = 2 \times P(Z \ge 0.00) = \mathbf{1.0000}$
+
+<div style={{ display: 'flex', justifyContent: 'center', margin: '20px 0' }}>
+  <svg viewBox="0 0 500 220" style={{ width: '100%', maxWidth: '550px', height: 'auto', backgroundColor: 'var(--ifm-background-surface-color)', borderRadius: '8px', border: '1px solid var(--ifm-color-emphasis-300)' }}>
+    <line x1="40" y1="170" x2="460" y2="170" stroke="var(--ifm-color-emphasis-600)" strokeWidth="1.5" />
+    <path d="M 50 170 C 75 170 95 165 110 150 L 110 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 390 150 C 405 165 425 170 450 170 L 390 170 Z" fill="rgba(239, 68, 68, 0.35)" />
+    <path d="M 110 170 L 110 150 C 150 95 190 35 250 35 C 310 35 350 95 390 150 L 390 170 Z" fill="rgba(34, 197, 94, 0.15)" />
+    <path d="M 50 170 C 100 170 160 35 250 35 C 340 35 400 170 450 170" fill="none" stroke="var(--ifm-color-primary)" strokeWidth="2.5" />
+    <line x1="110" y1="150" x2="110" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="390" y1="150" x2="390" y2="170" stroke="#ef4444" strokeWidth="2" strokeDasharray="3 3" />
+    <line x1="250" y1="35" x2="250" y2="170" stroke="#10b981" strokeWidth="2.5" />
+    <polygon points="250,35 245,25 255,25" fill="#10b981" />
+    <text x="250" y="18" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#10b981">Z_cal = 0.00 (Exactly on H₀)</text>
+    <text x="250" y="105" textAnchor="middle" fontSize="12" fontWeight="bold" fill="var(--ifm-color-emphasis-800)">Acceptance Region (Fail to Reject H₀: 99%)</text>
+    <text x="100" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">-Z_crit = -2.576</text>
+    <text x="400" y="186" textAnchor="middle" fontSize="11" fontWeight="bold" fill="#ef4444">+Z_crit = +2.576</text>
+    <text x="250" y="186" textAnchor="middle" fontSize="11" fill="var(--ifm-color-emphasis-700)">p₁ - p₂ = 0 (Center)</text>
+    <text x="75" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α/2 = 0.005)</text>
+    <text x="425" y="152" textAnchor="middle" fontSize="10" fontWeight="bold" fill="#ef4444">Reject H₀ (α/2 = 0.005)</text>
+  </svg>
+</div>
+*   **Decision:** $p\text{-value} = 1.0000 \gg 0.01 \implies$ **Fail to Reject $H_0$**. There is no difference in positive opinion proportions between Region 1 and Region 2.
+
+---

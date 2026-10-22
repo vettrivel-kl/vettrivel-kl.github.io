@@ -1,0 +1,228 @@
+---
+sidebar_position: 3
+title: Unit 3 - Sampling & Estimation
+description: LLT Component Unit 3 questions and comprehensive model solutions on confidence intervals for proportions, finite population correction, confidence intervals for sample means, and t-distribution.
+tags: [inferential-statistics, exam-prep, unit-3, estimation, confidence-intervals]
+toc_max_heading_level: 3
+---
+
+# Unit 3: Sampling & Estimation
+
+> **Course -** Inferential Statistics  
+> **Component -** LLT Assignment  
+> **Unit -** Unit 3
+
+---
+
+## Question 1
+
+:::info
+
+**Question Statement**
+
+In a recent survey conducted to evaluate customer satisfaction at a local retail store, 300 customers were sampled. Among the respondents, 180 reported that they were satisfied with their shopping experience.Calculate the 90%, 95%, 99% confidence interval for the proportion of all customers (assuming a total of 1000 customers) who are satisfied with their shopping experience at the retail store.
+
+:::
+
+---
+
+### Solution 1
+
+##### Step 1: Identify Parameters
+
+*   Total Population Size ($N$): $1000$
+*   Sample Size ($n$): $300$
+*   Number of Satisfied Customers ($x$): $180$
+*   Sample Proportion ($\hat{p}$):
+    $$\hat{p} = \frac{x}{n} = \frac{180}{300} = \mathbf{0.60}\text{ (or } 60\%\text{)}$$
+*   Complement Proportion ($\hat{q}$):
+    $$\hat{q} = 1 - \hat{p} = 1 - 0.60 = \mathbf{0.40}\text{ (or } 40\%\text{)}$$
+
+##### Step 2: Standard Error & Finite Population Correction (FPC)
+
+*   **Standard Error ($SE$):**
+    $$SE = \sqrt{\frac{\hat{p}\hat{q}}{n}} = \sqrt{\frac{0.60 \times 0.40}{300}} = \sqrt{\frac{0.24}{300}} = \mathbf{0.028284}$$
+
+*   **Finite Population Correction (FPC Factor):**
+    Because the sampling fraction $\frac{n}{N} = \frac{300}{1000} = 30\% > 5\%$, the FPC must be applied:
+    $$\text{FPC Factor} = \sqrt{\frac{N - n}{N - 1}} = \sqrt{\frac{1000 - 300}{1000 - 1}} = \sqrt{\frac{700}{999}} \approx \mathbf{0.837079}$$
+
+*   **Adjusted Standard Error ($SE_{\text{adj}}$):**
+    $$SE_{\text{adj}} = SE \times \text{FPC} = 0.028284 \times 0.837079 = \mathbf{0.023676}$$
+
+##### Step 3: Confidence Interval Formula
+
+$$\text{CI} = \hat{p} \pm (Z \times SE_{\text{adj}})$$
+
+---
+
+##### Subpart Evaluations
+
+*   **(i) 90% Confidence Interval:**
+    *   Critical Value ($Z$): $1.645$
+    *   Margin of Error ($ME$):
+        $$ME = 1.645 \times 0.023676 = \mathbf{0.038947}$$
+    *   Lower Limit:
+        $$0.60 - 0.038947 = \mathbf{0.561053}$$
+    *   Upper Limit:
+        $$0.60 + 0.038947 = \mathbf{0.638947}$$
+    *   **Interval:** $\mathbf{[56.11\%, \, 63.89\%]}$ (or $[0.5611, \, 0.6389]$)
+
+*   **(ii) 95% Confidence Interval:**
+    *   Critical Value ($Z$): $1.960$
+    *   Margin of Error ($ME$):
+        $$ME = 1.960 \times 0.023676 = \mathbf{0.046405}$$
+    *   Lower Limit:
+        $$0.60 - 0.046405 = \mathbf{0.553595}$$
+    *   Upper Limit:
+        $$0.60 + 0.046405 = \mathbf{0.646405}$$
+    *   **Interval:** $\mathbf{[55.36\%, \, 64.64\%]}$ (or $[0.5536, \, 0.6464]$)
+
+*   **(iii) 99% Confidence Interval:**
+    *   Critical Value ($Z$): $2.576$
+    *   Margin of Error ($ME$):
+        $$ME = 2.576 \times 0.023676 = \mathbf{0.060989}$$
+    *   Lower Limit:
+        $$0.60 - 0.060989 = \mathbf{0.539011}$$
+    *   Upper Limit:
+        $$0.60 + 0.060989 = \mathbf{0.660989}$$
+    *   **Interval:** $\mathbf{[53.90\%, \, 66.10\%]}$ (or $[0.5390, \, 0.6610]$)
+
+---
+
+## Question 2
+
+:::info
+
+**Question Statement**
+
+A company claims that the average time employees spend on training is 20 hours per month. A random sample of 36 employees is taken, and it is found that the average time spent on training is 22 hours with a population standard deviation of 6 hours. At a 90%, 95%,99% confidence level, can we conclude that the average training time for employees is significantly different from 20 hours? Assume data is normally distributed and calculate the confidence interval for the mean training time.
+
+:::
+
+---
+
+### Solution 2
+
+##### Step 1: Identify Parameters
+
+*   Claimed Population Mean ($\mu_0$): $20\text{ hours}$
+*   Sample Mean ($\bar{x}$): $22\text{ hours}$
+*   Population Standard Deviation ($\sigma$): $6\text{ hours}$
+*   Sample Size ($n$): $36\text{ employees}$
+
+##### Step 2: Calculate Standard Error ($SE$)
+
+$$SE = \frac{\sigma}{\sqrt{n}} = \frac{6}{\sqrt{36}} = \frac{6}{6} = \mathbf{1.0\text{ hour}}$$
+
+##### Step 3: Confidence Interval Formula
+
+$$\text{CI} = \bar{x} \pm (Z \times SE)$$
+
+---
+
+##### Subpart Evaluations across Confidence Levels
+
+###### (i) 90% Confidence Level
+*   Critical Value ($Z$): $1.645$
+*   Margin of Error ($ME$):
+    $$ME = 1.645 \times 1.0 = \mathbf{1.645}$$
+*   Lower Limit:
+    $$22 - 1.645 = \mathbf{20.355}$$
+*   Upper Limit:
+    $$22 + 1.645 = \mathbf{23.645}$$
+*   **Confidence Interval:** $\mathbf{[20.36, \, 23.64]\text{ hours}}$ (or $[20.355, \, 23.645]$)
+*   **Analysis:** The hypothesized value of $20$ sits completely outside the interval ($20 \notin [20.36, 23.64]$).  
+    $\therefore$ At a **90% confidence level**, the average training time is **significantly different** from 20 hours.
+
+###### (ii) 95% Confidence Level
+*   Critical Value ($Z$): $1.960$
+*   Margin of Error ($ME$):
+    $$ME = 1.960 \times 1.0 = \mathbf{1.960}$$
+*   Lower Limit:
+    $$22 - 1.960 = \mathbf{20.040}$$
+*   Upper Limit:
+    $$22 + 1.960 = \mathbf{23.960}$$
+*   **Confidence Interval:** $\mathbf{[20.040, \, 23.960]\text{ hours}}$
+*   **Analysis:** The hypothesized value of $20$ still falls outside this interval ($20 \notin [20.040, 23.960]$).  
+    $\therefore$ At a **95% confidence level**, the average training time is **significantly different** from 20 hours.
+
+###### (iii) 99% Confidence Level
+*   Critical Value ($Z$): $2.576$
+*   Margin of Error ($ME$):
+    $$ME = 2.576 \times 1.0 = \mathbf{2.576}$$
+*   Lower Limit:
+    $$22 - 2.576 = \mathbf{19.424}$$
+*   Upper Limit:
+    $$22 + 2.576 = \mathbf{24.576}$$
+*   **Confidence Interval:** $\mathbf{[19.424, \, 24.576]\text{ hours}}$
+*   **Analysis:** The hypothesized value of $20$ falls inside this wider interval ($20 \in [19.424, 24.576]$).  
+    $\therefore$ At a **99% confidence level**, we **do not have enough evidence** to say the average training time is significantly different from 20 hours.
+
+---
+
+## Question 3
+
+:::info
+
+**Question Statement**
+
+A researcher wants to assess the effect of a new study method on student performance. He collects test scores from a sample of 15 students who used the new method. The mean score of the sample is 78, and the standard deviation is 10. At a 90%,95% and 99% confidence level, what is the confidence interval for the average test score of all students using the new study method? Perform the calculation Confident Intervals.
+
+:::
+
+---
+
+### Solution 3
+
+##### Step 1: Identify Parameters & Degrees of Freedom
+
+*   Sample Mean ($\bar{x}$): $78$
+*   Sample Standard Deviation ($s$): $10$
+*   Sample Size ($n$): $15$
+*   Degrees of Freedom ($df$):
+    $$df = n - 1 = 15 - 1 = \mathbf{14}$$
+
+##### Step 2: Calculate Standard Error ($SE$)
+
+$$SE = \frac{s}{\sqrt{n}} = \frac{10}{\sqrt{15}} = \frac{10}{3.8730} \approx \mathbf{2.5820}$$
+
+##### Step 3: Confidence Interval Formula
+
+$$\text{CI} = \bar{x} \pm (t_c \times SE)$$
+
+---
+
+##### Subpart Evaluations
+
+*   **(i) 90% Confidence Interval:**
+    *   Critical Value ($t_c$ for $df = 14$ at 90%): $\mathbf{1.7613}$
+    *   Margin of Error ($ME$):
+        $$ME = 1.7613 \times 2.5820 = \mathbf{4.5477}$$
+    *   Lower Limit:
+        $$78 - 4.5477 = \mathbf{73.4523}$$
+    *   Upper Limit:
+        $$78 + 4.5477 = \mathbf{82.5523}$$
+    *   **Interval:** $\mathbf{[73.4523, \, 82.5523]}\approx \mathbf{[73.45, \, 82.55]}$
+
+*   **(ii) 95% Confidence Interval:**
+    *   Critical Value ($t_c$ for $df = 14$ at 95%): $\mathbf{2.1448}$
+    *   Margin of Error ($ME$):
+        $$ME = 2.1448 \times 2.5820 = \mathbf{5.5378}$$
+    *   Lower Limit:
+        $$78 - 5.5378 = \mathbf{72.4622}$$
+    *   Upper Limit:
+        $$78 + 5.5378 = \mathbf{83.5378}$$
+    *   **Interval:** $\mathbf{[72.46, \, 83.54]}$
+
+*   **(iii) 99% Confidence Interval:**
+    *   Critical Value ($t_c$ for $df = 14$ at 99%): $\mathbf{2.9768}$
+    *   Margin of Error ($ME$):
+        $$ME = 2.9768 \times 2.5820 = \mathbf{7.6862}$$
+    *   Lower Limit:
+        $$78 - 7.6862 = \mathbf{70.3138}$$
+    *   Upper Limit:
+        $$78 + 7.6862 = \mathbf{85.69}$$
+    *   **Interval:** $\mathbf{[70.31, \, 85.69]}$
+
+---
