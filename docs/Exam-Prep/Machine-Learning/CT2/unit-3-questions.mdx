@@ -221,8 +221,10 @@ where $x_1$ represents Income (in â‚¹1000s) and $x_2$ represents Spending (in â‚
 ##### (a) Euclidean Distance Calculation (5 Marks)
 
 1. **Step 1: Formula Definition (1 Mark)**
-   The Euclidean distance ($L_2$ norm) between $\mathbf{X}_{\text{new}} = (40, 15)$ and training point $\mathbf{X}_i = (x_{i1}, x_{i2})$ is:
-   $$d_E(\mathbf{X}_{\text{new}}, \mathbf{X}_i) = \sqrt{(40 - x_{i1})^2 + (15 - x_{i2})^2}$$
+   * **Euclidean Distance Formula between two points $(x_1, y_1)$ and $(x_2, y_2)$:**
+     $$d = \sqrt{(x_2 - x_1)^2 + (y_2 - y_1)^2}$$
+   * **Applied to Query Point $(40, 15)$ and Training Point $(x_{i1}, x_{i2})$:**
+     $$d_E = \sqrt{(40 - x_{i1})^2 + (15 - x_{i2})^2}$$
 
 2. **Step 2: Individual Distance Computations (3 Marks)**
    * **For Customer C1 $(20, 5)$:**
@@ -285,8 +287,10 @@ where $x_1$ represents Income (in â‚¹1000s) and $x_2$ represents Spending (in â‚
 ##### (c) Recalculate Distances Using Manhattan Metric & Compare (5 Marks)
 
 1. **Step 1: Formula Definition (1 Mark)**
-   The Manhattan distance ($L_1$ norm / Taxicab distance) is:
-   $$d_M(\mathbf{X}_{\text{new}}, \mathbf{X}_i) = \lvert 40 - x_{i1} \rvert + \lvert 15 - x_{i2} \rvert$$
+   * **Manhattan Distance Formula between two points $(x_1, y_1)$ and $(x_2, y_2)$:**
+     $$d_M = \lvert x_2 - x_1 \rvert + \lvert y_2 - y_1 \rvert$$
+   * **Applied to Query Point $(40, 15)$ and Training Point $(x_{i1}, x_{i2})$:**
+     $$d_M = \lvert 40 - x_{i1} \rvert + \lvert 15 - x_{i2} \rvert$$
 
 2. **Step 2: Individual Computations (2 Marks)**
    * **For C1 $(20, 5)$:** $d_M = \lvert 40 - 20 \rvert + \lvert 15 - 5 \rvert = 20 + 10 = \mathbf{30}$
