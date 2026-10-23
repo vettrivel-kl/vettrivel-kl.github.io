@@ -153,22 +153,22 @@ Assume given is a small dataset with numeric features:
 
 * **Algorithm:** **SVM with RBF Kernel**
 * **Why (Key Points):**
-  * **Kernel Trick:** The RBF kernel $K(\mathbf{x}, \mathbf{x}') = \exp(-\gamma \|\mathbf{x} - \mathbf{x}'\|^2)$ maps inputs into an infinite-dimensional feature space.
-  * **Smooth Separation:** A linear hyperplane in this higher space projects back as smooth, continuous non-linear boundaries in the original space (unlike KNN's noisy, jagged boundaries).
+  * **Infinite-Dimensional Mapping:** The RBF kernel $K(\mathbf{x}, \mathbf{x}') = \exp(-\gamma \|\mathbf{x} - \mathbf{x}'\|^2)$ projects inputs into an infinite-dimensional Hilbert space.
+  * **Smooth Decision Surfaces:** A linear hyperplane in this transformed space maps back to smooth, continuous non-linear contours in the original feature space.
 
 ##### (b) Most Sensitive to Irrelevant Features: KNN ($k=5$) (1.5 Marks)
 
 * **Algorithm:** **K-Nearest Neighbors (KNN)**
 * **Why (Key Points):**
-  * **Equal Distance Weighting:** KNN computes distance across all dimensions equally: $d = \sqrt{\sum (x_j - y_j)^2}$.
-  * **Curse of Dimensionality:** Irrelevant features add random noise to the distance calculation, drowning out true proximity signals ($d_{\max} \approx d_{\min}$).
+  * **Uniform Distance Metric:** Calculates Euclidean distance equally across all $D$ features: $d = \sqrt{\sum_{j=1}^D (x_j - y_j)^2}$.
+  * **Curse of Dimensionality:** Irrelevant dimensions inject random noise, collapsing distance contrast ($d_{\max} \approx d_{\min}$) and destroying neighborhood ranking.
 
 ##### (c) Best for Small Data and Missing Values: Gaussian Naïve Bayes (1.5 Marks)
 
 * **Algorithm:** **Gaussian Naïve Bayes**
 * **Why (Key Points):**
-  * **Small Data Robustness:** Only needs to estimate $2$ parameters per feature (mean $\mu$ and variance $\sigma^2$), avoiding overfitting on small samples (high bias, low variance).
-  * **Native Missing Value Handling:** Simply ignores missing features during inference by omitting them from the likelihood product: $P(\mathbf{x}_{\text{obs}} \mid C) = \prod_{j \in \text{obs}} P(x_j \mid C)$ (no imputation needed).
+  * **Parameter Efficiency:** Estimates only $2$ parameters per feature ($\mu, \sigma^2$), resisting overfitting on small samples via high bias/low variance.
+  * **Native Missing Value Handling:** Computes likelihoods by simply omitting missing attributes from the conditional product: $P(\mathbf{x}_{\text{obs}} \mid C) = \prod_{j \in \text{obs}} P(x_j \mid C)$.
 
 ###### Quick Comparison Summary
 

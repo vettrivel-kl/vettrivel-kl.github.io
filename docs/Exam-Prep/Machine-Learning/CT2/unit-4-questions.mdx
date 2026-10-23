@@ -201,35 +201,44 @@ A **decision stump** is a 1-level decision tree splitting on a single feature th
 
 * **Step 1: Weighted Error Rate ($\epsilon_m$) (1 Mark)**
   $$\epsilon_m = 10\% = \mathbf{0.10}$$
+  *(Note: A 10% misclassification rate equals a weighted error of 0.10 when sample weights are uniform, such as in round $m=1$.)*
 
 * **Step 2: State Alpha Formula (1 Mark)**
+  Standard AdaBoost (Freund & Schapire):
   $$\alpha_m = \frac{1}{2} \ln\left( \frac{1 - \epsilon_m}{\epsilon_m} \right)$$
+  *(Alternative convention note: Some textbooks omit the $\frac{1}{2}$ factor, giving $\alpha = \ln(9) \approx 2.1972$. Use whichever form your course notes follow.)*
 
 * **Step 3: Step-by-Step Calculation (1 Mark)**
   $$\frac{1 - \epsilon_m}{\epsilon_m} = \frac{1 - 0.10}{0.10} = \frac{0.90}{0.10} = 9$$
   $$\alpha_m = \frac{1}{2} \ln(9) = \frac{1}{2} \ln(3^2) = \ln(3) \approx \mathbf{1.0986}$$
 
 * **Step 4: Practical Meaning (1 Mark)**
-  * Since $\epsilon_m = 0.10 \ll 0.50$, the stump is accurate and receives a strong positive voting weight ($\alpha_m \approx +1.0986$) in the final ensemble rule $H(\mathbf{x}) = \text{sign}\left(\sum \alpha_m h_m(\mathbf{x})\right)$.
+  * Since $\epsilon_m = 0.10 \ll 0.50$, the stump is substantially better than random guessing and receives a strong positive voting weight ($\alpha_m \approx +1.0986$) in the final ensemble rule $H(\mathbf{x}) = \text{sign}\left(\sum \alpha_m h_m(\mathbf{x})\right)$.
 
 ---
 
 ##### (iv) How Boosting Reduces Bias but Can Increase Variance (4 Marks)
 
 * **How Boosting Reduces Bias (2 Marks):**
-  * **Sequential Residual Learning:** Each stump targets transactions misclassified by preceding stumps.
-  * **Non-Linear Synthesis:** An additive linear combination of simple linear stumps constructs complex, highly expressive non-linear decision boundaries, driving training error toward zero ($\lim_{M \to \infty} \text{Bias}^2 \to 0$).
+  * **Sample Reweighting on Hard Instances:** Unlike gradient boosting (which fits residuals directly), AdaBoost applies higher weights to misclassified transactions so each successive stump specifically focuses on samples earlier stumps got wrong.
+  * **Non-Linear Boundary Synthesis:** Additively combining numerous simple piecewise linear stumps constructs complex, highly expressive non-linear decision boundaries, driving ensemble training error toward zero ($\lim_{M \to \infty} \text{Bias}^2 \to 0$).
 
 * **Why Boosting Can Increase Variance (2 Marks):**
-  * **Sensitivity to Noise / Outliers:** Mislabeled transactions or noisy outliers are repeatedly misclassified.
-  * **Exponential Weight Explosion:** Outlier weights escalate exponentially ($e^{m\alpha}$), forcing later stumps to contort around noise pockets rather than generalizable fraud patterns, leading to **Overfitting**.
-  * *Fix:* Use learning rate shrinkage ($\eta < 1$) or limit total boosting rounds $M$.
+  * **Sensitivity to Noise / Outliers:** Mislabeled transactions or anomalous outliers are repeatedly misclassified.
+  * **Relative Weight Accumulation:** Because misclassified samples are boosted by $e^{+\alpha}$ each round, repeatedly misclassified noisy points keep gaining relative weight after normalization. This forces later stumps to aggressively contort around noise pockets rather than true fraud patterns, leading to **Overfitting**.
+  * *Fix:* Use learning rate shrinkage ($\eta < 1$), early stopping, or limit total boosting rounds $M$.
 
 ---
 
 ##### (v) Handling Missing Values in "Device ID" (4 Marks)
 
-1. **Feature Bypassing (1 Mark):** Each stump evaluates only one feature. If "Device ID" has missing values that degrade split quality, AdaBoost automatically chooses an alternative complete feature (e.g., Transaction Amount).
-2. **Missing as an Informative Category (1 Mark):** In fraud detection, missing device data is often intentional (e.g., fraudsters masking device footprints). Treating `Missing` as a distinct category (`Device_ID = Unknown`) provides strong predictive signal.
-3. **Surrogate Splits (1 Mark):** CART identifies an auxiliary feature correlated with Device ID (e.g., IP Geolocation or Browser Type) to route missing transactions along the surrogate branch.
-4. **Proportional Routing (1 Mark):** Transactions with missing values have their weights split proportionally between child branches based on observed sample distributions.
+AdaBoost has **no built-in missing-value handling mechanism**; it inherits whatever missing-value capabilities are provided by its base learners or preprocessing:
+
+1. **Preprocessing Imputation (Option A - 1.5 Marks):**
+   * Impute missing entries prior to boosting using the mode (most common device ID) or median, optionally adding a binary indicator flag for missingness.
+2. **Missing as an Informative Predictive Category (Option B - 1.5 Marks):**
+   * In cyber-fraud detection, missing device data is often non-random (fraudsters deliberately conceal device fingerprints). Treating `Missing` as an explicit categorical level (`Device_ID = Unknown`) allows stumps to split directly on missingness, often turning it into a powerful fraud indicator.
+3. **Base-Learner Native Handling (Option C - 1 Mark):**
+   * Employ weak learners that natively support missing attributes:
+     * **CART stumps:** Evaluate **surrogate splits** using auxiliary correlated features (e.g., Browser Type or IP Geolocation).
+     * **C4.5-style stumps:** Route instances with missing values down both branches using fractional / proportional sample weights.
