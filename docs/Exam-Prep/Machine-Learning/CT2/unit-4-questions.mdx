@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 title: Unit 4 - Decision Trees & Ensemble Learning
 description: Exact question wordings and comprehensive, mark-oriented model answers for Unit 4 Continuous Test 2 covering CART Decision Trees and AdaBoost.
 tags: [machine-learning, exam-prep, ct-exam, unit-4]
@@ -11,7 +11,8 @@ toc_max_heading_level: 3
 > **Course -** Machine Learning Algorithms (21CSC555J)  
 > **Assessment -** Continuous Test 2 (CT-2)  
 > **Unit -** Unit 4: Decision Trees (CART) & Ensemble Learning (AdaBoost)  
-> **Total Weightage -** 40 Marks (Question 3: 20 Marks; Question 4: 20 Marks)
+> **Total Weightage -** 40 Marks (Question 3: 20 Marks; Question 4: 20 Marks)  
+> **Rapid Revision -** [Unit 4 Cheat Sheet & Mental Models](./unit-4-cheat-sheet.mdx)
 
 ---
 
@@ -49,154 +50,98 @@ A retail company wants to build a CART classification tree to decide whether a c
 
 ### Solution 3
 
-#### 📝 Exam-Ready Answer (Structured for 20 Marks)
+#### 📝 Exam-Ready Answer (Crisp 20-Mark Structure)
 
 ---
 
 ##### (a) Gini Index for the Parent Node (Root) (4 Marks)
 
-1. **Step 1: Class Frequency Distribution at Root Node (1 Mark)**
-   * Total number of customer instances ($N$): $N = 7$
-   * Number of instances with $\text{Buy} = \text{Yes}$: $N_{\text{Yes}} = 4$ (Customers: C3, C4, C5, C6)
-   * Number of instances with $\text{Buy} = \text{No}$: $N_{\text{No}} = 3$ (Customers: C1, C2, C7)
+* **Step 1: Class Distribution & Probabilities (2 Marks)**
+  * Total samples: $N = 7$
+  * Class counts: $N_{\text{Yes}} = 4$ (C3, C4, C5, C6), $\; N_{\text{No}} = 3$ (C1, C2, C7)
+  * Probabilities: $p_{\text{Yes}} = \frac{4}{7}, \; p_{\text{No}} = \frac{3}{7}$
 
-2. **Step 2: Class Probabilities at Root (1 Mark)**
-   $$P(\text{Buy} = \text{Yes}) = p_1 = \frac{4}{7}$$
-   $$P(\text{Buy} = \text{No}) = p_2 = \frac{3}{7}$$
-
-3. **Step 3: State the Gini Index Formula (1 Mark)**
-   $$\text{Gini}(D) = 1 - \sum_{i=1}^C p_i^2 = 1 - \left( p_1^2 + p_2^2 \right)$$
-
-4. **Step 4: Substitution and Calculation (1 Mark)**
-   $$\text{Gini}(\text{Root}) = 1 - \left[ \left(\frac{4}{7}\right)^2 + \left(\frac{3}{7}\right)^2 \right] = 1 - \left[ \frac{16}{49} + \frac{9}{49} \right]$$
-   $$\text{Gini}(\text{Root}) = 1 - \frac{25}{49} = \frac{24}{49} \approx \mathbf{0.4898} \quad (\approx 0.490)$$
+* **Step 2: Formula & Calculation (2 Marks)**
+  $$\text{Gini}(\text{Root}) = 1 - \sum p_i^2 = 1 - \left[ \left(\frac{4}{7}\right)^2 + \left(\frac{3}{7}\right)^2 \right] = 1 - \frac{25}{49} = \mathbf{\frac{24}{49} \approx 0.4898}$$
 
 ---
 
 ##### (b) Compute Gini Index for Each Possible Split (8 Marks)
 
-In the **Classification and Regression Trees (CART)** methodology, trees are constructed strictly via **binary splits**. For an attribute with $k$ discrete categories, there are $2^{k-1} - 1$ unique binary partitions.
+CART strictly uses **binary splits**. For an attribute with $k=3$ discrete categories, there are $2^{k-1} - 1 = 3$ candidate binary partitions:
+$$\text{Gini}_{\text{split}} = \frac{N_L}{N}\text{Gini}(D_L) + \frac{N_R}{N}\text{Gini}(D_R)$$
 
----
-
-###### 1. Candidate Binary Splits for Age Group ($k = 3$: Young, Middle, Senior)
+###### 1. Splits for Age Group ($k=3$: Young, Middle, Senior) (4 Marks)
 
 * **Partition 1: $\{\text{Young}\}$ vs $\{\text{Middle, Senior}\}$**
-  * *Left Node ($D_L$: Young, $N_L = 2$):*
-    * C1 (No), C2 (No) $\implies \text{Yes} = 0, \text{No} = 2$.
-    $$\text{Gini}(D_L) = 1 - \left[ \left(\frac{0}{2}\right)^2 + \left(\frac{2}{2}\right)^2 \right] = 1 - 1 = \mathbf{0.0} \quad (\text{Pure Node})$$
-  * *Right Node ($D_R$: Middle + Senior, $N_R = 5$):*
-    * C3 (Yes), C4 (Yes), C5 (Yes), C6 (Yes), C7 (No) $\implies \text{Yes} = 4, \text{No} = 1$.
-    $$\text{Gini}(D_R) = 1 - \left[ \left(\frac{4}{5}\right)^2 + \left(\frac{1}{5}\right)^2 \right] = 1 - \left( \frac{16}{25} + \frac{1}{25} \right) = 1 - \frac{17}{25} = \frac{8}{25} = \mathbf{0.320}$$
-  * *Weighted Gini for Partition 1:*
-    $$\text{Gini}_{\text{split}}(\{\text{Young}\} \text{ vs } \{\text{Middle, Senior}\}) = \frac{2}{7}(0.0) + \frac{5}{7}(0.320) = \frac{1.6}{7} \approx \mathbf{0.2286}$$
+  * Left ($N_L = 2$, Young): 0 Yes, 2 No $\implies \text{Gini}(D_L) = 1 - (0 + 1) = \mathbf{0.0}$ *(Pure Leaf)*
+  * Right ($N_R = 5$, Mid+Sen): 4 Yes, 1 No $\implies \text{Gini}(D_R) = 1 - \left[\left(\frac{4}{5}\right)^2 + \left(\frac{1}{5}\right)^2\right] = 1 - \frac{17}{25} = \mathbf{0.320}$
+  * Weighted Gini: $\frac{2}{7}(0.0) + \frac{5}{7}(0.320) = \frac{1.6}{7} \approx \mathbf{0.2286}$
 
 * **Partition 2: $\{\text{Middle}\}$ vs $\{\text{Young, Senior}\}$**
-  * *Left Node ($D_L$: Middle, $N_L = 2$):*
-    * C3 (Yes), C4 (Yes) $\implies \text{Yes} = 2, \text{No} = 0$.
-    $$\text{Gini}(D_L) = 1 - \left[ \left(\frac{2}{2}\right)^2 + 0 \right] = \mathbf{0.0} \quad (\text{Pure Node})$$
-  * *Right Node ($D_R$: Young + Senior, $N_R = 5$):*
-    * C1 (No), C2 (No), C5 (Yes), C6 (Yes), C7 (No) $\implies \text{Yes} = 2, \text{No} = 3$.
-    $$\text{Gini}(D_R) = 1 - \left[ \left(\frac{2}{5}\right)^2 + \left(\frac{3}{5}\right)^2 \right] = 1 - \frac{13}{25} = \frac{12}{25} = \mathbf{0.480}$$
-  * *Weighted Gini for Partition 2:*
-    $$\text{Gini}_{\text{split}}(\{\text{Middle}\} \text{ vs } \{\text{Young, Senior}\}) = \frac{2}{7}(0.0) + \frac{5}{7}(0.480) = \frac{2.4}{7} \approx \mathbf{0.3429}$$
+  * Left ($N_L = 2$, Middle): 2 Yes, 0 No $\implies \text{Gini}(D_L) = \mathbf{0.0}$ *(Pure Leaf)*
+  * Right ($N_R = 5$, Young+Sen): 2 Yes, 3 No $\implies \text{Gini}(D_R) = 1 - \left[\frac{4}{25} + \frac{9}{25}\right] = \mathbf{0.480}$
+  * Weighted Gini: $\frac{2}{7}(0.0) + \frac{5}{7}(0.480) = \frac{2.4}{7} \approx \mathbf{0.3429}$
 
 * **Partition 3: $\{\text{Senior}\}$ vs $\{\text{Young, Middle}\}$**
-  * *Left Node ($D_L$: Senior, $N_L = 3$):*
-    * C5 (Yes), C6 (Yes), C7 (No) $\implies \text{Yes} = 2, \text{No} = 1$.
-    $$\text{Gini}(D_L) = 1 - \left[ \left(\frac{2}{3}\right)^2 + \left(\frac{1}{3}\right)^2 \right] = 1 - \frac{5}{9} = \frac{4}{9} \approx \mathbf{0.4444}$$
-  * *Right Node ($D_R$: Young + Middle, $N_R = 4$):*
-    * C1 (No), C2 (No), C3 (Yes), C4 (Yes) $\implies \text{Yes} = 2, \text{No} = 2$.
-    $$\text{Gini}(D_R) = 1 - \left[ \left(\frac{2}{4}\right)^2 + \left(\frac{2}{4}\right)^2 \right] = 1 - 0.500 = \mathbf{0.500}$$
-  * *Weighted Gini for Partition 3:*
-    $$\text{Gini}_{\text{split}}(\{\text{Senior}\} \text{ vs } \{\text{Young, Middle}\}) = \frac{3}{7}\left(\frac{4}{9}\right) + \frac{4}{7}(0.500) = \frac{4}{21} + \frac{2}{7} = \frac{10}{21} \approx \mathbf{0.4762}$$
+  * Left ($N_L = 3$, Senior): 2 Yes, 1 No $\implies \text{Gini}(D_L) = 1 - \left[\frac{4}{9} + \frac{1}{9}\right] = \frac{4}{9} \approx \mathbf{0.4444}$
+  * Right ($N_R = 4$, Young+Mid): 2 Yes, 2 No $\implies \text{Gini}(D_R) = 1 - \left[\frac{4}{16} + \frac{4}{16}\right] = \mathbf{0.500}$
+  * Weighted Gini: $\frac{3}{7}\left(\frac{4}{9}\right) + \frac{4}{7}(0.500) = \frac{10}{21} \approx \mathbf{0.4762}$
 
 $$\mathbf{\text{Best Split for Age Group: } \{\text{Young}\} \text{ vs } \{\text{Middle, Senior}\} \implies \text{Gini} \approx 0.2286}$$
 
----
-
-###### 2. Candidate Binary Splits for Income Level ($k = 3$: Low, Medium, High)
+###### 2. Splits for Income Level ($k=3$: Low, Medium, High) (4 Marks)
 
 * **Partition 1: $\{\text{Low}\}$ vs $\{\text{Medium, High}\}$**
-  * *Left Node ($D_L$: Low, $N_L = 3$):*
-    * C1 (No), C3 (Yes), C7 (No) $\implies \text{Yes} = 1, \text{No} = 2$.
-    $$\text{Gini}(D_L) = 1 - \left[ \left(\frac{1}{3}\right)^2 + \left(\frac{2}{3}\right)^2 \right] = 1 - \frac{5}{9} = \frac{4}{9} \approx \mathbf{0.4444}$$
-  * *Right Node ($D_R$: Medium + High, $N_R = 4$):*
-    * C2 (No), C4 (Yes), C5 (Yes), C6 (Yes) $\implies \text{Yes} = 3, \text{No} = 1$.
-    $$\text{Gini}(D_R) = 1 - \left[ \left(\frac{3}{4}\right)^2 + \left(\frac{1}{4}\right)^2 \right] = 1 - \frac{10}{16} = \frac{6}{16} = \mathbf{0.375}$$
-  * *Weighted Gini for Partition 1:*
-    $$\text{Gini}_{\text{split}}(\{\text{Low}\} \text{ vs } \{\text{Medium, High}\}) = \frac{3}{7}\left(\frac{4}{9}\right) + \frac{4}{7}(0.375) = \frac{4}{21} + \frac{1.5}{7} = \frac{4 + 4.5}{21} = \frac{8.5}{21} \approx \mathbf{0.4048}$$
+  * Left ($N_L = 3$, Low): 1 Yes, 2 No $\implies \text{Gini}(D_L) = 1 - \left[\frac{1}{9} + \frac{4}{9}\right] = \frac{4}{9} \approx \mathbf{0.4444}$
+  * Right ($N_R = 4$, Med+High): 3 Yes, 1 No $\implies \text{Gini}(D_R) = 1 - \left[\frac{9}{16} + \frac{1}{16}\right] = \frac{6}{16} = \mathbf{0.375}$
+  * Weighted Gini: $\frac{3}{7}\left(\frac{4}{9}\right) + \frac{4}{7}(0.375) = \frac{8.5}{21} \approx \mathbf{0.4048}$
 
 * **Partition 2: $\{\text{Medium}\}$ vs $\{\text{Low, High}\}$**
-  * *Left Node ($D_L$: Medium, $N_L = 2$):*
-    * C2 (No), C5 (Yes) $\implies \text{Yes} = 1, \text{No} = 1$.
-    $$\text{Gini}(D_L) = 1 - \left[ \left(\frac{1}{2}\right)^2 + \left(\frac{1}{2}\right)^2 \right] = 1 - 0.500 = \mathbf{0.500}$$
-  * *Right Node ($D_R$: Low + High, $N_R = 5$):*
-    * C1 (No), C3 (Yes), C4 (Yes), C6 (Yes), C7 (No) $\implies \text{Yes} = 3, \text{No} = 2$.
-    $$\text{Gini}(D_R) = 1 - \left[ \left(\frac{3}{5}\right)^2 + \left(\frac{2}{5}\right)^2 \right] = 1 - \frac{13}{25} = \frac{12}{25} = \mathbf{0.480}$$
-  * *Weighted Gini for Partition 2:*
-    $$\text{Gini}_{\text{split}}(\{\text{Medium}\} \text{ vs } \{\text{Low, High}\}) = \frac{2}{7}(0.500) + \frac{5}{7}(0.480) = \frac{1}{7} + \frac{2.4}{7} = \frac{3.4}{7} \approx \mathbf{0.4857}$$
+  * Left ($N_L = 2$, Medium): 1 Yes, 1 No $\implies \text{Gini}(D_L) = 1 - [0.25 + 0.25] = \mathbf{0.500}$
+  * Right ($N_R = 5$, Low+High): 3 Yes, 2 No $\implies \text{Gini}(D_R) = 1 - \left[\frac{9}{25} + \frac{4}{25}\right] = \mathbf{0.480}$
+  * Weighted Gini: $\frac{2}{7}(0.500) + \frac{5}{7}(0.480) = \frac{3.4}{7} \approx \mathbf{0.4857}$
 
 * **Partition 3: $\{\text{High}\}$ vs $\{\text{Low, Medium}\}$**
-  * *Left Node ($D_L$: High, $N_L = 2$):*
-    * C4 (Yes), C6 (Yes) $\implies \text{Yes} = 2, \text{No} = 0$.
-    $$\text{Gini}(D_L) = 1 - \left[ \left(\frac{2}{2}\right)^2 + 0 \right] = \mathbf{0.0} \quad (\text{Pure Node})$$
-  * *Right Node ($D_R$: Low + Medium, $N_R = 5$):*
-    * C1 (No), C2 (No), C3 (Yes), C5 (Yes), C7 (No) $\implies \text{Yes} = 2, \text{No} = 3$.
-    $$\text{Gini}(D_R) = 1 - \left[ \left(\frac{2}{5}\right)^2 + \left(\frac{3}{5}\right)^2 \right] = 1 - \frac{13}{25} = \frac{12}{25} = \mathbf{0.480}$$
-  * *Weighted Gini for Partition 3:*
-    $$\text{Gini}_{\text{split}}(\{\text{High}\} \text{ vs } \{\text{Low, Medium}\}) = \frac{2}{7}(0.0) + \frac{5}{7}(0.480) = \frac{2.4}{7} \approx \mathbf{0.3429}$$
+  * Left ($N_L = 2$, High): 2 Yes, 0 No $\implies \text{Gini}(D_L) = \mathbf{0.0}$ *(Pure Leaf)*
+  * Right ($N_R = 5$, Low+Med): 2 Yes, 3 No $\implies \text{Gini}(D_R) = 1 - \left[\frac{4}{25} + \frac{9}{25}\right] = \mathbf{0.480}$
+  * Weighted Gini: $\frac{2}{7}(0.0) + \frac{5}{7}(0.480) = \frac{2.4}{7} \approx \mathbf{0.3429}$
 
 $$\mathbf{\text{Best Split for Income Level: } \{\text{High}\} \text{ vs } \{\text{Low, Medium}\} \implies \text{Gini} \approx 0.3429}$$
 
 ---
 
-###### Alternative: Multi-Way Attribute Gini Summary (Standard Exam Reference)
+##### (c) Best Attribute to Split (4 Marks)
 
-If evaluated under the non-binary multi-way split definition ($\text{Gini}(D, A) = \sum \frac{|D_v|}{|D|} \text{Gini}(D_v)$):
-* **Age Group:**
-  $$\text{Gini}(D, \text{Age Group}) = \frac{2}{7}(0.0) + \frac{2}{7}(0.0) + \frac{3}{7}\left(\frac{4}{9}\right) = \frac{4}{21} \approx \mathbf{0.1905}$$
-* **Income Level:**
-  $$\text{Gini}(D, \text{Income Level}) = \frac{3}{7}\left(\frac{4}{9}\right) + \frac{2}{7}(0.500) + \frac{2}{7}(0.0) = \frac{4}{21} + \frac{1}{7} = \frac{7}{21} \approx \mathbf{0.3333}$$
+* **Impurity & Gain Comparison (2 Marks):**
+  $$\Delta \text{Gini} = \text{Gini}(\text{Root}) - \text{Gini}_{\text{split}} = 0.4898 - \text{Gini}_{\text{split}}$$
 
----
-
-##### (c) Best Attribute to Split Using Gini Index Criterion (4 Marks)
-
-1. **Step 1: Compare Gini Values & Gini Gain (2 Marks)**
-   In decision tree learning, the optimal split is the one that minimizes the resulting weighted Gini index (or equivalently, maximizes the **Gini Gain** $\Delta \text{Gini} = \text{Gini}(\text{Root}) - \text{Gini}_{\text{split}}$):
-
-| Attribute | Candidate Binary Split | Resulting Gini ($\text{Gini}_{\text{split}}$) | Gini Gain ($\Delta \text{Gini} = 0.4898 - \text{Gini}$) |
+| Attribute | Best Binary Split Condition | Resulting Gini | Gini Gain ($\Delta \text{Gini}$) |
 | :--- | :--- | :---: | :---: |
 | **Age Group** | **$\{\text{Young}\}$ vs $\{\text{Middle, Senior}\}$** | $\mathbf{0.2286}$ | $\mathbf{0.2612}$ *(Maximum Gain)* |
 | Income Level | $\{\text{High}\}$ vs $\{\text{Low, Medium}\}$ | $0.3429$ | $0.1469$ |
 
-*(Under the multi-way formulation, Age Group $\text{Gini} = 0.1905$ vs Income Level $\text{Gini} = 0.3333$).*
-
-2. **Step 2: Conclusion & Selection (2 Marks)**
-   * **Selected Best Attribute:** **Age Group** (with binary split condition $\text{Age Group} = \text{Young}$ vs $\text{Age Group} \in \{\text{Middle, Senior}\}$).
-   * **Reasoning:** It produces the minimum weighted impurity ($0.2286$) and achieves the highest impurity reduction ($\Delta \text{Gini} = 0.2612$). It immediately isolates a completely pure terminal leaf node for Young customers ($\text{Buy} = \text{No}$ with $100\%$ certainty).
+* **Selection & Justification (2 Marks):**
+  * **Selected Attribute:** **Age Group** (with binary split condition $\text{Age Group} = \text{Young}$ vs $\text{Age Group} \in \{\text{Middle, Senior}\}$).
+  * **Reason:** It minimizes weighted impurity ($0.2286$), achieves highest Gini Gain ($0.2612$), and immediately isolates a pure terminal leaf node for Young customers ($\text{Buy} = \text{No}$).
 
 ---
 
-##### (d) Tie-Breaking: What Happens if Both Attributes Have the Same Gini Value? (2 Marks)
+##### (d) Tie-Breaking Protocol for Identical Gini Values (2 Marks)
 
-If two attributes produce identical Gini index values, standard CART algorithms resolve the tie using the following established protocols:
-1. **Domain-Specific / Cost Priority:** Select the attribute that is cheaper, faster, or less intrusive to acquire in real-world production (e.g., Age Group may be easier to collect than verified Income).
-2. **Subtree Balance / Child Node Distribution:** Choose the split that creates more evenly distributed subset sizes (minimizing sample variance between child nodes).
-3. **Deterministic Heuristic:** Follow a consistent tie-breaking rule, such as selecting the attribute that appears first in the dataset schema (e.g., column index order).
-4. **Secondary Information Metric:** Compute Information Gain (Entropy) or Gain Ratio to assess if higher-order divergence distinguishes the attributes.
+If two attributes produce identical Gini values, resolve the tie using:
+1. **Acquisition Cost:** Choose the attribute cheaper or easier to collect in practice (e.g., Age Group over verified Income).
+2. **Subtree Balance:** Pick the split creating more evenly balanced sample counts between child nodes.
+3. **Schema Order:** Default to the attribute appearing first in the dataset schema.
+4. **Secondary Metric:** Compute Information Gain (Entropy) to test if logarithmic divergence breaks the tie.
 
 ---
 
 ##### (e) Two Key Advantages of CART over ID3 or C4.5 (2 Marks)
 
-1. **Unified Framework for Classification & Regression:**
-   * CART seamlessly builds both **Classification Trees** (using the Gini Index for categorical targets) and **Regression Trees** (using Mean Squared Error / Variance Reduction for continuous numerical targets). In contrast, ID3 is strictly limited to classification, and C4.5 requires separate extensions.
-2. **Binary Splitting Avoids Multi-Way Fragmentation:**
-   * CART strictly enforces **binary splits** ($2$ child nodes per split), preventing the exponential data fragmentation problem seen in ID3 (which creates a separate branch for every category). This preserves sample statistical power in lower nodes and naturally prevents overfitting on high-cardinality nominal attributes.
-3. **Rigorous Cost-Complexity Pruning:**
-   * CART uses a mathematically disciplined Minimal Cost-Complexity Pruning algorithm ($\alpha$-pruning parameterized with cross-validation), which is theoretically superior to the greedy heuristic error-based pruning utilized in C4.5.
+1. **Classification & Regression Support:** CART natively constructs both Classification Trees (via Gini Index) and Regression Trees (via Variance Reduction / MSE). ID3 supports classification only.
+2. **Binary Splitting Avoids Fragmentation:** Enforcing strictly 2 branches per split ($2^{k-1}-1$) prevents multi-way branch fragmentation (a flaw of ID3/C4.5), preserving statistical sample power in deeper child nodes.
+3. **Disciplined Cost-Complexity Pruning:** Uses minimal cost-complexity $\alpha$-pruning parameterized with cross-validation, which is theoretically sounder than heuristic error pruning.
 
 ---
 
@@ -220,104 +165,72 @@ An online payment platform applies AdaBoost to classify transactions as Fraudule
 
 ### Solution 4
 
-#### 📝 Exam-Ready Answer (Structured for 20 Marks)
+#### 📝 Exam-Ready Answer (Crisp 20-Mark Structure)
 
 ---
 
-##### (i) Why Decision Stumps are Used as Weak Learners in AdaBoost (4 Marks)
+##### (i) Why Decision Stumps are Used as Weak Learners (4 Marks)
 
-A **decision stump** is a 1-level decision tree consisting of a single root split node (testing exactly one attribute threshold) connected directly to two terminal leaf nodes.
+A **decision stump** is a 1-level decision tree splitting on a single feature threshold:
 
-1. **Satisfaction of Weak Learner Condition (1 Mark):**
-   * Boosting theory (Freund & Schapire) requires base learners to perform only slightly better than random guessing (error $\epsilon < 0.5$ in binary classification). A simple 1-feature stump easily satisfies this minimal requirement without needing complex parameter tuning.
-2. **High Bias, Ultra-Low Variance Structure (1 Mark):**
-   * Stumps are extreme high-bias, low-variance models. Since boosting is fundamentally designed to reduce ensemble bias by additively combining weak models, starting with low-variance base learners prevents the ensemble from exploding in variance.
-3. **Computational Speed & Scalability (1 Mark):**
-   * Training a stump requires scanning only $O(N \cdot D)$ candidate thresholds. In production transaction systems (such as high-frequency fraud detection), hundreds of boosting rounds can be trained in seconds.
-4. **Interpretability & Feature Ranking (1 Mark):**
-   * Because each stump isolates a single feature (e.g., $\text{Amount} > 500$), aggregating the stump weights provides an intuitive, mathematically exact measure of cumulative feature importance.
+1. **Weak Learner Requirement (1 Mark):** Boosting requires base learners to perform only slightly better than random guessing ($\epsilon < 0.5$). A 1-feature stump easily satisfies this condition without parameter tuning.
+2. **Low Variance Prevents Overfitting (1 Mark):** Stumps have high bias and ultra-low variance. Since boosting sequentially reduces bias, starting with low-variance base learners prevents the ensemble from exploding in variance.
+3. **Fast Computation (1 Mark):** Evaluating a stump takes only $O(N \cdot D)$ time, enabling hundreds of boosting rounds to train in seconds in real-time fraud detection.
+4. **Interpretability & Feature Ranking (1 Mark):** Aggregating single-feature stump weights ($\alpha_m$) provides directly interpretable feature importance rankings.
 
 ---
 
 ##### (ii) How Sample Weights are Updated After Each Iteration (4 Marks)
 
-1. **Step 1: Initialization (1 Mark)**
-   * At iteration $m = 1$, all $N$ transaction samples are initialized with equal, uniform weights:
-     $$w_i^{(1)} = \frac{1}{N}, \quad \forall i \in \{1, 2, \dots, N\}$$
+1. **Step 1: Uniform Initialization (1 Mark)**
+   $$w_i^{(1)} = \frac{1}{N}, \quad \forall i \in \{1, 2, \dots, N\}$$
 
-2. **Step 2: Weighted Error Rate Computation (1 Mark)**
-   * For the $m$-th weak learner $h_m(\mathbf{x})$, the weighted misclassification error $\epsilon_m$ is computed as the sum of weights of incorrectly predicted transactions:
-     $$\epsilon_m = \sum_{i=1}^N w_i^{(m)} \cdot \mathbb{I}\left( y_i \ne h_m(\mathbf{x}_i) \right)$$
-     where $y_i \in \{-1, +1\}$ and $\mathbb{I}(\cdot)$ is the indicator function.
+2. **Step 2: Weighted Misclassification Error (1 Mark)**
+   $$\epsilon_m = \sum_{i=1}^N w_i^{(m)} \cdot \mathbb{I}\left( y_i \ne h_m(\mathbf{x}_i) \right)$$
 
 3. **Step 3: Learner Importance Weight $\alpha_m$ (1 Mark)**
-   * The voting weight assigned to stump $h_m$ is:
-     $$\alpha_m = \frac{1}{2} \ln\left( \frac{1 - \epsilon_m}{\epsilon_m} \right)$$
-
-4. **Step 4: Multiplicative Weight Update & Renormalization (1 Mark)**
-   * Sample weights for iteration $m + 1$ are updated exponentially based on whether the transaction was correctly or incorrectly classified:
-     $$w_i^{(m+1)} = \frac{w_i^{(m)} \cdot \exp\left( -\alpha_m y_i h_m(\mathbf{x}_i) \right)}{Z_m}$$
-   * *For Correctly Classified Samples ($y_i h_m(\mathbf{x}_i) = +1$):*
-     $$w_i^{(m+1)} = w_i^{(m)} \cdot e^{-\alpha_m} \quad (\text{weight is penalized/decreased})$$
-   * *For Misclassified Samples ($y_i h_m(\mathbf{x}_i) = -1$):*
-     $$w_i^{(m+1)} = w_i^{(m)} \cdot e^{+\alpha_m} \quad (\text{weight is boosted/increased})$$
-   * $Z_m$ is the normalization factor ensuring $\sum_{i=1}^N w_i^{(m+1)} = 1$:
-     $$Z_m = \sum_{i=1}^N w_i^{(m)} \exp\left( -\alpha_m y_i h_m(\mathbf{x}_i) \right)$$
-   * **Core Insight:** Transactions misclassified as genuine when fraudulent are amplified in weight, forcing subsequent stumps to concentrate heavily on resolving these hard-to-detect frauds.
-
----
-
-##### (iii) Error and Alpha Computation for a Stump with 10% Misclassifications (4 Marks)
-
-1. **Step 1: Compute Weighted Error Rate ($\epsilon_m$) (1 Mark)**
-   * Given that the stump misclassifies $10\%$ of the total sample weight:
-     $$\epsilon_m = 10\% = \mathbf{0.10}$$
-
-2. **Step 2: State the Formula for Importance Weight ($\alpha_m$) (1 Mark)**
    $$\alpha_m = \frac{1}{2} \ln\left( \frac{1 - \epsilon_m}{\epsilon_m} \right)$$
 
-3. **Step 3: Step-by-Step Numerical Evaluation (1 Mark)**
-   * Evaluate the odds ratio:
-     $$\frac{1 - \epsilon_m}{\epsilon_m} = \frac{1 - 0.10}{0.10} = \frac{0.90}{0.10} = 9$$
-   * Substitute into the logarithm:
-     $$\alpha_m = \frac{1}{2} \ln(9) = \frac{1}{2} \ln(3^2) = \ln(3)$$
-   * Using $\ln(3) \approx 1.09861$:
-     $$\mathbf{\alpha_m \approx 1.0986}$$
-
-4. **Step 4: Mathematical & Practical Interpretation (1 Mark)**
-   * **High Positive Weight:** Because $\epsilon_m = 0.10 \ll 0.50$ (substantially better than random guessing), $\alpha_m \approx 1.099$ is strongly positive.
-   * **Voting Influence:** In the final ensemble decision rule:
-     $$H(\mathbf{x}) = \text{sign}\left( \sum_{m=1}^M \alpha_m h_m(\mathbf{x}) \right)$$
-     this high-performing stump receives a powerful voting weight of $+1.0986$, significantly influencing the fraud classification outcome.
+4. **Step 4: Exponential Reweighting & Normalization (1 Mark)**
+   * **Correct samples:** $w_i^{(m+1)} = w_i^{(m)} \cdot e^{-\alpha_m}$ (weight decreased)
+   * **Wrong samples:** $w_i^{(m+1)} = w_i^{(m)} \cdot e^{+\alpha_m}$ (weight boosted)
+   * **Normalize:** Divide by $Z_m = \sum w_i^{(m+1)}$ so weights sum to $1$. Hard-to-detect frauds are amplified for subsequent stumps.
 
 ---
 
-##### (iv) How Boosting Reduces Bias but Can Sometimes Increase Variance (4 Marks)
+##### (iii) Error and Alpha Computation for 10% Misclassification (4 Marks)
 
-1. **How Boosting Reduces Bias (2 Marks):**
-   * *Additive Sequential Correction:* Individual decision stumps have severe underfitting (high bias) because a single threshold cannot capture complex decision surfaces.
-   * *Progressive Residual Modeling:* Each successive learner is trained on the reweighted distribution of samples misclassified by preceding learners.
-   * *Non-Linear Boundary Synthesis:* Linearly combining numerous piecewise linear stumps forms highly expressive, intricate, non-linear decision boundaries:
-     $$\lim_{M \to \infty} \text{Bias}^2 \to 0$$
-     This guarantees that the ensemble training error drops exponentially toward zero as iterations increase.
+* **Step 1: Weighted Error Rate ($\epsilon_m$) (1 Mark)**
+  $$\epsilon_m = 10\% = \mathbf{0.10}$$
 
-2. **Why Boosting Can Sometimes Increase Variance (2 Marks):**
-   * *Extreme Sensitivity to Outliers & Label Noise:* If a payment dataset contains mislabeled transactions (e.g., an abnormal genuine purchase falsely flagged as fraud) or anomalous outliers, AdaBoost repeatedly misclassifies them.
-   * *Exponential Weight Explosion:* The weight of these noisy points escalates exponentially ($e^{m \alpha}$), causing the algorithm to over-focus on learning isolated noise points rather than generalizable fraud patterns.
-   * *Overfitting & Decision Boundary Fragmentation:* The ensemble boundary contorts into irregular, sharp pockets around noisy outliers, leading to high variance, brittle predictions, and deteriorated test accuracy.
-   * *Mitigation:* Employing shrinkage (learning rate $\eta < 1$), limiting maximum boosting iterations $M$, or using robust variants like Gradient Boosting with Huber loss.
+* **Step 2: State Alpha Formula (1 Mark)**
+  $$\alpha_m = \frac{1}{2} \ln\left( \frac{1 - \epsilon_m}{\epsilon_m} \right)$$
+
+* **Step 3: Step-by-Step Calculation (1 Mark)**
+  $$\frac{1 - \epsilon_m}{\epsilon_m} = \frac{1 - 0.10}{0.10} = \frac{0.90}{0.10} = 9$$
+  $$\alpha_m = \frac{1}{2} \ln(9) = \frac{1}{2} \ln(3^2) = \ln(3) \approx \mathbf{1.0986}$$
+
+* **Step 4: Practical Meaning (1 Mark)**
+  * Since $\epsilon_m = 0.10 \ll 0.50$, the stump is accurate and receives a strong positive voting weight ($\alpha_m \approx +1.0986$) in the final ensemble rule $H(\mathbf{x}) = \text{sign}\left(\sum \alpha_m h_m(\mathbf{x})\right)$.
 
 ---
 
-##### (v) Handling Missing Values in the "Device ID" Feature (4 Marks)
+##### (iv) How Boosting Reduces Bias but Can Increase Variance (4 Marks)
 
-In practical fraud detection, "Device ID" is frequently missing due to private browsing modes, cookie blocking, or emulator masking. AdaBoost handles this through several robust mechanisms:
+* **How Boosting Reduces Bias (2 Marks):**
+  * **Sequential Residual Learning:** Each stump targets transactions misclassified by preceding stumps.
+  * **Non-Linear Synthesis:** An additive linear combination of simple linear stumps constructs complex, highly expressive non-linear decision boundaries, driving training error toward zero ($\lim_{M \to \infty} \text{Bias}^2 \to 0$).
 
-1. **Feature Bypassing via Alternative Stumps (Primary CART/Stump Defense) (1.5 Marks):**
-   * In AdaBoost, each weak learner selects only **one** best feature to split on at each iteration. If "Device ID" contains extensive missing entries that degrade its split quality, the algorithm automatically selects an alternative, fully observed attribute (e.g., Transaction Amount, IP Geolocation, or Time of Transaction) that yields a lower weighted error $\epsilon_m$.
-2. **Missing as an Informative Predictive Category (1 Mark):**
-   * In cyber-fraud analysis, a missing Device ID is rarely random (it is Missing Not At Random, MNAR). Fraudsters deliberately conceal device fingerprints. AdaBoost treats `Missing` / `Null` as a separate, dedicated categorical level (`Device_ID = Unknown`). This category often becomes an exceptionally powerful indicator of fraudulent intent.
-3. **Surrogate Split Rule (CART-Specific Mechanism) (1 Mark):**
-   * If a stump insists on evaluating Device ID, CART constructs a **surrogate split** using an auxiliary feature (e.g., IP Address or Browser Type) that mimics the Device ID split with maximum mutual correlation, routing missing transactions along the surrogate branch.
-4. **Weighted Proportional Assignment (0.5 Marks):**
-   * When encountering a missing value during split evaluation, the sample's weight can be split proportionally across both branches according to the relative weight distribution of observed transactions in the child nodes.
+* **Why Boosting Can Increase Variance (2 Marks):**
+  * **Sensitivity to Noise / Outliers:** Mislabeled transactions or noisy outliers are repeatedly misclassified.
+  * **Exponential Weight Explosion:** Outlier weights escalate exponentially ($e^{m\alpha}$), forcing later stumps to contort around noise pockets rather than generalizable fraud patterns, leading to **Overfitting**.
+  * *Fix:* Use learning rate shrinkage ($\eta < 1$) or limit total boosting rounds $M$.
+
+---
+
+##### (v) Handling Missing Values in "Device ID" (4 Marks)
+
+1. **Feature Bypassing (1 Mark):** Each stump evaluates only one feature. If "Device ID" has missing values that degrade split quality, AdaBoost automatically chooses an alternative complete feature (e.g., Transaction Amount).
+2. **Missing as an Informative Category (1 Mark):** In fraud detection, missing device data is often intentional (e.g., fraudsters masking device footprints). Treating `Missing` as a distinct category (`Device_ID = Unknown`) provides strong predictive signal.
+3. **Surrogate Splits (1 Mark):** CART identifies an auxiliary feature correlated with Device ID (e.g., IP Geolocation or Browser Type) to route missing transactions along the surrogate branch.
+4. **Proportional Routing (1 Mark):** Transactions with missing values have their weights split proportionally between child branches based on observed sample distributions.

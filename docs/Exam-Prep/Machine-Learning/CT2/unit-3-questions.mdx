@@ -11,7 +11,8 @@ toc_max_heading_level: 3
 > **Course -** Machine Learning Algorithms (21CSC555J)  
 > **Assessment -** Continuous Test 2 (CT-2)  
 > **Unit -** Unit 3: Naïve Bayes & K-Nearest Neighbors  
-> **Total Weightage -** 40 Marks (Question 1.a: 15 Marks; Question 1.b: 5 Marks; Question 2: 20 Marks)
+> **Total Weightage -** 40 Marks (Question 1.a: 15 Marks; Question 1.b: 5 Marks; Question 2: 20 Marks)  
+> **Rapid Revision -** [Unit 3 Cheat Sheet & Mental Models](./unit-3-cheat-sheet.mdx)
 
 ---
 
@@ -108,22 +109,20 @@ An email filtering system uses Naïve Bayes to classify messages as Spam or Not 
 
 ---
 
-##### (iii) Class Prediction & Explanation of Independence Assumption (5 Marks)
+##### (iii) Class Prediction & Independence Assumption (5 Marks)
 
-1. **Step 1: Class Prediction by Maximum A Posteriori (MAP) Rule (2 Marks)**
-   $$\hat{y} = \arg\max_{c \in \{\text{Spam}, \text{NotSpam}\}} P(C = c \mid \mathbf{X})$$
-   $$\text{Since } P(\text{Spam} \mid \text{Email}) = 1.0 > P(\text{NotSpam} \mid \text{Email}) = 0.0$$
-   $$\hat{y} = \text{\textbf{Spam}}$$
-   * **Conclusion:** The new email is classified as **Spam**.
+* **Class Prediction (2 Marks):**
+  * **MAP Decision Rule:** $\hat{y} = \arg\max_{c} P(C = c \mid \mathbf{X})$
+  * Since $P(\text{Spam} \mid \text{Email}) = 1.0 > P(\text{NotSpam} \mid \text{Email}) = 0.0$, the email is classified as **Spam**.
 
-2. **Step 2: Formal Statement of Class-Conditional Independence Assumption (1.5 Marks)**
-   * The Naïve Bayes classifier assumes that all features $X_1, X_2, \dots, X_d$ are **mutually conditionally independent** given the class label $C$:
-     $$P(X_1, X_2, \dots, X_d \mid C) = \prod_{j=1}^d P(X_j \mid C)$$
-   * In this problem context, it assumes that the presence of the word **'Offer'** is completely independent of the presence of the word **'Win'**, once we know whether the email is Spam or Not Spam.
+* **Class-Conditional Independence Assumption (1.5 Marks):**
+  * **Formal Definition:** All features are assumed conditionally independent given the class label:
+    $$P(X_1, X_2, \dots, X_d \mid C) = \prod_{j=1}^d P(X_j \mid C)$$
+  * In this context, knowing the email contains 'Offer' provides zero information about 'Win', once the class is fixed.
 
-3. **Step 3: Real-World Validity & Trade-offs (1.5 Marks)**
-   * *Why it is "Naïve":* In natural language, promotional keywords are strongly correlated (e.g., an email containing "Offer" is far more likely to also contain "Win"). Treating them as conditionally independent is mathematically unrealistic.
-   * *Why it is preferred in practice:* Despite this violated assumption, the classifier performs remarkably well because it only needs the correct probability **ranking** ($\arg\max$), not perfectly calibrated probabilities. It reduces computational complexity from $O(2^d)$ parameters to $O(d)$ parameters, preventing overfitting on small training corpuses.
+* **Practical Validity & Trade-offs (1.5 Marks):**
+  * **Why "Naïve":** Real-world text features are strongly correlated (e.g., "Offer" and "Win" co-occur in spam).
+  * **Why It Works:** Classification only requires the correct probability **ranking** ($\arg\max$), not calibrated values. It reduces parameter complexity from $O(2^d)$ to $O(d)$, preventing overfitting.
 
 ---
 
@@ -149,42 +148,36 @@ Assume given is a small dataset with numeric features:
 
 ### Solution 1.b
 
-#### 📝 Exam-Ready Answer (Structured for 5 Marks)
+#### 📝 Exam-Ready Answer (Crisp 5-Mark Structure)
 
-##### (a) Best Algorithm for Non-Linear Decision Boundaries (2 Marks)
+##### (a) Best for Non-Linear Boundaries: SVM with RBF Kernel (2 Marks)
 
-* **Selected Algorithm:** **Support Vector Machine (SVM) with RBF (Radial Basis Function) Kernel**.
-* **Technical Justification:**
-  1. *Kernel Trick:* The RBF (Gaussian) kernel mathematically computes inner products in an **infinite-dimensional Hilbert feature space**:
-     $$K(\mathbf{x}, \mathbf{x}') = \exp\left( -\gamma \|\mathbf{x} - \mathbf{x}'\|^2 \right)$$
-  2. *Linear Hyperplane $\to$ Non-linear Boundary:* A linear separating hyperplane constructed in this infinite-dimensional space maps back to smooth, arbitrarily complex, non-linear decision contours in the original input space.
-  3. *Superiority over KNN & Gaussian NB:* While KNN can form piecewise non-linear boundaries, it suffers from noise and irregular boundary jaggedness. Gaussian Naïve Bayes can only construct linear or quadratic (ellipsoidal) boundaries under normal distributions. SVM with RBF provides the optimal margin and continuous non-linear separation.
+* **Algorithm:** **SVM with RBF Kernel**
+* **Why (Key Points):**
+  * **Kernel Trick:** The RBF kernel $K(\mathbf{x}, \mathbf{x}') = \exp(-\gamma \|\mathbf{x} - \mathbf{x}'\|^2)$ maps inputs into an infinite-dimensional feature space.
+  * **Smooth Separation:** A linear hyperplane in this higher space projects back as smooth, continuous non-linear boundaries in the original space (unlike KNN's noisy, jagged boundaries).
 
-##### (b) Algorithm Most Sensitive to Irrelevant Features (1.5 Marks)
+##### (b) Most Sensitive to Irrelevant Features: KNN ($k=5$) (1.5 Marks)
 
-* **Selected Algorithm:** **K-Nearest Neighbors (KNN, $k=5$)**.
-* **Technical Justification:**
-  1. *Uniform Distance Computation:* KNN computes spatial proximity (e.g., Euclidean distance) across all $D$ feature dimensions uniformly:
-     $$d(\mathbf{x}, \mathbf{y}) = \sqrt{\sum_{j=1}^D (x_j - y_j)^2}$$
-  2. *Curse of Dimensionality:* Irrelevant or noisy features contribute random variance to the distance sum equally with relevant features. As irrelevant dimensions increase, all pairwise distances converge to the same value ($d_{\max} \approx d_{\min}$), completely destroying the neighborhood structure.
-  3. *Comparison:* SVM learns small or zero weights ($\alpha_i$) for non-informative dimensions, and Naïve Bayes only computes feature-wise marginal products without distance coupling.
+* **Algorithm:** **K-Nearest Neighbors (KNN)**
+* **Why (Key Points):**
+  * **Equal Distance Weighting:** KNN computes distance across all dimensions equally: $d = \sqrt{\sum (x_j - y_j)^2}$.
+  * **Curse of Dimensionality:** Irrelevant features add random noise to the distance calculation, drowning out true proximity signals ($d_{\max} \approx d_{\min}$).
 
-##### (c) Algorithm Performing Better with Small Datasets and Missing Values (1.5 Marks)
+##### (c) Best for Small Data and Missing Values: Gaussian Naïve Bayes (1.5 Marks)
 
-* **Selected Algorithm:** **Gaussian Naïve Bayes**.
-* **Technical Justification:**
-  1. *Small Dataset Robustness (High Bias, Low Variance):* With few samples, high-capacity models (SVM with RBF) are prone to severe overfitting, and KNN ($k=5$) suffers from sparse sample density. Gaussian Naïve Bayes requires estimating only two parameters per feature (mean $\mu_j$ and variance $\sigma_j^2$), converging to its asymptotic error much faster with small sample sizes $N$.
-  2. *Native Missing Value Handling (Marginalization):* Naïve Bayes naturally handles missing feature values during inference by simply omitting the missing attribute from the conditional probability product:
-     $$P(\mathbf{x}_{\text{obs}} \mid C) = \prod_{j \in \text{observed}} P(x_j \mid C)$$
-     In contrast, standard SVM and KNN cannot evaluate dot products or distance vectors when attributes contain `NaN` without requiring synthetic imputation.
+* **Algorithm:** **Gaussian Naïve Bayes**
+* **Why (Key Points):**
+  * **Small Data Robustness:** Only needs to estimate $2$ parameters per feature (mean $\mu$ and variance $\sigma^2$), avoiding overfitting on small samples (high bias, low variance).
+  * **Native Missing Value Handling:** Simply ignores missing features during inference by omitting them from the likelihood product: $P(\mathbf{x}_{\text{obs}} \mid C) = \prod_{j \in \text{obs}} P(x_j \mid C)$ (no imputation needed).
 
-###### Comparative Summary Matrix
+###### Quick Comparison Summary
 
-| Evaluation Criterion | KNN ($k=5$) | Gaussian Naïve Bayes | SVM (RBF Kernel) | Winner |
-| :--- | :--- | :--- | :--- | :---: |
-| **Non-Linear Boundary** | Piecewise, noisy | Quadratic / Ellipsoidal | Infinite-dimensional projection | **SVM (RBF)** |
-| **Irrelevant Features** | Highly vulnerable (distance noise) | Moderate | Robust (max-margin regularization) | **KNN** *(Most Sensitive)* |
-| **Small $N$ + Missing Data** | Fails distance computation | Optimal (rapid convergence + native omission) | Fails kernel computation | **Gaussian NB** |
+| Criterion | Winner | Core Reason |
+| :--- | :--- | :--- |
+| **Non-Linear Boundary (2M)** | **SVM (RBF)** | Kernel trick creates smooth boundaries in infinite-dimensional space. |
+| **Sensitive to Irrelevant Features (1.5M)** | **KNN ($k=5$)** | Euclidean distance equally sums noise from all dimensions. |
+| **Small Data + Missing Values (1.5M)** | **Gaussian NB** | Few parameters ($\mu, \sigma^2$) + naturally omits missing features in product. |
 
 ---
 
@@ -320,30 +313,23 @@ where $x_1$ represents Income (in ₹1000s) and $x_2$ represents Spending (in �
 
 ---
 
-##### (d) Theoretical Analysis: Feature Scaling & Choice of K (3 Marks)
+##### (d) Feature Scaling & Choice of K (3 Marks)
 
-1. **Impact of Feature Scaling / Normalization (1.5 Marks)**
-   * *Problem of Dominance:* Distance metrics (Euclidean and Manhattan) assume all feature axes are isotropic (equal weight per numeric unit). If one feature has a vastly larger scale (e.g., Annual Income in raw rupees: ₹40,000 to ₹55,000) compared to monthly spending (₹5 to ₹22), the difference in income will mathematically dominate the distance sum:
-     $$(40,000 - 20,000)^2 \gg (15 - 5)^2$$
-     This effectively reduces the 2D feature space to a 1D space, ignoring the spending feature.
-   * *Remedy:* Standardizing features using **Min-Max Normalization** ($x' = \frac{x - x_{\min}}{x_{\max} - x_{\min}} \in [0, 1]$) or **Z-Score Standardization** ($z = \frac{x - \mu}{\sigma}$) ensures every feature contributes proportionally to the distance calculation.
+* **Impact of Feature Scaling (1.5 Marks):**
+  * **Scale Dominance:** KNN distance calculations are sensitive to magnitude. Features with larger ranges (e.g., Income in thousands) dominate features with smaller ranges (e.g., Spending in tens), distorting distance measurements.
+  * **Remedy:** Apply **Min-Max Normalization** ($[0, 1]$) or **Z-Score Standardization** so all dimensions contribute proportionally.
 
-2. **Effects of Parameter $K$ Selection (1.5 Marks)**
-
-| Parameter Setting | Model Complexity | Bias vs Variance | Risk / Behavior |
-| :--- | :--- | :--- | :--- |
-| **$K$ is too small ($K = 1$)** | Overly complex, jagged decision boundaries | **Low Bias, High Variance** | Highly vulnerable to training noise and outliers; easily leads to **Overfitting**. |
-| **$K$ is too large ($K \to N$)** | Overly smooth, rigid boundaries | **High Bias, Low Variance** | Ignores local spatial structure; degenerates into predicting the global majority class (**Underfitting**). |
-
-* *Rule of Thumb:* Choose an odd value for $K$ in binary classification to prevent ties, commonly setting $K \approx \sqrt{N}$ and tuning via cross-validation.
+* **Effect of Parameter $K$ (1.5 Marks):**
+  * **$K$ Too Small ($K = 1$):** **Low Bias, High Variance** $\implies$ sensitive to noise and outliers, causing **Overfitting** (jagged boundaries).
+  * **$K$ Too Large ($K \to N$):** **High Bias, Low Variance** $\implies$ overly smooth boundaries, degenerating into global majority voting (**Underfitting**).
+  * *Tip:* Choose an odd $K$ to break ties (rule of thumb: $K \approx \sqrt{N}$).
 
 ---
 
 ##### (e) Real-World Application of KNN (2 Marks)
 
-1. **Application Domain (1 Mark):**
-   * **E-Commerce & Streaming Collaborative Filtering Recommender Systems** (e.g., Amazon product suggestions, Spotify playlist recommendations, or Netflix movie matching).
-
-2. **Why KNN is Preferred There (1 Mark):**
-   * *Instance-Based Simplicity (Lazy Learning):* It requires no expensive training phase. New users and items can be ingested dynamically in real time without retraining a global model.
-   * *Natural Neighborhood Intuition:* Recommending items liked by users with similar consumption profiles (nearest neighbors in feature embedding space) is highly interpretable, intuitive, and effective without requiring complex parametric assumptions.
+* **Application (1 Mark):**
+  * **Recommender Systems / Collaborative Filtering** (e.g., Amazon product recommendations or Spotify music matching).
+* **Why Preferred (1 Mark):**
+  * **Lazy Learning (Zero Training Cost):** Stores training data directly; new users or products are ingested in real time without expensive model retraining.
+  * **Intuitive & Non-Parametric:** Recommends items by finding users with similar consumption profiles without assuming any underlying mathematical distribution.
