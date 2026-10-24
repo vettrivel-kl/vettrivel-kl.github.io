@@ -1,0 +1,121 @@
+---
+sidebar_position: 4
+title: Unit 4 Cheat Sheet - Decision Trees & Ensemble Learning
+description: High-signal, rapid-revision cheat sheet, mental models, and calculation accelerators for Unit 4 Continuous Test 2 covering CART Decision Trees and AdaBoost.
+tags: [machine-learning, exam-prep, ct-exam, unit-4, cheat-sheet, decision-trees, cart, adaboost, ensemble]
+toc_max_heading_level: 3
+---
+
+# Unit 4 Cheat Sheet: Decision Trees & Ensemble Learning
+
+> **Course -** Machine Learning Algorithms (21CSC555J)  
+> **Assessment -** Continuous Test 2 (CT-2)  
+> **Scope -** CART Classification Trees (Gini Index, Binary Splitting) and AdaBoost (Stumps, Weight Updates, Bias-Variance)  
+> **Primary Reference -** [Unit 4 Full Exam Solutions](./unit-4-questions.mdx)
+
+---
+
+## 1. Exam Overview & Fast Mapping (40 Marks)
+
+| Question | Algorithm & Topic | Core Numerical Shortcut | Essential Theory Keywords |
+| :--- | :--- | :--- | :--- |
+| **Q3 (20M)** | **CART Tree:** Customer Buy Decision | Root Gini $= \frac{24}{49} \approx 0.4898 \implies$ Age Group split $\{\text{Young}\}$ vs $\{\text{Mid, Sen}\}$ wins ($\text{Gini} = 0.2286$, $\Delta = 0.2612$) | Binary splitting ($2^{k-1}-1$), Cost-complexity pruning, Tie-breaking rules |
+| **Q4 (20M)** | **AdaBoost:** Transaction Fraud Classification | $10\%$ error $\implies \text{Odds} = 9 \implies \alpha = \frac{1}{2}\ln(9) = \ln(3) \approx \mathbf{1.0986}$ | Decision stumps (high bias/low variance), Sequential reweighting, Missing value bypassing |
+
+---
+
+## 2. Question 3: CART Classification Tree (20 Marks)
+
+### Step 1: Root Node Gini Calculation (4 Marks)
+* Total $N = 7 \implies N_{\text{Yes}} = 4$ (C3, C4, C5, C6), $\; N_{\text{No}} = 3$ (C1, C2, C7)
+* Formula:
+  $$\text{Gini}(\text{Root}) = 1 - \left[ \left(\frac{4}{7}\right)^2 + \left(\frac{3}{7}\right)^2 \right] = 1 - \frac{25}{49} = \mathbf{\frac{24}{49} \approx 0.4898}$$
+
+### Step 2: Binary Splits Speed Table (8 Marks)
+
+CART requires testing all $2^{k-1}-1 = 3$ candidate binary partitions per attribute:
+$$\text{Gini}_{\text{split}} = \frac{N_L}{N}\text{Gini}(D_L) + \frac{N_R}{N}\text{Gini}(D_R)$$
+
+| Attribute | Candidate Binary Partition | Left Node ($D_L$) | Right Node ($D_R$) | Weighted Gini | Rank / Status |
+| :--- | :--- | :---: | :---: | :---: | :--- |
+| **Age Group** | **$\{\text{Young}\}$ vs $\{\text{Middle, Senior}\}$** | 0 Yes, 2 No ($\mathbf{0.0}$, Pure) | 4 Yes, 1 No ($0.320$) | $\frac{2}{7}(0) + \frac{5}{7}(0.320) \approx \mathbf{0.2286}$ | **WINNER (Best Split)** |
+| Age Group | $\{\text{Middle}\}$ vs $\{\text{Young, Senior}\}$ | 2 Yes, 0 No ($\mathbf{0.0}$, Pure) | 2 Yes, 3 No ($0.480$) | $\frac{2}{7}(0) + \frac{5}{7}(0.480) \approx 0.3429$ | Suboptimal |
+| Age Group | $\{\text{Senior}\}$ vs $\{\text{Young, Middle}\}$ | 2 Yes, 1 No ($0.444$) | 2 Yes, 2 No ($0.500$) | $\frac{3}{7}(0.444) + \frac{4}{7}(0.5) \approx 0.4762$ | Suboptimal |
+| **Income Level** | **$\{\text{High}\}$ vs $\{\text{Low, Medium}\}$** | 2 Yes, 0 No ($\mathbf{0.0}$, Pure) | 2 Yes, 3 No ($0.480$) | $\frac{2}{7}(0) + \frac{5}{7}(0.480) \approx \mathbf{0.3429}$ | **Best for Income** |
+| Income Level | $\{\text{Low}\}$ vs $\{\text{Medium, High}\}$ | 1 Yes, 2 No ($0.444$) | 3 Yes, 1 No ($0.375$) | $\frac{3}{7}(0.444) + \frac{4}{7}(0.375) \approx 0.4048$ | Suboptimal |
+| Income Level | $\{\text{Medium}\}$ vs $\{\text{Low, High}\}$ | 1 Yes, 1 No ($0.500$) | 3 Yes, 2 No ($0.480$) | $\frac{2}{7}(0.5) + \frac{5}{7}(0.480) \approx 0.4857$ | Suboptimal |
+
+### Step 3: Best Attribute Decision (4 Marks)
+* **Age Group Gain:** $\Delta \text{Gini} = 0.4898 - 0.2286 = \mathbf{0.2612}$ *(Maximum Gain)*
+* **Income Level Gain:** $\Delta \text{Gini} = 0.4898 - 0.3429 = 0.1469$
+* **Decision:** Choose **Age Group** with split condition $\{\text{Young}\}$ vs $\{\text{Middle, Senior}\}$. It yields lowest impurity and cleanly isolates an immediately pure leaf node ($\text{Young} \implies \text{No}$).
+
+### Step 4: Theory Scoring Points (4 Marks)
+
+* **Tie-Breaking Protocols (2 Marks):**
+  1. Acquisition cost: choose feature cheaper to collect in practice.
+  2. Subtree balance: choose split creating more evenly sized child nodes.
+  3. Schema order: default to first column in dataset table.
+  4. Secondary metric: compute Information Gain (Entropy).
+* **Two Advantages of CART over ID3/C4.5 (2 Marks):**
+  1. **Classification & Regression Support:** Handles categorical (Gini) and continuous targets (MSE / variance reduction).
+  2. **Strict Binary Splitting:** Avoids multi-way branch fragmentation, preserving sample size in deeper nodes.
+  3. **Disciplined Cost-Complexity Pruning:** Minimal cost-complexity $\alpha$-pruning validated with cross-validation.
+
+---
+
+## 3. Question 4: AdaBoost Fraud Classifier (20 Marks)
+
+### Core Weight Update Formulas
+
+1. **Initial weights:** $w_i^{(1)} = \frac{1}{N}$
+2. **Weighted error:** $\epsilon_m = \sum_{\text{misclassified}} w_i^{(m)}$
+3. **Stump importance:** $\alpha_m = \frac{1}{2}\ln\left(\frac{1 - \epsilon_m}{\epsilon_m}\right)$
+4. **Sample update:**
+   * Correct: $w_i^{(m+1)} = w_i^{(m)} \cdot e^{-\alpha_m}$ (attenuated)
+   * Wrong: $w_i^{(m+1)} = w_i^{(m)} \cdot e^{+\alpha_m}$ (boosted)
+   * Normalize by $Z_m = \sum w_i^{(m+1)}$ so weights sum to $1$.
+
+### 10% Misclassification Numerical Shortcut (Sub-part iii: 4 Marks)
+
+* Error rate: $\epsilon_m = 10\% = 0.10$ *(Holds when weights are uniform, as in round 1)*
+* Odds ratio: $\frac{1 - \epsilon_m}{\epsilon_m} = \frac{0.90}{0.10} = 9$
+* Importance weight:
+  $$\alpha_m = \frac{1}{2}\ln(9) = \frac{1}{2}\ln(3^2) = \ln(3) \approx \mathbf{1.0986}$$
+  *(Note: Textbooks omitting $\frac{1}{2}$ yield $\alpha = \ln(9) \approx 2.1972$. Use standard Freund & Schapire $\frac{1}{2}\ln$ form unless specified).*
+* **Meaning:** High positive voting weight in final ensemble rule $H(\mathbf{x}) = \text{sign}\left(\sum \alpha_m h_m(\mathbf{x})\right)$.
+
+### Theory Scoring Points
+
+* **Why Decision Stumps? (4 Marks):**
+  1. Easily satisfies weak learner condition ($\epsilon < 0.5$).
+  2. **High bias, ultra-low variance:** Starting with low-variance models prevents ensemble variance from exploding.
+  3. Fast training: Only $O(N \cdot D)$ split evaluations.
+  4. Interpretability: Aggregated stump weights directly yield feature importance scores.
+* **Bias vs Variance in Boosting (4 Marks):**
+  * **Reduces Bias:** Each stump focuses on samples earlier stumps got wrong through higher sample weights (not residual fitting); linear combination builds non-linear boundaries.
+  * **Increases Variance:** Repeatedly misclassified noisy points keep gaining relative weight after normalization, forcing later stumps to overfit noise pockets.
+* **Handling Missing "Device ID" (4 Marks):**
+  * *AdaBoost has NO built-in missing value handling; it inherits base learner / pipeline behavior:*
+  1. **Option A (Imputation):** Impute via mode/median before training.
+  2. **Option B (Separate Category):** Treat `Missing` as a distinct level (`Device_ID = Unknown`), capturing deliberate fraud concealment.
+  3. **Option C (Base Learner Handling):** Use stumps that natively handle missing values (CART surrogate splits or C4.5 fractional weights).
+
+---
+
+## 4. Golden Numbers & Exam Traps
+
+### Quick Number Reference
+* **Q3 CART Tree:** Root Gini $= \frac{24}{49} \approx 0.4898$, Age Best Gini $= 0.2286$ (Gain $= 0.2612$), Income Best Gini $= 0.3429$ (Gain $= 0.1469$).
+* **Q4 AdaBoost:** $\epsilon = 0.10 \implies \text{Odds} = 9 \implies \alpha = \ln(3) \approx 1.0986$. Correct factor $= e^{-1.0986} = 1/3$, Wrong factor $= e^{+1.0986} = 3.0$.
+
+:::danger
+
+**Avoid These Common Traps**
+
+1. **Gini vs Entropy:** Gini uses squared probabilities ($1 - \sum p_i^2$). Do NOT use logarithms.
+2. **Binary vs Multi-Way Splits:** CART always tests **binary** partitions ($2^{k-1}-1$). Don't just compute a single 3-way split.
+3. **Weight Update Signs:** Misclassified instances get $e^{+\alpha}$ (increased); correctly classified instances get $e^{-\alpha}$ (decreased).
+4. **Log Base in $\alpha$:** Use the **natural logarithm** ($\ln$), not $\log_{10}$ or $\log_2$.
+
+:::

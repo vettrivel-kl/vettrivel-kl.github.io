@@ -1,5 +1,5 @@
 ---
-sidebar_position: 2
+sidebar_position: 3
 title: Unit 4 - Decision Trees & Ensemble Learning
 description: Exact question wordings and comprehensive, mark-oriented model answers for Unit 4 Continuous Test 2 covering CART Decision Trees and AdaBoost.
 tags: [machine-learning, exam-prep, ct-exam, unit-4]
@@ -164,81 +164,87 @@ An online payment platform applies AdaBoost to classify transactions as Fraudule
 
 ### Solution 4
 
-#### 📝 Exam-Ready Answer (Crisp 20-Mark Structure)
+#### Exam-Ready Answer (Crisp 20-Mark Structure)
 
 ---
 
 ##### (i) Why Decision Stumps are Used as Weak Learners (4 Marks)
 
-A **decision stump** is a 1-level decision tree splitting on a single feature threshold:
+1. **Weak Learner:** Only one simple split on a single feature threshold.
+2. **Low Variance:** Extremely simple structure makes it less sensitive to training-data variations and prevents ensemble variance explosion.
+3. **Fast:** Each stump is computationally cheap to train ($O(N \cdot D)$), allowing hundreds of iterations in real time.
+4. **Interpretable:** Easy to understand and provides direct feature importance rankings.
 
-1. **Weak Learner Requirement (1 Mark):** Boosting requires base learners to perform only slightly better than random guessing ($\epsilon < 0.5$). A 1-feature stump easily satisfies this condition without parameter tuning.
-2. **Low Variance Prevents Overfitting (1 Mark):** Stumps have high bias and ultra-low variance. Since boosting sequentially reduces bias, starting with low-variance base learners prevents the ensemble from exploding in variance.
-3. **Fast Computation (1 Mark):** Evaluating a stump takes only $O(N \cdot D)$ time, enabling hundreds of boosting rounds to train in seconds in real-time fraud detection.
-4. **Interpretability & Feature Ranking (1 Mark):** Aggregating single-feature stump weights ($\alpha_m$) provides directly interpretable feature importance rankings.
+> **Memory:** One Split -> Low Variance -> Fast -> Interpretable
 
 ---
 
 ##### (ii) How Sample Weights are Updated After Each Iteration (4 Marks)
 
-1. **Step 1: Uniform Initialization (1 Mark)**
-   $$w_i^{(1)} = \frac{1}{N}, \quad \forall i \in \{1, 2, \dots, N\}$$
+* **Step 1 - Uniform Initialization:**
+  Give every sample equal initial weight:
+  $$w_i^{(1)} = \frac{1}{N}, \quad \forall i \in \{1, 2, \dots, N\}$$
 
-2. **Step 2: Weighted Misclassification Error (1 Mark)**
-   $$\epsilon_m = \sum_{i=1}^N w_i^{(m)} \cdot \mathbb{I}\left( y_i \ne h_m(\mathbf{x}_i) \right)$$
+* **Step 2 - Weighted Misclassification Error:**
+  Add the weights of incorrectly classified samples:
+  $$\epsilon_m = \sum_{i=1}^N w_i^{(m)} \cdot \mathbb{I}\left( y_i \ne h_m(\mathbf{x}_i) \right)$$
 
-3. **Step 3: Learner Importance Weight $\alpha_m$ (1 Mark)**
-   $$\alpha_m = \frac{1}{2} \ln\left( \frac{1 - \epsilon_m}{\epsilon_m} \right)$$
+* **Step 3 - Learner Importance ($\alpha$):**
+  Calculate how much the stump is trusted:
+  $$\alpha_m = \frac{1}{2} \ln\left( \frac{1 - \epsilon_m}{\epsilon_m} \right)$$
+  *(Low error $\to$ High $\alpha$ $\to$ Stronger vote)*
 
-4. **Step 4: Exponential Reweighting & Normalization (1 Mark)**
-   * **Correct samples:** $w_i^{(m+1)} = w_i^{(m)} \cdot e^{-\alpha_m}$ (weight decreased)
-   * **Wrong samples:** $w_i^{(m+1)} = w_i^{(m)} \cdot e^{+\alpha_m}$ (weight boosted)
-   * **Normalize:** Divide by $Z_m = \sum w_i^{(m+1)}$ so weights sum to $1$. Hard-to-detect frauds are amplified for subsequent stumps.
+* **Step 4 - Exponential Reweighting & Normalization:**
+  * **Wrong samples:** Weight increases ($w_i^{(m+1)} = w_i^{(m)} \cdot e^{+\alpha_m}$).
+  * **Correct samples:** Weight decreases ($w_i^{(m+1)} = w_i^{(m)} \cdot e^{-\alpha_m}$).
+  * **Normalize:** Divide by $Z_m = \sum w_i^{(m+1)}$ so weights sum to $1$.
+  * Train the next stump using the updated sample weights.
+
+> **Memory:** Uniform -> Error -> Alpha -> Reweight -> Normalize -> Next Stump
 
 ---
 
-##### (iii) Error and Alpha Computation for 10% Misclassification (4 Marks)
+##### (iii) Calculate Alpha When Error is 10% (4 Marks)
 
-* **Step 1: Weighted Error Rate ($\epsilon_m$) (1 Mark)**
-  $$\epsilon_m = 10\% = \mathbf{0.10}$$
-  *(Note: A 10% misclassification rate equals a weighted error of 0.10 when sample weights are uniform, such as in round $m=1$.)*
+* **Given:** $\epsilon_m = 10\% = 0.10$
 
-* **Step 2: State Alpha Formula (1 Mark)**
-  Standard AdaBoost (Freund & Schapire):
-  $$\alpha_m = \frac{1}{2} \ln\left( \frac{1 - \epsilon_m}{\epsilon_m} \right)$$
-  *(Alternative convention note: Some textbooks omit the $\frac{1}{2}$ factor, giving $\alpha = \ln(9) \approx 2.1972$. Use whichever form your course notes follow.)*
+* **Formula & Calculation:**
+  $$\alpha_m = \frac{1}{2} \ln\left( \frac{1 - 0.10}{0.10} \right) = \frac{1}{2} \ln(9) = \frac{1}{2} \ln(3^2) = \ln(3) \approx \mathbf{1.0986}$$
 
-* **Step 3: Step-by-Step Calculation (1 Mark)**
-  $$\frac{1 - \epsilon_m}{\epsilon_m} = \frac{1 - 0.10}{0.10} = \frac{0.90}{0.10} = 9$$
-  $$\alpha_m = \frac{1}{2} \ln(9) = \frac{1}{2} \ln(3^2) = \ln(3) \approx \mathbf{1.0986}$$
-
-* **Step 4: Practical Meaning (1 Mark)**
-  * Since $\epsilon_m = 0.10 \ll 0.50$, the stump is substantially better than random guessing and receives a strong positive voting weight ($\alpha_m \approx +1.0986$) in the final ensemble rule $H(\mathbf{x}) = \text{sign}\left(\sum \alpha_m h_m(\mathbf{x})\right)$.
+* **Meaning:**
+  * Low error $\to$ High $\alpha$ $\to$ Strong positive vote in final ensemble.
+  * This error and $\alpha$ belong specifically to this one stump/iteration.
 
 ---
 
 ##### (iv) How Boosting Reduces Bias but Can Increase Variance (4 Marks)
 
-* **How Boosting Reduces Bias (2 Marks):**
-  * **Sample Reweighting on Hard Instances:** Unlike gradient boosting (which fits residuals directly), AdaBoost applies higher weights to misclassified transactions so each successive stump specifically focuses on samples earlier stumps got wrong.
-  * **Non-Linear Boundary Synthesis:** Additively combining numerous simple piecewise linear stumps constructs complex, highly expressive non-linear decision boundaries, driving ensemble training error toward zero ($\lim_{M \to \infty} \text{Bias}^2 \to 0$).
+* **Why Bias Decreases:**
+  * Individual decision stumps are simple and underfit alone.
+  * Each successive stump explicitly focuses on samples misclassified by previous rounds.
+  * Combining many weak learners creates a stronger, non-linear ensemble boundary.
+  * Therefore, training bias decreases toward zero.
 
-* **Why Boosting Can Increase Variance (2 Marks):**
-  * **Sensitivity to Noise / Outliers:** Mislabeled transactions or anomalous outliers are repeatedly misclassified.
-  * **Relative Weight Accumulation:** Because misclassified samples are boosted by $e^{+\alpha}$ each round, repeatedly misclassified noisy points keep gaining relative weight after normalization. This forces later stumps to aggressively contort around noise pockets rather than true fraud patterns, leading to **Overfitting**.
-  * *Fix:* Use learning rate shrinkage ($\eta < 1$), early stopping, or limit total boosting rounds $M$.
+* **Why Variance Can Increase:**
+  * Boosting aggressively focuses on hard-to-classify samples.
+  * If those difficult instances are noise or outliers, their weights become exponentially inflated.
+  * Subsequent stumps fit the noise rather than the underlying pattern, leading to overfitting.
+  * Therefore, variance can increase.
+
+> **Memory:** Correct mistakes -> Bias $\downarrow$ | Chase noise -> Variance $\uparrow$
 
 ---
 
 ##### (v) Handling Missing Values in "Device ID" (4 Marks)
 
-AdaBoost has **no built-in missing-value handling mechanism**; it inherits whatever missing-value capabilities are provided by its base learners or preprocessing:
+AdaBoost has no built-in missing value handling; it relies on preprocessing or base-learner capabilities:
 
-1. **Preprocessing Imputation (Option A - 1.5 Marks):**
-   * Impute missing entries prior to boosting using the mode (most common device ID) or median, optionally adding a binary indicator flag for missingness.
-2. **Missing as an Informative Predictive Category (Option B - 1.5 Marks):**
-   * In cyber-fraud detection, missing device data is often non-random (fraudsters deliberately conceal device fingerprints). Treating `Missing` as an explicit categorical level (`Device_ID = Unknown`) allows stumps to split directly on missingness, often turning it into a powerful fraud indicator.
-3. **Base-Learner Native Handling (Option C - 1 Mark):**
-   * Employ weak learners that natively support missing attributes:
-     * **CART stumps:** Evaluate **surrogate splits** using auxiliary correlated features (e.g., Browser Type or IP Geolocation).
-     * **C4.5-style stumps:** Route instances with missing values down both branches using fractional / proportional sample weights.
+1. **Pre-processing / Imputation:**
+   * Impute missing values before boosting using mode or median, optionally adding a binary missingness indicator flag.
+2. **Missing as an Informative Category:**
+   * Treat `Missing` or `Unknown` as a distinct category, allowing stumps to learn if missingness itself predicts fraud.
+3. **Base Learner Handles Missing Values Natively:**
+   * **CART stump:** Uses **surrogate splits** as a backup feature if Device ID is missing.
+   * **C4.5-style stump:** Distributes the instance's weight fractionally across all possible branches.
+
+> **Memory:** Impute -> Missing Category -> Native Handling
