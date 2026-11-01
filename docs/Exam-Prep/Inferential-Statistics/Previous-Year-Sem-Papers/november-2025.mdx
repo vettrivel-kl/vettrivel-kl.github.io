@@ -1,0 +1,663 @@
+---
+sidebar_position: 1
+title: November 2025
+description: Model answers and detailed step-by-step solutions for the November 2025 semester examination in Inferential Statistics (21CSC529T).
+tags: [inferential-statistics, exam-prep, semester-exam, previous-year-papers]
+toc_max_heading_level: 3
+---
+
+# November 2025
+
+> **Exam -** Semester Examination  
+> **Session -** November 2025  
+
+---
+
+## Question 1 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+Calculate standard deviation, variance and the coefficient of quartile deviation, coefficient of variation, Karl Pearson's coefficient of skewness for the following data. **(20 Marks)**
+
+| Sales | 15 | 18 | 25 | 27 | 30 | 35 |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Expenditure** | 50 | 65 | 82 | 95 | 110 | 120 |
+
+:::
+
+---
+
+### Solution 1 (20 Marks)
+
+#### Part A: Statistical Measures for Sales ($X$) (10 Marks)
+
+Given ordered observations ($n = 6$):
+$$X = [15, 18, 25, 27, 30, 35]$$
+
+##### 1. Mean and Deviations
+*   Sum: $\sum X = 15 + 18 + 25 + 27 + 30 + 35 = 150$
+*   Mean:
+    $$\bar{X} = \frac{\sum X}{n} = \frac{150}{6} = \mathbf{25.0}$$
+
+| $X_i$ | $(X_i - \bar{X})$ | $(X_i - \bar{X})^2$ |
+| :---: | :---: | :---: |
+| 15 | $-10$ | 100 |
+| 18 | $-7$ | 49 |
+| 25 | $0$ | 0 |
+| 27 | $+2$ | 4 |
+| 30 | $+5$ | 25 |
+| 35 | $+10$ | 100 |
+| **Total** | $\sum = 0$ | $\sum (X_i - \bar{X})^2 = \mathbf{278}$ |
+
+##### 2. Variance and Standard Deviation
+*   **Population Variance ($\sigma^2$):**
+    $$\sigma^2 = \frac{\sum (X_i - \bar{X})^2}{n} = \frac{278}{6} \approx \mathbf{46.3333}$$
+    *(Sample variance $s^2 = \frac{278}{5} = 55.60$)*
+*   **Population Standard Deviation ($\sigma$):**
+    $$\sigma = \sqrt{46.3333} \approx \mathbf{6.8069}$$
+    *(Sample standard deviation $s = \sqrt{55.60} \approx 7.4565$)*
+
+##### 3. Quartiles and Coefficient of Quartile Deviation
+*   **Median ($Q_2$):** For $n=6$, average of 3rd and 4th items:
+    $$M = \frac{25 + 27}{2} = 26.0$$
+*   **First Quartile ($Q_1$):** Position $\frac{n+1}{4} = \frac{7}{4} = 1.75$:
+    $$Q_1 = X_{(1)} + 0.75(X_{(2)} - X_{(1)}) = 15 + 0.75(18 - 15) = 15 + 2.25 = \mathbf{17.25}$$
+    *(Using lower-half median method: $Q_1 = 18.0$)*
+*   **Third Quartile ($Q_3$):** Position $\frac{3(n+1)}{4} = \frac{21}{4} = 5.25$:
+    $$Q_3 = X_{(5)} + 0.25(X_{(6)} - X_{(5)}) = 30 + 0.25(35 - 30) = 30 + 1.25 = \mathbf{31.25}$$
+    *(Using upper-half median method: $Q_3 = 30.0$)*
+*   **Quartile Deviation (Semi-Interquartile Range):**
+    $$\text{QD} = \frac{Q_3 - Q_1}{2} = \frac{31.25 - 17.25}{2} = \frac{14.0}{2} = \mathbf{7.0}$$
+*   **Coefficient of Quartile Deviation:**
+    $$\text{Coeff of QD} = \frac{Q_3 - Q_1}{Q_3 + Q_1} = \frac{31.25 - 17.25}{31.25 + 17.25} = \frac{14.0}{48.5} \approx \mathbf{0.2887}$$
+
+##### 4. Coefficient of Variation (CV)
+$$\text{CV} = \frac{\sigma}{\bar{X}} \times 100 = \frac{6.8069}{25.0} \times 100 \approx \mathbf{27.23\%}$$
+
+##### 5. Karl Pearson's Coefficient of Skewness ($Sk_p$)
+Since all data values are distinct (no repeated mode), use the median formulation:
+$$Sk_p = \frac{3(\text{Mean} - \text{Median})}{\sigma} = \frac{3(25.0 - 26.0)}{6.8069} = \frac{-3.0}{6.8069} \approx \mathbf{-0.4407}$$
+
+---
+
+#### Part B: Statistical Measures for Expenditure ($Y$) (10 Marks)
+
+Given ordered observations ($n = 6$):
+$$Y = [50, 65, 82, 95, 110, 120]$$
+
+##### 1. Mean and Deviations
+*   Sum: $\sum Y = 50 + 65 + 82 + 95 + 110 + 120 = 522$
+*   Mean:
+    $$\bar{Y} = \frac{\sum Y}{n} = \frac{522}{6} = \mathbf{87.0}$$
+
+| $Y_i$ | $(Y_i - \bar{Y})$ | $(Y_i - \bar{Y})^2$ |
+| :---: | :---: | :---: |
+| 50 | $-37$ | 1369 |
+| 65 | $-22$ | 484 |
+| 82 | $-5$ | 25 |
+| 95 | $+8$ | 64 |
+| 110 | $+23$ | 529 |
+| 120 | $+33$ | 1089 |
+| **Total** | $\sum = 0$ | $\sum (Y_i - \bar{Y})^2 = \mathbf{3560}$ |
+
+##### 2. Variance and Standard Deviation
+*   **Population Variance ($\sigma^2$):**
+    $$\sigma^2 = \frac{\sum (Y_i - \bar{Y})^2}{n} = \frac{3560}{6} \approx \mathbf{593.3333}$$
+    *(Sample variance $s^2 = \frac{3560}{5} = 712.0$)*
+*   **Population Standard Deviation ($\sigma$):**
+    $$\sigma = \sqrt{593.3333} \approx \mathbf{24.3584}$$
+    *(Sample standard deviation $s = \sqrt{712.0} \approx 26.6833$)*
+
+##### 3. Quartiles and Coefficient of Quartile Deviation
+*   **Median ($Q_2$):**
+    $$M = \frac{82 + 95}{2} = \mathbf{88.5}$$
+*   **First Quartile ($Q_1$):** Position $1.75$:
+    $$Q_1 = 50 + 0.75(65 - 50) = 50 + 11.25 = \mathbf{61.25}$$
+    *(Lower-half median: $Q_1 = 65.0$)*
+*   **Third Quartile ($Q_3$):** Position $5.25$:
+    $$Q_3 = 110 + 0.25(120 - 110) = 110 + 2.5 = \mathbf{112.50}$$
+    *(Upper-half median: $Q_3 = 110.0$)*
+*   **Quartile Deviation:**
+    $$\text{QD} = \frac{Q_3 - Q_1}{2} = \frac{112.50 - 61.25}{2} = \frac{51.25}{2} = \mathbf{25.625}$$
+*   **Coefficient of Quartile Deviation:**
+    $$\text{Coeff of QD} = \frac{Q_3 - Q_1}{Q_3 + Q_1} = \frac{51.25}{173.75} \approx \mathbf{0.2950}$$
+
+##### 4. Coefficient of Variation (CV)
+$$\text{CV} = \frac{\sigma}{\bar{Y}} \times 100 = \frac{24.3584}{87.0} \times 100 \approx \mathbf{28.00\%}$$
+
+##### 5. Karl Pearson's Coefficient of Skewness ($Sk_p$)
+$$Sk_p = \frac{3(\text{Mean} - \text{Median})}{\sigma} = \frac{3(87.0 - 88.5)}{24.3584} = \frac{-4.5}{24.3584} \approx \mathbf{-0.1847}$$
+
+:::tip
+
+**Examiner's Note**
+
+Both variables exhibit mild negative skewness ($Sk_p < 0$). In datasets where all values are distinct, always use Pearson's second empirical skewness formula $Sk_p = \frac{3(\text{Mean} - \text{Median})}{\sigma}$.
+
+:::
+
+---
+
+## Question 2 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+*   **i)** Discuss the Binomial and Poisson distribution, its properties, and its application in solving real-world problems. Include relevant examples and mathematical explanations. **(10 Marks)**
+*   **ii)** A clothing manufacturer produces three types of shirts: Regular, Slim, and Loose. The probability of producing a defective shirt in the Regular style is 0.04, for Slim it's 0.06, and for Loose it's 0.05. If a shirt is defective, the probability that it is a Regular shirt is 0.5, a Slim shirt is 0.3, and a Loose shirt is 0.2. If a defective shirt is selected, what is the most likely type? **(10 Marks)**
+
+:::
+
+---
+
+### Solution 2 (20 Marks)
+
+#### (i) Binomial and Poisson Distributions: Properties and Applications (10 Marks)
+
+##### 1. Binomial Distribution, $B(n, p)$
+*   **Definition:** Models the number of successes $k$ in $n$ independent and identical Bernoulli trials, each having constant success probability $p$.
+*   **Probability Mass Function (PMF):**
+    $$P(X = k) = \binom{n}{k} p^k (1 - p)^{n - k}, \quad k \in \{0, 1, \dots, n\}$$
+*   **Key Mathematical Properties:**
+    1.  $\text{Mean: } \mu = np$
+    2.  $\text{Variance: } \sigma^2 = npq \quad (q = 1 - p)$
+    3.  $\text{Condition: } \text{Variance} < \text{Mean}$ always ($npq < np$).
+*   **Real-World Application:** Quality assurance inspection where $n=100$ items are sampled with a known defect rate $p=0.02$.
+
+##### 2. Poisson Distribution, $P(\lambda)$
+*   **Definition:** Models the count of rare events occurring randomly in a fixed interval of time or space at a constant average rate $\lambda$.
+*   **Probability Mass Function (PMF):**
+    $$P(X = k) = \frac{e^{-\lambda} \lambda^k}{k!}, \quad k \in \{0, 1, 2, \dots\}$$
+*   **Key Mathematical Properties:**
+    1.  $\text{Mean: } \mathbb{E}[X] = \lambda$
+    2.  $\text{Variance: } \operatorname{Var}(X) = \lambda$
+    3.  $\text{Equidispersion: } \text{Mean} = \text{Variance} = \lambda$.
+*   **Poisson as Limiting Case of Binomial:** When $n \to \infty$ and $p \to 0$ such that $np = \lambda$ remains constant.
+*   **Real-World Application:** Server request arrival rates, incoming call center traffic per minute, or radioactive decay counts.
+
+---
+
+#### (ii) Shirt Style Defect Analysis (10 Marks)
+
+##### Analysis Under Literal Problem Phrasing:
+The problem statement explicitly provides the conditional probabilities given that a shirt is defective ($D$):
+*   $P(\text{Regular} \mid D) = 0.50$
+*   $P(\text{Slim} \mid D) = 0.30$
+*   $P(\text{Loose} \mid D) = 0.20$
+
+Since $P(\text{Regular} \mid D) = 0.50$ is the highest posterior probability:
+$$\mathbf{\text{The most likely type of defective shirt is the REGULAR style (Probability = 0.50)}}.$$
+
+##### Complete Bayesian Formulation (Standard Production Model):
+If the probabilities $(0.5, 0.3, 0.2)$ represent style production proportions (prior probabilities):
+*   Priors: $P(S_1 = \text{Regular}) = 0.50$, $P(S_2 = \text{Slim}) = 0.30$, $P(S_3 = \text{Loose}) = 0.20$
+*   Defect Likelihoods: $P(D \mid S_1) = 0.04$, $P(D \mid S_2) = 0.06$, $P(D \mid S_3) = 0.05$
+
+1.  **Total Probability of Selecting a Defective Shirt ($P(D)$):**
+    $$P(D) = \sum_{i=1}^3 P(S_i) P(D \mid S_i)$$
+    $$P(D) = (0.50)(0.04) + (0.30)(0.06) + (0.20)(0.05) = 0.020 + 0.018 + 0.010 = \mathbf{0.048}$$
+
+2.  **Posterior Probabilities via Bayes' Theorem:**
+    *   **Regular:**
+        $$P(S_1 \mid D) = \frac{P(S_1)P(D \mid S_1)}{P(D)} = \frac{0.020}{0.048} = \frac{20}{48} = \frac{5}{12} \approx \mathbf{0.4167 \ (41.67\%)}$$
+    *   **Slim:**
+        $$P(S_2 \mid D) = \frac{P(S_2)P(D \mid S_2)}{P(D)} = \frac{0.018}{0.048} = \frac{18}{48} = \frac{3}{8} = \mathbf{0.3750 \ (37.50\%)}$$
+    *   **Loose:**
+        $$P(S_3 \mid D) = \frac{P(S_3)P(D \mid S_3)}{P(D)} = \frac{0.010}{0.048} = \frac{10}{48} = \frac{5}{24} \approx \mathbf{0.2083 \ (20.83\%)}$$
+
+*   **Conclusion:** Under both interpretations, **Regular** is the most likely shirt style among defective items.
+
+:::tip
+
+**Examiner's Note**
+
+Presenting both the literal reading ($P(\text{Regular} \mid D) = 0.5$) and the complete Bayes' Theorem derivation ($5/12 \approx 41.67\%$) guarantees maximum marks regardless of the examiner's answer key interpretation.
+
+:::
+
+---
+
+## Question 3 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+*   **i)** A fair coin is tossed 250 times. Find the probability that heads will appear between 120 and 140 times using CLT. **(8 Marks)**
+*   **ii)** Explain the testing of hypothesis in detail with examples **(12 Marks)**
+
+:::
+
+---
+
+### Solution 3 (20 Marks)
+
+#### (i) CLT Normal Approximation for Coin Tossing (8 Marks)
+
+Let $X$ denote the number of heads in $n = 250$ tosses of a fair coin ($p = 0.5, q = 0.5$).
+
+##### 1. Parameters
+By the Central Limit Theorem (CLT), since $n$ is large ($n \ge 30$, $np \ge 5$, $nq \ge 5$), $X$ is approximately normally distributed: $X \sim \mathcal{N}(\mu, \sigma^2)$:
+*   **Mean:** $\mu = np = 250 \times 0.5 = \mathbf{125}$
+*   **Variance:** $\sigma^2 = npq = 250 \times 0.5 \times 0.5 = 62.5$
+*   **Standard Deviation:** $\sigma = \sqrt{62.5} \approx \mathbf{7.9057}$
+
+##### 2. Probability with Continuity Correction (Inclusive: $120 \le X \le 140$)
+To approximate discrete binomial integer values using a continuous curve, apply continuity correction:
+$$P(120 \le X \le 140) \approx P(119.5 \le X \le 140.5)$$
+
+Standardizing to standard normal variate $Z = \frac{X - \mu}{\sigma}$:
+*   $$z_1 = \frac{119.5 - 125}{7.9057} = \frac{-5.5}{7.9057} \approx \mathbf{-0.6957 \approx -0.70}$$
+*   $$z_2 = \frac{140.5 - 125}{7.9057} = \frac{15.5}{7.9057} \approx \mathbf{1.9606 \approx 1.96}$$
+
+Using standard normal cumulative probabilities:
+$$P(-0.70 \le Z \le 1.96) = \Phi(1.96) - \Phi(-0.70) = 0.9750 - (1 - 0.7580) = 0.9750 - 0.2420 = \mathbf{0.7330}$$
+*(Exact cumulative integration yields $0.7317$)*
+
+*(Alternative: Without continuity correction, $z_1 = \frac{120 - 125}{7.9057} = -0.63$, $z_2 = \frac{140 - 125}{7.9057} = 1.90 \implies P = \Phi(1.90) - \Phi(-0.63) = 0.9713 - 0.2643 = \mathbf{0.7070}$)*
+
+---
+
+#### (ii) Foundations of Hypothesis Testing (12 Marks)
+
+Hypothesis testing is a statistical decision-making framework to determine whether empirical sample evidence warrants rejecting a preconceived population assertion.
+
+##### 1. Null ($H_0$) and Alternative ($H_1$) Hypotheses
+*   **Null Hypothesis ($H_0$):** Baseline claim of no effect, no difference, or status quo (e.g., $H_0: \mu = 50\text{ kg}$).
+*   **Alternative Hypothesis ($H_1$):** Research hypothesis asserting a significant change or difference (e.g., $H_1: \mu \neq 50\text{ kg}$).
+
+##### 2. Errors in Decision Making
+| Reality \ Decision | Accept / Fail to Reject $H_0$ | Reject $H_0$ |
+| :--- | :--- | :--- |
+| **$H_0$ is True** | Correct Decision ($1 - \alpha$) | **Type I Error ($\alpha$):** False Positive |
+| **$H_0$ is False** | **Type II Error ($\beta$):** False Negative | Correct Decision / **Power ($1 - \beta$)** |
+
+*   **Level of Significance ($\alpha$):** The maximum tolerable probability of committing a Type I error (commonly $\alpha = 0.05$ or $0.01$).
+
+##### 3. Standard 5-Step Hypothesis Testing Workflow
+1.  **State Hypotheses:** Formulate $H_0$ and $H_1$.
+2.  **Select Test Statistic:** Choose appropriate statistic based on distribution and sample size:
+    $$Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \quad (n \ge 30), \quad t = \frac{\bar{X} - \mu}{s / \sqrt{n}} \quad (n < 30, \sigma \text{ unknown})$$
+3.  **Establish Decision Rule:** Determine critical value(s) from statistical tables for chosen $\alpha$ (e.g., critical $z = \pm 1.96$ for two-tailed $\alpha = 0.05$).
+4.  **Compute Test Statistic:** Calculate numerical test value from sample data.
+5.  **Conclusion:** If $\lvert \text{Test Statistic} \rvert > \text{Critical Value}$, reject $H_0$; otherwise fail to reject $H_0$.
+
+:::tip
+
+**Examiner's Note**
+
+In part (i), state why CLT applies ($np = 125 > 5$) and show the continuity correction step ($119.5$ to $140.5$). In part (ii), a clean $2 \times 2$ table defining Type I ($\alpha$) and Type II ($\beta$) errors earns full rubric marks.
+
+:::
+
+---
+
+## Question 4 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+*   **i)** In two large populations, there are 30% and 25% of fair haired people respectively. Is this difference likely to be hidden is samples of sizes 1200 and 900 respectively drawn from two populations? **(8 Marks)**
+*   **ii)** Two different types of drugs A and B were tried on certain patients for increasing weight. 5 persons were given drug A and 7 persons were given drug B. The increase in their weight is given below. Do the two drugs differ significantly with regard to their increase in average weight? **(12 Marks)**
+
+| Drug A | 3.6 | 5.5 | 5.9 | 4.1 | 1.4 | | |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Drug B** | 4.5 | 3.6 | 5.5 | 6.8 | 2.7 | 3.6 | 5.0 |
+
+:::
+
+---
+
+### Solution 4 (20 Marks)
+
+#### (i) Testing Difference Between Population Proportions (8 Marks)
+
+##### 1. Given Data
+*   Population 1: $P_1 = 0.30 \implies Q_1 = 0.70, \quad n_1 = 1200$
+*   Population 2: $P_2 = 0.25 \implies Q_2 = 0.75, \quad n_2 = 900$
+*   True Difference in Proportions:
+    $$P_1 - P_2 = 0.30 - 0.25 = \mathbf{0.05}$$
+
+##### 2. Standard Error of the Difference (SE)
+$$\text{SE}(p_1 - p_2) = \sqrt{\frac{P_1 Q_1}{n_1} + \frac{P_2 Q_2}{n_2}}$$
+$$\text{SE} = \sqrt{\frac{(0.30)(0.70)}{1200} + \frac{(0.25)(0.75)}{900}} = \sqrt{\frac{0.21}{1200} + \frac{0.1875}{900}}$$
+$$\text{SE} = \sqrt{0.000175 + 0.00020833} = \sqrt{0.00038333} \approx \mathbf{0.01958}$$
+
+##### 3. Evaluation: Is the Difference Likely to be Hidden?
+*   **Textbook Criterion (3-Sigma Rule):** A difference between two population parameters can be masked or reversed in sample draws if the true difference is smaller than 3 times its Standard Error:
+    $$3 \times \text{SE} = 3 \times 0.01958 = \mathbf{0.05874}$$
+    Since the actual difference $(0.05)$ is less than $3 \times \text{SE}$ ($0.05 < 0.05874$), **the difference is likely to be hidden in samples of these sizes**.
+*   **Hypothesis Testing Perspective ($z$-test):**
+    $$z = \frac{P_1 - P_2}{\text{SE}} = \frac{0.05}{0.01958} \approx \mathbf{2.55}$$
+    At the $1\%$ significance level, critical $z_{0.01} = 2.58$. Since $\lvert z \rvert = 2.55 < 2.58$, the difference is not statistically significant at the $1\%$ level, confirming it can be masked by sampling variation.
+
+---
+
+#### (ii) Two-Sample Independent Student's $t$-Test for Drugs A and B (12 Marks)
+
+##### 1. Formulation of Hypotheses
+*   **Null Hypothesis ($H_0$):** $\mu_1 = \mu_2$ (Both drugs produce identical average weight increases).
+*   **Alternative Hypothesis ($H_1$):** $\mu_1 \neq \mu_2$ (The two drugs differ significantly; two-tailed test).
+
+##### 2. Sample Statistics
+*   **Drug A ($n_1 = 5$):**
+    *   $\sum X_1 = 3.6 + 5.5 + 5.9 + 4.1 + 1.4 = 20.5$
+    *   $\bar{X}_1 = \frac{20.5}{5} = \mathbf{4.10}$
+    *   $\sum (X_{1i} - \bar{X}_1)^2 = (-0.5)^2 + (1.4)^2 + (1.8)^2 + (0.0)^2 + (-2.7)^2 = 0.25 + 1.96 + 3.24 + 0 + 7.29 = \mathbf{12.74}$
+*   **Drug B ($n_2 = 7$):**
+    *   $\sum X_2 = 4.5 + 3.6 + 5.5 + 6.8 + 2.7 + 3.6 + 5.0 = 31.7$
+    *   $\bar{X}_2 = \frac{31.7}{7} \approx \mathbf{4.5286}$
+    *   $\sum (X_{2i} - \bar{X}_2)^2 = (-0.03)^2 + (-0.93)^2 + (0.97)^2 + (2.27)^2 + (-1.83)^2 + (-0.93)^2 + (0.47)^2 \approx \mathbf{11.3943}$
+
+##### 3. Pooled Variance and Standard Error
+$$\text{Degrees of Freedom: } df = n_1 + n_2 - 2 = 5 + 7 - 2 = \mathbf{10}$$
+*   **Pooled Variance ($s_p^2$):**
+    $$s_p^2 = \frac{\sum (X_{1i} - \bar{X}_1)^2 + \sum (X_{2i} - \bar{X}_2)^2}{n_1 + n_2 - 2} = \frac{12.74 + 11.3943}{10} = \frac{24.1343}{10} = \mathbf{2.4134}$$
+*   **Pooled Standard Deviation:** $s_p = \sqrt{2.4134} \approx 1.5535$
+*   **Standard Error of the Difference:**
+    $$\text{SE}(\bar{X}_1 - \bar{X}_2) = s_p \sqrt{\frac{1}{n_1} + \frac{1}{n_2}} = 1.5535 \sqrt{\frac{1}{5} + \frac{1}{7}} = 1.5535 \sqrt{0.3429} \approx \mathbf{0.9097}$$
+
+##### 4. Test Statistic Computation
+$$t = \frac{\bar{X}_1 - \bar{X}_2}{\text{SE}(\bar{X}_1 - \bar{X}_2)} = \frac{4.10 - 4.5286}{0.9097} = \frac{-0.4286}{0.9097} \approx \mathbf{-0.471}$$
+$$\lvert t \rvert = \mathbf{0.471}$$
+
+##### 5. Statistical Decision
+*   **Critical Value:** For $df = 10$ at $\alpha = 0.05$ (two-tailed), critical $t_{0.05, 10} = \mathbf{2.228}$.
+*   **Decision Rule:** Since $\lvert t \rvert = 0.471 < 2.228$, we **fail to reject the null hypothesis $H_0$**.
+*   **Conclusion:** There is no statistically significant difference between Drug A and Drug B regarding their average increase in weight.
+
+:::tip
+
+**Examiner's Note**
+
+In part (i), state the classical $3 \times \text{SE}$ criterion ($0.05 < 0.05874$). In part (ii), state the pooled variance formula $s_p^2 = \frac{\sum (X_1-\bar{X}_1)^2 + \sum (X_2-\bar{X}_2)^2}{n_1+n_2-2}$ with $df = 10$, and compare calculated $t = 0.471$ with critical table value $t_{0.05} = 2.228$.
+
+:::
+
+---
+
+## Question 5 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+Explain Chi square Test and how it is useful to solve a goodness of fit problem. Use the following data to explain **(20 Marks)**
+
+| x | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **f** | 314 | 335 | 204 | 86 | 29 | 9 | 3 | 0 |
+
+:::
+
+---
+
+### Solution 5 (20 Marks)
+
+#### 1. Theory of the Chi-Square Goodness of Fit Test (6 Marks)
+The Chi-Square ($\chi^2$) Goodness of Fit test, developed by Karl Pearson, tests whether an observed sample frequency distribution $O_i$ matches a theoretical probability distribution $E_i$.
+
+##### Test Statistic:
+$$\chi^2 = \sum_{i=1}^k \frac{(O_i - E_i)^2}{E_i}$$
+where $O_i$ is observed frequency, $E_i = N \cdot P(X = x_i)$ is expected frequency, and $N = \sum O_i$.
+
+##### Key Operational Rules:
+1.  **Total Frequency Constraint:** $\sum O_i = \sum E_i = N$.
+2.  **Degrees of Freedom:** $df = k - 1 - m$, where $k$ is number of classes after pooling, and $m$ is the number of population parameters estimated from sample data.
+3.  **Pooling Rule:** If any expected frequency $E_i < 5$, adjacent classes must be pooled so that $E_i \ge 5$.
+
+---
+
+#### 2. Fitting a Theoretical Distribution to the Given Data (14 Marks)
+
+##### Step A: Parameter Estimation
+Total observations:
+$$N = 314 + 335 + 204 + 86 + 29 + 9 + 3 + 0 = \mathbf{980}$$
+
+Compute sample mean ($\bar{x} = \lambda$):
+$$\sum fx = 0(314) + 1(335) + 2(204) + 3(86) + 4(29) + 5(9) + 6(3) + 7(0)$$
+$$\sum fx = 0 + 335 + 408 + 258 + 116 + 45 + 18 + 0 = \mathbf{1180}$$
+$$\lambda = \frac{\sum fx}{N} = \frac{1180}{980} \approx \mathbf{1.2041}$$
+
+Since the data represents discrete event counts with small mean rate $\lambda \approx 1.2041$, we fit a **Poisson Distribution**:
+$$P(X = x) = \frac{e^{-\lambda} \lambda^x}{x!}, \quad E(x) = N \cdot P(X = x)$$
+
+##### Step B: Expected Frequencies Computation
+Using recurrence relation $E(x) = E(x - 1) \times \frac{\lambda}{x}$:
+*   $P(0) = e^{-1.2041} \approx 0.29997 \implies E(0) = 980 \times 0.29997 = \mathbf{293.97}$
+*   $E(1) = 293.97 \times 1.2041 = \mathbf{353.96}$
+*   $E(2) = 353.96 \times \frac{1.2041}{2} = \mathbf{213.10}$
+*   $E(3) = 213.10 \times \frac{1.2041}{3} = \mathbf{85.53}$
+*   $E(4) = 85.53 \times \frac{1.2041}{4} = \mathbf{25.75}$
+*   $E(5) = 25.75 \times \frac{1.2041}{5} = 6.20$
+*   $E(6) = 6.20 \times \frac{1.2041}{6} = 1.24$
+*   $E(7) = 1.24 \times \frac{1.2041}{7} = 0.21$
+
+##### Step C: Pooling Classes with $E_i < 5$
+Classes $x \ge 5$ are pooled into a single category ($x \ge 5$):
+*   $O_{\text{pooled}} = 9 + 3 + 0 = \mathbf{12}$
+*   $E_{\text{pooled}} = 980 - (293.97 + 353.96 + 213.10 + 85.53 + 25.75) = 980 - 972.31 = \mathbf{7.69}$
+
+##### Step D: Chi-Square Calculation Table
+| Class ($x$) | Observed ($O_i$) | Expected ($E_i$) | $(O_i - E_i)$ | $(O_i - E_i)^2$ | $\frac{(O_i - E_i)^2}{E_i}$ |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| **0** | 314 | 293.97 | $+20.03$ | 401.20 | $1.3648$ |
+| **1** | 335 | 353.96 | $-18.96$ | 359.48 | $1.0156$ |
+| **2** | 204 | 213.10 | $-9.10$ | 82.81 | $0.3886$ |
+| **3** | 86 | 85.53 | $+0.47$ | 0.22 | $0.0026$ |
+| **4** | 29 | 25.75 | $+3.25$ | 10.56 | $0.4102$ |
+| **$\ge 5$** | 12 | 7.69 | $+4.31$ | 18.58 | $2.4156$ |
+| **Total** | **980** | **980.00** | **0** | - | **$\chi^2_{\text{calc}} = \mathbf{5.5974}$** |
+
+##### Step E: Conclusion
+*   **Degrees of Freedom:** $k = 6$ classes after pooling, $m = 1$ parameter estimated ($\lambda$):
+    $$df = k - 1 - 1 = 6 - 2 = \mathbf{4}$$
+*   **Critical Value:** At $\alpha = 0.05$ with $df = 4$, critical $\chi^2_{0.05, 4} = \mathbf{9.488}$.
+*   **Decision:** Since $\chi^2_{\text{calc}} = 5.597 < 9.488$, we **fail to reject the null hypothesis**.
+*   **Conclusion:** The **Poisson distribution is a good fit** for the observed frequency distribution.
+
+:::tip
+
+**Examiner's Note**
+
+Highlight the pooling of classes $x \ge 5$ because expected frequencies must satisfy $E_i \ge 5$. Subtracting 1 degree of freedom for estimating $\lambda$ from data ($df = 6 - 1 - 1 = 4$) is a key scoring requirement.
+
+:::
+
+---
+
+## Question 6 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+Explain the Analysis of Variance with few examples. Use the data **(20 Marks)**
+
+| Month \ Dealer | A | B | C | D |
+| :--- | :---: | :---: | :---: | :---: |
+| **I** | 50 | 40 | 48 | 39 |
+| **II** | 46 | 48 | 50 | 45 |
+| **III** | 39 | 44 | 40 | 39 |
+
+:::
+
+---
+
+### Solution 6 (20 Marks)
+
+#### 1. Theory of Analysis of Variance (ANOVA) (6 Marks)
+ANOVA, introduced by Sir Ronald A. Fisher, decomposes the total variance in a continuous dependent variable into distinct, assignable sources of variation versus random experimental error.
+
+##### Governing Mathematical Identity (Partition of Sum of Squares):
+$$\text{TSS} = \text{SSR} + \text{SSC} + \text{SSE}$$
+where:
+*   $\text{TSS}$: Total Sum of Squares (overall data dispersion)
+*   $\text{SSR}$: Sum of Squares due to Rows (Month effect)
+*   $\text{SSC}$: Sum of Squares due to Columns (Dealer effect)
+*   $\text{SSE}$: Sum of Squares due to Error (unexplained residual variation)
+
+##### Real-World Examples:
+1.  **Agronomy:** Evaluating crop yield across 4 fertilizer types (Columns) across 3 soil moisture tiers (Rows).
+2.  **Marketing & Retail:** Evaluating sales performance across 4 retail dealer networks across 3 fiscal quarters.
+
+---
+
+#### 2. Two-Way ANOVA Computation for Given Data (14 Marks)
+
+##### Step A: Summary Table and Totals
+Rows ($r = 3$ Months: I, II, III), Columns ($c = 4$ Dealers: A, B, C, D), Total $N = r \times c = 12$.
+
+| Month \ Dealer | A | B | C | D | Row Sum ($R_i$) |
+| :---: | :---: | :---: | :---: | :---: | :---: |
+| **I** | 50 | 40 | 48 | 39 | $R_1 = \mathbf{177}$ |
+| **II** | 46 | 48 | 50 | 45 | $R_2 = \mathbf{189}$ |
+| **III** | 39 | 44 | 40 | 39 | $R_3 = \mathbf{162}$ |
+| **Col Sum ($C_j$)** | $C_1 = \mathbf{135}$ | $C_2 = \mathbf{132}$ | $C_3 = \mathbf{138}$ | $C_4 = \mathbf{123}$ | **Grand Total $G = \mathbf{528}$** |
+
+##### Step B: Sums of Squares Calculations
+1.  **Correction Factor (CF):**
+    $$\text{CF} = \frac{G^2}{N} = \frac{(528)^2}{12} = \frac{278,784}{12} = \mathbf{23,232.0}$$
+
+2.  **Raw Sum of Squares ($\sum X^2$):**
+    $$\sum X^2 = (50^2 + 40^2 + 48^2 + 39^2) + (46^2 + 48^2 + 50^2 + 45^2) + (39^2 + 44^2 + 40^2 + 39^2)$$
+    $$\sum X^2 = 7825 + 8945 + 6678 = \mathbf{23,448.0}$$
+
+3.  **Total Sum of Squares (TSS):**
+    $$\text{TSS} = \sum X^2 - \text{CF} = 23,448 - 23,232 = \mathbf{216.0}$$
+    $$\text{Degrees of Freedom: } df_{\text{total}} = N - 1 = 12 - 1 = \mathbf{11}$$
+
+4.  **Row Sum of Squares (Between Months, SSR):**
+    $$\text{SSR} = \frac{\sum R_i^2}{c} - \text{CF} = \frac{177^2 + 189^2 + 162^2}{4} - 23,232$$
+    $$\text{SSR} = \frac{31,329 + 35,721 + 26,244}{4} - 23,232 = \frac{93,294}{4} - 23,232 = 23,323.5 - 23,232 = \mathbf{91.5}$$
+    $$\text{Degrees of Freedom: } df_{\text{row}} = r - 1 = 3 - 1 = \mathbf{2}$$
+
+5.  **Column Sum of Squares (Between Dealers, SSC):**
+    $$\text{SSC} = \frac{\sum C_j^2}{r} - \text{CF} = \frac{135^2 + 132^2 + 138^2 + 123^2}{3} - 23,232$$
+    $$\text{SSC} = \frac{18,225 + 17,424 + 19,044 + 15,129}{3} - 23,232 = \frac{69,822}{3} - 23,232 = 23,274 - 23,232 = \mathbf{42.0}$$
+    $$\text{Degrees of Freedom: } df_{\text{col}} = c - 1 = 4 - 1 = \mathbf{3}$$
+
+6.  **Error Sum of Squares (Residual, SSE):**
+    $$\text{SSE} = \text{TSS} - \text{SSR} - \text{SSC} = 216.0 - 91.5 - 42.0 = \mathbf{82.5}$$
+    $$\text{Degrees of Freedom: } df_{\text{error}} = (r - 1)(c - 1) = 2 \times 3 = \mathbf{6}$$
+
+##### Step C: Two-Way ANOVA Table
+| Source of Variation | Sum of Squares (SS) | Degrees of Freedom ($df$) | Mean Square (MS) | Variance Ratio ($F_{\text{calc}}$) | Critical $F_{0.05}$ |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Between Months (Rows)** | $91.5$ | $2$ | $\text{MSR} = \frac{91.5}{2} = 45.75$ | $F_R = \frac{45.75}{13.75} = \mathbf{3.33}$ | $F(2, 6) = \mathbf{5.14}$ |
+| **Between Dealers (Cols)** | $42.0$ | $3$ | $\text{MSC} = \frac{42.0}{3} = 14.00$ | $F_C = \frac{14.00}{13.75} = \mathbf{1.02}$ | $F(3, 6) = \mathbf{4.76}$ |
+| **Residual Error** | $82.5$ | $6$ | $\text{MSE} = \frac{82.5}{6} = 13.75$ | - | - |
+| **Total** | **216.0** | **11** | - | - | - |
+
+##### Step D: Inferences and Hypotheses Testing
+1.  **For Months (Rows):**
+    *   $H_0$: There is no significant difference in sales across the three months.
+    *   Since $F_{\text{calc}} = 3.33 < F_{\text{table}} = 5.14$, we **fail to reject $H_0$**. Monthly sales variations are not statistically significant.
+2.  **For Dealers (Columns):**
+    *   $H_0$: There is no significant difference in sales across the four dealers.
+    *   Since $F_{\text{calc}} = 1.02 < F_{\text{table}} = 4.76$, we **fail to reject $H_0$**. Performance across dealers is not statistically significant.
+
+:::tip
+
+**Examiner's Note**
+
+Double-check arithmetic: $\text{TSS} = \text{SSR} + \text{SSC} + \text{SSE} \implies 91.5 + 42.0 + 82.5 = 216.0$. State separate null hypotheses and critical F-table comparisons for both Rows and Columns.
+
+:::
+
+---
+
+## Question 7 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+The marks of 100 students in an exam are found to be normally distributed with mean 70 and S.D. 5. Estimate the number of students whose marks will be:
+*   **i)** between 60 and 75 **(4 Marks)**
+*   **ii)** more than 75 marks **(4 Marks)**
+*   **iii)** less than 65 marks **(4 Marks)**
+
+Also explain the uses of normal distribution briefly. **(8 Marks)**
+
+:::
+
+---
+
+### Solution 7 (20 Marks)
+
+#### 1. Estimation of Student Mark Counts (12 Marks)
+
+Let $X$ denote the marks of a randomly selected student:
+$$X \sim \mathcal{N}(\mu = 70, \sigma^2 = 5^2), \quad N = 100$$
+Standard normal transformation:
+$$Z = \frac{X - \mu}{\sigma} = \frac{X - 70}{5}$$
+
+---
+
+##### (i) Marks Between 60 and 75 (4 Marks)
+Transform endpoints into standard normal $Z$-scores:
+*   For $X_1 = 60$:
+    $$z_1 = \frac{60 - 70}{5} = \frac{-10}{5} = \mathbf{-2.0}$$
+*   For $X_2 = 75$:
+    $$z_2 = \frac{75 - 70}{5} = \frac{5}{5} = \mathbf{1.0}$$
+
+Compute probability:
+$$P(60 \le X \le 75) = P(-2.0 \le Z \le 1.0) = \Phi(1.0) - \Phi(-2.0)$$
+From standard normal distribution tables:
+$$\Phi(1.0) = 0.8413, \quad \Phi(-2.0) = 1 - \Phi(2.0) = 1 - 0.9772 = 0.0228$$
+$$P(60 \le X \le 75) = 0.8413 - 0.0228 = \mathbf{0.8185 \ (81.85\%)}$$
+
+Expected number of students:
+$$\text{Count} = N \times P(60 \le X \le 75) = 100 \times 0.8185 = \mathbf{81.85 \approx 82 \text{ students}}$$
+
+---
+
+##### (ii) Marks More Than 75 (4 Marks)
+For $X = 75$:
+$$z = \frac{75 - 70}{5} = \mathbf{1.0}$$
+
+Compute probability:
+$$P(X > 75) = P(Z > 1.0) = 1 - \Phi(1.0) = 1 - 0.8413 = \mathbf{0.1587 \ (15.87\%)}$$
+
+Expected number of students:
+$$\text{Count} = N \times P(X > 75) = 100 \times 0.1587 = \mathbf{15.87 \approx 16 \text{ students}}$$
+
+---
+
+##### (iii) Marks Less Than 65 (4 Marks)
+For $X = 65$:
+$$z = \frac{65 - 70}{5} = \frac{-5}{5} = \mathbf{-1.0}$$
+
+Compute probability:
+$$P(X < 65) = P(Z < -1.0) = 1 - \Phi(1.0) = 1 - 0.8413 = \mathbf{0.1587 \ (15.87\%)}$$
+
+Expected number of students:
+$$\text{Count} = N \times P(X < 65) = 100 \times 0.1587 = \mathbf{15.87 \approx 16 \text{ students}}$$
+
+---
+
+#### 2. Practical Uses of the Normal Distribution (8 Marks)
+
+1.  **Foundation of Parametric Statistical Inference:**
+    *   Forms the mathematical backbone of classical hypothesis testing ($Z$-tests, $t$-tests, ANOVA $F$-tests, Chi-square tests), all of which assume underlying or asymptotic normality.
+2.  **Central Limit Theorem (CLT) Vehicle:**
+    *   Under CLT, sample means from any finite-variance distribution converge to a normal distribution as sample size grows ($n \ge 30$). This enables inference on complex population parameters without knowing the parent distribution.
+3.  **Statistical Quality Control & Six Sigma:**
+    *   Industrial manufacturing uses Gaussian control charts ($\bar{X}$ and $R$ charts) with action limits set at $\mu \pm 3\sigma$ ($99.73\%$ tolerance band) to detect process anomalies.
+4.  **Grading on a Curve and Psychometrics:**
+    *   Standardizes educational assessments and IQ tests (mean 100, SD 15) to ensure grading criteria remain invariant across different examination cohorts.
+5.  **Risk Management & Quantitative Finance:**
+    *   Models asset log-returns and calculates Value-at-Risk (VaR) thresholds in investment portfolios.
+
+:::tip
+
+**Examiner's Note**
+
+State probabilities to 4 decimal places and multiply by $N = 100$. Explicitly provide both fractional expectations ($81.85, 15.87, 15.87$) and integer-rounded estimates ($82, 16, 16$).
+
+:::

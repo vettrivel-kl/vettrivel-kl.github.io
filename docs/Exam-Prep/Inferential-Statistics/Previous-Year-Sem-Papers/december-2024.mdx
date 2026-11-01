@@ -1,0 +1,667 @@
+---
+sidebar_position: 3
+title: December 2024
+description: Model answers and detailed step-by-step solutions for the December 2024 semester examination in Inferential Statistics (21CSC529T).
+tags: [inferential-statistics, exam-prep, semester-exam, previous-year-papers]
+toc_max_heading_level: 3
+---
+
+# December 2024
+
+> **Exam -** Semester Examination  
+> **Session -** December 2024  
+
+---
+
+## Question 1 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+*   **i)** Discuss the measures of dispersion. How do they help in understanding the spread of any data? Use the following data to explain. A statistician conducted a study on the effect that playing video games has on memory recall. As part of her study, she compiled the following data: **(10 Marks)**
+
+| Hours teenagers spend on video games | Number of teenagers |
+| :--- | :---: |
+| 0-3.5 | 3 |
+| 3.5-7.5 | 7 |
+| 7.5-11.5 | 12 |
+| 11.5-15.5 | 7 |
+| 15.5-19.5 | 9 |
+
+*   **ii)** Define covariance and correlation. Discuss their differences and explain their significance in understanding relationships between variables with the help of following data. **(10 Marks)**
+
+| Student | Beginning score | Ending score |
+| :---: | :---: | :---: |
+| 1 | 1100 | 1120 |
+| 2 | 980 | 1030 |
+| 3 | 1200 | 1208 |
+| 4 | 998 | 1000 |
+| 5 | 893 | 948 |
+| 6 | 1015 | 1030 |
+| 7 | 1217 | 1224 |
+| 8 | 1232 | 1245 |
+| 9 | 967 | 988 |
+| 10 | 988 | 997 |
+
+:::
+
+---
+
+### Solution 1 (20 Marks)
+
+#### (i) Measures of Dispersion and Grouped Data Calculation (10 Marks)
+
+##### 1. Concept and Role of Measures of Dispersion
+Measures of central tendency (mean, median) identify the central location of a distribution, but they reveal nothing about the variability among observations.
+*   **Definition:** Measures of dispersion quantify the extent to which individual observations deviate from the central value or scatter across the domain.
+*   **Significance:**
+    1.  Assesses the reliability of the central average (low dispersion indicates a highly representative mean).
+    2.  Enables meaningful comparisons of consistency and risk across different distributions via relative measures like the Coefficient of Variation (CV).
+
+---
+
+##### 2. Step-by-Step Computation on Video Game Hours Data
+Total sample size $N = 3 + 7 + 12 + 7 + 9 = \mathbf{38}$.
+
+| Class Interval | Midpoint ($m_i$) | Frequency ($f_i$) | $f_i m_i$ | $(m_i - \bar{X})$ | $(m_i - \bar{X})^2$ | $f_i (m_i - \bar{X})^2$ | Cumulative Frequency ($cf$) |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| 0 - 3.5 | $1.75$ | 3 | $5.25$ | $-9.03$ | $81.54$ | $244.62$ | 3 |
+| 3.5 - 7.5 | $5.50$ | 7 | $38.50$ | $-5.28$ | $27.88$ | $195.16$ | 10 |
+| 7.5 - 11.5 | $9.50$ | 12 | $114.00$ | $-1.28$ | $1.64$ | $19.68$ | 22 |
+| 11.5 - 15.5 | $13.50$ | 7 | $94.50$ | $+2.72$ | $7.40$ | $51.80$ | 29 |
+| 15.5 - 19.5 | $17.50$ | 9 | $157.50$ | $+6.72$ | $45.16$ | $406.44$ | 38 |
+| **Total** | - | **$N = 38$** | **$409.75$** | - | - | **$917.70$** | - |
+
+*   **Mean ($\bar{X}$):**
+    $$\bar{X} = \frac{\sum f_i m_i}{N} = \frac{409.75}{38} \approx \mathbf{10.7829 \text{ hours}}$$
+
+*   **Variance ($\sigma^2$) and Standard Deviation ($\sigma$):**
+    $$\sigma^2 = \frac{\sum f_i (m_i - \bar{X})^2}{N} = \frac{917.70}{38} \approx \mathbf{24.1500 \text{ hours}^2}$$
+    $$\sigma = \sqrt{24.1500} \approx \mathbf{4.9143 \text{ hours}}$$
+
+*   **Quartiles and Quartile Deviation (QD):**
+    *   $Q_1$ class: $\frac{N}{4} = \frac{38}{4} = 9.5^{\text{th}}$ observation lies in interval **$3.5 - 7.5$** ($L = 3.5, cf_{\text{prev}} = 3, f = 7, h = 4$):
+        $$Q_1 = L + \left(\frac{\frac{N}{4} - cf_{\text{prev}}}{f}\right) h = 3.5 + \left(\frac{9.5 - 3}{7}\right) 4 = 3.5 + 3.7143 = \mathbf{7.2143 \text{ hours}}$$
+    *   $Q_3$ class: $\frac{3N}{4} = \frac{3 \times 38}{4} = 28.5^{\text{th}}$ observation lies in interval **$11.5 - 15.5$** ($L = 11.5, cf_{\text{prev}} = 22, f = 7, h = 4$):
+        $$Q_3 = L + \left(\frac{\frac{3N}{4} - cf_{\text{prev}}}{f}\right) h = 11.5 + \left(\frac{28.5 - 22}{7}\right) 4 = 11.5 + 3.7143 = \mathbf{15.2143 \text{ hours}}$$
+    *   **Quartile Deviation (Semi-Interquartile Range):**
+        $$\text{QD} = \frac{Q_3 - Q_1}{2} = \frac{15.2143 - 7.2143}{2} = \frac{8.0}{2} = \mathbf{4.0000 \text{ hours}}$$
+    *   **Coefficient of Quartile Deviation:**
+        $$\text{Coeff of QD} = \frac{Q_3 - Q_1}{Q_3 + Q_1} = \frac{8.0}{15.2143 + 7.2143} = \frac{8.0}{22.4286} \approx \mathbf{0.3567}$$
+
+*   **Coefficient of Variation (CV):**
+    $$\text{CV} = \frac{\sigma}{\bar{X}} \times 100 = \frac{4.9143}{10.7829} \times 100 \approx \mathbf{45.57\%}$$
+
+---
+
+#### (ii) Covariance and Correlation Analysis (10 Marks)
+
+##### 1. Conceptual Definitions and Differences
+*   **Covariance ($\operatorname{Cov}(X, Y)$):** Measures the joint directional variability of two random variables:
+    $$\operatorname{Cov}(X, Y) = \frac{1}{n} \sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})$$
+    *Limitation:* Scale-dependent. Changing units of measurement alters covariance value arbitrarily.
+*   **Correlation Coefficient ($r$):** The normalized measure of the strength and direction of the linear relationship:
+    $$r = \frac{\operatorname{Cov}(X, Y)}{\sigma_X \sigma_Y} \in [-1, +1]$$
+    *Advantage:* Dimensionless and invariant to linear transformations of scale or origin.
+
+| Dimension | Covariance ($\operatorname{Cov}$) | Correlation Coefficient ($r$) |
+| :--- | :--- | :--- |
+| **Formula** | $\frac{1}{n}\sum (X_i - \bar{X})(Y_i - \bar{Y})$ | $\frac{\operatorname{Cov}(X, Y)}{\sigma_X \sigma_Y}$ |
+| **Range** | $(-\infty, +\infty)$ | Strictly $[-1.0, +1.0]$ |
+| **Units** | Product of units of $X$ and $Y$ | Dimensionless (pure scalar) |
+| **Interpretation** | Indicates direction only | Indicates both direction and strength |
+
+---
+
+##### 2. Numerical Computation on Student Score Data ($n = 10$)
+Let $X$ denote Beginning Score and $Y$ denote Ending Score.
+*   $\sum X = 10,590 \implies \bar{X} = \frac{10,590}{10} = \mathbf{1059.0}$
+*   $\sum Y = 10,790 \implies \bar{Y} = \frac{10,790}{10} = \mathbf{1079.0}$
+
+| Student | $X_i$ | $Y_i$ | $(X_i - \bar{X})$ | $(Y_i - \bar{Y})$ | $(X_i - \bar{X})^2$ | $(Y_i - \bar{Y})^2$ | $(X_i - \bar{X})(Y_i - \bar{Y})$ |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| 1 | 1100 | 1120 | $+41$ | $+41$ | 1681 | 1681 | 1681 |
+| 2 | 980 | 1030 | $-79$ | $-49$ | 6241 | 2401 | 3871 |
+| 3 | 1200 | 1208 | $+141$ | $+129$ | 19881 | 16641 | 18189 |
+| 4 | 998 | 1000 | $-61$ | $-79$ | 3721 | 6241 | 4819 |
+| 5 | 893 | 948 | $-166$ | $-131$ | 27556 | 17161 | 21746 |
+| 6 | 1015 | 1030 | $-44$ | $-49$ | 1936 | 2401 | 2156 |
+| 7 | 1217 | 1224 | $+158$ | $+145$ | 24964 | 21025 | 22910 |
+| 8 | 1232 | 1245 | $+173$ | $+166$ | 29929 | 27556 | 28718 |
+| 9 | 967 | 988 | $-92$ | $-91$ | 8464 | 8281 | 8372 |
+| 10 | 988 | 997 | $-71$ | $-82$ | 5041 | 6724 | 5822 |
+| **Total** | **10590** | **10790** | **0** | **0** | **129,414** | **110,112** | **118,284** |
+
+*   **Population Covariance:**
+    $$\operatorname{Cov}(X, Y) = \frac{\sum (X_i - \bar{X})(Y_i - \bar{Y})}{n} = \frac{118,284}{10} = \mathbf{11,828.40}$$
+    *(Sample covariance $s_{XY} = \frac{118,284}{9} \approx 13,142.67$)*
+
+*   **Standard Deviations:**
+    $$\sigma_X = \sqrt{\frac{129,414}{10}} = \sqrt{12,941.40} \approx \mathbf{113.7603}$$
+    $$\sigma_Y = \sqrt{\frac{110,112}{10}} = \sqrt{11,011.20} \approx \mathbf{104.9343}$$
+
+*   **Pearson Correlation Coefficient ($r$):**
+    $$r = \frac{\operatorname{Cov}(X, Y)}{\sigma_X \sigma_Y} = \frac{11,828.40}{(113.7603)(104.9343)} = \frac{11,828.40}{11,937.36} \approx \mathbf{0.9909}$$
+
+*   **Interpretation:** An $r = +0.9909$ indicates a **near-perfect positive linear relationship**. Students with higher beginning test scores consistently achieve proportionately higher ending scores.
+
+:::tip
+
+**Examiner's Note**
+
+Notice the exact cancellation in $Q_3 - Q_1 = 8.0 \implies \text{QD} = 4.0$. In part (ii), both deviations sums $\sum (X - \bar{X})^2$ and $\sum (Y - \bar{Y})^2$ produce integer totals, allowing exact decimal accuracy.
+
+:::
+
+---
+
+## Question 2 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+*   **i)** Explain the normal distribution in detail with the help of mark or grade distribution of the class with some data. Discuss its properties, significance in statistics, and applications in real-life data analysis. **(10 Marks)**
+*   **ii)** A car manufacturer produces three models: Sedan, SUV, and Coupe. The probability of a defect is 0.02 for Sedan, 0.05 for SUV, and 0.03 for Coupe. Given a defective car, the probability it is a Sedan is 0.3, an SUV is 0.4, and a Coupe is 0.3. If a defective car is selected, which model is it most likely to be? Explain with calculations. **(10 Marks)**
+
+:::
+
+---
+
+### Solution 2 (20 Marks)
+
+#### (i) Normal Distribution: Properties, Significance, and Grade Modeling (10 Marks)
+
+##### 1. Definition and Probability Density Function (PDF)
+A continuous random variable $X$ follows a Normal (Gaussian) distribution, $X \sim \mathcal{N}(\mu, \sigma^2)$, with PDF:
+
+$$
+f(x) = \frac{1}{\sigma \sqrt{2\pi}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right), \quad -\infty < x < +\infty
+$$
+
+##### 2. Key Mathematical Properties
+1.  **Symmetry and Unimodality:** The distribution is bell-shaped and symmetric about the mean: $\text{Mean} = \text{Median} = \text{Mode} = \mu$.
+2.  **Total Area:** $\int_{-\infty}^{+\infty} f(x)\,dx = 1.0$.
+3.  **Empirical 68-95-99.7 Rule:**
+    *   $P(\mu - \sigma \le X \le \mu + \sigma) \approx 68.27\%$
+    *   $P(\mu - 2\sigma \le X \le \mu + 2\sigma) \approx 95.45\%$
+    *   $P(\mu - 3\sigma \le X \le \mu + 3\sigma) \approx 99.73\%$
+4.  **Points of Inflection:** Occur at $x = \mu \pm \sigma$.
+5.  **Skewness and Kurtosis:** Skewness $\beta_1 = 0$; Kurtosis $\beta_2 = 3$ (mesokurtic).
+
+##### 3. Academic Example (Class Grade Distribution)
+Let an exam with $N = 500$ students have mean $\mu = 70$ and standard deviation $\sigma = 10$:
+*   Grade A ($X \ge 85$): $Z = \frac{85 - 70}{10} = +1.5 \implies P(Z \ge 1.5) = 1 - 0.9332 = 6.68\%$ ($\approx 33$ students).
+*   Grade B ($70 \le X < 85$): $P(0 \le Z < 1.5) = 0.9332 - 0.5000 = 43.32\%$ ($\approx 217$ students).
+*   Grade C ($55 \le X < 70$): $Z = \frac{55 - 70}{10} = -1.5 \implies 43.32\%$ ($\approx 217$ students).
+*   Grade F ($X < 55$): $P(Z < -1.5) = 6.68\%$ ($\approx 33$ students).
+
+---
+
+#### (ii) Vehicle Defect Model Identification (10 Marks)
+
+##### Analysis Under Literal Problem Phrasing:
+The question explicitly states the conditional probability distribution given a defective vehicle ($D$):
+*   $P(\text{Sedan} \mid D) = 0.30$
+*   $P(\text{SUV} \mid D) = 0.40$
+*   $P(\text{Coupe} \mid D) = 0.30$
+
+Comparing the given values:
+$$P(\text{SUV} \mid D) = 0.40 > P(\text{Sedan} \mid D) = 0.30 = P(\text{Coupe} \mid D) = 0.30$$
+$$\mathbf{\text{The most likely model is the SUV (Probability = 0.40)}}.$$
+
+##### Complete Bayesian Formulation (Production Shares Model):
+If the probabilities $(0.3, 0.4, 0.3)$ denote production shares (prior probabilities):
+*   Priors: $P(M_1 = \text{Sedan}) = 0.30$, $P(M_2 = \text{SUV}) = 0.40$, $P(M_3 = \text{Coupe}) = 0.30$
+*   Defect Likelihoods: $P(D \mid M_1) = 0.02$, $P(D \mid M_2) = 0.05$, $P(D \mid M_3) = 0.03$
+
+1.  **Total Probability of a Defect ($P(D)$):**
+    $$P(D) = \sum_{i=1}^3 P(M_i)P(D \mid M_i)$$
+    $$P(D) = (0.30)(0.02) + (0.40)(0.05) + (0.30)(0.03) = 0.006 + 0.020 + 0.009 = \mathbf{0.035}$$
+
+2.  **Posterior Probabilities via Bayes' Theorem:**
+    *   **Sedan:**
+        $$P(M_1 \mid D) = \frac{P(M_1)P(D \mid M_1)}{P(D)} = \frac{0.006}{0.035} = \frac{6}{35} \approx \mathbf{0.1714 \ (17.14\%)}$$
+    *   **SUV:**
+        $$P(M_2 \mid D) = \frac{P(M_2)P(D \mid M_2)}{P(D)} = \frac{0.020}{0.035} = \frac{20}{35} = \frac{4}{7} \approx \mathbf{0.5714 \ (57.14\%)}$$
+    *   **Coupe:**
+        $$P(M_3 \mid D) = \frac{P(M_3)P(D \mid M_3)}{P(D)} = \frac{0.009}{0.035} = \frac{9}{35} \approx \mathbf{0.2571 \ (25.71\%)}$$
+
+*   **Conclusion:** Under both interpretations, **SUV** is the most likely model to have produced the defect.
+
+:::tip
+
+**Examiner's Note**
+
+Highlight that $4/7 \approx 57.14\%$ for SUV in Bayes' Theorem formulation. Demonstrating both interpretations ensures total rubric alignment.
+
+:::
+
+---
+
+## Question 3 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+*   **i)** Explain the rules for computing probability, including the addition and multiplication rules, with appropriate examples. **(8 Marks)**
+*   **ii)** What is the fundamental difference between permutation and combination with an example? **(6 Marks)**
+*   **iii)** The monthly electricity bill of households in a city follows a normal distribution, with a mean of $120 and a variance of $49. What is the probability that a randomly selected household has a monthly bill less than $110? **(6 Marks)**
+
+:::
+
+---
+
+### Solution 3 (20 Marks)
+
+#### (i) Rules for Computing Probability (8 Marks)
+
+##### 1. Addition Rule of Probability
+*   **General Addition Rule (Non-Mutually Exclusive Events):**
+    $$P(A \cup B) = P(A) + P(B) - P(A \cap B)$$
+    *Example:* Drawing a King or a Heart from a standard 52-card deck:
+    $$P(\text{King} \cup \text{Heart}) = \frac{4}{52} + \frac{13}{52} - \frac{1}{52} = \frac{16}{52} = \frac{4}{13}$$
+*   **Special Addition Rule (Mutually Exclusive Events, $A \cap B = \emptyset$):**
+    $$P(A \cup B) = P(A) + P(B)$$
+
+##### 2. Multiplication Rule of Probability
+*   **General Multiplication Rule (Dependent Events):**
+    $$P(A \cap B) = P(A) \cdot P(B \mid A)$$
+    *Example:* Drawing two Aces sequentially without replacement:
+    $$P(A_1 \cap A_2) = \frac{4}{52} \times \frac{3}{51} = \frac{12}{2652} = \frac{1}{221}$$
+*   **Special Multiplication Rule (Independent Events, $P(B \mid A) = P(B)$):**
+    $$P(A \cap B) = P(A) \cdot P(B)$$
+
+---
+
+#### (ii) Permutation vs. Combination (6 Marks)
+
+##### 1. Core Distinction
+*   **Permutation ($^n P_r$):** An **ordered arrangement** of $r$ objects selected from $n$ distinct items. **Order matters**.
+    $$^n P_r = \frac{n!}{(n - r)!}$$
+*   **Combination ($^n C_r$):** An **unordered selection** of $r$ objects from $n$ distinct items. **Order does not matter**.
+    $$^n C_r = \binom{n}{r} = \frac{n!}{r!(n - r)!} = \frac{^n P_r}{r!}$$
+
+##### 2. Comparative Concrete Example
+Consider selecting 3 letters from $\{A, B, C, D\}$ ($n = 4, r = 3$):
+*   **Combination:** Grouping $\{A, B, C\}$ is identical to $\{C, B, A\}$.
+    $$^4 C_3 = \frac{4!}{3!1!} = \mathbf{4 \text{ combinations}}$$
+*   **Permutation:** For each selection of 3 letters, there are $3! = 6$ distinct orders ($ABC, ACB, BAC, BCA, CAB, CBA$).
+    $$^4 P_3 = \frac{4!}{(4 - 3)!} = \frac{24}{1} = \mathbf{24 \text{ permutations}}$$
+
+---
+
+#### (iii) Normal Probability Calculation for Electricity Bill (6 Marks)
+
+Let $X$ denote the monthly electricity bill:
+$$X \sim \mathcal{N}(\mu = 120, \sigma^2 = 49) \implies \sigma = \sqrt{49} = \mathbf{7}$$
+
+We seek the probability $P(X < 110)$.
+
+##### 1. Standard Normal Transformation ($Z$-score)
+$$Z = \frac{X - \mu}{\sigma} = \frac{110 - 120}{7} = \frac{-10}{7} \approx \mathbf{-1.4286 \approx -1.43}$$
+
+##### 2. Probability Computation
+$$P(X < 110) = P(Z < -1.43) = \Phi(-1.43) = 1 - \Phi(1.43)$$
+
+From standard normal cumulative distribution tables:
+$$\Phi(1.43) \approx 0.9236$$
+$$P(X < 110) = 1 - 0.9236 = \mathbf{0.0764 \ (7.64\%)}$$
+*(Using exact $Z = -1.4286$ gives $P = 0.07656$)*
+
+:::tip
+
+**Examiner's Note**
+
+State $\sigma = \sqrt{49} = 7$ explicitly. The probability $P(Z < -1.43) = 0.0764$ represents the tail area below $1.43$ standard deviations from the mean.
+
+:::
+
+---
+
+## Question 4 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+*   **i)** Explain the steps involved in hypothesis testing and the importance of formulating null and alternative hypotheses. Provide an example. **(12 Marks)**
+*   **ii)** A random sample of size 100 is taken from a population whose mean is 60 and variance 400. Estimate using central limit theorem, with what probability can we assert that mean of the sample will not differ from $\mu = 60$ by more than 4. **(8 Marks)**
+
+:::
+
+---
+
+### Solution 4 (20 Marks)
+
+#### (i) Steps and Hypothesis Formulation in Statistical Testing (12 Marks)
+
+##### 1. Importance of Null ($H_0$) and Alternative ($H_1$) Hypotheses
+*   **Null Hypothesis ($H_0$):** Specifies a precise numerical parameter claim of no effect or no difference. It provides the probability distribution under which the test statistic is evaluated.
+*   **Alternative Hypothesis ($H_1$):** Specifies the directional (one-tailed) or non-directional (two-tailed) departure to be detected.
+*   *Importance:* Preserves objective falsifiability; scientific validation requires attempting to reject $H_0$ under controlled false-positive probability ($\alpha$).
+
+##### 2. Five-Step Hypothesis Testing Framework
+1.  **Formulate Hypotheses:** Set $H_0: \mu = \mu_0$ versus $H_1: \mu \neq \mu_0$.
+2.  **Select Test Statistic:** Determine sampling distribution ($Z$-test if $n \ge 30$, $t$-test if $n < 30$ and $\sigma$ unknown).
+3.  **Specify Significance Level ($\alpha$):** Fix Type I error threshold (e.g., $\alpha = 0.05 \implies Z_{\text{crit}} = \pm 1.96$).
+4.  **Compute Test Statistic from Data:** Evaluate $Z_{\text{calc}} = \frac{\bar{X} - \mu_0}{\sigma / \sqrt{n}}$.
+5.  **State Statistical Decision:** Reject $H_0$ if test statistic falls into the rejection region ($p\text{-value} \le \alpha$).
+
+---
+
+#### (ii) CLT Estimation of Sample Mean Deviation (8 Marks)
+
+##### 1. Population and Sample Parameters
+*   Sample size: $n = 100$
+*   Population mean: $\mu = 60$
+*   Population variance: $\sigma^2 = 400 \implies \text{Population SD } \sigma = \sqrt{400} = \mathbf{20}$
+
+##### 2. Central Limit Theorem Application
+By the Central Limit Theorem, since $n = 100 \ge 30$, the sample mean $\bar{X}$ is normally distributed:
+$$\bar{X} \sim \mathcal{N}\left(\mu, \sigma_{\bar{X}}^2\right), \quad \text{where } \sigma_{\bar{X}} = \frac{\sigma}{\sqrt{n}} = \frac{20}{\sqrt{100}} = \frac{20}{10} = \mathbf{2.0}$$
+
+##### 3. Probability Formulation
+We want the probability that $\bar{X}$ does not differ from $\mu = 60$ by more than 4:
+$$P(\lvert \bar{X} - 60 \rvert \le 4) = P(60 - 4 \le \bar{X} \le 60 + 4) = P(56 \le \bar{X} \le 64)$$
+
+Standardizing to standard normal variate $Z = \frac{\bar{X} - \mu}{\sigma_{\bar{X}}}$:
+*   For $\bar{X}_1 = 56$:
+    $$z_1 = \frac{56 - 60}{2.0} = \mathbf{-2.0}$$
+*   For $\bar{X}_2 = 64$:
+    $$z_2 = \frac{64 - 60}{2.0} = \mathbf{+2.0}$$
+
+##### 4. Computation
+$$P(-2.0 \le Z \le +2.0) = \Phi(2.0) - \Phi(-2.0)$$
+From standard normal distribution tables:
+$$\Phi(2.0) = 0.9772, \quad \Phi(-2.0) = 1 - 0.9772 = 0.0228$$
+$$P(-2.0 \le Z \le +2.0) = 0.9772 - 0.0228 = \mathbf{0.9544 \ (95.44\%)}$$
+
+*   **Conclusion:** We can assert with **$95.44\%$ confidence** that the sample mean will not differ from the true population mean by more than $4$.
+
+:::tip
+
+**Examiner's Note**
+
+Calculate the Standard Error of the mean first: $\sigma_{\bar{X}} = \frac{\sigma}{\sqrt{n}} = \frac{20}{10} = 2.0$. The interval $[-2\sigma_{\bar{X}}, +2\sigma_{\bar{X}}]$ corresponds directly to the empirical 2-sigma probability of $95.44\%$.
+
+:::
+
+---
+
+## Question 5 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+*   **i)** In an epidemic of certain diseases, 92 children contracted the disease. Of these 41 received no treatment and of these 10 showed after effects. Of the remainder who did receive the treatment, 17 showed after effects. Test hypothesis that the treatment was not effective. **(10 Marks)**
+*   **ii)** Two samples of sizes nine and eight gave the sums of squares of deviations from their respective means equal to 160 and 91 respectively. Can they be regarded as drawn from the same normal population? **(10 Marks)**
+
+:::
+
+---
+
+### Solution 5 (20 Marks)
+
+#### (i) Chi-Square Test of Independence for Disease Treatment (10 Marks)
+
+##### 1. Contingency Table Construction
+Total children $N = 92$.
+*   **No Treatment Group ($41$ children):** $10$ showed after-effects $\implies 41 - 10 = \mathbf{31}$ showed no after-effects.
+*   **Treatment Group ($92 - 41 = 51$ children):** $17$ showed after-effects $\implies 51 - 17 = \mathbf{34}$ showed no after-effects.
+
+| Treatment Group | After Effects (Yes) | No After Effects (No) | Row Total |
+| :--- | :---: | :---: | :---: |
+| **No Treatment** | $a = 10$ | $b = 31$ | $a + b = \mathbf{41}$ |
+| **Treatment** | $c = 17$ | $d = 34$ | $c + d = \mathbf{51}$ |
+| **Column Total** | $a + c = \mathbf{27}$ | $b + d = \mathbf{65}$ | **$N = \mathbf{92}$** |
+
+##### 2. Formulation of Hypotheses
+*   **Null Hypothesis ($H_0$):** The treatment has no effect on the presence of after-effects (treatment and after-effects are independent).
+*   **Alternative Hypothesis ($H_1$):** Treatment and after-effects are dependent.
+
+##### 3. Computation of Chi-Square Test Statistic
+For a $2 \times 2$ table, the Pearson Chi-Square statistic is:
+$$\chi^2 = \frac{N (ad - bc)^2}{(a + b)(c + d)(a + c)(b + d)}$$
+
+Substituting values:
+*   $ad - bc = (10 \times 34) - (31 \times 17) = 340 - 527 = \mathbf{-187}$
+*   $(ad - bc)^2 = (-187)^2 = \mathbf{34,969}$
+*   Denominator: $(41)(51)(27)(65) = \mathbf{3,668,535}$
+
+$$\chi^2 = \frac{92 \times 34,969}{3,668,535} = \frac{3,217,148}{3,668,535} \approx \mathbf{0.8769}$$
+
+*(With Yates' Correction for continuity: $\chi^2_{\text{Yates}} = \frac{92 (\lvert -187 \rvert - 46)^2}{3,668,535} = \frac{92(141)^2}{3,668,535} \approx \mathbf{0.4984}$)*
+
+##### 4. Statistical Decision
+*   **Degrees of Freedom:** $df = (r - 1)(c - 1) = (2 - 1)(2 - 1) = \mathbf{1}$.
+*   **Critical Value:** At $\alpha = 0.05$ with $df = 1$, critical $\chi^2_{0.05, 1} = \mathbf{3.841}$.
+*   **Decision:** Since $\chi^2_{\text{calc}} = 0.8769 < 3.841$, we **fail to reject $H_0$**.
+*   **Conclusion:** There is no statistically significant evidence to conclude that the treatment was effective; the hypothesis that the treatment was not effective is accepted.
+
+---
+
+#### (ii) $F$-Test for Equality of Two Population Variances (10 Marks)
+
+##### 1. Given Data and Sample Variances
+*   **Sample 1:** $n_1 = 9 \implies \nu_1 = n_1 - 1 = 8$.
+    $$\sum (X_{1i} - \bar{X}_1)^2 = 160 \implies s_1^2 = \frac{\sum (X_{1i} - \bar{X}_1)^2}{n_1 - 1} = \frac{160}{8} = \mathbf{20.0}$$
+*   **Sample 2:** $n_2 = 8 \implies \nu_2 = n_2 - 1 = 7$.
+    $$\sum (X_{2i} - \bar{X}_2)^2 = 91 \implies s_2^2 = \frac{\sum (X_{2i} - \bar{X}_2)^2}{n_2 - 1} = \frac{91}{7} = \mathbf{13.0}$$
+
+##### 2. Formulation of Hypotheses
+*   **Null Hypothesis ($H_0$):** $\sigma_1^2 = \sigma_2^2$ (Both samples are drawn from the same normal population with equal variance).
+*   **Alternative Hypothesis ($H_1$):** $\sigma_1^2 \neq \sigma_2^2$ (Population variances differ significantly).
+
+##### 3. Test Statistic ($F$-ratio)
+Placing the larger sample variance in the numerator:
+$$F = \frac{s_1^2}{s_2^2} = \frac{20.0}{13.0} \approx \mathbf{1.5385}$$
+with degrees of freedom $\nu_1 = 8$ (numerator) and $\nu_2 = 7$ (denominator).
+
+##### 4. Statistical Decision
+*   **Critical Value:** At $\alpha = 0.05$ for $df = (8, 7)$, critical $F_{0.05}(8, 7) = \mathbf{3.73}$.
+*   **Decision Rule:** Since $F_{\text{calc}} = 1.54 < F_{\text{crit}} = 3.73$, we **fail to reject $H_0$**.
+*   **Conclusion:** The two samples can be regarded as drawn from the same normal population.
+
+:::tip
+
+**Examiner's Note**
+
+In part (i), state the $2 \times 2$ formula clearly and verify $df = 1$. In part (ii), remember that sample variance divides by $(n - 1)$: $s_1^2 = 160/8 = 20$ and $s_2^2 = 91/7 = 13$, yielding $F = 1.5385$.
+
+:::
+
+---
+
+## Question 6 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+*   **i)** Explain how to conduct a one sample t-test. Provide an example scenario and interpret the results of the test. **(8 Marks)**
+*   **ii)** Experience has shown that 20 percent of a manufactured product is of top quality. On a particular day, the production of 400 articles, only 50 are of top quality. Show that either the production of the day chosen was not a representative sample or the hypothesis of 20 percent was wrong. Based on the day's production, find also the 95 percent confidence limits for the percentage of top-quality products. **(12 Marks)**
+
+:::
+
+---
+
+### Solution 6 (20 Marks)
+
+#### (i) One-Sample $t$-Test Methodology and Interpretation (8 Marks)
+
+##### 1. When to Use
+The one-sample $t$-test assesses whether the mean of a single population ($\mu$) equals a specified benchmark value ($\mu_0$) when the population standard deviation ($\sigma$) is unknown and sample size is small ($n < 30$).
+
+##### 2. Mathematical Formulation
+*   **Test Statistic:**
+    $$t = \frac{\bar{X} - \mu_0}{s / \sqrt{n}}$$
+    where $\bar{X} = \frac{1}{n}\sum X_i$ is sample mean, and $s = \sqrt{\frac{\sum (X_i - \bar{X})^2}{n - 1}}$ is sample standard deviation.
+*   **Degrees of Freedom:** $df = n - 1$.
+
+##### 3. Example Scenario and Interpretation
+*   *Scenario:* A manufacturer claims that battery packs have a mean runtime of $\mu_0 = 50$ hours. A quality auditor tests $n = 16$ units, finding $\bar{X} = 47.5$ hours and $s = 4.0$ hours.
+*   *Calculation:*
+    $$t = \frac{47.5 - 50}{4.0 / \sqrt{16}} = \frac{-2.5}{1.0} = -2.50$$
+*   *Interpretation:* At $\alpha = 0.05$ with $df = 15$, critical $t_{0.05, 15} = 2.131$. Because $\lvert -2.50 \rvert > 2.131$, $H_0$ is rejected. The batteries underperform the claimed 50-hour specification.
+
+---
+
+#### (ii) Test of Proportion and 95% Confidence Interval (12 Marks)
+
+##### 1. Testing the Proportion of Top-Quality Products
+*   Hypothesized population proportion: $P = 0.20 \implies Q = 1 - P = 0.80$
+*   Sample size: $n = 400$
+*   Observed top quality items: $x = 50$
+*   Sample proportion:
+    $$p = \frac{x}{n} = \frac{50}{400} = \mathbf{0.125 \ (12.5\%)}$$
+
+###### Hypotheses:
+*   $H_0: P = 0.20$ (The manufacturing process is producing 20% top-quality items).
+*   $H_1: P \neq 0.20$ (The true proportion differs from 20%).
+
+###### Standard Error and Test Statistic:
+$$\text{SE}(P) = \sqrt{\frac{PQ}{n}} = \sqrt{\frac{(0.20)(0.80)}{400}} = \sqrt{\frac{0.16}{400}} = \sqrt{0.0004} = \mathbf{0.02}$$
+
+$$z = \frac{p - P}{\text{SE}(P)} = \frac{0.125 - 0.20}{0.02} = \frac{-0.075}{0.02} = \mathbf{-3.75}$$
+$$\lvert z \rvert = \mathbf{3.75}$$
+
+###### Decision:
+*   At $\alpha = 0.05$, critical $z_{0.05} = 1.96$; at $\alpha = 0.01$, critical $z_{0.01} = 2.58$.
+*   Since $\lvert z \rvert = 3.75 \gg 2.58$, the difference is **highly statistically significant** ($p < 0.001$).
+*   **Conclusion:** We reject $H_0$. This demonstrates that **either the day chosen was unrepresentative (e.g., machine fault) or the hypothesis that 20% of products are top quality is false**.
+
+---
+
+##### 2. 95% Confidence Limits for the True Proportion
+Based on sample evidence ($p = 0.125, q = 0.875, n = 400$):
+
+$$\text{SE}_{\text{sample}}(p) = \sqrt{\frac{pq}{n}} = \sqrt{\frac{(0.125)(0.875)}{400}} = \sqrt{\frac{0.109375}{400}} = \sqrt{0.00027344} \approx \mathbf{0.016536}$$
+
+Margin of Error ($E$):
+$$E = z_{0.05/2} \times \text{SE}_{\text{sample}} = 1.96 \times 0.016536 \approx \mathbf{0.03241 \ (3.24\%)}$$
+
+95% Confidence Interval:
+$$\text{CI} = p \pm E = 0.1250 \pm 0.03241 = [\mathbf{0.0926}, \mathbf{0.1574}]$$
+
+In percentage terms:
+$$\mathbf{9.26\% \le P \le 15.74\%}$$
+
+:::tip
+
+**Examiner's Note**
+
+Show that $\lvert z \rvert = 3.75$ heavily exceeds $1.96$ and $2.58$. Notice that the hypothesized value $20\%$ ($0.20$) lies completely outside the $95\%$ confidence interval $[9.26\%, 15.74\%]$, confirming the hypothesis rejection.
+
+:::
+
+---
+
+## Question 7 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+*   **i)** Explain how ANOVA differs from t-tests in hypothesis testing. Discuss why ANOVA is preferable when comparing the means of more than two groups. **(5 Marks)**
+*   **ii)** The following data is about the mistakes made by 4 photographic laboratory technicians in 5 successive days. Is there any significance difference in performance among the technicians? **(15 Marks)**
+
+| Technician I $X_1$ | Technician II $X_2$ | Technician III $X_3$ | Technician IV $X_4$ |
+| :---: | :---: | :---: | :---: |
+| 4 | 14 | 10 | 9 |
+| 14 | 9 | 12 | 12 |
+| 10 | 12 | 7 | 8 |
+| 8 | 10 | 15 | 10 |
+| 11 | 14 | 11 | 11 |
+
+:::
+
+---
+
+### Solution 7 (20 Marks)
+
+#### (i) ANOVA vs. Multiple $t$-Tests: The Family-Wise Error Problem (5 Marks)
+
+##### 1. Core Difference
+*   **Two-Sample $t$-Test:** Compares the means of exactly two groups ($\mu_1 = \mu_2$).
+*   **ANOVA ($F$-Test):** Simultaneously tests the equality of $k \ge 3$ group means ($H_0: \mu_1 = \mu_2 = \dots = \mu_k$) by decomposing total variance into between-group variance and within-group error variance.
+
+##### 2. Why ANOVA is Preferable (Family-Wise Error Rate Inflation)
+To compare $k$ groups using pairwise $t$-tests, the number of independent pairwise tests required is:
+$$C = \binom{k}{2} = \frac{k(k - 1)}{2}$$
+For $k = 4$ groups, $C = \binom{4}{2} = 6$ individual tests are required.
+
+If each test is conducted at significance level $\alpha = 0.05$, the **Family-Wise Type I Error Rate ($\alpha_{\text{FW}}$)** explodes:
+$$\alpha_{\text{FW}} = 1 - (1 - \alpha)^C = 1 - (0.95)^6 = 1 - 0.7351 = \mathbf{0.2649 \ (26.49\%)}$$
+*   **The Hazard:** There is a $26.5\%$ chance of finding at least one falsely significant difference purely by random chance.
+*   **ANOVA Solution:** ANOVA tests all $k$ groups simultaneously in a single omnibus test while strictly preserving the Type I error rate at $\alpha = 0.05$.
+
+---
+
+#### (ii) One-Way ANOVA for Technician Mistakes Data (15 Marks)
+
+##### 1. Data Summary and Group Totals
+$k = 4$ technicians, $n = 5$ days each, Total observations $N = 4 \times 5 = \mathbf{20}$.
+
+| Day | Tech I ($X_1$) | Tech II ($X_2$) | Tech III ($X_3$) | Tech IV ($X_4$) |
+| :---: | :---: | :---: | :---: | :---: |
+| 1 | 4 | 14 | 10 | 9 |
+| 2 | 14 | 9 | 12 | 12 |
+| 3 | 10 | 12 | 7 | 8 |
+| 4 | 8 | 10 | 15 | 10 |
+| 5 | 11 | 14 | 11 | 11 |
+| **Sum ($T_j$)** | $T_1 = \mathbf{47}$ | $T_2 = \mathbf{59}$ | $T_3 = \mathbf{55}$ | $T_4 = \mathbf{50}$ |
+| **Mean ($\bar{X}_j$)** | $\bar{X}_1 = 9.4$ | $\bar{X}_2 = 11.8$ | $\bar{X}_3 = 11.0$ | $\bar{X}_4 = 10.0$ |
+
+##### 2. Sums of Squares Calculations
+1.  **Grand Total ($G$):**
+    $$G = \sum T_j = 47 + 59 + 55 + 50 = \mathbf{211}$$
+
+2.  **Correction Factor (CF):**
+    $$\text{CF} = \frac{G^2}{N} = \frac{(211)^2}{20} = \frac{44,521}{20} = \mathbf{2,226.05}$$
+
+3.  **Raw Sum of Squares ($\sum X^2$):**
+    $$\sum X_1^2 = 16 + 196 + 100 + 64 + 121 = 497$$
+    $$\sum X_2^2 = 196 + 81 + 144 + 100 + 196 = 717$$
+    $$\sum X_3^2 = 100 + 144 + 49 + 225 + 121 = 639$$
+    $$\sum X_4^2 = 81 + 144 + 64 + 100 + 121 = 510$$
+    $$\sum X^2 = 497 + 717 + 639 + 510 = \mathbf{2,363.0}$$
+
+4.  **Total Sum of Squares (TSS):**
+    $$\text{TSS} = \sum X^2 - \text{CF} = 2,363.0 - 2,226.05 = \mathbf{136.95}$$
+    $$df_{\text{total}} = N - 1 = 20 - 1 = \mathbf{19}$$
+
+5.  **Between Technicians Sum of Squares (SSB):**
+    $$\text{SSB} = \frac{\sum T_j^2}{n} - \text{CF} = \frac{47^2 + 59^2 + 55^2 + 50^2}{5} - 2,226.05$$
+    $$\text{SSB} = \frac{2,209 + 3,481 + 3,025 + 2,500}{5} - 2,226.05 = \frac{11,215}{5} - 2,226.05 = 2,243.0 - 2,226.05 = \mathbf{16.95}$$
+    $$df_{\text{between}} = k - 1 = 4 - 1 = \mathbf{3}$$
+
+6.  **Within Technicians Sum of Squares (Error SS, SSW):**
+    $$\text{SSW} = \text{TSS} - \text{SSB} = 136.95 - 16.95 = \mathbf{120.00}$$
+    $$df_{\text{within}} = N - k = 20 - 4 = \mathbf{16}$$
+
+##### 3. One-Way ANOVA Table
+| Source of Variation | Sum of Squares (SS) | Degrees of Freedom ($df$) | Mean Square (MS) | Variance Ratio ($F_{\text{calc}}$) | Critical $F_{0.05}$ |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Between Technicians** | $16.95$ | $3$ | $\text{MSB} = \frac{16.95}{3} = 5.65$ | $F = \frac{5.65}{7.50} = \mathbf{0.7533}$ | $F(3, 16) = \mathbf{3.24}$ |
+| **Within Technicians (Error)** | $120.00$ | $16$ | $\text{MSW} = \frac{120.00}{16} = 7.50$ | - | - |
+| **Total** | **136.95** | **19** | - | - | - |
+
+##### 4. Statistical Decision and Conclusion
+*   **Hypotheses:**
+    *   $H_0: \mu_1 = \mu_2 = \mu_3 = \mu_4$ (No significant difference in mistake performance among the 4 technicians).
+    *   $H_1$: At least one technician's mean mistake count differs significantly.
+*   **Decision Rule:** Critical value $F_{0.05}(3, 16) = \mathbf{3.24}$.
+*   Since $F_{\text{calc}} = 0.7533 < F_{\text{crit}} = 3.24$, we **fail to reject the null hypothesis $H_0$**.
+*   **Conclusion:** There is no statistically significant difference in performance (number of mistakes made) among the four photographic laboratory technicians.
+
+:::tip
+
+**Examiner's Note**
+
+Notice how within-group sum of squares resolves to an exact integer: $\text{SSW} = 136.95 - 16.95 = 120.0 \implies \text{MSW} = 120/16 = 7.5$. State the Family-Wise Error Rate formula $\alpha_{\text{FW}} = 1 - (1-\alpha)^C$ in part (i) to earn full theory marks.
+
+:::

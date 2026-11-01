@@ -1,0 +1,612 @@
+---
+sidebar_position: 2
+title: May 2025
+description: Model answers and detailed step-by-step solutions for the May 2025 semester examination in Inferential Statistics (21CSC529T).
+tags: [inferential-statistics, exam-prep, semester-exam, previous-year-papers]
+toc_max_heading_level: 3
+---
+
+# May 2025
+
+> **Exam -** Semester Examination  
+> **Session -** May 2025  
+
+---
+
+## Question 1 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+*   **i)** The competitors in a musical contest were ranked by the by 3 judges. Which pair of judges have more or less the same taste in music? **(12 Marks)**
+    *   RankbyJudgeA: 6 5 3 10 2 4 9 7 8 1
+    *   RankbyJudgeB: 5 8 4 7 10 2 1 6 9 3
+    *   RankbyJudgeC: 4 9 8 1 2 3 10 5 7 6
+*   **ii)** Explain coefficient of skewness and kurtosis and their role in analyzing the data. **(8 Marks)**
+
+:::
+
+---
+
+### Solution 1 (20 Marks)
+
+#### (i) Spearman's Rank Correlation Analysis Among Judges (12 Marks)
+
+Let $R_A, R_B, R_C$ denote the ranks assigned by Judge A, Judge B, and Judge C to $N = 10$ competitors.
+
+##### 1. Formula
+Spearman's rank correlation coefficient between two judges $X$ and $Y$ is:
+$$\rho = 1 - \frac{6 \sum d^2}{N(N^2 - 1)}$$
+where $d = R_X - R_Y$ and $N(N^2 - 1) = 10(100 - 1) = \mathbf{990}$.
+
+##### 2. Rank Difference Computations
+
+| Competitor | $R_A$ | $R_B$ | $R_C$ | $d_{AB} = R_A - R_B$ | $d_{AB}^2$ | $d_{BC} = R_B - R_C$ | $d_{BC}^2$ | $d_{AC} = R_A - R_C$ | $d_{AC}^2$ |
+| :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| 1 | 6 | 5 | 4 | $+1$ | 1 | $+1$ | 1 | $+2$ | 4 |
+| 2 | 5 | 8 | 9 | $-3$ | 9 | $-1$ | 1 | $-4$ | 16 |
+| 3 | 3 | 4 | 8 | $-1$ | 1 | $-4$ | 16 | $-5$ | 25 |
+| 4 | 10 | 7 | 1 | $+3$ | 9 | $+6$ | 36 | $+9$ | 81 |
+| 5 | 2 | 10 | 2 | $-8$ | 64 | $+8$ | 64 | $0$ | 0 |
+| 6 | 4 | 2 | 3 | $+2$ | 4 | $-1$ | 1 | $+1$ | 1 |
+| 7 | 9 | 1 | 10 | $+8$ | 64 | $-9$ | 81 | $-1$ | 1 |
+| 8 | 7 | 6 | 5 | $+1$ | 1 | $+1$ | 1 | $+2$ | 4 |
+| 9 | 8 | 9 | 7 | $-1$ | 1 | $+2$ | 4 | $+1$ | 1 |
+| 10 | 1 | 3 | 6 | $-2$ | 4 | $-3$ | 9 | $-5$ | 25 |
+| **Total** | - | - | - | - | $\sum d_{AB}^2 = \mathbf{158}$ | - | $\sum d_{BC}^2 = \mathbf{214}$ | - | $\sum d_{AC}^2 = \mathbf{158}$ |
+
+##### 3. Correlation Coefficients
+*   **Between Judge A and Judge B:**
+    $$\rho_{AB} = 1 - \frac{6 \times 158}{990} = 1 - \frac{948}{990} = \frac{42}{990} = \frac{7}{165} \approx \mathbf{+0.0424}$$
+
+*   **Between Judge B and Judge C:**
+    $$\rho_{BC} = 1 - \frac{6 \times 214}{990} = 1 - \frac{1284}{990} = 1 - 1.2970 = -\frac{294}{990} = -\frac{49}{165} \approx \mathbf{-0.2970}$$
+
+*   **Between Judge A and Judge C:**
+    $$\rho_{AC} = 1 - \frac{6 \times 158}{990} = 1 - \frac{948}{990} = \frac{42}{990} = \frac{7}{165} \approx \mathbf{+0.0424}$$
+
+##### 4. Conclusion
+*   $\rho_{AB} = \rho_{AC} = +0.0424 > 0$, indicating positive (though weak) agreement between Judge A and Judge B, as well as between Judge A and Judge C.
+*   $\rho_{BC} = -0.2970 < 0$, indicating opposite musical preferences between Judge B and Judge C.
+*   **Result:** **Judge A and Judge B** (and equally **Judge A and Judge C**) have more or less the same taste in music.
+
+---
+
+#### (ii) Coefficients of Skewness and Kurtosis in Data Analysis (8 Marks)
+
+##### 1. Coefficient of Skewness
+Skewness measures the degree of **asymmetry** of a distribution around its mean.
+*   **Karl Pearson's Formula:**
+    $$Sk_p = \frac{\text{Mean} - \text{Mode}}{\sigma} \quad \text{or} \quad \frac{3(\text{Mean} - \text{Median})}{\sigma}$$
+*   **Moment-Based Measure ($\beta_1, \gamma_1$):**
+    $$\gamma_1 = \sqrt{\beta_1} = \frac{\mu_3}{\mu_2^{3/2}} = \frac{\mu_3}{\sigma^3}$$
+*   **Interpretation:**
+    *   $\gamma_1 = 0$: Symmetric distribution (Normal distribution).
+    *   $\gamma_1 > 0$: Positively skewed (tail extends to the right; $\text{Mean} > \text{Median} > \text{Mode}$).
+    *   $\gamma_1 < 0$: Negatively skewed (tail extends to the left; $\text{Mean} < \text{Median} < \text{Mode}$).
+
+##### 2. Coefficient of Kurtosis
+Kurtosis measures the **peakedness and tail-weight** (outlier proneness) of a frequency distribution relative to a normal curve.
+*   **Moment-Based Measure ($\beta_2, \gamma_2$):**
+    $$\beta_2 = \frac{\mu_4}{\mu_2^2} = \frac{\mu_4}{\sigma^4}, \quad \gamma_2 = \beta_2 - 3$$
+*   **Interpretation:**
+    *   $\beta_2 = 3$ ($\gamma_2 = 0$): **Mesokurtic** (standard Gaussian bell shape).
+    *   $\beta_2 > 3$ ($\gamma_2 > 0$): **Leptokurtic** (sharp central peak with heavy, fat tails; indicates high outlier probability).
+    *   $\beta_2 < 3$ ($\gamma_2 < 0$): **Platykurtic** (flat-topped curve with thin, light tails).
+
+:::tip
+
+**Examiner's Note**
+
+Notice that $\sum d_{AB}^2 = \sum d_{AC}^2 = 158 \implies \rho_{AB} = \rho_{AC} = +0.0424$. For part (ii), state the moment ratios $\beta_1 = \frac{\mu_3^2}{\mu_2^3}$ and $\beta_2 = \frac{\mu_4}{\mu_2^2}$ alongside their geometric meanings.
+
+:::
+
+---
+
+## Question 2 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+Explain Baye's theorem with its usefulness. Also solve the following problem. Box 1 contains 1000 bulbs of which 10% are defective. Box 2 contains 2000 bulbs of which 5% are defective. Two bulbs are drawn (without replacement) from a randomly selected box. (i) Find the probability that both balls are defective and (ii) assuming that both are defective, find the probability that they came from box 1. **(20 Marks)**
+
+:::
+
+---
+
+### Solution 2 (20 Marks)
+
+#### 1. Bayes' Theorem: Statement and Usefulness (6 Marks)
+
+##### Mathematical Formulation:
+Let $B_1, B_2, \dots, B_k$ be a set of mutually exclusive and exhaustive events with prior probabilities $P(B_i) > 0$. For any observed event $A$ with $P(A) > 0$:
+
+$$
+P(B_i \mid A) = \frac{P(B_i) P(A \mid B_i)}{P(A)} = \frac{P(B_i) P(A \mid B_i)}{\sum_{j=1}^k P(B_j) P(A \mid B_j)}
+$$
+
+##### Practical Usefulness:
+1.  **Inversion of Conditional Probability:** Updates prior beliefs ($P(B_i)$) to posterior probabilities ($P(B_i \mid A)$) in light of newly acquired empirical evidence.
+2.  **Medical Diagnostics & Industrial Quality Control:** Computes the probability that a patient has a condition given a positive lab test, or that a defective product originated from a specific machine line.
+
+---
+
+#### 2. Bulb Defect Problem Formulation (14 Marks)
+
+##### Event Definitions:
+*   $B_1$: Box 1 is selected $\implies P(B_1) = \frac{1}{2} = 0.5$
+*   $B_2$: Box 2 is selected $\implies P(B_2) = \frac{1}{2} = 0.5$
+*   $D$: Both drawn bulbs are defective.
+
+##### Box Compositions:
+*   **Box 1:** $N_1 = 1000$ total bulbs, $10\%$ defective $\implies 100$ defective, $900$ non-defective.
+*   **Box 2:** $N_2 = 2000$ total bulbs, $5\%$ defective $\implies 100$ defective, $1900$ non-defective.
+
+##### Conditional Probabilities (Without Replacement):
+*   From Box 1:
+    $$P(D \mid B_1) = \frac{\binom{100}{2}}{\binom{1000}{2}} = \frac{100 \times 99}{1000 \times 999} = \frac{9900}{999000} = \frac{11}{1110} \approx \mathbf{0.009910}$$
+
+*   From Box 2:
+    $$P(D \mid B_2) = \frac{\binom{100}{2}}{\binom{2000}{2}} = \frac{100 \times 99}{2000 \times 1999} = \frac{9900}{3998000} = \frac{99}{39980} \approx \mathbf{0.002476}$$
+
+---
+
+##### Part (i): Total Probability That Both Bulbs Are Defective (7 Marks)
+By the Law of Total Probability:
+$$P(D) = P(B_1) P(D \mid B_1) + P(B_2) P(D \mid B_2)$$
+$$P(D) = \frac{1}{2} \left(\frac{11}{1110}\right) + \frac{1}{2} \left(\frac{99}{39980}\right) = \frac{1}{2} (0.0099099 + 0.0024762)$$
+$$P(D) = \frac{1}{2} (0.0123861) \approx \mathbf{0.006193 \ (0.6193\%)}$$
+
+In exact fractional form:
+$$P(D) = \frac{54,967}{8,875,560} \approx \mathbf{0.006193}$$
+
+*(Large-population binomial approximation: $P(D \mid B_1) = 0.10^2 = 0.01$, $P(D \mid B_2) = 0.05^2 = 0.0025 \implies P(D) = 0.5(0.01 + 0.0025) = \mathbf{0.00625}$)*
+
+---
+
+##### Part (ii): Posterior Probability That Both Came from Box 1 (7 Marks)
+Applying Bayes' Theorem:
+$$P(B_1 \mid D) = \frac{P(B_1) P(D \mid B_1)}{P(D)}$$
+$$P(B_1 \mid D) = \frac{\frac{1}{2} \times \frac{11}{1110}}{\frac{54,967}{8,875,560}} = \frac{3,998}{4,997} \approx \mathbf{0.8001 \ (80.01\%)}$$
+
+*(Using large-population approximation: $P(B_1 \mid D) = \frac{0.5 \times 0.010}{0.00625} = \frac{0.005}{0.00625} = \frac{4}{5} = \mathbf{0.8000 \ (80.00\%)}$)*
+
+*   **Final Answer:**
+    1.  $P(\text{Both Defective}) \approx \mathbf{0.006193}$ (or $\mathbf{0.00625}$).
+    2.  $P(\text{Box 1} \mid \text{Both Defective}) \approx \mathbf{80.01\%}$ (or $\mathbf{80.00\%}$).
+
+:::tip
+
+**Examiner's Note**
+
+Both the exact sampling without replacement ($\frac{3998}{4997} \approx 80.01\%$) and the binomial approximation ($\frac{4}{5} = 80.00\%$) yield virtually identical answers due to large lot sizes ($1000$ and $2000$). Note that the question prompt prints "both balls" as an exam typo for "both bulbs".
+
+:::
+
+---
+
+## Question 3 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+Explain briefly about the role of binomial, Poisson and normal distributions in data analysis with required examples. **(20 Marks)**
+
+:::
+
+---
+
+### Solution 3 (20 Marks)
+
+#### 1. The Binomial Distribution (6 Marks)
+
+##### Definition & Mathematical Model:
+Models the number of successes $k$ in $n$ independent and identical Bernoulli trials with constant probability of success $p$:
+$$P(X = k) = \binom{n}{k} p^k (1 - p)^{n - k}, \quad k \in \{0, 1, \dots, n\}$$
+$$\text{Mean: } \mu = np, \quad \text{Variance: } \sigma^2 = npq \quad (\text{Variance } < \text{ Mean})$$
+
+##### Role in Data Analysis:
+*   **Binary Outcome Modeling:** Serves as the foundation for A/B testing conversion rates, customer churn, and click-through analysis.
+*   **Acceptance Sampling in Manufacturing:** Evaluates lot quality by determining the probability of observing $k$ defective units in a sample of size $n$.
+*   *Concrete Example:* In clinical trials testing a vaccine with an $80\%$ efficacy rate ($p = 0.80$) on $n = 20$ patients, calculating the probability that at least 18 patients develop immunity.
+
+---
+
+#### 2. The Poisson Distribution (7 Marks)
+
+##### Definition & Mathematical Model:
+Models the frequency of rare, independent events occurring over a continuous interval of time, area, or volume at a constant average rate $\lambda$:
+$$P(X = k) = \frac{e^{-\lambda} \lambda^k}{k!}, \quad k \in \{0, 1, 2, \dots\}$$
+$$\text{Mean: } \mathbb{E}[X] = \lambda, \quad \text{Variance: } \operatorname{Var}(X) = \lambda \quad (\text{Equidispersion})$$
+
+##### Role in Data Analysis:
+*   **Arrival Processes & Queueing Theory:** Models customer traffic at bank tellers, website server hits per second, and network packet arrivals.
+*   **Rare Event Reliability Modeling:** Accurately models industrial equipment breakdowns, insurance claims per year, or defects per square meter of fabric.
+*   *Concrete Example:* If a cloud web server experiences an average of $\lambda = 4$ downtime incidents per month, calculating the probability of zero incidents in a given month ($P(X=0) = e^{-4} \approx 0.0183$).
+
+---
+
+#### 3. The Normal (Gaussian) Distribution (7 Marks)
+
+##### Definition & Mathematical Model:
+The continuous bell-shaped distribution governing continuous variables influenced by multiple additive independent factors:
+$$f(x) = \frac{1}{\sigma \sqrt{2\pi}} \exp\left(-\frac{(x - \mu)^2}{2\sigma^2}\right), \quad -\infty < x < +\infty$$
+$$\text{Mean} = \text{Median} = \text{Mode} = \mu, \quad \operatorname{Var}(X) = \sigma^2$$
+
+##### Role in Data Analysis:
+*   **Universal Sampling Distribution (Central Limit Theorem):** The distribution of sample means $\bar{X}$ converges to normality as $n \ge 30$, providing the mathematical basis for confidence intervals, $Z$-tests, $t$-tests, and regression residual analysis.
+*   **Process Capability & Six Sigma:** Evaluates industrial quality control limits set at $\mu \pm 3\sigma$ ($99.73\%$ process tolerance).
+*   *Concrete Example:* Modeling the distribution of employee annual salaries or student standardized test scores to construct fair grading curves and identify statistical outliers.
+
+##### Summary Comparison:
+| Distribution | Type | Support | Parameters | Variance vs. Mean | Primary Analytic Role |
+| :--- | :--- | :--- | :--- | :--- | :--- |
+| **Binomial** | Discrete | $k \in \{0, 1, \dots, n\}$ | $n, p$ | $\sigma^2 < \mu$ | Proportions and success/failure trials |
+| **Poisson** | Discrete | $k \in \{0, 1, 2, \dots\}$ | $\lambda$ | $\sigma^2 = \mu$ | Rate of rare events in time/space |
+| **Normal** | Continuous | $x \in (-\infty, +\infty)$ | $\mu, \sigma$ | Independent | CLT inference, errors, parametric modeling |
+
+:::tip
+
+**Examiner's Note**
+
+Include the probability formulas, moment relations ($\sigma^2 < \mu$ for Binomial; $\sigma^2 = \mu$ for Poisson), and concrete numerical examples for each distribution.
+
+:::
+
+---
+
+## Question 4 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+*   **i)** Explain power of the statistical testing with examples **(10 Marks)**
+*   **ii)** The lifetime of a certain type of battery is normally distributed with mean value 10 hours and standard deviation 1 hour. There are four batteries in a package. What lifetime value is such that the total lifetime of all batteries in a package exceeds that value for only 5% of all packages? **(10 Marks)**
+
+:::
+
+---
+
+### Solution 4 (20 Marks)
+
+#### (i) Power of a Statistical Test (10 Marks)
+
+##### 1. Mathematical Definition
+The **Power of a Hypothesis Test** is the probability of correctly rejecting a false null hypothesis:
+
+$$
+\text{Power} = 1 - \beta = P(\text{Reject } H_0 \mid H_1 \text{ is true})
+$$
+
+where $\beta$ is the probability of committing a **Type II Error** (failing to detect a real effect).
+
+##### 2. Decision Matrix
+| Reality \ Decision | Fail to Reject $H_0$ | Reject $H_0$ |
+| :--- | :--- | :--- |
+| **$H_0$ is True** | Correct Decision ($1 - \alpha$) | Type I Error ($\alpha$) |
+| **$H_0$ is False** | Type II Error ($\beta$) | **Power of the Test ($1 - \beta$)** |
+
+##### 3. Determinants of Test Power
+1.  **Effect Size ($\delta = \mu_1 - \mu_0$):** Larger true differences between groups are easier to detect, yielding higher power.
+2.  **Sample Size ($n$):** Increasing $n$ shrinks standard error ($\sigma / \sqrt{n}$), tightening the sampling distribution and increasing power.
+3.  **Significance Level ($\alpha$):** Relaxing $\alpha$ from $0.01$ to $0.05$ enlarges the rejection region, lowering $\beta$ and raising power.
+4.  **Population Variance ($\sigma^2$):** Lower noise/variability increases test power.
+
+##### 4. Applied Example
+In pharmaceutical drug trials, a power of $0.80$ ($80\%$) means that if a new drug is genuinely effective, the trial has an $80\%$ probability of achieving a statistically significant result, with a $20\%$ risk of missing the medical breakthrough ($\beta = 0.20$).
+
+---
+
+#### (ii) Battery Package Lifetime Percentile Calculation (10 Marks)
+
+##### 1. Parameters of Individual Batteries
+Let $X_i$ denote the lifetime of battery $i$ in hours:
+$$X_i \sim \text{i.i.d. } \mathcal{N}(\mu = 10, \sigma^2 = 1^2), \quad i \in \{1, 2, 3, 4\}$$
+
+##### 2. Distribution of Total Package Lifetime ($T$)
+The package contains $n = 4$ independent batteries. The total lifetime is:
+$$T = X_1 + X_2 + X_3 + X_4$$
+
+By the additive (reproductive) property of independent normal variables:
+*   **Mean of Total Lifetime:**
+    $$\mu_T = \mathbb{E}[T] = \sum_{i=1}^4 \mathbb{E}[X_i] = 4 \times 10 = \mathbf{40 \text{ hours}}$$
+*   **Variance of Total Lifetime:**
+    $$\sigma_T^2 = \operatorname{Var}(T) = \sum_{i=1}^4 \operatorname{Var}(X_i) = 4 \times 1^2 = \mathbf{4 \text{ hours}^2}$$
+*   **Standard Deviation of Total Lifetime:**
+    $$\sigma_T = \sqrt{4} = \mathbf{2 \text{ hours}}$$
+
+Therefore, $T \sim \mathcal{N}(\mu_T = 40, \sigma_T^2 = 4)$.
+
+##### 3. Determining the 95th Percentile Lifetime Value ($t_0$)
+We seek the value $t_0$ such that the total package lifetime exceeds $t_0$ for only $5\%$ of packages:
+$$P(T > t_0) = 0.05 \iff P(T \le t_0) = 0.95$$
+
+Standardizing to the standard normal variate $Z = \frac{T - \mu_T}{\sigma_T}$:
+$$P\left(Z \le \frac{t_0 - 40}{2}\right) = 0.95$$
+
+From standard normal distribution tables, the critical value corresponding to a cumulative probability of $0.95$ is:
+$$z_{0.05} = \mathbf{1.645}$$
+
+Setting up the algebraic equality:
+$$\frac{t_0 - 40}{2} = 1.645$$
+$$t_0 - 40 = 2 \times 1.645 = 3.29$$
+$$\mathbf{t_0 = 43.29 \text{ hours}}$$
+
+*   **Conclusion:** The lifetime value exceeded by only $5\%$ of all packages is **$43.29$ hours**.
+
+:::tip
+
+**Examiner's Note**
+
+State that variances add for independent variables ($\sigma_T^2 = 4 \times 1 = 4 \implies \sigma_T = 2$). Using critical $z = 1.645$ yields the exact answer $t_0 = 40 + 3.29 = 43.29\text{ hours}$.
+
+:::
+
+---
+
+## Question 5 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+*   **i)** Before an increase in excise duty on tea, 800 people out of a sample of 1000 were consumers of tea. After the increase in excise duty, 800 people out of a sample of 1200 were consumers of tea. Find whether there is any significant decrease in the consumption of tea after the increase of excise duty. **(8 Marks)**
+*   **ii)** In an epidemic of certain disease, 92 children contacted the disease. Of these 41 received no treatment and of these 10 showed after effects. Of the remainder who did receive the treatment, 17 showed after effects. Test hypothesis that the treatment was not effective. Also explain the uses of chi-square test in different scenarios. **(12 Marks)**
+
+:::
+
+---
+
+### Solution 5 (20 Marks)
+
+#### (i) Testing Difference Between Proportions of Tea Consumers (8 Marks)
+
+##### 1. Sample Data
+*   **Sample 1 (Before tax increase):** $n_1 = 1000, \quad x_1 = 800 \implies p_1 = \frac{800}{1000} = \mathbf{0.8000}$
+*   **Sample 2 (After tax increase):** $n_2 = 1200, \quad x_2 = 800 \implies p_2 = \frac{800}{1200} = \frac{2}{3} \approx \mathbf{0.6667}$
+
+##### 2. Hypotheses
+*   **Null Hypothesis ($H_0$):** $P_1 = P_2$ (Excise duty increase caused no change in tea consumption).
+*   **Alternative Hypothesis ($H_1$):** $P_1 > P_2$ (Significant decrease in consumption; one-tailed test).
+
+##### 3. Pooled Proportion and Standard Error
+Under $H_0$, pool both samples:
+$$\hat{P} = \frac{x_1 + x_2}{n_1 + n_2} = \frac{800 + 800}{1000 + 1200} = \frac{1600}{2200} = \frac{8}{11} \approx \mathbf{0.7273}$$
+$$\hat{Q} = 1 - \hat{P} = \frac{3}{11} \approx \mathbf{0.2727}$$
+
+Standard Error of the difference:
+$$\text{SE}(p_1 - p_2) = \sqrt{\hat{P}\hat{Q} \left(\frac{1}{n_1} + \frac{1}{n_2}\right)} = \sqrt{\left(\frac{8}{11}\right)\left(\frac{3}{11}\right) \left(\frac{1}{1000} + \frac{1}{1200}\right)}$$
+$$\text{SE} = \sqrt{\frac{24}{121} \times \left(0.001 + 0.0008333\right)} = \sqrt{0.198347 \times 0.0018333} = \sqrt{0.0003636} \approx \mathbf{0.01907}$$
+
+##### 4. Test Statistic Computation
+$$z = \frac{p_1 - p_2}{\text{SE}} = \frac{0.8000 - 0.6667}{0.01907} = \frac{0.1333}{0.01907} \approx \mathbf{6.99}$$
+
+##### 5. Statistical Decision
+*   **Critical Value:** For a one-tailed test at $\alpha = 0.05$, critical $z_{0.05} = 1.645$; at $\alpha = 0.01$, critical $z_{0.01} = 2.33$.
+*   Since $z_{\text{calc}} = 6.99 \gg 2.33$, the result is **overwhelmingly statistically significant** ($p < 0.0001$).
+*   **Conclusion:** Reject $H_0$. There is a **highly significant decrease in the consumption of tea** following the increase in excise duty.
+
+---
+
+#### (ii) Chi-Square Test for Treatment Effectiveness and Methodological Uses (12 Marks)
+
+##### 1. Contingency Table Construction
+Total children $N = 92$.
+*   No Treatment: $41$ children $\implies 10$ with after-effects, $31$ without.
+*   Treatment: $92 - 41 = 51$ children $\implies 17$ with after-effects, $34$ without.
+
+| Group | After Effects ($Y=1$) | No After Effects ($Y=0$) | Total |
+| :--- | :---: | :---: | :---: |
+| **No Treatment** | $a = 10$ | $b = 31$ | $a + b = \mathbf{41}$ |
+| **Treatment** | $c = 17$ | $d = 34$ | $c + d = \mathbf{51}$ |
+| **Total** | $a + c = \mathbf{27}$ | $b + d = \mathbf{65}$ | **$N = \mathbf{92}$** |
+
+##### 2. Chi-Square Test Computation
+$$\chi^2 = \frac{N (ad - bc)^2}{(a + b)(c + d)(a + c)(b + d)}$$
+$$ad - bc = (10 \times 34) - (31 \times 17) = 340 - 527 = -187 \implies (ad - bc)^2 = 34,969$$
+$$\text{Denominator} = (41)(51)(27)(65) = 3,668,535$$
+$$\chi^2 = \frac{92 \times 34,969}{3,668,535} = \frac{3,217,148}{3,668,535} \approx \mathbf{0.8769}$$
+
+*   **Decision:** For $df = (2 - 1)(2 - 1) = 1$ at $\alpha = 0.05$, critical $\chi^2_{0.05, 1} = \mathbf{3.841}$.
+*   Since $\chi^2_{\text{calc}} = 0.8769 < 3.841$, we **fail to reject $H_0$**.
+*   **Conclusion:** The data supports the hypothesis that the **treatment was not effective**.
+
+##### 3. Uses of the Chi-Square Test in Different Scenarios
+1.  **Test of Independence of Attributes:** Assesses whether two categorical variables (e.g., smoking status and lung cancer) are statistically independent in an $r \times c$ table.
+2.  **Test of Goodness of Fit:** Evaluates whether observed sample frequencies conform to a specified theoretical distribution (Binomial, Poisson, Normal).
+3.  **Test of Homogeneity:** Evaluates whether multiple independent populations share the same underlying proportion distribution across categories.
+4.  **Test of Population Variance:** Tests whether sample variance $s^2$ from a normal population conforms to a hypothesized value $\sigma_0^2$ via $\chi^2 = \frac{(n-1)s^2}{\sigma_0^2}$.
+
+:::tip
+
+**Examiner's Note**
+
+In part (i), pooling is mandatory under $H_0: P_1 = P_2$, yielding $\hat{P} = 1600/2200 = 8/11$ and $z = 6.99$. In part (ii), listing the 4 distinct uses of $\chi^2$ fulfills the second half of the question.
+
+:::
+
+---
+
+## Question 6 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+Two random samples gave the following data. Test whether the population have come from the same population. **(20 Marks)**
+
+*   Sample 1: 20 16 26 27 23 22 18 24 25 19
+*   Sample 2: 17 23 32 25 22 24 28 18 31 33 20 27
+
+:::
+
+---
+
+### Solution 6 (20 Marks)
+
+To test whether two independent samples are drawn from the **same normal population**, we must verify two criteria:
+1.  **Equality of Variances:** $\sigma_1^2 = \sigma_2^2$ (tested via Snedecor's $F$-test).
+2.  **Equality of Means:** $\mu_1 = \mu_2$ (tested via two-sample Student's $t$-test using pooled variance).
+
+---
+
+#### 1. Sample Summary Statistics (6 Marks)
+
+##### Sample 1 ($n_1 = 10$):
+Observations: $[20, 16, 26, 27, 23, 22, 18, 24, 25, 19]$
+*   Sum: $\sum X_1 = 20 + 16 + 26 + 27 + 23 + 22 + 18 + 24 + 25 + 19 = \mathbf{220}$
+*   Mean:
+    $$\bar{X}_1 = \frac{220}{10} = \mathbf{22.0}$$
+*   Sum of Squared Deviations:
+    $$\sum (X_{1i} - \bar{X}_1)^2 = (-2)^2 + (-6)^2 + (4)^2 + (5)^2 + (1)^2 + (0)^2 + (-4)^2 + (2)^2 + (3)^2 + (-3)^2$$
+    $$\sum (X_{1i} - \bar{X}_1)^2 = 4 + 36 + 16 + 25 + 1 + 0 + 16 + 4 + 9 + 9 = \mathbf{120.0}$$
+*   Unbiased Sample Variance:
+    $$s_1^2 = \frac{\sum (X_{1i} - \bar{X}_1)^2}{n_1 - 1} = \frac{120.0}{9} = \frac{40}{3} \approx \mathbf{13.3333}$$
+
+##### Sample 2 ($n_2 = 12$):
+Observations: $[17, 23, 32, 25, 22, 24, 28, 18, 31, 33, 20, 27]$
+*   Sum: $\sum X_2 = 17 + 23 + 32 + 25 + 22 + 24 + 28 + 18 + 31 + 33 + 20 + 27 = \mathbf{300}$
+*   Mean:
+    $$\bar{X}_2 = \frac{300}{12} = \mathbf{25.0}$$
+*   Sum of Squared Deviations:
+    $$\sum (X_{2i} - \bar{X}_2)^2 = (-8)^2 + (-2)^2 + (7)^2 + (0)^2 + (-3)^2 + (-1)^2 + (3)^2 + (-7)^2 + (6)^2 + (8)^2 + (-5)^2 + (2)^2$$
+    $$\sum (X_{2i} - \bar{X}_2)^2 = 64 + 4 + 49 + 0 + 9 + 1 + 9 + 49 + 36 + 64 + 25 + 4 = \mathbf{314.0}$$
+*   Unbiased Sample Variance:
+    $$s_2^2 = \frac{\sum (X_{2i} - \bar{X}_2)^2}{n_2 - 1} = \frac{314.0}{11} \approx \mathbf{28.5455}$$
+
+---
+
+#### 2. Step 1: Testing Equality of Variances via $F$-Test (7 Marks)
+
+*   **Hypotheses:**
+    *   $H_0: \sigma_1^2 = \sigma_2^2$ (Population variances are equal).
+    *   $H_1: \sigma_1^2 \neq \sigma_2^2$
+*   **Test Statistic ($F$):**
+    Placing the larger variance in the numerator:
+    $$F = \frac{s_2^2}{s_1^2} = \frac{28.5455}{13.3333} \approx \mathbf{2.1409}$$
+    with degrees of freedom $\nu_1 = n_2 - 1 = 11$ and $\nu_2 = n_1 - 1 = 9$.
+*   **Critical Value:** At $\alpha = 0.05$ for $df = (11, 9)$, critical $F_{0.05}(11, 9) \approx \mathbf{3.10}$.
+*   **Decision:** Since $F_{\text{calc}} = 2.14 < 3.10$, we **fail to reject $H_0$**. The assumption of equal population variances is valid.
+
+---
+
+#### 3. Step 2: Testing Equality of Means via Two-Sample $t$-Test (7 Marks)
+
+*   **Hypotheses:**
+    *   $H_0: \mu_1 = \mu_2$ (Population means are equal).
+    *   $H_1: \mu_1 \neq \mu_2$
+*   **Pooled Sample Variance ($s_p^2$):**
+    $$s_p^2 = \frac{\sum (X_{1i} - \bar{X}_1)^2 + \sum (X_{2i} - \bar{X}_2)^2}{n_1 + n_2 - 2} = \frac{120.0 + 314.0}{10 + 12 - 2} = \frac{434.0}{20} = \mathbf{21.70}$$
+    $$s_p = \sqrt{21.70} \approx \mathbf{4.6583}$$
+*   **Standard Error of the Difference:**
+    $$\text{SE}(\bar{X}_1 - \bar{X}_2) = s_p \sqrt{\frac{1}{n_1} + \frac{1}{n_2}} = 4.6583 \sqrt{\frac{1}{10} + \frac{1}{12}} = 4.6583 \sqrt{\frac{11}{60}} \approx \mathbf{1.9946}$$
+*   **Test Statistic ($t$):**
+    $$t = \frac{\bar{X}_1 - \bar{X}_2}{\text{SE}} = \frac{22.0 - 25.0}{1.9946} = \frac{-3.0}{1.9946} \approx \mathbf{-1.5041}$$
+    $$\lvert t \rvert = \mathbf{1.5041}$$
+*   **Degrees of Freedom:** $df = n_1 + n_2 - 2 = 10 + 12 - 2 = \mathbf{20}$.
+*   **Critical Value:** For $df = 20$ at $\alpha = 0.05$ (two-tailed), critical $t_{0.05, 20} = \mathbf{2.086}$.
+*   **Decision:** Since $\lvert t \rvert = 1.5041 < 2.086$, we **fail to reject $H_0$**.
+
+##### Final Conclusion:
+Since neither the variances ($F = 2.14 < 3.10$) nor the means ($t = -1.50 < 2.086$) differ significantly, **the two samples can be regarded as having come from the same normal population**.
+
+:::tip
+
+**Examiner's Note**
+
+"Come from the same population" requires testing BOTH equality of variances ($F$-test) and equality of means ($t$-test). Stating only the $t$-test without verifying variances loses substantial marks.
+
+:::
+
+---
+
+## Question 7 (20 Marks)
+
+:::info
+
+**Question Statement**
+
+The following data is on total Fe for four types of iron formation (1=carbonate, 2=silicate, 3=magnetite, 4=hematite). **(20 Marks)**
+
+*   1: 20.5 28.1 27.8 27.0 28.0 25.2 25.3 27.1 20.5 31.3
+*   2: 26.3 24.0 26.2 20.2 23.7 34.0 17.1 26.8 23.7 24.9
+*   3: 29.5 34.0 27.5 29.4 27.9 26.2 29.9 29.5 30.0 35.6
+*   4: 36.5 44.2 34.1 30.3 31.4 33.1 34.1 32.9 36.3 25.5
+
+Carry out an analysis of variance F test at significance level 0.01, and summarize the results in an ANOVA table.
+
+:::
+
+---
+
+### Solution 7 (20 Marks)
+
+#### 1. Data Summary and Group Totals (6 Marks)
+Number of groups $k = 4$, sample size per group $n = 10$, total observations $N = 4 \times 10 = \mathbf{40}$.
+
+| Formation Type | Observations ($X_{ij}$) | Sum ($T_j$) | Mean ($\bar{X}_j$) |
+| :--- | :--- | :---: | :---: |
+| **1: Carbonate** | $20.5, 28.1, 27.8, 27.0, 28.0, 25.2, 25.3, 27.1, 20.5, 31.3$ | $T_1 = \mathbf{260.80}$ | $\bar{X}_1 = \mathbf{26.08}$ |
+| **2: Silicate** | $26.3, 24.0, 26.2, 20.2, 23.7, 34.0, 17.1, 26.8, 23.7, 24.9$ | $T_2 = \mathbf{246.90}$ | $\bar{X}_2 = \mathbf{24.69}$ |
+| **3: Magnetite** | $29.5, 34.0, 27.5, 29.4, 27.9, 26.2, 29.9, 29.5, 30.0, 35.6$ | $T_3 = \mathbf{299.50}$ | $\bar{X}_3 = \mathbf{29.95}$ |
+| **4: Hematite** | $36.5, 44.2, 34.1, 30.3, 31.4, 33.1, 34.1, 32.9, 36.3, 25.5$ | $T_4 = \mathbf{338.40}$ | $\bar{X}_4 = \mathbf{33.84}$ |
+| **Total** | - | **Grand Total $G = \mathbf{1145.60}$** | $\bar{X} = \mathbf{28.64}$ |
+
+---
+
+#### 2. Sums of Squares Calculations (7 Marks)
+
+##### 1. Correction Factor (CF):
+$$\text{CF} = \frac{G^2}{N} = \frac{(1145.60)^2}{40} = \frac{1,312,399.36}{40} = \mathbf{32,809.9840}$$
+
+##### 2. Raw Sum of Squares ($\sum \sum X_{ij}^2$):
+*   $\sum X_{1}^2 = 420.25 + 789.61 + 772.84 + 729.00 + 784.00 + 635.04 + 640.09 + 734.41 + 420.25 + 979.69 = \mathbf{6905.18}$
+*   $\sum X_{2}^2 = 691.69 + 576.00 + 686.44 + 408.04 + 561.69 + 1156.00 + 292.41 + 718.24 + 561.69 + 620.01 = \mathbf{6272.21}$
+*   $\sum X_{3}^2 = 870.25 + 1156.00 + 756.25 + 864.36 + 778.41 + 686.44 + 894.01 + 870.25 + 900.00 + 1267.36 = \mathbf{9043.33}$
+*   $\sum X_{4}^2 = 1332.25 + 1953.64 + 1162.81 + 918.09 + 985.96 + 1095.61 + 1162.81 + 1082.41 + 1317.69 + 650.25 = \mathbf{11,661.52}$
+$$\sum \sum X_{ij}^2 = 6905.18 + 6272.21 + 9043.33 + 11,661.52 = \mathbf{33,882.2400}$$
+
+##### 3. Total Sum of Squares (TSS):
+$$\text{TSS} = \sum \sum X_{ij}^2 - \text{CF} = 33,882.24 - 32,809.984 = \mathbf{1072.2560}$$
+$$df_{\text{total}} = N - 1 = 40 - 1 = \mathbf{39}$$
+
+##### 4. Between Formations Sum of Squares (SSB / SSTr):
+$$\text{SSB} = \frac{\sum T_j^2}{n} - \text{CF} = \frac{260.8^2 + 246.9^2 + 299.5^2 + 338.4^2}{10} - 32,809.984$$
+$$\text{SSB} = \frac{68,016.64 + 60,959.61 + 89,700.25 + 114,514.56}{10} - 32,809.984$$
+$$\text{SSB} = \frac{333,191.06}{10} - 32,809.984 = 33,319.106 - 32,809.984 = \mathbf{509.1220}$$
+$$df_{\text{between}} = k - 1 = 4 - 1 = \mathbf{3}$$
+
+##### 5. Within Formations Sum of Squares (Error SS, SSW):
+$$\text{SSW} = \text{TSS} - \text{SSB} = 1072.2560 - 509.1220 = \mathbf{563.1340}$$
+$$df_{\text{within}} = N - k = 40 - 4 = \mathbf{36}$$
+
+---
+
+#### 3. One-Way ANOVA Summary Table (7 Marks)
+
+| Source of Variation | Sum of Squares (SS) | Degrees of Freedom ($df$) | Mean Square (MS) | Variance Ratio ($F_{\text{calc}}$) | Critical $F_{0.01}(3, 36)$ |
+| :--- | :---: | :---: | :---: | :---: | :---: |
+| **Between Formations** | $509.1220$ | $3$ | $\text{MSB} = \frac{509.1220}{3} = \mathbf{169.7073}$ | $F = \frac{169.7073}{15.6426} = \mathbf{10.85}$ | $\mathbf{4.38}$ |
+| **Within Formations (Error)**| $563.1340$ | $36$ | $\text{MSW} = \frac{563.1340}{36} = \mathbf{15.6426}$ | - | - |
+| **Total** | **1072.2560** | **39** | - | - | - |
+
+##### Statistical Decision & Conclusion:
+*   **Hypotheses:**
+    *   $H_0: \mu_1 = \mu_2 = \mu_3 = \mu_4$ (Mean total Fe content is identical across all four iron formations).
+    *   $H_1$: At least one iron formation differs significantly in mean Fe content.
+*   **Critical Value Comparison:** At significance level $\alpha = 0.01$ with $df = (3, 36)$, critical table value $F_{0.01}(3, 36) \approx \mathbf{4.38}$ (or $F_{0.01}(3, 40) = 4.31$).
+*   **Decision:** Since $F_{\text{calc}} = 10.85 \gg 4.38$, we **reject the null hypothesis $H_0$ at the $1\%$ significance level** ($p < 0.0001$).
+*   **Conclusion:** There is a highly statistically significant difference in mean total Fe content among the four types of iron formation (with Hematite exhibiting the highest mean Fe content at $33.84\%$, and Silicate the lowest at $24.69\%$).
+
+:::tip
+
+**Examiner's Note**
+
+Notice the significance level specified in the question is $\alpha = 0.01$ (not the standard $0.05$). The critical value for $df = (3, 36)$ at $\alpha = 0.01$ is $4.38$. Calculated $F = 10.85$ decisively rejects $H_0$.
+
+:::
