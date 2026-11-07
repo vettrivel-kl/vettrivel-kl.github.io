@@ -266,11 +266,30 @@ Explain the concept of confusion matrix and compute the below measures with defi
 *   d) F1 score
 *   e) False Positive Rate
 
-Evaluate for the following two university problem datasets:
-1.  **Binary Confusion Matrix ($N = 495$):**
-    *   Actual Pos (0) / Pred Pos (0): $205$, Actual Pos (0) / Pred Neg (1): $53$
-    *   Actual Neg (1) / Pred Pos (0): $42$, Actual Neg (1) / Pred Neg (1): $195$
-2.  **Multi-Class Fruit Confusion Matrix ($N = 36$):**
+Evaluate for the following university problem datasets:
+
+1.  **Binary Confusion Matrix A ($N = 495$):**
+
+| $N = 495$ | Positive (0) | Negative (1) |
+| :--- | :---: | :---: |
+| **Positive (0)** | 205 | 53 |
+| **Negative (1)** | 42 | 195 |
+
+2.  **Binary Confusion Matrix B ($N = 255$):**
+
+| $N = 255$ | Positive (0) | Negative (1) |
+| :--- | :---: | :---: |
+| **Positive (0)** | 85 | 48 |
+| **Negative (1)** | 47 | 75 |
+
+3.  **Binary Confusion Matrix C ($N = 195$):**
+
+| $N = 195$ | Positive (0) | Negative (1) |
+| :--- | :---: | :---: |
+| **Positive (0)** | 65 | 43 |
+| **Negative (1)** | 32 | 55 |
+
+4.  **Multi-Class Fruit Confusion Matrix ($N = 36$):**
 
 | Actual \ Predicted | Apple | Orange | Mango |
 | :--- | :---: | :---: | :---: |
@@ -299,27 +318,49 @@ Evaluate for the following two university problem datasets:
 
 ---
 
-#### 2. Evaluation of Binary Dataset ($N = 495$) (6 Marks)
+#### 2. Evaluation of Binary Dataset A ($N = 495$) (4 Marks)
 
 ##### Matrix Breakdown:
-*   $\text{True Positive (TP)} = \mathbf{205}$
-*   $\text{False Positive (FP)} = \mathbf{53}$
-*   $\text{False Negative (FN)} = \mathbf{42}$
-*   $\text{True Negative (TN)} = \mathbf{195}$
+*   $\text{True Positive (TP)} = \text{Actual Pos } (0) \land \text{Pred Pos } (0) = \mathbf{205}$
+*   $\text{False Negative (FN)} = \text{Actual Pos } (0) \land \text{Pred Neg } (1) = \mathbf{53}$
+*   $\text{False Positive (FP)} = \text{Actual Neg } (1) \land \text{Pred Pos } (0) = \mathbf{42}$
+*   $\text{True Negative (TN)} = \text{Actual Neg } (1) \land \text{Pred Neg } (1) = \mathbf{195}$
 *   $\text{Total } N = 205 + 53 + 42 + 195 = \mathbf{495}$
 
 ##### Step-by-Step Metric Summary:
 | Metric | Governing Formula | Exact Substitution | Decimal Value | Percentage |
 | :--- | :---: | :---: | :---: | :---: |
 | **Accuracy** | $\frac{\text{TP} + \text{TN}}{N}$ | $\frac{205 + 195}{495} = \frac{400}{495}$ | **$0.8081$** | **$80.81\%$** |
-| **Recall** | $\frac{\text{TP}}{\text{TP} + \text{FN}}$ | $\frac{205}{205 + 42} = \frac{205}{247}$ | **$0.8300$** | **$83.00\%$** |
-| **Precision** | $\frac{\text{TP}}{\text{TP} + \text{FP}}$ | $\frac{205}{205 + 53} = \frac{205}{258}$ | **$0.7946$** | **$79.46\%$** |
-| **$F_1$-Score** | $\frac{2\text{TP}}{2\text{TP} + \text{FP} + \text{FN}}$ | $\frac{2(205)}{2(205) + 53 + 42} = \frac{410}{505}$ | **$0.8119$** | **$81.19\%$** |
-| **FPR** | $\frac{\text{FP}}{\text{FP} + \text{TN}}$ | $\frac{53}{53 + 195} = \frac{53}{248}$ | **$0.2137$** | **$21.37\%$** |
+| **Recall** | $\frac{\text{TP}}{\text{TP} + \text{FN}}$ | $\frac{205}{205 + 53} = \frac{205}{258}$ | **$0.7946$** | **$79.46\%$** |
+| **Precision** | $\frac{\text{TP}}{\text{TP} + \text{FP}}$ | $\frac{205}{205 + 42} = \frac{205}{247}$ | **$0.8300$** | **$83.00\%$** |
+| **$F_1$-Score** | $\frac{2\text{TP}}{2\text{TP} + \text{FP} + \text{FN}}$ | $\frac{2(205)}{2(205) + 42 + 53} = \frac{410}{505}$ | **$0.8119$** | **$81.19\%$** |
+| **FPR** | $\frac{\text{FP}}{\text{FP} + \text{TN}}$ | $\frac{42}{42 + 195} = \frac{42}{237}$ | **$0.1772$** | **$17.72\%$** |
 
 ---
 
-#### 3. Evaluation of Multi-Class Fruit Matrix ($N = 36$) (6 Marks)
+#### 3. Evaluation of Binary Datasets B ($N = 255$) & C ($N = 195$) (4 Marks)
+
+##### Dataset B ($N = 255$: $\text{TP}=85, \text{FN}=48, \text{FP}=47, \text{TN}=75$):
+| Metric | Governing Formula | Exact Substitution | Decimal Value | Percentage |
+| :--- | :---: | :---: | :---: | :---: |
+| **Accuracy** | $\frac{\text{TP} + \text{TN}}{N}$ | $\frac{85 + 75}{255} = \frac{160}{255}$ | **$0.6275$** | **$62.75\%$** |
+| **Recall** | $\frac{\text{TP}}{\text{TP} + \text{FN}}$ | $\frac{85}{85 + 48} = \frac{85}{133}$ | **$0.6391$** | **$63.91\%$** |
+| **Precision** | $\frac{\text{TP}}{\text{TP} + \text{FP}}$ | $\frac{85}{85 + 47} = \frac{85}{132}$ | **$0.6439$** | **$64.39\%$** |
+| **$F_1$-Score** | $\frac{2\text{TP}}{2\text{TP} + \text{FP} + \text{FN}}$ | $\frac{2(85)}{2(85) + 47 + 48} = \frac{170}{265}$ | **$0.6415$** | **$64.15\%$** |
+| **FPR** | $\frac{\text{FP}}{\text{FP} + \text{TN}}$ | $\frac{47}{47 + 75} = \frac{47}{122}$ | **$0.3852$** | **$38.52\%$** |
+
+##### Dataset C ($N = 195$: $\text{TP}=65, \text{FN}=43, \text{FP}=32, \text{TN}=55$):
+| Metric | Governing Formula | Exact Substitution | Decimal Value | Percentage |
+| :--- | :---: | :---: | :---: | :---: |
+| **Accuracy** | $\frac{\text{TP} + \text{TN}}{N}$ | $\frac{65 + 55}{195} = \frac{120}{195}$ | **$0.6154$** | **$61.54\%$** |
+| **Recall** | $\frac{\text{TP}}{\text{TP} + \text{FN}}$ | $\frac{65}{65 + 43} = \frac{65}{108}$ | **$0.6019$** | **$60.19\%$** |
+| **Precision** | $\frac{\text{TP}}{\text{TP} + \text{FP}}$ | $\frac{65}{65 + 32} = \frac{65}{97}$ | **$0.6701$** | **$67.01\%$** |
+| **$F_1$-Score** | $\frac{2\text{TP}}{2\text{TP} + \text{FP} + \text{FN}}$ | $\frac{2(65)}{2(65) + 32 + 43} = \frac{130}{205}$ | **$0.6341$** | **$63.41\%$** |
+| **FPR** | $\frac{\text{FP}}{\text{FP} + \text{TN}}$ | $\frac{32}{32 + 55} = \frac{32}{87}$ | **$0.3678$** | **$36.78\%$** |
+
+---
+
+#### 4. Evaluation of Multi-Class Fruit Matrix ($N = 36$) (4 Marks)
 
 Total samples $N = (7+8+9) + (1+2+3) + (3+2+1) = 24 + 6 + 6 = \mathbf{36}$.
 *   **Overall Accuracy:**
@@ -348,7 +389,92 @@ In multi-class matrices, calculate TP as the diagonal cell, FN as the row sum mi
 
 **Question Statement**
 
-Construct Decision tree for the given dataset using Information gain and Entropy. How decision tree handles the overfitting? **(16 Marks)**
+*   **i)** Explain the concept of decision tree classifier and solve the given dataset using decision tree classifier using Information gain. **(10 Marks)**
+
+| Specialized skill | Academic | Salary Expectation | Communication Skill | Job Status |
+| :---: | :---: | :---: | :---: | :---: |
+| Yes | Poor | Low | Average | Not Selected |
+| Yes | Poor | High | Good | Selected |
+| No | High | High | Average | Selected |
+| No | Average | Medium | Poor | Not Selected |
+| Yes | High | Medium | Good | Selected |
+| No | Average | Low | Average | Not Selected |
+
+*   **ii)** Explain the concept of post pruning and pre-pruning with example? **(6 Marks)**
+
+:::
+
+---
+
+### Solution 5 (16 Marks)
+
+#### (i) Decision Tree Construction on Job Status Dataset (10 Marks)
+
+##### 1. Total Dataset Base Entropy ($S$)
+Total records $N = 6$: $3\text{ Selected}$ and $3\text{ Not Selected}$.
+$$p_{\text{Sel}} = \frac{3}{6} = 0.5, \quad p_{\text{NotSel}} = \frac{3}{6} = 0.5$$
+$$H(S) = -0.5 \log_2(0.5) - 0.5 \log_2(0.5) = \mathbf{1.0000 \text{ bits}}$$
+
+##### 2. Attribute Evaluation via Information Gain at Root
+$$\operatorname{Gain}(S, A) = H(S) - \sum_{v \in \operatorname{Values}(A)} \frac{\lvert S_v \rvert}{\lvert S \rvert} H(S_v)$$
+
+| Candidate Attribute | Subsets ($v$) | Counts (Sel, NotSel) | Sub-Entropy ($H$) | Remainder Entropy | Information Gain | Decision |
+| :--- | :--- | :---: | :---: | :---: | :---: | :--- |
+| **`Academic`** | **High** ($2$)<br/>**Average** ($2$)<br/>**Poor** ($2$) | ($2, 0$)<br/>($0, 2$)<br/>($1, 1$) | $0.0000$<br/>$0.0000$<br/>$1.0000$ | $\frac{2}{6}(0) + \frac{2}{6}(0) + \frac{2}{6}(1.0) = \mathbf{0.3333}$ | **$0.6667 \text{ bits}$** | **Selected as Root (Tie Winner)** |
+| **`Salary Expectation`** | **High** ($2$)<br/>**Low** ($2$)<br/>**Medium** ($2$) | ($2, 0$)<br/>($0, 2$)<br/>($1, 1$) | $0.0000$<br/>$0.0000$<br/>$1.0000$ | $\frac{2}{6}(0) + \frac{2}{6}(0) + \frac{2}{6}(1.0) = \mathbf{0.3333}$ | **$0.6667 \text{ bits}$** | Alternate Root |
+| `Communication Skill` | **Good** ($2$)<br/>**Poor** ($1$)<br/>**Average** ($3$) | ($2, 0$)<br/>($0, 1$)<br/>($1, 2$) | $0.0000$<br/>$0.0000$<br/>$0.9183$ | $\frac{2}{6}(0) + \frac{1}{6}(0) + \frac{3}{6}(0.9183) = 0.4591$ | $0.5409 \text{ bits}$ | Rejected |
+| `Specialized skill` | **Yes** ($3$)<br/>**No** ($3$) | ($2, 1$)<br/>($1, 2$) | $0.9183$<br/>$0.9183$ | $\frac{3}{6}(0.9183) + \frac{3}{6}(0.9183) = 0.9183$ | $0.0817 \text{ bits}$ | Rejected |
+
+##### 3. Branching and Subtree Expansion
+Select **`Academic`** as the Root Node:
+*   **Branch 1: `Academic = High` (Rows 3, 5):**
+    Both instances are $\text{Selected} \implies$ **Pure Leaf Node: Selected**.
+*   **Branch 2: `Academic = Average` (Rows 4, 6):**
+    Both instances are $\text{Not Selected} \implies$ **Pure Leaf Node: Not Selected**.
+*   **Branch 3: `Academic = Poor` (Rows 1, 2):**
+    Subset contains Row 1 ($\text{Low salary, Average comm} \to \text{Not Selected}$) and Row 2 ($\text{High salary, Good comm} \to \text{Selected}$).
+    Split on **`Salary Expectation`** (or `Communication Skill`):
+    *   `High` (Row 2): $\implies$ **Pure Leaf Node: Selected**.
+    *   `Low` (Row 1): $\implies$ **Pure Leaf Node: Not Selected**.
+
+##### 4. Constructed Tree Diagram
+```mermaid
+flowchart TD
+    ROOT["Academic"] -->|"High"| L1["Job Status: Selected"]
+    ROOT -->|"Average"| L2["Job Status: Not Selected"]
+    ROOT -->|"Poor"| N1["Salary Expectation"]
+    
+    N1 -->|"High"| L3["Job Status: Selected"]
+    N1 -->|"Low"| L4["Job Status: Not Selected"]
+```
+
+---
+
+#### (ii) Pre-Pruning vs. Post-Pruning (6 Marks)
+
+| Dimension | Pre-Pruning (Early Stopping) | Post-Pruning (Cost-Complexity Pruning) |
+| :--- | :--- | :--- |
+| **Timing** | Halts tree construction during growth. | Grows tree to full depth, then prunes branches bottom-up. |
+| **Criterion** | Stops if `max_depth` reached or $\operatorname{Gain} < \epsilon$. | Minimizes cost-complexity: $R_\alpha(T) = R(T) + \alpha \lvert T \rvert$. |
+| **Risk** | Horizon effect: may halt before uncovering valuable multi-feature interactions. | Computationally heavier, but consistently achieves optimal generalization. |
+
+:::tip
+
+**Examiner's Note**
+
+On the Job Status dataset, both `Academic` and `Salary Expectation` yield the identical maximum Information Gain of $0.6667$ bits. Selecting either attribute yields a simple, completely pure tree in two splits.
+
+:::
+
+---
+
+## Question 6 (16 Marks)
+
+:::info
+
+**Question Statement**
+
+*   **i)** Construct Decision tree for the given financial dataset using Information gain and Entropy. **(12 Marks)**
 
 | Day | Past Trend | Open Interest | Trading Volume | Return |
 | :---: | :---: | :---: | :---: | :---: |
@@ -363,35 +489,29 @@ Construct Decision tree for the given dataset using Information gain and Entropy
 | 9 | Positive | Low | Low | Down |
 | 10 | Positive | High | High | Up |
 
+*   **ii)** How decision tree handles the overfitting? **(4 Marks)**
+
 :::
 
 ---
 
-### Solution 5 (16 Marks)
+### Solution 6 (16 Marks)
 
-#### 1. Dataset Base Entropy ($S$) (4 Marks)
-Total samples $N = 10$: $4\text{ Up}$ (Days 1, 3, 4, 10) and $6\text{ Down}$ (Days 2, 5, 6, 7, 8, 9).
+#### (i) Decision Tree Construction on Financial Return Dataset (12 Marks)
+
+##### 1. Base Dataset Entropy ($S$)
+Total samples $N = 10$: $4\text{ Up}$ and $6\text{ Down}$.
 $$p_{\text{Up}} = \frac{4}{10} = 0.4, \quad p_{\text{Down}} = \frac{6}{10} = 0.6$$
+$$H(S) = -0.4 \log_2(0.4) - 0.6 \log_2(0.6) = \mathbf{0.9710 \text{ bits}}$$
 
-$$H(S) = -0.4 \log_2(0.4) - 0.6 \log_2(0.6) = -0.4(-1.3219) - 0.6(-0.7370) = \mathbf{0.9710 \text{ bits}}$$
-
----
-
-#### 2. Root Attribute Selection via Information Gain (6 Marks)
-
-##### Information Gain Summary Table:
+##### 2. Root Selection via Information Gain
 | Candidate Attribute | Value Subsets | Sub-Entropy ($H$) | Remainder Entropy | Information Gain | Decision |
 | :--- | :--- | :---: | :---: | :---: | :--- |
 | **`Past Trend`** | **Negative** ($4\text{ Down}$)<br/>**Positive** ($4\text{ Up}, 2\text{ Down}$) | $H = 0.0000$<br/>$H = 0.9183$ | $\frac{4}{10}(0) + \frac{6}{10}(0.9183) = \mathbf{0.5510}$ | **$0.4200 \text{ bits}$** | **Selected as Root (Highest Gain)** |
 | `Open Interest` | **High** ($2\text{ Up}, 2\text{ Down}$)<br/>**Low** ($2\text{ Up}, 4\text{ Down}$) | $H = 1.0000$<br/>$H = 0.9183$ | $\frac{4}{10}(1.0) + \frac{6}{10}(0.9183) = 0.9510$ | $0.0200 \text{ bits}$ | Rejected |
 | `Trading Volume` | **High** ($4\text{ Up}, 3\text{ Down}$)<br/>**Low** ($3\text{ Down}$) | $H = 0.9852$<br/>$H = 0.0000$ | $\frac{7}{10}(0.9852) + \frac{3}{10}(0) = 0.6897$ | $0.2813 \text{ bits}$ | Rejected |
 
-$$\operatorname{Gain}(S, \text{Past Trend}) = \mathbf{0.4200 \text{ bits}} \implies \text{Root Node}$$
-
----
-
-#### 3. Expanding the Tree Branches (3 Marks)
-
+##### 3. Expanding Branches
 *   **Branch 1: `Past Trend = Negative` (Days 2, 5, 7, 8):**
     All $4$ samples have $\text{Return} = \text{Down} \implies$ **Pure Leaf Node: Down**.
 *   **Branch 2: `Past Trend = Positive` (Days 1, 3, 4, 6, 9, 10):**
@@ -399,10 +519,6 @@ $$\operatorname{Gain}(S, \text{Past Trend}) = \mathbf{0.4200 \text{ bits}} \impl
     *   `High` (Days 1, 3, 4, 10): All $4$ samples are $\text{Up} \implies H = 0.0000$ (**Pure Leaf: Up**).
     *   `Low` (Days 6, 9): Both $2$ samples are $\text{Down} \implies H = 0.0000$ (**Pure Leaf: Down**).
     *   $$\operatorname{Gain}(S_{\text{Pos}}, \text{Trading Volume}) = 0.9183 - 0 = \mathbf{0.9183 \text{ bits}} \quad (\text{Complete Separation})$$
-
----
-
-#### 4. Final Architecture and Decision Rules (3 Marks)
 
 ```mermaid
 flowchart TD
@@ -413,10 +529,11 @@ flowchart TD
     N1 -->|"Low"| L3["Return: Down"]
 ```
 
-##### Production Rules:
-1.  $\text{IF } (\text{Past Trend} = \text{Negative}) \implies \mathbf{\text{Return = Down}}$
-2.  $\text{IF } (\text{Past Trend} = \text{Positive}) \land (\text{Trading Volume} = \text{High}) \implies \mathbf{\text{Return = Up}}$
-3.  $\text{IF } (\text{Past Trend} = \text{Positive}) \land (\text{Trading Volume} = \text{Low}) \implies \mathbf{\text{Return = Down}}$
+---
+
+#### (ii) Overfitting Handling in Decision Trees (4 Marks)
+1.  **Early Stopping (Pre-Pruning):** Enforces bounds on tree geometry (`max_depth`, `min_samples_split`).
+2.  **Cost-Complexity Pruning (Post-Pruning):** Minimizes $R_\alpha(T) = R(T) + \alpha \lvert T \rvert$ using held-out cross-validation.
 
 :::tip
 
@@ -428,7 +545,68 @@ Note that `Open Interest` is completely pruned because `Past Trend` followed by 
 
 ---
 
-## Question 6 (16 Marks)
+## Question 7 (16 Marks)
+
+:::info
+
+**Question Statement**
+
+*   **i)** Write the short notes and mathematical form of ODD and Logit function? **(4 Marks)**
+*   **ii)** Explain the non-linear machine learning models in detail? **(8 Marks)**
+*   **iii)** Define train, test and validation dataset. **(4 Marks)**
+
+:::
+
+---
+
+### Solution 7 (16 Marks)
+
+#### (i) Mathematical Form of Odds and Logit Function (4 Marks)
+*   **Odds Ratio:** Ratio of probability of occurrence ($p$) to non-occurrence:
+    $$\text{Odds} = \frac{p}{1 - p} \in [0, +\infty)$$
+*   **Logit Function:** Natural logarithm of odds, linearizing probabilities onto the real line:
+    $$\operatorname{logit}(p) = \ln\left(\frac{p}{1 - p}\right) = \mathbf{w}^T \mathbf{x} + b \in (-\infty, +\infty)$$
+
+---
+
+#### (ii) Non-Linear Machine Learning Models in Detail (8 Marks)
+
+1.  **Kernel Support Vector Machines (Cover's Theorem):**
+    *   Maps non-separable input vectors $\mathbf{x} \in \mathbb{R}^d$ into higher-dimensional Hilbert space $\mathcal{H}$ via Mercer kernels without explicit coordinate expansion:
+        $$K(\mathbf{x}_i, \mathbf{x}_j) = \exp\left(-\gamma \|\mathbf{x}_i - \mathbf{x}_j\|^2\right) \quad (\text{RBF Kernel})$$
+2.  **Decision Trees & Tree Ensembles:**
+    *   Recursively partitions the input space into axis-aligned hyper-rectangles, producing piecewise constant non-linear decision boundaries.
+3.  **Multi-Layer Perceptrons (Neural Networks):**
+    *   Applies non-linear activation functions (ReLU, GELU, Sigmoid) across hidden layers:
+        $$\mathbf{h}^{(l)} = \sigma\left(\mathbf{W}^{(l)} \mathbf{h}^{(l-1)} + \mathbf{b}^{(l)}\right)$$
+        *Universal Approximation Theorem:* A feedforward network with a single non-linear hidden layer can approximate any continuous function on compact subsets of $\mathbb{R}^d$.
+
+---
+
+#### (iii) Train, Test, and Validation Dataset Definitions (4 Marks)
+
+```mermaid
+flowchart LR
+    D["Total Dataset (100%)"] --> TR["Training Set (70%)<br/>Learns Model Parameters w, b"]
+    D --> VAL["Validation Set (15%)<br/>Tunes Hyperparameters & Early Stopping"]
+    D --> TS["Test Set (15%)<br/>Unbiased Generalization Audit"]
+```
+
+1.  **Training Dataset ($60 - 80\%$):** Observations used directly by optimization algorithms to fit internal model parameters (e.g., weights $\mathbf{w}$ and biases $b$).
+2.  **Validation Dataset ($10 - 20\%$):** Independent holdout used to tune hyperparameters (e.g., learning rate, tree depth), select candidate models, and guide early stopping.
+3.  **Test Dataset ($10 - 20\%$):** Gold-standard benchmark evaluated **strictly once** at the conclusion of research to assess final real-world generalization error.
+
+:::tip
+
+**Examiner's Note**
+
+Emphasize that the validation set guides model selection and hyperparameter tuning, whereas the test set must never be touched during training to prevent data leakage.
+
+:::
+
+---
+
+## Question 8 (16 Marks)
 
 :::info
 
@@ -443,7 +621,7 @@ Note that `Open Interest` is completely pruned because `Past Trend` followed by 
 
 ---
 
-### Solution 6 (16 Marks)
+### Solution 8 (16 Marks)
 
 #### 1. Bagging, Stacking, and Voting Ensembles (16 Marks)
 
@@ -508,7 +686,7 @@ Write the $e^{-1} \approx 36.8\%$ Out-of-Bag derivation for Bagging, contrast Ha
 
 ---
 
-## Question 7 (16 Marks)
+## Question 9 (16 Marks)
 
 :::info
 
@@ -523,7 +701,7 @@ Write the $e^{-1} \approx 36.8\%$ Out-of-Bag derivation for Bagging, contrast Ha
 
 ---
 
-### Solution 7 (16 Marks)
+### Solution 9 (16 Marks)
 
 #### a) Boosting Paradigms: AdaBoost vs. Gradient Boosting (10 Marks)
 
@@ -569,7 +747,7 @@ Contrast the two boosting mechanisms: AdaBoost adjusts **sample weights**, where
 
 ---
 
-## Question 8 (16 Marks)
+## Question 10 (16 Marks)
 
 :::info
 
@@ -582,7 +760,7 @@ Contrast the two boosting mechanisms: AdaBoost adjusts **sample weights**, where
 
 ---
 
-### Solution 8 (16 Marks)
+### Solution 10 (16 Marks)
 
 #### i) Working Principle of K-Nearest Neighbors (KNN) (10 Marks)
 
@@ -620,7 +798,7 @@ Highlight that KNN training is $O(1)$ lazy learning, while inference is $O(N \cd
 
 ---
 
-## Question 9 (16 Marks)
+## Question 11 (16 Marks)
 
 :::info
 
@@ -633,7 +811,7 @@ Highlight that KNN training is $O(1)$ lazy learning, while inference is $O(N \cd
 
 ---
 
-### Solution 9 (16 Marks)
+### Solution 11 (16 Marks)
 
 #### a) Core Issues in Supervised Learning Algorithms (6 Marks)
 
