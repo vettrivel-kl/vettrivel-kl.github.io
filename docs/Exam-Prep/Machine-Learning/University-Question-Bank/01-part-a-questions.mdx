@@ -9,12 +9,15 @@ toc_max_heading_level: 3
 # Part A: Short Answer Questions
 
 > **Course -** Machine Learning Algorithms (21CSC555J)  
-> **Assessment Tier -** Part-A University Question Bank  
+> **Source Document -** University Question Bank (Part A)  
 > **Mark Weightage -** 2 Marks per Question  
+> **Structure -** Aligned 1-to-1 with `Part_A_Questions.pdf` across Sets 1, 2, 3, and 4  
 
 ---
 
-## Question 1 (2 Marks)
+## Set 1 (Questions 1 to 10)
+
+### Question 1 (2 Marks)
 
 :::info
 
@@ -24,10 +27,6 @@ Describe the independent and dependent variable with example? **(2 Marks)**
 
 :::
 
----
-
-### Solution 1 (2 Marks)
-
 *   **Independent Variable ($X$):** The input, predictor, or controlled feature manipulated or observed to evaluate its effect on the system. It is assumed to be exogenous.
 *   **Dependent Variable ($Y$):** The outcome, response, or target variable whose variation is modeled and predicted as a function of $X$:
     $$Y = f(X) + \epsilon$$
@@ -35,7 +34,7 @@ Describe the independent and dependent variable with example? **(2 Marks)**
 
 ---
 
-## Question 2 (2 Marks)
+### Question 2 (2 Marks)
 
 :::info
 
@@ -45,10 +44,6 @@ Define the logistic regression with mathematical notation? **(2 Marks)**
 
 :::
 
----
-
-### Solution 2 (2 Marks)
-
 *   **Definition:** Logistic Regression is a supervised classification model that estimates the posterior probability of a binary categorical outcome via the **Sigmoid function**.
 *   **Mathematical Formulation:**
     $$P(Y = 1 \mid \mathbf{x}) = \sigma(z) = \frac{1}{1 + e^{-z}} = \frac{1}{1 + e^{-(\mathbf{w}^T \mathbf{x} + b)}}$$
@@ -57,7 +52,7 @@ Define the logistic regression with mathematical notation? **(2 Marks)**
 
 ---
 
-## Question 3 (2 Marks)
+### Question 3 (2 Marks)
 
 :::info
 
@@ -66,10 +61,6 @@ Define the logistic regression with mathematical notation? **(2 Marks)**
 Define Variance and Bias? **(2 Marks)**
 
 :::
-
----
-
-### Solution 3 (2 Marks)
 
 For an estimator $\hat{f}(x)$ predicting true target $f(x)$ across training sets $\mathcal{D}$:
 
@@ -82,7 +73,7 @@ For an estimator $\hat{f}(x)$ predicting true target $f(x)$ across training sets
 
 ---
 
-## Question 4 (2 Marks)
+### Question 4 (2 Marks)
 
 :::info
 
@@ -91,10 +82,6 @@ For an estimator $\hat{f}(x)$ predicting true target $f(x)$ across training sets
 Explain the ROC curve with neat diagram? **(2 Marks)**
 
 :::
-
----
-
-### Solution 4 (2 Marks)
 
 *   **Definition:** The **Receiver Operating Characteristic (ROC)** curve evaluates classifier discrimination by plotting the **True Positive Rate (TPR)** against the **False Positive Rate (FPR)** across all decision thresholds $\tau \in [0, 1]$.
 *   **Coordinate Axes:**
@@ -114,7 +101,7 @@ flowchart TD
 
 ---
 
-## Question 5 (2 Marks)
+### Question 5 (2 Marks)
 
 :::info
 
@@ -123,10 +110,6 @@ flowchart TD
 How to find the Optimised threshold for output probability? **(2 Marks)**
 
 :::
-
----
-
-### Solution 5 (2 Marks)
 
 The default threshold $\tau = 0.5$ is often suboptimal under class imbalance or asymmetric misclassification costs. Optimal thresholds are located via:
 
@@ -138,7 +121,7 @@ The default threshold $\tau = 0.5$ is often suboptimal under class imbalance or 
 
 ---
 
-## Question 6 (2 Marks)
+### Question 6 (2 Marks)
 
 :::info
 
@@ -148,10 +131,6 @@ Define Gini Index with mathematical notation? **(2 Marks)**
 
 :::
 
----
-
-### Solution 6 (2 Marks)
-
 *   **Definition:** The **Gini Impurity (Index)** measures the probability that a randomly chosen element from a dataset would be incorrectly labelled if labelled randomly according to the class distribution.
 *   **Mathematical Formula:**
     $$I_G(S) = 1 - \sum_{i=1}^C p_i^2$$
@@ -160,7 +139,7 @@ Define Gini Index with mathematical notation? **(2 Marks)**
 
 ---
 
-## Question 7 (2 Marks)
+### Question 7 (2 Marks)
 
 :::info
 
@@ -170,16 +149,12 @@ Signify the importance of non-linear machine learning models used in supervised 
 
 :::
 
----
-
-### Solution 7 (2 Marks)
-
 *   **Overcoming Linear Inseparability:** Real-world datasets (e.g., XOR patterns, concentric circles, complex fraud topologies) cannot be separated by an affine hyperplane ($\mathbf{w}^T \mathbf{x} + b = 0$). Linear models suffer from severe **high bias (underfitting)** on such tasks.
 *   **Automated Feature Interactions:** Non-linear models (Decision Trees, Kernel SVMs, Neural Networks, Ensembles) learn curved, multi-modal boundaries without requiring manual polynomial feature engineering.
 
 ---
 
-## Question 8 (2 Marks)
+### Question 8 (2 Marks)
 
 :::info
 
@@ -188,10 +163,6 @@ Signify the importance of non-linear machine learning models used in supervised 
 Differentiate bagging and boosting technique in machine learning model. **(2 Marks)**
 
 :::
-
----
-
-### Solution 8 (2 Marks)
 
 | Feature | Bagging (Bootstrap Aggregating) | Boosting |
 | :--- | :--- | :--- |
@@ -202,7 +173,7 @@ Differentiate bagging and boosting technique in machine learning model. **(2 Mar
 
 ---
 
-## Question 9 (2 Marks)
+### Question 9 (2 Marks)
 
 :::info
 
@@ -212,17 +183,13 @@ Write the assumptions of Naïve Bayes classifier? **(2 Marks)**
 
 :::
 
----
-
-### Solution 9 (2 Marks)
-
 1.  **Class-Conditional Feature Independence (Core Assumption):** Features $X_1, X_2, \dots, X_d$ are assumed mutually independent given the class label $Y$:
     $$P(X_1, X_2, \dots, X_d \mid Y) = \prod_{j=1}^d P(X_j \mid Y)$$
 2.  **Equal Feature Weighting:** All predictors contribute equally and independently to the final posterior decision in log-odds space.
 
 ---
 
-## Question 10 (2 Marks)
+### Question 10 (2 Marks)
 
 :::info
 
@@ -231,10 +198,6 @@ Write the assumptions of Naïve Bayes classifier? **(2 Marks)**
 List the distance measures used in machine learning model. **(2 Marks)**
 
 :::
-
----
-
-### Solution 10 (2 Marks)
 
 For vectors $\mathbf{u}, \mathbf{v} \in \mathbb{R}^d$:
 
@@ -249,7 +212,9 @@ For vectors $\mathbf{u}, \mathbf{v} \in \mathbb{R}^d$:
 
 ---
 
-## Question 11 (2 Marks)
+## Set 2 (Questions 1 to 10)
+
+### Question 1 (2 Marks)
 
 :::info
 
@@ -259,10 +224,6 @@ Write the short notes on classification with example? **(2 Marks)**
 
 :::
 
----
-
-### Solution 11 (2 Marks)
-
 *   **Definition:** Classification is a supervised learning task where an algorithm learns a mapping function $f: \mathcal{X} \to \mathcal{Y}$ from continuous or discrete feature vectors $\mathbf{x} \in \mathbb{R}^d$ to discrete categorical target labels $y \in \{C_1, \dots, C_K\}$.
 *   **Categories:**
     *   *Binary:* Two mutually exclusive classes (e.g., Default vs. Non-Default).
@@ -271,7 +232,7 @@ Write the short notes on classification with example? **(2 Marks)**
 
 ---
 
-## Question 12 (2 Marks)
+### Question 2 (2 Marks)
 
 :::info
 
@@ -281,10 +242,6 @@ What cost function is used for evaluating the loss of the logistic regression mo
 
 :::
 
----
-
-### Solution 12 (2 Marks)
-
 *   **Cost Function:** The **Binary Cross-Entropy Loss (Log Loss)**, derived via Maximum Likelihood Estimation (MLE):
     $$J(\mathbf{w}, b) = -\frac{1}{N} \sum_{i=1}^N \left[ y_i \ln(\hat{p}_i) + (1 - y_i) \ln(1 - \hat{p}_i) \right]$$
     *where $\hat{p}_i = \sigma(\mathbf{w}^T \mathbf{x}_i + b)$ and $y_i \in \{0, 1\}$.*
@@ -292,7 +249,7 @@ What cost function is used for evaluating the loss of the logistic regression mo
 
 ---
 
-## Question 13 (2 Marks)
+### Question 3 (2 Marks)
 
 :::info
 
@@ -301,10 +258,6 @@ What cost function is used for evaluating the loss of the logistic regression mo
 What is Overfitting and Underfitting? **(2 Marks)**
 
 :::
-
----
-
-### Solution 13 (2 Marks)
 
 *   **Underfitting (High Bias, Low Variance):**
     *   *Symptom:* High training error and high test error ($E_{\text{train}} \gg 0, E_{\text{test}} \gg 0$).
@@ -315,7 +268,7 @@ What is Overfitting and Underfitting? **(2 Marks)**
 
 ---
 
-## Question 14 (2 Marks)
+### Question 4 (2 Marks)
 
 :::info
 
@@ -324,10 +277,6 @@ What is Overfitting and Underfitting? **(2 Marks)**
 State the Kappa Statistics to measure the model performance. **(2 Marks)**
 
 :::
-
----
-
-### Solution 14 (2 Marks)
 
 *   **Definition:** **Cohen's Kappa ($\kappa$)** measures classification agreement between predictions and ground truth while explicitly adjusting for agreement occurring purely by chance:
     $$\kappa = \frac{p_o - p_e}{1 - p_e}$$
@@ -338,7 +287,7 @@ State the Kappa Statistics to measure the model performance. **(2 Marks)**
 
 ---
 
-## Question 15 (2 Marks)
+### Question 5 (2 Marks)
 
 :::info
 
@@ -348,10 +297,6 @@ Define Up Sampling and Down Sampling? **(2 Marks)**
 
 :::
 
----
-
-### Solution 15 (2 Marks)
-
 Data-level resampling techniques used to resolve class imbalance:
 
 *   **Up-Sampling (Over-sampling):** Increases the minority class count to match the majority class. Modern approaches use **SMOTE** (Synthetic Minority Over-sampling Technique) to interpolate synthetic feature vectors between $k$-nearest minority neighbors.
@@ -359,7 +304,23 @@ Data-level resampling techniques used to resolve class imbalance:
 
 ---
 
-## Question 16 (2 Marks)
+### Question 6 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+Define KNN model with example? **(2 Marks)**
+
+:::
+
+*   **Definition:** K-Nearest Neighbors (KNN) is an instance-based, non-parametric lazy learner. It retains all training instances in memory and classifies a query point by taking the majority vote among its $k$ closest neighbors:
+    $$\hat{y} = \arg\max_c \sum_{i \in \mathcal{N}_k(\mathbf{x}^*)} \mathbb{I}(y_i = c)$$
+*   **Concrete Example:** Classifying a loan applicant by Income (₹50,000) and Credit Score ($720$). If the $k = 3$ closest historical applicants are $[\text{Approve}, \text{Approve}, \text{Reject}]$, the model predicts **Approve**.
+
+---
+
+### Question 7 (2 Marks)
 
 :::info
 
@@ -368,10 +329,6 @@ Data-level resampling techniques used to resolve class imbalance:
 How decision tree handles the overfitting? **(2 Marks)**
 
 :::
-
----
-
-### Solution 16 (2 Marks)
 
 Decision trees control overfitting through two primary mechanisms:
 
@@ -383,30 +340,7 @@ Decision trees control overfitting through two primary mechanisms:
 
 ---
 
-## Question 17 (2 Marks)
-
-:::info
-
-**Question Statement**
-
-What is ensemble learning and write the types? **(2 Marks)**
-
-:::
-
----
-
-### Solution 17 (2 Marks)
-
-*   **Definition:** Ensemble learning combines predictions from multiple base models (weak learners) to produce a unified model with lower variance, lower bias, and superior generalization.
-*   **Four Primary Types:**
-    1.  **Bagging (Bootstrap Aggregating):** Parallel training on resampled subsets (e.g., Random Forest).
-    2.  **Boosting:** Sequential adaptive training correcting previous errors (e.g., AdaBoost, XGBoost).
-    3.  **Stacking:** Training a meta-model on predictions from heterogeneous base models.
-    4.  **Voting:** Aggregating predictions via hard (majority) or soft (probability average) voting.
-
----
-
-## Question 18 (2 Marks)
+### Question 8 (2 Marks)
 
 :::info
 
@@ -416,10 +350,6 @@ Signify the advantages of random forest technique. **(2 Marks)**
 
 :::
 
----
-
-### Solution 18 (2 Marks)
-
 1.  **Variance Reduction Without Overfitting:** Adding more trees monotonically stabilizes variance without increasing test error.
 2.  **Tree Decorrelation:** Random feature subspacing ($m = \sqrt{p}$) prevents dominant features from dictating every tree split, driving pairwise correlation $\rho \to 0$.
 3.  **Built-in Out-of-Bag (OOB) Validation:** Provides an unbiased error estimate during training without requiring a separate holdout set.
@@ -427,137 +357,7 @@ Signify the advantages of random forest technique. **(2 Marks)**
 
 ---
 
-## Question 19 (2 Marks)
-
-:::info
-
-**Question Statement**
-
-Define KNN model with example? **(2 Marks)**
-
-:::
-
----
-
-### Solution 19 (2 Marks)
-
-*   **Definition:** K-Nearest Neighbors (KNN) is an instance-based, non-parametric lazy learner. It retains all training instances in memory and classifies a query point by taking the majority vote among its $k$ closest neighbors:
-    $$\hat{y} = \arg\max_c \sum_{i \in \mathcal{N}_k(\mathbf{x}^*)} \mathbb{I}(y_i = c)$$
-*   **Concrete Example:** Classifying a loan applicant by Income (₹50,000) and Credit Score ($720$). If the $k = 3$ closest historical applicants are $[\text{Approve}, \text{Approve}, \text{Reject}]$, the model predicts **Approve**.
-
----
-
-## Question 20 (2 Marks)
-
-:::info
-
-**Question Statement**
-
-What are the types of naïve bayes classifier? **(2 Marks)**
-
-:::
-
----
-
-### Solution 20 (2 Marks)
-
-1.  **Gaussian Naïve Bayes:** Assumes real-valued continuous features follow a normal Gaussian distribution:
-    $$P(x_i \mid y) = \frac{1}{\sqrt{2\pi\sigma_y^2}} \exp\left(-\frac{(x_i - \mu_y)^2}{2\sigma_y^2}\right)$$
-2.  **Multinomial Naïve Bayes:** Models discrete word count frequencies / term frequencies in text classification.
-3.  **Bernoulli Naïve Bayes:** Models binary boolean feature flags ($x_i \in \{0, 1\}$) indicating word presence or absence.
-
----
-
-## Question 21 (2 Marks)
-
-:::info
-
-**Question Statement**
-
-Difference between Supervised and Unsupervised Learning with examples? **(2 Marks)**
-
-:::
-
----
-
-### Solution 21 (2 Marks)
-
-| Feature | Supervised Learning | Unsupervised Learning |
-| :--- | :--- | :--- |
-| **Training Data** | Labelled pairs: $\mathcal{D} = \{(\mathbf{x}_i, y_i)\}_{i=1}^N$ | Unlabelled feature vectors: $\mathcal{D} = \{\mathbf{x}_i\}_{i=1}^N$ |
-| **Objective** | Learn mapping $f(\mathbf{x}) \approx y$ to predict unseen targets | Discover intrinsic clusters, manifolds, or latent structures |
-| **Feedback** | Explicit loss evaluation against ground truth labels | Internal mathematical criteria (inertia, reconstruction error) |
-| **Examples** | Linear Regression, SVM, Random Forest | K-Means, PCA, DBSCAN, Autoencoders |
-
----
-
-## Question 22 (2 Marks)
-
-:::info
-
-**Question Statement**
-
-Define Recall and Precision **(2 Marks)**
-
-:::
-
----
-
-### Solution 22 (2 Marks)
-
-From a binary confusion matrix:
-
-*   **Precision (Positive Predictive Value):** The fraction of predicted positive instances that are truly positive (measures accuracy of positive alerts):
-    $$\text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}$$
-*   **Recall (Sensitivity / True Positive Rate):** The fraction of actual positive instances successfully identified by the model (measures coverage of the positive class):
-    $$\text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}$$
-
----
-
-## Question 23 (2 Marks)
-
-:::info
-
-**Question Statement**
-
-What is Data imbalance and how it affects the model performance? **(2 Marks)**
-
-:::
-
----
-
-### Solution 23 (2 Marks)
-
-*   **Definition:** Severe disparity in class frequencies where majority instances vastly outnumber minority instances (e.g., $99\%$ legitimate, $1\%$ fraud).
-*   **Adverse Impacts:**
-    1.  *The Accuracy Paradox:* A model predicting the majority class exclusively achieves $99\%$ accuracy while detecting $0\%$ of minority targets.
-    2.  *Decision Boundary Drift:* Standard loss functions treat all errors equally, causing decision boundaries to collapse toward the minority class.
-
----
-
-## Question 24 (2 Marks)
-
-:::info
-
-**Question Statement**
-
-Difference between the adaboost and gradient boosting **(2 Marks)**
-
-:::
-
----
-
-### Solution 24 (2 Marks)
-
-| Feature | AdaBoost (Adaptive Boosting) | Gradient Boosting (GBM / XGBoost) |
-| :--- | :--- | :--- |
-| **Error Handling** | Adjusts **instance weights**; misclassified points get higher weights. | Fits base learners directly to **pseudo-residuals (negative loss gradients)**. |
-| **Loss Optimization** | Restricted primarily to Exponential Loss ($e^{-y f(x)}$). | Optimizes arbitrary differentiable loss functions (MSE, Huber, Log-Loss). |
-| **Base Estimators** | Shallow single-split **decision stumps** (depth 1). | Deeper regression trees (typically depth 3 to 6). |
-
----
-
-## Question 25 (2 Marks)
+### Question 9 (2 Marks)
 
 :::info
 
@@ -566,10 +366,6 @@ Difference between the adaboost and gradient boosting **(2 Marks)**
 Define Bayes Theorem **(2 Marks)**
 
 :::
-
----
-
-### Solution 25 (2 Marks)
 
 *   **Definition:** Bayes' Theorem calculates the posterior probability of a hypothesis $H$ given observed evidence $E$ by inverting likelihood probabilities.
 *   **Mathematical Formula:**
@@ -582,7 +378,7 @@ Define Bayes Theorem **(2 Marks)**
 
 ---
 
-## Question 26 (2 Marks)
+### Question 10 (2 Marks)
 
 :::info
 
@@ -592,10 +388,6 @@ What are the various steps involved in building a machine learning model? **(2 M
 
 :::
 
----
-
-### Solution 26 (2 Marks)
-
 1.  **Problem Definition:** Specify the business target, problem type (classification/regression), and evaluation metric.
 2.  **Data Collection & Cleaning:** Ingest raw data; resolve missing values, corrupt records, and outliers.
 3.  **Exploratory Data Analysis (EDA):** Assess feature distributions, skewness, correlations, and class balance.
@@ -604,10 +396,336 @@ What are the various steps involved in building a machine learning model? **(2 M
 6.  **Hyperparameter Tuning:** Optimize model parameters via stratified cross-validation.
 7.  **Evaluation & Deployment:** Audit performance on held-out test data; deploy via REST API with performance drift monitoring.
 
+---
+
+## Set 3 (Questions 11 to 20)
+
+### Question 11 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+Write the short notes on classification with example? **(2 Marks)**
+
+:::
+
+*   **Definition:** Classification is a supervised learning task where an algorithm learns a mapping function $f: \mathcal{X} \to \mathcal{Y}$ from continuous or discrete feature vectors $\mathbf{x} \in \mathbb{R}^d$ to discrete categorical target labels $y \in \{C_1, \dots, C_K\}$.
+*   **Categories:** Binary (e.g., Pass/Fail) and Multi-Class (e.g., Disease categories).
+*   **Example:** Predicting whether a transaction is Legitimate ($0$) or Fraudulent ($1$).
+
+---
+
+### Question 12 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+Define the logistic regression with mathematical notation? **(2 Marks)**
+
+:::
+
+*   **Definition:** A linear model for binary classification that outputs probabilities using the logistic sigmoid function:
+    $$P(Y = 1 \mid \mathbf{x}) = \sigma(\mathbf{w}^T \mathbf{x} + b) = \frac{1}{1 + e^{-(\mathbf{w}^T \mathbf{x} + b)}}$$
+*   **Logit Form:** $\ln\left(\frac{p}{1-p}\right) = \mathbf{w}^T \mathbf{x} + b$.
+
+---
+
+### Question 13 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+What is Overfitting and Underfitting? **(2 Marks)**
+
+:::
+
+*   **Underfitting:** High bias, low capacity; model fails to capture training patterns ($E_{\text{train}} \gg 0$).
+*   **Overfitting:** High variance, excessive capacity; model fits training noise and generalizes poorly ($E_{\text{train}} \approx 0, E_{\text{test}} \gg 0$).
+
+---
+
+### Question 14 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+Explain the ROC curve with neat diagram? **(2 Marks)**
+
+:::
+
+*   **Axes:** True Positive Rate ($\text{Recall} = \frac{\text{TP}}{\text{TP}+\text{FN}}$) on Y-axis vs. False Positive Rate ($1 - \text{Specificity} = \frac{\text{FP}}{\text{FP}+\text{TN}}$) on X-axis across all thresholds $\tau \in [0, 1]$.
+*   **AUC:** Measures ranking quality ($\text{AUC}=1.0$ is ideal; $\text{AUC}=0.5$ is random chance).
+
+---
+
+### Question 15 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+Define Up Sampling and Down Sampling? **(2 Marks)**
+
+:::
+
+*   **Up-Sampling:** Increasing minority class representation by duplicating or synthetically interpolating new instances (e.g., SMOTE).
+*   **Down-Sampling:** Decreasing majority class representation by randomly or strategically removing instances (e.g., NearMiss).
+
+---
+
+### Question 16 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+How decision tree handles the overfitting? **(2 Marks)**
+
+:::
+
+*   **Pre-Pruning:** Early stopping based on `max_depth`, `min_samples_split`, or `min_impurity_decrease`.
+*   **Post-Pruning:** Growing the full tree and pruning subtrees using Cost-Complexity penalty $R_\alpha(T) = R(T) + \alpha \lvert T \rvert$.
+
+---
+
+### Question 17 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+What is ensemble learning and write the types? **(2 Marks)**
+
+:::
+
+*   **Definition:** Combining multiple diverse base models to improve predictive performance and robustness.
+*   **Types:** Bagging (Bootstrap Aggregation), Boosting (Adaptive Sequential), Stacking (Meta-Learner), and Voting (Hard/Soft).
+
+---
+
+### Question 18 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+Signify the advantages of random forest technique. **(2 Marks)**
+
+:::
+
+*   **Variance Reduction:** Aggregating decorrelated trees eliminates variance without increasing bias.
+*   **Feature Subspacing:** Choosing random subsets of features ($m = \sqrt{p}$) at each split prevents dominant features from dictating all trees.
+*   **Built-in OOB Error:** Unbiased internal validation from the $\approx 36.8\%$ unselected bootstrap instances.
+
+---
+
+### Question 19 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+Define KNN model with example? **(2 Marks)**
+
+:::
+
+*   **Definition:** An instance-based non-parametric classifier that assigns a query point the majority label among its $k$ nearest neighbors:
+    $$\hat{y} = \arg\max_c \sum_{i \in \mathcal{N}_k(\mathbf{x}^*)} \mathbb{I}(y_i = c)$$
+*   **Example:** In customer segmentation, classifying a new shopper by Euclidean proximity to the $k = 5$ closest historical profiles.
+
+---
+
+### Question 20 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+What are the types of naïve bayes classifier? **(2 Marks)**
+
+:::
+
+1.  **Gaussian Naïve Bayes:** Continuous real-valued features modeled with normal distribution $\mathcal{N}(\mu, \sigma^2)$.
+2.  **Multinomial Naïve Bayes:** Discrete integer count/frequency features (standard for Bag-of-Words text).
+3.  **Bernoulli Naïve Bayes:** Binary boolean features ($x_i \in \{0, 1\}$) indicating word presence or absence.
+
+---
+
+## Set 4 (Questions 1 to 10)
+
+### Question 1 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+Difference between Supervised and Unsupervised Learning with examples? **(2 Marks)**
+
+:::
+
+| Feature | Supervised Learning | Unsupervised Learning |
+| :--- | :--- | :--- |
+| **Data** | Labelled pairs $\{(\mathbf{x}_i, y_i)\}$ | Unlabelled feature vectors $\{\mathbf{x}_i\}$ |
+| **Goal** | Predict target for unseen inputs | Discover natural clusters or latent representations |
+| **Examples** | Linear Regression, Logistic Regression, SVM | K-Means, PCA, DBSCAN, Autoencoders |
+
+---
+
+### Question 2 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+What cost function is used for evaluating the loss of the logistic regression model? **(2 Marks)**
+
+:::
+
+*   **Function:** Binary Cross-Entropy (Log Loss):
+    $$J(\mathbf{w}, b) = -\frac{1}{N} \sum_{i=1}^N \left[ y_i \ln(\hat{p}_i) + (1 - y_i) \ln(1 - \hat{p}_i) \right]$$
+*   **Property:** Strictly convex with respect to $\mathbf{w}$, avoiding the local minima of Mean Squared Error.
+
+---
+
+### Question 3 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+Define Variance and Bias? **(2 Marks)**
+
+:::
+
+*   **Bias:** Error from erroneous assumptions; difference between expected model prediction and ground truth ($\mathbb{E}[\hat{f}] - f$).
+*   **Variance:** Error from sensitivity to training data fluctuations; spread of predictions around the mean ($\mathbb{E}[(\hat{f} - \mathbb{E}[\hat{f}])^2]$).
+
+---
+
+### Question 4 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+Define Recall and Precision **(2 Marks)**
+
+:::
+
+*   **Precision:** Proportion of positive alerts that are true:
+    $$\text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}$$
+*   **Recall:** Proportion of actual positives successfully detected:
+    $$\text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}$$
+
+---
+
+### Question 5 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+What is Data imbalance and how it affects the model performance? **(2 Marks)**
+
+:::
+
+*   **Definition:** Severe disproportion between classes (e.g., $99.5\%$ negative, $0.5\%$ positive).
+*   **Impact:** Generates the **Accuracy Paradox** (predicting the majority class yields deceptively high accuracy while missing all critical minority events) and shifts decision boundaries away from the minority class.
+
+---
+
+### Question 6 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+Define Gini Index with mathematical notation? **(2 Marks)**
+
+:::
+
+*   **Formula:**
+    $$I_G(S) = 1 - \sum_{i=1}^C p_i^2$$
+*   **Meaning:** Measures node impurity. $I_G = 0$ for a pure node; $I_G = 0.5$ for an equally balanced two-class split.
+
+---
+
+### Question 7 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+Difference between the adaboost and gradient boosting **(2 Marks)**
+
+:::
+
+| Dimension | AdaBoost | Gradient Boosting |
+| :--- | :--- | :--- |
+| **Adaptive Mechanism** | Updates **sample weights** based on classification error. | Fits base trees directly to **pseudo-residuals (loss gradients)**. |
+| **Loss Support** | Restricted primarily to Exponential Loss. | Optimizes arbitrary differentiable losses (MSE, Log-Loss, Huber). |
+| **Base Learner** | Decision stumps (depth 1). | Shallow regression trees (depth 3 to 6). |
+
+---
+
+### Question 8 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+Define Random forest with its hyper parameters? **(2 Marks)**
+
+:::
+
+*   **Definition:** An ensemble of decision trees trained on bootstrap samples with random feature subspacing at each node split.
+*   **Key Hyperparameters:**
+    *   `n_estimators`: Number of trees in the forest.
+    *   `max_features`: Number of randomly sampled candidate features at each split ($m = \sqrt{p}$).
+    *   `max_depth`: Maximum allowed tree depth to constrain tree complexity.
+    *   `min_samples_split`: Minimum samples required to split an internal node.
+
+---
+
+### Question 9 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+Define Bayes Theorem **(2 Marks)**
+
+:::
+
+*   **Formula:**
+    $$P(A \mid B) = \frac{P(B \mid A) P(A)}{P(B)}$$
+*   **Terms:** $P(A \mid B)$ is the posterior, $P(B \mid A)$ is the likelihood, $P(A)$ is the prior, and $P(B)$ is the marginal evidence.
+
+---
+
+### Question 10 (2 Marks)
+
+:::info
+
+**Question Statement**
+
+What are the Distance measures are used in the KNN model? **(2 Marks)**
+
+:::
+
+1.  **Euclidean Distance ($L_2$):** $d(\mathbf{u}, \mathbf{v}) = \sqrt{\sum (u_i - v_i)^2}$ (straight line).
+2.  **Manhattan Distance ($L_1$):** $d(\mathbf{u}, \mathbf{v}) = \sum \lvert u_i - v_i \rvert$ (grid based).
+3.  **Minkowski Distance ($L_p$):** $d(\mathbf{u}, \mathbf{v}) = \left(\sum \lvert u_i - v_i \rvert^p\right)^{1/p}$.
+4.  **Cosine Distance:** $1 - \frac{\mathbf{u} \cdot \mathbf{v}}{\|\mathbf{u}\|_2 \|\mathbf{v}\|_2}$ (angular orientation).
+
 :::tip
 
 **Examiner's Note**
 
-For 2-mark questions, examiners scan for: (1) Core definition keyword, (2) Mathematical formula with parameter definitions, and (3) A concise example. Structuring answers into these 3 bullets ensures consistent full marks.
+This page mirrors the exact 4 sets from `Part_A_Questions.pdf`. Structuring every 2-mark question with bold definitions, explicit equations, and clear examples guarantees maximum rubric hit rates during university evaluations.
 
 :::

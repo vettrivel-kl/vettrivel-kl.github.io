@@ -9,387 +9,147 @@ toc_max_heading_level: 3
 # Part B: Long Analytical & Numerical Problems
 
 > **Course -** Machine Learning Algorithms (21CSC555J)  
-> **Assessment Tier -** Part-B University Question Bank  
-> **Mark Weightage -** 16 Marks per Question (or 4m / 8m / 12m modular sub-parts)  
+> **Source Document -** University Question Bank (Part B)  
+> **Mark Weightage -** 16 Marks per Question (or 4m / 8m / 10m / 12m modular sub-parts)  
+> **Structure -** Aligned 1-to-1 with `Part_B_Questions.pdf` across Sets 1, 2, 3, and 4  
 
 ---
 
-## Question 1 (16 Marks)
+## Set 1 (Questions 1 to 5)
+
+### Question 1 (16 Marks)
 
 :::info
 
 **Question Statement**
 
-Explain in detail about different types of learning methods in machine learning with examples. **(16 Marks)**
+1.  Explain in detail about different types of learning methods in machine learning with example **(16 Marks)**  
+    **(OR)**  
+    a) Derive Logistic-Regression classification model from Linear Regression **(8 Marks)**  
+    b) Write short notes on: a) Sigmoidal transfer function &nbsp; b) ODD &nbsp; c) Loss function **(8 Marks)**
 
 :::
 
 ---
 
-### Solution 1 (16 Marks)
-
-Machine learning paradigms are classified based on the nature of the learning signal, the presence of supervision, and environmental feedback:
+#### Solution 1: Learning Methods in Machine Learning (Main Option)
 
 ```mermaid
 flowchart TD
     ML["Machine Learning Paradigms"] --> SUP["1. Supervised Learning<br/>(Labelled Pairs: X -> Y)"]
-    ML --> UNSUP["2. Unsupervised Learning<br/>(Unlabelled Data: Discover Structure)"]
+    ML --> UNSUP["2. Unsupervised Learning<br/>(Unlabelled Data: Discover Manifolds)"]
     ML --> SEMI["3. Semi-Supervised Learning<br/>(Small Labelled + Large Unlabelled)"]
     ML --> RL["4. Reinforcement Learning<br/>(Agent-Environment Reward Loop)"]
 ```
 
----
-
-#### 1. Supervised Learning (4 Marks)
-*   **Core Principle:** Learns an explicit mapping function $\hat{f}: \mathcal{X} \to \mathcal{Y}$ from labelled training pairs $\mathcal{D} = \{(\mathbf{x}_i, y_i)\}_{i=1}^N$ drawn i.i.d. from joint distribution $P(\mathbf{X}, Y)$.
-*   **Optimization Objective (Empirical Risk Minimization):**
-    $$\hat{f} = \arg\min_{f \in \mathcal{H}} \left[ \frac{1}{N} \sum_{i=1}^N \mathcal{L}(f(\mathbf{x}_i), y_i) + \lambda \Omega(f) \right]$$
-*   **Sub-Types:**
-    *   *Regression:* Continuous target $y \in \mathbb{R}$ (e.g., Linear Regression, Ridge, SVR predicting house prices).
-    *   *Classification:* Discrete target $y \in \{C_1, \dots, C_K\}$ (e.g., Logistic Regression, Random Forest predicting credit card fraud).
-
----
-
-#### 2. Unsupervised Learning (4 Marks)
-*   **Core Principle:** Discovers latent manifolds, geometric clusters, or probability distributions from unlabelled instances $\mathcal{D} = \{\mathbf{x}_i\}_{i=1}^N$.
-*   **Sub-Types:**
-    *   *Clustering:* Partitions observations into cohesive groups minimizing intra-cluster variance:
-        $$\min \sum_{k=1}^K \sum_{\mathbf{x}_i \in C_k} \|\mathbf{x}_i - \boldsymbol{\mu}_k\|^2 \quad (\text{K-Means, DBSCAN})$$
-    *   *Dimensionality Reduction:* Projects high-dimensional vectors to lower-dimensional latent representations while preserving variance or geodesics (e.g., PCA, t-SNE, UMAP).
-    *   *Density Estimation:* Models underlying probability density $p(\mathbf{x})$ (e.g., Gaussian Mixture Models, Isolation Forest).
+1.  **Supervised Learning:**
+    *   *Principle:* Learns mapping function $\hat{f}: \mathcal{X} \to \mathcal{Y}$ from labelled pairs $\mathcal{D} = \{(\mathbf{x}_i, y_i)\}_{i=1}^N$ minimizing empirical risk:
+        $$\hat{f} = \arg\min_{f \in \mathcal{H}} \frac{1}{N} \sum_{i=1}^N \mathcal{L}(f(\mathbf{x}_i), y_i) + \lambda \Omega(f)$$
+    *   *Sub-types:* Regression (continuous target $y \in \mathbb{R}$, e.g., house prices) and Classification (discrete target $y \in \{C_1, \dots, C_K\}$, e.g., fraud detection).
+2.  **Unsupervised Learning:**
+    *   *Principle:* Discovers latent clusters, manifolds, or probability density from unlabelled inputs $\{\mathbf{x}_i\}_{i=1}^N$.
+    *   *Sub-types:* Clustering (K-Means, DBSCAN), Dimensionality Reduction (PCA, t-SNE), and Density Estimation (GMMs).
+3.  **Semi-Supervised Learning:**
+    *   *Principle:* Exploits a small labelled set $\mathcal{D}_L$ ($10\%$) alongside massive unlabelled data $\mathcal{D}_U$ ($90\%$) under the cluster and manifold smoothness assumptions (e.g., medical MRI segmentation).
+4.  **Reinforcement Learning (RL):**
+    *   *Principle:* Formulated as a Markov Decision Process $\langle \mathcal{S}, \mathcal{A}, \mathcal{P}, \mathcal{R}, \gamma \rangle$. An agent takes actions $a_t$ under policy $\pi(a_t \mid s_t)$ to maximize expected discounted cumulative reward:
+        $$\pi^* = \arg\max_\pi \mathbb{E}\left[ \sum_{t=0}^\infty \gamma^t r_t \right] \quad (\text{Autonomous Navigation, AlphaGo})$$
 
 ---
 
-#### 3. Semi-Supervised Learning (4 Marks)
-*   **Core Principle:** Combines a small labelled set $\mathcal{D}_L = \{(\mathbf{x}_i, y_i)\}_{i=1}^l$ with a substantially larger unlabelled set $\mathcal{D}_U = \{\mathbf{x}_j\}_{j=l+1}^{l+u}$ ($u \gg l$).
-*   **Foundational Assumptions:**
-    *   *Smoothness Assumption:* Points close in input space share identical class labels.
-    *   *Cluster / Manifold Assumption:* The decision boundary passes through low-density regions, avoiding dense clusters.
-*   **Methods & Real-World Example:** Pseudo-labeling, Label Propagation. In clinical imaging, an expert radiologist annotates 100 CT scans, while 50,000 unlabelled scans guide representation learning.
+#### Solution 1 (OR): Logistic Regression Derivation and Core Primitives
 
----
+##### a) Derivation from Linear Regression
+1.  **Linear Incompatibility:** Standard linear regression $z = \mathbf{w}^T \mathbf{x} + b \in (-\infty, +\infty)$ violates probability bounds $[0, 1]$.
+2.  **Odds Ratio:** Let $p = P(Y = 1 \mid \mathbf{x})$. The odds of occurrence is:
+    $$\text{Odds} = \frac{p}{1 - p} \in [0, +\infty)$$
+3.  **Logit Link Function:** Taking the natural logarithm maps odds to the full real line $(-\infty, +\infty)$:
+    $$\operatorname{logit}(p) = \ln\left(\frac{p}{1 - p}\right) = \mathbf{w}^T \mathbf{x} + b = z$$
+4.  **Sigmoid Inversion:**
+    $$\frac{p}{1 - p} = e^z \implies p = \frac{e^z}{1 + e^z} = \mathbf{\frac{1}{1 + e^{-z}} \equiv \sigma(z)}$$
+    $$\mathbf{P(Y = 1 \mid \mathbf{x}) = \frac{1}{1 + \exp\left(-(\mathbf{w}^T \mathbf{x} + b)\right)}}$$
 
-#### 4. Reinforcement Learning (RL) (4 Marks)
-*   **Core Principle:** Formulated as a Markov Decision Process (MDP) defined by the tuple $\langle \mathcal{S}, \mathcal{A}, \mathcal{P}, \mathcal{R}, \gamma \rangle$. An agent in state $s_t \in \mathcal{S}$ selects action $a_t \in \mathcal{A}$ under policy $\pi(a_t \mid s_t)$, receives scalar reward $r_t$, and transitions to state $s_{t+1}$.
-*   **Optimization Objective (Expected Cumulative Return):**
-    $$\pi^* = \arg\max_\pi \mathbb{E}\left[ \sum_{t=0}^\infty \gamma^t r_t \right]$$
-*   **Concrete Example:** Autonomous vehicle trajectory planning, robotic manipulation, and game playing (AlphaGo).
-
----
-
-#### Summary Comparison Matrix
-| Dimension | Supervised | Unsupervised | Semi-Supervised | Reinforcement Learning |
-| :--- | :--- | :--- | :--- | :--- |
-| **Input Data** | Fully labelled $(\mathbf{x}_i, y_i)$ | Unlabelled $\mathbf{x}_i$ | Mixture ($l$ labelled, $u$ unlabelled) | State observations $s_t$ |
-| **Feedback Signal** | Direct ground-truth loss | None (internal mathematical heuristics) | Combined supervised + consistency loss | Delayed scalar reward $r_t$ |
-| **Goal** | Prediction / Extrapolation | Pattern & Cluster Discovery | Cost-effective label propagation | Optimal behavioral policy $\pi^*$ |
-
-:::tip
-
-**Examiner's Note**
-
-Provide both the formal mathematical objective (ERM, MDP tuple) and a distinct real-world application for each of the 4 paradigms to secure full rubric marks.
-
-:::
-
----
-
-## Question 2 (16 Marks)
-
-:::info
-
-**Question Statement**
-
-*   **a)** Derive Logistic-Regression classification model from Linear Regression. **(8 Marks)**
-*   **b)** Write short notes on: **(8 Marks)**
-    *   i) Sigmoidal transfer function
-    *   ii) Odds and Logit function
-    *   iii) Binary Cross-Entropy Loss function
-
-:::
-
----
-
-### Solution 2 (16 Marks)
-
-#### a) Derivation of Logistic Regression from Linear Regression (8 Marks)
-
-```mermaid
-flowchart LR
-    A["Linear Combination<br/>z = w^T x + b<br/>Range: (-inf, +inf)"] -->|"Step 1: Odds Ratio<br/>p / (1 - p)<br/>Range: [0, +inf)"| B["Step 2: Logit Link<br/>ln(p / (1 - p)) = z<br/>Range: (-inf, +inf)"]
-    B -->|"Step 3: Invert for p<br/>p = e^z / (1 + e^z)"| C["Sigmoid Hypothesis<br/>p = 1 / (1 + e^-z)<br/>Range: (0, 1)"]
-```
-
-##### Step 1: Why Linear Regression Fails for Classification
-Standard linear regression models continuous targets:
-$$z = \mathbf{w}^T \mathbf{x} + b \in (-\infty, +\infty)$$
-For binary classification, modeling posterior probability $P(Y = 1 \mid \mathbf{x})$ directly with $z$ violates Kolmogorov's axioms because linear outputs can evaluate to $z < 0$ or $z > 1$.
-
-##### Step 2: The Odds Ratio
-Let $p = P(Y = 1 \mid \mathbf{x})$. The **Odds** of the event occurring is:
-$$\text{Odds} = \frac{p}{1 - p} \in [0, +\infty)$$
-
-##### Step 3: The Logit (Log-Odds) Link Function
-Taking the natural logarithm maps the non-negative interval $[0, +\infty)$ onto the full real line $(-\infty, +\infty)$:
-$$\operatorname{logit}(p) = \ln\left(\frac{p}{1 - p}\right) \in (-\infty, +\infty)$$
-
-Equate this unbounded logit to the linear regression equation:
-$$\ln\left(\frac{p}{1 - p}\right) = \mathbf{w}^T \mathbf{x} + b = z$$
-
-##### Step 4: Solving for Probability $p$ (Sigmoid Inversion)
-Exponentiating both sides:
-$$\frac{p}{1 - p} = e^z \implies p = e^z(1 - p) \implies p = e^z - p e^z$$
-$$p(1 + e^z) = e^z \implies p = \frac{e^z}{1 + e^z}$$
-Divide numerator and denominator by $e^z$:
-$$\mathbf{p = \frac{1}{1 + e^{-z}} \equiv \sigma(z)}$$
-
-Substituting $z = \mathbf{w}^T \mathbf{x} + b$:
-$$\mathbf{P(Y = 1 \mid \mathbf{x}) = \frac{1}{1 + \exp\left(-(\mathbf{w}^T \mathbf{x} + b)\right)}}$$
-
----
-
-#### b) Short Notes on Core Logistic Regression Primitives (8 Marks)
-
-##### i) Sigmoidal Transfer Function $\sigma(z)$
-*   **Formula:** $\sigma(z) = \frac{1}{1 + e^{-z}}$
-*   **Mathematical Properties:**
-    1.  *Strict Bounds:* $\lim_{z \to +\infty} \sigma(z) = 1.0$, $\lim_{z \to -\infty} \sigma(z) = 0.0$.
-    2.  *Symmetry:* $\sigma(-z) = 1 - \sigma(z)$ with inflection point $\sigma(0) = 0.5$.
-    3.  *Derivative:* $\frac{d\sigma}{dz} = \sigma(z)(1 - \sigma(z))$.
-
-##### ii) Odds and Logit Function
-*   **Odds ($\frac{p}{1-p}$):** Relative likelihood of success versus failure. An odds of $4.0$ indicates success is 4 times more likely than failure.
-*   **Logit ($\ln\frac{p}{1-p}$):** Linearizes probability. A unit increase in feature $x_j$ increases log-odds by $w_j$, multiplying the odds by $e^{w_j}$.
-
-##### iii) Binary Cross-Entropy Loss Function
-*   **Formula:**
+##### b) Short Notes
+*   **Sigmoidal Transfer Function $\sigma(z)$:** S-shaped curve mapping $(-\infty, +\infty) \to (0, 1)$ with midpoint $\sigma(0) = 0.5$ and derivative $\frac{d\sigma}{dz} = \sigma(z)(1 - \sigma(z))$.
+*   **Odds:** Multiplicative probability ratio ($\frac{p}{1-p}$). A unit increase in feature $x_j$ multiplies odds by $e^{w_j}$.
+*   **Binary Cross-Entropy Loss:** Strictly convex cost function avoiding local minima:
     $$J(\mathbf{w}, b) = -\frac{1}{N} \sum_{i=1}^N \left[ y_i \ln(\hat{p}_i) + (1 - y_i) \ln(1 - \hat{p}_i) \right]$$
-*   **Convexity Advantage:** Unlike Mean Squared Error (which produces non-convex surfaces with multiple local minima when combined with sigmoids), Binary Cross-Entropy guarantees a **strictly convex optimization surface** with a single global minimum.
-
-:::tip
-
-**Examiner's Note**
-
-Show the 3 algebraic steps: $\text{Odds} \to \text{Logit} \to \text{Sigmoid}$. Highlight that the derivative of the sigmoid is $\sigma'(z) = \sigma(z)(1-\sigma(z))$ and that Cross-Entropy is strictly convex.
-
-:::
 
 ---
 
-## Question 3 (16 Marks)
+### Question 2 (16 Marks)
 
 :::info
 
 **Question Statement**
 
-*   **i)** Difference between classification and regression models? **(4 Marks)**
-*   **ii)** What is the impact of data class Imbalance on ML model. Describe the techniques used to rectify it with an suitable example. **(12 Marks)**
-
-:::
-
----
-
-### Solution 3 (16 Marks)
-
-#### i) Classification vs. Regression Models (4 Marks)
-
-| Dimension | Classification | Regression |
-| :--- | :--- | :--- |
-| **Target Variable ($Y$)** | **Discrete / Categorical** ($y \in \{0, 1\}$ or $\{C_1, \dots, C_K\}$) | **Continuous / Real-valued** ($y \in \mathbb{R}$) |
-| **Model Output** | Class probabilities and decision boundaries | Numerical scalar quantity along a continuous curve |
-| **Loss Function** | Cross-Entropy, Hinge Loss, Zero-One Loss | Mean Squared Error (MSE), Mean Absolute Error (MAE) |
-| **Evaluation Metrics** | Accuracy, Precision, Recall, $F_1$, ROC-AUC | $R^2$, RMSE, MAE, MAPE |
-| **Example** | Predicting whether an email is Spam or Ham | Predicting house prices or stock market index values |
-
----
-
-#### ii) Class Imbalance: Impact and Remediation Techniques (12 Marks)
-
-##### 1. Adverse Impacts on Machine Learning Models
-*   **The Accuracy Paradox:** In credit card fraud with $99.5\%$ legitimate and $0.5\%$ fraudulent transactions, a trivial model predicting "Legitimate" for all instances achieves $99.5\%$ accuracy while detecting $0\%$ of fraud.
-*   **Decision Boundary Drift:** Standard optimization algorithms minimize global misclassification rate, pushing decision boundaries toward the minority class and treating minority errors as negligible noise.
-
-##### 2. Techniques to Rectify Class Imbalance
-```mermaid
-flowchart TD
-    IMB["Class Imbalance Remediation"] --> D["1. Data-Level Resampling"]
-    IMB --> A["2. Algorithm-Level Modifications"]
-    IMB --> P["3. Post-Processing Threshold Tuning"]
-    
-    D --> D1["Oversampling (SMOTE)"]
-    D --> D2["Undersampling (NearMiss / Tomek Links)"]
-    
-    A --> A1["Cost-Sensitive Loss Weighting"]
-    A --> A2["Focal Loss (Suppresses easy instances)"]
-    
-    P --> P1["Adjust Decision Threshold tau via Precision-Recall"]
-```
-
-###### A. Data-Level Resampling Techniques
-1.  **Synthetic Minority Over-sampling Technique (SMOTE):**
-    *   Instead of duplicating rows, SMOTE synthesizes new minority instances along line segments connecting $k$-nearest minority neighbors:
-        $$\mathbf{x}_{\text{new}} = \mathbf{x}_i + \lambda (\mathbf{x}_{zi} - \mathbf{x}_i), \quad \lambda \sim \mathcal{U}(0, 1)$$
-2.  **NearMiss Undersampling:**
-    *   Filters majority class instances based on distance to nearest minority instances to eliminate redundant samples.
-
-###### B. Algorithm-Level Modifications
-1.  **Cost-Sensitive Learning (Balanced Class Weights):**
-    *   Assigns penalty weights inversely proportional to class frequencies:
-        $$w_c = \frac{N}{K \cdot N_c}$$
-        Misclassifying a rare fraud transaction is penalized $100\times$ more heavily than misclassifying a legitimate one.
-2.  **Focal Loss:**
-    *   Adds a modulating factor $(1 - p_t)^\gamma$ to cross-entropy to suppress gradients from well-classified easy examples.
-
-###### C. Post-Processing: Threshold Moving
-*   Shifts classification threshold from default $\tau = 0.5$ to a lower probability (e.g., $\tau = 0.15$) to maximize Recall on the minority class.
-
-:::tip
-
-**Examiner's Note**
-
-Provide concrete numbers for the Accuracy Paradox ($99.5\%$ accuracy with $0\%$ recall). Include the SMOTE interpolation formula $\mathbf{x}_{\text{new}} = \mathbf{x}_i + \lambda(\mathbf{x}_{zi} - \mathbf{x}_i)$ and explain class weight scaling.
-
-:::
-
----
-
-## Question 4 (16 Marks)
-
-:::info
-
-**Question Statement**
-
-Explain the concept of confusion matrix and compute the below measures with definition? **(16 Marks)**
-*   a) Accuracy
-*   b) Recall
-*   c) Precision
-*   d) F1 score
-*   e) False Positive Rate
-
-Evaluate for the following university problem datasets:
-
-1.  **Binary Confusion Matrix A ($N = 495$):**
+2.  (i) Difference between classification and regression models? **(4 marks)**  
+    (ii) Explain the techniques available for handling the class imbalance? **(12 marks)**  
+    **(OR)**  
+2.  Explain the concept of confusion matrix and compute the below measures with definition? **(5 marks)**
 
 | $N = 495$ | Positive (0) | Negative (1) |
 | :--- | :---: | :---: |
 | **Positive (0)** | 205 | 53 |
 | **Negative (1)** | 42 | 195 |
 
-2.  **Binary Confusion Matrix B ($N = 255$):**
-
-| $N = 255$ | Positive (0) | Negative (1) |
-| :--- | :---: | :---: |
-| **Positive (0)** | 85 | 48 |
-| **Negative (1)** | 47 | 75 |
-
-3.  **Binary Confusion Matrix C ($N = 195$):**
-
-| $N = 195$ | Positive (0) | Negative (1) |
-| :--- | :---: | :---: |
-| **Positive (0)** | 65 | 43 |
-| **Negative (1)** | 32 | 55 |
-
-4.  **Multi-Class Fruit Confusion Matrix ($N = 36$):**
-
-| Actual \ Predicted | Apple | Orange | Mango |
-| :--- | :---: | :---: | :---: |
-| **Apple** | 7 | 8 | 9 |
-| **Orange** | 1 | 2 | 3 |
-| **Mango** | 3 | 2 | 1 |
+*   a) Accuracy &nbsp; b) Recall &nbsp; c) Precision &nbsp; d) F1 score &nbsp; e) False Positive Rate
 
 :::
 
 ---
 
-### Solution 4 (16 Marks)
+#### Solution 2: Classification vs. Regression & Class Imbalance (Main Option)
 
-#### 1. Metric Definitions & Formulas (4 Marks)
+##### (i) Classification vs. Regression
+| Dimension | Classification | Regression |
+| :--- | :--- | :--- |
+| **Target Variable ($Y$)** | Discrete categories ($y \in \{0, 1\}$ or $\{C_1, \dots, C_K\}$) | Continuous values ($y \in \mathbb{R}$) |
+| **Loss Function** | Cross-Entropy, Hinge Loss | Mean Squared Error (MSE), Mean Absolute Error (MAE) |
+| **Evaluation Metrics** | Accuracy, Precision, Recall, $F_1$, ROC-AUC | $R^2$, RMSE, MAE, MAPE |
 
-*   **Accuracy:** Overall fraction of correct predictions:
-    $$\text{Accuracy} = \frac{\text{TP} + \text{TN}}{\text{Total } N}$$
-*   **Recall (Sensitivity / TPR):** Fraction of actual positives correctly caught:
-    $$\text{Recall} = \frac{\text{TP}}{\text{TP} + \text{FN}}$$
-*   **Precision (PPV):** Fraction of predicted positives that are truly positive:
-    $$\text{Precision} = \frac{\text{TP}}{\text{TP} + \text{FP}}$$
-*   **$F_1$-Score:** Harmonic mean of precision and recall:
-    $$F_1 = 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}} = \frac{2\text{TP}}{2\text{TP} + \text{FP} + \text{FN}}$$
-*   **False Positive Rate (FPR):** Fraction of actual negatives incorrectly flagged as positive:
-    $$\text{FPR} = \frac{\text{FP}}{\text{FP} + \text{TN}} = 1 - \text{Specificity}$$
+##### (ii) Techniques for Handling Class Imbalance
+1.  **Data-Level Resampling:**
+    *   *SMOTE (Synthetic Minority Over-sampling):* Synthesizes minority instances along feature segments:
+        $$\mathbf{x}_{\text{new}} = \mathbf{x}_i + \lambda (\mathbf{x}_{zi} - \mathbf{x}_i), \quad \lambda \sim \mathcal{U}(0, 1)$$
+    *   *NearMiss Undersampling:* Selects majority instances closest to minority boundaries.
+2.  **Algorithm-Level Adjustments:**
+    *   *Cost-Sensitive Loss:* Scales loss inversely proportional to class frequencies: $w_c = \frac{N}{K \cdot N_c}$.
+    *   *Focal Loss:* Modulates cross-entropy by $(1 - p_t)^\gamma$ to suppress easy negative instances.
+3.  **Threshold Moving:** Lowering classification threshold $\tau$ (e.g., from $0.50$ to $0.15$) to optimize minority recall.
 
 ---
 
-#### 2. Evaluation of Binary Dataset A ($N = 495$) (4 Marks)
+#### Solution 2 (OR): Binary Confusion Matrix Computation ($N = 495$)
 
-##### Matrix Breakdown:
-*   $\text{True Positive (TP)} = \text{Actual Pos } (0) \land \text{Pred Pos } (0) = \mathbf{205}$
-*   $\text{False Negative (FN)} = \text{Actual Pos } (0) \land \text{Pred Neg } (1) = \mathbf{53}$
-*   $\text{False Positive (FP)} = \text{Actual Neg } (1) \land \text{Pred Pos } (0) = \mathbf{42}$
-*   $\text{True Negative (TN)} = \text{Actual Neg } (1) \land \text{Pred Neg } (1) = \mathbf{195}$
-*   $\text{Total } N = 205 + 53 + 42 + 195 = \mathbf{495}$
+##### Given Matrix (Annotated with Totals):
+| $N = 495$ | Predicted Positive (0) | Predicted Negative (1) | Row Total (Actual) |
+| :--- | :---: | :---: | :---: |
+| **Actual Positive (0)** | **$205$** ($\text{TP}$) | **$53$** ($\text{FN}$) | $P = 258$ |
+| **Actual Negative (1)** | **$42$** ($\text{FP}$) | **$195$** ($\text{TN}$) | $N_{\text{neg}} = 237$ |
+| **Column Total (Predicted)** | $247$ | $248$ | **Total $N = 495$** |
 
-##### Step-by-Step Metric Summary:
+##### Metric Summary Table:
 | Metric | Governing Formula | Exact Substitution | Decimal Value | Percentage |
 | :--- | :---: | :---: | :---: | :---: |
 | **Accuracy** | $\frac{\text{TP} + \text{TN}}{N}$ | $\frac{205 + 195}{495} = \frac{400}{495}$ | **$0.8081$** | **$80.81\%$** |
-| **Recall** | $\frac{\text{TP}}{\text{TP} + \text{FN}}$ | $\frac{205}{205 + 53} = \frac{205}{258}$ | **$0.7946$** | **$79.46\%$** |
-| **Precision** | $\frac{\text{TP}}{\text{TP} + \text{FP}}$ | $\frac{205}{205 + 42} = \frac{205}{247}$ | **$0.8300$** | **$83.00\%$** |
+| **Recall (Sensitivity)** | $\frac{\text{TP}}{\text{TP} + \text{FN}}$ | $\frac{205}{205 + 53} = \frac{205}{258}$ | **$0.7946$** | **$79.46\%$** |
+| **Precision (PPV)** | $\frac{\text{TP}}{\text{TP} + \text{FP}}$ | $\frac{205}{205 + 42} = \frac{205}{247}$ | **$0.8300$** | **$83.00\%$** |
 | **$F_1$-Score** | $\frac{2\text{TP}}{2\text{TP} + \text{FP} + \text{FN}}$ | $\frac{2(205)}{2(205) + 42 + 53} = \frac{410}{505}$ | **$0.8119$** | **$81.19\%$** |
-| **FPR** | $\frac{\text{FP}}{\text{FP} + \text{TN}}$ | $\frac{42}{42 + 195} = \frac{42}{237}$ | **$0.1772$** | **$17.72\%$** |
+| **False Positive Rate (FPR)** | $\frac{\text{FP}}{\text{FP} + \text{TN}}$ | $\frac{42}{42 + 195} = \frac{42}{237}$ | **$0.1772$** | **$17.72\%$** |
 
 ---
 
-#### 3. Evaluation of Binary Datasets B ($N = 255$) & C ($N = 195$) (4 Marks)
-
-##### Dataset B ($N = 255$: $\text{TP}=85, \text{FN}=48, \text{FP}=47, \text{TN}=75$):
-| Metric | Governing Formula | Exact Substitution | Decimal Value | Percentage |
-| :--- | :---: | :---: | :---: | :---: |
-| **Accuracy** | $\frac{\text{TP} + \text{TN}}{N}$ | $\frac{85 + 75}{255} = \frac{160}{255}$ | **$0.6275$** | **$62.75\%$** |
-| **Recall** | $\frac{\text{TP}}{\text{TP} + \text{FN}}$ | $\frac{85}{85 + 48} = \frac{85}{133}$ | **$0.6391$** | **$63.91\%$** |
-| **Precision** | $\frac{\text{TP}}{\text{TP} + \text{FP}}$ | $\frac{85}{85 + 47} = \frac{85}{132}$ | **$0.6439$** | **$64.39\%$** |
-| **$F_1$-Score** | $\frac{2\text{TP}}{2\text{TP} + \text{FP} + \text{FN}}$ | $\frac{2(85)}{2(85) + 47 + 48} = \frac{170}{265}$ | **$0.6415$** | **$64.15\%$** |
-| **FPR** | $\frac{\text{FP}}{\text{FP} + \text{TN}}$ | $\frac{47}{47 + 75} = \frac{47}{122}$ | **$0.3852$** | **$38.52\%$** |
-
-##### Dataset C ($N = 195$: $\text{TP}=65, \text{FN}=43, \text{FP}=32, \text{TN}=55$):
-| Metric | Governing Formula | Exact Substitution | Decimal Value | Percentage |
-| :--- | :---: | :---: | :---: | :---: |
-| **Accuracy** | $\frac{\text{TP} + \text{TN}}{N}$ | $\frac{65 + 55}{195} = \frac{120}{195}$ | **$0.6154$** | **$61.54\%$** |
-| **Recall** | $\frac{\text{TP}}{\text{TP} + \text{FN}}$ | $\frac{65}{65 + 43} = \frac{65}{108}$ | **$0.6019$** | **$60.19\%$** |
-| **Precision** | $\frac{\text{TP}}{\text{TP} + \text{FP}}$ | $\frac{65}{65 + 32} = \frac{65}{97}$ | **$0.6701$** | **$67.01\%$** |
-| **$F_1$-Score** | $\frac{2\text{TP}}{2\text{TP} + \text{FP} + \text{FN}}$ | $\frac{2(65)}{2(65) + 32 + 43} = \frac{130}{205}$ | **$0.6341$** | **$63.41\%$** |
-| **FPR** | $\frac{\text{FP}}{\text{FP} + \text{TN}}$ | $\frac{32}{32 + 55} = \frac{32}{87}$ | **$0.3678$** | **$36.78\%$** |
-
----
-
-#### 4. Evaluation of Multi-Class Fruit Matrix ($N = 36$) (4 Marks)
-
-Total samples $N = (7+8+9) + (1+2+3) + (3+2+1) = 24 + 6 + 6 = \mathbf{36}$.
-*   **Overall Accuracy:**
-    $$\text{Accuracy} = \frac{\sum \text{Diagonal}}{N} = \frac{7 + 2 + 1}{36} = \frac{10}{36} \approx \mathbf{0.2778 \ (27.78\%)}$$
-
-##### One-vs-Rest Decomposition for Each Fruit:
-| Class | TP | FP (Col Sum - TP) | FN (Row Sum - TP) | TN ($N - \text{Row} - \text{Col} + \text{TP}$) | Recall | Precision | $F_1$-Score | FPR |
-| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Apple** | **7** | $1 + 3 = \mathbf{4}$ | $8 + 9 = \mathbf{17}$ | $36 - (7+4+17) = \mathbf{8}$ | $\frac{7}{24} \approx \mathbf{0.2917}$ | $\frac{7}{11} \approx \mathbf{0.6364}$ | **$0.4000$** | $\frac{4}{12} \approx \mathbf{0.3333}$ |
-| **Orange** | **2** | $8 + 2 = \mathbf{10}$ | $1 + 3 = \mathbf{4}$ | $36 - (2+10+4) = \mathbf{20}$ | $\frac{2}{6} \approx \mathbf{0.3333}$ | $\frac{2}{12} \approx \mathbf{0.1667}$ | **$0.2222$** | $\frac{10}{30} \approx \mathbf{0.3333}$ |
-| **Mango** | **1** | $9 + 3 = \mathbf{12}$ | $3 + 2 = \mathbf{5}$ | $36 - (1+12+5) = \mathbf{18}$ | $\frac{1}{6} \approx \mathbf{0.1667}$ | $\frac{1}{13} \approx \mathbf{0.0769}$ | **$0.1053$** | $\frac{12}{30} = \mathbf{0.4000}$ |
-
-:::tip
-
-**Examiner's Note**
-
-In multi-class matrices, calculate TP as the diagonal cell, FN as the row sum minus diagonal, FP as the column sum minus diagonal, and TN as all remaining cells.
-
-:::
-
----
-
-## Question 5 (16 Marks)
+### Question 3 (16 Marks)
 
 :::info
 
 **Question Statement**
 
-*   **i)** Explain the concept of decision tree classifier and solve the given dataset using decision tree classifier using Information gain. **(10 Marks)**
+3.  (i) Write in detail about decision tree splitting criteria **(8 marks)**: a) Gini index &nbsp; b) Information gain  
+    (ii) Explain the hyper parameters of Decision Tree? **(8 marks)**  
+    **(OR)**  
+    i) Explain the concept of decision tree classifier and solve the given dataset using decision tree classifier using Information gain **(10 marks)**
 
 | Specialized skill | Academic | Salary Expectation | Communication Skill | Job Status |
 | :---: | :---: | :---: | :---: | :---: |
@@ -400,44 +160,49 @@ In multi-class matrices, calculate TP as the diagonal cell, FN as the row sum mi
 | Yes | High | Medium | Good | Selected |
 | No | Average | Low | Average | Not Selected |
 
-*   **ii)** Explain the concept of post pruning and pre-pruning with example? **(6 Marks)**
+*   (ii) Explain the concept of post pruning and pre-pruning with example? **(6 marks)**
 
 :::
 
 ---
 
-### Solution 5 (16 Marks)
+#### Solution 3: Splitting Criteria & Hyperparameters (Main Option)
 
-#### (i) Decision Tree Construction on Job Status Dataset (10 Marks)
+##### (i) Splitting Criteria: Gini Index vs. Information Gain
+*   **Gini Impurity (CART):** Measures probability of misclassifying a randomly chosen element:
+    $$I_G(S) = 1 - \sum_{i=1}^C p_i^2$$
+    *Range:* $[0, 0.5]$ for binary splits. Minimizes computation by avoiding logarithms.
+*   **Information Gain (ID3 / C4.5):** Measures reduction in Shannon Entropy:
+    $$H(S) = - \sum_{i=1}^C p_i \log_2(p_i), \quad \operatorname{Gain}(S, A) = H(S) - \sum_{v \in \operatorname{Values}(A)} \frac{\lvert S_v \rvert}{\lvert S \rvert} H(S_v)$$
 
-##### 1. Total Dataset Base Entropy ($S$)
-Total records $N = 6$: $3\text{ Selected}$ and $3\text{ Not Selected}$.
-$$p_{\text{Sel}} = \frac{3}{6} = 0.5, \quad p_{\text{NotSel}} = \frac{3}{6} = 0.5$$
-$$H(S) = -0.5 \log_2(0.5) - 0.5 \log_2(0.5) = \mathbf{1.0000 \text{ bits}}$$
+##### (ii) Decision Tree Hyperparameters
+1.  `max_depth`: Limits maximum vertical depth to stop learning sample-specific noise.
+2.  `min_samples_split`: Minimum samples required to attempt a split at an internal node.
+3.  `min_samples_leaf`: Minimum samples mandated in every terminal leaf.
+4.  `max_features`: Number of candidate features evaluated at each split ($m = \sqrt{p}$).
 
-##### 2. Attribute Evaluation via Information Gain at Root
-$$\operatorname{Gain}(S, A) = H(S) - \sum_{v \in \operatorname{Values}(A)} \frac{\lvert S_v \rvert}{\lvert S \rvert} H(S_v)$$
+---
 
-| Candidate Attribute | Subsets ($v$) | Counts (Sel, NotSel) | Sub-Entropy ($H$) | Remainder Entropy | Information Gain | Decision |
-| :--- | :--- | :---: | :---: | :---: | :---: | :--- |
-| **`Academic`** | **High** ($2$)<br/>**Average** ($2$)<br/>**Poor** ($2$) | ($2, 0$)<br/>($0, 2$)<br/>($1, 1$) | $0.0000$<br/>$0.0000$<br/>$1.0000$ | $\frac{2}{6}(0) + \frac{2}{6}(0) + \frac{2}{6}(1.0) = \mathbf{0.3333}$ | **$0.6667 \text{ bits}$** | **Selected as Root (Tie Winner)** |
-| **`Salary Expectation`** | **High** ($2$)<br/>**Low** ($2$)<br/>**Medium** ($2$) | ($2, 0$)<br/>($0, 2$)<br/>($1, 1$) | $0.0000$<br/>$0.0000$<br/>$1.0000$ | $\frac{2}{6}(0) + \frac{2}{6}(0) + \frac{2}{6}(1.0) = \mathbf{0.3333}$ | **$0.6667 \text{ bits}$** | Alternate Root |
-| `Communication Skill` | **Good** ($2$)<br/>**Poor** ($1$)<br/>**Average** ($3$) | ($2, 0$)<br/>($0, 1$)<br/>($1, 2$) | $0.0000$<br/>$0.0000$<br/>$0.9183$ | $\frac{2}{6}(0) + \frac{1}{6}(0) + \frac{3}{6}(0.9183) = 0.4591$ | $0.5409 \text{ bits}$ | Rejected |
-| `Specialized skill` | **Yes** ($3$)<br/>**No** ($3$) | ($2, 1$)<br/>($1, 2$) | $0.9183$<br/>$0.9183$ | $\frac{3}{6}(0.9183) + \frac{3}{6}(0.9183) = 0.9183$ | $0.0817 \text{ bits}$ | Rejected |
+#### Solution 3 (OR): Decision Tree on Job Status Dataset ($N = 6$)
 
-##### 3. Branching and Subtree Expansion
-Select **`Academic`** as the Root Node:
-*   **Branch 1: `Academic = High` (Rows 3, 5):**
-    Both instances are $\text{Selected} \implies$ **Pure Leaf Node: Selected**.
-*   **Branch 2: `Academic = Average` (Rows 4, 6):**
-    Both instances are $\text{Not Selected} \implies$ **Pure Leaf Node: Not Selected**.
-*   **Branch 3: `Academic = Poor` (Rows 1, 2):**
-    Subset contains Row 1 ($\text{Low salary, Average comm} \to \text{Not Selected}$) and Row 2 ($\text{High salary, Good comm} \to \text{Selected}$).
-    Split on **`Salary Expectation`** (or `Communication Skill`):
-    *   `High` (Row 2): $\implies$ **Pure Leaf Node: Selected**.
-    *   `Low` (Row 1): $\implies$ **Pure Leaf Node: Not Selected**.
+##### 1. Base Dataset Entropy ($S$)
+Total $N = 6$: $3\text{ Selected}, 3\text{ Not Selected} \implies H(S) = -0.5\log_2(0.5) - 0.5\log_2(0.5) = \mathbf{1.0000 \text{ bits}}$.
 
-##### 4. Constructed Tree Diagram
+##### 2. Attribute Information Gain Summary:
+| Candidate Attribute | Value Subsets | Sub-Entropy ($H$) | Remainder Entropy | Information Gain | Decision |
+| :--- | :--- | :---: | :---: | :---: | :--- |
+| **`Academic`** | **High** ($2\text{ Sel}$)<br/>**Average** ($2\text{ NotSel}$)<br/>**Poor** ($1\text{ Sel}, 1\text{ NotSel}$) | $0.0000$<br/>$0.0000$<br/>$1.0000$ | $\frac{2}{6}(0) + \frac{2}{6}(0) + \frac{2}{6}(1.0) = \mathbf{0.3333}$ | **$0.6667 \text{ bits}$** | **Selected as Root (Tie Winner)** |
+| **`Salary Expectation`** | **High** ($2\text{ Sel}$)<br/>**Low** ($2\text{ NotSel}$)<br/>**Medium** ($1\text{ Sel}, 1\text{ NotSel}$) | $0.0000$<br/>$0.0000$<br/>$1.0000$ | $\frac{2}{6}(0) + \frac{2}{6}(0) + \frac{2}{6}(1.0) = \mathbf{0.3333}$ | **$0.6667 \text{ bits}$** | Alternate Root |
+| `Communication Skill` | **Good** ($2\text{ Sel}$)<br/>**Poor** ($1\text{ NotSel}$)<br/>**Average** ($1\text{ Sel}, 2\text{ NotSel}$) | $0.0000$<br/>$0.0000$<br/>$0.9183$ | $\frac{2}{6}(0) + \frac{1}{6}(0) + \frac{3}{6}(0.9183) = 0.4591$ | $0.5409 \text{ bits}$ | Rejected |
+| `Specialized skill` | **Yes** ($2\text{ Sel}, 1\text{ NotSel}$)<br/>**No** ($1\text{ Sel}, 2\text{ NotSel}$) | $0.9183$<br/>$0.9183$ | $\frac{3}{6}(0.9183) + \frac{3}{6}(0.9183) = 0.9183$ | $0.0817 \text{ bits}$ | Rejected |
+
+##### 3. Subtree Splits under `Academic`
+*   `Academic = High` (Rows 3, 5): $\implies$ **Pure Leaf: Selected**
+*   `Academic = Average` (Rows 4, 6): $\implies$ **Pure Leaf: Not Selected**
+*   `Academic = Poor` (Rows 1, 2): Split on `Salary Expectation`:
+    *   `High` (Row 2): $\implies$ **Selected**
+    *   `Low` (Row 1): $\implies$ **Not Selected**
+
 ```mermaid
 flowchart TD
     ROOT["Academic"] -->|"High"| L1["Job Status: Selected"]
@@ -448,33 +213,211 @@ flowchart TD
     N1 -->|"Low"| L4["Job Status: Not Selected"]
 ```
 
----
-
-#### (ii) Pre-Pruning vs. Post-Pruning (6 Marks)
-
-| Dimension | Pre-Pruning (Early Stopping) | Post-Pruning (Cost-Complexity Pruning) |
-| :--- | :--- | :--- |
-| **Timing** | Halts tree construction during growth. | Grows tree to full depth, then prunes branches bottom-up. |
-| **Criterion** | Stops if `max_depth` reached or $\operatorname{Gain} < \epsilon$. | Minimizes cost-complexity: $R_\alpha(T) = R(T) + \alpha \lvert T \rvert$. |
-| **Risk** | Horizon effect: may halt before uncovering valuable multi-feature interactions. | Computationally heavier, but consistently achieves optimal generalization. |
-
-:::tip
-
-**Examiner's Note**
-
-On the Job Status dataset, both `Academic` and `Salary Expectation` yield the identical maximum Information Gain of $0.6667$ bits. Selecting either attribute yields a simple, completely pure tree in two splits.
-
-:::
+##### (ii) Pre-Pruning vs. Post-Pruning
+*   **Pre-Pruning:** Early stopping based on bounds (`max_depth`, `min_samples_split`). Fast, but risks underfitting.
+*   **Post-Pruning:** Grows the full tree, then collapses subtrees bottom-up using cost-complexity penalty $R_\alpha(T) = R(T) + \alpha \lvert T \rvert$.
 
 ---
 
-## Question 6 (16 Marks)
+### Question 4 (16 Marks)
 
 :::info
 
 **Question Statement**
 
-*   **i)** Construct Decision tree for the given financial dataset using Information gain and Entropy. **(12 Marks)**
+4.  Explain in detail about bagging ensemble techniques classification? **(10 marks)**  
+    (ii) Define stacking and Voting ensemble model? **(6 marks)**  
+    **(OR)**  
+4.  Describe the random forest model with example and justify the hyper parameter importance? **(16 marks)**
+
+:::
+
+---
+
+#### Solution 4: Bagging, Stacking & Voting (Main Option)
+
+1.  **Bagging (Bootstrap Aggregation):**
+    *   *Resampling:* Draws $B$ independent samples of size $N$ with replacement. Each tree sees $\approx 63.2\%$ unique rows, leaving $e^{-1} \approx 36.8\%$ as **Out-of-Bag (OOB)** validation samples.
+    *   *Aggregation:* Consolidated via plurality vote: $\hat{Y} = \arg\max_c \sum_{b=1}^B \mathbb{I}(\hat{y}_b = c)$.
+2.  **Voting Classifiers:**
+    *   *Hard Voting:* Plurality vote among base model predictions ($\text{mode}(\hat{y}_1, \dots, \hat{y}_M)$).
+    *   *Soft Voting:* Averages predicted probabilities: $\hat{y} = \arg\max_c \frac{1}{M}\sum P_m(Y = c \mid \mathbf{x})$.
+3.  **Stacking (Stacked Generalization):**
+    *   Heterogeneous base estimators (SVM, Random Forest, XGBoost) generate cross-validated predictions.
+    *   A **Meta-Learner** (Logistic Regression / ElasticNet) trains on these predictions to assign optimal regional weights.
+
+---
+
+#### Solution 4 (OR): Random Forest Algorithm & Hyperparameter Tuning
+
+1.  **Algorithmic Framework:** Combines Bootstrap Resampling with **Random Feature Subspacing** ($m \approx \sqrt{p}$).
+2.  **Ensemble Variance Reduction Formula:**
+    $$\operatorname{Var}(\bar{T}) = \rho \sigma^2 + \frac{1 - \rho}{B} \sigma^2$$
+    *Random feature subspacing drives pairwise tree correlation $\rho \to 0$, reducing overall ensemble variance $\rho\sigma^2$ without inflating bias.*
+3.  **Hyperparameters:**
+    *   `n_estimators`: More trees monotonically reduce variance without overfitting.
+    *   `max_features`: Smaller $m$ decorrelates trees (standard $\sqrt{p}$).
+    *   `max_depth` & `min_samples_split`: Regularizes individual tree complexity.
+
+---
+
+### Question 5 (16 Marks)
+
+:::info
+
+**Question Statement**
+
+5.  a) Discuss the distance measures used in machine learning model.  
+    b) Write the k-nearest neighbor algorithm with suitable example  
+    **(OR)**  
+5.  a) Describe the issues of supervised learning algorithm.  
+    b) Write short notes on: &nbsp; i) Multinomial Naïve Bayes &nbsp; ii) Gaussian Naïve Baye
+
+:::
+
+---
+
+#### Solution 5: Distance Metrics and KNN (Main Option)
+
+##### a) Distance Measures in Machine Learning
+*   **Euclidean ($L_2$):** $d_2(\mathbf{u}, \mathbf{v}) = \sqrt{\sum (u_i - v_i)^2}$ (straight-line distance, sensitive to scaling).
+*   **Manhattan ($L_1$):** $d_1(\mathbf{u}, \mathbf{v}) = \sum \lvert u_i - v_i \rvert$ (grid-based, outlier-robust).
+*   **Minkowski ($L_p$):** $d_p(\mathbf{u}, \mathbf{v}) = \left(\sum \lvert u_i - v_i \rvert^p\right)^{1/p}$.
+*   **Cosine Distance:** $1 - \frac{\mathbf{u} \cdot \mathbf{v}}{\|\mathbf{u}\|_2 \|\mathbf{v}\|_2}$ (angular orientation, invariant to text length).
+
+##### b) K-Nearest Neighbors (KNN) Algorithm
+1.  Store training instances $\{(\mathbf{x}_i, y_i)\}_{i=1}^N$.
+2.  For query $\mathbf{x}^*$, compute distance $D(\mathbf{x}^*, \mathbf{x}_i)$ to all training points.
+3.  Identify the $k$ nearest instances $\mathcal{N}_k(\mathbf{x}^*)$ and assign majority vote:
+    $$\hat{y} = \arg\max_c \sum_{i \in \mathcal{N}_k(\mathbf{x}^*)} \mathbb{I}(y_i = c)$$
+*   *Example:* Classifying a customer (Income ₹50,000, Credit $720$). If $k = 3$ nearest neighbors are $[\text{Approve}, \text{Approve}, \text{Reject}]$, the loan is **Approved**.
+
+---
+
+#### Solution 5 (OR): Supervised Issues & Naïve Bayes Variants
+
+##### a) Core Issues in Supervised Learning
+1.  **Bias-Variance Dilemma:** Underfitting vs. Overfitting trade-off.
+2.  **Curse of Dimensionality:** Exponential volume growth makes points equidistant in high dimensions.
+3.  **Class Imbalance:** Rare target events get overwhelmed by majority classes.
+
+##### b) Naïve Bayes Variants
+*   **Multinomial Naïve Bayes:** Discrete token count frequencies evaluated using Laplace smoothing:
+    $$\hat{\theta}_{ci} = \frac{N_{ci} + 1}{N_c + \lvert V \rvert} \quad (\text{Bag-of-Words text classification})$$
+*   **Gaussian Naïve Bayes:** Real-valued continuous features modeled via normal distribution:
+    $$P(x_i \mid y) = \frac{1}{\sqrt{2\pi\sigma_{yi}^2}} \exp\left(-\frac{(x_i - \mu_{yi})^2}{2\sigma_{yi}^2}\right)$$
+
+---
+
+## Set 2 (Questions 2 to 5)
+
+### Question 2 (16 Marks)
+
+:::info
+
+**Question Statement**
+
+2.  Differentiate supervised and unsupervised machine learning model. **(4 marks)**  
+    c) Difference between classification and regression models? **(4 marks)**  
+    d) Write the short notes and mathematical form of ODD and Logit function? **(8 marks)**  
+    **(OR)**  
+    (ii) Discuss briefly the logistic regression in the machine learning model with a suitable example. **(12 marks)**  
+    (iii) define train, test and validation dataset **(4 marks)**
+
+:::
+
+---
+
+#### Solution 2: Paradigms, Task Types & Logit Function (Main Option)
+
+##### Supervised vs. Unsupervised Learning (4 Marks)
+| Feature | Supervised Learning | Unsupervised Learning |
+| :--- | :--- | :--- |
+| **Data** | Labelled pairs $\{(\mathbf{x}_i, y_i)\}$ | Unlabelled feature vectors $\{\mathbf{x}_i\}$ |
+| **Goal** | Prediction / Extrapolation | Structure / Cluster Discovery |
+| **Examples** | SVM, Random Forest, Logistic Regression | K-Means, PCA, DBSCAN |
+
+##### Classification vs. Regression (4 Marks)
+*   *Classification:* Discrete category target $y \in \{0, 1\}$ (e.g., Spam vs. Ham).
+*   *Regression:* Continuous scalar target $y \in \mathbb{R}$ (e.g., Stock price).
+
+##### Odds and Logit Function (8 Marks)
+*   **Odds Ratio:** $\text{Odds} = \frac{p}{1 - p} \in [0, +\infty)$.
+*   **Logit Function:** $\operatorname{logit}(p) = \ln\left(\frac{p}{1 - p}\right) = \mathbf{w}^T \mathbf{x} + b \in (-\infty, +\infty)$.
+
+---
+
+#### Solution 2 (OR): Logistic Regression & Data Partitioning
+
+##### (ii) Logistic Regression with Example (12 Marks)
+Outputs calibrated posterior probabilities $P(Y=1 \mid \mathbf{x}) = \sigma(\mathbf{w}^T \mathbf{x} + b)$ optimized via Binary Cross-Entropy loss. For an applicant with credit profile $\mathbf{x}$, if $P \ge 0.50$, the loan is approved.
+
+##### (iii) Train, Validation, and Test Dataset Definitions (4 Marks)
+```mermaid
+flowchart LR
+    D["Total Dataset (100%)"] --> TR["Training Set (70%)<br/>Fits Model Weights w, b"]
+    D --> VAL["Validation Set (15%)<br/>Tunes Hyperparameters & Stops Early"]
+    D --> TS["Test Set (15%)<br/>Final Unbiased Generalization Audit"]
+```
+
+---
+
+### Question 3 (16 Marks)
+
+:::info
+
+**Question Statement**
+
+3.  Explain the concept of confusion matrix and compute the below measures for all the target class labels with definition? **(16 marks)**
+
+| Predicted \ Actual | Apple | Orange | Mango |
+| :--- | :---: | :---: | :---: |
+| **Apple** | 7 | 8 | 9 |
+| **Orange** | 1 | 2 | 3 |
+| **Mango** | 3 | 2 | 1 |
+
+*   a) Accuracy &nbsp; b) Recall &nbsp; c) Precision &nbsp; d) F1 score &nbsp; e) False Positive Rate
+
+**(OR)**
+
+2)  What is the impact of data class Imbalance on ML model. Describe the techniques used to rectify it with an suitable example.  
+4.  a) Write the decision tree algorithm.  
+    b) Describe briefly the entropy method of determining the feature importance in machine learning model.
+
+:::
+
+---
+
+#### Solution 3: Multi-Class Confusion Matrix (Main Option)
+
+Total observations $N = 36$. Overall Accuracy $= \frac{7 + 2 + 1}{36} = \frac{10}{36} \approx \mathbf{27.78\%}$.
+
+##### One-vs-Rest Decomposition for Each Fruit:
+| Class | TP | FP (Row Sum - TP) | FN (Col Sum - TP) | TN ($N - \text{Row} - \text{Col} + \text{TP}$) | Recall ($\frac{\text{TP}}{\text{TP}+\text{FN}}$) | Precision ($\frac{\text{TP}}{\text{TP}+\text{FP}}$) | $F_1$-Score | FPR ($\frac{\text{FP}}{\text{FP}+\text{TN}}$) |
+| :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
+| **Apple** | **7** | $8 + 9 = \mathbf{17}$ | $1 + 3 = \mathbf{4}$ | $36 - (7+17+4) = \mathbf{8}$ | $\frac{7}{11} \approx \mathbf{0.6364}$ | $\frac{7}{24} \approx \mathbf{0.2917}$ | **$0.4000$** | $\frac{17}{25} = \mathbf{0.6800}$ |
+| **Orange** | **2** | $1 + 3 = \mathbf{4}$ | $8 + 2 = \mathbf{10}$ | $36 - (2+4+10) = \mathbf{20}$ | $\frac{2}{12} \approx \mathbf{0.1667}$ | $\frac{2}{6} \approx \mathbf{0.3333}$ | **$0.2222$** | $\frac{4}{24} \approx \mathbf{0.1667}$ |
+| **Mango** | **1** | $3 + 2 = \mathbf{5}$ | $9 + 3 = \mathbf{12}$ | $36 - (1+5+12) = \mathbf{18}$ | $\frac{1}{13} \approx \mathbf{0.0769}$ | $\frac{1}{6} \approx \mathbf{0.1667}$ | **$0.1053$** | $\frac{5}{23} \approx \mathbf{0.2174}$ |
+
+---
+
+#### Solution 3 (OR): Class Imbalance & Decision Tree Algorithm
+
+1.  **Class Imbalance Impact & Remediation:** Accuracy paradox; solved via SMOTE oversampling, NearMiss undersampling, and Cost-Sensitive loss reweighting.
+2.  **Decision Tree Algorithm (ID3 / CART):**
+    *   Evaluate all features; compute Information Gain / Gini reduction.
+    *   Split node on attribute maximizing gain; recurse on subsets until pure or stopping criteria met.
+3.  **Entropy Method for Feature Importance:** Features that yield the largest cumulative reductions in entropy across all tree splits hold the highest feature importance.
+
+---
+
+### Question 3 (Continued / Alternate) (16 Marks)
+
+:::info
+
+**Question Statement**
+
+3.  (i) Construct Decision tree for the given dataset using Information gain and Entropy. **(12 marks)**
 
 | Day | Past Trend | Open Interest | Trading Volume | Return |
 | :---: | :---: | :---: | :---: | :---: |
@@ -489,36 +432,28 @@ On the Job Status dataset, both `Academic` and `Salary Expectation` yield the id
 | 9 | Positive | Low | Low | Down |
 | 10 | Positive | High | High | Up |
 
-*   **ii)** How decision tree handles the overfitting? **(4 Marks)**
+*   (ii) How decision tree handles the overfitting? **(4 marks)**
 
 :::
 
 ---
 
-### Solution 6 (16 Marks)
-
-#### (i) Decision Tree Construction on Financial Return Dataset (12 Marks)
+#### Solution: Decision Tree on Stock Return Dataset
 
 ##### 1. Base Dataset Entropy ($S$)
-Total samples $N = 10$: $4\text{ Up}$ and $6\text{ Down}$.
-$$p_{\text{Up}} = \frac{4}{10} = 0.4, \quad p_{\text{Down}} = \frac{6}{10} = 0.6$$
-$$H(S) = -0.4 \log_2(0.4) - 0.6 \log_2(0.6) = \mathbf{0.9710 \text{ bits}}$$
+$N = 10$: $4\text{ Up}, 6\text{ Down} \implies H(S) = -0.4\log_2(0.4) - 0.6\log_2(0.6) = \mathbf{0.9710 \text{ bits}}$.
 
 ##### 2. Root Selection via Information Gain
-| Candidate Attribute | Value Subsets | Sub-Entropy ($H$) | Remainder Entropy | Information Gain | Decision |
-| :--- | :--- | :---: | :---: | :---: | :--- |
-| **`Past Trend`** | **Negative** ($4\text{ Down}$)<br/>**Positive** ($4\text{ Up}, 2\text{ Down}$) | $H = 0.0000$<br/>$H = 0.9183$ | $\frac{4}{10}(0) + \frac{6}{10}(0.9183) = \mathbf{0.5510}$ | **$0.4200 \text{ bits}$** | **Selected as Root (Highest Gain)** |
-| `Open Interest` | **High** ($2\text{ Up}, 2\text{ Down}$)<br/>**Low** ($2\text{ Up}, 4\text{ Down}$) | $H = 1.0000$<br/>$H = 0.9183$ | $\frac{4}{10}(1.0) + \frac{6}{10}(0.9183) = 0.9510$ | $0.0200 \text{ bits}$ | Rejected |
-| `Trading Volume` | **High** ($4\text{ Up}, 3\text{ Down}$)<br/>**Low** ($3\text{ Down}$) | $H = 0.9852$<br/>$H = 0.0000$ | $\frac{7}{10}(0.9852) + \frac{3}{10}(0) = 0.6897$ | $0.2813 \text{ bits}$ | Rejected |
+*   $\operatorname{Gain}(S, \text{Past Trend}) = 0.9710 - [\frac{4}{10}(0) + \frac{6}{10}(0.9183)] = \mathbf{0.4200 \text{ bits}}$ (**Highest $\implies$ Root**)
+*   $\operatorname{Gain}(S, \text{Trading Volume}) = 0.9710 - 0.6897 = \mathbf{0.2813 \text{ bits}}$
+*   $\operatorname{Gain}(S, \text{Open Interest}) = 0.9710 - 0.9510 = \mathbf{0.0200 \text{ bits}}$
 
-##### 3. Expanding Branches
-*   **Branch 1: `Past Trend = Negative` (Days 2, 5, 7, 8):**
-    All $4$ samples have $\text{Return} = \text{Down} \implies$ **Pure Leaf Node: Down**.
-*   **Branch 2: `Past Trend = Positive` (Days 1, 3, 4, 6, 9, 10):**
-    Subset contains $4\text{ Up}, 2\text{ Down}$ ($H = 0.9183$). Evaluate `Trading Volume`:
-    *   `High` (Days 1, 3, 4, 10): All $4$ samples are $\text{Up} \implies H = 0.0000$ (**Pure Leaf: Up**).
-    *   `Low` (Days 6, 9): Both $2$ samples are $\text{Down} \implies H = 0.0000$ (**Pure Leaf: Down**).
-    *   $$\operatorname{Gain}(S_{\text{Pos}}, \text{Trading Volume}) = 0.9183 - 0 = \mathbf{0.9183 \text{ bits}} \quad (\text{Complete Separation})$$
+##### 3. Tree Architecture & Decision Rules
+*   `Past Trend = Negative` (Days 2, 5, 7, 8): $\implies$ **Pure Leaf: Down**
+*   `Past Trend = Positive` (Days 1, 3, 4, 6, 9, 10): Split on `Trading Volume`:
+    *   `High` (Days 1, 3, 4, 10): $\implies$ **Pure Leaf: Up**
+    *   `Low` (Days 6, 9): $\implies$ **Pure Leaf: Down**
+    *   $\operatorname{Gain}(S_{\text{Pos}}, \text{Trading Volume}) = 0.9183 - 0 = \mathbf{0.9183 \text{ bits}}$ (Complete separation)
 
 ```mermaid
 flowchart TD
@@ -531,331 +466,174 @@ flowchart TD
 
 ---
 
-#### (ii) Overfitting Handling in Decision Trees (4 Marks)
-1.  **Early Stopping (Pre-Pruning):** Enforces bounds on tree geometry (`max_depth`, `min_samples_split`).
-2.  **Cost-Complexity Pruning (Post-Pruning):** Minimizes $R_\alpha(T) = R(T) + \alpha \lvert T \rvert$ using held-out cross-validation.
-
-:::tip
-
-**Examiner's Note**
-
-Note that `Open Interest` is completely pruned because `Past Trend` followed by `Trading Volume` achieves $100\%$ pure separation in only two levels.
-
-:::
-
----
-
-## Question 7 (16 Marks)
+### Question 4 (16 Marks)
 
 :::info
 
 **Question Statement**
 
-*   **i)** Write the short notes and mathematical form of ODD and Logit function? **(4 Marks)**
-*   **ii)** Explain the non-linear machine learning models in detail? **(8 Marks)**
-*   **iii)** Define train, test and validation dataset. **(4 Marks)**
+4)  Describe the random forest model with example and justify the hyper parameter importance? **(16 marks)**  
+    **OR**  
+4)  How feature importance playing major role in predicting the target variable? **(6 marks)**  
+    Explain the detailed concept and features of a) gradient boosting and b) Adaboosting? **(10 marks)**
 
 :::
 
 ---
 
-### Solution 7 (16 Marks)
+#### Solution 4: Boosting Paradigms & Feature Importance
 
-#### (i) Mathematical Form of Odds and Logit Function (4 Marks)
-*   **Odds Ratio:** Ratio of probability of occurrence ($p$) to non-occurrence:
-    $$\text{Odds} = \frac{p}{1 - p} \in [0, +\infty)$$
-*   **Logit Function:** Natural logarithm of odds, linearizing probabilities onto the real line:
-    $$\operatorname{logit}(p) = \ln\left(\frac{p}{1 - p}\right) = \mathbf{w}^T \mathbf{x} + b \in (-\infty, +\infty)$$
-
----
-
-#### (ii) Non-Linear Machine Learning Models in Detail (8 Marks)
-
-1.  **Kernel Support Vector Machines (Cover's Theorem):**
-    *   Maps non-separable input vectors $\mathbf{x} \in \mathbb{R}^d$ into higher-dimensional Hilbert space $\mathcal{H}$ via Mercer kernels without explicit coordinate expansion:
-        $$K(\mathbf{x}_i, \mathbf{x}_j) = \exp\left(-\gamma \|\mathbf{x}_i - \mathbf{x}_j\|^2\right) \quad (\text{RBF Kernel})$$
-2.  **Decision Trees & Tree Ensembles:**
-    *   Recursively partitions the input space into axis-aligned hyper-rectangles, producing piecewise constant non-linear decision boundaries.
-3.  **Multi-Layer Perceptrons (Neural Networks):**
-    *   Applies non-linear activation functions (ReLU, GELU, Sigmoid) across hidden layers:
-        $$\mathbf{h}^{(l)} = \sigma\left(\mathbf{W}^{(l)} \mathbf{h}^{(l-1)} + \mathbf{b}^{(l)}\right)$$
-        *Universal Approximation Theorem:* A feedforward network with a single non-linear hidden layer can approximate any continuous function on compact subsets of $\mathbb{R}^d$.
+1.  **Feature Importance Role (6 Marks):**
+    *   Enables model interpretability and regulatory compliance (e.g., credit approval).
+    *   Identifies uninformative features for dimensionality reduction.
+    *   Calculated via Mean Decrease in Impurity (MDI) or Permutation Importance.
+2.  **AdaBoost vs. Gradient Boosting (10 Marks):**
+    *   *AdaBoost:* Reweights misclassified samples iteratively: $w_i \gets w_i \exp(-\alpha_m y_i h_m(x_i))$.
+    *   *Gradient Boosting:* Fits base regression trees directly to the **pseudo-residuals (negative loss gradients)**:
+        $$r_{im} = -\left[\frac{\partial \mathcal{L}(y_i, f(\mathbf{x}_i))}{\partial f(\mathbf{x}_i)}\right]_{f=f_{m-1}}$$
 
 ---
 
-#### (iii) Train, Test, and Validation Dataset Definitions (4 Marks)
-
-```mermaid
-flowchart LR
-    D["Total Dataset (100%)"] --> TR["Training Set (70%)<br/>Learns Model Parameters w, b"]
-    D --> VAL["Validation Set (15%)<br/>Tunes Hyperparameters & Early Stopping"]
-    D --> TS["Test Set (15%)<br/>Unbiased Generalization Audit"]
-```
-
-1.  **Training Dataset ($60 - 80\%$):** Observations used directly by optimization algorithms to fit internal model parameters (e.g., weights $\mathbf{w}$ and biases $b$).
-2.  **Validation Dataset ($10 - 20\%$):** Independent holdout used to tune hyperparameters (e.g., learning rate, tree depth), select candidate models, and guide early stopping.
-3.  **Test Dataset ($10 - 20\%$):** Gold-standard benchmark evaluated **strictly once** at the conclusion of research to assess final real-world generalization error.
-
-:::tip
-
-**Examiner's Note**
-
-Emphasize that the validation set guides model selection and hyperparameter tuning, whereas the test set must never be touched during training to prevent data leakage.
-
-:::
-
----
-
-## Question 8 (16 Marks)
+### Question 5 (16 Marks)
 
 :::info
 
 **Question Statement**
 
-*   **a)** Explain in detail about bagging ensemble techniques classification? **(10 marks)**
-*   **b)** Define stacking and Voting ensemble model? **(6 marks)**
-*   **(OR)**
-*   Describe the random forest model with example and justify the hyper parameter importance? **(16 marks)**
+. (i) Explain the working principle of K nearest neighbour classifier? **(10 marks)**  
+(ii) what are the different distance measures are used in the KNN and how it impacts the neighbours on KNN model? **(6 marks)**  
+**(OR)**  
+5.  Explain Naïve bayes classifier in detail and solve the following dataset with the bayes model?
 
 :::
 
 ---
 
-### Solution 8 (16 Marks)
+#### Solution 5: Naïve Bayes Classifier with Worked Example
 
-#### 1. Bagging, Stacking, and Voting Ensembles (16 Marks)
-
-##### a) Bagging (Bootstrap Aggregation) Mechanics (10 Marks)
-Bagging reduces the variance of unstable, high-capacity estimators by training multiple independent models on resampled subsets:
-
-```mermaid
-flowchart LR
-    D["Training Dataset D (N samples)"] --> B1["Bootstrap Sample 1 (size N, with replacement)"]
-    D --> B2["Bootstrap Sample 2 (size N, with replacement)"]
-    D --> B3["Bootstrap Sample B (size N, with replacement)"]
-    
-    B1 --> M1["Base Classifier 1"]
-    B2 --> M2["Base Classifier 2"]
-    B3 --> MB["Base Classifier B"]
-    
-    M1 & M2 & MB --> AGG["Majority Voting: y_hat = mode(M_1, ..., M_B)"]
-```
-
-1.  **Bootstrap Resampling:** From training set $\mathcal{D}$ of size $N$, sample $N$ points uniformly with replacement. The probability of an instance *not* being chosen is:
-    $$\lim_{N \to \infty} \left(1 - \frac{1}{N}\right)^N = e^{-1} \approx 0.368 \ (36.8\%)$$
-    Thus, each base model trains on $\approx 63.2\%$ unique instances, leaving $36.8\%$ as **Out-of-Bag (OOB)** samples for unbiased validation.
-2.  **Parallel Training:** All $B$ base estimators train independently in parallel.
-3.  **Aggregation:** Binary/multiclass predictions are consolidated via plurality vote:
-    $$\hat{Y} = \arg\max_{c \in \{1, \dots, K\}} \sum_{b=1}^B \mathbb{I}(\hat{y}_b = c)$$
+1.  **Formulation:** Applies Bayes' Theorem with class-conditional feature independence:
+    $$P(Y = c \mid \mathbf{x}) \propto P(Y = c) \prod_{j=1}^d P(x_j \mid Y = c)$$
+2.  **Worked Spam Example:**
+    *   Given message $\mathbf{x} = [\text{"free"}, \text{"money"}]$.
+    *   Priors: $P(\text{Spam}) = 0.40, P(\text{Ham}) = 0.60$.
+    *   Likelihoods: $P(\text{"free"} \mid \text{Spam}) = 0.80, P(\text{"money"} \mid \text{Spam}) = 0.70$; $P(\text{"free"} \mid \text{Ham}) = 0.10, P(\text{"money"} \mid \text{Ham}) = 0.05$.
+    *   $\text{Score}(\text{Spam}) = 0.40 \times 0.80 \times 0.70 = \mathbf{0.2240}$
+    *   $\text{Score}(\text{Ham}) = 0.60 \times 0.10 \times 0.05 = \mathbf{0.0030}$
+    *   $$P(\text{Spam} \mid \mathbf{x}) = \frac{0.2240}{0.2240 + 0.0030} \approx \mathbf{98.68\%} \implies \mathbf{\hat{y} = \text{Spam}}$$
 
 ---
 
-##### b) Stacking and Voting Ensembles (6 Marks)
-*   **Voting Classifier:**
-    *   *Hard Voting:* Predicts the class receiving the simple majority of individual model votes ($\text{mode}(\hat{y}_1, \dots, \hat{y}_M)$).
-    *   *Soft Voting:* Averages predicted class probabilities across all models and selects the class maximizing average probability:
-        $$\hat{y} = \arg\max_{c} \frac{1}{M}\sum_{m=1}^M P_m(Y = c \mid \mathbf{x})$$
-*   **Stacking (Stacked Generalization):**
-    *   Heterogeneous base models ($M_1$: SVM, $M_2$: Random Forest, $M_3$: XGBoost) generate out-of-fold predictions.
-    *   A **Meta-Learner** (typically Logistic Regression or ElasticNet) trains on these predictions as input features to learn which base models perform best in different regions of the feature space.
+## Set 3 (Questions 5 to 5)
 
----
-
-#### 2. OR: Random Forest Algorithm and Hyperparameter Tuning (16 Marks)
-
-##### 1. Algorithmic Overview
-Random Forest introduces **Random Feature Subspacing** to standard bagging: at every candidate node split, only a random subset of $m \approx \sqrt{p}$ features is considered.
-
-##### 2. The Decorrelation Mechanism
-For an ensemble of $B$ trees with individual variance $\sigma^2$ and pairwise correlation $\rho$:
-$$\operatorname{Var}(\bar{T}) = \rho \sigma^2 + \frac{1 - \rho}{B} \sigma^2$$
-As $B$ grows large, variance approaches $\rho \sigma^2$. Random feature selection drives $\rho \to 0$, reducing overall ensemble variance without increasing bias.
-
-##### 3. Hyperparameter Justification
-*   `n_estimators`: Increasing trees stabilizes predictions and eliminates variance without causing overfitting.
-*   `max_features`: Balances individual tree bias against ensemble correlation $\rho$ (default $\sqrt{p}$).
-*   `max_depth` & `min_samples_split`: Prevents individual trees from learning extreme noise.
-
-:::tip
-
-**Examiner's Note**
-
-Write the $e^{-1} \approx 36.8\%$ Out-of-Bag derivation for Bagging, contrast Hard vs. Soft voting, and explain the ensemble variance reduction formula $\operatorname{Var} = \rho \sigma^2 + \frac{1-\rho}{B}\sigma^2$.
-
-:::
-
----
-
-## Question 9 (16 Marks)
+### Question 7 (16 Marks)
 
 :::info
 
 **Question Statement**
 
-*   **a)** Explain the detailed concept and features of: **(10 Marks)**
-    *   i) AdaBoost
-    *   ii) Gradient Boosting
-*   **b)** How feature importance plays a major role in predicting the target variable? **(6 Marks)**
+7.  Explain the concept of confusion matrix and compute the below measures with definition? **(16 marks)**
+
+| $N = 255$ | Positive (0) | Negative (1) |
+| :--- | :---: | :---: |
+| **Positive (0)** | 85 | 48 |
+| **Negative (1)** | 47 | 75 |
+
+*   c) Accuracy &nbsp; d) Recall &nbsp; c) Precision &nbsp; d) F1 score &nbsp; e) False Positive Rate
 
 :::
 
 ---
 
-### Solution 9 (16 Marks)
+#### Solution 7: Confusion Matrix B ($N = 255$)
 
-#### a) Boosting Paradigms: AdaBoost vs. Gradient Boosting (10 Marks)
+##### Matrix Element Identifications:
+*   $\text{True Positive (TP)} = \text{Actual Pos } (0) \land \text{Pred Pos } (0) = \mathbf{85}$
+*   $\text{False Negative (FN)} = \text{Actual Pos } (0) \land \text{Pred Neg } (1) = \mathbf{48}$
+*   $\text{False Positive (FP)} = \text{Actual Neg } (1) \land \text{Pred Pos } (0) = \mathbf{47}$
+*   $\text{True Negative (TN)} = \text{Actual Neg } (1) \land \text{Pred Neg } (1) = \mathbf{75}$
+*   $\text{Total } N = 85 + 48 + 47 + 75 = \mathbf{255}$
 
-##### i) AdaBoost (Adaptive Boosting)
-*   **Mechanism:** Sequentially trains decision stumps by dynamically adjusting instance weights.
-*   **Weight Update Formula:**
-    $$w_i^{(m+1)} = w_i^{(m)} \exp\left(-\alpha_m y_i h_m(\mathbf{x}_i)\right)$$
-    where estimator weight is $\alpha_m = \frac{1}{2} \ln\left(\frac{1 - \epsilon_m}{\epsilon_m}\right)$. Misclassified samples receive increased weights, forcing subsequent estimators to focus on difficult instances.
-
-##### ii) Gradient Boosting (GBM / XGBoost)
-*   **Mechanism:** Optimizes arbitrary differentiable loss functions $\mathcal{L}(y, f(\mathbf{x}))$ by iteratively fitting regression trees directly to the **negative gradient (pseudo-residuals)** of the loss:
-    $$r_{im} = -\left[ \frac{\partial \mathcal{L}(y_i, f(\mathbf{x}_i))}{\partial f(\mathbf{x}_i)} \right]_{f = f_{m-1}}$$
-*   **Additive Expansion:**
-    $$f_m(\mathbf{x}) = f_{m-1}(\mathbf{x}) + \gamma_m h_m(\mathbf{x})$$
-    where $\gamma_m$ is the step length (shrinkage / learning rate $\eta$).
-
-```mermaid
-flowchart LR
-    A["Initial Prediction f_0(x) = y_bar"] --> B["Compute Pseudo-Residuals r_i = y_i - f(x_i)"]
-    B --> C["Fit Regression Tree h_m to Residuals"]
-    C --> D["Update: f_m(x) = f_{m-1}(x) + eta * h_m(x)"]
-    D --> B
-```
+##### Metric Summary Table:
+| Metric | Governing Formula | Exact Substitution | Decimal Value | Percentage |
+| :--- | :---: | :---: | :---: | :---: |
+| **Accuracy** | $\frac{\text{TP} + \text{TN}}{N}$ | $\frac{85 + 75}{255} = \frac{160}{255}$ | **$0.6275$** | **$62.75\%$** |
+| **Recall (Sensitivity)** | $\frac{\text{TP}}{\text{TP} + \text{FN}}$ | $\frac{85}{85 + 48} = \frac{85}{133}$ | **$0.6391$** | **$63.91\%$** |
+| **Precision (PPV)** | $\frac{\text{TP}}{\text{TP} + \text{FP}}$ | $\frac{85}{85 + 47} = \frac{85}{132}$ | **$0.6439$** | **$64.39\%$** |
+| **$F_1$-Score** | $\frac{2\text{TP}}{2\text{TP} + \text{FP} + \text{FN}}$ | $\frac{2(85)}{2(85) + 47 + 48} = \frac{170}{265}$ | **$0.6415$** | **$64.15\%$** |
+| **False Positive Rate (FPR)** | $\frac{\text{FP}}{\text{FP} + \text{TN}}$ | $\frac{47}{47 + 75} = \frac{47}{122}$ | **$0.3852$** | **$38.52\%$** |
 
 ---
 
-#### b) Role of Feature Importance in Target Prediction (6 Marks)
+## Set 4 (Questions 9 to 5)
 
-1.  **Interpretability & Governance:** Quantifies which variables drive model decisions, fulfilling regulatory explainability requirements (e.g., credit approval).
-2.  **Dimensionality Reduction:** Identifies non-informative features, allowing removal of noisy columns to speed up training.
-3.  **Scientific Discovery:** Uncovers unexpected biological or economic relationships (e.g., identifying primary biomarker genes in oncology).
-4.  **Computation Methods:**
-    *   *Mean Decrease in Impurity (MDI):* Total reduction in Gini/Entropy contributed by a feature across all splits.
-    *   *Permutation Importance:* Evaluates the drop in validation score when values of a single feature are randomly shuffled.
-
-:::tip
-
-**Examiner's Note**
-
-Contrast the two boosting mechanisms: AdaBoost adjusts **sample weights**, whereas Gradient Boosting fits base trees to **pseudo-residuals (negative gradients)**.
-
-:::
-
----
-
-## Question 10 (16 Marks)
+### Question 9 & 1 (16 Marks)
 
 :::info
 
 **Question Statement**
 
-*   **i)** Explain the working principle of K nearest neighbour classifier? **(10 Marks)**
-*   **ii)** What are the different distance measures are used in the KNN and how it impacts the neighbours on KNN model? **(6 Marks)**
+9.  Explain in detail about logistic regression classifier, advantages and applications with suitable example? **(16 marks)**  
+    **(OR)**  
+1.  Write the short notes and mathematical form of ODD and Logit function? **(4 marks)**  
+    (ii) Explain the non-linear machine learning models in detail? **(8 marks)**  
+    (iii) define train, test and validation dataset **(4 marks)**
 
 :::
 
 ---
 
-### Solution 10 (16 Marks)
+#### Solution: Non-Linear Machine Learning Models (8 Marks)
 
-#### i) Working Principle of K-Nearest Neighbors (KNN) (10 Marks)
-
-KNN is an **instance-based, non-parametric, lazy learning** classifier:
-1.  **Training Phase ($O(1)$ Time):** Stores training vectors $\mathcal{D} = \{(\mathbf{x}_i, y_i)\}_{i=1}^N$. No parametric function is learned.
-2.  **Inference Phase ($O(N \cdot d)$ Time):**
-    *   *Distance Evaluation:* Compute metric distance $D(\mathbf{x}^*, \mathbf{x}_i)$ between query point $\mathbf{x}^*$ and all $N$ stored samples.
-    *   *Neighborhood Selection:* Sort distances and identify the $k$ smallest instances ($\mathcal{N}_k(\mathbf{x}^*)$).
-    *   *Classification:* Apply plurality voting:
-        $$\hat{y} = \arg\max_{c} \sum_{i \in \mathcal{N}_k(\mathbf{x}^*)} \mathbb{I}(y_i = c)$$
-    *   *Distance-Weighted Voting:* Weights votes by inverse distance:
-        $$w_i = \frac{1}{D(\mathbf{x}^*, \mathbf{x}_i) + \epsilon}$$
+1.  **Kernel Support Vector Machines (Cover's Theorem):** Non-linear mapping $\Phi: \mathbb{R}^d \to \mathcal{H}$ via Mercer kernels ($K(\mathbf{x}_i, \mathbf{x}_j) = \exp(-\gamma \|\mathbf{x}_i - \mathbf{x}_j\|^2)$) establishes linear separability in high dimensions.
+2.  **Decision Trees & Ensembles:** Recursively partitions the feature space into axis-aligned rectangular regions, producing non-linear piecewise constant boundaries.
+3.  **Neural Networks (Universal Approximation Theorem):** Combining linear weights with non-linear activations (ReLU, Sigmoid) allows multi-layer perceptrons to approximate any continuous function.
 
 ---
 
-#### ii) Distance Measures and Their Impact on Neighborhoods (6 Marks)
-
-##### 1. Distance Formulations
-*   **Euclidean Distance ($L_2$):** $d_2(\mathbf{u}, \mathbf{v}) = \sqrt{\sum (u_i - v_i)^2}$. Generates spherical, circular neighborhoods. Highly sensitive to outliers due to squaring.
-*   **Manhattan Distance ($L_1$):** $d_1(\mathbf{u}, \mathbf{v}) = \sum \lvert u_i - v_i \rvert$. Generates diamond-shaped neighborhoods. Robust to outliers and suited for urban grid networks.
-*   **Minkowski Distance ($L_p$):** $d_p(\mathbf{u}, \mathbf{v}) = (\sum \lvert u_i - v_i \rvert^p)^{1/p}$. Generalization ($p=1 \implies L_1, p=2 \implies L_2$).
-*   **Cosine Distance:** $1 - \frac{\mathbf{u} \cdot \mathbf{v}}{\|\mathbf{u}\| \|\mathbf{v}\|}$. Evaluates angular orientation, making it invariant to document length in text classification.
-
-##### 2. Impact on Decision Boundaries & Preprocessing Requirement
-*   *Scale Dominance Hazard:* If Feature A has scale $1000 - 50,000$ (income) and Feature B has scale $1 - 5$ (rating), Feature A will completely dominate $L_2$ distance by orders of magnitude.
-*   *Remedy:* **Z-score standardization or Min-Max normalization is mandatory** prior to running KNN.
-
-:::tip
-
-**Examiner's Note**
-
-Highlight that KNN training is $O(1)$ lazy learning, while inference is $O(N \cdot d)$ computationally intensive. Explain why feature scaling is strictly mandatory for distance-based models.
-
-:::
-
----
-
-## Question 11 (16 Marks)
+### Question 10 & 2 (16 Marks)
 
 :::info
 
 **Question Statement**
 
-*   **a)** Describe the issues of supervised learning algorithm. **(6 Marks)**
-*   **b)** Explain Naïve Bayes Classifier with an Example and discuss its variants (Multinomial, Gaussian). **(10 Marks)**
+10. (i) Difference between classification and regression models? **(4 marks)**  
+    (ii) Explain the techniques available for handling the class imbalance? **(12 marks)**  
+    **(OR)**  
+. 2. Explain the concept of confusion matrix and compute the below measures with definition? **(5 marks)**
+
+| $N = 195$ | Positive (0) | Negative (1) |
+| :--- | :---: | :---: |
+| **Positive (0)** | 65 | 43 |
+| **Negative (1)** | 32 | 55 |
+
+*   e) Accuracy &nbsp; f) Recall &nbsp; c) Precision &nbsp; d) F1 score &nbsp; e) False Positive Rate
 
 :::
 
 ---
 
-### Solution 11 (16 Marks)
+#### Solution: Confusion Matrix C ($N = 195$)
 
-#### a) Core Issues in Supervised Learning Algorithms (6 Marks)
+##### Matrix Element Identifications:
+*   $\text{True Positive (TP)} = \text{Actual Pos } (0) \land \text{Pred Pos } (0) = \mathbf{65}$
+*   $\text{False Negative (FN)} = \text{Actual Pos } (0) \land \text{Pred Neg } (1) = \mathbf{43}$
+*   $\text{False Positive (FP)} = \text{Actual Neg } (1) \land \text{Pred Pos } (0) = \mathbf{32}$
+*   $\text{True Negative (TN)} = \text{Actual Neg } (1) \land \text{Pred Neg } (1) = \mathbf{55}$
+*   $\text{Total } N = 65 + 43 + 32 + 55 = \mathbf{195}$
 
-1.  **Bias-Variance Dilemma:** High bias causes underfitting; high variance causes overfitting. Achieving minimal out-of-sample error requires optimizing model capacity.
-2.  **Curse of Dimensionality:** As feature dimension $d \to \infty$, volume of feature space grows exponentially ($V \propto r^d$), causing points to become equidistant and rendering distance metrics ineffective.
-3.  **Label Noise & Measurement Artifacts:** Erroneous or subjective annotations corrupt loss gradient updates.
-4.  **Class Imbalance:** Disproportionate class ratios cause models to ignore minority targets.
-
----
-
-#### b) Naïve Bayes Classifier: Principle, Mathematics, and Example (10 Marks)
-
-##### 1. Mathematical Formulation
-Given feature vector $\mathbf{x} = [x_1, \dots, x_d]^T$, Bayes' Theorem yields:
-$$P(Y = c \mid \mathbf{x}) = \frac{P(Y = c) P(\mathbf{x} \mid Y = c)}{P(\mathbf{x})}$$
-Applying the **Class-Conditional Independence Assumption**:
-$$P(\mathbf{x} \mid Y = c) = \prod_{j=1}^d P(x_j \mid Y = c)$$
-The decision rule selects the class maximizing posterior probability:
-$$\hat{y} = \arg\max_{c} \left[ \ln P(Y = c) + \sum_{j=1}^d \ln P(x_j \mid Y = c) \right]$$
-
-##### 2. Worked Example (Spam Classification)
-Classify an incoming message containing words $\mathbf{x} = [\text{"free"}, \text{"money"}]$:
-*   Priors: $P(\text{Spam}) = 0.40, \quad P(\text{Ham}) = 0.60$
-*   Likelihoods:
-    *   $P(\text{"free"} \mid \text{Spam}) = 0.80, \quad P(\text{"money"} \mid \text{Spam}) = 0.70$
-    *   $P(\text{"free"} \mid \text{Ham}) = 0.10, \quad P(\text{"money"} \mid \text{Ham}) = 0.05$
-
-Compute unnormalized posterior scores:
-*   $\text{Score}(\text{Spam}) = 0.40 \times 0.80 \times 0.70 = \mathbf{0.2240}$
-*   $\text{Score}(\text{Ham}) = 0.60 \times 0.10 \times 0.05 = \mathbf{0.0030}$
-
-Normalizing:
-$$P(\text{Spam} \mid \mathbf{x}) = \frac{0.2240}{0.2240 + 0.0030} = \frac{0.2240}{0.2270} \approx \mathbf{98.68\%}$$
-$$\mathbf{\hat{y} = \text{Spam}}$$
-
-##### 3. Key Variants
-*   **Multinomial Naïve Bayes:** Evaluates integer word counts using Laplace smoothing:
-    $$\hat{\theta}_{ci} = \frac{N_{ci} + 1}{N_c + \lvert V \rvert}$$
-*   **Gaussian Naïve Bayes:** Evaluates continuous attributes via normal density parameters ($\mu_{ci}, \sigma_{ci}^2$).
+##### Metric Summary Table:
+| Metric | Governing Formula | Exact Substitution | Decimal Value | Percentage |
+| :--- | :---: | :---: | :---: | :---: |
+| **Accuracy** | $\frac{\text{TP} + \text{TN}}{N}$ | $\frac{65 + 55}{195} = \frac{120}{195}$ | **$0.6154$** | **$61.54\%$** |
+| **Recall (Sensitivity)** | $\frac{\text{TP}}{\text{TP} + \text{FN}}$ | $\frac{65}{65 + 43} = \frac{65}{108}$ | **$0.6019$** | **$60.19\%$** |
+| **Precision (PPV)** | $\frac{\text{TP}}{\text{TP} + \text{FP}}$ | $\frac{65}{65 + 32} = \frac{65}{97}$ | **$0.6701$** | **$67.01\%$** |
+| **$F_1$-Score** | $\frac{2\text{TP}}{2\text{TP} + \text{FP} + \text{FN}}$ | $\frac{2(65)}{2(65) + 32 + 43} = \frac{130}{205}$ | **$0.6341$** | **$63.41\%$** |
+| **False Positive Rate (FPR)** | $\frac{\text{FP}}{\text{FP} + \text{TN}}$ | $\frac{32}{32 + 55} = \frac{32}{87}$ | **$0.3678$** | **$36.78\%$** |
 
 :::tip
 
 **Examiner's Note**
 
-Show the independence factor expansion $P(\mathbf{x} \mid y) = \prod P(x_i \mid y)$ and demonstrate the zero-frequency problem resolved by Laplace smoothing $+1$.
+This page mirrors all Part B sets from `Part_B_Questions.pdf`. All confusion matrix tables feature annotated row and column totals matching the PDF screenshots, and all decision tree problems include step-by-step Information Gain tables and Mermaid diagrams.
 
 :::
