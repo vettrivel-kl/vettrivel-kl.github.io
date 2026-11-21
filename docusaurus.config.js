@@ -83,6 +83,9 @@ const config = {
             '**/dsa/**',
             '/dsa/**',
             '**/dsa',
+            '**/x7q9m2v8k4/**',
+            '/x7q9m2v8k4/**',
+            '/x7q9m2v8k4',
           ],
         },
       }),
@@ -90,6 +93,18 @@ const config = {
   ],
 
   plugins: [
+    [
+      '@docusaurus/plugin-content-docs',
+      /** @type {import('@docusaurus/plugin-content-docs').Options} */
+      ({
+        id: 'x7q9m2v8k4',
+        path: 'x7q9m2v8k4',
+        routeBasePath: 'x7q9m2v8k4',
+        sidebarPath: './sidebarsX7q9m2v8k4.js',
+        remarkPlugins: [remarkMath],
+        rehypePlugins: [rehypeKatex],
+      }),
+    ],
     [
       '@docusaurus/plugin-content-docs',
       /** @type {import('@docusaurus/plugin-content-docs').Options} */
