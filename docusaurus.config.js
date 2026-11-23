@@ -156,30 +156,7 @@ const config = {
             type: 'docSidebar',
             sidebarId: 'tutorialSidebar',
             position: 'left',
-            label: 'Notes',
-          },
-          {
-            type: 'dropdown',
-            label: 'Study Guides',
-            position: 'left',
-            items: [
-              {
-                label: 'Machine Learning (21CSC555J)',
-                href: 'pathname:///ml-study-guide/index.html',
-              },
-              {
-                label: 'Fundamentals of AI (21CSC569J)',
-                href: 'pathname:///fai-study-guide/index.html',
-              },
-              {
-                label: 'Research Methodology (21IPC501J)',
-                href: 'pathname:///rm-study-guide/index.html',
-              },
-              {
-                label: 'Inferential Statistics (21MAS501J)',
-                href: 'pathname:///ifs-study-guide/index.html',
-              },
-            ],
+            label: 'Notes ',
           },
         ],
       },
