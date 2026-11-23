@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Fundamentals of AI -- All-in-One Master Reference & Formula Handbook (21CSC569J)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --primary-accent: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #eff6ff;
+      --success-accent: #059669;
+      --success-light: #ecfdf5;
+      --warning-accent: #b45309;
+      --warning-light: #fffbeb;
+      --danger-accent: #dc2626;
+      --danger-light: #fef2f2;
+      --purple: #7c3aed;
+      --purple-light: #f5f3ff;
+      --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+      --card-shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --sidebar-width: 280px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-tertiary: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --primary-accent: #3b82f6;
+      --primary-dark: #60a5fa;
+      --primary-light: #1e3a8a33;
+      --success-accent: #10b981;
+      --success-light: #064e3b33;
+      --warning-accent: #f59e0b;
+      --warning-light: #78350f33;
+      --danger-accent: #ef4444;
+      --danger-light: #7f1d1d33;
+      --purple: #a78bfa;
+      --purple-light: #581c8733;
+      --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+      --card-shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-size: 15px;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-left: var(--safe-left);
+      padding-right: var(--safe-right);
+    }
+
+    /* Desktop Sidebar Navigation */
+    .sidebar {
+      width: var(--sidebar-width);
+      background-color: var(--bg-primary);
+      border-right: 1px solid var(--border-color);
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      padding-top: var(--safe-top);
+      flex-shrink: 0;
+    }
+
+    .sidebar-header {
+      padding: 20px 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar-header h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary-accent);
+      margin-bottom: 4px;
+    }
+
+    .sidebar-header p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .sidebar-nav {
+      padding: 12px 8px;
+      flex: 1;
+    }
+
+    .nav-section-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 10px 12px 4px;
+    }
+
+    .sidebar-nav a {
+      display: block;
+      padding: 7px 12px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.86rem;
+      border-radius: 6px;
+      margin-bottom: 2px;
+      transition: all 0.15s ease;
+    }
+
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      background-color: var(--primary-light);
+      color: var(--primary-accent);
+      font-weight: 600;
+    }
+
+    .sidebar-footer {
+      padding: 16px;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Mobile Sticky Topbar */
+    .mobile-topbar {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      background: #0f172a;
+      color: #fff;
+      padding: calc(10px + var(--safe-top)) 14px 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mobile-topbar-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mobile-topbar-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .mobile-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #f8fafc;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      min-height: 36px;
+    }
+
+    /* Horizontal Swipeable Pill Nav */
+    .mobile-pills-bar {
+      display: none;
+      overflow-x: auto;
+      white-space: nowrap;
+      padding: 8px 12px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      position: sticky;
+      top: calc(54px + var(--safe-top));
+      z-index: 850;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    }
+    .mobile-pills-bar::-webkit-scrollbar { display: none; }
+
+    .pill-link {
+      display: inline-block;
+      padding: 5px 11px;
+      margin-right: 5px;
+      border-radius: 99px;
+      background: #f1f5f9;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--border-color);
+      text-decoration: none;
+    }
+
+    /* Mobile Drawer Menu */
+    .drawer-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      z-index: 998;
+      backdrop-filter: blur(3px);
+    }
+
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 85%;
+      max-width: 320px;
+      height: 100vh;
+      background: #0f172a;
+      color: #e2e8f0;
+      z-index: 999;
+      padding: calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+      overflow-y: auto;
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
+      transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mobile-drawer.open { left: 0; }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 12px;
+    }
+
+    .drawer-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    /* Main Content Area */
+    .content-area {
+      flex: 1;
+      padding: 32px clamp(16px, 4vw, 48px) calc(60px + var(--safe-bottom));
+      max-width: 1180px;
+      min-width: 0;
+    }
+
+    /* Header */
+    .page-header {
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .badge-hub {
+      display: inline-block;
+      padding: 4px 10px;
+      background-color: var(--primary-light);
+      color: var(--primary-accent);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .page-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      max-width: 800px;
+    }
+
+    /* Target Banner */
+    .target-banner {
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+      color: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 25px rgba(49, 46, 129, 0.2);
+    }
+    .target-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .target-box {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .target-num {
+      font-size: 24px;
+      font-weight: 800;
+      color: #a5b4fc;
+    }
+
+    section {
+      scroll-margin-top: calc(90px + var(--safe-top));
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 14px 0;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      scrollbar-width: none;
+    }
+    .table-container::-webkit-scrollbar { display: none; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-color);
+      text-align: left;
+    }
+    th {
+      background-color: var(--bg-tertiary);
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) { background-color: rgba(0, 0, 0, 0.015); }
+
+    .katex-display {
+      font-size: clamp(13px, 3.4vw, 15px) !important;
+      margin: 10px 0 !important;
+      padding: 10px 4px 6px !important;
+      overflow-x: auto !important;
+      overflow-y: visible !important;
+      scrollbar-width: none !important;
+    }
+    .katex-display::-webkit-scrollbar { display: none !important; }
+
+    .theme-toggle-btn {
+      background: none;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 880px) {
+      body { flex-direction: column; }
+      .sidebar { display: none; }
+      .mobile-topbar { display: flex; }
+      .mobile-pills-bar { display: block; }
+      .content-area { padding: 16px 14px calc(60px + var(--safe-bottom)); }
+      .target-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Mobile Drawer Backdrop -->
+  <div class="drawer-backdrop" id="backdrop" onclick="toggleDrawer()"></div>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-drawer" id="drawer">
+    <div class="drawer-header">
+      <div style="font-weight:800;font-size:13px;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;">FAI Handbook</div>
+      <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+    </div>
+    <a href="/fai-study-guide/index.html" style="display:block;padding:8px 12px;border-radius:8px;font-size:13px;background:#1e293b;color:#38bdf8;text-decoration:none;margin-bottom:12px;">&larr; Open Study Guides Hub</a>
+    <div style="font-size:10px;color:#64748b;text-transform:uppercase;margin:12px 0 6px;font-weight:700;">Cheatsheet Sections</div>
+    <nav>
+      <a href="#targets" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#cbd5e1;text-decoration:none;">01. Score Target Matrix</a>
+      <a href="#informed" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#cbd5e1;text-decoration:none;">02. Informed Search (A* & AO*)</a>
+      <a href="#adversarial" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#cbd5e1;text-decoration:none;">03. Game Playing & CSP</a>
+      <a href="#uninformed" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#cbd5e1;text-decoration:none;">04. Uninformed Search Traversal</a>
+      <a href="#kr" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#cbd5e1;text-decoration:none;">05. Bayes Nets & KR</a>
+      <a href="#python" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#cbd5e1;text-decoration:none;">06. Python, Pandas & Plots</a>
+      <a href="#matrix" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#cbd5e1;text-decoration:none;">07. Algorithm Master Matrix</a>
+    </nav>
+  </div>
+
+  <!-- Mobile Topbar -->
+  <div class="mobile-topbar">
+    <div class="mobile-topbar-title">
+      <span>FAI Master Cheatsheet</span>
+    </div>
+    <div class="mobile-topbar-actions">
+      <a href="/fai-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+      <button class="mobile-btn" onclick="toggleDrawer()">&#9776; Menu</button>
+    </div>
+  </div>
+
+  <!-- Mobile Pills Bar -->
+  <div class="mobile-pills-bar">
+    <a href="#targets" class="pill-link">Targets</a>
+    <a href="#informed" class="pill-link">A* / AO*</a>
+    <a href="#adversarial" class="pill-link">Minimax / CSP</a>
+    <a href="#uninformed" class="pill-link">DFS / BFS</a>
+    <a href="#kr" class="pill-link">Bayes Nets</a>
+    <a href="#python" class="pill-link">Python & Pandas</a>
+    <a href="#matrix" class="pill-link">Matrix</a>
+  </div>
+
+  <!-- Desktop Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>FAI Handbook</h2>
+      <p>Course Code 21CSC569J</p>
+    </div>
+    <div class="sidebar-nav">
+      <a href="/fai-study-guide/index.html" style="background:#1e293b;color:#38bdf8;font-weight:700;margin-bottom:12px;">&larr; Open Study Guides Hub</a>
+      <div class="nav-section-title">Handbook Navigation</div>
+      <a href="#targets">01. Strategic Targets</a>
+      <a href="#informed">02. Informed Search (A* & AO*)</a>
+      <a href="#adversarial">03. Adversarial Search & CSP</a>
+      <a href="#uninformed">04. Uninformed Search Traversal</a>
+      <a href="#kr">05. Bayes Nets & KR</a>
+      <a href="#python">06. Python, Pandas & Plots</a>
+      <a href="#matrix">07. Master Algorithm Matrix</a>
+      <a href="#presentation">08. Answer Presentation</a>
+    </div>
+    <div class="sidebar-footer">
+      <button class="theme-toggle-btn" onclick="toggleTheme()">🌓 Dark Mode</button>
+      <span>Vettri's Notes</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="content-area">
+
+    <div class="page-header">
+      <span class="badge-hub">All-in-One Master Reference Sheet</span>
+      <h1 class="page-title">Fundamentals of Artificial Intelligence Master Reference & Formula Handbook</h1>
+      <p class="page-subtitle">Consolidated mathematical formulas, search complexity matrices, game tree pruning protocols, probabilistic inference, and Python foundations for 21CSC569J.</p>
+    </div>
+
+    <!-- Section 01: Score Targets -->
+    <section id="targets">
+      <div class="target-banner">
+        <h2 style="font-size:1.2rem;margin-bottom:4px;">Strategic Score Target (60/40 University Rule)</h2>
+        <p style="font-size:0.88rem;opacity:0.9;">Total Score = Internal Assessment (60%) + [Semester Exam Score &times; 0.40]</p>
+        <div class="target-grid">
+          <div class="target-box">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.8;">Internal Score</div>
+            <div class="target-num">56.79 / 60</div>
+            <div style="font-size:11px;opacity:0.85;">94.65% internal carryover.</div>
+          </div>
+          <div class="target-box">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.8;">Min Sem Mark for Grade A</div>
+            <div class="target-num" style="color:#6ee7b7;">36 / 100</div>
+            <div style="font-size:11px;opacity:0.85;">(71.0 - 56.79) / 0.40 = 35.53.</div>
+          </div>
+          <div class="target-box">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.8;">Safe Target (+7 Buffer)</div>
+            <div class="target-num" style="color:#fde047;">43 / 100</div>
+            <div style="font-size:11px;opacity:0.85;">Final total = 74.00 (Grade A).</div>
+          </div>
+          <div class="target-box">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.8;">Target for Grade A+ / S</div>
+            <div class="target-num" style="color:#d8b4fe;">61 / 100</div>
+            <div style="font-size:11px;opacity:0.85;">Final total = 81.00 &ge; 81.0.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: Informed Search -->
+    <section id="informed">
+      <h2 class="section-title">02. Informed Heuristic Search (A* & AO*)</h2>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">A* Evaluation Function & Admissibility</h3>
+        $$f(n) = g(n) + h(n)$$
+        <p><strong>Admissibility:</strong> $0 \le h(n) \le h^*(n)$ (Never overestimates true minimal cost). Guarantees optimal path.</p>
+        <p><strong>Consistency (Monotonicity):</strong> $h(n) \le c(n, a, n') + h(n') \implies f(n) \le f(n')$. Guarantees $f(n)$ is non-decreasing along paths.</p>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">8-Puzzle Manhattan Distance Heuristic</h3>
+        $$h(n) = \sum_{i=1}^8 \left( |x_i - x_i^{\text{goal}}| + |y_i - y_i^{\text{goal}}| \right)$$
+        <p><em>Benchmark:</em> May 2025 Initial State has $h(S_0) = 5$, $g(S_0) = 0 \implies f(n) = 5$ constant at all 5 optimal moves.</p>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">AO* And-Or Branch Cost Propagation</h3>
+        $$\text{OR Branch: } \operatorname{Cost}(n) = \min_i [c(n, n_i) + h(n_i)], \qquad \text{AND Branch: } \operatorname{Cost}(n) = \sum_j [c(n, n_j) + h(n_j)]$$
+      </div>
+    </section>
+
+    <!-- Section 03: Adversarial Search & CSP -->
+    <section id="adversarial">
+      <h2 class="section-title">03. Adversarial Search & Constraint Satisfaction</h2>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Minimax & Alpha-Beta Pruning Invariant</h3>
+        $$\alpha \ge \beta \implies \text{PRUNE remaining sibling branches!}$$
+        <p>$\alpha = \max(\alpha, v)$ updated at MAX nodes ($\alpha = -\infty$). $\beta = \min(\beta, v)$ updated at MIN nodes ($\beta = +\infty$).</p>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">SEND + MORE = MONEY Cryptarithmetic Solution</h3>
+        $$\begin{matrix} & 9 & 5 & 6 & 7 \\ + & 1 & 0 & 8 & 5 \\ \hline 1 & 0 & 6 & 5 & 2 \end{matrix}$$
+        $$M = 1, \ O = 0, \ S = 9, \ E = 5, \ N = 6, \ R = 8, \ D = 7, \ Y = 2$$
+        $$\mathbf{N + E + E + D = 6 + 5 + 5 + 7 = 23}$$
+      </div>
+    </section>
+
+    <!-- Section 04: Uninformed Search -->
+    <section id="uninformed">
+      <h2 class="section-title">04. Uninformed Search Traversal & Complexities</h2>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Search Algorithm</th>
+              <th>Data Structure</th>
+              <th>Complete?</th>
+              <th>Optimal?</th>
+              <th>Time</th>
+              <th>Space</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Breadth-First (BFS)</strong></td>
+              <td>FIFO Queue</td>
+              <td>Yes</td>
+              <td>Yes (unit cost)</td>
+              <td>$O(b^d)$</td>
+              <td>$O(b^d)$ (Exponential)</td>
+            </tr>
+            <tr>
+              <td><strong>Depth-First (DFS)</strong></td>
+              <td>LIFO Stack</td>
+              <td>No (infinite trees)</td>
+              <td>No</td>
+              <td>$O(b^m)$</td>
+              <td>$O(bm)$ (Linear)</td>
+            </tr>
+            <tr>
+              <td><strong>Depth-Limited (DLS)</strong></td>
+              <td>LIFO Stack (Limit $L$)</td>
+              <td>Yes (if $d \le L$)</td>
+              <td>No</td>
+              <td>$O(b^L)$</td>
+              <td>$O(bL)$ (Linear)</td>
+            </tr>
+            <tr>
+              <td><strong>Iterative Deepening (IDS)</strong></td>
+              <td>LIFO Stack (Repeated)</td>
+              <td>Yes</td>
+              <td>Yes (unit cost)</td>
+              <td>$O(b^d)$</td>
+              <td>$O(bd)$ (Optimal + Linear)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Hill Climbing 3 Hazards</h3>
+        <p>1. <strong>Local Maxima:</strong> Peak lower than global optimum $\to$ Remedy: Random Restart.</p>
+        <p>2. <strong>Plateau / Shoulder:</strong> Flat zero gradient $\to$ Remedy: Limited sideways moves.</p>
+        <p>3. <strong>Ridge:</strong> Steep sides, gentle spine $\to$ Remedy: Simulated Annealing ($P = e^{\Delta E / T}$).</p>
+      </div>
+    </section>
+
+    <!-- Section 05: Bayes Nets & KR -->
+    <section id="kr">
+      <h2 class="section-title">05. Knowledge Representation & Bayesian Networks</h2>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">The Alarm Bayesian Network Solution</h3>
+        $$P(A \mid J, M, \neg E, \neg B) = \frac{P(A \mid \neg B, \neg E)P(J \mid A)P(M \mid A)}{\sum_{a} P(a \mid \neg B, \neg E)P(J \mid a)P(M \mid a)}$$
+        $$= \frac{0.001 \times 0.90 \times 0.70}{(0.001 \times 0.90 \times 0.70) + (0.999 \times 0.05 \times 0.01)} = \frac{0.000630}{0.0011295} = \frac{140}{251} \approx \mathbf{55.78\%}$$
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Minsky's Frames & Chaining</h3>
+        <p><strong>Frames Structure:</strong> Slots (attributes), Facets (defaults/ranges), and Procedural Demons (`if-needed`, `if-added`, `if-removed`).</p>
+        <p><strong>Forward Chaining:</strong> Data-driven ($\text{IF} \to \text{THEN}$) starting from facts (CLIPS, Rete).</p>
+        <p><strong>Backward Chaining:</strong> Goal-driven ($\text{THEN} \to \text{IF}$) starting from hypothesis (Prolog, MYCIN).</p>
+      </div>
+    </section>
+
+    <!-- Section 06: Python & Pandas -->
+    <section id="python">
+      <h2 class="section-title">06. Python Core, Pandas & Visualization</h2>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Mutability & Memory Proof</h3>
+        <p><strong>Strings are Immutable:</strong> Modification raises `TypeError`. Creating/concatenating alters `id(obj)`.</p>
+        <p><strong>Lists are Mutable:</strong> In-place `append()` retains identical `id(obj)`.</p>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Essential Pandas Commands</h3>
+        <p>• Missing Data: `df.isnull().sum()`, `df.fillna(df['col'].mean(), inplace=True)`, `df.dropna(subset=['col'])`</p>
+        <p>• GroupBy: `df.groupby('Store')['Sales'].agg(['sum', 'mean'])`</p>
+        <p>• Filtering: `df[(df['Category'] == 'Electronics') & (df['Total_Sales'] > 10000)]`</p>
+      </div>
+    </section>
+
+    <!-- Section 07: Master Algorithm Matrix -->
+    <section id="matrix">
+      <h2 class="section-title">07. Master Algorithm Matrix</h2>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Algorithm</th>
+              <th>Class</th>
+              <th>Heuristic Used</th>
+              <th>Time</th>
+              <th>Space</th>
+              <th>Key Invariant</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>A* Search</strong></td>
+              <td>Informed Graph</td>
+              <td>Admissible $h(n) \le h^*(n)$</td>
+              <td>$O(b^d)$</td>
+              <td>$O(b^d)$</td>
+              <td>$f(n) = g(n) + h(n)$</td>
+            </tr>
+            <tr>
+              <td><strong>AO* Search</strong></td>
+              <td>AND-OR Hypergraph</td>
+              <td>Underestimate $h(n)$</td>
+              <td>$O(b^d)$</td>
+              <td>$O(bd)$</td>
+              <td>AND takes sum; OR takes min</td>
+            </tr>
+            <tr>
+              <td><strong>Minimax</strong></td>
+              <td>Adversarial Game</td>
+              <td>Static Evaluation</td>
+              <td>$O(b^m)$</td>
+              <td>$O(bm)$</td>
+              <td>Alternating MAX/MIN plies</td>
+            </tr>
+            <tr>
+              <td><strong>Alpha-Beta</strong></td>
+              <td>Adversarial Game</td>
+              <td>Static Evaluation</td>
+              <td>$O(b^{m/2})$ optimal</td>
+              <td>$O(bm)$</td>
+              <td>Cutoff when $\alpha \ge \beta$</td>
+            </tr>
+            <tr>
+              <td><strong>Bayesian Net</strong></td>
+              <td>Probabilistic Graphical</td>
+              <td>CPTs</td>
+              <td>$O(n \cdot 2^k)$</td>
+              <td>$O(n \cdot 2^k)$</td>
+              <td>$\prod P(X_i \mid \text{Parents}(X_i))$</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function toggleDrawer() {
+      const drawer = document.getElementById('drawer');
+      const backdrop = document.getElementById('backdrop');
+      drawer.classList.toggle('open');
+      backdrop.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>One-Way ANOVA & F-Test | Complete Exam Question Bank & Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#2563eb;--brand-soft:#eff6ff;--teal:#059669;--teal-soft:#ecfdf5;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#0f172a;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:800}
+aside h2{font-size:19px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.12em;margin:20px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#cbd5e1;font-size:13px}
+nav a:hover,nav a.active{background:#1e293b;color:#38bdf8;text-decoration:none}
+.module-hub-link{background:#1e293b;border:1px solid #334155;color:#38bdf8;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:24px;padding:14px;border:1px solid #334155;border-radius:12px;color:#cbd5e1;font-size:12px;background:#131d35}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#047857;color:#ecfdf5}
+
+/* Mobile Sticky Topbar (iPhone 13 Notch Friendly) */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#0f172a;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{
+  font-size:14.5px;
+  font-weight:800;
+  color:#f8fafc;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.mobile-topbar-actions{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.mobile-btn{
+  background:#1e293b;
+  border:1px solid #334155;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  cursor:pointer;
+  min-height:36px;
+}
+
+/* Horizontal Swipeable Pill Nav for iPhone 13 */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer Menu Overlay */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#0f172a;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #1e293b;
+  padding-bottom:12px;
+}
+.drawer-close{
+  background:none;
+  border:none;
+  color:#94a3b8;
+  font-size:24px;
+  cursor:pointer;
+  padding:4px 8px;
+}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#7c3aed 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"F=MSB/MSW";position:absolute;right:16px;bottom:-28px;font-size:80px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#c4b5fd;font-weight:800}
+h1{font-size:clamp(24px,4.5vw,42px);line-height:1.15;margin:10px 0}
+.hero p{max-width:680px;color:#e0e7ff;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+.formula-banner{
+  background:#0f172a;
+  color:#f8fafc;
+  padding:16px 14px;
+  border-radius:12px;
+  text-align:center;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+.formula-banner .katex-display{margin:6px 0}
+.formula-banner small{display:block;font-size:11px;color:#94a3b8;margin-top:6px}
+
+/* KaTeX Horizontal Scrollbar Removal & Vertical Headroom (No Clipping) */
+.katex-display{
+  font-size:clamp(13px, 3.6vw, 15.5px) !important;
+  margin:12px 0 !important;
+  padding:12px 4px 8px !important; /* Ample vertical headroom so numerators/brackets never get sliced */
+  overflow-x:auto !important;
+  overflow-y:visible !important; /* Never clip ascenders */
+  scrollbar-width:none !important; /* Hide Firefox scrollbars */
+  -ms-overflow-style:none !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+.katex-display::-webkit-scrollbar{
+  display:none !important; /* Hide Safari & Chrome scrollbars */
+}
+.katex-display > .katex{
+  display:block !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  padding-top:4px !important; /* Extra safety margin for tall numerators & superscripts */
+  padding-bottom:2px !important;
+}
+.katex{
+  font-size:1em !important;
+  line-height:normal !important;
+  text-rendering:auto !important;
+  white-space:normal !important;
+}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--teal-soft);border-color:var(--teal)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+.note.purple{background:var(--purple-soft);border-color:var(--purple)}
+
+/* Table Styling - Clean & No Cutoff */
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#dbeafe;color:#1e40af;margin-bottom:6px}
+.pyq-badge.ct{background:#e0e7ff;color:#3730a3}
+.pyq-badge.llt{background:#ecfdf5;color:#065f46}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+  -webkit-tap-highlight-color:transparent;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  transition:background .15s;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+button:hover{background:#1d4ed8}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+/* Quiz for iPhone 13 (Large Touch Targets) */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+  -webkit-tap-highlight-color:transparent;
+  transition:all .15s;
+}
+.quiz-q label:active{background:#eff6ff;border-color:#93c5fd}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--teal-soft);border-radius:8px;border-left:3px solid var(--teal);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Interactive Calculator (16px Input to Prevent iOS Auto-Zoom) */
+.tool-box{background:white;border:2px solid #c4b5fd;border-radius:12px;padding:16px;margin:16px 0}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:8px}
+.tool-group label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px}
+.tool-group input{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  font-size:16px; /* Prevents iOS Safari Zoom */
+  background:#f8fafc;
+  min-height:40px;
+}
+.tool-result{margin-top:12px;padding:10px 12px;background:#f5f3ff;border-radius:8px;border-left:4px solid var(--purple);font-size:13px}
+
+.footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+/* iPhone 13 & Mobile Responsive Tweaks */
+@media(max-width:880px){
+  .shell{display:block}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:14px 12px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr;gap:10px}
+  .hero{padding:20px 14px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  h2{font-size:18px}
+  .card{padding:14px}
+  .details-box{padding:12px 14px}
+  .tool-box{padding:14px}
+  button{width:100%;margin-bottom:6px}
+  .controls button{width:auto;flex:1}
+  table{font-size:12px}
+  th,td{padding:7px 8px}
+}
+
+@media print{
+  aside,.controls,button,.tool-box,.mobile-topbar,.mobile-pills-bar{display:none!important}
+  .shell{display:block}
+  main{padding:0}
+  .hero{background:#0f172a!important;color:#fff!important;print-color-adjust:exact}
+  .card,.step,.quiz-q,.details-box{break-inside:avoid;box-shadow:none}
+  .answer,details[open] div,details div{display:block!important}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Sticky Top Bar (iPhone 13 Notch Friendly) -->
+<header class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>One-Way ANOVA</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/ifs-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="openDrawer()">&#9776; Menu</button>
+  </div>
+</header>
+
+<!-- Horizontal Quick-Jump Pill Bar (Flick with thumb on train) -->
+<nav class="mobile-pills-bar" aria-label="Quick jumps">
+  <a href="#overview" class="pill-link">01 · Concept</a>
+  <a href="#why-anova" class="pill-link">02 · Why ANOVA?</a>
+  <a href="#algorithm" class="pill-link">03 · 6 Steps</a>
+  <a href="#table-template" class="pill-link">04 · ANOVA Table</a>
+  <a href="#f-test-variances" class="pill-link">05 · F-Test</a>
+  <a href="#pitfalls" class="pill-link">06 · Traps</a>
+  <a href="#q1-theory" class="pill-link">Q1 · Theory (5M)</a>
+  <a href="#q2-technicians" class="pill-link">Q2 · Technicians (15M)</a>
+  <a href="#q3-iron" class="pill-link">Q3 · Iron Fe (20M)</a>
+  <a href="#q4-twoway" class="pill-link">Q4 · Two-Way (20M)</a>
+  <a href="#q5-variances" class="pill-link">Q5 · Variance F</a>
+  <a href="#interactive-tool" class="pill-link">F-Calculator</a>
+  <a href="#practice" class="pill-link">Quiz</a>
+</nav>
+
+<!-- Mobile Drawer Backdrop & Drawer -->
+<div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="drawer-header">
+    <div style="font-size:14px;font-weight:800;color:#38bdf8;">NAVIGATION MENU</div>
+    <button class="drawer-close" onclick="closeDrawer()">&times;</button>
+  </div>
+  <a href="/ifs-study-guide/index.html" class="module-hub-link" style="margin-bottom:14px;padding:8px 10px;border-radius:8px;">&larr; Return to All Guides Hub</a>
+  
+  <div class="nav-label">Core Concepts</div>
+  <nav>
+    <a href="#overview" onclick="closeDrawer()">01 · Intuition & Partitioning</a>
+    <a href="#why-anova" onclick="closeDrawer()">02 · Why Not Multiple t-Tests?</a>
+    <a href="#algorithm" onclick="closeDrawer()">03 · 6-Step Computation Algorithm</a>
+    <a href="#table-template" onclick="closeDrawer()">04 · Standard ANOVA Table</a>
+    <a href="#f-test-variances" onclick="closeDrawer()">05 · F-Test for Equality of Variances</a>
+    <a href="#pitfalls" onclick="closeDrawer()">06 · 6 Deadly Exam Traps</a>
+  </nav>
+
+  <div class="nav-label">All Solved Exam Problems</div>
+  <nav>
+    <a href="#q1-theory" onclick="closeDrawer()">Q1 · Dec 2024: ANOVA vs t-Test (5M)</a>
+    <a href="#q2-technicians" onclick="closeDrawer()">Q2 · Dec 2024: Technicians Mistakes (15M)</a>
+    <a href="#q3-iron" onclick="closeDrawer()">Q3 · May 2025: Iron Formations (20M)</a>
+    <a href="#q4-twoway" onclick="closeDrawer()">Q4 · Nov 2025: Two-Way ANOVA (20M)</a>
+    <a href="#q5-variances" onclick="closeDrawer()">Q5 · Core Archetype: Variance F-Test</a>
+  </nav>
+
+  <div class="nav-label">Interactive Practice</div>
+  <nav>
+    <a href="#interactive-tool" onclick="closeDrawer()">Dynamic ANOVA Calculator</a>
+    <a href="#practice" onclick="closeDrawer()">Interactive Self-Test Quiz</a>
+    <a href="#checklist" onclick="closeDrawer()">Exam Hall Checklist</a>
+  </nav>
+</div>
+
+<div class="shell">
+
+<!-- Desktop Sidebar (Hidden on mobile) -->
+<aside>
+  <div class="brand">M.Tech · Inferential Statistics</div>
+  <h2>One-Way ANOVA<br>& F-Test Handbook</h2>
+  
+  <a href="/ifs-study-guide/index.html" class="module-hub-link">&larr; Return to All Guides Hub</a>
+
+  <div class="nav-label">Core Pedagogy</div>
+  <nav>
+    <a href="#overview">01 · Intuition & Partitioning</a>
+    <a href="#why-anova">02 · Why Not Multiple t-Tests?</a>
+    <a href="#algorithm">03 · 6-Step Algorithm</a>
+    <a href="#table-template">04 · Standard ANOVA Table</a>
+    <a href="#f-test-variances">05 · F-Test for Variances</a>
+    <a href="#pitfalls">06 · 6 Deadly Exam Traps</a>
+  </nav>
+
+  <div class="nav-label">Complete Question Bank</div>
+  <nav>
+    <a href="#q1-theory">Q1 · Dec 2024: ANOVA vs t-Test (5M)</a>
+    <a href="#q2-technicians">Q2 · Dec 2024: Technicians Mistakes (15M)</a>
+    <a href="#q3-iron">Q3 · May 2025: Iron Formations (20M)</a>
+    <a href="#q4-twoway">Q4 · Nov 2025: Two-Way ANOVA (20M)</a>
+    <a href="#q5-variances">Q5 · Core Archetype: Variance F-Test</a>
+  </nav>
+
+  <div class="nav-label">Interactive Practice</div>
+  <nav>
+    <a href="#interactive-tool">Dynamic ANOVA Calculator</a>
+    <a href="#practice">Interactive Self-Test Quiz</a>
+    <a href="#checklist">Exam Hall Checklist</a>
+  </nav>
+
+  <div class="side-note">
+    <strong>Semester Exam Targets</strong><br>
+    Internal score: <strong>48 / 60</strong><br>
+    Min Sem score for A: <strong>58 / 100</strong><br>
+    Target with margin: <strong>65 / 100</strong><br>
+    <span class="status-pill pill-target">Priority 3 Unit 5 Topic</span>
+    <p style="margin-top:8px;color:#94a3b8;font-size:11px">Guaranteed 15-20 Mark Question in Section C.</p>
+  </div>
+</aside>
+
+<!-- Main Body -->
+<main>
+
+<header class="hero" id="overview">
+  <div class="eyebrow">Unit 5 · Analysis of Variance · Priority 3</div>
+  <h1>One-Way ANOVA & F-Test</h1>
+  <p>The definitive master guide to decomposing total variation into Treatment vs Error, testing $\ge 3$ independent group means simultaneously, avoiding $\alpha$-inflation, and constructing university-grade ANOVA tables.</p>
+  <div class="pills">
+    <span class="pill">Family-Wise Error Rate</span>
+    <span class="pill">6-Step Algorithm</span>
+    <span class="pill">Dec 2024 (20M Solved)</span>
+    <span class="pill">May 2025 (20M Solved)</span>
+    <span class="pill">Two-Way ANOVA Included</span>
+    <span class="pill">Zero-Scroll Math</span>
+  </div>
+</header>
+
+<div style="margin:14px 0;display:flex;gap:8px;flex-wrap:wrap;">
+  <button class="secondary" style="font-size:12.5px;padding:6px 12px;min-height:36px;" onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All Solutions</button>
+  <button class="secondary" style="font-size:12.5px;padding:6px 12px;min-height:36px;" onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All Solutions</button>
+</div>
+
+<!-- Section 1 -->
+<section>
+  <h2>01. Intuition: Partitioning of Total Variation</h2>
+  <p class="lead">Invented by Sir Ronald A. Fisher, **ANOVA (Analysis of Variance)** tests whether $k \ge 3$ independent population means are equal ($H_0: \mu_1 = \mu_2 = \dots = \mu_k$) by decomposing the total dispersion in the dataset into two orthogonal components:</p>
+
+  <div class="formula-banner">
+    $$\begin{aligned}
+    \text{Total Sum of Squares (TSS)} = \text{Between Treatments (SSB)} + \text{Within Groups Error (SSW)}
+    \end{aligned}$$
+    <small>Variance Ratio: $F = \frac{\text{Mean Square Between (Signal)}}{\text{Mean Square Within (Noise)}} = \frac{\text{MSB}}{\text{MSW}}$</small>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="kicker">Between Treatments · Treatment Effect</div>
+      <h3>SSB / SSTr — The Signal</h3>
+      <p>Measures how much the individual group sample means $\bar{X}_j$ deviate from the grand overall mean $\bar{X}$. Reflects true experimental differences plus sampling noise.</p>
+    </div>
+    <div class="card">
+      <div class="kicker">Within Groups · Random Residual</div>
+      <h3>SSW / SSE — The Noise</h3>
+      <p>Measures the internal variation of individual observations $X_{ij}$ around their own group mean $\bar{X}_j$. Reflects purely unexplained random experimental error.</p>
+    </div>
+  </div>
+
+  <div class="note good">
+    <strong>The Core F-Ratio Decision Logic:</strong><br>
+    &bull; If $H_0$ is true (no treatment effect), $\text{MSB} \approx \text{MSW} \implies F_{\text{calc}} \approx 1.0$.<br>
+    &bull; If $H_1$ is true (treatments create real differences), $\text{MSB} \gg \text{MSW} \implies F_{\text{calc}} \gg 1.0$.<br>
+    &bull; When $F_{\text{calc}} > F_{\text{critical}}(k-1, N-k, \alpha)$, we reject $H_0$.
+  </div>
+</section>
+
+<!-- Section 2 -->
+<section id="why-anova">
+  <h2>02. Why ANOVA? The Family-Wise Error Problem</h2>
+  <p class="lead">A mandatory 5-mark theory question on every semester exam asks: <em>"Why can't we just run multiple two-sample t-tests?"</em></p>
+
+  <div class="card">
+    <h3>The Compound Probability Explosion</h3>
+    <p>To compare $k$ group means using pairwise $t$-tests, the number of independent pairwise comparisons is:</p>
+    $$\begin{aligned}
+    C = \binom{k}{2} = \frac{k(k - 1)}{2}
+    \end{aligned}$$
+    <p>For $k = 4$ groups, $C = \binom{4}{2} = 6$ individual tests are required.</p>
+    <p>If each test is performed at significance level $\alpha = 0.05$, the probability of making at least one false positive (Type I error) across the entire experiment explodes into the **Family-Wise Error Rate ($\alpha_{\text{FW}}$)**:</p>
+    $$\begin{aligned}
+    \alpha_{\text{FW}} &= 1 - (1 - \alpha)^C \\[4pt]
+    &= 1 - (0.95)^6 = 1 - 0.7351 = \mathbf{0.2649 \ (26.49\%)}
+    \end{aligned}$$
+    <div class="note danger">
+      <strong>The Statistical Disaster:</strong> With 4 groups, running pairwise $t$-tests means a <strong>26.5% probability</strong> of declaring a fake significant difference purely by chance! ANOVA solves this by conducting a single omnibus $F$-test while strictly capping Type I error at $\alpha = 0.05$.
+    </div>
+  </div>
+</section>
+
+<!-- Section 3 -->
+<section id="algorithm">
+  <h2>03. The 6-Step Computational Algorithm</h2>
+  <div class="steps">
+    <div class="step">
+      <div>
+        <h3>Compute Group Totals & Grand Total ($G$)</h3>
+        <p>Calculate column totals $T_j = \sum x_{ij}$. Then sum them for the Grand Total $G = \sum T_j$. Count total observations $N = \sum n_j$.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div>
+        <h3>Compute the Correction Factor (CF)</h3>
+        $$\begin{aligned}
+        \text{CF} = \frac{G^2}{N}
+        \end{aligned}$$
+      </div>
+    </div>
+    <div class="step">
+      <div>
+        <h3>Calculate Total Sum of Squares (TSS)</h3>
+        <p>Square every single raw value in the table, sum them, and subtract CF:</p>
+        $$\begin{aligned}
+        \text{TSS} = \sum \sum X_{ij}^2 - \text{CF}, \quad df_{\text{total}} = N - 1
+        \end{aligned}$$
+      </div>
+    </div>
+    <div class="step">
+      <div>
+        <h3>Calculate Between-Groups Sum of Squares (SSB)</h3>
+        <p>Square each group total, divide by its group size $n_j$, sum them, and subtract CF:</p>
+        $$\begin{aligned}
+        \text{SSB} = \sum_{j=1}^k \frac{T_j^2}{n_j} - \text{CF}, \quad df_{\text{between}} = k - 1
+        \end{aligned}$$
+      </div>
+    </div>
+    <div class="step">
+      <div>
+        <h3>Calculate Within-Groups Error Sum of Squares (SSW)</h3>
+        <p>Obtain error SS by simple subtraction (guaranteed exact arithmetic):</p>
+        $$\begin{aligned}
+        \text{SSW} = \text{TSS} - \text{SSB}, \quad df_{\text{within}} = N - k
+        \end{aligned}$$
+      </div>
+    </div>
+    <div class="step">
+      <div>
+        <h3>Calculate Mean Squares & F-Ratio</h3>
+        $$\begin{aligned}
+        \text{MSB} = \frac{\text{SSB}}{k - 1}, \quad \text{MSW} = \frac{\text{SSW}}{N - k} \implies F_{\text{calc}} = \frac{\text{MSB}}{\text{MSW}}
+        \end{aligned}$$
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 4 -->
+<section id="table-template">
+  <h2>04. Standard One-Way ANOVA Summary Table Template</h2>
+  <p>In the semester exam, you must draw this table to secure the final 7 marks of the question:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Source of Variation</th>
+          <th>Sum of Squares ($SS$)</th>
+          <th>Degrees of Freedom ($df$)</th>
+          <th>Mean Square ($MS$)</th>
+          <th>Variance Ratio ($F$)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Between Groups (Treatments)</strong></td>
+          <td>$\text{SSB}$</td>
+          <td>$k - 1$</td>
+          <td>$\text{MSB} = \frac{\text{SSB}}{k - 1}$</td>
+          <td rowspan="2" style="vertical-align:middle;font-weight:800;color:var(--brand);">
+            $$F = \frac{\text{MSB}}{\text{MSW}}$$
+          </td>
+        </tr>
+        <tr>
+          <td><strong>Within Groups (Error / Residual)</strong></td>
+          <td>$\text{SSW}$</td>
+          <td>$N - k$</td>
+          <td>$\text{MSW} = \frac{\text{SSW}}{N - k}$</td>
+        </tr>
+        <tr style="font-weight:700;background:#f1f5f9;">
+          <td>Total</td>
+          <td>$\text{TSS} = \text{SSB} + \text{SSW}$</td>
+          <td>$N - 1$</td>
+          <td>-</td>
+          <td>-</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note purple">
+    <strong>Decision Rule:</strong> Look up $F_{\text{crit}}$ with degrees of freedom $\nu_1 = k - 1$ (numerator) and $\nu_2 = N - k$ (denominator).<br>
+    If $F_{\text{calc}} > F_{\text{crit}}$, <strong>Reject $H_0$</strong> and conclude there is a statistically significant difference between group means.
+  </div>
+</section>
+
+<!-- Section 5 -->
+<section id="f-test-variances">
+  <h2>05. F-Test for Equality of Two Variances</h2>
+  <p class="lead">Used to test if two independent populations have identical variances ($H_0: \sigma_1^2 = \sigma_2^2$). Also serves as the test of homogeneity of variance before pooling $t$-tests.</p>
+
+  <div class="formula-banner">
+    $$\begin{aligned}
+    F = \frac{S_1^2}{S_2^2}, \quad \text{where } S_1^2 \ge S_2^2
+    \end{aligned}$$
+    <small>Degrees of freedom: Numerator $\nu_1 = n_1 - 1$, Denominator $\nu_2 = n_2 - 1$</small>
+  </div>
+
+  <div class="card">
+    <h3>Standard Sample Variance Formula:</h3>
+    $$\begin{aligned}
+    S^2 = \frac{\sum (X - \bar{X})^2}{n - 1} = \frac{\sum X^2 - \frac{(\sum X)^2}{n}}{n - 1}
+    \end{aligned}$$
+    <p class="small" style="color:var(--muted)">Always place the larger sample variance in the numerator so that calculated $F \ge 1.0$. This allows direct comparison against standard right-tail $F$ tables.</p>
+  </div>
+</section>
+
+<!-- Section 6: Deadly Traps -->
+<section id="pitfalls">
+  <h2>06. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 1 · Forgetting to Subtract CF</div>
+      <h3>Treating $\sum X^2$ as TSS</h3>
+      <p>$\text{TSS} \ne \sum \sum X_{ij}^2$. You must subtract the Correction Factor: $\text{TSS} = \sum \sum X^2 - \text{CF}$. Forgetting CF inflates TSS by thousands!</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 2 · Wrong Divisor in SSB</div>
+      <h3>Dividing $\sum T_j^2$ by $N$ instead of $n_j$</h3>
+      <p>In $\text{SSB} = \sum \frac{T_j^2}{n_j} - \text{CF}$, the divisor is the group sample size $n_j$ (e.g. 5 or 10), NOT the total sample size $N$!</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 3 · Inverted Degrees of Freedom</div>
+      <h3>Looking up $F(16, 3)$ instead of $F(3, 16)$</h3>
+      <p>Numerator $df$ is always Treatment ($k - 1 = 3$). Denominator $df$ is Error ($N - k = 16$). Swapping them gives an incorrect critical cutoff.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 4 · Over-Interpreting Omnibus F</div>
+      <h3>Claiming ANOVA proves *which* pair differs</h3>
+      <p>A significant $F$-test proves only that <em>at least one</em> pair differs. It does not pinpoint the specific pair without post-hoc tests (Tukey's HSD / Scheffe).</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 5 · Negative Sum of Squares</div>
+      <h3>Producing a negative SSB or SSW</h3>
+      <p>Sums of squares are squared deviations and can NEVER be negative. If $\text{SSB} < 0$, your CF or $\sum T_j^2 / n$ calculation has an arithmetic error.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 6 · Degrees of Freedom Balance</div>
+      <h3>Failing the Check: $df_B + df_W = df_{\text{total}}$</h3>
+      <p>Always verify: $(k - 1) + (N - k) = N - 1$. For example, $3 + 16 = 19$, or $3 + 36 = 39$. If this sum fails, do not proceed to mean squares.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================== -->
+<!-- COMPLETE QUESTION BANK: ALL 5 PROBLEMS     -->
+<!-- ========================================== -->
+<section id="question-bank">
+  <h2>07. The Complete University Question Bank (All Problems Solved)</h2>
+  <p class="lead">Every ANOVA and F-Test question from past semester exams (May 2025, Dec 2024, Nov 2025) and core course syllabus archetypes:</p>
+
+  <!-- QUESTION 1: Dec 2024 Q6(i) Theory (5 Marks) -->
+  <div id="q1-theory" class="details-box">
+    <span class="pyq-badge">Semester Exam Paper · December 2024 (Question 6 Part i) &middot; 5 Marks</span>
+    <h3 style="margin:6px 0 10px;">Question 1: Why ANOVA Differs from Multiple t-Tests (5 Marks)</h3>
+    <p><strong>Question Statement (Verbatim):</strong><br>
+    <em>"Explain how ANOVA differs from t-tests in hypothesis testing. Discuss why ANOVA is preferable when comparing the means of more than two groups. (5 Marks)"</em></p>
+
+    <details open>
+      <summary>View Complete Theory Model Answer</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Fundamental Differences:</strong></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Dimension</th><th>Two-Sample t-Test</th><th>One-Way ANOVA (F-Test)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>Number of Groups</strong></td><td>Exactly two groups ($k = 2$)</td><td>Two or more groups ($k \ge 3$)</td></tr>
+              <tr><td><strong>Hypotheses</strong></td><td>$H_0: \mu_1 = \mu_2$</td><td>$H_0: \mu_1 = \mu_2 = \dots = \mu_k$</td></tr>
+              <tr><td><strong>Test Statistic</strong></td><td>Student's $t$ (ratio of mean diff to SE)</td><td>Fisher's $F$ (ratio of Between MS to Within MS)</td></tr>
+              <tr><td><strong>Mathematical Relation</strong></td><td colspan="2" style="text-align:center;">For $k = 2$, the $F$-test is mathematically identical to $t^2$: $F = t^2$.</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:8px;"><strong>2. Why ANOVA is Preferable: The Family-Wise Error Rate Problem:</strong></p>
+        <p>When comparing $k = 4$ groups, conducting pairwise $t$-tests requires $C = \binom{4}{2} = 6$ individual tests. If each test is evaluated at $\alpha = 0.05$, the cumulative Type I error probability across the family of tests is:</p>
+        $$\begin{aligned}
+        \alpha_{\text{FW}} &= 1 - (1 - \alpha)^C \\[4pt]
+        &= 1 - (0.95)^6 = 1 - 0.7351 = \mathbf{0.2649 \ (26.49\%)}
+        \end{aligned}$$
+        <p><strong>Conclusion:</strong> Running multiple $t$-tests leads to an unacceptably high $26.5\%$ risk of finding false significance. ANOVA avoids this by testing all means simultaneously in a single test, strictly preserving the Type I error at $\alpha = 0.05$.</p>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 2: Dec 2024 Q6(ii) Technicians (15 Marks) -->
+  <div id="q2-technicians" class="details-box">
+    <span class="pyq-badge">Semester Exam Paper · December 2024 (Question 6 Part ii) &middot; 15 Marks</span>
+    <h3 style="margin:6px 0 10px;">Question 2: Photographic Technicians Mistakes One-Way ANOVA (15 Marks)</h3>
+    <p><strong>Question Statement (Verbatim):</strong><br>
+    <em>"The following data is about the mistakes made by 4 photographic laboratory technicians in 5 successive days. Is there any significant difference in performance among the technicians? (15 Marks)"</em></p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Day</th><th>Tech I ($X_1$)</th><th>Tech II ($X_2$)</th><th>Tech III ($X_3$)</th><th>Tech IV ($X_4$)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>4</td><td>14</td><td>10</td><td>9</td></tr>
+          <tr><td>2</td><td>14</td><td>9</td><td>12</td><td>12</td></tr>
+          <tr><td>3</td><td>10</td><td>12</td><td>7</td><td>8</td></tr>
+          <tr><td>4</td><td>8</td><td>10</td><td>15</td><td>10</td></tr>
+          <tr><td>5</td><td>11</td><td>14</td><td>11</td><td>11</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution & ANOVA Table</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Group Totals & Grand Total:</strong></p>
+        <ul>
+          <li>Tech I Total: $T_1 = 4 + 14 + 10 + 8 + 11 = \mathbf{47}$</li>
+          <li>Tech II Total: $T_2 = 14 + 9 + 12 + 10 + 14 = \mathbf{59}$</li>
+          <li>Tech III Total: $T_3 = 10 + 12 + 7 + 15 + 11 = \mathbf{55}$</li>
+          <li>Tech IV Total: $T_4 = 9 + 12 + 8 + 10 + 11 = \mathbf{50}$</li>
+          <li>Grand Total: $G = 47 + 59 + 55 + 50 = \mathbf{211}$; Total sample size $N = 4 \times 5 = \mathbf{20}$.</li>
+        </ul>
+
+        <p style="margin-top:8px;"><strong>2. Correction Factor (CF):</strong></p>
+        $$\begin{aligned}
+        \text{CF} = \frac{G^2}{N} = \frac{211^2}{20} = \frac{44,521}{20} = \mathbf{2,226.05}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>3. Raw Sum of Squares & Total SS (TSS):</strong></p>
+        $$\begin{aligned}
+        \sum \sum X^2 &= 497 + 717 + 639 + 510 = \mathbf{2,363.0} \\[4pt]
+        \text{TSS} &= 2,363.0 - 2,226.05 = \mathbf{136.95}, \quad df = 20 - 1 = \mathbf{19}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>4. Between Technicians SS (SSB):</strong></p>
+        $$\begin{aligned}
+        \text{SSB} &= \frac{47^2 + 59^2 + 55^2 + 50^2}{5} - \text{CF} \\[4pt]
+        &= \frac{2,209 + 3,481 + 3,025 + 2,500}{5} - 2,226.05 \\[4pt]
+        &= \frac{11,215}{5} - 2,226.05 = 2,243.0 - 2,226.05 = \mathbf{16.95} \\[4pt]
+        df_{\text{between}} &= 4 - 1 = \mathbf{3}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>5. Within Technicians SS (SSW / Error):</strong></p>
+        $$\begin{aligned}
+        \text{SSW} &= \text{TSS} - \text{SSB} = 136.95 - 16.95 = \mathbf{120.00} \\[4pt]
+        df_{\text{within}} &= 20 - 4 = \mathbf{16}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>6. One-Way ANOVA Summary Table:</strong></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Source of Variation</th><th>SS</th><th>df</th><th>Mean Square (MS)</th><th>F-Ratio</th><th>Critical $F_{0.05}(3, 16)$</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Between Technicians</strong></td>
+                <td>$16.95$</td>
+                <td>$3$</td>
+                <td>$\text{MSB} = \frac{16.95}{3} = 5.65$</td>
+                <td rowspan="2" style="vertical-align:middle;font-weight:800;color:var(--brand);">
+                  $$F = \frac{5.65}{7.50} = \mathbf{0.7533}$$
+                </td>
+                <td rowspan="2" style="vertical-align:middle;font-weight:700;">$\mathbf{3.24}$</td>
+              </tr>
+              <tr>
+                <td><strong>Within Technicians (Error)</strong></td>
+                <td>$120.00$</td>
+                <td>$16$</td>
+                <td>$\text{MSW} = \frac{120.00}{16} = 7.50$</td>
+              </tr>
+              <tr style="font-weight:700;background:#f1f5f9;">
+                <td>Total</td><td>136.95</td><td>19</td><td>-</td><td>-</td><td>-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note good">
+          <strong>Decision & Conclusion:</strong><br>
+          Critical value at $\alpha = 0.05$ with $df = (3, 16)$ is $\mathbf{3.24}$.<br>
+          Since $F_{\text{calc}} = 0.7533 < 3.24$, we <strong>fail to reject the null hypothesis $H_0$</strong>.<br>
+          <em>There is no statistically significant difference in performance (number of mistakes) among the four laboratory technicians.</em>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 3: May 2025 Paper Q6 Iron Formations (20 Marks) -->
+  <div id="q3-iron" class="details-box">
+    <span class="pyq-badge">Semester Exam Paper · May 2025 (Question 6) &middot; 20 Marks</span>
+    <h3 style="margin:6px 0 10px;">Question 3: Total Fe Content Across 4 Iron Formations ($\alpha = 0.01$) (20 Marks)</h3>
+    <p><strong>Question Statement (Verbatim):</strong><br>
+    <em>"Total Fe content was measured in four iron formations (1: Carbonate, 2: Silicate, 3: Magnetite, 4: Hematite) with 10 observations each. Carry out an analysis of variance F-test at significance level 0.01, and summarize the results in an ANOVA table. (20 Marks)"</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution & ANOVA Table</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Group Totals ($k = 4, n = 10, N = 40$):</strong></p>
+        <ul>
+          <li>Formation 1 Total: $T_1 = \mathbf{260.80} \implies \bar{X}_1 = 26.08$</li>
+          <li>Formation 2 Total: $T_2 = \mathbf{246.90} \implies \bar{X}_2 = 24.69$</li>
+          <li>Formation 3 Total: $T_3 = \mathbf{299.50} \implies \bar{X}_3 = 29.95$</li>
+          <li>Formation 4 Total: $T_4 = \mathbf{338.40} \implies \bar{X}_4 = 33.84$</li>
+          <li>Grand Total $G = 260.8 + 246.9 + 299.5 + 338.4 = \mathbf{1,145.60}$</li>
+        </ul>
+
+        <p style="margin-top:8px;"><strong>2. Correction Factor (CF):</strong></p>
+        $$\begin{aligned}
+        \text{CF} = \frac{1,145.60^2}{40} = \frac{1,312,399.36}{40} = \mathbf{32,809.9840}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>3. Sums of Squares Calculations:</strong></p>
+        <ul>
+          <li>Raw Sum of Squares $\sum \sum X^2 = \mathbf{33,882.2400}$</li>
+          <li>$\text{TSS} = 33,882.2400 - 32,809.9840 = \mathbf{1,072.2560}$ ($df = 39$)</li>
+          <li>$\text{SSB} = \frac{260.8^2 + 246.9^2 + 299.5^2 + 338.4^2}{10} - \text{CF} = 33,319.106 - 32,809.984 = \mathbf{509.1220}$ ($df = 3$)</li>
+          <li>$\text{SSW} = \text{TSS} - \text{SSB} = 1,072.2560 - 509.1220 = \mathbf{563.1340}$ ($df = 36$)</li>
+        </ul>
+
+        <p style="margin-top:8px;"><strong>4. One-Way ANOVA Table:</strong></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Source of Variation</th><th>SS</th><th>df</th><th>Mean Square (MS)</th><th>F-Ratio</th><th>Critical $F_{0.01}(3, 36)$</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Between Formations</strong></td>
+                <td>$509.1220$</td>
+                <td>$3$</td>
+                <td>$\text{MSB} = \frac{509.1220}{3} = \mathbf{169.7073}$</td>
+                <td rowspan="2" style="vertical-align:middle;font-weight:800;color:var(--brand);">
+                  $$F = \frac{169.7073}{15.6426} = \mathbf{10.85}$$
+                </td>
+                <td rowspan="2" style="vertical-align:middle;font-weight:700;">$\mathbf{4.38}$</td>
+              </tr>
+              <tr>
+                <td><strong>Within Formations (Error)</strong></td>
+                <td>$563.1340$</td>
+                <td>$36$</td>
+                <td>$\text{MSW} = \frac{563.1340}{36} = \mathbf{15.6426}$</td>
+              </tr>
+              <tr style="font-weight:700;background:#f1f5f9;">
+                <td>Total</td><td>1072.2560</td><td>39</td><td>-</td><td>-</td><td>-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note good">
+          <strong>Decision & Conclusion ($\alpha = 0.01$):</strong><br>
+          Critical cutoff value $F_{0.01}(3, 36) \approx \mathbf{4.38}$.<br>
+          Since $F_{\text{calc}} = 10.85 \gg 4.38$, we <strong>reject $H_0$ at the $1\%$ level of significance</strong> ($p < 0.0001$).<br>
+          <em>There is a highly statistically significant difference in mean Fe content among the four iron formations (Hematite is highest at $33.84\%$, Silicate lowest at $24.69\%$).</em>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 4: Nov 2025 Paper Q6 Two-Way ANOVA (20 Marks) -->
+  <div id="q4-twoway" class="details-box">
+    <span class="pyq-badge">Semester Exam Paper · November 2025 (Question 6) &middot; 20 Marks</span>
+    <h3 style="margin:6px 0 10px;">Question 4: Two-Way ANOVA Without Replication (20 Marks)</h3>
+    <p><strong>Question Statement (Verbatim):</strong><br>
+    <em>"A car manufacturing company evaluates the sales performance of 4 retail dealers (A, B, C, D) over 3 months (I, II, III). Carry out a Two-Way ANOVA test at $\alpha = 0.05$ to determine if there is a significant difference in sales across months and across dealers. (20 Marks)"</em></p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Month \ Dealer</th><th>A</th><th>B</th><th>C</th><th>D</th><th>Row Sum ($R_i$)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>I</strong></td><td>50</td><td>40</td><td>48</td><td>39</td><td>$R_1 = \mathbf{177}$</td></tr>
+          <tr><td><strong>II</strong></td><td>46</td><td>48</td><td>50</td><td>45</td><td>$R_2 = \mathbf{189}$</td></tr>
+          <tr><td><strong>III</strong></td><td>39</td><td>44</td><td>40</td><td>39</td><td>$R_3 = \mathbf{162}$</td></tr>
+          <tr style="font-weight:700;background:#f1f5f9;">
+            <td>Col Sum ($C_j$)</td><td>$C_1 = 135$</td><td>$C_2 = 132$</td><td>$C_3 = 138$</td><td>$C_4 = 123$</td><td>$G = \mathbf{528}$</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details open>
+      <summary>View Complete Step-by-Step Two-Way ANOVA Solution</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Correction Factor (CF):</strong> ($r = 3, c = 4, N = 12$)</p>
+        $$\begin{aligned}
+        \text{CF} = \frac{528^2}{12} = \frac{278,784}{12} = \mathbf{23,232.0}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>2. Sums of Squares Decomposition:</strong></p>
+        <ul>
+          <li>Raw Sum $\sum X^2 = 23,448.0 \implies \text{TSS} = 23,448 - 23,232 = \mathbf{216.0}$ ($df = 11$)</li>
+          <li>$\text{SSR (Months)} = \frac{177^2 + 189^2 + 162^2}{4} - \text{CF} = 23,323.5 - 23,232 = \mathbf{91.5}$ ($df = 2$)</li>
+          <li>$\text{SSC (Dealers)} = \frac{135^2 + 132^2 + 138^2 + 123^2}{3} - \text{CF} = 23,274 - 23,232 = \mathbf{42.0}$ ($df = 3$)</li>
+          <li>$\text{SSE (Residual)} = \text{TSS} - \text{SSR} - \text{SSC} = 216.0 - 91.5 - 42.0 = \mathbf{82.5}$ ($df = 6$)</li>
+        </ul>
+
+        <p style="margin-top:8px;"><strong>3. Two-Way ANOVA Summary Table:</strong></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Source of Variation</th><th>SS</th><th>df</th><th>MS</th><th>$F_{\text{calc}}$</th><th>Critical $F_{0.05}$</th><th>Decision</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Months (Rows)</strong></td>
+                <td>$91.5$</td>
+                <td>$2$</td>
+                <td>$45.75$</td>
+                <td>$F_R = \frac{45.75}{13.75} = \mathbf{3.33}$</td>
+                <td>$F(2, 6) = \mathbf{5.14}$</td>
+                <td>Fail to Reject $H_0$</td>
+              </tr>
+              <tr>
+                <td><strong>Dealers (Cols)</strong></td>
+                <td>$42.0$</td>
+                <td>$3$</td>
+                <td>$14.00$</td>
+                <td>$F_C = \frac{14.00}{13.75} = \mathbf{1.02}$</td>
+                <td>$F(3, 6) = \mathbf{4.76}$</td>
+                <td>Fail to Reject $H_0$</td>
+              </tr>
+              <tr>
+                <td><strong>Residual Error</strong></td>
+                <td>$82.5$</td>
+                <td>$6$</td>
+                <td>$13.75$</td>
+                <td>-</td>
+                <td>-</td>
+                <td>-</td>
+              </tr>
+              <tr style="font-weight:700;background:#f1f5f9;">
+                <td>Total</td><td>216.0</td><td>11</td><td>-</td><td>-</td><td>-</td><td>-</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="note good">
+          <strong>Conclusions:</strong><br>
+          1. <strong>Months:</strong> $F_R = 3.33 < 5.14 \implies$ Monthly sales differences are not statistically significant.<br>
+          2. <strong>Dealers:</strong> $F_C = 1.02 < 4.76 \implies$ Performance variations across the four dealers are not statistically significant.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 5: F-Test for Equality of Two Variances Archetype -->
+  <div id="q5-variances" class="details-box">
+    <span class="pyq-badge llt">Core Syllabus Archetype · F-Test for Variances</span>
+    <h3 style="margin:6px 0 10px;">Question 5: Testing Equality of Two Population Variances</h3>
+    <p><strong>Question Statement:</strong><br>
+    <em>"Two independent manufacturing machines produce steel rods. A sample of 10 rods from Machine A has sample variance $s_1^2 = 25.0$. A sample of 12 rods from Machine B has sample variance $s_2^2 = 10.0$. At $\alpha = 0.05$, test whether Machine A produces significantly more variable rod diameters than Machine B."</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Formulate Hypotheses:</strong></p>
+        <ul>
+          <li>Null Hypothesis: $H_0: \sigma_1^2 = \sigma_2^2$ (Both machines have identical variance).</li>
+          <li>Alternative Hypothesis: $H_1: \sigma_1^2 > \sigma_2^2$ (Right-tailed test).</li>
+        </ul>
+
+        <p style="margin-top:8px;"><strong>2. Test Statistic & Degrees of Freedom:</strong></p>
+        $$\begin{aligned}
+        F_{\text{calc}} = \frac{s_1^2}{s_2^2} = \frac{25.0}{10.0} = \mathbf{2.50}
+        \end{aligned}$$
+        <ul>
+          <li>Numerator $df$: $\nu_1 = n_1 - 1 = 10 - 1 = \mathbf{9}$</li>
+          <li>Denominator $df$: $\nu_2 = n_2 - 1 = 12 - 1 = \mathbf{11}$</li>
+        </ul>
+
+        <p style="margin-top:8px;"><strong>3. Critical Value Lookup & Decision:</strong></p>
+        <p>From the standard $F$-distribution table for $\alpha = 0.05$ with $df = (9, 11)$:</p>
+        $$\begin{aligned}
+        F_{0.05}(9, 11) = \mathbf{2.90}
+        \end{aligned}$$
+        <p>Since $F_{\text{calc}} = 2.50 < F_{\text{crit}} = 2.90$, we **fail to reject $H_0$**.</p>
+        <div class="note good">
+          <strong>Conclusion:</strong> There is insufficient statistical evidence at the $5\%$ level to conclude that Machine A produces significantly more variable rods than Machine B.
+        </div>
+      </div>
+    </details>
+  </div>
+
+</section>
+
+<!-- Section 8: Interactive Calculator -->
+<section id="interactive-tool" class="tool-box">
+  <div class="eyebrow" style="color:var(--purple)">Interactive Study Tool</div>
+  <h2 style="border:none;margin-top:4px;">Dynamic One-Way ANOVA F-Ratio Calculator</h2>
+  <p style="font-size:13px;color:var(--muted)">Enter Sums of Squares and degrees of freedom to verify ANOVA calculations instantly:</p>
+
+  <div class="tool-grid">
+    <div class="tool-group">
+      <label>Between SS (SSB)</label>
+      <input type="number" id="inp-ssb" value="16.95" step="0.05" oninput="calculateANOVA()">
+    </div>
+    <div class="tool-group">
+      <label>Between df ($k - 1$)</label>
+      <input type="number" id="inp-dfb" value="3" step="1" min="1" oninput="calculateANOVA()">
+    </div>
+    <div class="tool-group">
+      <label>Within SS (SSW)</label>
+      <input type="number" id="inp-ssw" value="120.00" step="0.5" oninput="calculateANOVA()">
+    </div>
+    <div class="tool-group">
+      <label>Within df ($N - k$)</label>
+      <input type="number" id="inp-dfw" value="16" step="1" min="1" oninput="calculateANOVA()">
+    </div>
+  </div>
+
+  <div class="tool-result" id="anova-output">
+    Loading ANOVA calculations...
+  </div>
+</section>
+
+<!-- Section 9: Interactive Self-Test Quiz -->
+<section id="practice">
+  <h2>08. Interactive Self-Test Quiz (Active Recall)</h2>
+  <p class="lead">Test your ANOVA degrees of freedom, F-ratio, and $\alpha$-inflation logic before proceeding. Attempt all 4 questions:</p>
+
+  <div class="quiz-q" data-answer="b">
+    <strong>Question 1 — Family-Wise Error Rate ($\alpha_{\text{FW}}$)</strong>
+    <p>If an experiment evaluates $k = 4$ group means using pairwise $t$-tests at $\alpha = 0.05$, how many pairwise tests are required, and what is the approximate Family-Wise Type I error rate?</p>
+    <label><input type="radio" name="q1" value="a"> 4 tests, $\alpha_{\text{FW}} \approx 5\%$</label>
+    <label><input type="radio" name="q1" value="b"> 6 tests, $\alpha_{\text{FW}} \approx 26.5\%$</label>
+    <label><input type="radio" name="q1" value="c"> 3 tests, $\alpha_{\text{FW}} \approx 14.3\%$</label>
+    <label><input type="radio" name="q1" value="d"> 12 tests, $\alpha_{\text{FW}} \approx 50\%$</label>
+    <div class="feedback" id="f1"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(1)">Check Answer</button>
+      <button onclick="toggleAnswer('a1')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a1">
+      <strong>Correct: 6 tests, $\alpha_{\text{FW}} \approx 26.5\%$</strong>.<br>
+      $C = \binom{4}{2} = 6$. $\alpha_{\text{FW}} = 1 - (1 - 0.05)^6 = 1 - 0.7351 = 0.2649 = 26.49\%$. This illustrates why ANOVA is mandatory.
+    </div>
+  </div>
+
+  <div class="quiz-q" data-answer="c">
+    <strong>Question 2 — Degrees of Freedom Identity</strong>
+    <p>A One-Way ANOVA is conducted on $k = 4$ iron formations with $n = 10$ samples in each group ($N = 40$). What are the Between-Groups and Within-Groups degrees of freedom?</p>
+    <label><input type="radio" name="q2" value="a"> $df_B = 4, df_W = 40$</label>
+    <label><input type="radio" name="q2" value="b"> $df_B = 3, df_W = 39$</label>
+    <label><input type="radio" name="q2" value="c"> $df_B = 3, df_W = 36$</label>
+    <label><input type="radio" name="q2" value="d"> $df_B = 4, df_W = 36$</label>
+    <div class="feedback" id="f2"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(2)">Check Answer</button>
+      <button onclick="toggleAnswer('a2')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a2">
+      <strong>Correct: $df_B = 3, df_W = 36$</strong>.<br>
+      $df_{\text{between}} = k - 1 = 4 - 1 = 3$. $df_{\text{within}} = N - k = 40 - 4 = 36$. Check: $3 + 36 = 39 = N - 1$.
+    </div>
+  </div>
+
+  <div class="quiz-q" data-answer="a">
+    <strong>Question 3 — F-Test Statistical Decision</strong>
+    <p>In a One-Way ANOVA, the calculated $F = 10.85$ and the critical table value is $F_{0.01}(3, 36) = 4.38$. What is the correct statistical decision?</p>
+    <label><input type="radio" name="q3" value="a"> Reject $H_0$; there is a statistically significant difference between group means.</label>
+    <label><input type="radio" name="q3" value="b"> Fail to reject $H_0$; group means are identical.</label>
+    <label><input type="radio" name="q3" value="c"> Accept $H_1$ without testing.</label>
+    <label><input type="radio" name="q3" value="d"> Re-sample because $F$ cannot exceed 10.</label>
+    <div class="feedback" id="f3"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(3)">Check Answer</button>
+      <button onclick="toggleAnswer('a3')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a3">
+      <strong>Correct: Option A</strong>.<br>
+      Since $F_{\text{calc}} = 10.85 > F_{\text{crit}} = 4.38$, the between-group variation is far larger than random error, rejecting $H_0$ decisively at $\alpha = 0.01$.
+    </div>
+  </div>
+
+  <div class="quiz-q" data-answer="d">
+    <strong>Question 4 — Meaning of $F \approx 1.0$</strong>
+    <p>What does an ANOVA variance ratio of $F_{\text{calc}} \approx 1.0$ imply?</p>
+    <label><input type="radio" name="q4" value="a"> The treatment effect is huge.</label>
+    <label><input type="radio" name="q4" value="b"> The experiment had no random error.</label>
+    <label><input type="radio" name="q4" value="c"> The sample size was too small.</label>
+    <label><input type="radio" name="q4" value="d"> Between-group variation is no greater than random within-group noise; null hypothesis is likely true.</label>
+    <div class="feedback" id="f4"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(4)">Check Answer</button>
+      <button onclick="toggleAnswer('a4')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a4">
+      <strong>Correct: Option D</strong>.<br>
+      When $\text{MSB} \approx \text{MSW}$, the differences between group means are entirely consistent with random chance, meaning treatments produced no measurable effect.
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <h3>Self-Test Progress</h3>
+    <div class="small" id="scoreText">0 of 4 correct</div>
+    <div class="progress-wrap"><div class="progress" id="scoreBar"></div></div>
+  </div>
+</section>
+
+<!-- Section 10: Exam Checklist -->
+<section id="checklist">
+  <h2>09. Exam Hall Answer Sheet Presentation Checklist</h2>
+  
+  <div class="card">
+    <p>When solving an ANOVA problem in the semester exam, follow this exact structure to guarantee maximum marks:</p>
+    <ol style="margin-left:18px;line-height:1.75;font-size:13.5px;">
+      <li><strong>State the Hypotheses:</strong> $H_0: \mu_1 = \mu_2 = \dots = \mu_k$ versus $H_1: \text{At least one mean differs}$.</li>
+      <li><strong>Summary Table:</strong> Write group totals $T_j$, sample sizes $n_j$, and Grand Total $G$.</li>
+      <li><strong>Correction Factor:</strong> Write $\text{CF} = \frac{G^2}{N}$ and evaluate.</li>
+      <li><strong>Total SS:</strong> Write $\text{TSS} = \sum X^2 - \text{CF}$ with $df = N - 1$.</li>
+      <li><strong>Between SS:</strong> Write $\text{SSB} = \sum \frac{T_j^2}{n_j} - \text{CF}$ with $df = k - 1$.</li>
+      <li><strong>Within SS:</strong> Write $\text{SSW} = \text{TSS} - \text{SSB}$ with $df = N - k$.</li>
+      <li><strong>Draw Complete ANOVA Table:</strong> Present Source, SS, df, MS, and $F_{\text{calc}}$.</li>
+      <li><strong>Critical Value & Decision:</strong> State $F_{\text{crit}}(k-1, N-k, \alpha)$. State whether $F_{\text{calc}} > F_{\text{crit}}$ and write final English conclusion.</li>
+    </ol>
+  </div>
+
+  <div class="controls" style="margin-top:16px;">
+    <button onclick="window.print()">Print / Save as PDF</button>
+    <button class="secondary" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to Top &uarr;</button>
+    <a href="/ifs-study-guide/04-chi-square-tests.html" class="btn" style="background:#059669;color:#fff;padding:8px 14px;border-radius:8px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;min-height:40px;">Proceed to Next: 04 &middot; Chi-Square Tests &rarr;</a>
+  </div>
+</section>
+
+<div class="footer">
+  <div><strong>Inferential Statistics (21CSC529T)</strong> &middot; Module 03: One-Way ANOVA & F-Test</div>
+  <div>Next Topic in 2-Day Plan: <strong>Chi-Square Tests (&chi;&sup2; Independence & Goodness of Fit)</strong></div>
+</div>
+
+</main>
+</div>
+
+<script>
+// Mobile Drawer open/close for iPhone 13
+function openDrawer(){
+  document.getElementById('mobileDrawer').classList.add('open');
+  document.getElementById('drawerBackdrop').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer(){
+  document.getElementById('mobileDrawer').classList.remove('open');
+  document.getElementById('drawerBackdrop').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Toggle solution explanations
+function toggleAnswer(id){
+  document.getElementById(id).classList.toggle('show');
+}
+
+// Quiz evaluation logic
+function checkQuiz(n){
+  const q = document.querySelectorAll('.quiz-q')[n-1];
+  const chosen = q.querySelector('input:checked');
+  const feedback = document.getElementById('f'+n);
+  
+  if(!chosen){
+    feedback.textContent = 'Please select an option first.';
+    feedback.style.color = '#b45309';
+    return;
+  }
+  
+  const isCorrect = chosen.value === q.dataset.answer;
+  if(isCorrect){
+    feedback.textContent = 'Correct! Outstanding precision.';
+    feedback.style.color = '#059669';
+    q.dataset.done = 'yes';
+  } else {
+    feedback.textContent = 'Incorrect. Check the explanation and try again.';
+    feedback.style.color = '#dc2626';
+    q.dataset.done = 'no';
+  }
+  
+  const completed = [...document.querySelectorAll('.quiz-q')].filter(el => el.dataset.done === 'yes').length;
+  document.getElementById('scoreText').textContent = `${completed} of 4 correct`;
+  document.getElementById('scoreBar').style.width = `${(completed / 4) * 100}%`;
+}
+
+// Dynamic ANOVA calculation engine
+function calculateANOVA(){
+  const ssb = parseFloat(document.getElementById('inp-ssb').value) || 0;
+  const dfb = parseInt(document.getElementById('inp-dfb').value) || 1;
+  const ssw = parseFloat(document.getElementById('inp-ssw').value) || 0;
+  const dfw = parseInt(document.getElementById('inp-dfw').value) || 1;
+
+  const msb = ssb / dfb;
+  const msw = ssw / dfw;
+  const f = msw > 0 ? (msb / msw) : 0;
+  const tss = ssb + ssw;
+  const dft = dfb + dfw;
+
+  document.getElementById('anova-output').innerHTML = `
+    <div><strong>Total SS:</strong> ${tss.toFixed(2)} (Total df: ${dft})</div>
+    <div style="margin-top:4px;">
+      &bull; <strong>MSB (Between):</strong> ${msb.toFixed(4)}<br>
+      &bull; <strong>MSW (Within / Error):</strong> ${msw.toFixed(4)}
+    </div>
+    <div style="margin-top:6px;font-weight:800;color:#7c3aed;font-size:14.5px;">
+      &rarr; F-Ratio (MSB / MSW) = ${f.toFixed(4)}
+    </div>
+    <div style="margin-top:4px;font-size:12px;color:var(--muted);">
+      Degrees of freedom: Numerator $\\nu_1 = ${dfb}$, Denominator $\\nu_2 = ${dfw}$.
+    </div>
+  `;
+}
+
+// Highlight sidebar item on click
+document.querySelectorAll('nav a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.querySelectorAll('nav a').forEach(el => el.classList.remove('active'));
+    a.classList.add('active');
+  });
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  calculateANOVA();
+});
+</script>
+</body>
+</html>

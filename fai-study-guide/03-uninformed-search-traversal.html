@@ -1,0 +1,1011 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Uninformed Search & Traversal | Complete Exam Question Bank & Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#2563eb;--brand-soft:#eff6ff;--teal:#059669;--teal-soft:#ecfdf5;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#0f172a;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:800}
+aside h2{font-size:18px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.12em;margin:18px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#cbd5e1;font-size:13px}
+nav a:hover,nav a.active{background:#1e293b;color:#38bdf8;text-decoration:none}
+.module-hub-link{background:#1e293b;border:1px solid #334155;color:#38bdf8;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:20px;padding:12px;border:1px solid #334155;border-radius:12px;color:#cbd5e1;font-size:12px;background:#131d35}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#047857;color:#ecfdf5}
+
+/* Mobile Topbar */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#0f172a;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{font-size:14.5px;font-weight:800;color:#f8fafc;display:flex;align-items:center;gap:6px;}
+.mobile-topbar-actions{display:flex;gap:6px;align-items:center;}
+.mobile-btn{
+  background:#1e293b;
+  border:1px solid #334155;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  min-height:36px;
+  display:inline-flex;
+  align-items:center;
+}
+
+/* Horizontal Swipeable Pill Nav */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#0f172a;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #1e293b;
+  padding-bottom:12px;
+}
+.drawer-close{background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;padding:4px 8px;}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 60%,#312e81 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"DFS / BFS";position:absolute;right:20px;bottom:-25px;font-size:90px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#a5b4fc;font-weight:800}
+h1{font-size:clamp(22px,4.5vw,38px);line-height:1.15;margin:10px 0}
+.hero p{max-width:700px;color:#e0e7ff;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+.formula-banner{
+  background:#0f172a;
+  color:#f8fafc;
+  padding:16px 14px;
+  border-radius:12px;
+  text-align:center;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+.formula-banner .katex-display{margin:6px 0}
+.formula-banner small{display:block;font-size:11px;color:#94a3b8;margin-top:6px}
+
+/* KaTeX Headroom */
+.katex-display{
+  font-size:clamp(13px, 3.6vw, 15.5px) !important;
+  margin:12px 0 !important;
+  padding:12px 4px 8px !important;
+  overflow-x:auto !important;
+  overflow-y:visible !important;
+  scrollbar-width:none !important;
+}
+.katex-display::-webkit-scrollbar{display:none !important;}
+.katex-display > .katex{
+  display:block !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  padding-top:4px !important;
+  padding-bottom:2px !important;
+}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--teal-soft);border-color:var(--teal)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#dbeafe;color:#1e40af;margin-bottom:6px}
+.pyq-badge.nov{background:#fef3c7;color:#92400e}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+button:hover{background:#1d4ed8}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+
+/* Quiz for iPhone 13 */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--teal-soft);border-radius:8px;border-left:3px solid var(--teal);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Tree Diagram Container */
+.tree-box{background:#0f172a;color:#f8fafc;padding:16px;border-radius:12px;font-family:monospace;font-size:13px;line-height:1.5;overflow-x:auto;margin:12px 0}
+
+/* Interactive Calculator */
+.tool-box{background:white;border:2px solid #93c5fd;border-radius:12px;padding:16px;margin:16px 0}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:8px}
+.tool-group label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px}
+.tool-group input, .tool-group select{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  font-size:16px;
+  background:#f8fafc;
+  min-height:40px;
+}
+.tool-result{margin-top:12px;padding:12px;background:#eff6ff;border-radius:8px;border-left:4px solid var(--brand);font-size:13px}
+
+/* Mobile Responsiveness */
+@media(max-width:880px){
+  .shell{grid-template-columns:1fr}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:16px 14px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr}
+  .hero{padding:22px 16px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  .card{padding:14px}
+  .tool-box{padding:12px}
+  .tool-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Drawer Backdrop -->
+<div class="drawer-backdrop" id="backdrop" onclick="toggleDrawer()"></div>
+
+<!-- Slide-Out Mobile Navigation Drawer -->
+<div class="mobile-drawer" id="drawer">
+  <div class="drawer-header">
+    <div style="font-weight:800;font-size:13px;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;">FAI Study Hub</div>
+    <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+  </div>
+  <a href="/fai-study-guide/index.html" class="module-hub-link" style="display:block;padding:8px 12px;border-radius:8px;font-size:13px;">&larr; Back to Study Hub</a>
+  <div class="nav-label">Sections</div>
+  <nav>
+    <a href="#intuition" onclick="toggleDrawer()">01. Intuition & Contrast</a>
+    <a href="#search-properties" onclick="toggleDrawer()">02. Search Properties Matrix</a>
+    <a href="#dls-ids" onclick="toggleDrawer()">03. DLS & Iterative Deepening</a>
+    <a href="#hill-climbing" onclick="toggleDrawer()">04. Hill Climbing Hazards</a>
+    <a href="#notation" onclick="toggleDrawer()">05. Notation Matrix</a>
+    <a href="#steps" onclick="toggleDrawer()">06. Solving Protocol</a>
+    <a href="#traps" onclick="toggleDrawer()">07. 6 Exam Traps</a>
+    <a href="#pyqs" onclick="toggleDrawer()">08. All Solved PYQs</a>
+    <a href="#calculator" onclick="toggleDrawer()">09. Interactive Tool</a>
+    <a href="#quiz" onclick="toggleDrawer()">10. Active Recall Quiz</a>
+    <a href="#checklist" onclick="toggleDrawer()">11. Presentation Template</a>
+  </nav>
+  <div class="nav-label">Modules</div>
+  <nav>
+    <a href="/fai-study-guide/01-informed-search-astar-ao.html">01. Informed Search (A* & AO*)</a>
+    <a href="/fai-study-guide/02-adversarial-search-csp.html">02. Game Playing & CSP</a>
+    <a href="/fai-study-guide/03-uninformed-search-traversal.html" class="active">03. Uninformed Search</a>
+    <a href="/fai-study-guide/04-knowledge-representation-bayesian-networks.html">04. Bayes Nets & KR</a>
+    <a href="/fai-study-guide/05-python-pandas-visualization.html">05. Python, Pandas & Plots</a>
+  </nav>
+</div>
+
+<!-- Mobile Sticky Topbar -->
+<div class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>Module 03 · Uninformed Search</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/fai-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="toggleDrawer()">&#9776; Menu</button>
+  </div>
+</div>
+
+<!-- Mobile Horizontal Pill Nav -->
+<div class="mobile-pills-bar">
+  <a href="#intuition" class="pill-link">Intuition</a>
+  <a href="#search-properties" class="pill-link">Properties</a>
+  <a href="#dls-ids" class="pill-link">DLS & IDS</a>
+  <a href="#hill-climbing" class="pill-link">Hill Climbing</a>
+  <a href="#traps" class="pill-link">Traps</a>
+  <a href="#pyqs" class="pill-link">Past Papers</a>
+  <a href="#calculator" class="pill-link">Visualizer</a>
+  <a href="#quiz" class="pill-link">Quiz</a>
+  <a href="#checklist" class="pill-link">Checklist</a>
+</div>
+
+<div class="shell">
+
+  <!-- Desktop Sidebar -->
+  <aside>
+    <div class="brand">21CSC569J · Exam Prep</div>
+    <h2>Uninformed Search & Traversal</h2>
+    <a href="/fai-study-guide/index.html" class="module-hub-link" style="padding:8px 12px;border-radius:8px;font-size:12.5px;">&larr; Back to Study Hub</a>
+
+    <div class="nav-label">Sections</div>
+    <nav>
+      <a href="#intuition">01. Intuition & Contrast</a>
+      <a href="#search-properties">02. Search Properties Matrix</a>
+      <a href="#dls-ids">03. DLS & Iterative Deepening</a>
+      <a href="#hill-climbing">04. Hill Climbing Hazards</a>
+      <a href="#notation">05. Notation Decoding Matrix</a>
+      <a href="#steps">06. Step-by-Step Protocol</a>
+      <a href="#traps">07. 6 Deadly Exam Traps</a>
+      <a href="#pyqs">08. Complete University PYQs</a>
+      <a href="#calculator">09. Traversal Simulator</a>
+      <a href="#quiz">10. Self-Test Active Recall</a>
+      <a href="#checklist">11. Answer Sheet Checklist</a>
+    </nav>
+
+    <div class="side-note">
+      <strong>Exam Weightage: 20 Marks</strong><br>
+      Internal Score: <strong>56.79 / 60</strong><br>
+      Target Sem Mark: <strong>36 / 100</strong> (Safe: 43)<br>
+      <span class="status-pill pill-target">Priority 4 High-Yield</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="eyebrow">Module 03 · Blind Search & Local Optimization</div>
+      <h1>Uninformed Search & Traversal</h1>
+      <p>Systematic graph exploration and local optimization. Step-by-step state space traces for Breadth-First Search (BFS), Depth-First Search (DFS), Depth-Limited Search (DLS) with cutoff limit $L=2$, Iterative Deepening Search (IDS), and Hill Climbing structural hazards.</p>
+      <div class="pills">
+        <span class="pill">Nov 2025 (Q3 20M, Q4 5M)</span>
+        <span class="pill">May 2025 (Q7 10M)</span>
+        <span class="pill">DFS (10 Nodes)</span>
+        <span class="pill">DLS L=2 (7 Nodes)</span>
+        <span class="pill">Hill Climbing Hazards</span>
+      </div>
+    </div>
+
+    <!-- Section 01: Intuition & Contrast -->
+    <section id="intuition">
+      <h2>01. Intuition & Concept Contrast</h2>
+      <p class="lead">Uninformed (blind) search algorithms operate without domain heuristics; they know only how to generate successor states and test whether a state is the goal.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Exploration Pattern</div>
+          <h3 style="margin-top:2px;">BFS (FIFO Queue) vs DFS (LIFO Stack)</h3>
+          <p><strong>Breadth-First Search (BFS):</strong> Expands the shallowest unexpanded node first. Explores level by level across the breadth. Complete and optimal for uniform step costs, but consumes exponential memory ($O(b^d)$) because it must store all active fringe nodes in RAM.</p>
+          <p><strong>Depth-First Search (DFS):</strong> Expands the deepest unexpanded node first along a single path before backtracking. Incomplete on infinite trees and non-optimal, but uses modest linear memory ($O(bm)$).</p>
+        </div>
+        <div class="card">
+          <div class="kicker">Hybrid Optimization</div>
+          <h3 style="margin-top:2px;">DLS vs Iterative Deepening (IDS)</h3>
+          <p><strong>Depth-Limited Search (DLS):</strong> Enforces an artificial depth cutoff boundary at depth $L$. Solves DFS infinite-loop failures, but fails if the goal lies beyond depth $L$.</p>
+          <p><strong>Iterative Deepening Search (IDS):</strong> Calls DLS with progressively increasing limits ($L = 0, 1, 2, \dots$). <strong>Combines the best of both worlds:</strong> optimal and complete like BFS, with the tiny linear memory footprint of DFS ($O(bd)$).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: Search Properties Matrix -->
+    <section id="search-properties">
+      <h2>02. Comprehensive Search Properties Comparison Matrix</h2>
+      <p class="lead"><strong>Guaranteed University Question (10 Marks).</strong> Comparing uninformed search algorithms across 4 standard criteria.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Search Algorithm</th>
+              <th>Data Structure</th>
+              <th>Complete?</th>
+              <th>Optimal?</th>
+              <th>Time Complexity</th>
+              <th>Space Complexity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Breadth-First Search (BFS)</strong></td>
+              <td>FIFO Queue</td>
+              <td>Yes (if $b$ finite)</td>
+              <td>Yes (if step cost = 1)</td>
+              <td>$O(b^d)$</td>
+              <td>$O(b^d)$ (Exponential RAM)</td>
+            </tr>
+            <tr>
+              <td><strong>Uniform-Cost Search (UCS)</strong></td>
+              <td>Priority Queue (by $g$)</td>
+              <td>Yes (if costs $\ge \epsilon$)</td>
+              <td>Yes (Any step cost)</td>
+              <td>$O(b^{1 + \lfloor C^* / \epsilon \rfloor})$</td>
+              <td>$O(b^{1 + \lfloor C^* / \epsilon \rfloor})$</td>
+            </tr>
+            <tr>
+              <td><strong>Depth-First Search (DFS)</strong></td>
+              <td>LIFO Stack</td>
+              <td>No (infinite trees)</td>
+              <td>No (can find long path)</td>
+              <td>$O(b^m)$</td>
+              <td>$\mathbf{O(bm)}$ (Linear!)</td>
+            </tr>
+            <tr>
+              <td><strong>Depth-Limited Search (DLS)</strong></td>
+              <td>LIFO Stack (Limit $L$)</td>
+              <td>Yes (if goal $d \le L$)</td>
+              <td>No</td>
+              <td>$O(b^L)$</td>
+              <td>$\mathbf{O(bL)}$</td>
+            </tr>
+            <tr>
+              <td><strong>Iterative Deepening (IDS)</strong></td>
+              <td>LIFO Stack (Repeated)</td>
+              <td>Yes (if $b$ finite)</td>
+              <td>Yes (if step cost = 1)</td>
+              <td>$O(b^d)$</td>
+              <td>$\mathbf{O(bd)}$ (Optimal + Linear)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <small style="color:var(--muted);">Where $b$ = branching factor, $d$ = depth of shallowest goal, $m$ = maximum tree depth, $L$ = depth limit.</small>
+    </section>
+
+    <!-- Section 03: DLS & Iterative Deepening -->
+    <section id="dls-ids">
+      <h2>03. Depth-Limited Search (DLS) Mechanics</h2>
+      <p class="lead"><strong>Nov 2025 (Q3.b) Exam Walkthrough.</strong> Why DLS cuts off leaves and how it prevents infinite loops.</p>
+
+      <div class="card">
+        <h3>The Cutoff Protocol:</h3>
+        <p>In standard DFS, the algorithm follows left branches indefinitely. If a tree has depth $m = \infty$, DFS gets trapped in an infinite loop.</p>
+        <p>DLS introduces a boundary $L$. When generating nodes at depth $L$:</p>
+        <ul>
+          <li>The algorithm visits and tests node at depth $L$.</li>
+          <li>It **does NOT generate or expand any child nodes** beneath depth $L$.</li>
+          <li>Child nodes are flagged as **pruned by cutoff**, and the search immediately backtracks to the parent level.</li>
+        </ul>
+      </div>
+
+      <div class="note good">
+        <strong>Why Iterative Deepening is Optimal Despite Repeated Work:</strong><br>
+        Students often assume IDS wastes time re-expanding upper levels. In an exponential tree with branching factor $b \ge 2$, the vast majority of nodes reside at the bottom level ($d$).<br>
+        $$\text{Ratio} = \frac{b^d + b^{d-1} + \dots}{b^d} \approx \frac{b}{b - 1}$$
+        For $b = 10$, re-expansion overhead is only about $11\%$, a tiny price to pay for switching space complexity from gigabytes down to kilobytes!
+      </div>
+    </section>
+
+    <!-- Section 04: Hill Climbing Hazards -->
+    <section id="hill-climbing">
+      <h2>04. Hill Climbing Local Search & The 3 Hazards</h2>
+      <p class="lead"><strong>Nov 2025 (Q4.a) Guaranteed 5-Mark Question.</strong> Greedy local search without memory.</p>
+
+      <div class="formula-banner">
+        <div><strong>The Hill Climbing Invariant</strong></div>
+        $$\text{Move to neighbor } n' \iff \operatorname{Value}(n') > \operatorname{Value}(n)$$
+        <small>Halts when no neighboring state has a higher value.</small>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker" style="color:var(--red);">Hazard 01</div>
+          <h3 style="margin-top:2px;">Local Maxima</h3>
+          <p>A peak that is higher than all its immediate neighbors, but lower than the global optimum. Because hill climbing cannot take downhill moves, it gets stuck permanently.</p>
+          <p><em>Remedy:</em> <strong>Random-Restart Hill Climbing</strong> (conduct multiple searches from uniformly distributed random start states).</p>
+        </div>
+        <div class="card">
+          <div class="kicker" style="color:var(--amber);">Hazard 02</div>
+          <h3 style="margin-top:2px;">Plateaus & Flat Shoulders</h3>
+          <p>An area of the state space where the evaluation landscape is flat (zero gradient). All neighbors have the exact same score.</p>
+          <p><em>Remedy:</em> Allow a limited number of sideways moves (e.g., max 100 sideways steps before aborting).</p>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="kicker" style="color:var(--purple);">Hazard 03</div>
+        <h3 style="margin-top:2px;">Ridges</h3>
+        <p>A sequence of local peaks where the slope is steep along edges but gentle along the spine. The greedy search oscillates back and forth across the narrow ridge, making negligible progress along the spine.</p>
+        <p><em>Remedy:</em> <strong>Simulated Annealing</strong>: Probabilistically accept suboptimal downhill moves based on temperature $T$ with Boltzmann probability $P = e^{\Delta E / T}$. As $T \to 0$, it settles smoothly into the global peak.</p>
+      </div>
+    </section>
+
+    <!-- Section 05: Notation Matrix -->
+    <section id="notation">
+      <h2>05. Notation Decoding Matrix</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Formal Name</th>
+              <th>Plain-English Meaning</th>
+              <th>Exam Benchmark</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$b$</td>
+              <td>Branching Factor</td>
+              <td>Average number of child nodes generated per node</td>
+              <td>$b = 2$ in binary search trees</td>
+            </tr>
+            <tr>
+              <td>$d$</td>
+              <td>Goal Depth</td>
+              <td>Depth of shallowest goal node in tree</td>
+              <td>$d = 2$ in Nov 2025 exam tree</td>
+            </tr>
+            <tr>
+              <td>$m$</td>
+              <td>Maximum Depth</td>
+              <td>Deepest possible path in state space</td>
+              <td>$m = 3$ in Nov 2025 tree ($H, I, K$)</td>
+            </tr>
+            <tr>
+              <td>$L$</td>
+              <td>Depth Limit</td>
+              <td>Pre-set cutoff boundary for Depth-Limited Search</td>
+              <td>$L = 2$ in Nov 2025 exam question</td>
+            </tr>
+            <tr>
+              <td>$\Delta E$</td>
+              <td>Energy Difference</td>
+              <td>$\operatorname{Value}(n') - \operatorname{Value}(n)$ in Simulated Annealing</td>
+              <td>Negative when neighbor is worse</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 06: Solving Protocol -->
+    <section id="steps">
+      <h2>06. Repeatable Step-by-Step Solving Protocol</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>Step 1: Set Up Node Stack and Unvisited Set</strong>
+            <p>Push Root node $A$ onto the LIFO stack: $\text{Stack} = [A]$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 2: Pop Current Node & Check Goal</strong>
+            <p>Pop top node. If it matches Goal node, halt and output path.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 3: Push Successors in Reverse Tie-Break Order</strong>
+            <p>To visit Left children before Right children, <strong>push Right child first, then Left child</strong> so Left is at the top of the LIFO stack!</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 4: For DLS, Enforce Depth Check ($d \le L$)</strong>
+            <p>If node depth $= L$, <strong>do NOT push its successors to the stack</strong>. Mark sub-branches as cutoff and backtrack immediately.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 5: Write Visited Node Order Clearly</strong>
+            <p>List visited nodes separated by arrows: $A \to B \to \dots \to G$.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 07: 6 Exam Traps -->
+    <section id="traps">
+      <h2>07. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+      <div class="grid">
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 01: Stack Insertion Order Inversion</div>
+          <h3>Pushing Left Child Before Right Child</h3>
+          <p>In a LIFO stack, the last item pushed is the first popped. If you push Left child first, the Right child will be popped first! <strong>Push Right child first to explore Left first.</strong></p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 02: Visiting Pruned Leaves in DLS</div>
+          <h3>Listing Leaves at Depth $L+1$</h3>
+          <p>In DLS with $L=2$, nodes $H, I, K$ at depth 3 <strong>must NEVER appear in the visited list</strong>. They are pruned at depth 2.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 03: Claiming DFS is Space-Hungry</div>
+          <h3>Confusing BFS Space with DFS Space</h3>
+          <p>BFS uses exponential space $O(b^d)$. DFS uses tiny linear space $O(bm)$. Claiming DFS has high space complexity is an automatic mark deduction.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 04: Hill Climbing Memory Fallacy</div>
+          <h3>Assuming Hill Climbing Can Backtrack</h3>
+          <p>Hill Climbing maintains <strong>zero search tree history</strong>. It remembers only its current state. Once stuck at a local maximum, it cannot backtrack on its own.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 05: Goal Node Halting in DFS</div>
+          <h3>Continuing Search After Goal is Reached</h3>
+          <p>When the Goal node (Node G) is popped and visited, <strong>the algorithm must halt immediately</strong>. Do not continue exploring remaining stack items.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 06: Zero-Indexed Depth Errors</div>
+          <h3>Starting Depth Count at 1 Instead of 0</h3>
+          <p>Root node $A$ is at **Depth 0**. Level 1 children are at Depth 1. Counting Root as Depth 1 shifts your cutoff limit by an entire level.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 08: Complete Solved University PYQs -->
+    <section id="pyqs">
+      <h2>08. Complete University Question Bank (All Past PYQs Solved)</h2>
+      <div class="controls">
+        <button onclick="toggleAllDetails(true)">Expand All Solutions</button>
+        <button class="secondary" onclick="toggleAllDetails(false)">Collapse All</button>
+      </div>
+
+      <!-- Question 1: Nov 2025 Q3 DFS vs DLS (20 Marks) -->
+      <div class="details-box">
+        <details id="q1">
+          <summary>
+            <span><span class="pyq-badge nov">Nov 2025 · Question 3</span> Complete DFS vs DLS Traversal on 10-Node Tree (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Given the tree configuration below, perform DFS traversal starting from root A. (10 Marks)<br>
+            Perform Depth-Limited Search (DLS) with depth limit $L = 2$. Compare both methods. (10 Marks)
+          </div>
+
+          <div class="tree-box">
+Depth 0:             A (Initial node)
+                   /   \
+Depth 1:          B     C
+                 / \   / \
+Depth 2:        D   E F   G (Goal node)
+               /   /   \
+Depth 3:      H   I     K
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>a) Depth-First Search (DFS) Traversal Trace (10 Marks):</h5>
+          <ol>
+            <li><strong>Visit A:</strong> Push right child $C$, then left child $B$. Stack: $[C, B]$.</li>
+            <li><strong>Pop & Visit B:</strong> Push right child $E$, then left child $D$. Stack: $[C, E, D]$.</li>
+            <li><strong>Pop & Visit D:</strong> Push child $H$. Stack: $[C, E, H]$.</li>
+            <li><strong>Pop & Visit H:</strong> Leaf node at depth 3. Backtrack. Stack: $[C, E]$.</li>
+            <li><strong>Pop & Visit E:</strong> Push child $I$. Stack: $[C, I]$.</li>
+            <li><strong>Pop & Visit I:</strong> Leaf node at depth 3. Backtrack. Stack: $[C]$.</li>
+            <li><strong>Pop & Visit C:</strong> Push right child $G$, then left child $F$. Stack: $[G, F]$.</li>
+            <li><strong>Pop & Visit F:</strong> Push child $K$. Stack: $[G, K]$.</li>
+            <li><strong>Pop & Visit K:</strong> Leaf node at depth 3. Backtrack. Stack: $[G]$.</li>
+            <li><strong>Pop & Visit G:</strong> **Goal node reached! Search halts.**</li>
+          </ol>
+          <p><strong>DFS Visited Order (10 Nodes):</strong><br>
+          $$\mathbf{A \to B \to D \to H \to E \to I \to C \to F \to K \to G}$$</p>
+
+          <h5>b) Depth-Limited Search (DLS) with Limit $L = 2$ (10 Marks):</h5>
+          <ol>
+            <li><strong>Depth 0:</strong> Visit **A**. Push children $C, B$.</li>
+            <li><strong>Depth 1:</strong> Visit **B**. Push children $E, D$.</li>
+            <li><strong>Depth 2 (Limit Reached):</strong> Visit **D**. Because Depth $= L = 2$, child $H$ is **cutoff / pruned**! Backtrack.</li>
+            <li><strong>Depth 2 (Limit Reached):</strong> Visit **E**. Child $I$ is **cutoff / pruned**! Backtrack to $C$.</li>
+            <li><strong>Depth 1:</strong> Visit **C**. Push children $G, F$.</li>
+            <li><strong>Depth 2 (Limit Reached):</strong> Visit **F**. Child $K$ is **cutoff / pruned**! Backtrack to $G$.</li>
+            <li><strong>Depth 2 (Limit Reached):</strong> Visit **G**. **Goal node reached! Search halts successfully.**</li>
+          </ol>
+          <p><strong>DLS Visited Order ($L = 2$, 7 Nodes):</strong><br>
+          $$\mathbf{A \to B \to D \to E \to C \to F \to G}$$
+          *(Nodes $H, I, K$ at depth 3 were completely pruned by cutoff).*</p>
+
+          <h5>c) Comprehensive Comparison Table:</h5>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Dimension</th><th>Depth-First Search (DFS)</th><th>Depth-Limited Search (DLS, $L=2$)</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Nodes Visited</strong></td><td>10 nodes</td><td><strong>7 nodes</strong> (3 leaf nodes pruned)</td></tr>
+                <tr><td><strong>Search Efficiency Here</strong></td><td>Wastes time exploring $H, I, K$</td><td><strong>More efficient</strong>; reaches goal faster</td></tr>
+                <tr><td><strong>Infinite Path Trap</strong></td><td>Vulnerable on infinite trees</td><td><strong>Immune</strong>; strictly bounds depth</td></tr>
+                <tr><td><strong>Space Complexity</strong></td><td>$O(bm)$</td><td>$O(bL)$</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </details>
+      </div>
+
+      <!-- Question 2: Nov 2025 Q4.a Hill Climbing (5 Marks) -->
+      <div class="details-box">
+        <details id="q2">
+          <summary>
+            <span><span class="pyq-badge nov">Nov 2025 · Question 4.a</span> Hill Climbing Algorithm Principles & 3 Structural Hazards (5 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Explain the Hill Climbing algorithm and list its drawbacks. (5 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Working Principle:</h5>
+          <p>Hill climbing is an informed local search optimization technique. It inspects immediate neighboring states and moves greedily to whichever state improves the objective function. It terminates when no neighbor is better than the current state. Maintains zero search history ($O(1)$ space).</p>
+
+          <h5>2. The Three Critical Structural Drawbacks:</h5>
+          <ol>
+            <li><strong>Local Maxima:</strong> A suboptimal peak higher than all immediate neighbors but lower than the global optimum. Algorithm halts prematurely.</li>
+            <li><strong>Plateaus & Flat Shoulders:</strong> A flat region of identical evaluation values (zero gradient), causing unguided random walks.</li>
+            <li><strong>Ridges:</strong> A sequence of connected local peaks with steep sides and a gentle spine, causing inefficient zig-zag oscillations across the slope.</li>
+          </ol>
+        </details>
+      </div>
+
+      <!-- Question 3: May 2025 Q7.i BFS vs DFS (10 Marks) -->
+      <div class="details-box">
+        <details id="q3">
+          <summary>
+            <span><span class="pyq-badge">May 2025 · Question 7.i</span> BFS vs DFS Working Principles & Data Structures (10 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Explain working principle of BFS and DFS algorithms with a step-by-step illustration on a sample graph. (10 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Breadth-First Search (BFS):</h5>
+          <ul>
+            <li><strong>Data Structure:</strong> First-In, First-Out (**FIFO**) Queue.</li>
+            <li><strong>Principle:</strong> Explores all nodes at depth $k$ before examining any node at depth $k+1$.</li>
+            <li><strong>Optimality & Completeness:</strong> Guaranteed optimal for uniform edge costs; complete on finite branching. Exponential memory $O(b^d)$.</li>
+          </ul>
+
+          <h5>2. Depth-First Search (DFS):</h5>
+          <ul>
+            <li><strong>Data Structure:</strong> Last-In, First-Out (**LIFO**) Stack.</li>
+            <li><strong>Principle:</strong> Descends along a single branch to maximum depth before backtracking.</li>
+            <li><strong>Memory Advantage:</strong> Consumes only linear memory $O(bm)$, making it feasible on deep trees where BFS exhausts RAM.</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+    <!-- Section 09: Interactive Traversal Simulator -->
+    <section id="calculator">
+      <h2>09. Interactive Offline Search Traversal Simulator</h2>
+      <p class="lead">Compare DFS vs DLS node visits live on the exam tree structure.</p>
+
+      <div class="tool-box">
+        <div class="tool-grid">
+          <div class="tool-group">
+            <label>Search Algorithm</label>
+            <select id="simAlgo" onchange="runSim()">
+              <option value="dfs">Standard Depth-First Search (DFS)</option>
+              <option value="dls">Depth-Limited Search (DLS with L = 2)</option>
+            </select>
+          </div>
+          <div class="tool-group">
+            <label>Goal Node</label>
+            <input type="text" id="simGoal" value="G" disabled>
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <button onclick="runSim()">Run Traversal Trace</button>
+        </div>
+
+        <div class="tool-result" id="simOutput">
+          Click button to run search simulation.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 10: Active Recall Quiz -->
+    <section id="quiz">
+      <h2>10. Active Recall Self-Test Quiz</h2>
+      <div class="progress-wrap"><div class="progress" id="quizBar"></div></div>
+      <div id="quizScore" style="font-size:12.5px;font-weight:700;color:var(--muted);margin-top:4px;">Answer the questions below to evaluate progress (0/4 answered).</div>
+
+      <div class="quiz-q" id="qz1">
+        <strong>1. In the November 2025 exam tree, why does DLS ($L = 2$) visit only 7 nodes while DFS visits 10 nodes?</strong>
+        <label><input type="radio" name="q1" value="a" onclick="checkQ(1,'a','Leaves H, I, K at depth 3 are pruned by the cutoff limit')"> Leaf nodes H, I, K at depth 3 exceed the limit L = 2 and are pruned</label>
+        <label><input type="radio" name="q1" value="b" onclick="checkQ(1,'a','Leaves H, I, K at depth 3 are pruned by the cutoff limit')"> DLS uses a priority queue that sorts nodes by heuristic</label>
+        <label><input type="radio" name="q1" value="c" onclick="checkQ(1,'a','Leaves H, I, K at depth 3 are pruned by the cutoff limit')"> Node G is at depth 1 in DLS</label>
+        <div class="feedback" id="fb1"></div>
+        <div class="answer" id="ans1"><strong>Correct: (a)</strong> DLS never expands nodes beyond depth $L = 2$. Therefore, leaf nodes $H, I, K$ at depth 3 are completely pruned, saving 3 visits.</div>
+      </div>
+
+      <div class="quiz-q" id="qz2">
+        <strong>2. What data structure is fundamentally used to implement Breadth-First Search (BFS)?</strong>
+        <label><input type="radio" name="q2" value="a" onclick="checkQ(2,'b','FIFO Queue')"> LIFO Stack</label>
+        <label><input type="radio" name="q2" value="b" onclick="checkQ(2,'b','FIFO Queue')"> FIFO Queue</label>
+        <label><input type="radio" name="q2" value="c" onclick="checkQ(2,'b','FIFO Queue')"> Binary Search Tree</label>
+        <div class="feedback" id="fb2"></div>
+        <div class="answer" id="ans2"><strong>Correct: (b)</strong> BFS uses a FIFO (First-In, First-Out) queue to ensure nodes at the current level are explored before descending to the next depth.</div>
+      </div>
+
+      <div class="quiz-q" id="qz3">
+        <strong>3. What is the space complexity of Depth-First Search (DFS)?</strong>
+        <label><input type="radio" name="q3" value="a" onclick="checkQ(3,'c','Linear O(bm)')"> Exponential $O(b^d)$</label>
+        <label><input type="radio" name="q3" value="b" onclick="checkQ(3,'c','Linear O(bm)')"> Constant $O(1)$</label>
+        <label><input type="radio" name="q3" value="c" onclick="checkQ(3,'c','Linear O(bm)')"> Linear $O(bm)$</label>
+        <div class="feedback" id="fb3"></div>
+        <div class="answer" id="ans3"><strong>Correct: (c)</strong> DFS stores only the path from root to current node and sibling nodes along that path, requiring modest linear memory $O(bm)$.</div>
+      </div>
+
+      <div class="quiz-q" id="qz4">
+        <strong>4. How does Simulated Annealing escape local maxima in Hill Climbing?</strong>
+        <label><input type="radio" name="q4" value="a" onclick="checkQ(4,'b','Probabilistically accepts worse moves based on temperature')"> By using a LIFO stack</label>
+        <label><input type="radio" name="q4" value="b" onclick="checkQ(4,'b','Probabilistically accepts worse moves based on temperature')"> By probabilistically accepting downhill (suboptimal) moves with probability $e^{\Delta E / T}$</label>
+        <label><input type="radio" name="q4" value="c" onclick="checkQ(4,'b','Probabilistically accepts worse moves based on temperature')"> By running A* search on the spine</label>
+        <div class="feedback" id="fb4"></div>
+        <div class="answer" id="ans4"><strong>Correct: (b)</strong> When temperature $T$ is high, Simulated Annealing frequently takes downhill moves to jump out of local traps; as $T$ cools, it converges greedily.</div>
+      </div>
+    </section>
+
+    <!-- Section 11: Answer Sheet Checklist -->
+    <section id="checklist">
+      <h2>11. Exam Hall Answer Sheet Presentation Checklist</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>1. Label Tree Depths Starting from Depth 0</strong>
+            <p>Write Depth 0 for Root A, Depth 1 for B/C, Depth 2 for D/E/F/G, Depth 3 for H/I/K.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>2. Show Stack States Step by Step</strong>
+            <p>Explicitly write stack contents at each step (e.g. $[C, B] \to [C, E, D] \dots$).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>3. Explicitly State Pruned Nodes in DLS</strong>
+            <p>Write: "Nodes H, I, K are pruned because their depth 3 > limit L = 2."</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>4. Provide Side-by-Side Visited Sequences</strong>
+            <p>Box: DFS = $A \to B \to D \to H \to E \to I \to C \to F \to K \to G$ (10 nodes).<br>
+               Box: DLS = $A \to B \to D \to E \to C \to F \to G$ (7 nodes).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>5. For Hill Climbing, Name All 3 Hazards</strong>
+            <p>Draw quick sketches of: (1) Local Maxima, (2) Plateau/Shoulder, (3) Ridge.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function toggleDrawer() {
+  const drawer = document.getElementById('drawer');
+  const backdrop = document.getElementById('backdrop');
+  drawer.classList.toggle('open');
+  backdrop.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+}
+
+function toggleAllDetails(open) {
+  document.querySelectorAll('details').forEach(d => d.open = open);
+}
+
+function runSim() {
+  const algo = document.getElementById('simAlgo').value;
+  let out = '';
+
+  if (algo === 'dfs') {
+    out = '<strong>Depth-First Search (DFS) Traversal:</strong><br>';
+    out += '• Total Nodes Visited: <strong>10 nodes</strong><br>';
+    out += '• <strong>Sequence: A &rarr; B &rarr; D &rarr; H &rarr; E &rarr; I &rarr; C &rarr; F &rarr; K &rarr; G</strong><br>';
+    out += '• Leaves at Depth 3 ($H, I, K$) are all expanded before backtracking to Goal $G$.';
+  } else {
+    out = '<strong>Depth-Limited Search (DLS with $L = 2$):</strong><br>';
+    out += '• Total Nodes Visited: <strong>7 nodes</strong> (Saved 3 leaf node visits!)<br>';
+    out += '• <strong>Sequence: A &rarr; B &rarr; D &rarr; E &rarr; C &rarr; F &rarr; G</strong><br>';
+    out += '• <span style="color:var(--teal);font-weight:700;">Nodes H, I, K at Depth 3 were successfully PRUNED by cutoff!</span>';
+  }
+
+  document.getElementById('simOutput').innerHTML = out;
+  if (window.renderMathInElement) {
+    renderMathInElement(document.getElementById('simOutput'), {delimiters: [{left: '$', right: '$', display: false}]});
+  }
+}
+
+// Quiz Interactive Evaluation
+const answeredQ = {};
+function checkQ(qNum, correctVal, reason) {
+  const selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+  const fb = document.getElementById('fb' + qNum);
+  const ans = document.getElementById('ans' + qNum);
+
+  answeredQ[qNum] = true;
+
+  if (selected.value === correctVal) {
+    fb.innerHTML = '<span style="color:var(--teal);">&#10003; Correct! ' + reason + '</span>';
+  } else {
+    fb.innerHTML = '<span style="color:var(--red);">&#10007; Incorrect. ' + reason + '</span>';
+  }
+  ans.classList.add('show');
+
+  const answeredCount = Object.keys(answeredQ).length;
+  const pct = (answeredCount / 4) * 100;
+  document.getElementById('quizBar').style.width = pct + '%';
+  document.getElementById('quizScore').innerText = 'Completed ' + answeredCount + ' of 4 questions (' + pct.toFixed(0) + '%).';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  runSim();
+});
+</script>
+
+</body>
+</html>

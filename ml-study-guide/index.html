@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Machine Learning Algorithms -- Study Guides Hub (21CSC555J)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f8fafc;--surface:#ffffff;--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;
+  --brand:#2563eb;--brand-soft:#eff6ff;--teal:#059669;--teal-soft:#ecfdf5;
+  --amber:#b45309;--amber-soft:#fffbeb;--purple:#7c3aed;--purple-soft:#f5f3ff;
+  --rose:#e11d48;--rose-soft:#fff1f2;
+  --shadow:0 10px 30px rgba(15,23,42,.06);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:inherit;text-decoration:none;-webkit-tap-highlight-color:transparent}
+.container{
+  max-width:1120px;
+  margin:0 auto;
+  padding:calc(24px + var(--safe-top)) 18px calc(60px + var(--safe-bottom));
+}
+
+/* Hero */
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e293b 50%,#1e3a8a 100%);
+  color:white;
+  border-radius:22px;
+  padding:36px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+  margin-bottom:28px;
+}
+.hero:after{content:"wᵀx+b";position:absolute;right:20px;bottom:-35px;font-size:110px;font-weight:900;color:rgba(255,255,255,.04);pointer-events:none}
+.eyebrow{font-size:11.5px;text-transform:uppercase;letter-spacing:.14em;color:#93c5fd;font-weight:800}
+h1{font-size:clamp(26px,4.5vw,42px);line-height:1.15;margin:10px 0}
+.hero p{max-width:720px;color:#cbd5e1;font-size:15px;margin:0;line-height:1.6}
+
+/* Targets */
+.targets-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:30px}
+.target-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.03)}
+.target-label{font-size:10.5px;text-transform:uppercase;font-weight:800;color:var(--muted);letter-spacing:.08em}
+.target-val{font-size:26px;font-weight:800;color:var(--brand);margin:4px 0}
+.target-sub{font-size:12px;color:var(--muted)}
+
+/* Module Grid */
+h2{font-size:20px;color:#0f172a;margin:28px 0 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.module-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.module-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:22px;
+  box-shadow:var(--shadow);
+  transition:transform .2s,border-color .2s;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  position:relative;
+  min-height:230px;
+}
+.module-card:hover{transform:translateY(-3px);border-color:var(--brand);box-shadow:0 14px 30px rgba(37,99,235,.1)}
+.module-card:active{transform:scale(0.99)}
+.module-badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:10.5px;font-weight:800;text-transform:uppercase;margin-bottom:10px}
+.badge-ready{background:var(--teal-soft);color:var(--teal)}
+.badge-queued{background:var(--brand-soft);color:var(--brand)}
+.module-title{font-size:18px;font-weight:700;color:#0f172a;margin-bottom:6px}
+.module-desc{font-size:13.5px;color:var(--muted);margin-bottom:16px;flex:1;line-height:1.55}
+.module-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px}
+.tag{background:#f1f5f9;color:#475569;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.module-action{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:13.5px;
+  font-weight:700;
+  color:var(--brand);
+  min-height:36px;
+}
+
+/* Strategic Roadmap Card */
+.strategy-card{background:linear-gradient(135deg,#eff6ff 0%,#dbeafe 100%);border:1px solid #bfdbfe;border-radius:16px;padding:22px;margin-top:30px;color:#1e40af}
+.strategy-title{font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:8px}
+
+/* Footer */
+.footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+/* iPhone 13 & Mobile Viewport Tweaks */
+@media(max-width:880px){
+  .container{padding:calc(16px + var(--safe-top)) 14px calc(50px + var(--safe-bottom))}
+  .hero{padding:22px 16px;border-radius:18px;margin-bottom:20px}
+  .hero:after{display:none}
+  h1{font-size:24px}
+  .targets-row{grid-template-columns:1fr 1fr;gap:10px}
+  .target-card{padding:14px}
+  .target-val{font-size:22px}
+  .module-grid{grid-template-columns:1fr;gap:14px}
+  .module-card{padding:18px;min-height:auto}
+  .module-action{min-height:44px}
+}
+
+@media(max-width:380px){
+  .targets-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Hero Header -->
+  <header class="hero">
+    <div style="margin-bottom:12px;">
+      <a href="/" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:12.5px;font-weight:700;text-decoration:none;">&larr; Back to Vettri's Notes (Site Home)</a>
+    </div>
+    <div class="eyebrow">M.Tech · Course Code 21CSC555J</div>
+    <h1>Machine Learning Algorithms Study Hub</h1>
+    <p>High-yield, standalone micro-learning study guides engineered for university semester examination preparation. Designed for 100% offline study on mobile screens with unclipped KaTeX mathematics, step-by-step algorithms, and complete verified solutions for every past paper question.</p>
+  </header>
+
+  <!-- Strategic Score Targets -->
+  <div class="targets-row">
+    <div class="target-card">
+      <div class="target-label">Current Internal Score</div>
+      <div class="target-val">51.60 / 60</div>
+      <div class="target-sub">Carries 51.60 direct marks into 100-mark final (86.0%).</div>
+    </div>
+    <div class="target-card">
+      <div class="target-label">Min Sem Score for Grade A</div>
+      <div class="target-val" style="color:var(--teal)">49 / 100</div>
+      <div class="target-sub">51.60 + (48.50 &times; 0.40) = 71.00 &ge; 71.0 (A cut-off).</div>
+    </div>
+    <div class="target-card">
+      <div class="target-label">Safe Target (+7 Buffer)</div>
+      <div class="target-val" style="color:#2563eb">56 / 100</div>
+      <div class="target-sub">51.60 + (56 &times; 0.40) = 74.00 (comfortable safety cushion).</div>
+    </div>
+    <div class="target-card">
+      <div class="target-label">Grade A+ / S Target</div>
+      <div class="target-val" style="color:#7c3aed">74 / 100</div>
+      <div class="target-sub">51.60 + (73.50 &times; 0.40) = 81.00 &ge; 81.0 (A+ cutoff).</div>
+    </div>
+  </div>
+
+  <!-- Priority Modules -->
+  <h2>
+    <span>Priority High-Yield Modules</span>
+    <span style="font-size:12.5px;font-weight:600;color:var(--muted)">Top 5 Recurring Topics (80+ Exam Marks)</span>
+  </h2>
+
+  <div class="module-grid">
+
+    <!-- Module 1 -->
+    <a href="/ml-study-guide/01-linear-regression-optimization.html" class="module-card">
+      <div>
+        <span class="module-badge badge-ready">Module 01 · Priority 4 · 20 Marks</span>
+        <div class="module-title">Linear Regression & Optimization Foundations</div>
+        <div class="module-desc">Complete OLS mathematical derivations for slope and intercept, Normal Equation matrix derivation, Batch vs SGD vs Mini-batch Gradient Descent, Bias-Variance decomposition, Ridge (L2) vs Lasso (L1) geometry, and full metric proofs (MSE, RMSE, MAE, R², Adjusted R²).</div>
+        <div class="module-tags">
+          <span class="tag">Jan 2025 (Q1 20M)</span>
+          <span class="tag">OLS Derivation</span>
+          <span class="tag">Normal Equation</span>
+          <span class="tag">Gradient Descent</span>
+          <span class="tag">Ridge vs Lasso</span>
+          <span class="tag">Interactive OLS Solver</span>
+        </div>
+      </div>
+      <div class="module-action">Open Module Guide &rarr;</div>
+    </a>
+
+    <!-- Module 2 -->
+    <a href="/ml-study-guide/02-logistic-regression-metrics.html" class="module-card">
+      <div>
+        <span class="module-badge badge-ready">Module 02 · Priority 2 · 20-40 Marks</span>
+        <div class="module-title">Logistic Regression, Classification Metrics & Validation</div>
+        <div class="module-desc">Derivation of Sigmoid from linear regression log-odds, Multi-class One-vs-Rest (OvR) vs Softmax Regression, 10,000-point rare-event confusion matrix calculations, the 99.5% Accuracy Paradox, PR-AUC vs ROC-AUC proofs under extreme class imbalance, SMOTE + Tomek links, and Stratified K-Fold CV.</div>
+        <div class="module-tags">
+          <span class="tag">Jan 2025 (Q2 20M, Q3 20M)</span>
+          <span class="tag">Nov 2025 (Q2 20M, Q6 20M)</span>
+          <span class="tag">Sigmoid Derivation</span>
+          <span class="tag">Accuracy Paradox</span>
+          <span class="tag">PR-AUC vs ROC-AUC</span>
+          <span class="tag">Confusion Calculator</span>
+        </div>
+      </div>
+      <div class="module-action">Open Module Guide &rarr;</div>
+    </a>
+
+    <!-- Module 3 -->
+    <a href="/ml-study-guide/03-naive-bayes-knn.html" class="module-card">
+      <div>
+        <span class="module-badge badge-ready">Module 03 · Priority 3 · 20-40 Marks</span>
+        <div class="module-title">Naïve Bayes & K-Nearest Neighbors (KNN)</div>
+        <div class="module-desc">Complete step-by-step verified solutions for the classic 10-row Car Theft dataset (Red SUV Domestic), email spam filtering with Laplace smoothing, KNN lazy learning mechanics, choice of K (bias-variance trade-off), Euclidean vs Manhattan distance geometry, and why feature scaling is mandatory.</div>
+        <div class="module-tags">
+          <span class="tag">Jan 2025 (Q4 20M, Q5 20M)</span>
+          <span class="tag">CT-2 (Q1.a 15M, Q2 20M)</span>
+          <span class="tag">Car Theft 10-Row</span>
+          <span class="tag">Spam Filtering</span>
+          <span class="tag">K-Selection Tradeoff</span>
+          <span class="tag">Interactive Bayes Tool</span>
+        </div>
+      </div>
+      <div class="module-action">Open Module Guide &rarr;</div>
+    </a>
+
+    <!-- Module 4 -->
+    <a href="/ml-study-guide/04-decision-trees-ensembles.html" class="module-card">
+      <div>
+        <span class="module-badge badge-ready">Module 04 · Priority 1 · 20-40 Marks</span>
+        <div class="module-title">Decision Trees & Ensemble Methods</div>
+        <div class="module-desc">Quinlan's ID3 full construction on the 14-day Weather dataset with complete entropy and Information Gain calculations, Breiman's CART Gini index tree construction, Random Forest mathematical ensemble variance reduction proof (Var = ρσ² + (1-ρ)σ²/B), feature subspace sampling, and AdaBoost reweighting mechanics.</div>
+        <div class="module-tags">
+          <span class="tag">Jan 2025 (Q6 20M)</span>
+          <span class="tag">Nov 2025 (Q4 20M, Q7 20M)</span>
+          <span class="tag">CT-2 (Q3 20M, Q4 20M)</span>
+          <span class="tag">Weather 14-Day ID3</span>
+          <span class="tag">Random Forest Proof</span>
+          <span class="tag">Interactive Entropy Tool</span>
+        </div>
+      </div>
+      <div class="module-action">Open Module Guide &rarr;</div>
+    </a>
+
+    <!-- Module 5 -->
+    <a href="/ml-study-guide/05-clustering-pca.html" class="module-card">
+      <div>
+        <span class="module-badge badge-ready">Module 05 · Priority 5 · 20 Marks</span>
+        <div class="module-title">Clustering (K-Means) & Dimensionality Reduction (PCA)</div>
+        <div class="module-desc">K-Means WCSS minimization objective, iterative assignment and centroid update protocol, Elbow method inflection vs Silhouette coefficient, K-Means++ seeding, PCA for high-dimensional regimes (p ≫ n, 5000 genes vs 100 samples), distance concentration proofs, Dual SVD in O(n²p), and biological biomarker loading deconvolution.</div>
+        <div class="module-tags">
+          <span class="tag">Jan 2025 (Q7 20M)</span>
+          <span class="tag">Nov 2025 (Q5 20M)</span>
+          <span class="tag">WCSS Elbow Method</span>
+          <span class="tag">PCA Dual SVD</span>
+          <span class="tag">p ≫ n Regime</span>
+          <span class="tag">Interactive K-Means Tool</span>
+        </div>
+      </div>
+      <div class="module-action">Open Module Guide &rarr;</div>
+    </a>
+
+    <!-- Unified Master Reference -->
+    <a href="/machine-learning-study-guide.html" class="module-card" style="background:#f8fafc;border:2px dashed #cbd5e1;">
+      <div>
+        <span class="module-badge" style="background:#e2e8f0;color:#334155;">Comprehensive Reference</span>
+        <div class="module-title">All-in-One Master Reference & Formula Handbook</div>
+        <div class="module-desc">Unified syllabus formula cheatsheet, loss functions, derivation steps, complexity comparison matrix, and exam hall presentation checklist consolidated into a single offline document.</div>
+        <div class="module-tags">
+          <span class="tag">Formula Cheatsheet</span>
+          <span class="tag">Loss Functions</span>
+          <span class="tag">Algorithm Complexities</span>
+          <span class="tag">Presentation Checklist</span>
+        </div>
+      </div>
+      <div class="module-action">Open Master Reference &rarr;</div>
+    </a>
+
+  </div>
+
+  <!-- Strategic Study Plan -->
+  <div class="strategy-card">
+    <div class="strategy-title">
+      <span>High-Yield Strategic Preparation Plan (Target: 56+ Marks)</span>
+    </div>
+    <p style="margin:0;font-size:13.5px;line-height:1.65;">
+      <strong>Step 1 (First 40 Marks Guaranteed):</strong> Master the <strong>ID3 Weather Decision Tree</strong> (Module 04) and the <strong>Naïve Bayes Car Theft / Spam Calculation</strong> (Module 03). These appear verbatim in almost every exam and CT.<br>
+      <strong>Step 2 (Next 35 Marks):</strong> Master the <strong>OLS Derivation</strong> (Module 01) and the <strong>Confusion Matrix / Metrics calculation</strong> (Module 02).<br>
+      <strong>Result:</strong> These 4 questions alone provide up to 75 marks out of 100, easily exceeding your safe target of 56 marks and securing an <strong>'A' or 'A+' Grade</strong>.
+    </p>
+  </div>
+
+  <div class="footer">
+    <div><strong>Vettri's Handbook</strong> · Machine Learning Algorithms (21CSC555J) Exam Preparation</div>
+    <div>Local Files: <code>static/ml-study-guide/</code> · Standalone Offline Mobile-Optimized</div>
+  </div>
+
+</div>
+
+</body>
+</html>

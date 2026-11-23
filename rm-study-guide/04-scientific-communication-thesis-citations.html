@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Scientific Dissemination & Thesis Architecture | Complete Exam Question Bank</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#059669;--brand-soft:#ecfdf5;--blue:#2563eb;--blue-soft:#eff6ff;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#064e3b;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#a7f3d0;font-weight:800}
+aside h2{font-size:18px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#6ee7b7;text-transform:uppercase;letter-spacing:.12em;margin:18px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#d1fae5;font-size:13px}
+nav a:hover,nav a.active{background:#047857;color:#ffffff;text-decoration:none}
+.module-hub-link{background:#047857;border:1px solid #059669;color:#ffffff;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:20px;padding:12px;border:1px solid #059669;border-radius:12px;color:#d1fae5;font-size:12px;background:#022c22}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#10b981;color:#022c22}
+
+/* Mobile Topbar */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#064e3b;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{font-size:14.5px;font-weight:800;color:#f8fafc;display:flex;align-items:center;gap:6px;}
+.mobile-topbar-actions{display:flex;gap:6px;align-items:center;}
+.mobile-btn{
+  background:#047857;
+  border:1px solid #059669;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  min-height:36px;
+  display:inline-flex;
+  align-items:center;
+}
+
+/* Horizontal Swipeable Pill Nav */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#064e3b;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #047857;
+  padding-bottom:12px;
+}
+.drawer-close{background:none;border:none;color:#a7f3d0;font-size:24px;cursor:pointer;padding:4px 8px;}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#064e3b 0%,#0f766e 60%,#047857 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"THESIS";position:absolute;right:20px;bottom:-25px;font-size:90px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#a7f3d0;font-weight:800}
+h1{font-size:clamp(22px,4.5vw,38px);line-height:1.15;margin:10px 0}
+.hero p{max-width:700px;color:#d1fae5;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+.code-box{background:#0f172a;color:#f8fafc;padding:14px 16px;border-radius:10px;font-family:monospace;font-size:13px;line-height:1.5;overflow-x:auto;margin:12px 0}
+.code-box pre{margin:0}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--brand-soft);border-color:var(--brand)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#d1fae5;color:#065f46;margin-bottom:6px}
+.pyq-badge.nov{background:#fef3c7;color:#92400e}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+button:hover{background:#047857}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+
+/* Quiz for iPhone 13 */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--brand-soft);border-left:3px solid var(--brand);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Mobile Responsiveness */
+@media(max-width:880px){
+  .shell{grid-template-columns:1fr}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:16px 14px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr}
+  .hero{padding:22px 16px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  .card{padding:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Drawer Backdrop -->
+<div class="drawer-backdrop" id="backdrop" onclick="toggleDrawer()"></div>
+
+<!-- Slide-Out Mobile Navigation Drawer -->
+<div class="mobile-drawer" id="drawer">
+  <div class="drawer-header">
+    <div style="font-weight:800;font-size:13px;color:#a7f3d0;letter-spacing:.1em;text-transform:uppercase;">RM Study Hub</div>
+    <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+  </div>
+  <a href="/rm-study-guide/index.html" class="module-hub-link" style="display:block;padding:8px 12px;border-radius:8px;font-size:13px;">&larr; Back to Study Hub</a>
+  <div class="nav-label">Sections</div>
+  <nav>
+    <a href="#intuition" onclick="toggleDrawer()">01. Intuition & Contrast</a>
+    <a href="#presentation-arch" onclick="toggleDrawer()">02. 10-Min Presentation Architecture</a>
+    <a href="#citation-styles" onclick="toggleDrawer()">03. APA vs IEEE vs Chicago</a>
+    <a href="#thesis-blueprint" onclick="toggleDrawer()">04. Master Thesis Blueprint (Ch 1-6)</a>
+    <a href="#journal-selection" onclick="toggleDrawer()">05. Journal Identification</a>
+    <a href="#traps" onclick="toggleDrawer()">06. 6 Exam Traps</a>
+    <a href="#pyqs" onclick="toggleDrawer()">07. All Solved PYQs</a>
+    <a href="#calculator" onclick="toggleDrawer()">08. Interactive Citation Tool</a>
+    <a href="#quiz" onclick="toggleDrawer()">09. Active Recall Quiz</a>
+    <a href="#checklist" onclick="toggleDrawer()">10. Presentation Template</a>
+  </nav>
+  <div class="nav-label">Modules</div>
+  <nav>
+    <a href="/rm-study-guide/01-doe-crd-rbd-taguchi.html">01. DoE & Taguchi</a>
+    <a href="/rm-study-guide/02-research-ethics-misconduct-publishing.html">02. Ethics & Misconduct</a>
+    <a href="/rm-study-guide/03-statistical-analysis-hypothesis-testing.html">03. Stats, Correlation & χ²</a>
+    <a href="/rm-study-guide/04-scientific-communication-thesis-citations.html" class="active">04. Dissemination & Thesis</a>
+    <a href="/rm-study-guide/05-research-types-decision-making-mcdm.html">05. Research Types & MCDM</a>
+  </nav>
+</div>
+
+<!-- Mobile Sticky Topbar -->
+<div class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>Module 04 · Thesis & Citations</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/rm-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="toggleDrawer()">&#9776; Menu</button>
+  </div>
+</div>
+
+<!-- Mobile Horizontal Pill Nav -->
+<div class="mobile-pills-bar">
+  <a href="#intuition" class="pill-link">Intuition</a>
+  <a href="#presentation-arch" class="pill-link">Presentation</a>
+  <a href="#citation-styles" class="pill-link">Citations</a>
+  <a href="#thesis-blueprint" class="pill-link">Thesis</a>
+  <a href="#journal-selection" class="pill-link">Journals</a>
+  <a href="#traps" class="pill-link">Traps</a>
+  <a href="#pyqs" class="pill-link">Past Papers</a>
+  <a href="#calculator" class="pill-link">Citation Tool</a>
+  <a href="#quiz" class="pill-link">Quiz</a>
+  <a href="#checklist" class="pill-link">Checklist</a>
+</div>
+
+<div class="shell">
+
+  <!-- Desktop Sidebar -->
+  <aside>
+    <div class="brand">21IPC501J · Exam Prep</div>
+    <h2>Scientific Dissemination & Thesis</h2>
+    <a href="/rm-study-guide/index.html" class="module-hub-link" style="padding:8px 12px;border-radius:8px;font-size:12.5px;">&larr; Back to Study Hub</a>
+
+    <div class="nav-label">Sections</div>
+    <nav>
+      <a href="#intuition">01. Intuition & Contrast</a>
+      <a href="#presentation-arch">02. 10-Min Presentation Architecture</a>
+      <a href="#citation-styles">03. APA vs IEEE vs Chicago</a>
+      <a href="#thesis-blueprint">04. Master Thesis Blueprint (Ch 1-6)</a>
+      <a href="#journal-selection">05. Journal Identification</a>
+      <a href="#traps">06. 6 Deadly Exam Traps</a>
+      <a href="#pyqs">07. Complete University PYQs</a>
+      <a href="#calculator">08. Interactive Citation Tool</a>
+      <a href="#quiz">09. Self-Test Active Recall</a>
+      <a href="#checklist">10. Answer Sheet Checklist</a>
+    </nav>
+
+    <div class="side-note">
+      <strong>Exam Weightage: 20 Marks</strong><br>
+      Internal Score: <strong>51.00 / 60</strong><br>
+      Target Sem Mark: <strong>50 / 100</strong> (Safe: 57)<br>
+      <span class="status-pill pill-target">Priority 4 High-Yield</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="eyebrow">Module 04 · Academic Communication & Research Reporting</div>
+      <h1>Scientific Dissemination, Citations & Thesis Architecture</h1>
+      <p>Master conference communication and formal thesis defense. Oral vs. Poster presentations, 10-minute conference slide architecture (1-slide-per-minute heuristic), converting references into APA 7th, IEEE, and Chicago styles, and the comprehensive Master Blueprint of a Postgraduate Thesis (Chapters 1 to 6).</p>
+      <div class="pills">
+        <span class="pill">Nov 2025 (Q3 20M, Q4 20M)</span>
+        <span class="pill">Jan 2025 (Q2 20M, Q7 20M)</span>
+        <span class="pill">10-Min Presentation</span>
+        <span class="pill">APA / IEEE / Chicago</span>
+        <span class="pill">Thesis Chapters 1-6</span>
+      </div>
+    </div>
+
+    <!-- Section 01: Intuition & Contrast -->
+    <section id="intuition">
+      <h2>01. Intuition & Concept Contrast</h2>
+      <p class="lead">Research is complete only when communicated clearly. Oral presentations, visual posters, and written theses serve complementary audiences.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Dissemination Mode</div>
+          <h3 style="margin-top:2px;">Oral Lecture vs Poster Session</h3>
+          <p><strong>Oral Presentation:</strong> Synchronous, linear one-to-many broadcast delivered to a seated audience within a strict time slot ($10 - 15\text{ mins}$). Best for high-level narrative and broad visibility.</p>
+          <p><strong>Poster Presentation:</strong> Asynchronous, static $A0$ display facilitating informal one-on-one dialogues over several hours. Best for deep technical scrutiny and individual networking.</p>
+        </div>
+        <div class="card">
+          <div class="kicker">Citation Logic</div>
+          <h3 style="margin-top:2px;">Author-Date (APA/Chicago) vs Numeric (IEEE)</h3>
+          <p><strong>Author-Date (APA / Chicago):</strong> Embeds author and year directly in body text `(Gupta & Mehta, 2021)`. Emphasizes historical chronology and researcher prominence.</p>
+          <p><strong>Numeric Citation (IEEE):</strong> Uses compact bracketed numbers `[1]`. Preserves typographic flow in dense engineering and mathematical text.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: 10-Min Presentation Architecture -->
+    <section id="presentation-arch">
+      <h2>02. 10-Minute Conference Presentation Architecture</h2>
+      <p class="lead"><strong>Nov 2025 (Q3.i) 12-Mark Problem.</strong> Applying cognitive load theory and the **1-slide-per-minute heuristic** (8 total slides).</p>
+
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>Slide 1: Hook & Problem Formulation (1 Minute)</strong>
+            <p>State the real-world grand challenge immediately. Why does this problem matter today? Zero fluff or textbook preambles.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Slides 2-3: Research Gap & Novel Contributions (2 Minutes)</strong>
+            <p>Contrast existing state-of-the-art limitations against your proposed approach. Clearly highlight 3 bulleted contributions.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Slides 4-5: System Architecture & Core Methodology (3 Minutes)</strong>
+            <p>Show a high-level system block diagram. Avoid low-level pseudocode; focus on the primary governing formula or intuition.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Slides 6-7: Empirical Benchmarking & Ablation Results (3 Minutes)</strong>
+            <p>High-contrast comparative graphs showing baseline comparisons, error bars, and percentage performance deltas.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Slide 8: Key Takeaway, Limitations & Future Horizons (1 Minute)</strong>
+            <p>One definitive sentence summarizing the scientific legacy of the paper, transitioning cleanly to audience Q&A.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 03: Citation Styles -->
+    <section id="citation-styles">
+      <h2>03. Academic Citation Style Conversions</h2>
+      <p class="lead"><strong>Nov 2025 (Q3.ii) Guaranteed 8-Mark Question.</strong> Converting reference across 3 premier styles.</p>
+
+      <div class="card">
+        <h3>Given Raw Journal Reference:</h3>
+        <p style="font-family:monospace;background:#f1f5f9;padding:8px;border-radius:6px;">R. K. Gupta and S. Mehta, "Solar PV efficiency improvements in India," Journal of Renewable Energy Research, vol. 12, no. 3, pp. 145-158, 2021.</p>
+
+        <h4>1. APA Style (7th Edition)</h4>
+        <div class="code-box"><pre>
+Gupta, R. K., & Mehta, S. (2021). Solar PV efficiency improvements in India. Journal of Renewable Energy Research, 12(3), 145–158.</pre></div>
+        <p>• <em>Rules:</em> All authors inverted (`Last, Initials.`), ampersand (`&`), year in parentheses immediately after authors, title in sentence case without quotation marks, italic volume followed directly by unitalicized issue in parentheses `12(3)`.</p>
+
+        <h4>2. IEEE Style</h4>
+        <div class="code-box"><pre>
+R. K. Gupta and S. Mehta, "Solar PV efficiency improvements in India," J. Renew. Energy Res., vol. 12, no. 3, pp. 145–158, 2021.</pre></div>
+        <p>• <em>Rules:</em> No author inversion (`First. Middle. Last`), article title in headline title case enclosed in double quotation marks, standard journal abbreviation, explicit `vol.`, `no.`, `pp.`, and year placed at the very end.</p>
+
+        <h4>3. Chicago Style (Author-Date, 17th Edition)</h4>
+        <div class="code-box"><pre>
+Gupta, R. K., and S. Mehta. 2021. "Solar PV Efficiency Improvements in India." Journal of Renewable Energy Research 12 (3): 145–158.</pre></div>
+        <p>• <em>Rules:</em> <strong>Only the first author is inverted</strong> (`Gupta, R. K., and S. Mehta`), year placed after authors without parentheses, title in double quotation marks, volume and issue formatted as `12 (3): 145–158` without abbreviations.</p>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Formatting Feature</th>
+              <th>APA Style (7th Ed.)</th>
+              <th>IEEE Style</th>
+              <th>Chicago Style (Author-Date)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Author Inversion</strong></td>
+              <td>All authors inverted (`Gupta, R. K., & Mehta, S.`)</td>
+              <td><strong>No inversion</strong> (`R. K. Gupta and S. Mehta`)</td>
+              <td><strong>Only first author inverted</strong> (`Gupta, R. K., and S. Mehta`)</td>
+            </tr>
+            <tr>
+              <td><strong>Placement of Year</strong></td>
+              <td>In parentheses after authors: `(2021).`</td>
+              <td><strong>At very end:</strong> `, 2021.`</td>
+              <td>After authors without parentheses: `2021.`</td>
+            </tr>
+            <tr>
+              <td><strong>Article Title</strong></td>
+              <td>Sentence case; <strong>no quotation marks</strong></td>
+              <td>Title case; <strong>in double quotes</strong></td>
+              <td>Title case; <strong>in double quotes</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Volume / Issue</strong></td>
+              <td>Italic volume, issue in parens: `12(3)`</td>
+              <td>Explicit labels: `vol. 12, no. 3`</td>
+              <td>Colon separator: `12 (3): 145–158`</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 04: Thesis Blueprint -->
+    <section id="thesis-blueprint">
+      <h2>04. Master Blueprint of a Postgraduate Thesis (Chapters 1 to 6)</h2>
+      <p class="lead"><strong>Nov 2025 (Q4) Guaranteed 20-Mark Comprehensive Question.</strong></p>
+
+      <div class="card">
+        <h3>1. Complete Thesis Organization Schema:</h3>
+        <div class="code-box"><pre>
+PRELIMINARY MATTER
+├── Title Page (Title, Candidate Name, Roll No., Degree, Supervisor, Institution, Year)
+├── Certificate of Original Authorship (Signed by Guide and Department Head)
+├── Declaration of Student Plagiarism Clearance (Turnitin / Urkund < 10%)
+├── Dedication and Acknowledgments
+├── Abstract (One-page concise summary: Context, Problem, Method, Key Results, Impact)
+├── Table of Contents, List of Tables, List of Figures, List of Abbreviations
+
+MAIN THESIS BODY (Chapters 1 to 6)
+├── Chapter 1: Introduction (Motivation, Problem Formulation, Objectives, Roadmap)
+├── Chapter 2: Literature Review (Foundations, SOTA synthesis, Taxonomy, Research Gap)
+├── Chapter 3: Research Methodology & System Architecture (Mathematical models, data flow)
+├── Chapter 4: Implementation Details (Hardware/Software, pseudocode, modular design)
+├── Chapter 5: Empirical Results & Discussion (Benchmarks, ablation studies, p-values)
+└── Chapter 6: Conclusion & Future Horizons (Novel contributions, limitations, roadmap)
+
+BACK MATTER
+├── References / Bibliography (Strictly uniform APA or IEEE formatting)
+├── Appendix A: Mathematical Proofs & Detailed Derivations
+├── Appendix B: Raw Calibration Sheets & Hardware Schematics
+└── List of Publications Arising from Thesis (Peer-reviewed journals/conferences)</pre></div>
+
+        <h3>2. Narrative Rationale: The 6 Driving Research Questions:</h3>
+        <ul>
+          <li><strong>From Ch 1 to Ch 2:</strong> <em>"What is the problem and why does it matter?"</em> $\to$ <em>"What have others tried and what is missing?"</em> (Identifies the **Research Gap**).</li>
+          <li><strong>From Ch 2 to Ch 3:</strong> <em>"How do we mathematically solve this missing gap?"</em> (Establishes the theoretical model).</li>
+          <li><strong>From Ch 3 to Ch 4:</strong> <em>"How was the model engineered in practice?"</em> (Guarantees scientific replicability).</li>
+          <li><strong>From Ch 4 to Ch 5:</strong> <em>"Does the solution actually work better?"</em> (Empirical benchmarks and statistical validation).</li>
+          <li><strong>From Ch 5 to Ch 6:</strong> <em>"What have we learned and where do we go next?"</em> (Delineates real-world limitations and future work).</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Section 05: Journal Selection -->
+    <section id="journal-selection">
+      <h2>05. Journal Identification & Submission Workflow</h2>
+      <p class="lead"><strong>Jan 2025 (Q2.ii & Q7.b) Core 10-Mark Question.</strong></p>
+
+      <div class="card">
+        <h3>Strategic Selection Framework:</h3>
+        <ol>
+          <li><strong>Aims & Scope Verification:</strong> Audit recent papers to ensure target journal publishes your exact methodological approach and domain.</li>
+          <li><strong>Premier Indexing Verification:</strong> Confirm inclusion in:
+            <ul>
+              <li><strong>Clarivate Web of Science (WoS):</strong> Science Citation Index Expanded (SCIE).</li>
+              <li><strong>Scopus:</strong> CiteScore quartile rank ($Q_1, Q_2$).</li>
+              <li><strong>UGC-CARE List:</strong> Mandatory for Indian universities.</li>
+            </ul>
+          </li>
+          <li><strong>Journal Matcher Algorithms:</strong> Leverage publisher matching tools (Elsevier JournalFinder, Springer Nature Journal Suggester, IEEE Publication Recommender).</li>
+          <li><strong>Submission Lifecycle:</strong> Initial editorial triage $\to$ Double-blind peer review $\to$ Revisions (Major/Minor) with point-by-point rebuttal table $\to$ Acceptance & Galley Proof verification.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Section 06: 6 Exam Traps -->
+    <section id="traps">
+      <h2>06. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+      <div class="grid">
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 01: Inverting Authors in IEEE</div>
+          <h3>Writing `Gupta, R. K.` in IEEE</h3>
+          <p>IEEE <strong>DOES NOT INVERT</strong> author names! It is strictly `R. K. Gupta and S. Mehta`. Inverting names in IEEE loses full marks.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 02: Quoting Article Titles in APA</div>
+          <h3>Putting Quotes Around APA Article Titles</h3>
+          <p>APA 7th explicitly forbids quotation marks around article titles: `Solar PV efficiency improvements in India.` Quotation marks are used in IEEE and Chicago, not APA.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 03: Year Placement in IEEE</div>
+          <h3>Placing Year in Parentheses in IEEE</h3>
+          <p>In IEEE, publication year is placed <strong>at the very end of the citation</strong> without parentheses: `, 2021.` In APA, it is placed in parentheses after authors: `(2021).`</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 04: Omitting Preliminary and Back Matter</div>
+          <h3>Writing Only Chapters 1 to 6 for Thesis</h3>
+          <p>A thesis blueprint is incomplete without the Preliminary Matter (Abstract, Certificates) and Back Matter (References, Appendices). Always include all three divisions.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 05: Treating Posters as Shrunken Papers</div>
+          <h3>Pasting Walls of Text on Posters</h3>
+          <p>Posters are visual conversation starters, not miniature printed journal articles. Heavy text walls violate poster presentation design principles.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 06: Chicago Author Inversion</div>
+          <h3>Inverting Both Authors in Chicago</h3>
+          <p>In Chicago style, <strong>only the first author is inverted</strong> (`Gupta, R. K., and S. Mehta`). Second authors retain natural order.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 07: Complete Solved University PYQs -->
+    <section id="pyqs">
+      <h2>07. Complete University Question Bank (All Past PYQs Solved)</h2>
+      <div class="controls">
+        <button onclick="toggleAllDetails(true)">Expand All Solutions</button>
+        <button class="secondary" onclick="toggleAllDetails(false)">Collapse All</button>
+      </div>
+
+      <!-- Question 1: Nov 2025 Q3 Citations (20 Marks) -->
+      <div class="details-box">
+        <details id="q1">
+          <summary>
+            <span><span class="pyq-badge nov">Nov 2025 · Question 3</span> 10-Minute Presentation Architecture & 3 Citation Conversions (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            i) Prepare a 10-minute conference presentation architecture based on a research paper. (12 Marks)<br>
+            ii) Convert reference into APA, IEEE, and Chicago styles and explain differences. (8 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>(i) 10-Minute Presentation Architecture (12 Marks):</h5>
+          <p>Apply 1-slide-per-minute heuristic across 8 slides: Slide 1 (Hook), Slides 2-3 (Gap & Contributions), Slides 4-5 (Architecture & Formulas), Slides 6-7 (Benchmarking graphs), Slide 8 (Takeaway). Use high visual hierarchy, zero text walls, and graceful Q&A handling.</p>
+
+          <h5>(ii) Citation Conversions (8 Marks):</h5>
+          <ul>
+            <li><strong>APA 7th:</strong> `Gupta, R. K., & Mehta, S. (2021). Solar PV efficiency improvements in India. Journal of Renewable Energy Research, 12(3), 145–158.`</li>
+            <li><strong>IEEE:</strong> `R. K. Gupta and S. Mehta, "Solar PV efficiency improvements in India," J. Renew. Energy Res., vol. 12, no. 3, pp. 145–158, 2021.`</li>
+            <li><strong>Chicago:</strong> `Gupta, R. K., and S. Mehta. 2021. "Solar PV Efficiency Improvements in India." Journal of Renewable Energy Research 12 (3): 145–158.`</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- Question 2: Nov 2025 Q4 Master Thesis (20 Marks) -->
+      <div class="details-box">
+        <details id="q2">
+          <summary>
+            <span><span class="pyq-badge nov">Nov 2025 · Question 4</span> Master Thesis Structure Blueprint & Narrative Rationale (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Provide a well-organized sequence of chapters and sub-sections for a postgraduate thesis and justify the rationale behind their order. (20 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Three Major Divisions:</h5>
+          <ul>
+            <li><strong>Preliminary Matter:</strong> Title, Certificate, Plagiarism Declaration, Abstract, ToC, Lists of Tables/Figures.</li>
+            <li><strong>Main Body (Chapters 1-6):</strong> Introduction $\to$ Literature Review (Research Gap) $\to$ Methodology $\to$ Implementation $\to$ Empirical Results $\to$ Conclusion.</li>
+            <li><strong>Back Matter:</strong> References (APA/IEEE), Appendices (Proofs, Schematics), Publications List.</li>
+          </ul>
+          <h5>2. Narrative Rationale:</h5>
+          <p>Follows the logical inquiry arc: Problem Definition $\to$ Missing Gap $\to$ Mathematical Solution $\to$ Practical Engineering $\to$ Empirical Validation $\to$ Synthesis.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Section 08: Interactive Citation Tool -->
+    <section id="calculator">
+      <h2>08. Interactive Offline Citation Style Formatter</h2>
+      <p class="lead">Compare how citations render across APA 7th, IEEE, and Chicago styles live.</p>
+
+      <div class="tool-box">
+        <div class="tool-grid">
+          <div class="tool-group">
+            <label>First Author (Last, First M.)</label>
+            <input type="text" id="citAuth1" value="Gupta, R. K.">
+          </div>
+          <div class="tool-group">
+            <label>Second Author (Last, First M.)</label>
+            <input type="text" id="citAuth2" value="Mehta, S.">
+          </div>
+          <div class="tool-group">
+            <label>Year</label>
+            <input type="text" id="citYear" value="2021">
+          </div>
+          <div class="tool-group">
+            <label>Article Title</label>
+            <input type="text" id="citTitle" value="Solar PV efficiency improvements in India">
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <button onclick="formatCitations()">Format in APA, IEEE & Chicago</button>
+        </div>
+
+        <div class="tool-result" id="citOutput">
+          Click button to generate citation renderings.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 09: Active Recall Quiz -->
+    <section id="quiz">
+      <h2>09. Active Recall Self-Test Quiz</h2>
+      <div class="progress-wrap"><div class="progress" id="quizBar"></div></div>
+      <div id="quizScore" style="font-size:12.5px;font-weight:700;color:var(--muted);margin-top:4px;">Answer the questions below to evaluate progress (0/4 answered).</div>
+
+      <div class="quiz-q" id="qz1">
+        <strong>1. How does IEEE citation style format author names compared to APA style?</strong>
+        <label><input type="radio" name="q1" value="a" onclick="checkQ(1,'a','IEEE does not invert authors (R. K. Gupta), while APA inverts all authors (Gupta, R. K.)')"> IEEE does not invert authors (R. K. Gupta), while APA inverts all authors (Gupta, R. K.)</label>
+        <label><input type="radio" name="q1" value="b" onclick="checkQ(1,'a','IEEE does not invert authors (R. K. Gupta), while APA inverts all authors (Gupta, R. K.)')"> Both styles invert all author names</label>
+        <label><input type="radio" name="q1" value="c" onclick="checkQ(1,'a','IEEE does not invert authors (R. K. Gupta), while APA inverts all authors (Gupta, R. K.)')"> APA places author names at the very end of the citation</label>
+        <div class="feedback" id="fb1"></div>
+        <div class="answer" id="ans1"><strong>Correct: (a)</strong> In IEEE, authors are written in direct order `R. K. Gupta and S. Mehta`; APA inverts all authors `Gupta, R. K., & Mehta, S.`</div>
+      </div>
+
+      <div class="quiz-q" id="qz2">
+        <strong>2. Where is the publication year placed in an IEEE style journal citation?</strong>
+        <label><input type="radio" name="q2" value="a" onclick="checkQ(2,'b','At the very end of the reference')"> In parentheses immediately after the author names</label>
+        <label><input type="radio" name="q2" value="b" onclick="checkQ(2,'b','At the very end of the reference')"> At the very end of the reference (after page numbers)</label>
+        <label><input type="radio" name="q2" value="c" onclick="checkQ(2,'b','At the very end of the reference')"> Inside the article title in brackets</label>
+        <div class="feedback" id="fb2"></div>
+        <div class="answer" id="ans2"><strong>Correct: (b)</strong> IEEE places year at the very end: `, vol. 12, no. 3, pp. 145–158, 2021.`</div>
+      </div>
+
+      <div class="quiz-q" id="qz3">
+        <strong>3. What is the recommended slide count for a 10-minute conference paper presentation?</strong>
+        <label><input type="radio" name="q3" value="a" onclick="checkQ(3,'c','7 to 8 slides (1 slide per minute heuristic)')"> 25 to 30 slides</label>
+        <label><input type="radio" name="q3" value="b" onclick="checkQ(3,'c','7 to 8 slides (1 slide per minute heuristic)')"> Exactly 1 slide</label>
+        <label><input type="radio" name="q3" value="c" onclick="checkQ(3,'c','7 to 8 slides (1 slide per minute heuristic)')"> 7 to 8 slides based on the 1-slide-per-minute heuristic</label>
+        <div class="feedback" id="fb3"></div>
+        <div class="answer" id="ans3"><strong>Correct: (c)</strong> The 1-slide-per-minute rule ensures unhurried delivery and ample time for audience interaction.</div>
+      </div>
+
+      <div class="quiz-q" id="qz4">
+        <strong>4. In a master's thesis, what critical element connects Chapter 2 (Literature Review) to Chapter 3 (Methodology)?</strong>
+        <label><input type="radio" name="q4" value="a" onclick="checkQ(4,'b','The Research Gap identified in literature that motivates the proposed solution')"> The Acknowledgments section</label>
+        <label><input type="radio" name="q4" value="b" onclick="checkQ(4,'b','The Research Gap identified in literature that motivates the proposed solution')"> The Research Gap identified in the literature review that motivates the proposed methodology</label>
+        <label><input type="radio" name="q4" value="c" onclick="checkQ(4,'b','The Research Gap identified in literature that motivates the proposed solution')"> The List of Abbreviations</label>
+        <div class="feedback" id="fb4"></div>
+        <div class="answer" id="ans4"><strong>Correct: (b)</strong> Chapter 2 culminates in the **Research Gap**, providing direct intellectual justification for the methodology in Chapter 3.</div>
+      </div>
+    </section>
+
+    <!-- Section 10: Answer Sheet Checklist -->
+    <section id="checklist">
+      <h2>10. Exam Hall Answer Sheet Presentation Checklist</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>1. Write Out All 3 Citation Styles Verbatim</strong>
+            <p>Ensure APA has year in parens, IEEE has year at end, and Chicago inverts only first author.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>2. For 10-Min Presentation, Show Slide Allocation Table</strong>
+            <p>Provide the 8-slide breakdown with time stamps (1m, 2m, 3m, 3m, 1m).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>3. Draw the Master Thesis Schema (Preliminary, Ch 1-6, Back)</strong>
+            <p>Include all 3 major divisions to earn full marks on thesis structure.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>4. Explain the Narrative Questions Linking Chapters</strong>
+            <p>Write out the transitional logic: Problem $\to$ Gap $\to$ Solution $\to$ Engineering $\to$ Validation.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function toggleDrawer() {
+  const drawer = document.getElementById('drawer');
+  const backdrop = document.getElementById('backdrop');
+  drawer.classList.toggle('open');
+  backdrop.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+}
+
+function toggleAllDetails(open) {
+  document.querySelectorAll('details').forEach(d => d.open = open);
+}
+
+function formatCitations() {
+  const a1 = document.getElementById('citAuth1').value.trim();
+  const a2 = document.getElementById('citAuth2').value.trim();
+  const yr = document.getElementById('citYear').value.trim();
+  const tit = document.getElementById('citTitle').value.trim();
+
+  let out = '<strong>Rendered Academic Citations:</strong><br><br>';
+  out += '<strong>1. APA 7th Edition:</strong><br>';
+  out += '<code>' + a1 + ', & ' + a2 + ' (' + yr + '). ' + tit + '. <em>Journal of Renewable Energy Research</em>, 12(3), 145–158.</code><br><br>';
+  out += '<strong>2. IEEE Style:</strong><br>';
+  out += '<code>R. K. Gupta and S. Mehta, "' + tit + '," <em>J. Renew. Energy Res.</em>, vol. 12, no. 3, pp. 145–158, ' + yr + '.</code><br><br>';
+  out += '<strong>3. Chicago (Author-Date):</strong><br>';
+  out += '<code>' + a1 + ', and S. Mehta. ' + yr + '. "' + tit + '." <em>Journal of Renewable Energy Research</em> 12 (3): 145–158.</code>';
+
+  document.getElementById('citOutput').innerHTML = out;
+}
+
+// Quiz Interactive Evaluation
+const answeredQ = {};
+function checkQ(qNum, correctVal, reason) {
+  const selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+  const fb = document.getElementById('fb' + qNum);
+  const ans = document.getElementById('ans' + qNum);
+
+  answeredQ[qNum] = true;
+
+  if (selected.value === correctVal) {
+    fb.innerHTML = '<span style="color:var(--brand);">&#10003; Correct! ' + reason + '</span>';
+  } else {
+    fb.innerHTML = '<span style="color:var(--red);">&#10007; Incorrect. ' + reason + '</span>';
+  }
+  ans.classList.add('show');
+
+  const answeredCount = Object.keys(answeredQ).length;
+  const pct = (answeredCount / 4) * 100;
+  document.getElementById('quizBar').style.width = pct + '%';
+  document.getElementById('quizScore').innerText = 'Completed ' + answeredCount + ' of 4 questions (' + pct.toFixed(0) + '%).';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  formatCitations();
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Knowledge Representation & Bayesian Networks | Complete Exam Question Bank</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#2563eb;--brand-soft:#eff6ff;--teal:#059669;--teal-soft:#ecfdf5;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#0f172a;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:800}
+aside h2{font-size:18px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.12em;margin:18px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#cbd5e1;font-size:13px}
+nav a:hover,nav a.active{background:#1e293b;color:#38bdf8;text-decoration:none}
+.module-hub-link{background:#1e293b;border:1px solid #334155;color:#38bdf8;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:20px;padding:12px;border:1px solid #334155;border-radius:12px;color:#cbd5e1;font-size:12px;background:#131d35}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#047857;color:#ecfdf5}
+
+/* Mobile Topbar */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#0f172a;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{font-size:14.5px;font-weight:800;color:#f8fafc;display:flex;align-items:center;gap:6px;}
+.mobile-topbar-actions{display:flex;gap:6px;align-items:center;}
+.mobile-btn{
+  background:#1e293b;
+  border:1px solid #334155;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  min-height:36px;
+  display:inline-flex;
+  align-items:center;
+}
+
+/* Horizontal Swipeable Pill Nav */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#0f172a;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #1e293b;
+  padding-bottom:12px;
+}
+.drawer-close{background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;padding:4px 8px;}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 60%,#312e81 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"P(A|J,M)";position:absolute;right:20px;bottom:-25px;font-size:90px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#a5b4fc;font-weight:800}
+h1{font-size:clamp(22px,4.5vw,38px);line-height:1.15;margin:10px 0}
+.hero p{max-width:700px;color:#e0e7ff;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+.formula-banner{
+  background:#0f172a;
+  color:#f8fafc;
+  padding:16px 14px;
+  border-radius:12px;
+  text-align:center;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+.formula-banner .katex-display{margin:6px 0}
+.formula-banner small{display:block;font-size:11px;color:#94a3b8;margin-top:6px}
+
+/* KaTeX Headroom */
+.katex-display{
+  font-size:clamp(13px, 3.6vw, 15.5px) !important;
+  margin:12px 0 !important;
+  padding:12px 4px 8px !important;
+  overflow-x:auto !important;
+  overflow-y:visible !important;
+  scrollbar-width:none !important;
+}
+.katex-display::-webkit-scrollbar{display:none !important;}
+.katex-display > .katex{
+  display:block !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  padding-top:4px !important;
+  padding-bottom:2px !important;
+}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--teal-soft);border-color:var(--teal)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#dbeafe;color:#1e40af;margin-bottom:6px}
+.pyq-badge.nov{background:#fef3c7;color:#92400e}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+button:hover{background:#1d4ed8}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+
+/* Quiz for iPhone 13 */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--teal-soft);border-radius:8px;border-left:3px solid var(--teal);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Diagram Container */
+.diag-box{background:#0f172a;color:#f8fafc;padding:16px;border-radius:12px;font-family:monospace;font-size:13px;line-height:1.5;overflow-x:auto;margin:12px 0}
+
+/* Interactive Calculator */
+.tool-box{background:white;border:2px solid #93c5fd;border-radius:12px;padding:16px;margin:16px 0}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:8px}
+.tool-group label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px}
+.tool-group input{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  font-size:16px;
+  background:#f8fafc;
+  min-height:40px;
+}
+.tool-result{margin-top:12px;padding:12px;background:#eff6ff;border-radius:8px;border-left:4px solid var(--brand);font-size:13px}
+
+/* Mobile Responsiveness */
+@media(max-width:880px){
+  .shell{grid-template-columns:1fr}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:16px 14px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr}
+  .hero{padding:22px 16px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  .card{padding:14px}
+  .tool-box{padding:12px}
+  .tool-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Drawer Backdrop -->
+<div class="drawer-backdrop" id="backdrop" onclick="toggleDrawer()"></div>
+
+<!-- Slide-Out Mobile Navigation Drawer -->
+<div class="mobile-drawer" id="drawer">
+  <div class="drawer-header">
+    <div style="font-weight:800;font-size:13px;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;">FAI Study Hub</div>
+    <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+  </div>
+  <a href="/fai-study-guide/index.html" class="module-hub-link" style="display:block;padding:8px 12px;border-radius:8px;font-size:13px;">&larr; Back to Study Hub</a>
+  <div class="nav-label">Sections</div>
+  <nav>
+    <a href="#intuition" onclick="toggleDrawer()">01. Intuition & Contrast</a>
+    <a href="#bayes-net-math" onclick="toggleDrawer()">02. Bayesian Network Factorization</a>
+    <a href="#frames-math" onclick="toggleDrawer()">03. Minsky's Frames Schema</a>
+    <a href="#chaining" onclick="toggleDrawer()">04. Forward vs Backward Chaining</a>
+    <a href="#notation" onclick="toggleDrawer()">05. Notation Matrix</a>
+    <a href="#steps" onclick="toggleDrawer()">06. Solving Protocol</a>
+    <a href="#traps" onclick="toggleDrawer()">07. 6 Exam Traps</a>
+    <a href="#pyqs" onclick="toggleDrawer()">08. All Solved PYQs</a>
+    <a href="#calculator" onclick="toggleDrawer()">09. Interactive Tool</a>
+    <a href="#quiz" onclick="toggleDrawer()">10. Active Recall Quiz</a>
+    <a href="#checklist" onclick="toggleDrawer()">11. Presentation Template</a>
+  </nav>
+  <div class="nav-label">Modules</div>
+  <nav>
+    <a href="/fai-study-guide/01-informed-search-astar-ao.html">01. Informed Search (A* & AO*)</a>
+    <a href="/fai-study-guide/02-adversarial-search-csp.html">02. Game Playing & CSP</a>
+    <a href="/fai-study-guide/03-uninformed-search-traversal.html">03. Uninformed Search</a>
+    <a href="/fai-study-guide/04-knowledge-representation-bayesian-networks.html" class="active">04. Bayes Nets & KR</a>
+    <a href="/fai-study-guide/05-python-pandas-visualization.html">05. Python, Pandas & Plots</a>
+  </nav>
+</div>
+
+<!-- Mobile Sticky Topbar -->
+<div class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>Module 04 · Bayes Nets & KR</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/fai-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="toggleDrawer()">&#9776; Menu</button>
+  </div>
+</div>
+
+<!-- Mobile Horizontal Pill Nav -->
+<div class="mobile-pills-bar">
+  <a href="#intuition" class="pill-link">Intuition</a>
+  <a href="#bayes-net-math" class="pill-link">Bayes Net Math</a>
+  <a href="#frames-math" class="pill-link">Frames</a>
+  <a href="#chaining" class="pill-link">Chaining</a>
+  <a href="#traps" class="pill-link">Traps</a>
+  <a href="#pyqs" class="pill-link">Past Papers</a>
+  <a href="#calculator" class="pill-link">Calculator</a>
+  <a href="#quiz" class="pill-link">Quiz</a>
+  <a href="#checklist" class="pill-link">Checklist</a>
+</div>
+
+<div class="shell">
+
+  <!-- Desktop Sidebar -->
+  <aside>
+    <div class="brand">21CSC569J · Exam Prep</div>
+    <h2>Bayesian Networks & KR</h2>
+    <a href="/fai-study-guide/index.html" class="module-hub-link" style="padding:8px 12px;border-radius:8px;font-size:12.5px;">&larr; Back to Study Hub</a>
+
+    <div class="nav-label">Sections</div>
+    <nav>
+      <a href="#intuition">01. Intuition & Contrast</a>
+      <a href="#bayes-net-math">02. Bayesian Net Factorization</a>
+      <a href="#frames-math">03. Minsky's Frames Schema</a>
+      <a href="#chaining">04. Forward vs Backward Chaining</a>
+      <a href="#notation">05. Notation Decoding Matrix</a>
+      <a href="#steps">06. Step-by-Step Protocol</a>
+      <a href="#traps">07. 6 Deadly Exam Traps</a>
+      <a href="#pyqs">08. Complete University PYQs</a>
+      <a href="#calculator">09. Interactive Calculator</a>
+      <a href="#quiz">10. Self-Test Active Recall</a>
+      <a href="#checklist">11. Answer Sheet Checklist</a>
+    </nav>
+
+    <div class="side-note">
+      <strong>Exam Weightage: 20-30 Marks</strong><br>
+      Internal Score: <strong>56.79 / 60</strong><br>
+      Target Sem Mark: <strong>36 / 100</strong> (Safe: 43)<br>
+      <span class="status-pill pill-target">Priority 3 High-Yield</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="eyebrow">Module 04 · Uncertain Reasoning & Symbolic Knowledge</div>
+      <h1>Knowledge Representation & Bayesian Networks</h1>
+      <p>Probabilistic graphical models and symbolic reasoning under uncertainty. Complete verified solutions for the classic Alarm Bayesian Network ($P(A \mid J, M, \neg E, \neg B) = 55.78\%$), Knowledge-Based Agent architectures, Forward vs Backward Chaining, and Minsky's Frames schema.</p>
+      <div class="pills">
+        <span class="pill">May 2025 (Q5 20M, Q6 20M)</span>
+        <span class="pill">Nov 2025 (Q6 20M)</span>
+        <span class="pill">Alarm Net (55.78%)</span>
+        <span class="pill">Forward vs Backward</span>
+        <span class="pill">Frames & Demons</span>
+      </div>
+    </div>
+
+    <!-- Section 01: Intuition & Contrast -->
+    <section id="intuition">
+      <h2>01. Intuition & Concept Contrast</h2>
+      <p class="lead">Classical logic handles exact deterministic truths ($\text{True} / \text{False}$). Real-world AI systems must reason under noise, incomplete evidence, and uncertainty using probabilistic graph factorizations and symbolic schemas.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Uncertainty Handling</div>
+          <h3 style="margin-top:2px;">Propositional Logic vs Bayesian Networks</h3>
+          <p><strong>Propositional Logic:</strong> Strict boolean assertions ($P \implies Q$). Cannot express partial belief, noisy sensor readings, or conflicting evidence.</p>
+          <p><strong>Bayesian Belief Networks (BBN):</strong> Directed Acyclic Graphs (DAGs) capturing conditional independence. Factorizes massive joint distributions into manageable local conditional probability tables (CPTs).</p>
+        </div>
+        <div class="card">
+          <div class="kicker">Inference Direction</div>
+          <h3 style="margin-top:2px;">Forward Chaining vs Backward Chaining</h3>
+          <p><strong>Forward Chaining (Data-Driven / Bottom-Up):</strong> Starts from observed facts; fires matching rules ($\text{IF} \to \text{THEN}$) to deduce new assertions. Used in monitoring and real-time control (CLIPS, Rete).</p>
+          <p><strong>Backward Chaining (Goal-Driven / Top-Down):</strong> Starts from a target hypothesis; works backward to find supporting facts. Used in diagnosis and automated theorem proving (Prolog, MYCIN).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: Bayesian Network Factorization -->
+    <section id="bayes-net-math">
+      <h2>02. Bayesian Network Mathematical Factorization</h2>
+
+      <div class="formula-banner">
+        <div><strong>The Master Bayesian Network Chain Rule</strong></div>
+        $$P(X_1, X_2, \dots, X_n) = \prod_{i=1}^n P(X_i \mid \operatorname{Parents}(X_i))$$
+        <small>Collapses exponential joint distributions from $O(2^n)$ down to linear local parent tables.</small>
+      </div>
+
+      <div class="card">
+        <h3>Conditional Independence & D-Separation:</h3>
+        <p>In a Bayesian network, each variable $X$ is conditionally independent of its non-descendants given its parents:</p>
+        $$P(X \mid \operatorname{Parents}(X), \operatorname{NonDescendants}(X)) = P(X \mid \operatorname{Parents}(X))$$
+        <p>In the classic Alarm network: $Burglary (B) \to Alarm (A) \leftarrow Earthquake (E)$, and $A \to JohnCalls (J)$, $A \to MaryCalls (M)$.</p>
+        <ul>
+          <li>Given $A$, $J$ and $M$ are conditionally independent: $P(J, M \mid A) = P(J \mid A)P(M \mid A)$.</li>
+          <li>$B$ and $E$ are marginally independent priors: $P(B, E) = P(B)P(E)$.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Section 03: Frames Schema -->
+    <section id="frames-math">
+      <h2>03. Minsky's Frames in Knowledge Representation</h2>
+      <p class="lead"><strong>May 2025 (Q6.ii) Guaranteed 10-Mark Question.</strong> Object-oriented structured knowledge representation.</p>
+
+      <div class="card">
+        <h3>Core Components of a Frame:</h3>
+        <ol>
+          <li><strong>Slots:</strong> Named attributes or properties characterizing the entity (e.g., `Color`, `Fuel`, `Owner`).</li>
+          <li><strong>Facets:</strong> Constraints, default values, or data type metadata for a slot (e.g., `Default: 4`, `Range: [1, 10]`).</li>
+          <li><strong>Procedural Attachments (Demons):</strong> Active subroutines invoked automatically by slot modifications:
+            <ul>
+              <li><strong>`if-needed`:</strong> Triggered when a slot value is requested but empty; computes the value dynamically on the fly.</li>
+              <li><strong>`if-added`:</strong> Triggered when a new value is placed into a slot; verifies integrity constraints.</li>
+              <li><strong>`if-removed`:</strong> Triggered when a slot value is deleted.</li>
+            </ul>
+          </li>
+        </ol>
+
+        <div class="diag-box">
+Frame: AUTOMOBILE
+    SuperClass: Vehicle
+    Wheels: 4 (Default Facet)
+    Fuel: Petrol / Diesel (Range Constraint)
+
+Frame: CAR (Inherits from AUTOMOBILE)
+    Body_Type: Sedan
+    Passenger_Capacity: 5
+    Mileage: if-needed Compute_Mileage()  <-- Procedural Demon
+
+Frame: MY_SEDAN (Instance of CAR)
+    Color: Silver
+    Registration_No: "TN-09-AB-1234"
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 04: Forward vs Backward Chaining -->
+    <section id="chaining">
+      <h2>04. Forward vs Backward Reasoning Comparison</h2>
+      <p class="lead"><strong>Nov 2025 (Q6) 20-Mark Long Answer Question.</strong></p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Forward Reasoning (Data-Driven)</th>
+              <th>Backward Reasoning (Goal-Driven)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Starting Point</strong></td>
+              <td>Initial known facts and sensor observations</td>
+              <td>Target hypothesis or query to prove</td>
+            </tr>
+            <tr>
+              <td><strong>Direction of Search</strong></td>
+              <td>Bottom-Up: Antecedent (IF) $\to$ Consequent (THEN)</td>
+              <td>Top-Down: Consequent (THEN) $\to$ Antecedent (IF)</td>
+            </tr>
+            <tr>
+              <td><strong>Branching Factor</strong></td>
+              <td>High (may derive many irrelevant facts)</td>
+              <td>Low (focused strictly on goal sub-branches)</td>
+            </tr>
+            <tr>
+              <td><strong>Question Answered</strong></td>
+              <td><em>"What follows from these known facts?"</em></td>
+              <td><em>"Why is this conclusion valid?"</em></td>
+            </tr>
+            <tr>
+              <td><strong>Industrial Examples</strong></td>
+              <td>CLIPS, Rete algorithm, trading bots</td>
+              <td>Prolog, MYCIN medical diagnosis</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 05: Notation Matrix -->
+    <section id="notation">
+      <h2>05. Notation Decoding Matrix</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Formal Name</th>
+              <th>Plain-English Meaning</th>
+              <th>Alarm Network Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$B, \neg B$</td>
+              <td>Burglary Variable</td>
+              <td>Burglary occurred ($B$) vs did not occur ($\neg B$)</td>
+              <td>$P(B) = 0.001, \ P(\neg B) = 0.999$</td>
+            </tr>
+            <tr>
+              <td>$E, \neg E$</td>
+              <td>Earthquake Variable</td>
+              <td>Earthquake occurred ($E$) vs did not occur ($\neg E$)</td>
+              <td>$P(E) = 0.002, \ P(\neg E) = 0.998$</td>
+            </tr>
+            <tr>
+              <td>$A \mid \neg B, \neg E$</td>
+              <td>Alarm Likelihood</td>
+              <td>Alarm rings given no burglary and no earthquake</td>
+              <td>$P(A \mid \neg B, \neg E) = \mathbf{0.001}$</td>
+            </tr>
+            <tr>
+              <td>$J \mid A, M \mid A$</td>
+              <td>Sensor Likelihoods</td>
+              <td>Probability John/Mary calls given Alarm occurred</td>
+              <td>$P(J \mid A) = 0.90, \ P(M \mid A) = 0.70$</td>
+            </tr>
+            <tr>
+              <td>$\text{Evidence}$</td>
+              <td>Normalizing Constant</td>
+              <td>Marginal probability denominator across all states of $A$</td>
+              <td>$\alpha = 0.000630 + 0.0004995 = \mathbf{0.0011295}$</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 06: Solving Protocol -->
+    <section id="steps">
+      <h2>06. Repeatable Step-by-Step Solving Protocol</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>Step 1: Write Down the Joint Factorization Equation</strong>
+            $$P(A \mid J, M, \neg E, \neg B) = \frac{P(A, J, M, \neg E, \neg B)}{P(J, M, \neg E, \neg B)}$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 2: Cancel Out Common Prior Factors</strong>
+            <p>Both numerator and denominator share the prior term $P(\neg B)P(\neg E)$. Cancel them out immediately to save computation!</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 3: Compute Numerator for $A = \text{True}$</strong>
+            $$\text{Term}_1 = P(A \mid \neg B, \neg E) \times P(J \mid A) \times P(M \mid A) = 0.001 \times 0.90 \times 0.70 = \mathbf{0.000630}$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 4: Compute Numerator for $A = \text{False}$</strong>
+            $$\text{Term}_2 = P(\neg A \mid \neg B, \neg E) \times P(J \mid \neg A) \times P(M \mid \neg A) = 0.999 \times 0.05 \times 0.01 = \mathbf{0.0004995}$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 5: Compute Total Evidence & Final Posterior Fraction</strong>
+            $$\text{Evidence} = 0.000630 + 0.0004995 = 0.0011295$$
+            $$P(A \mid J, M, \neg E, \neg B) = \frac{0.000630}{0.0011295} = \frac{630}{1129.5} = \frac{140}{251} \approx \mathbf{55.78\%}$$
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 07: 6 Exam Traps -->
+    <section id="traps">
+      <h2>07. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+      <div class="grid">
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 01: Multiplying Unnecessary Priors</div>
+          <h3>Multiplying $P(\neg B)P(\neg E)$ into Every Term</h3>
+          <p>Multiplying $0.999 \times 0.998$ adds tiny decimal factors that invite arithmetic errors. <strong>Cancel $P(\neg B)P(\neg E)$ from numerator and denominator before multiplying!</strong></p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 02: Inverting $P(\neg A \mid \neg B, \neg E)$</div>
+          <h3>Writing $P(\neg A) = 0.001$</h3>
+          <p>If $P(A \mid \neg B, \neg E) = 0.001$, then $P(\neg A \mid \neg B, \neg E) = 1 - 0.001 = \mathbf{0.999}$. Using $0.001$ for $\neg A$ destroys the calculation.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 03: Forgetting Normalization</div>
+          <h3>Reporting $0.000630$ as Final Probability</h3>
+          <p>$0.000630$ is an unnormalized joint term. A probability cannot be complete without dividing by the total evidence sum ($0.0011295$).</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 04: Omitting Procedural Demons in Frames</div>
+          <h3>Defining Only Slots and Values</h3>
+          <p>Frames are distinguished from simple records by their **procedural attachment demons** (`if-needed`, `if-added`, `if-removed`). Omitting demons loses 4 marks.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 05: Swapping Forward and Backward Roles</div>
+          <h3>Claiming Backward Chaining is Data-Driven</h3>
+          <p>Forward Chaining is data-driven (starts with facts). Backward Chaining is **goal-driven** (starts with hypothesis). Confusing them loses 5 marks.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 06: Diagnostic vs Causal Reasoning</div>
+          <h3>Confusing $P(\text{Cause} \mid \text{Symptom})$ with $P(\text{Symptom} \mid \text{Cause})$</h3>
+          <p>Causal reasoning moves from disease to symptoms. Diagnostic reasoning uses Bayes' rule to invert the direction from symptoms to cause.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 08: Complete Solved University PYQs -->
+    <section id="pyqs">
+      <h2>08. Complete University Question Bank (All Past PYQs Solved)</h2>
+      <div class="controls">
+        <button onclick="toggleAllDetails(true)">Expand All Solutions</button>
+        <button class="secondary" onclick="toggleAllDetails(false)">Collapse All</button>
+      </div>
+
+      <!-- Question 1: May 2025 Q6.i Alarm Net (10 Marks) -->
+      <div class="details-box">
+        <details id="q1">
+          <summary>
+            <span><span class="pyq-badge">May 2025 · Question 6.i</span> The Alarm Bayesian Network Probability Calculation (10 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Calculate the probability that the Alarm rings (A) given that:<br>
+            John Calls (J), Mary Calls (M), Earthquake doesn't happen (~E), Burglary doesn't happen (~B). (10 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Formula Setup via Bayes' Rule & Factorization:</h5>
+          $$P(A \mid J, M, \neg E, \neg B) = \frac{P(A, J, M, \neg E, \neg B)}{P(J, M, \neg E, \neg B)}$$
+          <p>Canceling the common prior term $P(\neg B)P(\neg E)$ from both sides:</p>
+          $$P(A \mid J, M, \neg E, \neg B) = \frac{P(A \mid \neg B, \neg E) P(J \mid A) P(M \mid A)}{P(A \mid \neg B, \neg E)P(J \mid A)P(M \mid A) + P(\neg A \mid \neg B, \neg E)P(J \mid \neg A)P(M \mid \neg A)}$$
+
+          <h5>2. CPT Value Substitutions:</h5>
+          <ul>
+            <li>$P(A \mid \neg B, \neg E) = \mathbf{0.001} \implies P(\neg A \mid \neg B, \neg E) = 1 - 0.001 = \mathbf{0.999}$</li>
+            <li>$P(J \mid A) = \mathbf{0.90} \implies P(J \mid \neg A) = \mathbf{0.05}$</li>
+            <li>$P(M \mid A) = \mathbf{0.70} \implies P(M \mid \neg A) = \mathbf{0.01}$</li>
+          </ul>
+
+          <h5>3. Numerical Evaluation:</h5>
+          $$\begin{aligned}
+          \text{Numerator (Alarm = True):} & \quad 0.001 \times 0.90 \times 0.70 = \mathbf{0.000630} \\[4pt]
+          \text{Term (Alarm = False):} & \quad 0.999 \times 0.05 \times 0.01 = \mathbf{0.0004995} \\[4pt]
+          \text{Denominator (Evidence):} & \quad 0.000630 + 0.0004995 = \mathbf{0.0011295}
+          \end{aligned}$$
+
+          <h5>4. Final Posterior Probability:</h5>
+          $$P(A \mid J, M, \neg E, \neg B) = \frac{0.000630}{0.0011295} = \frac{630}{1129.5} = \frac{1260}{2259} = \frac{140}{251} \approx \mathbf{0.5578}$$
+          <p><strong>Final Answer:</strong> $\mathbf{55.78\%}$</p>
+        </details>
+      </div>
+
+      <!-- Question 2: May 2025 Q6.ii Frames (10 Marks) -->
+      <div class="details-box">
+        <details id="q2">
+          <summary>
+            <span><span class="pyq-badge">May 2025 · Question 6.ii</span> Frames Syntax, Semantics & Inference Mechanisms (10 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Give the syntax, semantic and inference mechanisms in Frames with example. (10 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Syntax & Structural Schema:</h5>
+          <p>Introduced by Marvin Minsky (1974), a **Frame** is an object-oriented knowledge schema consisting of **Slots**, **Facets**, and **Procedural Attachments**.</p>
+          <div class="diag-box">
+Frame_Name:
+    Slot_1: Value_1
+    Slot_2: Value_2 (Default_Facet)
+    Slot_3: if-needed Procedural_Attachment
+          </div>
+
+          <h5>2. Semantics & Components:</h5>
+          <ul>
+            <li><strong>Slots:</strong> Attributes describing the entity (e.g. `Passenger_Capacity`, `Fuel`).</li>
+            <li><strong>Facets:</strong> Metadata describing constraints or defaults (e.g. `Default: 4`).</li>
+            <li><strong>Procedural Demons:</strong>
+              <ul>
+                <li>`if-needed`: Executed when a slot value is requested but missing.</li>
+                <li>`if-added`: Executed when a new value is inserted into a slot.</li>
+                <li>`if-removed`: Executed when a value is removed from a slot.</li>
+              </ul>
+            </li>
+          </ul>
+
+          <h5>3. Inference Mechanisms:</h5>
+          <ol>
+            <li><strong>Inheritance:</strong> Automatic property inheritance along `is-a` taxonomies.</li>
+            <li><strong>Default Reasoning:</strong> Uses inherited defaults when instance data is omitted.</li>
+            <li><strong>Active Demon Execution:</strong> Computes missing values dynamically via `if-needed` code.</li>
+          </ol>
+        </details>
+      </div>
+
+      <!-- Question 3: Nov 2025 Q6 Forward vs Backward (20 Marks) -->
+      <div class="details-box">
+        <details id="q3">
+          <summary>
+            <span><span class="pyq-badge nov">Nov 2025 · Question 6</span> Forward vs. Backward Reasoning in AI (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Explain the concepts of Forward and Backward Reasoning in AI with suitable examples, highlighting working principles, differences, and applications. (20 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Forward Reasoning (Data-Driven / Bottom-Up) (7 Marks):</h5>
+          <p>Starts with initial observed facts in working memory and applies rules ($\text{IF} \to \text{THEN}$) iteratively to deduce new assertions until reaching a goal.</p>
+          <p><em>Example:</em> Facts: "Fritz croaks" and "Fritz eats flies". Rule: $\text{Croaks} \land \text{Eats Flies} \implies \text{Frog}$. Infers: "Fritz is a frog". Rule: $\text{Frog} \implies \text{Green}$. Conclusion: "Fritz is green".</p>
+
+          <h5>2. Backward Reasoning (Goal-Driven / Top-Down) (7 Marks):</h5>
+          <p>Starts with a target hypothesis and works backward through rules to locate supporting facts. Antecedents become intermediate sub-goals.</p>
+          <p><em>Example:</em> Query: "Is Fritz green?" Checks rule: $\text{Frog} \implies \text{Green}$. Sets sub-goal: "Is Fritz a frog?" Checks rule: $\text{Croaks} \land \text{Eats Flies} \implies \text{Frog}$. Verifies stored database confirming Fritz croaks and eats flies. Hypothesis confirmed!</p>
+
+          <h5>3. Applications (6 Marks):</h5>
+          <ul>
+            <li><strong>Forward:</strong> Real-time monitoring, trading bots, robotics sensor interpretation (CLIPS, Rete algorithm).</li>
+            <li><strong>Backward:</strong> Medical diagnostic expert systems (MYCIN), automated theorem proving, logic programming (Prolog).</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+    <!-- Section 09: Interactive Calculator -->
+    <section id="calculator">
+      <h2>09. Interactive Offline Alarm Bayesian Network Calculator</h2>
+      <p class="lead">Change sensor probabilities to observe how posterior alarm belief updates live.</p>
+
+      <div class="tool-box">
+        <div class="tool-grid">
+          <div class="tool-group">
+            <label>P(A | ~B, ~E)</label>
+            <input type="number" id="pA" value="0.001" step="0.0001">
+          </div>
+          <div class="tool-group">
+            <label>P(J | A)</label>
+            <input type="number" id="pJ_A" value="0.90" step="0.01">
+          </div>
+          <div class="tool-group">
+            <label>P(M | A)</label>
+            <input type="number" id="pM_A" value="0.70" step="0.01">
+          </div>
+          <div class="tool-group">
+            <label>P(J | ~A)</label>
+            <input type="number" id="pJ_notA" value="0.05" step="0.01">
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <button onclick="calculateBayesNet()">Compute Posterior P(A | J, M, ~E, ~B)</button>
+        </div>
+
+        <div class="tool-result" id="bnOutput">
+          Click button to compute posterior probability.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 10: Active Recall Quiz -->
+    <section id="quiz">
+      <h2>10. Active Recall Self-Test Quiz</h2>
+      <div class="progress-wrap"><div class="progress" id="quizBar"></div></div>
+      <div id="quizScore" style="font-size:12.5px;font-weight:700;color:var(--muted);margin-top:4px;">Answer the questions below to evaluate progress (0/4 answered).</div>
+
+      <div class="quiz-q" id="qz1">
+        <strong>1. In the May 2025 exam Alarm Bayesian network, what is the calculated posterior probability $P(A \mid J, M, \neg E, \neg B)$?</strong>
+        <label><input type="radio" name="q1" value="a" onclick="checkQ(1,'b','55.78% (140/251)')"> $0.10\%$</label>
+        <label><input type="radio" name="q1" value="b" onclick="checkQ(1,'b','55.78% (140/251)')"> $55.78\%$ ($140 / 251$)</label>
+        <label><input type="radio" name="q1" value="c" onclick="checkQ(1,'b','55.78% (140/251)')"> $90.00\%$</label>
+        <div class="feedback" id="fb1"></div>
+        <div class="answer" id="ans1"><strong>Correct: (b)</strong> $\frac{0.000630}{0.000630 + 0.0004995} = \frac{0.000630}{0.0011295} \approx \mathbf{55.78\%}$.</div>
+      </div>
+
+      <div class="quiz-q" id="qz2">
+        <strong>2. Which procedural attachment in Minsky's Frames is executed when a slot value is queried but missing?</strong>
+        <label><input type="radio" name="q2" value="a" onclick="checkQ(2,'c','if-needed demon')"> `if-added`</label>
+        <label><input type="radio" name="q2" value="b" onclick="checkQ(2,'c','if-needed demon')"> `if-removed`</label>
+        <label><input type="radio" name="q2" value="c" onclick="checkQ(2,'c','if-needed demon')"> `if-needed`</label>
+        <div class="feedback" id="fb2"></div>
+        <div class="answer" id="ans2"><strong>Correct: (c)</strong> An `if-needed` demon is an active procedure triggered on demand to compute missing attribute values dynamically.</div>
+      </div>
+
+      <div class="quiz-q" id="qz3">
+        <strong>3. What search direction is fundamentally used by Forward Chaining in expert systems?</strong>
+        <label><input type="radio" name="q3" value="a" onclick="checkQ(3,'a','Data-Driven (Bottom-Up)')"> Data-Driven (Bottom-Up): starts with known facts and derives new facts</label>
+        <label><input type="radio" name="q3" value="b" onclick="checkQ(3,'a','Data-Driven (Bottom-Up)')"> Goal-Driven (Top-Down): starts with a hypothesis to prove</label>
+        <label><input type="radio" name="q3" value="c" onclick="checkQ(3,'a','Data-Driven (Bottom-Up)')"> Minimax search</label>
+        <div class="feedback" id="fb3"></div>
+        <div class="answer" id="ans3"><strong>Correct: (a)</strong> Forward chaining moves forward from known evidence to derive conclusions (data-driven).</div>
+      </div>
+
+      <div class="quiz-q" id="qz4">
+        <strong>4. Why can the prior terms $P(\neg B)P(\neg E)$ be canceled in the Alarm Network calculation?</strong>
+        <label><input type="radio" name="q4" value="a" onclick="checkQ(4,'c','They appear as a constant multiplicative factor in every term of numerator and denominator')"> Because they are equal to zero</label>
+        <label><input type="radio" name="q4" value="c" onclick="checkQ(4,'c','They appear as a constant multiplicative factor in every term of numerator and denominator')"> Because they are constant multiplicative factors appearing in both the numerator and every term of the denominator</label>
+        <label><input type="radio" name="q4" value="b" onclick="checkQ(4,'c','They appear as a constant multiplicative factor in every term of numerator and denominator')"> Because Burglary and Earthquake are conditionally dependent</label>
+        <div class="feedback" id="fb4"></div>
+        <div class="answer" id="ans4"><strong>Correct: (c)</strong> Factoring out $P(\neg B)P(\neg E)$ from both numerator and denominator cancels them completely, simplifying arithmetic.</div>
+      </div>
+    </section>
+
+    <!-- Section 11: Answer Sheet Checklist -->
+    <section id="checklist">
+      <h2>11. Exam Hall Answer Sheet Presentation Checklist</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>1. Write the Conditional Independence Chain Expansion</strong>
+            <p>Write $P(A, J, M, \neg E, \neg B) = P(\neg B)P(\neg E)P(A \mid \neg B, \neg E)P(J \mid A)P(M \mid A)$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>2. Show the Prior Factor Cancellation Explicitly</strong>
+            <p>Strike out $P(\neg B)P(\neg E)$ from numerator and denominator so the examiner sees clean algebra.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>3. Show Both Numerator Terms ($A = \text{True}$ and $A = \text{False}$)</strong>
+            <p>Write $\text{Term}_1 = 0.000630$ and $\text{Term}_2 = 0.0004995$ clearly labeled.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>4. Provide Both Fraction and Percentage for Final Posterior</strong>
+            <p>Box: $P(A \mid J, M, \neg E, \neg B) = \frac{140}{251} \approx \mathbf{55.78\%}$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>5. For Frames, List All 3 Demons Explicitly</strong>
+            <p>Never omit `if-needed`, `if-added`, and `if-removed` with definitions.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function toggleDrawer() {
+  const drawer = document.getElementById('drawer');
+  const backdrop = document.getElementById('backdrop');
+  drawer.classList.toggle('open');
+  backdrop.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+}
+
+function toggleAllDetails(open) {
+  document.querySelectorAll('details').forEach(d => d.open = open);
+}
+
+function calculateBayesNet() {
+  const pA = parseFloat(document.getElementById('pA').value) || 0.001;
+  const pJ_A = parseFloat(document.getElementById('pJ_A').value) || 0.90;
+  const pM_A = parseFloat(document.getElementById('pM_A').value) || 0.70;
+  const pJ_notA = parseFloat(document.getElementById('pJ_notA').value) || 0.05;
+  const pM_notA = 0.01;
+
+  const pNotA = 1.0 - pA;
+  const term1 = pA * pJ_A * pM_A;
+  const term2 = pNotA * pJ_notA * pM_notA;
+  const evidence = term1 + term2;
+  const posterior = term1 / evidence;
+
+  let out = '<strong>Computed Bayesian Network Results:</strong><br>';
+  out += '• $\\text{Numerator (Alarm = True)} = ' + pA + ' \\times ' + pJ_A + ' \\times ' + pM_A + ' = <strong>' + term1.toFixed(6) + '</strong>$<br>';
+  out += '• $\\text{Term (Alarm = False)} = ' + pNotA.toFixed(3) + ' \\times ' + pJ_notA + ' \\times ' + pM_notA + ' = <strong>' + term2.toFixed(7) + '</strong>$<br>';
+  out += '• $\\text{Total Evidence Sum} = ' + evidence.toFixed(7) + '$<br>';
+  out += '• <strong>Posterior Probability $P(A \\mid J, M, \\neg E, \\neg B) = ' + (posterior * 100).toFixed(2) + '\\%$ (' + posterior.toFixed(4) + ')</strong>';
+
+  document.getElementById('bnOutput').innerHTML = out;
+  if (window.renderMathInElement) {
+    renderMathInElement(document.getElementById('bnOutput'), {delimiters: [{left: '$', right: '$', display: false}]});
+  }
+}
+
+// Quiz Interactive Evaluation
+const answeredQ = {};
+function checkQ(qNum, correctVal, reason) {
+  const selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+  const fb = document.getElementById('fb' + qNum);
+  const ans = document.getElementById('ans' + qNum);
+
+  answeredQ[qNum] = true;
+
+  if (selected.value === correctVal) {
+    fb.innerHTML = '<span style="color:var(--teal);">&#10003; Correct! ' + reason + '</span>';
+  } else {
+    fb.innerHTML = '<span style="color:var(--red);">&#10007; Incorrect. ' + reason + '</span>';
+  }
+  ans.classList.add('show');
+
+  const answeredCount = Object.keys(answeredQ).length;
+  const pct = (answeredCount / 4) * 100;
+  document.getElementById('quizBar').style.width = pct + '%';
+  document.getElementById('quizScore').innerText = 'Completed ' + answeredCount + ' of 4 questions (' + pct.toFixed(0) + '%).';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  calculateBayesNet();
+});
+</script>
+
+</body>
+</html>

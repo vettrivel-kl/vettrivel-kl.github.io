@@ -1,0 +1,1054 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Informed Search (A* & AO*) | Complete Exam Question Bank & Study Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#2563eb;--brand-soft:#eff6ff;--teal:#059669;--teal-soft:#ecfdf5;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#0f172a;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:800}
+aside h2{font-size:18px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.12em;margin:18px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#cbd5e1;font-size:13px}
+nav a:hover,nav a.active{background:#1e293b;color:#38bdf8;text-decoration:none}
+.module-hub-link{background:#1e293b;border:1px solid #334155;color:#38bdf8;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:20px;padding:12px;border:1px solid #334155;border-radius:12px;color:#cbd5e1;font-size:12px;background:#131d35}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#047857;color:#ecfdf5}
+
+/* Mobile Sticky Topbar */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#0f172a;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{
+  font-size:14.5px;
+  font-weight:800;
+  color:#f8fafc;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.mobile-topbar-actions{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.mobile-btn{
+  background:#1e293b;
+  border:1px solid #334155;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  cursor:pointer;
+  min-height:36px;
+}
+
+/* Horizontal Swipeable Pill Nav */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#0f172a;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #1e293b;
+  padding-bottom:12px;
+}
+.drawer-close{
+  background:none;
+  border:none;
+  color:#94a3b8;
+  font-size:24px;
+  cursor:pointer;
+  padding:4px 8px;
+}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 60%,#312e81 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"f(n)=g+h";position:absolute;right:20px;bottom:-25px;font-size:90px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#a5b4fc;font-weight:800}
+h1{font-size:clamp(22px,4.5vw,38px);line-height:1.15;margin:10px 0}
+.hero p{max-width:700px;color:#e0e7ff;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+.formula-banner{
+  background:#0f172a;
+  color:#f8fafc;
+  padding:16px 14px;
+  border-radius:12px;
+  text-align:center;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+.formula-banner .katex-display{margin:6px 0}
+.formula-banner small{display:block;font-size:11px;color:#94a3b8;margin-top:6px}
+
+/* KaTeX Headroom */
+.katex-display{
+  font-size:clamp(13px, 3.6vw, 15.5px) !important;
+  margin:12px 0 !important;
+  padding:12px 4px 8px !important;
+  overflow-x:auto !important;
+  overflow-y:visible !important;
+  scrollbar-width:none !important;
+}
+.katex-display::-webkit-scrollbar{display:none !important;}
+.katex-display > .katex{
+  display:block !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  padding-top:4px !important;
+  padding-bottom:2px !important;
+}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--teal-soft);border-color:var(--teal)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#dbeafe;color:#1e40af;margin-bottom:6px}
+.pyq-badge.nov{background:#fef3c7;color:#92400e}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+button:hover{background:#1d4ed8}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+
+/* Quiz for iPhone 13 */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--teal-soft);border-radius:8px;border-left:3px solid var(--teal);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Puzzle Visual Board */
+.puzzle-board{display:inline-grid;grid-template-columns:repeat(3,44px);grid-template-rows:repeat(3,44px);gap:3px;background:#334155;padding:4px;border-radius:8px;margin:8px 0}
+.puzzle-cell{background:#f8fafc;color:#0f172a;display:grid;place-items:center;font-weight:800;font-size:16px;border-radius:4px}
+.puzzle-cell.blank{background:#94a3b8;color:transparent}
+
+/* Interactive Calculator */
+.tool-box{background:white;border:2px solid #93c5fd;border-radius:12px;padding:16px;margin:16px 0}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:8px}
+.tool-group label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px}
+.tool-group input{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  font-size:16px;
+  background:#f8fafc;
+  min-height:40px;
+}
+.tool-result{margin-top:12px;padding:12px;background:#eff6ff;border-radius:8px;border-left:4px solid var(--brand);font-size:13px}
+
+/* Mobile Responsiveness */
+@media(max-width:880px){
+  .shell{grid-template-columns:1fr}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:16px 14px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr}
+  .hero{padding:22px 16px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  .card{padding:14px}
+  .tool-box{padding:12px}
+  .tool-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Drawer Backdrop -->
+<div class="drawer-backdrop" id="backdrop" onclick="toggleDrawer()"></div>
+
+<!-- Slide-Out Mobile Navigation Drawer -->
+<div class="mobile-drawer" id="drawer">
+  <div class="drawer-header">
+    <div style="font-weight:800;font-size:13px;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;">FAI Study Hub</div>
+    <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+  </div>
+  <a href="/fai-study-guide/index.html" class="module-hub-link" style="display:block;padding:8px 12px;border-radius:8px;font-size:13px;">&larr; Back to Study Hub</a>
+  <div class="nav-label">Sections</div>
+  <nav>
+    <a href="#intuition" onclick="toggleDrawer()">01. Intuition & Contrast</a>
+    <a href="#astar-math" onclick="toggleDrawer()">02. A* Evaluation & Heuristics</a>
+    <a href="#ao-math" onclick="toggleDrawer()">03. AO* And-Or Trees</a>
+    <a href="#notation" onclick="toggleDrawer()">04. Notation Matrix</a>
+    <a href="#steps" onclick="toggleDrawer()">05. Solving Protocol</a>
+    <a href="#traps" onclick="toggleDrawer()">06. 6 Exam Traps</a>
+    <a href="#pyqs" onclick="toggleDrawer()">07. All Solved PYQs</a>
+    <a href="#calculator" onclick="toggleDrawer()">08. Interactive Tool</a>
+    <a href="#quiz" onclick="toggleDrawer()">09. Active Recall Quiz</a>
+    <a href="#checklist" onclick="toggleDrawer()">10. Presentation Template</a>
+  </nav>
+  <div class="nav-label">Modules</div>
+  <nav>
+    <a href="/fai-study-guide/01-informed-search-astar-ao.html" class="active">01. Informed Search (A* & AO*)</a>
+    <a href="/fai-study-guide/02-adversarial-search-csp.html">02. Game Playing & CSP</a>
+    <a href="/fai-study-guide/03-uninformed-search-traversal.html">03. Uninformed Search</a>
+    <a href="/fai-study-guide/04-knowledge-representation-bayesian-networks.html">04. Bayes Nets & KR</a>
+    <a href="/fai-study-guide/05-python-pandas-visualization.html">05. Python, Pandas & Plots</a>
+  </nav>
+</div>
+
+<!-- Mobile Sticky Topbar -->
+<div class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>Module 01 · A* & AO* Search</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/fai-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="toggleDrawer()">&#9776; Menu</button>
+  </div>
+</div>
+
+<!-- Mobile Horizontal Pill Nav -->
+<div class="mobile-pills-bar">
+  <a href="#intuition" class="pill-link">Intuition</a>
+  <a href="#astar-math" class="pill-link">A* Formulation</a>
+  <a href="#ao-math" class="pill-link">AO* Search</a>
+  <a href="#traps" class="pill-link">Traps</a>
+  <a href="#pyqs" class="pill-link">Past Papers</a>
+  <a href="#calculator" class="pill-link">A* Calculator</a>
+  <a href="#quiz" class="pill-link">Quiz</a>
+  <a href="#checklist" class="pill-link">Checklist</a>
+</div>
+
+<div class="shell">
+
+  <!-- Desktop Sidebar -->
+  <aside>
+    <div class="brand">21CSC569J · Exam Prep</div>
+    <h2>Informed Search (A* & AO*)</h2>
+    <a href="/fai-study-guide/index.html" class="module-hub-link" style="padding:8px 12px;border-radius:8px;font-size:12.5px;">&larr; Back to Study Hub</a>
+
+    <div class="nav-label">Sections</div>
+    <nav>
+      <a href="#intuition">01. Intuition & Contrast</a>
+      <a href="#astar-math">02. A* Evaluation & Heuristics</a>
+      <a href="#ao-math">03. AO* And-Or Trees</a>
+      <a href="#notation">04. Notation Decoding Matrix</a>
+      <a href="#steps">05. Step-by-Step Protocol</a>
+      <a href="#traps">06. 6 Deadly Exam Traps</a>
+      <a href="#pyqs">07. Complete University PYQs</a>
+      <a href="#calculator">08. Interactive A* Tool</a>
+      <a href="#quiz">09. Self-Test Active Recall</a>
+      <a href="#checklist">10. Answer Sheet Checklist</a>
+    </nav>
+
+    <div class="side-note">
+      <strong>Exam Weightage: 20-30 Marks</strong><br>
+      Internal Score: <strong>56.79 / 60</strong><br>
+      Target Sem Mark: <strong>36 / 100</strong> (Safe: 43)<br>
+      <span class="status-pill pill-target">Priority 1 High-Yield</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="eyebrow">Module 01 · Heuristic State-Space Search</div>
+      <h1>Informed Heuristic Search (A* & AO*)</h1>
+      <p>The core foundation of AI pathfinding and problem solving. Step-by-step verified derivations for the 8-Puzzle Problem using Manhattan Distance, Robot Grid Navigation, Priority Queue traces, and AO* search on And-Or trees.</p>
+      <div class="pills">
+        <span class="pill">May 2025 (Q3 20M, Q7 20M)</span>
+        <span class="pill">Nov 2025 (Q4 20M)</span>
+        <span class="pill">8-Puzzle A* (f=5)</span>
+        <span class="pill">Robot Grid (cost=12)</span>
+        <span class="pill">AO* Hyper-Edges</span>
+      </div>
+    </div>
+
+    <!-- Section 01: Intuition & Contrast -->
+    <section id="intuition">
+      <h2>01. Intuition & Concept Contrast</h2>
+      <p class="lead">Uninformed search (BFS, DFS) blindly explores states without knowing whether a path leads toward the goal. Informed heuristic search uses domain knowledge $h(n)$ to steer search toward promising directions.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Search Paradigm</div>
+          <h3 style="margin-top:2px;">Uniform-Cost vs Greedy vs A*</h3>
+          <p><strong>Uniform-Cost Search ($f = g$):</strong> Looks only backward at cost incurred so far. Optimal and complete, but explores blindly in all directions.</p>
+          <p><strong>Greedy Best-First ($f = h$):</strong> Looks only forward toward the goal. Very fast, but vulnerable to false leads and non-optimal paths.</p>
+          <p><strong>A* Search ($f = g + h$):</strong> Perfectly balances past cost $g(n)$ and estimated future cost $h(n)$. Guaranteed to find the optimal shortest path if $h(n)$ is admissible.</p>
+        </div>
+        <div class="card">
+          <div class="kicker">Problem Topology</div>
+          <h3 style="margin-top:2px;">OR Graph (A*) vs AND-OR Graph (AO*)</h3>
+          <p><strong>Standard OR Graph (A*):</strong> A branch represents alternative single choices (e.g., Robot goes Left OR Right). The solution is a single sequential path from Start to Goal.</p>
+          <p><strong>AND-OR Graph (AO*):</strong> Used for problem reduction (divide-and-conquer). An AND branch requires solving <em>all</em> sub-problems simultaneously. The solution is a sub-tree.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: A* Math & Heuristics -->
+    <section id="astar-math">
+      <h2>02. A* Evaluation Function & Heuristic Properties</h2>
+
+      <div class="formula-banner">
+        <div><strong>The A* Evaluation Function</strong></div>
+        $$f(n) = g(n) + h(n)$$
+        <small>$g(n)$: Exact cost from Start to node $n$. $h(n)$: Estimated heuristic cost from $n$ to Goal.</small>
+      </div>
+
+      <div class="card">
+        <h3>1. Heuristic Admissibility</h3>
+        <p>A heuristic $h(n)$ is **admissible** if it never overestimates the true minimal cost $h^*(n)$ required to reach the goal:</p>
+        $$0 \le h(n) \le h^*(n), \quad \forall n$$
+        <p><em>Theorem:</em> Tree-search A* using an admissible heuristic is guaranteed to be **complete and optimal**.</p>
+
+        <h3>2. Heuristic Consistency (Monotonicity)</h3>
+        <p>A heuristic is **consistent (monotonic)** if for every node $n$ and every successor $n'$ generated by action $a$ with step cost $c(n, a, n')$:</p>
+        $$h(n) \le c(n, a, n') + h(n') \implies f(n) \le f(n')$$
+        <p>This triangle inequality ensures that $f(n)$ never decreases along any path. Graph-search A* with a consistent heuristic never needs to re-open closed nodes.</p>
+
+        <h3>3. Standard Heuristics for the 8-Puzzle Problem:</h3>
+        <ul>
+          <li><strong>$h_1(n)$ (Misplaced Tiles):</strong> Counts number of numbered tiles not in their goal position. Admissible because each tile must move at least once ($h_1 \le h^*$).</li>
+          <li><strong>$h_2(n)$ (Manhattan Distance):</strong> Sum of horizontal and vertical distances of all tiles from their goal slots:
+          $$h_2(n) = \sum_{i=1}^8 \left( |x_i - x_i^{\text{goal}}| + |y_i - y_i^{\text{goal}}| \right)$$
+          Admissible because tiles move 1 square at a time and cannot hop. <strong>$h_2(n)$ dominates $h_1(n)$ ($h_2(n) \ge h_1(n)$)</strong>, pruning more search space.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Section 03: AO* Search -->
+    <section id="ao-math">
+      <h2>03. AO* Algorithm on AND-OR Trees</h2>
+      <p class="lead">AO* operates on problem decomposition graphs. It finds the minimal cost solution tree by recursively updating cost estimates backward from leaf nodes.</p>
+
+      <div class="formula-banner">
+        <div><strong>AO* Branch Cost Propagation Formulas</strong></div>
+        $$\text{OR Node: } \operatorname{Cost}(n) = \min_{i} \left[ c(n, n_i) + h(n_i) \right]$$
+        $$\text{AND Node: } \operatorname{Cost}(n) = \sum_{j} \left[ c(n, n_j) + h(n_j) \right]$$
+        <small>Where $c(n, n_i)$ is edge cost and $h(n_i)$ is sub-tree heuristic.</small>
+      </div>
+
+      <div class="note good">
+        <strong>The AO* Backward Cost Revision Protocol:</strong><br>
+        1. Expand the most promising leaf node in the current partial tree.<br>
+        2. Compute costs for its child branches (taking $\min$ for OR branches, and $\sum$ for AND branches).<br>
+        3. Backtrack up the tree, updating costs of all ancestor nodes until the root is updated.<br>
+        4. Re-mark the optimal branch pointer at each node based on the newly calculated minimum costs.
+      </div>
+    </section>
+
+    <!-- Section 04: Notation Matrix -->
+    <section id="notation">
+      <h2>04. Notation Decoding Matrix</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Formal Name</th>
+              <th>Plain-English Meaning</th>
+              <th>8-Puzzle Benchmark</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$g(n)$</td>
+              <td>Path Cost</td>
+              <td>Exact moves executed from Start to current node</td>
+              <td>$g(S_0) = 0, \quad g(S_5) = 5$</td>
+            </tr>
+            <tr>
+              <td>$h(n)$</td>
+              <td>Heuristic Estimate</td>
+              <td>Estimated remaining moves to reach Goal state</td>
+              <td>$h(S_0) = 5, \quad h(S_{\text{Goal}}) = 0$</td>
+            </tr>
+            <tr>
+              <td>$f(n)$</td>
+              <td>Total Evaluation Score</td>
+              <td>Estimated total path cost passing through $n$</td>
+              <td>$f(n) = 5$ invariant along optimal path</td>
+            </tr>
+            <tr>
+              <td>$\text{OPEN}$</td>
+              <td>Priority Queue / Frontier</td>
+              <td>Discovered nodes awaiting expansion (sorted by $f$)</td>
+              <td>Node with smallest $f$ dequeued first</td>
+            </tr>
+            <tr>
+              <td>$\text{CLOSED}$</td>
+              <td>Explored Set</td>
+              <td>Nodes already expanded to prevent infinite loops</td>
+              <td>Visited state configurations</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 05: Solving Protocol -->
+    <section id="steps">
+      <h2>05. Repeatable Step-by-Step Solving Protocol</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>Step 1: Set Up Goal Coordinate Lookup Table</strong>
+            <p>Write down $[r, c]$ coordinates for every numbered tile in the Goal configuration ($0$-indexed or $1$-indexed).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 2: Compute Initial Heuristic $h(S_0)$</strong>
+            <p>Calculate Manhattan distance for every tile from $1$ to $8$: $\sum (|r - r_{\text{goal}}| + |c - c_{\text{goal}}|)$. <em>Never calculate distance for the blank space!</em></p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 3: Evaluate Candidate Blank Swaps</strong>
+            <p>Determine legal blank moves (UP, DOWN, LEFT, RIGHT). For each resulting state, compute $g = g_{\text{parent}} + 1$ and updated $h$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 4: Select State with Lowest $f(n) = g(n) + h(n)$</strong>
+            <p>Expand state with lowest $f(n)$. If tied, pick the state with lower $h(n)$ (closer to goal).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 5: Trace Path to Goal & State Invariance</strong>
+            <p>List the sequence of blank moves and verify that $f(n)$ remains constant or monotonic.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 06: 6 Exam Traps -->
+    <section id="traps">
+      <h2>06. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+      <div class="grid">
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 01: Counting the Blank Space</div>
+          <h3>Adding Distance for Blank Space (-)</h3>
+          <p>The Manhattan heuristic is the sum of distances for <strong>numbered tiles 1 through 8 only</strong>. Adding the blank space's distance makes $h(n)$ inadmissible, violating optimality proofs.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 02: Coordinate Index Swapping</div>
+          <h3>Swapping Rows and Columns ($[r, c]$ vs $[x, y]$)</h3>
+          <p>In a 2D matrix, index is $[row, column]$. A tile at Row 2, Column 1 has coords $[2, 1]$. Confusing row with $x$ causes massive arithmetic errors.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 03: Forgetting Past Cost $g(n)$</div>
+          <h3>Running Greedy Best-First Instead of A*</h3>
+          <p>Sorting OPEN list strictly by $h(n)$ turns A* into Greedy Best-First, which is non-optimal. <strong>Always sort by $f(n) = g(n) + h(n)$!</strong></p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 04: Inadmissible Heuristics</div>
+          <h3>Squaring Distances ($\Delta x^2 + \Delta y^2$)</h3>
+          <p>Squared Euclidean distance overestimates true cost when distance $> 1$, breaking admissibility. True Euclidean $\sqrt{\Delta x^2 + \Delta y^2}$ is admissible; squared is not.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 05: AND Node Cost Calculation</div>
+          <h3>Taking Minimum on AND Branches in AO*</h3>
+          <p>In AO*, OR branches take $\min$, but <strong>AND branches take the SUM ($\sum$) of all connected children</strong> plus edge costs.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 06: Halting at Goal Insertion</div>
+          <h3>Terminating When Goal is Added to OPEN</h3>
+          <p>A* must terminate only when the **Goal node is DEQUEUED / EXPANDED** from the priority queue, not when it is merely generated.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 07: Complete Solved University PYQs -->
+    <section id="pyqs">
+      <h2>07. Complete University Question Bank (All Past PYQs Solved)</h2>
+      <div class="controls">
+        <button onclick="toggleAllDetails(true)">Expand All Solutions</button>
+        <button class="secondary" onclick="toggleAllDetails(false)">Collapse All</button>
+      </div>
+
+      <!-- Question 1: May 2025 Q3 8-Puzzle A* (20 Marks) -->
+      <div class="details-box">
+        <details id="q1">
+          <summary>
+            <span><span class="pyq-badge">May 2025 · Question 3</span> The 8-Puzzle Problem Full A* Search Solution (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Solve the 8-Puzzle Problem using A* Search. Blank tile (-) can move UP, DOWN, LEFT, RIGHT.<br>
+            $$\text{Initial: } \begin{bmatrix} 2 & 8 & 3 \\ 1 & 6 & 4 \\ 7 & - & 5 \end{bmatrix}, \quad \text{Goal: } \begin{bmatrix} 1 & 2 & 3 \\ 8 & - & 4 \\ 7 & 6 & 5 \end{bmatrix}$$
+            Blank space is at position $(2, 1)$ (Row 2, Col 1).<br>
+            1. Using A* search, find optimal path from initial to goal state. (10 Marks)<br>
+            2. Sequence of moves with $f(n)$ calculation taken by blank tile. (10 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Goal Coordinate Mapping ($[r, c]$):</h5>
+          <p>Row 0: $1:[0,0], \ 2:[0,1], \ 3:[0,2]$<br>
+             Row 1: $8:[1,0], \ -:[1,1], \ 4:[1,2]$<br>
+             Row 2: $7:[2,0], \ 6:[2,1], \ 5:[2,2]$</p>
+
+          <h5>2. Initial State $S_0$ Manhattan Distance:</h5>
+          <ul>
+            <li>Tile 1 at $[1, 0] \to \text{Goal } [0, 0]$: $|1-0| + |0-0| = \mathbf{1}$</li>
+            <li>Tile 2 at $[0, 0] \to \text{Goal } [0, 1]$: $|0-0| + |0-1| = \mathbf{1}$</li>
+            <li>Tile 3 at $[0, 2] \to \text{Goal } [0, 2]$: $\mathbf{0}$</li>
+            <li>Tile 4 at $[1, 2] \to \text{Goal } [1, 2]$: $\mathbf{0}$</li>
+            <li>Tile 5 at $[2, 2] \to \text{Goal } [2, 2]$: $\mathbf{0}$</li>
+            <li>Tile 6 at $[1, 1] \to \text{Goal } [2, 1]$: $|1-2| + |1-1| = \mathbf{1}$</li>
+            <li>Tile 7 at $[2, 0] \to \text{Goal } [2, 0]$: $\mathbf{0}$</li>
+            <li>Tile 8 at $[0, 1] \to \text{Goal } [1, 0]$: $|0-1| + |1-0| = 1 + 1 = \mathbf{2}$</li>
+          </ul>
+          $$h(S_0) = 1 + 1 + 0 + 0 + 0 + 1 + 0 + 2 = \mathbf{5}$$
+          $$f(S_0) = g(S_0) + h(S_0) = 0 + 5 = \mathbf{5}$$
+
+          <h5>3. Step-by-Step Sequence of Blank Tile Moves:</h5>
+          <div class="steps">
+            <div class="step">
+              <div>
+                <strong>Step 1: Blank Moves UP (Swap with Tile 6)</strong>
+                <p>Blank moves from $[2, 1]$ to $[1, 1]$. Tile 6 enters goal position $[2, 1]$!</p>
+                <p>Tiles misplaced: $1$ (dist 1), $2$ (dist 1), $8$ (dist 2). Total $h = 4$.</p>
+                $$\mathbf{g(S_1) = 1, \quad h(S_1) = 4 \implies f(S_1) = 1 + 4 = 5}$$
+              </div>
+            </div>
+            <div class="step">
+              <div>
+                <strong>Step 2: Blank Moves UP (Swap with Tile 8)</strong>
+                <p>Blank moves from $[1, 1]$ to $[0, 1]$. Tile 8 moves to $[1, 1]$ (dist to $[1, 0]$ is 1).</p>
+                <p>Tiles misplaced: $1$ (dist 1), $2$ (dist 1), $8$ (dist 1). Total $h = 3$.</p>
+                $$\mathbf{g(S_2) = 2, \quad h(S_2) = 3 \implies f(S_2) = 2 + 3 = 5}$$
+              </div>
+            </div>
+            <div class="step">
+              <div>
+                <strong>Step 3: Blank Moves LEFT (Swap with Tile 2)</strong>
+                <p>Blank moves from $[0, 1]$ to $[0, 0]$. Tile 2 enters goal position $[0, 1]$!</p>
+                <p>Tiles misplaced: $1$ (dist 1), $8$ (dist 1). Total $h = 2$.</p>
+                $$\mathbf{g(S_3) = 3, \quad h(S_3) = 2 \implies f(S_3) = 3 + 2 = 5}$$
+              </div>
+            </div>
+            <div class="step">
+              <div>
+                <strong>Step 4: Blank Moves DOWN (Swap with Tile 1)</strong>
+                <p>Blank moves from $[0, 0]$ to $[1, 0]$. Tile 1 enters goal position $[0, 0]$!</p>
+                <p>Tiles misplaced: $8$ (dist 1). Total $h = 1$.</p>
+                $$\mathbf{g(S_4) = 4, \quad h(S_4) = 1 \implies f(S_4) = 4 + 1 = 5}$$
+              </div>
+            </div>
+            <div class="step">
+              <div>
+                <strong>Step 5: Blank Moves RIGHT (Swap with Tile 8)</strong>
+                <p>Blank moves from $[1, 0]$ to $[1, 1]$. Tile 8 enters goal position $[1, 0]$!</p>
+                <p>All 8 tiles are in their exact goal slots ($h = 0$).</p>
+                $$\mathbf{g(S_{\text{Goal}}) = 5, \quad h(S_{\text{Goal}}) = 0 \implies f(S_{\text{Goal}}) = 5 + 0 = 5}$$
+              </div>
+            </div>
+          </div>
+
+          <h5>Summary of Optimal Solution:</h5>
+          $$\mathbf{\text{Start} \xrightarrow{\text{UP}} S_1 \xrightarrow{\text{UP}} S_2 \xrightarrow{\text{LEFT}} S_3 \xrightarrow{\text{DOWN}} S_4 \xrightarrow{\text{RIGHT}} \text{Goal}}$$
+          <ul>
+            <li><strong>Optimal Path Cost:</strong> $5$ moves.</li>
+            <li><strong>Heuristic Consistency Invariant:</strong> Notice that $f(n) = 5$ at every step. This proves the Manhattan heuristic is monotonically consistent.</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- Question 2: Nov 2025 Q4.b Robot Grid A* (15 Marks) -->
+      <div class="details-box">
+        <details id="q2">
+          <summary>
+            <span><span class="pyq-badge nov">Nov 2025 · Question 4.b</span> Robot Grid Navigation A* Search Execution Trace (15 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Robot navigates from Node 0 $(0, 2)$ to Goal Node 5 $(8, 2)$.<br>
+            Nodes: $0(0,2), 1(2,0), 2(2,4), 3(6,0), 4(6,4), 5(8,2)$.<br>
+            Edge costs: $0\to 1: 3, \ 0\to 2: 4, \ 2\to 1: 5, \ 2\to 4: 8, \ 1\to 3: 6, \ 1\to 4: 10, \ 3\to 4: 7, \ 3\to 5: 3, \ 4\to 5: 9$.<br>
+            Apply A* search using Euclidean distance heuristic. Show node expansion and $f(n) = g(n) + h(n)$. (15 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Euclidean Heuristic $h(n) = \sqrt{(x_n - 8)^2 + (y_n - 2)^2}$:</h5>
+          <ul>
+            <li>$h(0) = \sqrt{(0-8)^2 + (2-2)^2} = \sqrt{64} = \mathbf{8.00}$</li>
+            <li>$h(1) = \sqrt{(2-8)^2 + (0-2)^2} = \sqrt{36 + 4} = \sqrt{40} \approx \mathbf{6.32}$</li>
+            <li>$h(2) = \sqrt{(2-8)^2 + (4-2)^2} = \sqrt{36 + 4} = \sqrt{40} \approx \mathbf{6.32}$</li>
+            <li>$h(3) = \sqrt{(6-8)^2 + (0-2)^2} = \sqrt{4 + 4} = \sqrt{8} \approx \mathbf{2.83}$</li>
+            <li>$h(4) = \sqrt{(6-8)^2 + (4-2)^2} = \sqrt{4 + 4} = \sqrt{8} \approx \mathbf{2.83}$</li>
+            <li>$h(5) = \sqrt{(8-8)^2 + (2-2)^2} = \mathbf{0.00}$</li>
+          </ul>
+
+          <h5>2. Complete Step-by-Step Priority Queue Trace:</h5>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Step</th><th>Node Expanded</th><th>Successor</th><th>$g(n)$</th><th>$h(n)$</th><th>$f(n) = g + h$</th><th>Priority Queue (OPEN)</th></tr></thead>
+              <tbody>
+                <tr><td>0</td><td>-</td><td>0</td><td>0</td><td>8.00</td><td>8.00</td><td>$\{[0]: 8.00\}$</td></tr>
+                <tr><td>1</td><td>0</td><td>1<br>2</td><td>3<br>4</td><td>6.32<br>6.32</td><td><strong>9.32</strong><br>10.32</td><td>$\{[1]: \mathbf{9.32}, [2]: 10.32\}$</td></tr>
+                <tr><td>2</td><td>1</td><td>3<br>4</td><td>3+6=9<br>3+10=13</td><td>2.83<br>2.83</td><td>11.83<br>15.83</td><td>$\{[2]: \mathbf{10.32}, [3]: 11.83, [4]: 15.83\}$</td></tr>
+                <tr><td>3</td><td>2</td><td>4 (via 2)</td><td>4+8=12</td><td>2.83</td><td>14.83</td><td>$\{[3]: \mathbf{11.83}, [4]: 14.83\}$</td></tr>
+                <tr><td>4</td><td>3</td><td>5 (Goal)</td><td>9+3=12</td><td>0.00</td><td><strong>12.00</strong></td><td>$\{[5]: \mathbf{12.00}, [4]: 14.83\}$</td></tr>
+                <tr><td>5</td><td>5</td><td><strong>Goal Dequeued</strong></td><td><strong>12</strong></td><td><strong>0.00</strong></td><td><strong>12.00</strong></td><td><strong>Search Halts!</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p><strong>Optimal Path:</strong> $\mathbf{0 \to 1 \to 3 \to 5}$<br>
+             <strong>Optimal Path Cost:</strong> $g(5) = 3 + 6 + 3 = \mathbf{12}$</p>
+        </details>
+      </div>
+
+      <!-- Question 3: May 2025 Q7.b AO* Search (10 Marks) -->
+      <div class="details-box">
+        <details id="q3">
+          <summary>
+            <span><span class="pyq-badge">May 2025 · Question 7.b</span> AO* Algorithm on AND-OR Tree (10 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Root A has AND branch to (B AND C) with edge costs 1, 1, and OR branch to D with edge cost 1.<br>
+            Node B has OR branches to E (cost 1) and F (cost 1).<br>
+            Node D has AND branch to (G AND H) with edge costs 1, 1.<br>
+            Heuristics: $h(B)=3, h(C)=4, h(D)=5, h(E)=5, h(F)=7, h(G)=4, h(H)=4$.<br>
+            Apply AO* search to find the optimal solution path. (10 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Initial Root Evaluation:</h5>
+          <ul>
+            <li>Branch 1 (AND branch to B and C):
+            $$\text{Cost}(A \to BC) = c(A, B) + h(B) + c(A, C) + h(C) = 1 + 3 + 1 + 4 = \mathbf{9}$$</li>
+            <li>Branch 2 (OR branch to D):
+            $$\text{Cost}(A \to D) = c(A, D) + h(D) = 1 + 5 = \mathbf{6}$$</li>
+          </ul>
+          <p>Since $6 < 9$, the initial best branch is $A \to D$. Expand $D$.</p>
+
+          <h5>2. Expanding Node D (AND branch to G and H):</h5>
+          $$\text{Cost}(D) = c(D, G) + h(G) + c(D, H) + h(H) = 1 + 4 + 1 + 4 = \mathbf{10}$$
+          <p>Update ancestor node $A$: $\text{Cost}(A \to D) = c(A, D) + \text{Cost}(D) = 1 + 10 = \mathbf{11}$.</p>
+          <p>Now re-compare at Root $A$: Branch $A \to BC$ cost is $9$, whereas updated $A \to D$ is $11$.<br>
+             <strong>Branch pointer switches to $(A \to BC)$!</strong> Expand $B$.</p>
+
+          <h5>3. Expanding Node B (OR branches to E and F):</h5>
+          <ul>
+            <li>$\text{Cost}(B \to E) = c(B, E) + h(E) = 1 + 5 = \mathbf{6}$</li>
+            <li>$\text{Cost}(B \to F) = c(B, F) + h(F) = 1 + 7 = \mathbf{8}$</li>
+          </ul>
+          <p>Best choice for $B$ is $E$ with cost $6$. Update $B$: $\text{Cost}(B) = \mathbf{6}$.</p>
+          <p>Update Root $A$ via $(A \to BC)$:</p>
+          $$\text{Cost}(A \to BC) = c(A, B) + \text{Cost}(B) + c(A, C) + h(C) = 1 + 6 + 1 + 4 = \mathbf{12}$$
+
+          <h5>4. Final Comparison & Optimal Subtree:</h5>
+          <p>Comparing Root $A$ alternatives: $\text{Cost}(A \to D) = \mathbf{11}$ vs $\text{Cost}(A \to BC) = \mathbf{12}$.<br>
+             The optimal solution subtree is $\mathbf{A \to D \to (G \text{ AND } H)}$ with total cost $\mathbf{11}$.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Section 08: Interactive A* Tool -->
+    <section id="calculator">
+      <h2>08. Interactive Offline 8-Puzzle Manhattan Calculator</h2>
+      <p class="lead">Input coordinates $[r, c]$ of numbered tiles to instantly calculate Manhattan Distance and evaluate $h(n)$ for any custom puzzle state.</p>
+
+      <div class="tool-box">
+        <p style="font-size:12px;color:var(--muted);margin-bottom:8px;">Goal configuration: 1:[0,0], 2:[0,1], 3:[0,2], 8:[1,0], 4:[1,2], 7:[2,0], 6:[2,1], 5:[2,2].</p>
+        <div class="tool-grid">
+          <div class="tool-group">
+            <label>Tile 1 Position (r, c)</label>
+            <input type="text" id="t1Pos" value="1, 0">
+          </div>
+          <div class="tool-group">
+            <label>Tile 2 Position (r, c)</label>
+            <input type="text" id="t2Pos" value="0, 0">
+          </div>
+          <div class="tool-group">
+            <label>Tile 6 Position (r, c)</label>
+            <input type="text" id="t6Pos" value="1, 1">
+          </div>
+          <div class="tool-group">
+            <label>Tile 8 Position (r, c)</label>
+            <input type="text" id="t8Pos" value="0, 1">
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <button onclick="calculateManhattan()">Compute Heuristic h(n)</button>
+        </div>
+
+        <div class="tool-result" id="hOutput">
+          Click button to compute Manhattan distance.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 09: Self-Test Active Recall Quiz -->
+    <section id="quiz">
+      <h2>09. Active Recall Self-Test Quiz</h2>
+      <div class="progress-wrap"><div class="progress" id="quizBar"></div></div>
+      <div id="quizScore" style="font-size:12.5px;font-weight:700;color:var(--muted);margin-top:4px;">Answer the questions below to evaluate progress (0/4 answered).</div>
+
+      <div class="quiz-q" id="qz1">
+        <strong>1. What does it mean for an A* heuristic $h(n)$ to be admissible?</strong>
+        <label><input type="radio" name="q1" value="a" onclick="checkQ(1,'a','It never overestimates the true remaining cost to the goal')"> It never overestimates the true minimum cost to reach the goal ($h(n) \le h^*(n)$)</label>
+        <label><input type="radio" name="q1" value="b" onclick="checkQ(1,'a','It never overestimates the true remaining cost to the goal')"> It is always strictly equal to zero</label>
+        <label><input type="radio" name="q1" value="c" onclick="checkQ(1,'a','It never overestimates the true remaining cost to the goal')"> It runs in $O(1)$ time complexity</label>
+        <div class="feedback" id="fb1"></div>
+        <div class="answer" id="ans1"><strong>Correct: (a)</strong> Admissibility ($h(n) \le h^*(n)$) guarantees that A* never overlooks an optimal path.</div>
+      </div>
+
+      <div class="quiz-q" id="qz2">
+        <strong>2. Why is the Manhattan Distance heuristic preferred over the Misplaced Tiles heuristic in the 8-puzzle?</strong>
+        <label><input type="radio" name="q2" value="a" onclick="checkQ(2,'b','Manhattan dominates misplaced tiles by providing a tighter bound')"> Manhattan distance is easier to compute mentally</label>
+        <label><input type="radio" name="q2" value="b" onclick="checkQ(2,'b','Manhattan dominates misplaced tiles by providing a tighter bound')"> Manhattan distance dominates Misplaced Tiles ($h_{\text{manhattan}} \ge h_{\text{misplaced}}$), pruning more search space</label>
+        <label><input type="radio" name="q2" value="c" onclick="checkQ(2,'b','Manhattan dominates misplaced tiles by providing a tighter bound')"> Misplaced tiles heuristic is inadmissible</label>
+        <div class="feedback" id="fb2"></div>
+        <div class="answer" id="ans2"><strong>Correct: (b)</strong> A dominating admissible heuristic gives higher, more accurate bounds without overestimating, visiting fewer nodes.</div>
+      </div>
+
+      <div class="quiz-q" id="qz3">
+        <strong>3. Along the optimal path in the May 2025 8-puzzle problem, what is the value of $f(n) = g(n) + h(n)$ at each step?</strong>
+        <label><input type="radio" name="q3" value="a" onclick="checkQ(3,'c','f(n) = 5 is constant throughout')"> It decreases from 5 down to 0</label>
+        <label><input type="radio" name="q3" value="b" onclick="checkQ(3,'c','f(n) = 5 is constant throughout')"> It increases from 0 up to 5</label>
+        <label><input type="radio" name="q3" value="c" onclick="checkQ(3,'c','f(n) = 5 is constant throughout')"> It remains constant at $f(n) = 5$ at all 5 steps (Consistent/Monotonic)</label>
+        <div class="feedback" id="fb3"></div>
+        <div class="answer" id="ans3"><strong>Correct: (c)</strong> Because every move reduces remaining Manhattan distance by exactly 1 while increasing $g$ by 1, $f(n) = 5$ is perfectly invariant.</div>
+      </div>
+
+      <div class="quiz-q" id="qz4">
+        <strong>4. In an AND-OR tree (AO* algorithm), how is the cost of an AND branch calculated?</strong>
+        <label><input type="radio" name="q4" value="a" onclick="checkQ(4,'a','By summing the edge costs and heuristic estimates of all child nodes')"> By summing the edge costs and heuristic estimates of all child nodes ($\sum [c_j + h_j]$)</label>
+        <label><input type="radio" name="q4" value="b" onclick="checkQ(4,'a','By summing the edge costs and heuristic estimates of all child nodes')"> By taking the minimum cost among all child nodes</label>
+        <label><input type="radio" name="q4" value="c" onclick="checkQ(4,'a','By summing the edge costs and heuristic estimates of all child nodes')"> By multiplying the probabilities of all children</label>
+        <div class="feedback" id="fb4"></div>
+        <div class="answer" id="ans4"><strong>Correct: (a)</strong> An AND branch requires solving <em>all</em> sub-problems, so their total costs must be summed together.</div>
+      </div>
+    </section>
+
+    <!-- Section 10: Answer Sheet Checklist -->
+    <section id="checklist">
+      <h2>10. Exam Hall Answer Sheet Presentation Checklist</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>1. State the A* Formula & Define Components</strong>
+            <p>Write $f(n) = g(n) + h(n)$ with $g$ defined as cost from start and $h$ as estimated cost to goal.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>2. Prove Admissibility of the Chosen Heuristic</strong>
+            <p>Write: "$h(n)$ is admissible because a tile must move at least its grid distance to reach goal, so $h(n) \le h^*(n)$."</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>3. Draw Goal Matrix with Coordinates</strong>
+            <p>Write down coordinate $[r, c]$ beside each number to prevent mental math mistakes during distance sums.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>4. Show Step-by-Step Priority Queue Table for Graph Search</strong>
+            <p>Always draw a table showing: Step, Node Expanded, Generated Successors, $g, h, f$, and OPEN list state.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>5. For 8-Puzzle, Draw State Matrices at Each Blank Move</strong>
+            <p>Draw the $3 \times 3$ grid after each of the 5 blank moves, clearly indicating blank direction (UP, UP, LEFT, DOWN, RIGHT).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>6. Call Out Invariance of $f(n)$</strong>
+            <p>Explicitly point out to examiner that $f(S_0) = \dots = f(S_5) = 5$, verifying monotonic consistency.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function toggleDrawer() {
+  const drawer = document.getElementById('drawer');
+  const backdrop = document.getElementById('backdrop');
+  drawer.classList.toggle('open');
+  backdrop.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+}
+
+function toggleAllDetails(open) {
+  document.querySelectorAll('details').forEach(d => d.open = open);
+}
+
+function calculateManhattan() {
+  const parsePos = (id) => {
+    const val = document.getElementById(id).value.trim();
+    const parts = val.split(',').map(s => parseInt(s.trim(), 10));
+    return parts.length === 2 && !isNaN(parts[0]) && !isNaN(parts[1]) ? parts : null;
+  };
+
+  const goals = {
+    1: [0, 0],
+    2: [0, 1],
+    6: [2, 1],
+    8: [1, 0]
+  };
+
+  const p1 = parsePos('t1Pos');
+  const p2 = parsePos('t2Pos');
+  const p6 = parsePos('t6Pos');
+  const p8 = parsePos('t8Pos');
+
+  if (!p1 || !p2 || !p6 || !p8) {
+    document.getElementById('hOutput').innerHTML = '<span style="color:var(--red);">Error: Coordinates must be in format r, c (e.g. 1, 0).</span>';
+    return;
+  }
+
+  const d1 = Math.abs(p1[0] - goals[1][0]) + Math.abs(p1[1] - goals[1][1]);
+  const d2 = Math.abs(p2[0] - goals[2][0]) + Math.abs(p2[1] - goals[2][1]);
+  const d6 = Math.abs(p6[0] - goals[6][0]) + Math.abs(p6[1] - goals[6][1]);
+  const d8 = Math.abs(p8[0] - goals[8][0]) + Math.abs(p8[1] - goals[8][1]);
+  const totalH = d1 + d2 + d6 + d8;
+
+  let out = '<strong>Computed Manhattan Distances:</strong><br>';
+  out += '• Tile 1 at [' + p1 + '] &rarr; Goal [0, 0]: Distance = <strong>' + d1 + '</strong><br>';
+  out += '• Tile 2 at [' + p2 + '] &rarr; Goal [0, 1]: Distance = <strong>' + d2 + '</strong><br>';
+  out += '• Tile 6 at [' + p6 + '] &rarr; Goal [2, 1]: Distance = <strong>' + d6 + '</strong><br>';
+  out += '• Tile 8 at [' + p8 + '] &rarr; Goal [1, 0]: Distance = <strong>' + d8 + '</strong><br>';
+  out += '• <strong>Subtotal Heuristic $h(n)$ for these 4 tiles: ' + totalH + '</strong><br>';
+  if (totalH === 5) {
+    out += '<span style="color:var(--teal);font-weight:700;">Exact match with May 2025 Initial State! (h = 5)</span>';
+  }
+
+  document.getElementById('hOutput').innerHTML = out;
+  if (window.renderMathInElement) {
+    renderMathInElement(document.getElementById('hOutput'), {delimiters: [{left: '$', right: '$', display: false}]});
+  }
+}
+
+// Quiz Interactive Evaluation
+const answeredQ = {};
+function checkQ(qNum, correctVal, reason) {
+  const selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+  const fb = document.getElementById('fb' + qNum);
+  const ans = document.getElementById('ans' + qNum);
+
+  answeredQ[qNum] = true;
+
+  if (selected.value === correctVal) {
+    fb.innerHTML = '<span style="color:var(--teal);">&#10003; Correct! ' + reason + '</span>';
+  } else {
+    fb.innerHTML = '<span style="color:var(--red);">&#10007; Incorrect. ' + reason + '</span>';
+  }
+  ans.classList.add('show');
+
+  const answeredCount = Object.keys(answeredQ).length;
+  const pct = (answeredCount / 4) * 100;
+  document.getElementById('quizBar').style.width = pct + '%';
+  document.getElementById('quizScore').innerText = 'Completed ' + answeredCount + ' of 4 questions (' + pct.toFixed(0) + '%).';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  calculateManhattan();
+});
+</script>
+
+</body>
+</html>
