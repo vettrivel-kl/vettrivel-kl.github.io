@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Linear Regression & Optimization | Complete Exam Question Bank & Study Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#2563eb;--brand-soft:#eff6ff;--teal:#059669;--teal-soft:#ecfdf5;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#0f172a;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:800}
+aside h2{font-size:18px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.12em;margin:18px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#cbd5e1;font-size:13px}
+nav a:hover,nav a.active{background:#1e293b;color:#38bdf8;text-decoration:none}
+.module-hub-link{background:#1e293b;border:1px solid #334155;color:#38bdf8;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:20px;padding:12px;border:1px solid #334155;border-radius:12px;color:#cbd5e1;font-size:12px;background:#131d35}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#047857;color:#ecfdf5}
+
+/* Mobile Sticky Topbar (Shown on iPhone 13 & Mobile) */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#0f172a;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{
+  font-size:14.5px;
+  font-weight:800;
+  color:#f8fafc;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.mobile-topbar-actions{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.mobile-btn{
+  background:#1e293b;
+  border:1px solid #334155;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  cursor:pointer;
+  min-height:36px;
+}
+
+/* Horizontal Swipeable Pill Nav for iPhone 13 */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer Menu Overlay */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#0f172a;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #1e293b;
+  padding-bottom:12px;
+}
+.drawer-close{
+  background:none;
+  border:none;
+  color:#94a3b8;
+  font-size:24px;
+  cursor:pointer;
+  padding:4px 8px;
+}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#2563eb 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"y=Xβ+ε";position:absolute;right:20px;bottom:-25px;font-size:96px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#93c5fd;font-weight:800}
+h1{font-size:clamp(22px,4.5vw,38px);line-height:1.15;margin:10px 0}
+.hero p{max-width:700px;color:#e0e7ff;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+.formula-banner{
+  background:#0f172a;
+  color:#f8fafc;
+  padding:16px 14px;
+  border-radius:12px;
+  text-align:center;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+.formula-banner .katex-display{margin:6px 0}
+.formula-banner small{display:block;font-size:11px;color:#94a3b8;margin-top:6px}
+
+/* KaTeX Horizontal Scrollbar Removal & Vertical Headroom (No Clipping) */
+.katex-display{
+  font-size:clamp(13px, 3.6vw, 15.5px) !important;
+  margin:12px 0 !important;
+  padding:12px 4px 8px !important;
+  overflow-x:auto !important;
+  overflow-y:visible !important;
+  scrollbar-width:none !important;
+  -ms-overflow-style:none !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+.katex-display::-webkit-scrollbar{display:none !important;}
+.katex-display > .katex{
+  display:block !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  padding-top:4px !important;
+  padding-bottom:2px !important;
+}
+.katex{
+  font-size:1em !important;
+  line-height:normal !important;
+  text-rendering:auto !important;
+  white-space:normal !important;
+}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--teal-soft);border-color:var(--teal)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+.note.purple{background:var(--purple-soft);border-color:var(--purple)}
+
+/* Table Styling - Clean & No Cutoff */
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#dbeafe;color:#1e40af;margin-bottom:6px}
+.pyq-badge.ct{background:#e0e7ff;color:#3730a3}
+.pyq-badge.qb{background:#ecfdf5;color:#065f46}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+  -webkit-tap-highlight-color:transparent;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  transition:background .15s;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+button:hover{background:#1d4ed8}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+
+/* Quiz for iPhone 13 (Large Touch Targets) */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+  -webkit-tap-highlight-color:transparent;
+  transition:all .15s;
+}
+.quiz-q label:active{background:#eff6ff;border-color:#93c5fd}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--teal-soft);border-radius:8px;border-left:3px solid var(--teal);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Interactive OLS Solver */
+.tool-box{background:white;border:2px solid #93c5fd;border-radius:12px;padding:16px;margin:16px 0}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:8px}
+.tool-group label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px}
+.tool-group input{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  font-size:16px; /* Prevents iOS Safari Zoom */
+  background:#f8fafc;
+  min-height:40px;
+}
+.tool-result{margin-top:12px;padding:12px;background:#eff6ff;border-radius:8px;border-left:4px solid var(--brand);font-size:13px}
+
+/* Mobile Responsiveness */
+@media(max-width:880px){
+  .shell{grid-template-columns:1fr}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:16px 14px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr}
+  .hero{padding:22px 16px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  .card{padding:14px}
+  .tool-box{padding:12px}
+  .tool-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Drawer Backdrop -->
+<div class="drawer-backdrop" id="backdrop" onclick="toggleDrawer()"></div>
+
+<!-- Slide-Out Mobile Navigation Drawer -->
+<div class="mobile-drawer" id="drawer">
+  <div class="drawer-header">
+    <div style="font-weight:800;font-size:13px;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;">ML Study Hub</div>
+    <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+  </div>
+  <a href="/ml-study-guide/index.html" class="module-hub-link" style="display:block;padding:8px 12px;border-radius:8px;font-size:13px;">&larr; Back to Study Hub</a>
+  <div class="nav-label">Sections</div>
+  <nav>
+    <a href="#intuition" onclick="toggleDrawer()">01. Intuition & Contrast</a>
+    <a href="#math" onclick="toggleDrawer()">02. Mathematical Proofs</a>
+    <a href="#notation" onclick="toggleDrawer()">03. Notation Decoding</a>
+    <a href="#steps" onclick="toggleDrawer()">04. Solving Protocol</a>
+    <a href="#traps" onclick="toggleDrawer()">05. 6 Exam Traps</a>
+    <a href="#pyqs" onclick="toggleDrawer()">06. All Solved PYQs</a>
+    <a href="#calculator" onclick="toggleDrawer()">07. Interactive OLS Tool</a>
+    <a href="#quiz" onclick="toggleDrawer()">08. Active Recall Quiz</a>
+    <a href="#checklist" onclick="toggleDrawer()">09. Presentation Template</a>
+  </nav>
+  <div class="nav-label">Modules</div>
+  <nav>
+    <a href="/ml-study-guide/01-linear-regression-optimization.html" class="active">01. Linear Regression</a>
+    <a href="/ml-study-guide/02-logistic-regression-metrics.html">02. Logistic & Metrics</a>
+    <a href="/ml-study-guide/03-naive-bayes-knn.html">03. Naive Bayes & KNN</a>
+    <a href="/ml-study-guide/04-decision-trees-ensembles.html">04. Decision Trees & RF</a>
+    <a href="/ml-study-guide/05-clustering-pca.html">05. K-Means & PCA</a>
+  </nav>
+</div>
+
+<!-- Mobile Sticky Topbar -->
+<div class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>Module 01 · Regression</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/ml-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="toggleDrawer()">&#9776; Menu</button>
+  </div>
+</div>
+
+<!-- Mobile Horizontal Pill Nav -->
+<div class="mobile-pills-bar">
+  <a href="#intuition" class="pill-link">Intuition</a>
+  <a href="#math" class="pill-link">OLS Proof</a>
+  <a href="#matrix" class="pill-link">Normal Eq</a>
+  <a href="#gradient" class="pill-link">Gradient Descent</a>
+  <a href="#regularization" class="pill-link">Ridge/Lasso</a>
+  <a href="#traps" class="pill-link">Traps</a>
+  <a href="#pyqs" class="pill-link">Past Papers</a>
+  <a href="#calculator" class="pill-link">OLS Tool</a>
+  <a href="#quiz" class="pill-link">Quiz</a>
+  <a href="#checklist" class="pill-link">Checklist</a>
+</div>
+
+<div class="shell">
+
+  <!-- Desktop Sidebar -->
+  <aside>
+    <div class="brand">21CSC555J · Exam Prep</div>
+    <h2>Linear Regression & Optimization</h2>
+    <a href="/ml-study-guide/index.html" class="module-hub-link" style="padding:8px 12px;border-radius:8px;font-size:12.5px;">&larr; Back to Study Hub</a>
+
+    <div class="nav-label">Sections</div>
+    <nav>
+      <a href="#intuition">01. Intuition & Contrast</a>
+      <a href="#math">02. Mathematical Proofs</a>
+      <a href="#matrix">03. Matrix Normal Equation</a>
+      <a href="#gradient">04. Gradient Descent Variants</a>
+      <a href="#regularization">05. Regularization (L1 vs L2)</a>
+      <a href="#notation">06. Notation Decoding Matrix</a>
+      <a href="#steps">07. Step-by-Step Protocol</a>
+      <a href="#traps">08. 6 Deadly Exam Traps</a>
+      <a href="#pyqs">09. Complete University PYQs</a>
+      <a href="#calculator">10. Interactive OLS Solver</a>
+      <a href="#quiz">11. Self-Test Active Recall</a>
+      <a href="#checklist">12. Answer Sheet Checklist</a>
+    </nav>
+
+    <div class="side-note">
+      <strong>Exam Weightage: 20 Marks</strong><br>
+      Internal Score: <strong>51.60 / 60</strong><br>
+      Target Sem Mark: <strong>49 / 100</strong> (Safe: 56)<br>
+      <span class="status-pill pill-target">Priority 4 High-Yield</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="eyebrow">Module 01 · Analytical Foundations & Proofs</div>
+      <h1>Linear Regression & Optimization</h1>
+      <p>The mathematical backbone of supervised machine learning. Covers Ordinary Least Squares (OLS) closed-form derivations, matrix formulations, gradient descent optimization, regularization geometry, and regression evaluation metrics.</p>
+      <div class="pills">
+        <span class="pill">Jan 2025 (Q1 20M)</span>
+        <span class="pill">OLS Derivations</span>
+        <span class="pill">Normal Equation</span>
+        <span class="pill">Ridge vs Lasso</span>
+        <span class="pill">Bias-Variance</span>
+      </div>
+    </div>
+
+    <!-- Section 01: Intuition & Contrast -->
+    <section id="intuition">
+      <h2>01. Intuition & Concept Contrast</h2>
+      <p class="lead">Linear regression fits an optimal hyperplanar trend line through empirical observations by minimizing the sum of squared vertical discrepancies between predicted points and ground-truth responses.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Model Paradigm</div>
+          <h3 style="margin-top:2px;">Simple vs Multiple Linear Regression</h3>
+          <p><strong>Simple Linear Regression (SLR):</strong> Single scalar feature $X \in \mathbb{R}$ predicting scalar response $Y \in \mathbb{R}$ via 2 parameters (slope $\beta_1$ and intercept $\beta_0$).</p>
+          <p><strong>Multiple Linear Regression (MLR):</strong> Vector of $d$ features $\mathbf{x} \in \mathbb{R}^d$ predicting $Y$ via hyperplane defined by $d+1$ parameters ($\mathbf{w} \in \mathbb{R}^d$ and bias $b$).</p>
+        </div>
+        <div class="card">
+          <div class="kicker">Optimization Paradigm</div>
+          <h3 style="margin-top:2px;">Closed-Form (OLS) vs Iterative (Gradient Descent)</h3>
+          <p><strong>Ordinary Least Squares (OLS):</strong> Direct exact analytical solution using calculus ($\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$). Perfect for $n \le 10^5, d \le 10^3$; suffers from $O(d^3)$ matrix inversion complexity.</p>
+          <p><strong>Gradient Descent (GD):</strong> Iterative step-by-step optimization along negative error gradients ($\mathbf{w} \leftarrow \mathbf{w} - \alpha \nabla_{\mathbf{w}}\mathcal{L}$). Scales to billions of samples and high dimensions.</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Complexity Trade-off</div>
+          <h3 style="margin-top:2px;">Underfitting vs Overfitting in Academics</h3>
+          <p><strong>Underfitting (High Bias, Low Variance):</strong> A flat or overly rigid line that fails to capture the learning curve (e.g., predicting that study hours have zero effect on test scores). High training and test errors.</p>
+          <p><strong>Overfitting (Low Bias, High Variance):</strong> A high-degree polynomial that memorizes noisy individual test quirks. Zero training error, but catastrophic test failure on unseen students.</p>
+        </div>
+        <div class="card">
+          <div class="kicker">Regularization Geometry</div>
+          <h3 style="margin-top:2px;">Ridge ($L_2$) vs Lasso ($L_1$)</h3>
+          <p><strong>Ridge Regression ($L_2$ Penalty $\lambda \|\mathbf{w}\|_2^2$):</strong> Smooth circular constraint contour. Shrinks coefficients continuously toward zero but never forces exact zeros. Retains all features.</p>
+          <p><strong>Lasso Regression ($L_1$ Penalty $\lambda \|\mathbf{w}\|_1$):</strong> Sharp diamond constraint contour with corners on coordinate axes. Forces non-informative feature weights to exactly $0$, performing automated feature selection.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: Mathematical Proofs -->
+    <section id="math">
+      <h2>02. Mathematical Proofs (The OLS Derivation)</h2>
+      <p class="lead"><strong>Guaranteed University Exam Proof (10 Marks).</strong> Derivation of the optimal slope ($\hat{\beta}_1$) and intercept ($\hat{\beta}_0$) via Ordinary Least Squares.</p>
+
+      <div class="formula-banner">
+        <div><strong>The Closed-Form OLS Equations</strong></div>
+        $$\hat{\beta}_1 = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sum_{i=1}^n (X_i - \bar{X})^2} = \frac{\operatorname{Cov}(X, Y)}{\operatorname{Var}(X)}, \qquad \hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X}$$
+        <small>Where $\bar{X} = \frac{1}{n}\sum X_i$ and $\bar{Y} = \frac{1}{n}\sum Y_i$.</small>
+      </div>
+
+      <div class="note">
+        <strong>Step-by-Step Derivation Protocol for Exam Hall:</strong>
+      </div>
+
+      <div class="card">
+        <h3>Step 1: Setup Objective Function (Residual Sum of Squares)</h3>
+        <p>Given $n$ paired observations $\{(X_i, Y_i)\}_{i=1}^n$, the linear model is $Y_i = \beta_0 + \beta_1 X_i + \epsilon_i$. The predicted value is $\hat{Y}_i = \beta_0 + \beta_1 X_i$.</p>
+        <p>The OLS criterion minimizes the Residual Sum of Squares (RSS), denoted as $S(\beta_0, \beta_1)$:</p>
+        $$\begin{aligned}
+        S(\beta_0, \beta_1) &= \sum_{i=1}^n (Y_i - \hat{Y}_i)^2 \\[4pt]
+        &= \sum_{i=1}^n \left(Y_i - \beta_0 - \beta_1 X_i\right)^2
+        \end{aligned}$$
+      </div>
+
+      <div class="card">
+        <h3>Step 2: Partial Derivative with respect to Intercept ($\beta_0$)</h3>
+        <p>Apply the chain rule and set the partial derivative equal to zero to find the stationary point:</p>
+        $$\begin{aligned}
+        \frac{\partial S}{\partial \beta_0} &= -2 \sum_{i=1}^n \left(Y_i - \beta_0 - \beta_1 X_i\right) = 0 \\[6pt]
+        \sum_{i=1}^n Y_i - \sum_{i=1}^n \beta_0 - \beta_1 \sum_{i=1}^n X_i &= 0 \\[6pt]
+        \sum_{i=1}^n Y_i - n\beta_0 - \beta_1 \sum_{i=1}^n X_i &= 0
+        \end{aligned}$$
+        <p>Divide the entire equation by $n$:</p>
+        $$\begin{aligned}
+        \frac{1}{n}\sum_{i=1}^n Y_i - \beta_0 - \beta_1 \left(\frac{1}{n}\sum_{i=1}^n X_i\right) &= 0 \\[6pt]
+        \bar{Y} - \beta_0 - \beta_1 \bar{X} &= 0 \\[6pt]
+        \mathbf{\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X}} &\quad \text{--- (Equation 1)}
+        \end{aligned}$$
+      </div>
+
+      <div class="card">
+        <h3>Step 3: Partial Derivative with respect to Slope ($\beta_1$)</h3>
+        <p>Differentiate $S(\beta_0, \beta_1)$ with respect to $\beta_1$ and set to zero:</p>
+        $$\begin{aligned}
+        \frac{\partial S}{\partial \beta_1} &= -2 \sum_{i=1}^n X_i \left(Y_i - \beta_0 - \beta_1 X_i\right) = 0 \\[6pt]
+        \sum_{i=1}^n X_i Y_i - \beta_0 \sum_{i=1}^n X_i - \beta_1 \sum_{i=1}^n X_i^2 &= 0 \quad \text{--- (Equation 2)}
+        \end{aligned}$$
+      </div>
+
+      <div class="card">
+        <h3>Step 4: Substitute Equation 1 into Equation 2</h3>
+        <p>Substitute $\beta_0 = \bar{Y} - \beta_1 \bar{X}$ into Equation 2:</p>
+        $$\begin{aligned}
+        \sum_{i=1}^n X_i Y_i - (\bar{Y} - \beta_1 \bar{X})\sum_{i=1}^n X_i - \beta_1 \sum_{i=1}^n X_i^2 &= 0 \\[6pt]
+        \sum_{i=1}^n X_i Y_i - \bar{Y}\sum_{i=1}^n X_i + \beta_1 \bar{X}\sum_{i=1}^n X_i - \beta_1 \sum_{i=1}^n X_i^2 &= 0
+        \end{aligned}$$
+        <p>Notice that $\sum X_i = n\bar{X}$ and $\bar{Y}\sum X_i = \bar{Y}(n\bar{X}) = n\bar{X}\bar{Y}$:</p>
+        $$\begin{aligned}
+        \sum_{i=1}^n X_i Y_i - n\bar{X}\bar{Y} - \beta_1 \left(\sum_{i=1}^n X_i^2 - n\bar{X}^2\right) &= 0 \\[6pt]
+        \beta_1 \left(\sum_{i=1}^n X_i^2 - n\bar{X}^2\right) &= \sum_{i=1}^n X_i Y_i - n\bar{X}\bar{Y}
+        \end{aligned}$$
+        <p>Using the algebraic centering identities $\sum (X_i - \bar{X})^2 = \sum X_i^2 - n\bar{X}^2$ and $\sum (X_i - \bar{X})(Y_i - \bar{Y}) = \sum X_i Y_i - n\bar{X}\bar{Y}$:</p>
+        $$\mathbf{\hat{\beta}_1 = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sum_{i=1}^n (X_i - \bar{X})^2}} \quad \text{Q.E.D.}$$
+      </div>
+    </section>
+
+    <!-- Section 03: Matrix Normal Equation -->
+    <section id="matrix">
+      <h2>03. Matrix Normal Equation (Multiple Linear Regression)</h2>
+      <p class="lead">When modeling multiple features $\mathbf{y} = \mathbf{X}\boldsymbol{\beta} + \boldsymbol{\epsilon}$, calculus is executed using compact matrix vectorization.</p>
+
+      <div class="formula-banner">
+        <div><strong>The Normal Equation</strong></div>
+        $$\hat{\boldsymbol{\beta}} = \left(\mathbf{X}^T \mathbf{X}\right)^{-1} \mathbf{X}^T \mathbf{y}$$
+        <small>Where $\mathbf{X} \in \mathbb{R}^{n \times (d+1)}$, $\mathbf{y} \in \mathbb{R}^{n \times 1}$, and $\boldsymbol{\beta} \in \mathbb{R}^{(d+1) \times 1}$.</small>
+      </div>
+
+      <div class="card">
+        <h3>Matrix Derivation Protocol:</h3>
+        $$\begin{aligned}
+        \mathbf{e} &= \mathbf{y} - \mathbf{X}\boldsymbol{\beta} \\[4pt]
+        \operatorname{RSS}(\boldsymbol{\beta}) &= \mathbf{e}^T \mathbf{e} = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^T (\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) \\[4pt]
+        &= \mathbf{y}^T \mathbf{y} - \mathbf{y}^T \mathbf{X}\boldsymbol{\beta} - \boldsymbol{\beta}^T \mathbf{X}^T \mathbf{y} + \boldsymbol{\beta}^T \mathbf{X}^T \mathbf{X}\boldsymbol{\beta} \\[4pt]
+        &= \mathbf{y}^T \mathbf{y} - 2\boldsymbol{\beta}^T \mathbf{X}^T \mathbf{y} + \boldsymbol{\beta}^T \mathbf{X}^T \mathbf{X}\boldsymbol{\beta}
+        \end{aligned}$$
+        <p>Take the matrix derivative with respect to parameter vector $\boldsymbol{\beta}$:</p>
+        $$\begin{aligned}
+        \nabla_{\boldsymbol{\beta}} \operatorname{RSS}(\boldsymbol{\beta}) &= -2\mathbf{X}^T \mathbf{y} + 2\mathbf{X}^T \mathbf{X}\boldsymbol{\beta} = \mathbf{0} \\[6pt]
+        \mathbf{X}^T \mathbf{X}\boldsymbol{\beta} &= \mathbf{X}^T \mathbf{y} \\[6pt]
+        \mathbf{\hat{\boldsymbol{\beta}}} &= \mathbf{\left(\mathbf{X}^T \mathbf{X}\right)^{-1} \mathbf{X}^T \mathbf{y}}
+        \end{aligned}$$
+      </div>
+
+      <div class="note warn">
+        <strong>Exam Trap: When is $(\mathbf{X}^T\mathbf{X})$ Non-Invertible?</strong><br>
+        1. <strong>Multicollinearity:</strong> Two or more features are perfectly linearly dependent, reducing the matrix rank below $d+1$.<br>
+        2. <strong>High Dimensions ($p > n$):</strong> More features than observations guarantees rank $\le n < p$, producing a singular matrix.<br>
+        <em>Remedy:</em> Add $L_2$ Ridge regularization: $(\mathbf{X}^T\mathbf{X} + \lambda \mathbf{I})^{-1}\mathbf{X}^T\mathbf{y}$, which is strictly positive-definite and always invertible.
+      </div>
+    </section>
+
+    <!-- Section 04: Gradient Descent Variants -->
+    <section id="gradient">
+      <h2>04. Gradient Descent Optimization Variants</h2>
+      <p class="lead">Gradient descent iteratively updates parameters along the negative gradient of the loss surface: $\boldsymbol{\theta} \leftarrow \boldsymbol{\theta} - \alpha \nabla_{\boldsymbol{\theta}} \mathcal{L}(\boldsymbol{\theta})$.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Batch Gradient Descent (BGD)</th>
+              <th>Stochastic Gradient Descent (SGD)</th>
+              <th>Mini-Batch Gradient Descent (MBGD)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Batch Size</strong></td>
+              <td>Full dataset ($m = n$)</td>
+              <td>Single sample ($m = 1$)</td>
+              <td>Subset ($m \in [32, 256]$)</td>
+            </tr>
+            <tr>
+              <td><strong>Trajectory</strong></td>
+              <td>Monotonic, smooth straight path</td>
+              <td>Highly noisy, zig-zag stochastic path</td>
+              <td>Balanced, steady path</td>
+            </tr>
+            <tr>
+              <td><strong>Memory Cost</strong></td>
+              <td>High: requires entire data in RAM</td>
+              <td>Minimal: processes one row at a time</td>
+              <td>Optimal: fits modern GPU caches</td>
+            </tr>
+            <tr>
+              <td><strong>Local Minima</strong></td>
+              <td>Can get trapped in saddle points</td>
+              <td>High noise helps jump out of local minima</td>
+              <td>Smooth vectorization with escape capability</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card">
+        <h3>Role of the Learning Rate ($\alpha$)</h3>
+        <p><strong>$\alpha$ Too Small:</strong> Tiny incremental steps; convergence requires millions of epochs, risking process timeout.</p>
+        <p><strong>$\alpha$ Too Large:</strong> Parameter updates overshoot the cost function valley, causing the loss to oscillate or diverge to $+\infty$.</p>
+      </div>
+    </section>
+
+    <!-- Section 05: Regularization & Metrics -->
+    <section id="regularization">
+      <h2>05. Regularization & Evaluation Metrics</h2>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">L2 Penalty</div>
+          <h3 style="margin-top:2px;">Ridge Regression</h3>
+          $$\min_{\mathbf{w}} \frac{1}{2n}\sum_{i=1}^n (y_i - \mathbf{w}^T\mathbf{x}_i)^2 + \lambda \|\mathbf{w}\|_2^2$$
+          <p>Penalizes large weights smoothly by adding $\lambda \sum w_j^2$. The circular contour shrinks all parameters proportionally toward zero, preventing extreme oscillations caused by collinear features.</p>
+        </div>
+        <div class="card">
+          <div class="kicker">L1 Penalty</div>
+          <h3 style="margin-top:2px;">Lasso Regression</h3>
+          $$\min_{\mathbf{w}} \frac{1}{2n}\sum_{i=1}^n (y_i - \mathbf{w}^T\mathbf{x}_i)^2 + \lambda \|\mathbf{w}\|_1$$
+          <p>Penalizes the absolute sum of weights $\lambda \sum |w_j|$. The non-differentiable sharp corners of the $L_1$ diamond hit the cost function along coordinate axes, driving irrelevant feature weights to exact zero.</p>
+        </div>
+      </div>
+
+      <h3>Regression Evaluation Metrics Reference</h3>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Mathematical Formula</th>
+              <th>Interpretation & Examiner Utility</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Mean Squared Error (MSE)</strong></td>
+              <td>$\frac{1}{n}\sum_{i=1}^n (Y_i - \hat{Y}_i)^2$</td>
+              <td>Penalizes large outlier errors quadratically. Units are squared (e.g., $\text{marks}^2$).</td>
+            </tr>
+            <tr>
+              <td><strong>Root Mean Squared Error (RMSE)</strong></td>
+              <td>$\sqrt{\frac{1}{n}\sum_{i=1}^n (Y_i - \hat{Y}_i)^2}$</td>
+              <td>Restores error to natural target units ($\text{marks}$). Directly interpretable.</td>
+            </tr>
+            <tr>
+              <td><strong>Mean Absolute Error (MAE)</strong></td>
+              <td>$\frac{1}{n}\sum_{i=1}^n |Y_i - \hat{Y}_i|$</td>
+              <td>Linear penalty; robust to extreme outliers that would distort MSE.</td>
+            </tr>
+            <tr>
+              <td><strong>Coefficient of Determination ($R^2$)</strong></td>
+              <td>$1 - \frac{\text{SS}_{\text{res}}}{\text{SS}_{\text{tot}}} = 1 - \frac{\sum(Y_i - \hat{Y}_i)^2}{\sum(Y_i - \bar{Y})^2}$</td>
+              <td>Proportion of total target variance explained by the model ($R^2 \in [0, 1]$).</td>
+            </tr>
+            <tr>
+              <td><strong>Adjusted $R^2$</strong></td>
+              <td>$1 - \left[\frac{(1 - R^2)(n - 1)}{n - p - 1}\right]$</td>
+              <td>Penalizes adding useless features ($p$). Increases only if new feature improves model beyond chance.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 06: Notation Matrix -->
+    <section id="notation">
+      <h2>06. Notation Decoding Matrix</h2>
+      <p class="lead">Quick reference table mapping academic mathematical symbols to practical implementations.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Formal Name</th>
+              <th>Plain-English Meaning</th>
+              <th>Applied Exam Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$X_i, Y_i$</td>
+              <td>Feature & Target Pair</td>
+              <td>Input variable and output observation</td>
+              <td>$X = \text{Study Hours}, Y = \text{Exam Score}$</td>
+            </tr>
+            <tr>
+              <td>$\hat{\beta}_1$</td>
+              <td>Slope Parameter</td>
+              <td>Expected change in $Y$ per unit increase in $X$</td>
+              <td>$\hat{\beta}_1 = 5.0 \implies +5\text{ marks per additional hour}$</td>
+            </tr>
+            <tr>
+              <td>$\hat{\beta}_0$</td>
+              <td>Intercept Parameter</td>
+              <td>Expected value of $Y$ when $X = 0$</td>
+              <td>$\hat{\beta}_0 = 40.0 \implies \text{Baseline score with } 0\text{ hours}$</td>
+            </tr>
+            <tr>
+              <td>$e_i = Y_i - \hat{Y}_i$</td>
+              <td>Residual / Error</td>
+              <td>Vertical distance from data point to line</td>
+              <td>Actual: $70$, Predicted: $65 \implies e_i = +5$</td>
+            </tr>
+            <tr>
+              <td>$\text{SS}_{\text{res}}$</td>
+              <td>Residual Sum of Squares</td>
+              <td>Unexplained variance remaining in model</td>
+              <td>$\sum (Y_i - \hat{Y}_i)^2$ (Minimized by OLS)</td>
+            </tr>
+            <tr>
+              <td>$\text{SS}_{\text{tot}}$</td>
+              <td>Total Sum of Squares</td>
+              <td>Total variance in dependent variable around mean</td>
+              <td>$\sum (Y_i - \bar{Y})^2$</td>
+            </tr>
+            <tr>
+              <td>$\alpha$</td>
+              <td>Learning Rate</td>
+              <td>Step size scale factor in gradient descent</td>
+              <td>$\alpha = 0.01$ step along negative gradient</td>
+            </tr>
+            <tr>
+              <td>$\lambda$</td>
+              <td>Regularization Coefficient</td>
+              <td>Penalty weight balancing fit vs complexity</td>
+              <td>$\lambda = 0 \implies \text{OLS}; \lambda \to \infty \implies \mathbf{w} \to \mathbf{0}$</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 07: Solving Protocol -->
+    <section id="steps">
+      <h2>07. Repeatable Step-by-Step Solving Protocol</h2>
+      <p class="lead">Follow this numbered protocol to compute regression models without arithmetic errors under exam pressure:</p>
+
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>Step 1: Compute Sample Means</strong>
+            $$\bar{X} = \frac{1}{n}\sum_{i=1}^n X_i, \qquad \bar{Y} = \frac{1}{n}\sum_{i=1}^n Y_i$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 2: Construct Deviation Columns</strong>
+            <p>Compute deviations for every point: $(X_i - \bar{X})$, $(Y_i - \bar{Y})$, squared deviations $(X_i - \bar{X})^2$, and cross-products $(X_i - \bar{X})(Y_i - \bar{Y})$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 3: Calculate Slope ($\hat{\beta}_1$)</strong>
+            $$\hat{\beta}_1 = \frac{\sum (X_i - \bar{X})(Y_i - \bar{Y})}{\sum (X_i - \bar{X})^2}$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 4: Calculate Intercept ($\hat{\beta}_0$)</strong>
+            $$\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X}$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 5: Write the Prediction Equation</strong>
+            $$\hat{Y} = \hat{\beta}_0 + \hat{\beta}_1 X$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 6: Compute Residuals & $R^2$ Variance Explained</strong>
+            $$\text{SS}_{\text{res}} = \sum (Y_i - \hat{Y}_i)^2, \quad \text{SS}_{\text{tot}} = \sum (Y_i - \bar{Y})^2, \quad R^2 = 1 - \frac{\text{SS}_{\text{res}}}{\text{SS}_{\text{tot}}}$$
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 08: 6 Exam Traps -->
+    <section id="traps">
+      <h2>08. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+      <p class="lead">Examiners frequently deduct marks for these 6 subtle missteps:</p>
+
+      <div class="grid">
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 01: Denominator Confusion</div>
+          <h3>Dividing by $n$ or $\operatorname{Var}(Y)$ in Slope</h3>
+          <p>Students write $\hat{\beta}_1 = \frac{\sum (X-\bar{X})(Y-\bar{Y})}{\sum (Y-\bar{Y})^2}$. The denominator <strong>MUST be the variance of the independent variable $X$</strong> ($\sum (X-\bar{X})^2$). Dividing by $Y$ flips the regression.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 02: Forgetting Intercept Column</div>
+          <h3>Missing Column of Ones in Matrix $\mathbf{X}$</h3>
+          <p>In matrix formulation, $\mathbf{X}$ must include an initial column of $1$'s: $\mathbf{X} = [\mathbf{1} \,\|\, \mathbf{x}_1 \,\|\, \dots]$. Omitting this forces the regression line through the origin ($b = 0$), destroying prediction accuracy.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 03: Unit Discrepancy</div>
+          <h3>Reporting MSE in Units of Target</h3>
+          <p>If $Y$ is in dollars or exam marks, $\text{MSE}$ is in $\text{dollars}^2$ or $\text{marks}^2$. Always state that <strong>$\text{RMSE}$ is required for direct unit interpretation</strong>.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 04: The Monotonic $R^2$ Illusion</div>
+          <h3>Assuming Higher $R^2$ Always Means Better Model</h3>
+          <p>Adding junk features into multiple linear regression will <strong>never decrease $R^2$</strong>. It will either stay the same or artificially increase. Examiners require explaining <strong>Adjusted $R^2$</strong> to penalize parameter bloat.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 05: Lasso on Collinear Features</div>
+          <h3>Believing Lasso Selects All Correlated Features</h3>
+          <p>When two features are highly collinear ($r > 0.95$), Lasso arbitrarily selects <strong>only one</strong> feature and sets the other to zero. Ridge retains both with shrunken weights.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 06: Swapping Bias and Variance</div>
+          <h3>Confusing Underfitting with High Variance</h3>
+          <p>Underfitting = <strong>High Bias</strong> (inflexible model, ignores data). Overfitting = <strong>High Variance</strong> (hyper-flexible model, memorizes sample noise).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 09: Complete Solved University PYQs -->
+    <section id="pyqs">
+      <h2>09. Complete University Question Bank (All Past PYQs Solved)</h2>
+      <p class="lead">Every question from available semester exams, continuous tests, and the question bank solved step-by-step.</p>
+
+      <div class="controls">
+        <button onclick="toggleAllDetails(true)">Expand All Solutions</button>
+        <button class="secondary" onclick="toggleAllDetails(false)">Collapse All</button>
+      </div>
+
+      <!-- Question 1: Jan 2025 (20 Marks) -->
+      <div class="details-box">
+        <details id="q1">
+          <summary>
+            <span><span class="pyq-badge">Jan 2025 · Question 1</span> Simple Linear Regression Derivation, Overfitting & Metrics (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            <strong>i)</strong> Consider a dataset where independent variable $X$ represents study hours, and dependent variable $Y$ represents exam scores: Explain the process of deriving the simple linear regression equation. Describe mathematical steps to calculate slope and intercept. Interpret the line in context. (10 Marks)<br>
+            <strong>ii)</strong> Define overfitting and underfitting in student performance prediction and their impact on reliability. (5 Marks)<br>
+            <strong>iii)</strong> Identify and explain commonly used evaluation metrics for regression models in student exam score prediction. (5 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>(i) Derivation and Interpretation (10 Marks)</h5>
+          <p>1. <strong>Model Setup:</strong> Let $Y_i = \beta_0 + \beta_1 X_i + \epsilon_i$, where predicted score is $\hat{Y}_i = \hat{\beta}_0 + \hat{\beta}_1 X_i$.</p>
+          <p>2. <strong>Objective:</strong> Minimize Residual Sum of Squares $S(\beta_0, \beta_1) = \sum_{i=1}^n (Y_i - \beta_0 - \beta_1 X_i)^2$.</p>
+          <p>3. <strong>Partial Derivative for $\beta_0$:</strong></p>
+          $$\frac{\partial S}{\partial \beta_0} = -2\sum (Y_i - \beta_0 - \beta_1 X_i) = 0 \implies \mathbf{\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X}}$$
+          <p>4. <strong>Partial Derivative for $\beta_1$:</strong></p>
+          $$\frac{\partial S}{\partial \beta_1} = -2\sum X_i(Y_i - \beta_0 - \beta_1 X_i) = 0$$
+          <p>Substituting $\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X}$ yields:</p>
+          $$\sum X_i Y_i - \bar{Y}\sum X_i - \hat{\beta}_1\left(\sum X_i^2 - \bar{X}\sum X_i\right) = 0$$
+          $$\mathbf{\hat{\beta}_1 = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sum_{i=1}^n (X_i - \bar{X})^2}}$$
+          <p>5. <strong>Interpretation in Context:</strong></p>
+          <ul>
+            <li><strong>Slope ($\hat{\beta}_1$):</strong> The marginal score increase per additional hour studied. If $\hat{\beta}_1 = 4.5$, every additional hour increases expected exam score by $4.5$ marks.</li>
+            <li><strong>Intercept ($\hat{\beta}_0$):</strong> Baseline score expected for a student studying zero hours ($X = 0$). If $\hat{\beta}_0 = 35.0$, a student with $0$ hours is predicted to score $35.0$ marks.</li>
+          </ul>
+
+          <h5>(ii) Overfitting vs Underfitting (5 Marks)</h5>
+          <ul>
+            <li><strong>Underfitting (High Bias):</strong> The model assumes a constant horizontal line or inadequate structure. It fails to capture that more study hours improve performance. <em>Impact:</em> Systematically underestimates hardworking students and overestimates non-studying students.</li>
+            <li><strong>Overfitting (High Variance):</strong> The model uses an 8th-degree polynomial to pass through every single training student's data point, memorizing quirks like a student who studied 10 hours but had the flu and scored 20. <em>Impact:</em> Unreliable generalization; predictions fluctuate wildly on unseen students.</li>
+          </ul>
+
+          <h5>(iii) Evaluation Metrics for Exam Score Prediction (5 Marks)</h5>
+          <ol>
+            <li><strong>MSE:</strong> Penalizes large prediction errors severely.</li>
+            <li><strong>RMSE:</strong> Expresses error in original exam marks (e.g., $\text{RMSE} = 4.2 \text{ marks}$ error on average).</li>
+            <li><strong>MAE:</strong> Robust average error without quadratic exaggeration.</li>
+            <li><strong>$R^2$ Score:</strong> Measures what percentage of score variance is explained by study hours (e.g., $R^2 = 0.82 \implies 82\%$ explained).</li>
+            <li><strong>Adjusted $R^2$ Score:</strong> Validates whether adding extra features (e.g., student attendance, sleep hours) provides genuine explanatory power.</li>
+          </ol>
+        </details>
+      </div>
+
+      <!-- Question 2: Normal Equation Proof (Part B Question Bank) -->
+      <div class="details-box">
+        <details id="q2">
+          <summary>
+            <span><span class="pyq-badge qb">Part B QB · Set 1</span> Multiple Linear Regression Matrix Normal Equation Derivation (16 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Derive the Normal Equation for Multiple Linear Regression using matrix calculus: $\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}$. State the dimensions of all matrices and discuss conditions where $\mathbf{X}^T\mathbf{X}$ cannot be inverted. (16 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <p>1. <strong>Matrix Dimensions:</strong></p>
+          <ul>
+            <li>$\mathbf{y} \in \mathbb{R}^{n \times 1}$: Vector of observed responses.</li>
+            <li>$\mathbf{X} \in \mathbb{R}^{n \times (d+1)}$: Design matrix with first column all ones ($x_{i0} = 1$).</li>
+            <li>$\boldsymbol{\beta} \in \mathbb{R}^{(d+1) \times 1}$: Parameter vector $[\beta_0, \beta_1, \dots, \beta_d]^T$.</li>
+            <li>$\mathbf{e} \in \mathbb{R}^{n \times 1}$: Residual error vector $\mathbf{e} = \mathbf{y} - \mathbf{X}\boldsymbol{\beta}$.</li>
+          </ul>
+          <p>2. <strong>Matrix RSS Expansion:</strong></p>
+          $$S(\boldsymbol{\beta}) = \mathbf{e}^T\mathbf{e} = (\mathbf{y} - \mathbf{X}\boldsymbol{\beta})^T(\mathbf{y} - \mathbf{X}\boldsymbol{\beta}) = \mathbf{y}^T\mathbf{y} - 2\boldsymbol{\beta}^T\mathbf{X}^T\mathbf{y} + \boldsymbol{\beta}^T\mathbf{X}^T\mathbf{X}\boldsymbol{\beta}$$
+          <p>3. <strong>Matrix Differentiation:</strong></p>
+          $$\frac{\partial S}{\partial \boldsymbol{\beta}} = -2\mathbf{X}^T\mathbf{y} + 2\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} = \mathbf{0}$$
+          $$\mathbf{X}^T\mathbf{X}\boldsymbol{\beta} = \mathbf{X}^T\mathbf{y} \implies \mathbf{\hat{\boldsymbol{\beta}} = (\mathbf{X}^T\mathbf{X})^{-1}\mathbf{X}^T\mathbf{y}}$$
+          <p>4. <strong>Singularity Conditions:</strong></p>
+          <ul>
+            <li><strong>Collinearity:</strong> $\operatorname{Rank}(\mathbf{X}) < d+1$, meaning one feature is a linear combination of others.</li>
+            <li><strong>$p > n$:</strong> More features than observations guarantees that $\operatorname{det}(\mathbf{X}^T\mathbf{X}) = 0$.</li>
+            <li><strong>Fix:</strong> Ridge regularization $(\mathbf{X}^T\mathbf{X} + \lambda \mathbf{I})^{-1}\mathbf{X}^T\mathbf{y}$.</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- Question 3: Nov 2025 Q3 Linear vs Non-Parametric -->
+      <div class="details-box">
+        <details id="q3">
+          <summary>
+            <span><span class="pyq-badge">Nov 2025 · Question 3</span> Structural Failure of Linear Regression on Complex Non-Linear Text Data (10 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            A marketing team leader suggests using simple linear regression to predict customer satisfaction from structured data and unstructured text feedback. Justify why linear regression fails in this scenario. (10 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <ol>
+            <li><strong>Rigid Hyperplanar Space:</strong> Linear regression assumes constant marginal rate of change $\frac{\partial y}{\partial x_j} = \beta_j$. Satisfaction exhibits non-linear saturation, threshold steps, and dimishing returns that linear planes cannot represent.</li>
+            <li><strong>High Dimensionality & Sparsity ($p \gg n$):</strong> Vectorizing unstructured text produces vocabulary spaces with thousands of terms ($d > 5000$). When $d > n$, $\mathbf{X}^T\mathbf{X}$ is rank-deficient and singular, causing OLS to collapse.</li>
+            <li><strong>Lack of Cross-Modal Interaction:</strong> Linear models cannot capture feature interactions (e.g., High Price is acceptable IF Quality is High, but disastrous IF Quality is Low) without manual polynomial expansion.</li>
+          </ol>
+        </details>
+      </div>
+    </section>
+
+    <!-- Section 10: Interactive OLS Solver -->
+    <section id="calculator">
+      <h2>10. Interactive Offline OLS Regression Solver</h2>
+      <p class="lead">Test your calculations. Enter paired $(X, Y)$ observations separated by commas to instantly compute means, slope, intercept, $R^2$, and evaluate predictions.</p>
+
+      <div class="tool-box">
+        <div class="tool-grid">
+          <div class="tool-group">
+            <label>X Values (e.g. Study Hours)</label>
+            <input type="text" id="xInput" value="2, 4, 6, 8, 10">
+          </div>
+          <div class="tool-group">
+            <label>Y Values (e.g. Exam Scores)</label>
+            <input type="text" id="yInput" value="50, 60, 70, 80, 90">
+          </div>
+          <div class="tool-group">
+            <label>Test X to Predict</label>
+            <input type="number" id="xTest" value="7" step="any">
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <button onclick="calculateOLS()">Compute OLS Parameters</button>
+        </div>
+
+        <div class="tool-result" id="olsOutput">
+          Click the button above to calculate regression parameters.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 11: Self-Test Active Recall Quiz -->
+    <section id="quiz">
+      <h2>11. Active Recall Self-Test Quiz</h2>
+      <p class="lead">Check your mastery before entering the exam hall. Instant feedback provided for each question.</p>
+
+      <div class="progress-wrap"><div class="progress" id="quizBar"></div></div>
+      <div id="quizScore" style="font-size:12.5px;font-weight:700;color:var(--muted);margin-top:4px;">Answer the questions below to evaluate progress (0/4 answered).</div>
+
+      <div class="quiz-q" id="qz1">
+        <strong>1. In simple linear regression, Ordinary Least Squares minimizes which quantity?</strong>
+        <label><input type="radio" name="q1" value="a" onclick="checkQ(1,'b','Sum of squared residuals (RSS)')"> The sum of horizontal distances between points and line</label>
+        <label><input type="radio" name="q1" value="b" onclick="checkQ(1,'b','Sum of squared residuals (RSS)')"> The sum of vertical squared discrepancies between actual and predicted responses</label>
+        <label><input type="radio" name="q1" value="c" onclick="checkQ(1,'b','Sum of squared residuals (RSS)')"> The product of variance of X and variance of Y</label>
+        <div class="feedback" id="fb1"></div>
+        <div class="answer" id="ans1"><strong>Correct: (b)</strong> OLS minimizes $\sum (Y_i - \hat{Y}_i)^2$, which represents vertical squared errors.</div>
+      </div>
+
+      <div class="quiz-q" id="qz2">
+        <strong>2. If $n = 5$, $\bar{X} = 6.0$, $\bar{Y} = 70.0$, and the calculated slope is $\hat{\beta}_1 = 5.0$, what is the intercept $\hat{\beta}_0$?</strong>
+        <label><input type="radio" name="q2" value="a" onclick="checkQ(2,'c','Intercept = 70 - 5*(6) = 40.0')"> $10.0$</label>
+        <label><input type="radio" name="q2" value="b" onclick="checkQ(2,'c','Intercept = 70 - 5*(6) = 40.0')"> $70.0$</label>
+        <label><input type="radio" name="q2" value="c" onclick="checkQ(2,'c','Intercept = 70 - 5*(6) = 40.0')"> $40.0$</label>
+        <div class="feedback" id="fb2"></div>
+        <div class="answer" id="ans2"><strong>Correct: (c)</strong> $\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X} = 70.0 - (5.0 \times 6.0) = 70 - 30 = \mathbf{40.0}$.</div>
+      </div>
+
+      <div class="quiz-q" id="qz3">
+        <strong>3. Why does Lasso ($L_1$) regression produce sparse models (exact zero weights) while Ridge ($L_2$) does not?</strong>
+        <label><input type="radio" name="q3" value="a" onclick="checkQ(3,'a','L1 diamond geometry has sharp corners on axes')"> $L_1$ constraint contours have sharp corners on coordinate axes where gradients hit zero</label>
+        <label><input type="radio" name="q3" value="b" onclick="checkQ(3,'a','L1 diamond geometry has sharp corners on axes')"> $L_2$ penalty is computationally impossible to invert</label>
+        <label><input type="radio" name="q3" value="c" onclick="checkQ(3,'a','L1 diamond geometry has sharp corners on axes')"> $L_1$ uses an exponential loss function</label>
+        <div class="feedback" id="fb3"></div>
+        <div class="answer" id="ans3"><strong>Correct: (a)</strong> The diamond geometry of the $L_1$ ball intersects the elliptical loss contours at coordinate axes, setting irrelevant weights to exactly zero.</div>
+      </div>
+
+      <div class="quiz-q" id="qz4">
+        <strong>4. What is the main advantage of Adjusted $R^2$ over standard $R^2$ in multiple regression?</strong>
+        <label><input type="radio" name="q4" value="a" onclick="checkQ(4,'c','Adjusted R2 penalizes useless predictor parameters')"> It is always higher than standard R2</label>
+        <label><input type="radio" name="q4" value="b" onclick="checkQ(4,'c','Adjusted R2 penalizes useless predictor parameters')"> It eliminates the need for calculating MSE</label>
+        <label><input type="radio" name="q4" value="c" onclick="checkQ(4,'c','Adjusted R2 penalizes useless predictor parameters')"> It penalizes adding non-informative features, increasing only if real explanatory power is added</label>
+        <div class="feedback" id="fb4"></div>
+        <div class="answer" id="ans4"><strong>Correct: (c)</strong> Adjusted $R^2 = 1 - \frac{(1-R^2)(n-1)}{n-p-1}$, which decreases if adding feature $p$ fails to compensate for the lost degree of freedom.</div>
+      </div>
+    </section>
+
+    <!-- Section 12: Answer Sheet Checklist -->
+    <section id="checklist">
+      <h2>12. Exam Hall Answer Sheet Presentation Checklist</h2>
+      <p class="lead">Follow this structured template on your physical exam answer booklet to secure maximum marks:</p>
+
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>1. Define Model & Variables Explicitly</strong>
+            <p>Write: "Let $X$ denote the independent variable (Study Hours) and $Y$ denote the dependent response (Exam Score). Model: $Y = \beta_0 + \beta_1 X + \epsilon$."</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>2. State the OLS Minimization Criterion</strong>
+            <p>Write: "Minimize $S(\beta_0, \beta_1) = \sum_{i=1}^n (Y_i - \beta_0 - \beta_1 X_i)^2$."</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>3. Show Both First-Order Conditions</strong>
+            <p>Write the partial derivative steps $\frac{\partial S}{\partial \beta_0} = 0$ and $\frac{\partial S}{\partial \beta_1} = 0$ with equation numbers.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>4. Box the Final Governing Formulas</strong>
+            <p>Draw a clean box around $\hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X}$ and $\hat{\beta}_1 = \frac{\sum (X-\bar{X})(Y-\bar{Y})}{\sum (X-\bar{X})^2}$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>5. Interpret Both Slope and Intercept with Concrete Units</strong>
+            <p>Never leave raw numbers alone. Always write: "Slope $\hat{\beta}_1 = 5.0$ indicates an expected gain of $5$ marks per hour; intercept $\hat{\beta}_0 = 40.0$ indicates baseline score for zero hours."</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>6. For Bias-Variance Questions, State the Decomposition</strong>
+            <p>Write: $\text{Error} = \text{Bias}^2 + \text{Variance} + \sigma_\epsilon^2$. Mention that underfitting = high bias, overfitting = high variance.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+// Mobile Drawer Toggle
+function toggleDrawer() {
+  const drawer = document.getElementById('drawer');
+  const backdrop = document.getElementById('backdrop');
+  drawer.classList.toggle('open');
+  backdrop.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+}
+
+// Expand / Collapse Details
+function toggleAllDetails(open) {
+  document.querySelectorAll('details').forEach(d => d.open = open);
+}
+
+// Interactive OLS Calculator
+function calculateOLS() {
+  const xStr = document.getElementById('xInput').value.trim();
+  const yStr = document.getElementById('yInput').value.trim();
+  const xTest = parseFloat(document.getElementById('xTest').value);
+
+  const xVals = xStr.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n));
+  const yVals = yStr.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n));
+
+  if (xVals.length !== yVals.length || xVals.length < 2) {
+    document.getElementById('olsOutput').innerHTML = '<span style="color:var(--red);font-weight:700;">Error: X and Y must have the exact same count (minimum 2 points).</span>';
+    return;
+  }
+
+  const n = xVals.length;
+  let sumX = 0, sumY = 0;
+  for (let i = 0; i < n; i++) { sumX += xVals[i]; sumY += yVals[i]; }
+  const xBar = sumX / n;
+  const yBar = sumY / n;
+
+  let covXY = 0, varX = 0, ssTot = 0;
+  for (let i = 0; i < n; i++) {
+    const dx = xVals[i] - xBar;
+    const dy = yVals[i] - yBar;
+    covXY += dx * dy;
+    varX += dx * dx;
+    ssTot += dy * dy;
+  }
+
+  if (varX === 0) {
+    document.getElementById('olsOutput').innerHTML = '<span style="color:var(--red);font-weight:700;">Error: All X values are identical (Var(X) = 0). Cannot compute slope.</span>';
+    return;
+  }
+
+  const beta1 = covXY / varX;
+  const beta0 = yBar - beta1 * xBar;
+
+  let ssRes = 0;
+  for (let i = 0; i < n; i++) {
+    const pred = beta0 + beta1 * xVals[i];
+    ssRes += Math.pow(yVals[i] - pred, 2);
+  }
+
+  const mse = ssRes / n;
+  const rmse = Math.sqrt(mse);
+  const r2 = ssTot !== 0 ? (1 - ssRes / ssTot) : 1;
+  const yPredTest = !isNaN(xTest) ? (beta0 + beta1 * xTest) : null;
+
+  let out = '<strong>Computed OLS Model Results:</strong><br>';
+  out += '• Number of Observations ($n$): ' + n + '<br>';
+  out += '• Mean X ($\bar{X}$): ' + xBar.toFixed(3) + ' | Mean Y ($\bar{Y}$): ' + yBar.toFixed(3) + '<br>';
+  out += '• <strong>Slope ($\hat{\beta}_1$): ' + beta1.toFixed(4) + '</strong><br>';
+  out += '• <strong>Intercept ($\hat{\beta}_0$): ' + beta0.toFixed(4) + '</strong><br>';
+  out += '• <strong>Equation: $\hat{Y} = ' + beta0.toFixed(3) + ' + (' + beta1.toFixed(3) + ') X$</strong><br>';
+  out += '• MSE: ' + mse.toFixed(4) + ' | RMSE: ' + rmse.toFixed(4) + '<br>';
+  out += '• <strong>$R^2$ (Variance Explained): ' + (r2 * 100).toFixed(2) + '%</strong> (' + r2.toFixed(4) + ')<br>';
+  if (yPredTest !== null) {
+    out += '• <strong>Prediction for $X = ' + xTest + '$: $\hat{Y} = ' + yPredTest.toFixed(3) + '$</strong>';
+  }
+
+  document.getElementById('olsOutput').innerHTML = out;
+  if (window.renderMathInElement) {
+    renderMathInElement(document.getElementById('olsOutput'), {delimiters: [{left: '$', right: '$', display: false}]});
+  }
+}
+
+// Quiz Interactive Evaluation
+const answeredQ = {};
+function checkQ(qNum, correctVal, reason) {
+  const selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+  const fb = document.getElementById('fb' + qNum);
+  const ans = document.getElementById('ans' + qNum);
+
+  answeredQ[qNum] = true;
+
+  if (selected.value === correctVal) {
+    fb.innerHTML = '<span style="color:var(--teal);">&#10003; Correct! ' + reason + '</span>';
+  } else {
+    fb.innerHTML = '<span style="color:var(--red);">&#10007; Incorrect. ' + reason + '</span>';
+  }
+  ans.classList.add('show');
+
+  // Update progress
+  const answeredCount = Object.keys(answeredQ).length;
+  const pct = (answeredCount / 4) * 100;
+  document.getElementById('quizBar').style.width = pct + '%';
+  document.getElementById('quizScore').innerText = 'Completed ' + answeredCount + ' of 4 questions (' + pct.toFixed(0) + '%).';
+}
+
+// Initial calculation on load
+window.addEventListener('DOMContentLoaded', () => {
+  calculateOLS();
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Fundamentals of AI -- Study Guides Hub (21CSC569J)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f8fafc;--surface:#ffffff;--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;
+  --brand:#2563eb;--brand-soft:#eff6ff;--teal:#059669;--teal-soft:#ecfdf5;
+  --amber:#b45309;--amber-soft:#fffbeb;--purple:#7c3aed;--purple-soft:#f5f3ff;
+  --rose:#e11d48;--rose-soft:#fff1f2;
+  --shadow:0 10px 30px rgba(15,23,42,.06);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:inherit;text-decoration:none;-webkit-tap-highlight-color:transparent}
+.container{
+  max-width:1120px;
+  margin:0 auto;
+  padding:calc(24px + var(--safe-top)) 18px calc(60px + var(--safe-bottom));
+}
+
+/* Hero */
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 50%,#312e81 100%);
+  color:white;
+  border-radius:22px;
+  padding:36px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+  margin-bottom:28px;
+}
+.hero:after{content:"f(n)=g(n)+h(n)";position:absolute;right:15px;bottom:-35px;font-size:80px;font-weight:900;color:rgba(255,255,255,.04);pointer-events:none}
+.eyebrow{font-size:11.5px;text-transform:uppercase;letter-spacing:.14em;color:#a5b4fc;font-weight:800}
+h1{font-size:clamp(26px,4.5vw,42px);line-height:1.15;margin:10px 0}
+.hero p{max-width:720px;color:#cbd5e1;font-size:15px;margin:0;line-height:1.6}
+
+/* Targets */
+.targets-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:30px}
+.target-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.03)}
+.target-label{font-size:10.5px;text-transform:uppercase;font-weight:800;color:var(--muted);letter-spacing:.08em}
+.target-val{font-size:26px;font-weight:800;color:var(--brand);margin:4px 0}
+.target-sub{font-size:12px;color:var(--muted)}
+
+/* Module Grid */
+h2{font-size:20px;color:#0f172a;margin:28px 0 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.module-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.module-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:22px;
+  box-shadow:var(--shadow);
+  transition:transform .2s,border-color .2s;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  position:relative;
+  min-height:230px;
+}
+.module-card:hover{transform:translateY(-3px);border-color:var(--brand);box-shadow:0 14px 30px rgba(37,99,235,.1)}
+.module-card:active{transform:scale(0.99)}
+.module-badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:10.5px;font-weight:800;text-transform:uppercase;margin-bottom:10px}
+.badge-ready{background:var(--teal-soft);color:var(--teal)}
+.badge-queued{background:var(--brand-soft);color:var(--brand)}
+.module-title{font-size:18px;font-weight:700;color:#0f172a;margin-bottom:6px}
+.module-desc{font-size:13.5px;color:var(--muted);margin-bottom:16px;flex:1;line-height:1.55}
+.module-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px}
+.tag{background:#f1f5f9;color:#475569;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.module-action{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:13.5px;
+  font-weight:700;
+  color:var(--brand);
+  min-height:36px;
+}
+
+/* Strategic Roadmap Card */
+.strategy-card{background:linear-gradient(135deg,#eef2ff 0%,#e0e7ff 100%);border:1px solid #c7d2fe;border-radius:16px;padding:22px;margin-top:30px;color:#3730a3}
+.strategy-title{font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:8px}
+
+/* Footer */
+.footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+/* iPhone 13 & Mobile Viewport Tweaks */
+@media(max-width:880px){
+  .container{padding:calc(16px + var(--safe-top)) 14px calc(50px + var(--safe-bottom))}
+  .hero{padding:22px 16px;border-radius:18px;margin-bottom:20px}
+  .hero:after{display:none}
+  h1{font-size:24px}
+  .targets-row{grid-template-columns:1fr 1fr;gap:10px}
+  .target-card{padding:14px}
+  .target-val{font-size:22px}
+  .module-grid{grid-template-columns:1fr;gap:14px}
+  .module-card{padding:18px;min-height:auto}
+  .module-action{min-height:44px}
+}
+
+@media(max-width:380px){
+  .targets-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Hero Header -->
+  <header class="hero">
+    <div style="margin-bottom:12px;">
+      <a href="/" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:12.5px;font-weight:700;text-decoration:none;">&larr; Back to Vettri's Notes (Site Home)</a>
+    </div>
+    <div class="eyebrow">M.Tech · Course Code 21CSC569J</div>
+    <h1>Fundamentals of AI Study Hub</h1>
+    <p>High-yield, standalone micro-learning study guides engineered for university semester examination preparation. Designed for 100% offline study on mobile screens with unclipped KaTeX mathematics, step-by-step algorithms, priority queue search traces, and complete verified solutions for every past paper question.</p>
+  </header>
+
+  <!-- Strategic Score Targets -->
+  <div class="targets-row">
+    <div class="target-card">
+      <div class="target-label">Current Internal Score</div>
+      <div class="target-val">56.79 / 60</div>
+      <div class="target-sub">Carries 56.79 direct marks into 100-mark final (94.65%).</div>
+    </div>
+    <div class="target-card">
+      <div class="target-label">Min Sem Score for Grade A</div>
+      <div class="target-val" style="color:var(--teal)">36 / 100</div>
+      <div class="target-sub">56.79 + (35.53 &times; 0.40) = 71.00 &ge; 71.0 (A cut-off).</div>
+    </div>
+    <div class="target-card">
+      <div class="target-label">Safe Target (+7 Buffer)</div>
+      <div class="target-val" style="color:#2563eb">43 / 100</div>
+      <div class="target-sub">56.79 + (43 &times; 0.40) = 73.99 &ge; 71.0 (comfortable buffer).</div>
+    </div>
+    <div class="target-card">
+      <div class="target-label">Grade A+ / S Target</div>
+      <div class="target-val" style="color:#7c3aed">61 / 100</div>
+      <div class="target-sub">56.79 + (60.53 &times; 0.40) = 81.00 &ge; 81.0 (A+ cutoff).</div>
+    </div>
+  </div>
+
+  <!-- Priority Modules -->
+  <h2>
+    <span>Priority High-Yield Modules</span>
+    <span style="font-size:12.5px;font-weight:600;color:var(--muted)">Top 5 Recurring Topics (&ge; 85% Exam Marks)</span>
+  </h2>
+
+  <div class="module-grid">
+
+    <!-- Module 1 -->
+    <a href="/fai-study-guide/01-informed-search-astar-ao.html" class="module-card">
+      <div>
+        <span class="module-badge badge-ready">Module 01 · Priority 1 · 20-30 Marks</span>
+        <div class="module-title">Informed Heuristic Search (A* & AO*)</div>
+        <div class="module-desc">Complete verified solutions for the classic 8-Puzzle Problem with Manhattan Distance heuristic (h=5, invariant f(n)=5, 5-move optimal sequence), Robot Grid Navigation with Euclidean heuristic (path 0 &rarr; 1 &rarr; 3 &rarr; 5, cost 12), and AO* search on And-Or graph hyper-edges.</div>
+        <div class="module-tags">
+          <span class="tag">May 2025 (Q3 20M, Q7 20M)</span>
+          <span class="tag">Nov 2025 (Q4 20M)</span>
+          <span class="tag">8-Puzzle A*</span>
+          <span class="tag">Robot Grid</span>
+          <span class="tag">AO* Trees</span>
+          <span class="tag">Interactive A* Tool</span>
+        </div>
+      </div>
+      <div class="module-action">Open Module Guide &rarr;</div>
+    </a>
+
+    <!-- Module 2 -->
+    <a href="/fai-study-guide/02-adversarial-search-csp.html" class="module-card">
+      <div>
+        <span class="module-badge badge-ready">Module 02 · Priority 2 · 20-30 Marks</span>
+        <div class="module-title">Adversarial Search & Constraint Satisfaction (Game Playing & CSP)</div>
+        <div class="module-desc">Procedural Alpha-Beta Pruning walkthrough with explicit tracking of [&alpha;, &beta;] intervals and pruned cutoff branches, Minimax bottom-up utility propagation (Root Max = 5 &rarr; Move to B), and step-by-step verified cryptarithmetic solution to SEND + MORE = MONEY (N + E + E + D = 23).</div>
+        <div class="module-tags">
+          <span class="tag">May 2025 (Q4 20M)</span>
+          <span class="tag">Nov 2025 (Q5 20M)</span>
+          <span class="tag">Alpha-Beta Pruning</span>
+          <span class="tag">Minimax Tree</span>
+          <span class="tag">Cryptarithmetic CSP</span>
+          <span class="tag">Interactive Minimax Tool</span>
+        </div>
+      </div>
+      <div class="module-action">Open Module Guide &rarr;</div>
+    </a>
+
+    <!-- Module 3 -->
+    <a href="/fai-study-guide/03-uninformed-search-traversal.html" class="module-card">
+      <div>
+        <span class="module-badge badge-ready">Module 03 · Priority 4 · 20 Marks</span>
+        <div class="module-title">Uninformed Search & Local Search Optimization</div>
+        <div class="module-desc">Breadth-First Search (FIFO queue) vs Depth-First Search (LIFO stack) step-by-step state space traces, Depth-Limited Search (DLS) with cutoff limit L=2 showing leaf pruning (H, I, K pruned), Iterative Deepening Search (IDS), and Hill Climbing local search hazards (Local Maxima, Plateaus, Ridges).</div>
+        <div class="module-tags">
+          <span class="tag">May 2025 (Q7 10M)</span>
+          <span class="tag">Nov 2025 (Q3 20M, Q4 5M)</span>
+          <span class="tag">BFS vs DFS</span>
+          <span class="tag">DLS Cutoff L=2</span>
+          <span class="tag">Hill Climbing Hazards</span>
+          <span class="tag">Traversal Visualizer</span>
+        </div>
+      </div>
+      <div class="module-action">Open Module Guide &rarr;</div>
+    </a>
+
+    <!-- Module 4 -->
+    <a href="/fai-study-guide/04-knowledge-representation-bayesian-networks.html" class="module-card">
+      <div>
+        <span class="module-badge badge-ready">Module 04 · Priority 3 · 20-30 Marks</span>
+        <div class="module-title">Knowledge Representation & Uncertain Reasoning (Bayesian Networks)</div>
+        <div class="module-desc">The classic Alarm Bayesian Network with Burglary and Earthquake: complete calculation of P(A | J, M, ~E, ~B) = 55.78% via conditional independence, Bayes' Theorem in uncertain reasoning, Knowledge-Based Agent architecture (TELL, ASK, KB), Forward vs Backward Reasoning, and Minsky's Frames schema.</div>
+        <div class="module-tags">
+          <span class="tag">May 2025 (Q5 20M, Q6 20M)</span>
+          <span class="tag">Nov 2025 (Q6 20M)</span>
+          <span class="tag">Alarm Bayesian Net (55.78%)</span>
+          <span class="tag">Forward vs Backward</span>
+          <span class="tag">Frames Schema</span>
+          <span class="tag">Interactive Bayes Tool</span>
+        </div>
+      </div>
+      <div class="module-action">Open Module Guide &rarr;</div>
+    </a>
+
+    <!-- Module 5 -->
+    <a href="/fai-study-guide/05-python-pandas-visualization.html" class="module-card">
+      <div>
+        <span class="module-badge badge-ready">Module 05 · Priority 5 · 20-30 Marks</span>
+        <div class="module-title">Python Core Foundations, Pandas & Visualization</div>
+        <div class="module-desc">Python mutability vs immutability with memory address identity proof (id()), string slicing and operations, recursive factorial n! with input guards, Pandas data cleaning (handling NaN, dropna, fillna), groupby aggregations, and Matplotlib/Seaborn custom plotting with labels and colors.</div>
+        <div class="module-tags">
+          <span class="tag">May 2025 (Q1 20M, Q2 20M)</span>
+          <span class="tag">Nov 2025 (Q1 20M, Q2 20M)</span>
+          <span class="tag">Memory id() Mutability</span>
+          <span class="tag">Pandas Data Cleaning</span>
+          <span class="tag">EDA Groupby</span>
+          <span class="tag">Matplotlib Charts</span>
+        </div>
+      </div>
+      <div class="module-action">Open Module Guide &rarr;</div>
+    </a>
+
+    <!-- Unified Master Reference -->
+    <a href="/fundamentals-of-ai-study-guide.html" class="module-card" style="background:#f8fafc;border:2px dashed #cbd5e1;">
+      <div>
+        <span class="module-badge" style="background:#e2e8f0;color:#334155;">Comprehensive Reference</span>
+        <div class="module-title">All-in-One Master Reference & Formula Handbook</div>
+        <div class="module-desc">Unified syllabus formula cheatsheet, search complexity matrix (BFS, DFS, DLS, A*, AO*, Minimax, Alpha-Beta), inference rules, Python built-in complexity tables, and exam presentation checklist consolidated into a single document.</div>
+        <div class="module-tags">
+          <span class="tag">Formula Cheatsheet</span>
+          <span class="tag">Search Complexities</span>
+          <span class="tag">Inference Rules</span>
+          <span class="tag">Presentation Checklist</span>
+        </div>
+      </div>
+      <div class="module-action">Open Master Reference &rarr;</div>
+    </a>
+
+  </div>
+
+  <!-- Strategic Study Plan -->
+  <div class="strategy-card">
+    <div class="strategy-title">
+      <span>High-Yield Strategic Preparation Plan (Target: 43+ Marks for Grade 'A')</span>
+    </div>
+    <p style="margin:0;font-size:13.5px;line-height:1.65;">
+      <strong>Your Exceptional Advantage:</strong> With an internal score of <strong>56.79 / 60 (94.65%)</strong>, you need only <strong>36 marks</strong> (safe target: <strong>43 marks</strong>) on the 100-mark semester paper to secure a guaranteed <strong>'A' Grade</strong>.<br>
+      <strong>Step 1 (First 40 Marks Guaranteed):</strong> Master the <strong>8-Puzzle A* Search</strong> (Module 01) and the <strong>Alpha-Beta Pruning / Cryptarithmetic CSP</strong> (Module 02). These two questions alone yield 40 marks and lock in your 'A' Grade.<br>
+      <strong>Step 2 (Aiming for 'A+' or 'O' Grade):</strong> Complete the <strong>Alarm Bayesian Network</strong> (Module 04, 55.78% calculation) and the <strong>Python Mutability & Pandas EDA questions</strong> (Module 05) to easily cross 75&ndash;86 marks into <strong>'A+' or 'O' Grade</strong> distinction!
+    </p>
+  </div>
+
+  <div class="footer">
+    <div><strong>Vettri's Handbook</strong> · Fundamentals of Artificial Intelligence (21CSC569J) Exam Preparation</div>
+    <div>Local Files: <code>static/fai-study-guide/</code> · Standalone Offline Mobile-Optimized</div>
+  </div>
+
+</div>
+
+</body>
+</html>

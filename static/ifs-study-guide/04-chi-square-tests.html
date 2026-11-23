@@ -1,0 +1,1155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Chi-Square Tests (χ²) | Complete Exam Question Bank & Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#2563eb;--brand-soft:#eff6ff;--teal:#059669;--teal-soft:#ecfdf5;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#0f172a;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:800}
+aside h2{font-size:19px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.12em;margin:20px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#cbd5e1;font-size:13px}
+nav a:hover,nav a.active{background:#1e293b;color:#38bdf8;text-decoration:none}
+.module-hub-link{background:#1e293b;border:1px solid #334155;color:#38bdf8;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:24px;padding:14px;border:1px solid #334155;border-radius:12px;color:#cbd5e1;font-size:12px;background:#131d35}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#047857;color:#ecfdf5}
+
+/* Mobile Sticky Topbar (iPhone 13 Notch Friendly) */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#0f172a;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{
+  font-size:14.5px;
+  font-weight:800;
+  color:#f8fafc;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.mobile-topbar-actions{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.mobile-btn{
+  background:#1e293b;
+  border:1px solid #334155;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  cursor:pointer;
+  min-height:36px;
+}
+
+/* Horizontal Swipeable Pill Nav for iPhone 13 */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer Menu Overlay */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#0f172a;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #1e293b;
+  padding-bottom:12px;
+}
+.drawer-close{
+  background:none;
+  border:none;
+  color:#94a3b8;
+  font-size:24px;
+  cursor:pointer;
+  padding:4px 8px;
+}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#d97706 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"χ²=Σ(O-E)²/E";position:absolute;right:16px;bottom:-28px;font-size:74px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#fde68a;font-weight:800}
+h1{font-size:clamp(24px,4.5vw,42px);line-height:1.15;margin:10px 0}
+.hero p{max-width:680px;color:#e0e7ff;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+.formula-banner{
+  background:#0f172a;
+  color:#f8fafc;
+  padding:16px 14px;
+  border-radius:12px;
+  text-align:center;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+.formula-banner .katex-display{margin:6px 0}
+.formula-banner small{display:block;font-size:11px;color:#94a3b8;margin-top:6px}
+
+/* KaTeX Horizontal Scrollbar Removal & Vertical Headroom (No Clipping) */
+.katex-display{
+  font-size:clamp(13px, 3.6vw, 15.5px) !important;
+  margin:12px 0 !important;
+  padding:12px 4px 8px !important; /* Ample vertical headroom so numerators/brackets never get sliced */
+  overflow-x:auto !important;
+  overflow-y:visible !important; /* Never clip ascenders */
+  scrollbar-width:none !important; /* Hide Firefox scrollbars */
+  -ms-overflow-style:none !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+.katex-display::-webkit-scrollbar{
+  display:none !important; /* Hide Safari & Chrome scrollbars */
+}
+.katex-display > .katex{
+  display:block !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  padding-top:4px !important; /* Extra safety margin for tall numerators & superscripts */
+  padding-bottom:2px !important;
+}
+.katex{
+  font-size:1em !important;
+  line-height:normal !important;
+  text-rendering:auto !important;
+  white-space:normal !important;
+}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--teal-soft);border-color:var(--teal)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+.note.purple{background:var(--purple-soft);border-color:var(--purple)}
+
+/* Table Styling - Clean & No Cutoff */
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#dbeafe;color:#1e40af;margin-bottom:6px}
+.pyq-badge.ct{background:#e0e7ff;color:#3730a3}
+.pyq-badge.llt{background:#ecfdf5;color:#065f46}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+  -webkit-tap-highlight-color:transparent;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  transition:background .15s;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+button:hover{background:#1d4ed8}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+/* Quiz for iPhone 13 (Large Touch Targets) */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+  -webkit-tap-highlight-color:transparent;
+  transition:all .15s;
+}
+.quiz-q label:active{background:#eff6ff;border-color:#93c5fd}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--teal-soft);border-radius:8px;border-left:3px solid var(--teal);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Interactive Calculator (16px Input to Prevent iOS Auto-Zoom) */
+.tool-box{background:white;border:2px solid #fde68a;border-radius:12px;padding:16px;margin:16px 0}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:8px}
+.tool-group label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px}
+.tool-group input{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  font-size:16px; /* Prevents iOS Safari Zoom */
+  background:#f8fafc;
+  min-height:40px;
+}
+.tool-result{margin-top:12px;padding:10px 12px;background:#fffbeb;border-radius:8px;border-left:4px solid var(--amber);font-size:13px}
+
+.footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+/* iPhone 13 & Mobile Responsive Tweaks */
+@media(max-width:880px){
+  .shell{display:block}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:14px 12px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr;gap:10px}
+  .hero{padding:20px 14px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  h2{font-size:18px}
+  .card{padding:14px}
+  .details-box{padding:12px 14px}
+  .tool-box{padding:14px}
+  button{width:100%;margin-bottom:6px}
+  .controls button{width:auto;flex:1}
+  table{font-size:12px}
+  th,td{padding:7px 8px}
+}
+
+@media print{
+  aside,.controls,button,.tool-box,.mobile-topbar,.mobile-pills-bar{display:none!important}
+  .shell{display:block}
+  main{padding:0}
+  .hero{background:#0f172a!important;color:#fff!important;print-color-adjust:exact}
+  .card,.step,.quiz-q,.details-box{break-inside:avoid;box-shadow:none}
+  .answer,details[open] div,details div{display:block!important}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Sticky Top Bar (iPhone 13 Notch Friendly) -->
+<header class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>Chi-Square Tests (χ²)</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/ifs-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="openDrawer()">&#9776; Menu</button>
+  </div>
+</header>
+
+<!-- Horizontal Quick-Jump Pill Bar (Flick with thumb on train) -->
+<nav class="mobile-pills-bar" aria-label="Quick jumps">
+  <a href="#overview" class="pill-link">01 · Concept</a>
+  <a href="#independence" class="pill-link">02 · Independence</a>
+  <a href="#yates-formula" class="pill-link">03 · Yates'</a>
+  <a href="#goodness-fit" class="pill-link">04 · Goodness of Fit</a>
+  <a href="#pitfalls" class="pill-link">05 · Traps</a>
+  <a href="#q1-epidemic-dec" class="pill-link">Q1 · Epidemic (10M)</a>
+  <a href="#q2-epidemic-may" class="pill-link">Q2 · Uses (12M)</a>
+  <a href="#q3-poisson-fit" class="pill-link">Q3 · Poisson Fit (20M)</a>
+  <a href="#q4-contingency-3x3" class="pill-link">Q4 · 3x3 Table</a>
+  <a href="#q5-uniform-die" class="pill-link">Q5 · Die Fit</a>
+  <a href="#interactive-tool" class="pill-link">2x2 Solver</a>
+  <a href="#practice" class="pill-link">Quiz</a>
+</nav>
+
+<!-- Mobile Drawer Backdrop & Drawer -->
+<div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="drawer-header">
+    <div style="font-size:14px;font-weight:800;color:#38bdf8;">NAVIGATION MENU</div>
+    <button class="drawer-close" onclick="closeDrawer()">&times;</button>
+  </div>
+  <a href="/ifs-study-guide/index.html" class="module-hub-link" style="margin-bottom:14px;padding:8px 10px;border-radius:8px;">&larr; Return to All Guides Hub</a>
+  
+  <div class="nav-label">Core Concepts</div>
+  <nav>
+    <a href="#overview" onclick="closeDrawer()">01 · Intuition & Discrepancy</a>
+    <a href="#independence" onclick="closeDrawer()">02 · Contingency Independence</a>
+    <a href="#yates-formula" onclick="closeDrawer()">03 · Yates' Continuity Correction</a>
+    <a href="#goodness-fit" onclick="closeDrawer()">04 · Goodness of Fit Framework</a>
+    <a href="#pitfalls" onclick="closeDrawer()">05 · 6 Deadly Exam Traps</a>
+  </nav>
+
+  <div class="nav-label">All Solved Exam Problems</div>
+  <nav>
+    <a href="#q1-epidemic-dec" onclick="closeDrawer()">Q1 · Dec 2024: Epidemic Disease (10M)</a>
+    <a href="#q2-epidemic-may" onclick="closeDrawer()">Q2 · May 2025: 4 Uses & Epidemic (12M)</a>
+    <a href="#q3-poisson-fit" onclick="closeDrawer()">Q3 · Nov 2025: Poisson Fit & Pooling (20M)</a>
+    <a href="#q4-contingency-3x3" onclick="closeDrawer()">Q4 · CT-1: Activity & Age (3x3 Table)</a>
+    <a href="#q5-uniform-die" onclick="closeDrawer()">Q5 · Core: Fair Die Goodness of Fit</a>
+  </nav>
+
+  <div class="nav-label">Interactive Practice</div>
+  <nav>
+    <a href="#interactive-tool" onclick="closeDrawer()">Dynamic 2x2 Chi-Square Calculator</a>
+    <a href="#practice" onclick="closeDrawer()">Interactive Self-Test Quiz</a>
+    <a href="#checklist" onclick="closeDrawer()">Exam Hall Checklist</a>
+  </nav>
+</div>
+
+<div class="shell">
+
+<!-- Desktop Sidebar (Hidden on mobile) -->
+<aside>
+  <div class="brand">M.Tech · Inferential Statistics</div>
+  <h2>Chi-Square Tests (χ²)<br>Master Study Guide</h2>
+  
+  <a href="/ifs-study-guide/index.html" class="module-hub-link">&larr; Return to All Guides Hub</a>
+
+  <div class="nav-label">Core Pedagogy</div>
+  <nav>
+    <a href="#overview">01 · Intuition & Discrepancy</a>
+    <a href="#independence">02 · Contingency Independence</a>
+    <a href="#yates-formula">03 · Yates' Continuity Correction</a>
+    <a href="#goodness-fit">04 · Goodness of Fit Framework</a>
+    <a href="#pitfalls">05 · 6 Deadly Exam Traps</a>
+  </nav>
+
+  <div class="nav-label">Complete Question Bank</div>
+  <nav>
+    <a href="#q1-epidemic-dec">Q1 · Dec 2024: Epidemic Disease (10M)</a>
+    <a href="#q2-epidemic-may">Q2 · May 2025: 4 Uses & Epidemic (12M)</a>
+    <a href="#q3-poisson-fit">Q3 · Nov 2025: Poisson Fit & Pooling (20M)</a>
+    <a href="#q4-contingency-3x3">Q4 · CT-1: Activity & Age (3x3 Table)</a>
+    <a href="#q5-uniform-die">Q5 · Core: Fair Die Goodness of Fit</a>
+  </nav>
+
+  <div class="nav-label">Interactive Practice</div>
+  <nav>
+    <a href="#interactive-tool">Dynamic 2x2 Calculator</a>
+    <a href="#practice">Interactive Self-Test Quiz</a>
+    <a href="#checklist">Exam Hall Checklist</a>
+  </nav>
+
+  <div class="side-note">
+    <strong>Semester Exam Targets</strong><br>
+    Internal score: <strong>48 / 60</strong><br>
+    Min Sem score for A: <strong>58 / 100</strong><br>
+    Target with margin: <strong>65 / 100</strong><br>
+    <span class="status-pill pill-target">Priority 4 Unit 5 Topic</span>
+    <p style="margin-top:8px;color:#94a3b8;font-size:11px">Appears in both Section B (10-12M) and Section C (20M).</p>
+  </div>
+</aside>
+
+<!-- Main Body -->
+<main>
+
+<header class="hero" id="overview">
+  <div class="eyebrow">Unit 5 · Non-Parametric & Association Tests · Priority 4</div>
+  <h1>Chi-Square Tests ($\chi^2$)</h1>
+  <p>The comprehensive master guide covering contingency table independence, expected frequency matrices, Yates' continuity correction, distribution goodness-of-fit, and pooling rules.</p>
+  <div class="pills">
+    <span class="pill">Test of Independence</span>
+    <span class="pill">Yates' Correction</span>
+    <span class="pill">Poisson Fit & Pooling (20M)</span>
+    <span class="pill">Dec 2024 & May 2025 Solved</span>
+    <span class="pill">Zero-Scroll Math</span>
+  </div>
+</header>
+
+<div style="margin:14px 0;display:flex;gap:8px;flex-wrap:wrap;">
+  <button class="secondary" style="font-size:12.5px;padding:6px 12px;min-height:36px;" onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All Solutions</button>
+  <button class="secondary" style="font-size:12.5px;padding:6px 12px;min-height:36px;" onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All Solutions</button>
+</div>
+
+<!-- Section 1 -->
+<section>
+  <h2>01. Intuition: The Discrepancy Metric</h2>
+  <p class="lead">Developed by Karl Pearson, the **Chi-Square ($\chi^2$) statistic** measures the normalized discrepancy between empirically observed counts ($O$) and theoretically expected counts ($E$ under $H_0$):</p>
+
+  <div class="formula-banner">
+    $$\begin{aligned}
+    \chi^2 = \sum_{i=1}^k \frac{(O_i - E_i)^2}{E_i} \sim \chi^2(df)
+    \end{aligned}$$
+    <small>Sum of Squared Residuals Weighted by Theoretical Frequencies</small>
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="kicker">Core Test 1 · Cross-Tabulation</div>
+      <h3>Test of Independence</h3>
+      <p>Determines if two categorical attributes (e.g., Treatment vs Recovery, Smoker vs Lung Cancer) are statistically independent in an $r \times c$ contingency table.</p>
+    </div>
+    <div class="card">
+      <div class="kicker">Core Test 2 · Theoretical Conformity</div>
+      <h3>Goodness of Fit Test</h3>
+      <p>Evaluates whether an observed sample frequency distribution conforms to a theoretical probability model (Uniform, Poisson, Binomial, Mendelian genetic ratios).</p>
+    </div>
+  </div>
+
+  <div class="note good">
+    <strong>4 Essential Conditions for Validity (University Rubric):</strong><br>
+    1. **Total Sample Size:** $N \ge 50$.<br>
+    2. **Minimum Expected Frequency (Rule of 5):** No expected cell frequency $E_i$ should be $< 5$. If $E_i < 5$, pool adjacent classes or apply Yates' correction.<br>
+    3. **Raw Counts Only:** Observations MUST be raw counts/frequencies. Never apply $\chi^2$ directly to percentages, proportions, or averages.<br>
+    4. **Mutually Exclusive & Random:** Each subject must belong to exactly one category, sampled independently.
+  </div>
+</section>
+
+<!-- Section 2 -->
+<section id="independence">
+  <h2>02. Contingency Tables & Test of Independence</h2>
+  <p class="lead">In an $r \times c$ contingency table with $r$ rows and $c$ columns, the expected frequency for cell $(i, j)$ under $H_0$ (Independence) is:</p>
+
+  <div class="formula-banner">
+    $$\begin{aligned}
+    E_{ij} = \frac{(\text{Row } i \text{ Total}) \times (\text{Column } j \text{ Total})}{\text{Grand Total } N}
+    \end{aligned}$$
+    <small>Degrees of Freedom: $df = (r - 1)(c - 1)$</small>
+  </div>
+
+  <div class="card">
+    <h3>Direct $2 \times 2$ Table Shortcut Formula</h3>
+    <p>For a standard $2 \times 2$ table $\begin{pmatrix} a & b \\ c & d \end{pmatrix}$ with $N = a + b + c + d$, Pearson's statistic simplifies without calculating individual $E_{ij}$:</p>
+    $$\begin{aligned}
+    \chi^2 = \frac{N (ad - bc)^2}{(a + b)(c + d)(a + c)(b + d)}, \quad df = (2 - 1)(2 - 1) = 1
+    \end{aligned}$$
+  </div>
+</section>
+
+<!-- Section 3 -->
+<section id="yates-formula">
+  <h2>03. Yates' Correction for Continuity ($2 \times 2$ Table)</h2>
+  <p class="lead">Because the discrete counts are approximated by a continuous $\chi^2$ distribution, Frank Yates introduced a continuity correction ($\pm 0.5$) for $2 \times 2$ tables, especially when cell counts are modest:</p>
+
+  <div class="formula-banner">
+    $$\begin{aligned}
+    \chi_{\text{Yates}}^2 = \frac{N \left(|ad - bc| - \frac{N}{2}\right)^2}{(a + b)(c + d)(a + c)(b + d)}, \quad df = 1
+    \end{aligned}$$
+    <small>Subtracting $N/2$ contracts the discrepancy towards zero, preventing Type I error inflation</small>
+  </div>
+
+  <div class="note warn">
+    <strong>Examiner's Grading Rule:</strong> Whenever solving a $2 \times 2$ table in Section B or C, presenting **both** the uncorrected Pearson $\chi^2$ and Yates' continuity corrected $\chi^2$ guarantees 100% marks under any answer key!
+  </div>
+</section>
+
+<!-- Section 4 -->
+<section id="goodness-fit">
+  <h2>04. Goodness of Fit & Parameter Estimation Rules</h2>
+  <p class="lead">Tests whether an observed frequency distribution $O_i$ matches expected frequencies $E_i = N \cdot P(X = x_i)$.</p>
+
+  <div class="card">
+    <h3>Degrees of Freedom in Goodness of Fit:</h3>
+    $$\begin{aligned}
+    df = k - 1 - m
+    \end{aligned}$$
+    <ul style="margin-left:18px;line-height:1.75;font-size:13.5px;margin-top:6px;">
+      <li>$k$: Number of categories/classes <strong>after pooling</strong> small cells ($E < 5$).</li>
+      <li>$1$: Subtracted because $\sum E_i = \sum O_i = N$ (Total frequency constraint).</li>
+      <li>$m$: Number of population parameters <strong>estimated from the sample data</strong>:
+        <ul>
+          <li>$m = 0$ for completely specified theoretical ratios (e.g. Mendelian 9:3:3:1 or Fair Die $1/6$).</li>
+          <li>$m = 1$ when estimating mean rate $\lambda = \bar{x}$ (Poisson) or success rate $p$ (Binomial).</li>
+          <li>$m = 2$ when estimating mean $\mu$ and standard deviation $\sigma$ (Normal).</li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- Section 5: Deadly Traps -->
+<section id="pitfalls">
+  <h2>05. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 1 · Observed in Denominator</div>
+      <h3>Dividing by $O$ instead of $E$</h3>
+      <p>The denominator MUST be Expected frequency: $\frac{(O - E)^2}{E}$. Writing $\frac{(O - E)^2}{O}$ is a fatal conceptual error.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 2 · Ignoring $E < 5$ Pooling Rule</div>
+      <h3>Testing cells where expected frequency is $< 5$</h3>
+      <p>If any expected cell has $E_i < 5$, you MUST pool it with an adjacent class. Failing to pool invalidates the large-sample $\chi^2$ approximation.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 3 · Wrong Degrees of Freedom</div>
+      <h3>Using $df = N - 1$ on a Contingency Table</h3>
+      <p>In contingency tables, $df = (r - 1)(c - 1)$, NOT $N - 1$. For a $2 \times 2$ table, $df = 1$. For a $3 \times 3$ table, $df = (2)(2) = 4$.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 4 · Forgetting $m$ in Goodness of Fit</div>
+      <h3>Using $df = k - 1$ when $\lambda$ was estimated</h3>
+      <p>When you compute sample mean $\lambda = \sum fx / N$, you used up 1 degree of freedom! The correct $df$ is $k - 1 - 1 = k - 2$.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 5 · Testing Proportions Directly</div>
+      <h3>Applying $\chi^2$ to percentages like 40% and 60%</h3>
+      <p>$\chi^2$ requires integer frequencies. Always multiply percentages by sample size to get raw headcounts ($O$) before computing $\chi^2$.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 6 · Two-Tailed Critical Lookups</div>
+      <h3>Dividing $\alpha$ by 2</h3>
+      <p>$\chi^2$ is inherently a **one-tailed (right-tailed) test** because deviations are squared. For $\alpha = 0.05$ with $df = 1$, use $\chi^2_{0.05, 1} = \mathbf{3.841}$.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================== -->
+<!-- COMPLETE QUESTION BANK: ALL 5 PROBLEMS     -->
+<!-- ========================================== -->
+<section id="question-bank">
+  <h2>06. The Complete University Question Bank (All Problems Solved)</h2>
+  <p class="lead">Every single Chi-Square question from past semester exams (May 2025, Dec 2024, Nov 2025) and class test materials:</p>
+
+  <!-- QUESTION 1: Dec 2024 Q5(i) Epidemic Disease (10 Marks) -->
+  <div id="q1-epidemic-dec" class="details-box">
+    <span class="pyq-badge">Semester Exam Paper · December 2024 (Question 5 Part i) &middot; 10 Marks</span>
+    <h3 style="margin:6px 0 10px;">Question 1: Epidemic Disease Treatment Effectiveness ($2 \times 2$ Table) (10 Marks)</h3>
+    <p><strong>Question Statement (Verbatim):</strong><br>
+    <em>"In an epidemic of a certain disease, 92 children contracted the disease. Of these, 41 received no treatment and of these 10 showed after-effects. Of the remainder who did receive treatment, 17 showed after-effects. Test the hypothesis that the treatment was not effective at $\alpha = 0.05$. (10 Marks)"</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution (Pearson & Yates)</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Construct the $2 \times 2$ Contingency Table:</strong></p>
+        <p>Total children $N = 92$. Untreated = 41 (10 after-effects, $41 - 10 = 31$ no after-effects). Treated = $92 - 41 = 51$ (17 after-effects, $51 - 17 = 34$ no after-effects).</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Group</th><th>After-Effects</th><th>No After-Effects</th><th>Row Total</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><strong>No Treatment</strong></td><td>$a = 10$</td><td>$b = 31$</td><td>$a + b = \mathbf{41}$</td></tr>
+              <tr><td><strong>Treatment</strong></td><td>$c = 17$</td><td>$d = 34$</td><td>$c + d = \mathbf{51}$</td></tr>
+              <tr style="font-weight:700;background:#f1f5f9;">
+                <td>Col Total</td><td>$a + c = \mathbf{27}$</td><td>$b + d = \mathbf{65}$</td><td>$N = \mathbf{92}$</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:8px;"><strong>2. Cross-Product Term:</strong></p>
+        $$\begin{aligned}
+        ad - bc &= (10 \times 34) - (31 \times 17) = 340 - 527 = \mathbf{-187} \\[4pt]
+        (ad - bc)^2 &= (-187)^2 = \mathbf{34,969}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>3. Uncorrected Pearson Chi-Square ($\chi^2$):</strong></p>
+        $$\begin{aligned}
+        \chi^2 &= \frac{N (ad - bc)^2}{(a + b)(c + d)(a + c)(b + d)} \\[6pt]
+        &= \frac{92 \times 34,969}{41 \times 51 \times 27 \times 65} = \frac{3,217,148}{3,668,535} \approx \mathbf{0.8769}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>4. With Yates' Continuity Correction:</strong></p>
+        $$\begin{aligned}
+        |ad - bc| - \frac{N}{2} &= |-187| - \frac{92}{2} = 187 - 46 = \mathbf{141} \\[4pt]
+        \chi_{\text{Yates}}^2 &= \frac{92 \times (141)^2}{3,668,535} = \frac{92 \times 19,881}{3,668,535} = \frac{1,829,052}{3,668,535} \approx \mathbf{0.4986}
+        \end{aligned}$$
+
+        <div class="note good">
+          <strong>Decision & Conclusion:</strong><br>
+          Degrees of freedom: $df = (2 - 1)(2 - 1) = \mathbf{1}$. Critical value at $\alpha = 0.05$ is $\chi^2_{0.05, 1} = \mathbf{3.841}$.<br>
+          Since $\chi^2_{\text{calc}} = 0.8769 < 3.841$ (and $\chi^2_{\text{Yates}} = 0.4986 < 3.841$), we <strong>fail to reject $H_0$</strong>.<br>
+          <em>There is no statistically significant evidence at the 5% level to show that the treatment was effective in reducing after-effects.</em>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 2: May 2025 Paper Q4(ii) (12 Marks) -->
+  <div id="q2-epidemic-may" class="details-box">
+    <span class="pyq-badge">Semester Exam Paper · May 2025 (Question 4 Part ii) &middot; 12 Marks</span>
+    <h3 style="margin:6px 0 10px;">Question 2: Treatment Effectiveness & 4 Uses of Chi-Square (12 Marks)</h3>
+    <p><strong>Question Statement (Verbatim):</strong><br>
+    <em>"Solve the 92 children epidemic disease problem and test the hypothesis that treatment was not effective. Also explain the uses of chi-square test in different scenarios. (12 Marks)"</em></p>
+
+    <details open>
+      <summary>View Complete 4 Methodological Uses Model Answer</summary>
+      <div style="margin-top:12px;">
+        <p><em>(Numerical solution matches Question 1: $\chi^2 = 0.8769 < 3.841 \implies$ Fail to reject $H_0$).</em></p>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:12px 0;">
+
+        <p><strong>4 Methodological Uses of the Chi-Square Test (Full Marks Criteria):</strong></p>
+        <ol style="margin-left:18px;line-height:1.75;font-size:13.5px;">
+          <li><strong>Test of Independence of Attributes:</strong> Evaluates whether two qualitative variables in a contingency table ($r \times c$) possess an association or operate independently ($df = (r-1)(c-1)$).</li>
+          <li><strong>Test of Goodness of Fit:</strong> Assesses whether observed empirical frequencies conform to a hypothesized theoretical distribution (Poisson, Binomial, Normal, Uniform) ($df = k - 1 - m$).</li>
+          <li><strong>Test of Homogeneity:</strong> Tests whether multiple independent sub-populations are homogeneous with respect to a specific categorical characteristic.</li>
+          <li><strong>Test of a Single Population Variance:</strong> Tests whether a sample variance $s^2$ from a normal population conforms to a hypothesized population variance $\sigma_0^2$ via the test statistic:
+            $$\begin{aligned}
+            \chi^2 = \frac{(n - 1)s^2}{\sigma_0^2} \sim \chi^2(n - 1)
+            \end{aligned}$$
+          </li>
+        </ol>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 3: Nov 2025 Paper Q5 Poisson Fit (20 Marks) -->
+  <div id="q3-poisson-fit" class="details-box">
+    <span class="pyq-badge">Semester Exam Paper · November 2025 (Question 5) &middot; 20 Marks</span>
+    <h3 style="margin:6px 0 10px;">Question 3: Poisson Distribution Goodness of Fit & Pooling (20 Marks)</h3>
+    <p><strong>Question Statement (Verbatim):</strong><br>
+    <em>"Explain Chi square Test and how it is useful to solve a goodness of fit problem. Use the following data to explain (20 Marks)"</em></p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>x</th><th>0</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><strong>f</strong></td><td>314</td><td>335</td><td>204</td><td>86</td><td>29</td><td>9</td><td>3</td><td>0</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution & Pooling Table</summary>
+      <div style="margin-top:12px;">
+        <p><strong>Step A: Parameter Estimation ($\lambda$):</strong></p>
+        $$\begin{aligned}
+        N &= 314 + 335 + 204 + 86 + 29 + 9 + 3 + 0 = \mathbf{980} \\[4pt]
+        \sum fx &= 0(314) + 1(335) + 2(204) + 3(86) + 4(29) + 5(9) + 6(3) + 7(0) \\[4pt]
+        &= 335 + 408 + 258 + 116 + 45 + 18 = \mathbf{1,180} \\[4pt]
+        \lambda &= \frac{\sum fx}{N} = \frac{1,180}{980} \approx \mathbf{1.2041}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>Step B: Expected Frequencies $E_i = N \frac{e^{-\lambda} \lambda^x}{x!}$:</strong></p>
+        <ul>
+          <li>$E(0) = 980 \times e^{-1.2041} = 980 \times 0.29997 = \mathbf{293.97}$</li>
+          <li>$E(1) = 293.97 \times 1.2041 = \mathbf{353.96}$</li>
+          <li>$E(2) = 353.96 \times \frac{1.2041}{2} = \mathbf{213.10}$</li>
+          <li>$E(3) = 213.10 \times \frac{1.2041}{3} = \mathbf{85.53}$</li>
+          <li>$E(4) = 85.53 \times \frac{1.2041}{4} = \mathbf{25.75}$</li>
+          <li>$E(5) = 6.20, \; E(6) = 1.24, \; E(7) = 0.21$</li>
+        </ul>
+
+        <p style="margin-top:8px;"><strong>Step C: Mandatory Pooling Rule ($E_i \ge 5$):</strong></p>
+        <p>Because $E(6) = 1.24 < 5$ and $E(7) = 0.21 < 5$, classes $x \ge 5$ are pooled together:</p>
+        $$\begin{aligned}
+        O_{\text{pooled}} &= 9 + 3 + 0 = \mathbf{12} \\[4pt]
+        E_{\text{pooled}} &= 980 - (293.97 + 353.96 + 213.10 + 85.53 + 25.75) = \mathbf{7.69}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>Step D: Chi-Square Calculation Table:</strong></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Class ($x$)</th><th>$O_i$</th><th>$E_i$</th><th>$O_i - E_i$</th><th>$(O_i - E_i)^2$</th><th>$\frac{(O_i - E_i)^2}{E_i}$</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>0</td><td>314</td><td>293.97</td><td>$+20.03$</td><td>401.20</td><td>$1.3648$</td></tr>
+              <tr><td>1</td><td>335</td><td>353.96</td><td>$-18.96$</td><td>359.48</td><td>$1.0156$</td></tr>
+              <tr><td>2</td><td>204</td><td>213.10</td><td>$-9.10$</td><td>82.81</td><td>$0.3886$</td></tr>
+              <tr><td>3</td><td>86</td><td>85.53</td><td>$+0.47$</td><td>0.22</td><td>$0.0026$</td></tr>
+              <tr><td>4</td><td>29</td><td>25.75</td><td>$+3.25$</td><td>10.56</td><td>$0.4102$</td></tr>
+              <tr><td>$\ge 5$</td><td>12</td><td>7.69</td><td>$+4.31$</td><td>18.58</td><td>$2.4156$</td></tr>
+              <tr style="font-weight:700;background:#f1f5f9;">
+                <td>Total</td><td>980</td><td>980.00</td><td>0</td><td>-</td><td>$\chi^2_{\text{calc}} = \mathbf{5.5974}$</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:8px;"><strong>Step E: Degrees of Freedom & Decision:</strong></p>
+        $$\begin{aligned}
+        df &= k - 1 - m = 6 - 1 - 1 = \mathbf{4} \\[4pt]
+        \chi^2_{0.05, 4} &= \mathbf{9.488}
+        \end{aligned}$$
+        <div class="note good">
+          Since $\chi^2_{\text{calc}} = 5.597 < 9.488$, we <strong>fail to reject the null hypothesis</strong>.<br>
+          <em>The Poisson distribution is an excellent fit for the observed data.</em>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 4: 3x3 Table Community Center (CT-1 Archetype) -->
+  <div id="q4-contingency-3x3" class="details-box">
+    <span class="pyq-badge ct">CT-1 & LLT Unit 2 Archetype &middot; $3 \times 3$ Contingency Table</span>
+    <h3 style="margin:6px 0 10px;">Question 4: Age Group vs Preferred Sport Activity ($3 \times 3$ Contingency)</h3>
+    <p><strong>Question Statement:</strong><br>
+    <em>"A community sports center records 390 participants across 3 age tiers and 3 sports activities. Test at $\alpha = 0.05$ whether sport preference is independent of age group."</em></p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Age Tier</th><th>Swimming (S)</th><th>Volleyball (V)</th><th>Table Tennis (TT)</th><th>Row Total</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Adult</td><td>80 (69.23)</td><td>50 (64.62)</td><td>40 (36.15)</td><td>$R_1 = \mathbf{170}$</td></tr>
+          <tr><td>Teen</td><td>30 (44.87)</td><td>60 (41.87)</td><td>20 (23.41)</td><td>$R_2 = \mathbf{110}$</td></tr>
+          <tr><td>Child</td><td>40 (44.87)</td><td>30 (41.87)</td><td>70 (23.41)</td><td>$R_3 = \mathbf{110}$</td></tr>
+          <tr style="font-weight:700;background:#f1f5f9;">
+            <td>Col Total</td><td>$C_1 = \mathbf{160}$</td><td>$C_2 = \mathbf{150}$</td><td>$C_3 = \mathbf{80}$</td><td>$N = \mathbf{390}$</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Expected Frequencies $E_{ij} = \frac{R_i \times C_j}{N}$:</strong></p>
+        <ul>
+          <li>Adult: $E_{11} = \frac{170 \times 160}{390} = 69.23; \; E_{12} = \frac{170 \times 150}{390} = 64.62; \; E_{13} = \frac{170 \times 80}{390} = 36.15$</li>
+          <li>Teen: $E_{21} = \frac{110 \times 160}{390} = 44.87; \; E_{22} = \frac{110 \times 150}{390} = 41.87; \; E_{23} = \frac{110 \times 80}{390} = 23.41$</li>
+          <li>Child: $E_{31} = 44.87; \; E_{32} = 41.87; \; E_{33} = 23.41$</li>
+        </ul>
+
+        <p style="margin-top:8px;"><strong>2. Chi-Square Summation:</strong></p>
+        $$\begin{aligned}
+        \chi^2 &= \frac{(80 - 69.23)^2}{69.23} + \frac{(50 - 64.62)^2}{64.62} + \dots + \frac{(70 - 23.41)^2}{23.41} \\[4pt]
+        &= 1.676 + 3.308 + 0.410 + 4.928 + 7.850 + 0.497 + 0.529 + 3.366 + 92.74 \\[4pt]
+        &\approx \mathbf{115.30}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>3. Degrees of Freedom & Decision:</strong></p>
+        $$\begin{aligned}
+        df = (r - 1)(c - 1) = (3 - 1)(3 - 1) = 2 \times 2 = \mathbf{4} \\[4pt]
+        \chi^2_{0.05, 4} = \mathbf{9.488}
+        \end{aligned}$$
+        <div class="note good">
+          Since $\chi^2_{\text{calc}} = 115.30 \gg 9.488$, we **reject $H_0$** ($p < 0.0001$).<br>
+          <em>Sport preference is highly dependent on age tier (Children heavily prefer Table Tennis).</em>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 5: Fair Die Goodness of Fit -->
+  <div id="q5-uniform-die" class="details-box">
+    <span class="pyq-badge llt">Uniform Distribution Archetype &middot; Die Rolling</span>
+    <h3 style="margin:6px 0 10px;">Question 5: Testing a Fair 6-Sided Die (Discrete Uniform Fit)</h3>
+    <p><strong>Question Statement:</strong><br>
+    <em>"A six-sided die is rolled 120 times with observed outcomes: 1: 15, 2: 24, 3: 18, 4: 21, 5: 25, 6: 17. At $\alpha = 0.05$, test whether the die is fair."</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Theoretical Expected Frequencies:</strong> Under $H_0$ (fair die), each face has probability $1/6$.</p>
+        $$\begin{aligned}
+        E_i = 120 \times \frac{1}{6} = \mathbf{20} \quad \text{for all } i \in \{1, 2, 3, 4, 5, 6\}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>2. Compute Chi-Square Statistic:</strong></p>
+        $$\begin{aligned}
+        \chi^2 &= \sum_{i=1}^6 \frac{(O_i - 20)^2}{20} \\[4pt]
+        &= \frac{(15-20)^2 + (24-20)^2 + (18-20)^2 + (21-20)^2 + (25-20)^2 + (17-20)^2}{20} \\[4pt]
+        &= \frac{25 + 16 + 4 + 1 + 25 + 9}{20} = \frac{80}{20} = \mathbf{4.00}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>3. Degrees of Freedom & Decision:</strong></p>
+        $$\begin{aligned}
+        df &= k - 1 - 0 = 6 - 1 = \mathbf{5} \\[4pt]
+        \chi^2_{0.05, 5} &= \mathbf{11.070}
+        \end{aligned}$$
+        <div class="note good">
+          Since $\chi^2_{\text{calc}} = 4.00 < 11.070$, we **fail to reject $H_0$**.<br>
+          <em>The die is consistent with a fair, balanced six-sided die.</em>
+        </div>
+      </div>
+    </details>
+  </div>
+
+</section>
+
+<!-- Section 7: Interactive 2x2 Calculator -->
+<section id="interactive-tool" class="tool-box">
+  <div class="eyebrow" style="color:var(--amber)">Interactive Study Tool</div>
+  <h2 style="border:none;margin-top:4px;">Dynamic 2x2 Contingency Table & Yates Calculator</h2>
+  <p style="font-size:13px;color:var(--muted)">Enter cell counts $\begin{pmatrix} a & b \\ c & d \end{pmatrix}$ to compute Pearson $\chi^2$ and Yates' corrected $\chi^2$ instantly:</p>
+
+  <div class="tool-grid">
+    <div class="tool-group">
+      <label>Cell a (NoTreat + Effect)</label>
+      <input type="number" id="inp-a" value="10" min="0" oninput="calculateChi2()">
+    </div>
+    <div class="tool-group">
+      <label>Cell b (NoTreat + NoEffect)</label>
+      <input type="number" id="inp-b" value="31" min="0" oninput="calculateChi2()">
+    </div>
+    <div class="tool-group">
+      <label>Cell c (Treat + Effect)</label>
+      <input type="number" id="inp-c" value="17" min="0" oninput="calculateChi2()">
+    </div>
+    <div class="tool-group">
+      <label>Cell d (Treat + NoEffect)</label>
+      <input type="number" id="inp-d" value="34" min="0" oninput="calculateChi2()">
+    </div>
+  </div>
+
+  <div class="tool-result" id="chi2-output">
+    Loading calculations...
+  </div>
+</section>
+
+<!-- Section 8: Interactive Self-Test Quiz -->
+<section id="practice">
+  <h2>08. Interactive Self-Test Quiz (Active Recall)</h2>
+  <p class="lead">Test your contingency table, Yates' correction, and goodness of fit skills. Attempt all 4 questions:</p>
+
+  <div class="quiz-q" data-answer="b">
+    <strong>Question 1 — Contingency Table Degrees of Freedom</strong>
+    <p>In a study with a $3 \times 4$ contingency table, what are the degrees of freedom for testing independence?</p>
+    <label><input type="radio" name="q1" value="a"> 12</label>
+    <label><input type="radio" name="q1" value="b"> 6</label>
+    <label><input type="radio" name="q1" value="c"> 11</label>
+    <label><input type="radio" name="q1" value="d"> 7</label>
+    <div class="feedback" id="f1"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(1)">Check Answer</button>
+      <button onclick="toggleAnswer('a1')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a1">
+      <strong>Correct: $df = (r - 1)(c - 1) = (3 - 1)(4 - 1) = 2 \times 3 = \mathbf{6}$</strong>.
+    </div>
+  </div>
+
+  <div class="quiz-q" data-answer="a">
+    <strong>Question 2 — Purpose of Yates' Continuity Correction</strong>
+    <p>Why is Yates' correction applied to a $2 \times 2$ contingency table?</p>
+    <label><input type="radio" name="q2" value="a"> To adjust for approximating discrete integer counts with a continuous distribution, preventing false positives.</label>
+    <label><input type="radio" name="q2" value="b"> To increase the calculated Chi-square value so $H_0$ is rejected faster.</label>
+    <label><input type="radio" name="q2" value="c"> To calculate degrees of freedom automatically.</label>
+    <label><input type="radio" name="q2" value="d"> To allow testing when total sample size $N < 10$.</label>
+    <div class="feedback" id="f2"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(2)">Check Answer</button>
+      <button onclick="toggleAnswer('a2')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a2">
+      <strong>Correct: Option A</strong>.<br>
+      Subtracting $N/2$ contracts the discrepancy towards zero, correcting for continuity and reducing Type I error inflation.
+    </div>
+  </div>
+
+  <div class="quiz-q" data-answer="c">
+    <strong>Question 3 — Rule of 5 Pooling Requirement</strong>
+    <p>In a Chi-square test, what must be done if an expected frequency is $E_i = 3.2$?</p>
+    <label><input type="radio" name="q3" value="a"> Discard the observation.</label>
+    <label><input type="radio" name="q3" value="b"> Multiply all frequencies by 10.</label>
+    <label><input type="radio" name="q3" value="c"> Pool the cell with an adjacent category so the combined expected frequency is $\ge 5$.</label>
+    <label><input type="radio" name="q3" value="d"> Ignore it if $O_i \ge 5$.</label>
+    <div class="feedback" id="f3"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(3)">Check Answer</button>
+      <button onclick="toggleAnswer('a3')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a3">
+      <strong>Correct: Option C</strong>.<br>
+      Under Cochran's criteria, every expected cell frequency must be $\ge 5$. Small cells are pooled, reducing the number of effective classes $k$.
+    </div>
+  </div>
+
+  <div class="quiz-q" data-answer="d">
+    <strong>Question 4 — Poisson Goodness of Fit Degrees of Freedom</strong>
+    <p>A sample of counts is classified into 7 categories after pooling, and the Poisson mean $\lambda$ is estimated from the data. What is the degrees of freedom?</p>
+    <label><input type="radio" name="q4" value="a"> 7</label>
+    <label><input type="radio" name="q4" value="b"> 6</label>
+    <label><input type="radio" name="q4" value="c"> 4</label>
+    <label><input type="radio" name="q4" value="d"> 5</label>
+    <div class="feedback" id="f4"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(4)">Check Answer</button>
+      <button onclick="toggleAnswer('a4')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a4">
+      <strong>Correct: $df = k - 1 - m = 7 - 1 - 1 = \mathbf{5}$</strong>.<br>
+      One degree of freedom is lost for total frequency constraint, and another is lost for estimating $\lambda$.
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <h3>Self-Test Progress</h3>
+    <div class="small" id="scoreText">0 of 4 correct</div>
+    <div class="progress-wrap"><div class="progress" id="scoreBar"></div></div>
+  </div>
+</section>
+
+<!-- Section 9: Exam Checklist -->
+<section id="checklist">
+  <h2>09. Exam Hall Answer Sheet Presentation Checklist</h2>
+  
+  <div class="card">
+    <p>When solving a Chi-Square problem in the semester exam, follow this exact structure to guarantee maximum marks:</p>
+    <ol style="margin-left:18px;line-height:1.75;font-size:13.5px;">
+      <li><strong>State the Hypotheses:</strong> $H_0$: The two attributes are independent (or data follows specified distribution) vs $H_1$: Dependent.</li>
+      <li><strong>Contingency Table with Marginals:</strong> Draw the table with Row Totals, Column Totals, and Grand Total $N$.</li>
+      <li><strong>Expected Frequencies:</strong> Write $E_{ij} = \frac{R_i \times C_j}{N}$ and list all cell expectations.</li>
+      <li><strong>Check the Rule of 5:</strong> Explicitly note: <em>"All expected frequencies $E_i \ge 5$, so Chi-square conditions are satisfied."</em></li>
+      <li><strong>Chi-Square Calculation:</strong> State formula $\chi^2 = \sum \frac{(O-E)^2}{E}$ (and Yates formula for $2 \times 2$). Show arithmetic table.</li>
+      <li><strong>Degrees of Freedom & Critical Value:</strong> State $df = (r-1)(c-1)$ or $df = k - 1 - m$ and look up $\chi^2_{\alpha, df}$.</li>
+      <li><strong>Final Decision & Contextual Conclusion:</strong> Compare $\chi^2_{\text{calc}}$ against $\chi^2_{\text{crit}}$ and write an unambiguous conclusion sentence.</li>
+    </ol>
+  </div>
+
+  <div class="controls" style="margin-top:16px;">
+    <button onclick="window.print()">Print / Save as PDF</button>
+    <button class="secondary" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to Top &uarr;</button>
+    <a href="/ifs-study-guide/05-tests-of-means-proportions.html" class="btn" style="background:#059669;color:#fff;padding:8px 14px;border-radius:8px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;min-height:40px;">Proceed to Next: 05 &middot; Tests of Means & Proportions &rarr;</a>
+  </div>
+</section>
+
+<div class="footer">
+  <div><strong>Inferential Statistics (21CSC529T)</strong> &middot; Module 04: Chi-Square Tests ($\chi^2$)</div>
+  <div>Next Topic in 2-Day Plan: <strong>Tests of Means & Proportions ($t$ and $Z$ tests)</strong></div>
+</div>
+
+</main>
+</div>
+
+<script>
+// Mobile Drawer open/close for iPhone 13
+function openDrawer(){
+  document.getElementById('mobileDrawer').classList.add('open');
+  document.getElementById('drawerBackdrop').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer(){
+  document.getElementById('mobileDrawer').classList.remove('open');
+  document.getElementById('drawerBackdrop').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Toggle solution explanations
+function toggleAnswer(id){
+  document.getElementById(id).classList.toggle('show');
+}
+
+// Quiz evaluation logic
+function checkQuiz(n){
+  const q = document.querySelectorAll('.quiz-q')[n-1];
+  const chosen = q.querySelector('input:checked');
+  const feedback = document.getElementById('f'+n);
+  
+  if(!chosen){
+    feedback.textContent = 'Please select an option first.';
+    feedback.style.color = '#b45309';
+    return;
+  }
+  
+  const isCorrect = chosen.value === q.dataset.answer;
+  if(isCorrect){
+    feedback.textContent = 'Correct! Outstanding precision.';
+    feedback.style.color = '#059669';
+    q.dataset.done = 'yes';
+  } else {
+    feedback.textContent = 'Incorrect. Check the explanation and try again.';
+    feedback.style.color = '#dc2626';
+    q.dataset.done = 'no';
+  }
+  
+  const completed = [...document.querySelectorAll('.quiz-q')].filter(el => el.dataset.done === 'yes').length;
+  document.getElementById('scoreText').textContent = `${completed} of 4 correct`;
+  document.getElementById('scoreBar').style.width = `${(completed / 4) * 100}%`;
+}
+
+// Interactive 2x2 Chi-Square calculation engine
+function calculateChi2(){
+  const a = parseFloat(document.getElementById('inp-a').value) || 0;
+  const b = parseFloat(document.getElementById('inp-b').value) || 0;
+  const c = parseFloat(document.getElementById('inp-c').value) || 0;
+  const d = parseFloat(document.getElementById('inp-d').value) || 0;
+
+  const N = a + b + c + d;
+  if(N === 0){
+    document.getElementById('chi2-output').innerHTML = 'Total count is 0.';
+    return;
+  }
+
+  const r1 = a + b;
+  const r2 = c + d;
+  const c1 = a + c;
+  const c2 = b + d;
+  const den = r1 * r2 * c1 * c2;
+
+  if(den === 0){
+    document.getElementById('chi2-output').innerHTML = 'Marginal totals must be non-zero.';
+    return;
+  }
+
+  const ad_bc = (a * d) - (b * c);
+  const rawChi2 = (N * Math.pow(ad_bc, 2)) / den;
+
+  const yatesDiff = Math.max(0, Math.abs(ad_bc) - (N / 2.0));
+  const yatesChi2 = (N * Math.pow(yatesDiff, 2)) / den;
+
+  document.getElementById('chi2-output').innerHTML = `
+    <div><strong>Total Observations (N):</strong> ${N} (df = 1)</div>
+    <div style="margin-top:4px;">
+      &bull; <strong>Cross Product (ad - bc):</strong> ${ad_bc.toFixed(0)}<br>
+      &bull; <strong>Uncorrected Pearson &chi;&sup2;:</strong> <span style="font-weight:800;color:var(--brand);">${rawChi2.toFixed(4)}</span><br>
+      &bull; <strong>Yates' Corrected &chi;&sup2;:</strong> <span style="font-weight:800;color:var(--amber);">${yatesChi2.toFixed(4)}</span>
+    </div>
+    <div style="margin-top:6px;font-size:12.5px;color:var(--muted);">
+      Critical value at &alpha; = 0.05 is <strong>3.841</strong>. ${rawChi2 < 3.841 ? '<span style="color:#059669;font-weight:700;">&rarr; Fail to Reject H₀</span>' : '<span style="color:#dc2626;font-weight:700;">&rarr; Reject H₀</span>'}
+    </div>
+  `;
+}
+
+// Highlight sidebar item on click
+document.querySelectorAll('nav a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.querySelectorAll('nav a').forEach(el => el.classList.remove('active'));
+    a.classList.add('active');
+  });
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  calculateChi2();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,1314 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bayes' Theorem & Total Probability | Complete Exam Question Bank & Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#2563eb;--brand-soft:#eff6ff;--teal:#059669;--teal-soft:#ecfdf5;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#0f172a;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:800}
+aside h2{font-size:19px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.12em;margin:20px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#cbd5e1;font-size:13px}
+nav a:hover,nav a.active{background:#1e293b;color:#38bdf8;text-decoration:none}
+.module-hub-link{background:#1e293b;border:1px solid #334155;color:#38bdf8;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:24px;padding:14px;border:1px solid #334155;border-radius:12px;color:#cbd5e1;font-size:12px;background:#131d35}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#047857;color:#ecfdf5}
+
+/* Mobile Sticky Topbar (Shown on iPhone 13 & Mobile) */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#0f172a;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{
+  font-size:14.5px;
+  font-weight:800;
+  color:#f8fafc;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.mobile-topbar-actions{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.mobile-btn{
+  background:#1e293b;
+  border:1px solid #334155;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  cursor:pointer;
+  min-height:36px;
+}
+
+/* Horizontal Swipeable Pill Nav for iPhone 13 */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer Menu Overlay */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#0f172a;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #1e293b;
+  padding-bottom:12px;
+}
+.drawer-close{
+  background:none;
+  border:none;
+  color:#94a3b8;
+  font-size:24px;
+  cursor:pointer;
+  padding:4px 8px;
+}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#2563eb 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"P(B|A)";position:absolute;right:24px;bottom:-28px;font-size:108px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#93c5fd;font-weight:800}
+h1{font-size:clamp(24px,4.5vw,42px);line-height:1.15;margin:10px 0}
+.hero p{max-width:680px;color:#e0e7ff;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+.formula-banner{
+  background:#0f172a;
+  color:#f8fafc;
+  padding:16px 14px;
+  border-radius:12px;
+  text-align:center;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+.formula-banner .katex-display{margin:6px 0}
+.formula-banner small{display:block;font-size:11px;color:#94a3b8;margin-top:6px}
+
+/* KaTeX Horizontal Scrollbar Removal & Vertical Headroom (No Clipping) */
+.katex-display{
+  font-size:clamp(13px, 3.6vw, 15.5px) !important;
+  margin:12px 0 !important;
+  padding:12px 4px 8px !important; /* Ample top and bottom headroom so numerators/brackets never get sliced */
+  overflow-x:auto !important;
+  overflow-y:visible !important; /* Never clip ascenders */
+  scrollbar-width:none !important; /* Hide Firefox scrollbars */
+  -ms-overflow-style:none !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+.katex-display::-webkit-scrollbar{
+  display:none !important; /* Hide Safari & Chrome scrollbars */
+}
+.katex-display > .katex{
+  display:block !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  padding-top:4px !important; /* Extra safety margin for tall numerators & superscripts */
+  padding-bottom:2px !important;
+}
+.katex{
+  font-size:1em !important;
+  line-height:normal !important;
+  text-rendering:auto !important;
+  white-space:normal !important;
+}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--teal-soft);border-color:var(--teal)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+.note.purple{background:var(--purple-soft);border-color:var(--purple)}
+
+/* Table Styling - Clean & No Cutoff */
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#dbeafe;color:#1e40af;margin-bottom:6px}
+.pyq-badge.ct{background:#e0e7ff;color:#3730a3}
+.pyq-badge.llt{background:#ecfdf5;color:#065f46}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+  -webkit-tap-highlight-color:transparent;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  transition:background .15s;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+button:hover{background:#1d4ed8}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+/* Quiz for iPhone 13 (Large Touch Targets) */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+  -webkit-tap-highlight-color:transparent;
+  transition:all .15s;
+}
+.quiz-q label:active{background:#eff6ff;border-color:#93c5fd}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--teal-soft);border-radius:8px;border-left:3px solid var(--teal);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Interactive Bayes Tool (16px Input to Prevent iOS Auto-Zoom) */
+.tool-box{background:white;border:2px solid #93c5fd;border-radius:12px;padding:16px;margin:16px 0}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:8px}
+.tool-group label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px}
+.tool-group input{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  font-size:16px; /* Prevents iOS Safari Zoom */
+  background:#f8fafc;
+  min-height:40px;
+}
+.tool-result{margin-top:12px;padding:10px 12px;background:#eff6ff;border-radius:8px;border-left:4px solid var(--brand);font-size:13px}
+
+.footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+/* iPhone 13 & Mobile Responsive Tweaks */
+@media(max-width:880px){
+  .shell{display:block}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:14px 12px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr;gap:10px}
+  .hero{padding:20px 14px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  h2{font-size:18px}
+  .card{padding:14px}
+  .details-box{padding:12px 14px}
+  .tool-box{padding:14px}
+  button{width:100%;margin-bottom:6px}
+  .controls button{width:auto;flex:1}
+  
+  /* Compact Table for Mobile */
+  table{font-size:12px}
+  th,td{padding:7px 8px}
+}
+
+@media print{
+  aside,.controls,button,.tool-box,.mobile-topbar,.mobile-pills-bar{display:none!important}
+  .shell{display:block}
+  main{padding:0}
+  .hero{background:#0f172a!important;color:#fff!important;print-color-adjust:exact}
+  .card,.step,.quiz-q,.details-box{break-inside:avoid;box-shadow:none}
+  .answer,details[open] div,details div{display:block!important}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Sticky Top Bar (iPhone 13 Notch Friendly) -->
+<header class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>Bayes' Theorem</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/ifs-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="openDrawer()">&#9776; Menu</button>
+  </div>
+</header>
+
+<!-- Horizontal Quick-Jump Pill Bar (Flick with thumb on train) -->
+<nav class="mobile-pills-bar" aria-label="Quick jumps">
+  <a href="#overview" class="pill-link">01 · Concept</a>
+  <a href="#formula" class="pill-link">02 · Formula</a>
+  <a href="#pitfalls" class="pill-link">03 · Traps</a>
+  <a href="#q1-bulb" class="pill-link">Q1 · Bulbs (20M)</a>
+  <a href="#q2-lines" class="pill-link">Q2 · Lines A,B,C (10M)</a>
+  <a href="#q3-shirts" class="pill-link">Q3 · Shirts (10M)</a>
+  <a href="#q4-cars" class="pill-link">Q4 · Vehicles (10M)</a>
+  <a href="#q5-beverage" class="pill-link">Q5 · Beverages</a>
+  <a href="#q6-electronic" class="pill-link">Q6 · Electronic</a>
+  <a href="#q7-food" class="pill-link">Q7 · Food</a>
+  <a href="#interactive-tool" class="pill-link">Dynamic Solver</a>
+  <a href="#practice" class="pill-link">Self-Test Quiz</a>
+</nav>
+
+<!-- Mobile Drawer Backdrop & Drawer -->
+<div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="drawer-header">
+    <div style="font-size:14px;font-weight:800;color:#38bdf8;">NAVIGATION MENU</div>
+    <button class="drawer-close" onclick="closeDrawer()">&times;</button>
+  </div>
+  <a href="/ifs-study-guide/index.html" class="module-hub-link" style="margin-bottom:14px;padding:8px 10px;border-radius:8px;">&larr; Return to All Guides Hub</a>
+  
+  <div class="nav-label">Core Concepts</div>
+  <nav>
+    <a href="#overview" onclick="closeDrawer()">01 · Intuition & Problem</a>
+    <a href="#formula" onclick="closeDrawer()">02 · Mathematical Theorem</a>
+    <a href="#notation" onclick="closeDrawer()">03 · Notation Matrix</a>
+    <a href="#method" onclick="closeDrawer()">04 · 6-Step Exam Protocol</a>
+    <a href="#pitfalls" onclick="closeDrawer()">05 · 6 Deadly Exam Traps</a>
+  </nav>
+
+  <div class="nav-label">All 7 Questions Solved</div>
+  <nav>
+    <a href="#q1-bulb" onclick="closeDrawer()">Q1 · May 2025: Bulbs in Boxes (20M)</a>
+    <a href="#q2-lines" onclick="closeDrawer()">Q2 · CT-1 Set A: Lines A,B,C (10M)</a>
+    <a href="#q3-shirts" onclick="closeDrawer()">Q3 · Nov 2025: Shirt Styles (10M)</a>
+    <a href="#q4-cars" onclick="closeDrawer()">Q4 · Dec 2024: Vehicle Models (10M)</a>
+    <a href="#q5-beverage" onclick="closeDrawer()">Q5 · LLT Unit 2: Beverage Defect</a>
+    <a href="#q6-electronic" onclick="closeDrawer()">Q6 · CT-1 Batch 3: Electronic Devices</a>
+    <a href="#q7-food" onclick="closeDrawer()">Q7 · CT-1 Batch 3: Food Products</a>
+  </nav>
+
+  <div class="nav-label">Interactive Practice</div>
+  <nav>
+    <a href="#interactive-tool" onclick="closeDrawer()">Dynamic Bayes Solver</a>
+    <a href="#practice" onclick="closeDrawer()">Interactive Self-Test Quiz</a>
+    <a href="#checklist" onclick="closeDrawer()">Exam Hall Checklist</a>
+  </nav>
+</div>
+
+<div class="shell">
+
+<!-- Desktop Sidebar (Hidden on mobile) -->
+<aside>
+  <div class="brand">M.Tech · Inferential Statistics</div>
+  <h2>Bayes' Theorem<br>Complete Guide & Bank</h2>
+  
+  <a href="/ifs-study-guide/index.html" class="module-hub-link">&larr; Return to All Guides Hub</a>
+
+  <div class="nav-label">Core Pedagogy</div>
+  <nav>
+    <a href="#overview">01 · Intuition & Problem</a>
+    <a href="#formula">02 · Mathematical Theorem</a>
+    <a href="#notation">03 · Notation Matrix</a>
+    <a href="#method">04 · 6-Step Exam Protocol</a>
+    <a href="#pitfalls">05 · 6 Deadly Exam Traps</a>
+  </nav>
+
+  <div class="nav-label">Complete Question Bank (7 PYQs)</div>
+  <nav>
+    <a href="#q1-bulb">Q1 · May 2025: Bulbs in Boxes (20M)</a>
+    <a href="#q2-lines">Q2 · CT-1 Set A: Lines A, B, C (10M)</a>
+    <a href="#q3-shirts">Q3 · Nov 2025: Shirt Styles (10M)</a>
+    <a href="#q4-cars">Q4 · Dec 2024: Vehicle Models (10M)</a>
+    <a href="#q5-beverage">Q5 · LLT Unit 2: Beverage Defect</a>
+    <a href="#q6-electronic">Q6 · CT-1 Batch 3: Electronic Devices</a>
+    <a href="#q7-food">Q7 · CT-1 Batch 3: Food Products</a>
+  </nav>
+
+  <div class="nav-label">Interactive Practice</div>
+  <nav>
+    <a href="#interactive-tool">Dynamic Bayes Solver</a>
+    <a href="#practice">Interactive Self-Test Quiz</a>
+    <a href="#checklist">Exam Hall Checklist</a>
+  </nav>
+
+  <div class="side-note">
+    <strong>Semester Exam Targets</strong><br>
+    Internal score: <strong>48 / 60</strong><br>
+    Min Sem score for A: <strong>58 / 100</strong><br>
+    Target with margin: <strong>65 / 100</strong><br>
+    <span class="status-pill pill-target">Priority 1 Unit 2 Topic</span>
+    <p style="margin-top:8px;color:#94a3b8;font-size:11px">Contains all 7 questions from Sem Papers, CT-1, and LLT assignments.</p>
+  </div>
+</aside>
+
+<!-- Main Body -->
+<main>
+
+<header class="hero" id="overview">
+  <div class="eyebrow">Unit 2 · Probability & Distributions · Complete Question Bank</div>
+  <h1>Bayes' Theorem & Total Probability</h1>
+  <p>The definitive master guide incorporating all 7 Bayes' Theorem problems found across your semester exam papers, class tests, and assignments with complete mathematical derivations.</p>
+  <div class="pills">
+    <span class="pill">All 7 Questions Solved</span>
+    <span class="pill">May 2025 (20 Marks)</span>
+    <span class="pill">CT-1 Set A (10 Marks)</span>
+    <span class="pill">Nov 2025 & Dec 2024</span>
+    <span class="pill">Inverse Prior Derivations</span>
+    <span class="pill">Interactive Quiz</span>
+  </div>
+</header>
+
+<div style="margin:14px 0;display:flex;gap:8px;flex-wrap:wrap;">
+  <button class="secondary" style="font-size:12.5px;padding:6px 12px;min-height:36px;" onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All Solutions</button>
+  <button class="secondary" style="font-size:12.5px;padding:6px 12px;min-height:36px;" onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All Solutions</button>
+</div>
+
+<!-- Section 1 -->
+<section>
+  <h2>01. What Problem Does Bayes' Theorem Solve?</h2>
+  <p class="lead">Standard conditional probability asks: <em>"If a product came from Line A, what is the chance it is defective?"</em> &rarr; $P(D \mid A)$. <strong>Bayes' Theorem answers the reverse forensic question:</strong> <em>"We observed a defective item. What is the probability it was produced by Line A?"</em> &rarr; $P(A \mid D)$.</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="kicker">Prior Probability · Before Inspection</div>
+      <h3>$P(B_i)$ — Baseline Share</h3>
+      <p>The initial production volume or baseline population prevalence before examining sample items or running diagnostic tests.</p>
+    </div>
+    <div class="card">
+      <div class="kicker">Posterior Probability · After Evidence</div>
+      <h3>$P(B_i \mid A)$ — Updated Attribution</h3>
+      <p>The revised probability attributing the observed symptom/defect $A$ to origin $B_i$, balancing its defect rate against its production volume.</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <strong>Key Intuition:</strong> Bayes' Theorem re-weights prior probabilities by how strongly each source explains the observed defect (Likelihood), normalised by the total probability of observing that defect across all sources.
+  </div>
+</section>
+
+<!-- Section 2 -->
+<section id="formula">
+  <h2>02. Mathematical Statement & Formal Theorem</h2>
+  <p>Let $B_1, B_2, \dots, B_k$ be a set of <strong>mutually exclusive</strong> ($B_i \cap B_j = \emptyset$ for $i \ne j$) and <strong>exhaustive</strong> ($\bigcup_{i=1}^k B_i = S$) events forming a partition of the sample space $S$, with prior probabilities $P(B_i) > 0$.</p>
+  <p>For any observed event $A$ with $P(A) > 0$, the posterior probability of cause $B_i$ given evidence $A$ is:</p>
+
+  <div class="formula-banner">
+    $$\begin{aligned}
+    P(B_i \mid A) &= \frac{P(B_i) \cdot P(A \mid B_i)}{P(A)} \\[6pt]
+    &= \frac{P(B_i) \cdot P(A \mid B_i)}{\sum_{j=1}^k P(B_j) \cdot P(A \mid B_j)}
+    \end{aligned}$$
+    <small>Posterior Probability = (Prior &times; Likelihood) &divide; Total Probability of Evidence</small>
+  </div>
+
+  <div class="card">
+    <h3>Law of Total Probability (The Denominator)</h3>
+    <p>The denominator $P(A)$ represents the overall probability of event $A$ occurring across all sources:</p>
+    <div style="background:#f1f5f9;padding:10px 12px;border-radius:8px;margin:8px 0;">
+      $$\begin{aligned}
+      P(A) &= \sum_{j=1}^k P(B_j)P(A \mid B_j) \\[4pt]
+      &= P(B_1)P(A \mid B_1) + \dots + P(B_k)P(A \mid B_k)
+      \end{aligned}$$
+    </div>
+    <p class="small" style="color:var(--muted);font-size:12px;">In the exam, write this expanded summation explicitly before plugging in numeric values. University rubrics allocate specific step-marks to this formula.</p>
+  </div>
+</section>
+
+<!-- Section 3 -->
+<section id="notation">
+  <h2>03. Notation Decoding Matrix</h2>
+  <p>Avoid losing marks to reversed conditional symbols. Always match the problem statement to this table:</p>
+  
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Symbol</th>
+          <th>Role</th>
+          <th>Definition</th>
+          <th>Industrial Example</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>$B_i$</strong></td>
+          <td>Hypothesis</td>
+          <td>$i$-th origin/source</td>
+          <td>Line B produced the component.</td>
+        </tr>
+        <tr>
+          <td><strong>$A$ (or $D$)</strong></td>
+          <td>Evidence</td>
+          <td>Observed condition</td>
+          <td>Selected component is defective.</td>
+        </tr>
+        <tr>
+          <td><strong>$P(B_i)$</strong></td>
+          <td>Prior</td>
+          <td>Baseline probability</td>
+          <td>Line B produces 35% of total output ($0.35$).</td>
+        </tr>
+        <tr>
+          <td><strong>$P(A \mid B_i)$</strong></td>
+          <td>Likelihood</td>
+          <td>Evidence chance given cause</td>
+          <td>Defect rate of Line B is 3% ($0.03$).</td>
+        </tr>
+        <tr>
+          <td><strong>$P(A)$</strong></td>
+          <td>Total Prob</td>
+          <td>Marginal defect rate</td>
+          <td>Overall factory defect rate ($0.0310$).</td>
+        </tr>
+        <tr>
+          <td><strong>$P(B_i \mid A)$</strong></td>
+          <td>Posterior</td>
+          <td>Attribution to origin</td>
+          <td>Given defective, chance from Line B ($33.87\%$).</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note danger">
+    <strong>Fatal Distinction:</strong> $P(D \mid B) \ne P(B \mid D)$.<br>
+    $P(D \mid B) = 0.03$ is the line's quality rating (known before inspection).<br>
+    $P(B \mid D) \approx 0.3387$ is the diagnostic attribution (computed after finding a defect).
+  </div>
+</section>
+
+<!-- Section 4 -->
+<section id="method">
+  <h2>04. The 6-Step Exam Problem-Solving Protocol</h2>
+  <div class="steps">
+    <div class="step">
+      <div>
+        <h3>Define Events Clearly</h3>
+        <p>Write: <em>"Let $B_1, B_2, B_3$ denote the events that the item is manufactured by Source 1, 2, 3 respectively. Let $D$ denote the event that the item is defective."</em></p>
+      </div>
+    </div>
+    <div class="step">
+      <div>
+        <h3>Tabulate Priors and Likelihoods</h3>
+        <p>State all values in decimal format. Verify that priors form a complete partition: $\sum P(B_i) = 1.00$.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div>
+        <h3>Write Total Probability Formula</h3>
+        <p>State $P(D) = \sum_{j=1}^k P(B_j)P(D \mid B_j)$ before any calculation. Show each product term individually.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div>
+        <h3>Compute Denominator $P(D)$</h3>
+        <p>Sum the individual product terms to find total probability. Check that $P(D)$ lies reasonably between minimum and maximum defect rates.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div>
+        <h3>Apply Bayes' Theorem Formula</h3>
+        <p>Write $P(B_i \mid D) = \frac{P(B_i)P(D \mid B_i)}{P(D)}$, substitute the numerator product and denominator, and evaluate.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div>
+        <h3>State Fraction & Percentage Conclusion</h3>
+        <p>Provide the final result as both a simplified fraction and a percentage with a complete conclusion sentence.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 5: Deadly Traps -->
+<section id="pitfalls">
+  <h2>05. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 1 · Reversed Notation</div>
+      <h3>Writing $P(D \mid B_i)$ instead of $P(B_i \mid D)$</h3>
+      <p>The problem gives you $P(D \mid B_i)$ (the defect rate). Never write this as your final answer. You are solving for $P(B_i \mid D)$.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 2 · Incomplete Denominator</div>
+      <h3>Forgetting the Summation in $P(A)$</h3>
+      <p>The denominator MUST sum the contributions of <em>every</em> source. If there are 3 machines, the denominator must have 3 products added together.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 3 · Percentage Conversion Errors</div>
+      <h3>Treating 2% as 0.2 instead of 0.02</h3>
+      <p>Always convert percentages carefully: $2\% = 0.02$, $0.5\% = 0.005$, $10\% = 0.10$. A single misplaced decimal destroys the entire computation.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 4 · Sampling Without Replacement</div>
+      <h3>Ignoring Combination Reductions</h3>
+      <p>When drawing 2 items from a finite lot of size $N$, use combinations $\binom{d}{2}/\binom{N}{2}$ or sequential products $\frac{d}{N} \times \frac{d-1}{N-1}$, not simply $(d/N)^2$.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 5 · Priors Not Summing to 1</div>
+      <h3>Failing the Sanity Check $\sum P(B_i) = 1$</h3>
+      <p>Check that prior production shares add up to exactly $1.00$ ($0.40 + 0.35 + 0.25 = 1.00$). If they do not, re-read the question carefully.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 6 · Missing Verbal Conclusion</div>
+      <h3>Leaving Bare Decimals with No Final Sentence</h3>
+      <p>Examiners deduct 1-2 marks if you stop at `0.4032`. Always add: <em>"Therefore, Line C is the most likely origin with probability 40.32%."</em></p>
+    </div>
+  </div>
+</section>
+
+<!-- COMPLETE QUESTION BANK: ALL 7 QUESTIONS -->
+<section id="question-bank">
+  <h2>06. The Complete University Question Bank (All 7 Questions Solved)</h2>
+  <p class="lead">Every single Bayes' Theorem question from your course syllabus, class tests (CT-1), assignments (LLT), and semester papers (May 2025, Nov 2025, Dec 2024):</p>
+
+  <!-- QUESTION 1: May 2025 (20 Marks) -->
+  <div id="q1-bulb" class="details-box">
+    <span class="pyq-badge">Semester Exam Paper · May 2025 (Question 2) &middot; 20 Marks</span>
+    <span class="pyq-badge ct">Also in CT-1 Batch 2 · Question 6</span>
+    <h3 style="margin:6px 0 10px;">Question 1: Two Boxes with Bulbs Drawn Without Replacement (20 Marks)</h3>
+    <p><strong>Question Statement:</strong><br>
+    <em>"Explain Baye's theorem with its usefulness. Also solve the following problem. Box 1 contains 1000 bulbs of which 10% are defective. Box 2 contains 2000 bulbs of which 5% are defective. Two bulbs are drawn (without replacement) from a randomly selected box.<br>
+    (i) Find the probability that both bulbs are defective.<br>
+    (ii) Assuming that both are defective, find the probability that they came from Box 1."</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution & Examiner Rubric</summary>
+      <div style="margin-top:12px;">
+        <p><strong>Part 1: Statement and Usefulness of Bayes' Theorem (6 Marks)</strong></p>
+        <p><em>Statement:</em> Let $B_1, B_2, \dots, B_k$ be mutually exclusive and exhaustive events with $P(B_i) > 0$. For any event $A$ with $P(A) > 0$:</p>
+        $$\begin{aligned}
+        P(B_i \mid A) = \frac{P(B_i)P(A \mid B_i)}{\sum_{j=1}^k P(B_j)P(A \mid B_j)}
+        \end{aligned}$$
+        <p><em>Usefulness:</em> Inverts conditional probabilities to infer hidden root causes from empirical symptoms, underpinning quality assurance, diagnostic screening, and Bayesian classifiers.</p>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:12px 0;">
+
+        <p><strong>Part 2: Numerical Derivation (14 Marks)</strong></p>
+        <p><strong>1. Events & Priors:</strong> Box 1 selected: $P(B_1) = 0.5$; Box 2 selected: $P(B_2) = 0.5$. Let $D$ = both drawn bulbs are defective.</p>
+
+        <p style="margin-top:8px;"><strong>2. Conditional Likelihoods (Sampling Without Replacement):</strong></p>
+        <ul>
+          <li><strong>Box 1 ($N_1 = 1000$, Defective = $100$):</strong>
+            $$\begin{aligned}
+            P(D \mid B_1) &= \frac{\binom{100}{2}}{\binom{1000}{2}} = \frac{100 \times 99}{1000 \times 999} \\[4pt]
+            &= \frac{11}{1110} \approx \mathbf{0.009910}
+            \end{aligned}$$
+          </li>
+          <li><strong>Box 2 ($N_2 = 2000$, Defective = $100$):</strong>
+            $$\begin{aligned}
+            P(D \mid B_2) &= \frac{\binom{100}{2}}{\binom{2000}{2}} = \frac{100 \times 99}{2000 \times 1999} \\[4pt]
+            &= \frac{99}{39980} \approx \mathbf{0.002476}
+            \end{aligned}$$
+          </li>
+        </ul>
+
+        <p style="margin-top:8px;"><strong>3. Part (i) Total Probability $P(D)$:</strong></p>
+        $$\begin{aligned}
+        P(D) &= P(B_1)P(D \mid B_1) + P(B_2)P(D \mid B_2) \\[4pt]
+        &= 0.5(0.009910) + 0.5(0.002476) \\[4pt]
+        &= 0.004955 + 0.001238 \\[4pt]
+        &= \mathbf{0.006193} \quad (\mathbf{0.6193\%})
+        \end{aligned}$$
+        <p><em>In exact fraction form:</em> $P(D) = \frac{54,967}{8,875,560} \approx 0.006193$.</p>
+        <p><em>(Binomial approx: $P(D) = 0.5(0.10^2) + 0.5(0.05^2) = \mathbf{0.00625}$).</em></p>
+
+        <p style="margin-top:8px;"><strong>4. Part (ii) Posterior Probability $P(B_1 \mid D)$:</strong></p>
+        $$\begin{aligned}
+        P(B_1 \mid D) &= \frac{P(B_1)P(D \mid B_1)}{P(D)} \\[6pt]
+        &= \frac{0.004955}{0.006193} = \frac{3,998}{4,997} \\[6pt]
+        &\approx \mathbf{0.8001} \quad (\mathbf{80.01\%})
+        \end{aligned}$$
+        <p><em>(Under binomial approximation: $P(B_1 \mid D) = \frac{0.00500}{0.00625} = \frac{4}{5} = \mathbf{80.00\%}$).</em></p>
+
+        <div class="note good">
+          <strong>Conclusion:</strong> If two drawn bulbs are both defective, there is an <strong>80.01%</strong> (or 80.00%) posterior probability that they came from Box 1.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 2: CT-1 Set A Q2B (10 Marks) -->
+  <div id="q2-lines" class="details-box">
+    <span class="pyq-badge ct">CT-1 Exam · Set A (Question 2 Part B) &middot; 10 Marks</span>
+    <h3 style="margin:6px 0 10px;">Question 2: Production Lines A, B, and C Defect Attribution (10 Marks)</h3>
+    <p><strong>Question Statement:</strong><br>
+    <em>"A manufacturing company operates three production lines: Line A, Line B, and Line C. The proportion of total products manufactured by the three lines is 40%, 35%, and 25%, respectively. The probabilities that a product manufactured by each line is defective are 2%, 3%, and 5%, respectively. A product is randomly selected from the company's production and is found to be defective. Using Bayes' theorem, calculate the probability that the defective product was manufactured by Line A, Line B, and Line C. Based on your calculations, identify which production line is most likely to have produced the defective product. (10 Marks)"</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution & Managerial Insight</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Priors and Likelihoods:</strong></p>
+        <ul>
+          <li>Priors: $P(A) = 0.40, \; P(B) = 0.35, \; P(C) = 0.25$ &nbsp; ($\sum = 1.00$)</li>
+          <li>Likelihoods: $P(D \mid A) = 0.02, \; P(D \mid B) = 0.03, \; P(D \mid C) = 0.05$</li>
+        </ul>
+
+        <p style="margin-top:8px;"><strong>2. Law of Total Probability $P(D)$:</strong></p>
+        $$\begin{aligned}
+        P(D) &= P(A)P(D \mid A) + P(B)P(D \mid B) + P(C)P(D \mid C) \\[4pt]
+        &= (0.40 \times 0.02) + (0.35 \times 0.03) + (0.25 \times 0.05) \\[4pt]
+        &= 0.0080 + 0.0105 + 0.0125 = \mathbf{0.0310} \quad (\mathbf{3.10\%})
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>3. Posterior Probabilities via Bayes' Theorem:</strong></p>
+        <ul>
+          <li><strong>Line A:</strong>
+            $$P(A \mid D) = \frac{0.0080}{0.0310} = \frac{8}{31} \approx \mathbf{0.2581 \ (25.81\%)}$$
+          </li>
+          <li><strong>Line B:</strong>
+            $$P(B \mid D) = \frac{0.0105}{0.0310} = \frac{21}{62} \approx \mathbf{0.3387 \ (33.87\%)}$$
+          </li>
+          <li><strong>Line C:</strong>
+            $$P(C \mid D) = \frac{0.0125}{0.0310} = \frac{25}{62} \approx \mathbf{0.4032 \ (40.32\%)}$$
+          </li>
+        </ul>
+        <p><em>Check:</em> $25.81\% + 33.87\% + 40.32\% = 100.00\%$.</p>
+
+        <div class="note good">
+          <strong>Conclusion & Insight:</strong><br>
+          Comparing posterior probabilities: $P(C \mid D) = 40.32\% > P(B \mid D) = 33.87\% > P(A \mid D) = 25.81\%$.<br>
+          <strong>Line C is most likely</strong> to have produced the defective product. Even though Line A has the highest production share (40%), Line C's higher defect rate (5%) causes it to generate the largest share of defective goods.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 3: November 2025 Paper (10 Marks) -->
+  <div id="q3-shirts" class="details-box">
+    <span class="pyq-badge">Semester Exam Paper · November 2025 (Question 2 Part ii) &middot; 10 Marks</span>
+    <h3 style="margin:6px 0 10px;">Question 3: Garment Factory Shirt Styles Defect Attribution (10 Marks)</h3>
+    <p><strong>Question Statement:</strong><br>
+    <em>"A garment factory manufactures three styles of shirts: Regular ($S_1$), Slim-fit ($S_2$), and Loose-fit ($S_3$). Production shares are 50%, 30%, and 20% respectively. The percentage of defective shirts produced by each style is 4%, 6%, and 5% respectively. A shirt is chosen at random and found to be defective. Find which style is most likely to be the defective shirt."</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Given Data:</strong></p>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr><th>Style ($S_i$)</th><th>Prior $P(S_i)$</th><th>Defect Rate</th><th>Joint $P(S_i \cap D)$</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Regular ($S_1$)</td><td>$0.50$</td><td>$0.04$</td><td>$0.50 \times 0.04 = \mathbf{0.020}$</td></tr>
+              <tr><td>Slim ($S_2$)</td><td>$0.30$</td><td>$0.06$</td><td>$0.30 \times 0.06 = \mathbf{0.018}$</td></tr>
+              <tr><td>Loose ($S_3$)</td><td>$0.20$</td><td>$0.05$</td><td>$0.20 \times 0.05 = \mathbf{0.010}$</td></tr>
+              <tr style="font-weight:700;background:#f1f5f9;">
+                <td>Total</td><td>$1.00$</td><td>-</td><td><strong>$P(D) = 0.048$</strong></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <p style="margin-top:8px;"><strong>2. Total Probability of a Defect:</strong></p>
+        $$\begin{aligned}
+        P(D) &= \sum_{i=1}^3 P(S_i)P(D \mid S_i) \\[4pt]
+        &= 0.020 + 0.018 + 0.010 = \mathbf{0.048 \ (4.8\%)}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>3. Posterior Probabilities:</strong></p>
+        <ul>
+          <li>$P(S_1 \mid D) = \frac{0.020}{0.048} = \frac{5}{12} \approx \mathbf{0.4167 \ (41.67\%)}$</li>
+          <li>$P(S_2 \mid D) = \frac{0.018}{0.048} = \frac{3}{8} = \mathbf{0.3750 \ (37.50\%)}$</li>
+          <li>$P(S_3 \mid D) = \frac{0.010}{0.048} = \frac{5}{24} \approx \mathbf{0.2083 \ (20.83\%)}$</li>
+        </ul>
+
+        <div class="note good">
+          <strong>Conclusion:</strong> Since $P(S_1 \mid D) = 41.67\% > 37.50\% > 20.83\%$, the defective shirt is <strong>most likely the REGULAR style ($S_1$)</strong>.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 4: December 2024 Paper (10 Marks) -->
+  <div id="q4-cars" class="details-box">
+    <span class="pyq-badge">Semester Exam Paper · December 2024 (Question 2 Part ii) &middot; 10 Marks</span>
+    <h3 style="margin:6px 0 10px;">Question 4: Automobile Vehicle Defect Model Identification (10 Marks)</h3>
+    <p><strong>Question Statement:</strong><br>
+    <em>"A vehicle assembly plant produces Sedan ($M_1$), SUV ($M_2$), and Coupe ($M_3$) models. Their production shares are 30%, 40%, and 30% respectively. Defect rates are 2% for Sedan, 5% for SUV, and 3% for Coupe. If a defective vehicle is discovered during pre-delivery inspection, which model is most likely responsible?"</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Given Data:</strong></p>
+        <ul>
+          <li>Priors: $P(M_1) = 0.30, \; P(M_2) = 0.40, \; P(M_3) = 0.30$</li>
+          <li>Likelihoods: $P(D \mid M_1) = 0.02, \; P(D \mid M_2) = 0.05, \; P(D \mid M_3) = 0.03$</li>
+        </ul>
+
+        <p style="margin-top:8px;"><strong>2. Total Probability of a Defect:</strong></p>
+        $$\begin{aligned}
+        P(D) &= (0.30 \times 0.02) + (0.40 \times 0.05) + (0.30 \times 0.03) \\[4pt]
+        &= 0.006 + 0.020 + 0.009 = \mathbf{0.035 \ (3.5\%)}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>3. Posterior Probabilities via Bayes' Theorem:</strong></p>
+        <ul>
+          <li><strong>Sedan:</strong> $P(M_1 \mid D) = \frac{0.006}{0.035} = \frac{6}{35} \approx \mathbf{0.1714 \ (17.14\%)}$</li>
+          <li><strong>SUV:</strong> $P(M_2 \mid D) = \frac{0.020}{0.035} = \frac{4}{7} \approx \mathbf{0.5714 \ (57.14\%)}$</li>
+          <li><strong>Coupe:</strong> $P(M_3 \mid D) = \frac{0.009}{0.035} = \frac{9}{35} \approx \mathbf{0.2571 \ (25.71\%)}$</li>
+        </ul>
+
+        <div class="note good">
+          <strong>Conclusion:</strong> With a posterior probability of $4/7 \approx \mathbf{57.14\%}$, the <strong>SUV model ($M_2$)</strong> is overwhelmingly the most likely source of the defect.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 5: LLT Assignment Unit 2 Q3 -->
+  <div id="q5-beverage" class="details-box">
+    <span class="pyq-badge llt">LLT Assignment · Unit 2 (Question 3)</span>
+    <h3 style="margin:6px 0 10px;">Question 5: Beverage Types Defect Identification</h3>
+    <p><strong>Question Statement (Verbatim from LLT Assignment):</strong><br>
+    <em>"A company produces three types of beverages: A, B, and C. The probability of a beverage being defective is as follows: The probability of a beverage being defective for A is 0.02, for B is 0.05, and for C is 0.01. The conditional probabilities that a defective beverage comes from each type are: The probability that a defective beverage is of type A is 0.2, of type B is 0.3, and of type C is 0.35. If a defective beverage is discovered, what is the most likely type of beverage (A, B, or C) that it is?"</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution & Dual Interpretations</summary>
+      <div style="margin-top:12px;">
+        <p><strong>Interpretation A: Literal Question Phrasing (MAP Decision)</strong></p>
+        <p>The question prompt states: <em>"The conditional probabilities that a defective beverage comes from each type are: A is 0.2, B is 0.3, C is 0.35"</em>. These are the posterior probabilities $P(\text{Type} \mid D)$:</p>
+        <ul>
+          <li>$P(A \mid D) = 0.20 \ (20\%)$</li>
+          <li>$P(B \mid D) = 0.30 \ (30\%)$</li>
+          <li>$P(C \mid D) = 0.35 \ (35\%)$</li>
+        </ul>
+        <p>Comparing these directly: $P(C \mid D) = 0.35 > P(B \mid D) = 0.30 > P(A \mid D) = 0.20$.<br>
+        <strong>Conclusion A:</strong> Under literal reading, <strong>Type C</strong> is the most likely defective beverage ($35\%$).</p>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:12px 0;">
+
+        <p><strong>Interpretation B: Standard Assignment Key (Priors as Production Shares)</strong></p>
+        <p>If the percentages ($0.20, 0.30, 0.35$) represent the prior production shares of the three lines ($P(A) = 0.20, P(B) = 0.30, P(C) = 0.35$):</p>
+        <ul>
+          <li>Likelihoods: $P(D \mid A) = 0.02, \; P(D \mid B) = 0.05, \; P(D \mid C) = 0.01$.</li>
+          <li>Total Defect Probability:
+            $$\begin{aligned}
+            P(D) &= (0.20 \times 0.02) + (0.30 \times 0.05) + (0.35 \times 0.01) \\[4pt]
+            &= 0.0040 + 0.0150 + 0.0035 = \mathbf{0.0225}
+            \end{aligned}$$
+          </li>
+          <li>Bayes' Posterior Probabilities:
+            <ul>
+              <li>$P(A \mid D) = \frac{0.0040}{0.0225} = \frac{8}{45} \approx \mathbf{17.78\%}$</li>
+              <li>$P(B \mid D) = \frac{0.0150}{0.0225} = \frac{2}{3} \approx \mathbf{66.67\%}$</li>
+              <li>$P(C \mid D) = \frac{0.0035}{0.0225} = \frac{7}{45} \approx \mathbf{15.56\%}$</li>
+            </ul>
+          </li>
+        </ul>
+        <p><strong>Conclusion B:</strong> Under the production share model, <strong>Type B is overwhelmingly the most likely defective beverage ($66.67\%$)</strong>.</p>
+
+        <div class="note purple">
+          <strong>Examiner's Note:</strong> Explicitly writing both the literal reading (Type C = 35%) and the Bayes' derivation (Type B = 66.67%) ensures 100% marks regardless of which solution the faculty or examiner follows in their answer key.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 6: CT-1 Batch 3 Q10 -->
+  <div id="q6-electronic" class="details-box">
+    <span class="pyq-badge ct">CT-1 Exam · Batch 3 (Question 10) &middot; Advanced Concept</span>
+    <h3 style="margin:6px 0 10px;">Question 6: Electronic Devices Posterior Comparison & Prior Derivation</h3>
+    <p><strong>Question Statement:</strong><br>
+    <em>"Let X, Y, Z represent events that a produced device is of Type X, Type Y, or Type Z. Conditional defect probabilities are: $P(D \mid X) = 0.01, P(D \mid Y) = 0.04, P(D \mid Z) = 0.02$. The posterior probabilities of device type given a defective is found are: $P(X \mid D) = 0.5, P(Y \mid D) = 0.3, P(Z \mid D) = 0.2$. If a defective device is picked up from the factory, what is the most likely type of device?"</em></p>
+
+    <details open>
+      <summary>View Complete Dual-Interpretation Solution</summary>
+      <div style="margin-top:12px;">
+        <p><strong>Interpretation A: Direct Posterior Comparison (MAP Decision)</strong></p>
+        <p>We are given the condition that a defective device has been found. We compare the posterior probabilities directly:</p>
+        $$P(X \mid D) = 0.50 \ (50\%), \quad P(Y \mid D) = 0.30 \ (30\%), \quad P(Z \mid D) = 0.20 \ (20\%)$$
+        <p><strong>Conclusion A:</strong> <strong>Type X</strong> is the most likely type of device among defectives ($50\%$).</p>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:12px 0;">
+
+        <p><strong>Interpretation B: Deriving the Unknown Production Volume (Priors)</strong></p>
+        <p>If the examiner intended to ask <em>"What is the most produced device type by the factory overall?"</em>, we apply Bayes' Theorem in reverse:</p>
+        $$P(k) = \frac{P(k \mid D) \cdot P(D)}{P(D \mid k)}$$
+        <p>Let $c = P(D)$ be the constant marginal defect rate:</p>
+        <ul>
+          <li>$P(X) = \frac{0.5 \cdot c}{0.01} = 50c$</li>
+          <li>$P(Y) = \frac{0.3 \cdot c}{0.04} = 7.5c$</li>
+          <li>$P(Z) = \frac{0.2 \cdot c}{0.02} = 10c$</li>
+        </ul>
+        <p>Since $\sum P(k) = 1$:</p>
+        $$\begin{aligned}
+        50c + 7.5c + 10c = 67.5c &= 1 \\[4pt]
+        \implies c = \frac{1}{67.5} &= \frac{2}{135}
+        \end{aligned}$$
+        <p>Substituting $c$ yields exact factory production shares:</p>
+        <ul>
+          <li>$P(X) = 50 \times \frac{2}{135} = \frac{20}{27} \approx \mathbf{74.07\%}$</li>
+          <li>$P(Y) = 7.5 \times \frac{2}{135} = \frac{1}{9} \approx \mathbf{11.11\%}$</li>
+          <li>$P(Z) = 10 \times \frac{2}{135} = \frac{4}{27} \approx \mathbf{14.81\%}$</li>
+        </ul>
+        <div class="note purple">
+          <strong>Examiner's Note:</strong> Presenting both Interpretation A (Type X has highest posterior $0.5$) and Interpretation B (Type X has highest production share $74.07\%$) demonstrates full mastery and guarantees 100% marks under any answer key.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 7: CT-1 Batch 3 Q11 -->
+  <div id="q7-food" class="details-box">
+    <span class="pyq-badge ct">CT-1 Exam · Batch 3 (Question 11) &middot; Advanced Concept</span>
+    <h3 style="margin:6px 0 10px;">Question 7: Food Products Quality Control Analysis</h3>
+    <p><strong>Question Statement:</strong><br>
+    <em>"Let D, E, F represent food products of Type D, E, F. Conditional defect probabilities are: $P(\text{Def} \mid D) = 0.03, P(\text{Def} \mid E) = 0.01, P(\text{Def} \mid F) = 0.04$. The conditional probabilities that a defective product is of each type are: $P(D \mid \text{Def}) = 0.2, P(E \mid \text{Def}) = 0.5, P(F \mid \text{Def}) = 0.3$. If a defective product is selected, what is the most likely type of food product it belongs to?"</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution</summary>
+      <div style="margin-top:12px;">
+        <p><strong>Interpretation A: Direct Posterior Comparison</strong></p>
+        <p>Comparing given conditional probabilities given a defective item:</p>
+        $$P(E \mid \text{Def}) = 0.50 > P(F \mid \text{Def}) = 0.30 > P(D \mid \text{Def}) = 0.20$$
+        <p><strong>Conclusion A:</strong> <strong>Type E</strong> is the most likely food product among defectives ($50\%$).</p>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:12px 0;">
+
+        <p><strong>Interpretation B: Deriving Baseline Factory Production Shares</strong></p>
+        <p>Using $P(k) = \frac{P(k \mid \text{Def}) \cdot c}{P(\text{Def} \mid k)}$ where $c = P(\text{Def})$:</p>
+        <ul>
+          <li>$P(D) = \frac{0.2 \cdot c}{0.03} = \frac{20}{3}c = \frac{80}{12}c$</li>
+          <li>$P(E) = \frac{0.5 \cdot c}{0.01} = 50c = \frac{600}{12}c$</li>
+          <li>$P(F) = \frac{0.3 \cdot c}{0.04} = \frac{30}{4}c = \frac{90}{12}c$</li>
+        </ul>
+        <p>Summing: $\left(\frac{80 + 600 + 90}{12}\right) c = \frac{770}{12}c = 1 \implies c = \frac{12}{770} = \frac{6}{385}$.</p>
+        <p>Substituting back:</p>
+        <ul>
+          <li>$P(D) = \frac{80}{770} = \frac{8}{77} \approx \mathbf{10.39\%}$</li>
+          <li>$P(E) = \frac{600}{770} = \frac{60}{77} \approx \mathbf{77.92\%}$</li>
+          <li>$P(F) = \frac{90}{770} = \frac{9}{77} \approx \mathbf{11.69\%}$</li>
+        </ul>
+        <div class="note good">
+          <strong>Conclusion:</strong> Under both interpretations, <strong>Type E is the most likely food product</strong> (accounting for 50% of defects and 77.92% of total production volume).
+        </div>
+      </div>
+    </details>
+  </div>
+
+</section>
+
+<!-- Section 7: Interactive Bayes Calculator -->
+<section id="interactive-tool" class="tool-box">
+  <div class="eyebrow" style="color:var(--brand)">Interactive Study Widget</div>
+  <h2 style="border:none;margin-top:4px;">Dynamic Bayes Theorem Calculator (3 Sources)</h2>
+  <p style="font-size:13px;color:var(--muted)">Use this widget to verify textbook problems or create custom practice scenarios:</p>
+
+  <div class="tool-grid">
+    <div class="tool-group">
+      <label>Source 1 Prior $P(B_1)$</label>
+      <input type="number" id="tb-p1" value="0.40" step="0.05" min="0" max="1" oninput="solveInteractiveBayes()">
+    </div>
+    <div class="tool-group">
+      <label>Source 1 Likelihood $P(A \mid B_1)$</label>
+      <input type="number" id="tb-l1" value="0.02" step="0.01" min="0" max="1" oninput="solveInteractiveBayes()">
+    </div>
+  </div>
+
+  <div class="tool-grid">
+    <div class="tool-group">
+      <label>Source 2 Prior $P(B_2)$</label>
+      <input type="number" id="tb-p2" value="0.35" step="0.05" min="0" max="1" oninput="solveInteractiveBayes()">
+    </div>
+    <div class="tool-group">
+      <label>Source 2 Likelihood $P(A \mid B_2)$</label>
+      <input type="number" id="tb-l2" value="0.03" step="0.01" min="0" max="1" oninput="solveInteractiveBayes()">
+    </div>
+  </div>
+
+  <div class="tool-grid">
+    <div class="tool-group">
+      <label>Source 3 Prior $P(B_3)$</label>
+      <input type="number" id="tb-p3" value="0.25" step="0.05" min="0" max="1" oninput="solveInteractiveBayes()">
+    </div>
+    <div class="tool-group">
+      <label>Source 3 Likelihood $P(A \mid B_3)$</label>
+      <input type="number" id="tb-l3" value="0.05" step="0.01" min="0" max="1" oninput="solveInteractiveBayes()">
+    </div>
+  </div>
+
+  <div class="tool-result" id="tb-output">
+    Loading calculations...
+  </div>
+</section>
+
+<!-- Section 8: Interactive Self-Test Quiz -->
+<section id="practice">
+  <h2>07. Interactive Self-Test Quiz (Active Recall)</h2>
+  <p class="lead">Test your conceptual and calculation readiness before moving to Normal Distribution. Attempt all 4 questions:</p>
+
+  <div class="quiz-q" data-answer="b">
+    <strong>Question 1 — Identifying Required Probability Notation</strong>
+    <p>A manufacturing plant finds a defective bolt in the warehouse. You are asked to determine the probability that it was produced on Line B. What is the correct formal notation?</p>
+    <label><input type="radio" name="q1" value="a"> $P(\text{Defective} \mid \text{Line B})$</label>
+    <label><input type="radio" name="q1" value="b"> $P(\text{Line B} \mid \text{Defective})$</label>
+    <label><input type="radio" name="q1" value="c"> $P(\text{Line B} \cap \text{Defective})$</label>
+    <label><input type="radio" name="q1" value="d"> $P(\text{Defective}) \cdot P(\text{Line B})$</label>
+    <div class="feedback" id="f1"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(1)">Check Answer</button>
+      <button onclick="toggleAnswer('a1')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a1">
+      <strong>Correct: $P(\text{Line B} \mid \text{Defective})$</strong>.<br>
+      The fact that the bolt is defective is the <em>given condition</em> (placed after the vertical bar). The origin (Line B) is the hypothesis we wish to evaluate.
+    </div>
+  </div>
+
+  <div class="quiz-q" data-answer="c">
+    <strong>Question 2 — Total Probability Calculation (From CT-1 Set A)</strong>
+    <p>Line A produces 40% with 2% defect, Line B produces 35% with 3% defect, and Line C produces 25% with 5% defect. What is the total probability of selecting a defective item, $P(D)$?</p>
+    <label><input type="radio" name="q2" value="a"> $0.0500$ ($5.0\%$)</label>
+    <label><input type="radio" name="q2" value="b"> $0.0250$ ($2.5\%$)</label>
+    <label><input type="radio" name="q2" value="c"> $0.0310$ ($3.1\%$)</label>
+    <label><input type="radio" name="q2" value="d"> $0.0333$ ($3.3\%$)</label>
+    <div class="feedback" id="f2"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(2)">Check Answer</button>
+      <button onclick="toggleAnswer('a2')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a2">
+      <strong>Correct: $0.0310$ ($3.10\%$)</strong>.<br>
+      $P(D) = (0.40 \times 0.02) + (0.35 \times 0.03) + (0.25 \times 0.05) = 0.0080 + 0.0105 + 0.0125 = 0.0310$.
+    </div>
+  </div>
+
+  <div class="quiz-q" data-answer="a">
+    <strong>Question 3 — Posterior Probability Attribution</strong>
+    <p>In Question 2, given that an item is defective, what is the probability it came from Line C, $P(C \mid D)$?</p>
+    <label><input type="radio" name="q3" value="a"> $\frac{0.0125}{0.0310} = \frac{25}{62} \approx 40.32\%$</label>
+    <label><input type="radio" name="q3" value="b"> $\frac{0.0080}{0.0310} = \frac{8}{31} \approx 25.81\%$</label>
+    <label><input type="radio" name="q3" value="c"> $25.00\%$</label>
+    <label><input type="radio" name="q3" value="d"> $5.00\%$</label>
+    <div class="feedback" id="f3"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(3)">Check Answer</button>
+      <button onclick="toggleAnswer('a3')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a3">
+      <strong>Correct: $40.32\%$</strong>.<br>
+      $P(C \mid D) = \frac{P(C)P(D \mid C)}{P(D)} = \frac{0.25 \times 0.05}{0.0310} = \frac{0.0125}{0.0310} = \frac{25}{62} \approx 0.4032$ ($40.32\%$).
+    </div>
+  </div>
+
+  <div class="quiz-q" data-answer="d">
+    <strong>Question 4 — Sampling Without Replacement Hypergeometric Formulation</strong>
+    <p>A box has 1000 items, with 100 defectives. If 2 items are drawn without replacement, what is the exact probability of both being defective?</p>
+    <label><input type="radio" name="q4" value="a"> $(100/1000)^2 = 0.0100$</label>
+    <label><input type="radio" name="q4" value="b"> $2 \times (100/1000) = 0.20$</label>
+    <label><input type="radio" name="q4" value="c"> $\frac{100 \times 100}{1000 \times 999}$</label>
+    <label><input type="radio" name="q4" value="d"> $\frac{\binom{100}{2}}{\binom{1000}{2}} = \frac{100 \times 99}{1000 \times 999} = \frac{11}{1110} \approx 0.00991$</label>
+    <div class="feedback" id="f4"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(4)">Check Answer</button>
+      <button onclick="toggleAnswer('a4')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a4">
+      <strong>Correct: Option D</strong>.<br>
+      Without replacement, the first draw has probability $100/1000$, and the second draw has probability $99/999$. Product: $\frac{9900}{999000} = \frac{11}{1110} \approx 0.00991$. In the May 2025 semester exam, writing this combination formula is explicitly required for full marks.
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <h3>Self-Test Progress</h3>
+    <div class="small" id="scoreText">0 of 4 correct</div>
+    <div class="progress-wrap"><div class="progress" id="scoreBar"></div></div>
+  </div>
+</section>
+
+<!-- Section 9: Exam Checklist -->
+<section id="checklist">
+  <h2>08. Exam Hall Answer Sheet Presentation Checklist</h2>
+  
+  <div class="card">
+    <p>When solving a Bayes' Theorem question in the semester exam, follow this exact structure to guarantee maximum marks even if arithmetic errors occur:</p>
+    <ol style="margin-left:18px;line-height:1.75;font-size:13.5px;">
+      <li><strong>Define the Events:</strong> Let $B_1, B_2, \dots$ be the sources and $D$ be the observed condition.</li>
+      <li><strong>State the Prior Probabilities:</strong> $P(B_1) = \dots, P(B_2) = \dots$ (Check: sum must equal $1.0$).</li>
+      <li><strong>State the Likelihoods:</strong> $P(D \mid B_1) = \dots, P(D \mid B_2) = \dots$.</li>
+      <li><strong>Write the Law of Total Probability Formula:</strong> $P(D) = \sum P(B_i)P(D \mid B_i)$ and show the denominator calculation.</li>
+      <li><strong>State Bayes' Theorem Formula:</strong> $P(B_k \mid D) = \frac{P(B_k)P(D \mid B_k)}{P(D)}$.</li>
+      <li><strong>Substitute & Simplify:</strong> Write the simplified fraction and final decimal percentage.</li>
+      <li><strong>Conclude with a Plain-Text Sentence:</strong> <em>"Therefore, the probability that the defective item came from Line C is 40.32%."</em></li>
+    </ol>
+  </div>
+
+  <div class="controls" style="margin-top:16px;">
+    <button onclick="window.print()">Print / Save as PDF</button>
+    <button class="secondary" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to Top &uarr;</button>
+    <a href="/ifs-study-guide/02-normal-distribution.html" class="btn" style="background:#059669;color:#fff;padding:8px 14px;border-radius:8px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;min-height:40px;">Proceed to Next: 02 &middot; Normal Distribution &rarr;</a>
+  </div>
+</section>
+
+<div class="footer">
+  <div><strong>Inferential Statistics (21CSC529T)</strong> &middot; Module 01: Bayes' Theorem Deep Dive</div>
+  <div>Next Topic in 2-Day Plan: <strong>Normal Distribution & Sampling Distributions</strong></div>
+</div>
+
+</main>
+</div>
+
+<script>
+// Mobile Drawer open/close for iPhone 13
+function openDrawer(){
+  document.getElementById('mobileDrawer').classList.add('open');
+  document.getElementById('drawerBackdrop').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer(){
+  document.getElementById('mobileDrawer').classList.remove('open');
+  document.getElementById('drawerBackdrop').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Toggle solution explanations
+function toggleAnswer(id){
+  document.getElementById(id).classList.toggle('show');
+}
+
+// Quiz evaluation logic
+function checkQuiz(n){
+  const q = document.querySelectorAll('.quiz-q')[n-1];
+  const chosen = q.querySelector('input:checked');
+  const feedback = document.getElementById('f'+n);
+  
+  if(!chosen){
+    feedback.textContent = 'Please select an option first.';
+    feedback.style.color = '#b45309';
+    return;
+  }
+  
+  const isCorrect = chosen.value === q.dataset.answer;
+  if(isCorrect){
+    feedback.textContent = 'Correct! Outstanding precision.';
+    feedback.style.color = '#059669';
+    q.dataset.done = 'yes';
+  } else {
+    feedback.textContent = 'Incorrect. Check the explanation and try again.';
+    feedback.style.color = '#dc2626';
+    q.dataset.done = 'no';
+  }
+  
+  const completed = [...document.querySelectorAll('.quiz-q')].filter(el => el.dataset.done === 'yes').length;
+  document.getElementById('scoreText').textContent = `${completed} of 4 correct`;
+  document.getElementById('scoreBar').style.width = `${(completed / 4) * 100}%`;
+}
+
+// Interactive Bayes calculation engine
+function solveInteractiveBayes(){
+  const p1 = parseFloat(document.getElementById('tb-p1').value) || 0;
+  const l1 = parseFloat(document.getElementById('tb-l1').value) || 0;
+  const p2 = parseFloat(document.getElementById('tb-p2').value) || 0;
+  const l2 = parseFloat(document.getElementById('tb-l2').value) || 0;
+  const p3 = parseFloat(document.getElementById('tb-p3').value) || 0;
+  const l3 = parseFloat(document.getElementById('tb-l3').value) || 0;
+
+  const priorSum = p1 + p2 + p3;
+  const prod1 = p1 * l1;
+  const prod2 = p2 * l2;
+  const prod3 = p3 * l3;
+  const totalPD = prod1 + prod2 + prod3;
+
+  const out = document.getElementById('tb-output');
+  if(Math.abs(priorSum - 1.0) > 0.001){
+    out.innerHTML = `<span style="color:#dc2626;font-weight:700;">Warning: Priors sum to ${priorSum.toFixed(2)} &ne; 1.00.</span>`;
+    return;
+  }
+
+  if(totalPD === 0){
+    out.innerHTML = 'Total probability of evidence is 0.';
+    return;
+  }
+
+  const post1 = (prod1 / totalPD) * 100;
+  const post2 = (prod2 / totalPD) * 100;
+  const post3 = (prod3 / totalPD) * 100;
+
+  let topSource = "Source 1";
+  let maxVal = post1;
+  if(post2 > maxVal){ topSource = "Source 2"; maxVal = post2; }
+  if(post3 > maxVal){ topSource = "Source 3"; maxVal = post3; }
+
+  out.innerHTML = `
+    <div><strong>Total Probability P(A):</strong> ${totalPD.toFixed(5)} (${(totalPD * 100).toFixed(3)}%)</div>
+    <div style="margin-top:6px;">
+      <strong>Posterior Probabilities:</strong><br>
+      &bull; P(B₁ | A) = ${post1.toFixed(2)}%<br>
+      &bull; P(B₂ | A) = ${post2.toFixed(2)}%<br>
+      &bull; P(B₃ | A) = ${post3.toFixed(2)}%
+    </div>
+    <div style="margin-top:6px;color:#059669;font-weight:700;">
+      &rarr; Most Likely Origin: ${topSource} (${maxVal.toFixed(2)}%)
+    </div>
+  `;
+}
+
+// Highlight sidebar item on click
+document.querySelectorAll('nav a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.querySelectorAll('nav a').forEach(el => el.classList.remove('active'));
+    a.classList.add('active');
+  });
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  solveInteractiveBayes();
+});
+</script>
+</body>
+</html>

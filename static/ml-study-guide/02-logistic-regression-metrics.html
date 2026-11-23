@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Logistic Regression & Classification Metrics | Complete Exam Question Bank & Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#2563eb;--brand-soft:#eff6ff;--teal:#059669;--teal-soft:#ecfdf5;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#0f172a;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:800}
+aside h2{font-size:18px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.12em;margin:18px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#cbd5e1;font-size:13px}
+nav a:hover,nav a.active{background:#1e293b;color:#38bdf8;text-decoration:none}
+.module-hub-link{background:#1e293b;border:1px solid #334155;color:#38bdf8;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:20px;padding:12px;border:1px solid #334155;border-radius:12px;color:#cbd5e1;font-size:12px;background:#131d35}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#047857;color:#ecfdf5}
+
+/* Mobile Sticky Topbar */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#0f172a;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{
+  font-size:14.5px;
+  font-weight:800;
+  color:#f8fafc;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.mobile-topbar-actions{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.mobile-btn{
+  background:#1e293b;
+  border:1px solid #334155;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  cursor:pointer;
+  min-height:36px;
+}
+
+/* Horizontal Swipeable Pill Nav */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer Menu Overlay */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#0f172a;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #1e293b;
+  padding-bottom:12px;
+}
+.drawer-close{
+  background:none;
+  border:none;
+  color:#94a3b8;
+  font-size:24px;
+  cursor:pointer;
+  padding:4px 8px;
+}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#2563eb 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"σ(z)";position:absolute;right:20px;bottom:-30px;font-size:110px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#93c5fd;font-weight:800}
+h1{font-size:clamp(22px,4.5vw,38px);line-height:1.15;margin:10px 0}
+.hero p{max-width:700px;color:#e0e7ff;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+.formula-banner{
+  background:#0f172a;
+  color:#f8fafc;
+  padding:16px 14px;
+  border-radius:12px;
+  text-align:center;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+.formula-banner .katex-display{margin:6px 0}
+.formula-banner small{display:block;font-size:11px;color:#94a3b8;margin-top:6px}
+
+/* KaTeX Horizontal Scrollbar Removal & Vertical Headroom (No Clipping) */
+.katex-display{
+  font-size:clamp(13px, 3.6vw, 15.5px) !important;
+  margin:12px 0 !important;
+  padding:12px 4px 8px !important;
+  overflow-x:auto !important;
+  overflow-y:visible !important;
+  scrollbar-width:none !important;
+  -ms-overflow-style:none !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+.katex-display::-webkit-scrollbar{display:none !important;}
+.katex-display > .katex{
+  display:block !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  padding-top:4px !important;
+  padding-bottom:2px !important;
+}
+.katex{
+  font-size:1em !important;
+  line-height:normal !important;
+  text-rendering:auto !important;
+  white-space:normal !important;
+}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--teal-soft);border-color:var(--teal)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+.note.purple{background:var(--purple-soft);border-color:var(--purple)}
+
+/* Table Styling - Clean & No Cutoff */
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#dbeafe;color:#1e40af;margin-bottom:6px}
+.pyq-badge.ct{background:#e0e7ff;color:#3730a3}
+.pyq-badge.nov{background:#fef3c7;color:#92400e}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+  -webkit-tap-highlight-color:transparent;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  transition:background .15s;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+button:hover{background:#1d4ed8}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+
+/* Quiz for iPhone 13 (Large Touch Targets) */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+  -webkit-tap-highlight-color:transparent;
+  transition:all .15s;
+}
+.quiz-q label:active{background:#eff6ff;border-color:#93c5fd}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--teal-soft);border-radius:8px;border-left:3px solid var(--teal);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Interactive Confusion Calculator */
+.tool-box{background:white;border:2px solid #93c5fd;border-radius:12px;padding:16px;margin:16px 0}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px;margin-top:8px}
+.tool-group label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px}
+.tool-group input{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  font-size:16px; /* Prevents iOS Safari Zoom */
+  background:#f8fafc;
+  min-height:40px;
+}
+.tool-result{margin-top:12px;padding:12px;background:#eff6ff;border-radius:8px;border-left:4px solid var(--brand);font-size:13px}
+
+/* Mobile Responsiveness */
+@media(max-width:880px){
+  .shell{grid-template-columns:1fr}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:16px 14px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr}
+  .hero{padding:22px 16px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  .card{padding:14px}
+  .tool-box{padding:12px}
+  .tool-grid{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Drawer Backdrop -->
+<div class="drawer-backdrop" id="backdrop" onclick="toggleDrawer()"></div>
+
+<!-- Slide-Out Mobile Navigation Drawer -->
+<div class="mobile-drawer" id="drawer">
+  <div class="drawer-header">
+    <div style="font-weight:800;font-size:13px;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;">ML Study Hub</div>
+    <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+  </div>
+  <a href="/ml-study-guide/index.html" class="module-hub-link" style="display:block;padding:8px 12px;border-radius:8px;font-size:13px;">&larr; Back to Study Hub</a>
+  <div class="nav-label">Sections</div>
+  <nav>
+    <a href="#intuition" onclick="toggleDrawer()">01. Intuition & Contrast</a>
+    <a href="#math" onclick="toggleDrawer()">02. Sigmoid Derivation</a>
+    <a href="#multiclass" onclick="toggleDrawer()">03. Multi-Class OvR vs Softmax</a>
+    <a href="#metrics" onclick="toggleDrawer()">04. Confusion Matrix Metrics</a>
+    <a href="#imbalance" onclick="toggleDrawer()">05. Accuracy Paradox & PR-AUC</a>
+    <a href="#notation" onclick="toggleDrawer()">06. Notation Matrix</a>
+    <a href="#steps" onclick="toggleDrawer()">07. Solving Protocol</a>
+    <a href="#traps" onclick="toggleDrawer()">08. 6 Exam Traps</a>
+    <a href="#pyqs" onclick="toggleDrawer()">09. All Solved PYQs</a>
+    <a href="#calculator" onclick="toggleDrawer()">10. Confusion Matrix Tool</a>
+    <a href="#quiz" onclick="toggleDrawer()">11. Active Recall Quiz</a>
+    <a href="#checklist" onclick="toggleDrawer()">12. Presentation Template</a>
+  </nav>
+  <div class="nav-label">Modules</div>
+  <nav>
+    <a href="/ml-study-guide/01-linear-regression-optimization.html">01. Linear Regression</a>
+    <a href="/ml-study-guide/02-logistic-regression-metrics.html" class="active">02. Logistic & Metrics</a>
+    <a href="/ml-study-guide/03-naive-bayes-knn.html">03. Naive Bayes & KNN</a>
+    <a href="/ml-study-guide/04-decision-trees-ensembles.html">04. Decision Trees & RF</a>
+    <a href="/ml-study-guide/05-clustering-pca.html">05. K-Means & PCA</a>
+  </nav>
+</div>
+
+<!-- Mobile Sticky Topbar -->
+<div class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>Module 02 · Classification</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/ml-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="toggleDrawer()">&#9776; Menu</button>
+  </div>
+</div>
+
+<!-- Mobile Horizontal Pill Nav -->
+<div class="mobile-pills-bar">
+  <a href="#intuition" class="pill-link">Intuition</a>
+  <a href="#math" class="pill-link">Sigmoid Proof</a>
+  <a href="#multiclass" class="pill-link">OvR vs Softmax</a>
+  <a href="#metrics" class="pill-link">Metrics</a>
+  <a href="#imbalance" class="pill-link">Paradox</a>
+  <a href="#traps" class="pill-link">Traps</a>
+  <a href="#pyqs" class="pill-link">Past Papers</a>
+  <a href="#calculator" class="pill-link">Confusion Tool</a>
+  <a href="#quiz" class="pill-link">Quiz</a>
+  <a href="#checklist" class="pill-link">Checklist</a>
+</div>
+
+<div class="shell">
+
+  <!-- Desktop Sidebar -->
+  <aside>
+    <div class="brand">21CSC555J · Exam Prep</div>
+    <h2>Logistic Regression & Metrics</h2>
+    <a href="/ml-study-guide/index.html" class="module-hub-link" style="padding:8px 12px;border-radius:8px;font-size:12.5px;">&larr; Back to Study Hub</a>
+
+    <div class="nav-label">Sections</div>
+    <nav>
+      <a href="#intuition">01. Intuition & Contrast</a>
+      <a href="#math">02. Sigmoid Derivation</a>
+      <a href="#multiclass">03. Multi-Class OvR vs Softmax</a>
+      <a href="#metrics">04. Confusion Matrix Metrics</a>
+      <a href="#imbalance">05. Accuracy Paradox & PR-AUC</a>
+      <a href="#notation">06. Notation Decoding Matrix</a>
+      <a href="#steps">07. Step-by-Step Protocol</a>
+      <a href="#traps">08. 6 Deadly Exam Traps</a>
+      <a href="#pyqs">09. Complete University PYQs</a>
+      <a href="#calculator">10. Confusion Matrix Tool</a>
+      <a href="#quiz">11. Self-Test Active Recall</a>
+      <a href="#checklist">12. Answer Sheet Checklist</a>
+    </nav>
+
+    <div class="side-note">
+      <strong>Exam Weightage: 20-40 Marks</strong><br>
+      Internal Score: <strong>51.60 / 60</strong><br>
+      Target Sem Mark: <strong>49 / 100</strong> (Safe: 56)<br>
+      <span class="status-pill pill-target">Priority 2 High-Yield</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="eyebrow">Module 02 · Probabilistic Classification & Diagnostics</div>
+      <h1>Logistic Regression, Metrics & Validation</h1>
+      <p>Master the transformation from unbounded linear regression to bounded probabilities via the Sigmoid function, multi-class architectures, full confusion matrix derivations, the 99.5% Accuracy Paradox, PR-AUC vs ROC-AUC, and Stratified K-Fold CV.</p>
+      <div class="pills">
+        <span class="pill">Jan 2025 (Q2 20M, Q3 20M)</span>
+        <span class="pill">Nov 2025 (Q2 20M, Q6 20M)</span>
+        <span class="pill">Sigmoid Derivation</span>
+        <span class="pill">Accuracy Paradox</span>
+        <span class="pill">PR-AUC vs ROC-AUC</span>
+      </div>
+    </div>
+
+    <!-- Section 01: Intuition & Contrast -->
+    <section id="intuition">
+      <h2>01. Intuition & Concept Contrast</h2>
+      <p class="lead">Why can't we use linear regression for classification? Linear regression predicts unbounded real numbers $z \in (-\infty, +\infty)$. Probabilities must strictly obey the Kolmogorov axioms: $P(Y=1 \mid \mathbf{x}) \in [0, 1]$.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Function Mapping</div>
+          <h3 style="margin-top:2px;">Linear Output vs Probability Sigmoid</h3>
+          <p><strong>Linear Output ($z = \mathbf{w}^T\mathbf{x} + b$):</strong> Can predict $-4.2$ or $+15.8$. Meaningless as a probability; sensitive to extreme outliers that skew the decision boundary.</p>
+          <p><strong>Sigmoid Function ($\sigma(z) = \frac{1}{1 + e^{-z}}$):</strong> Smooth S-shaped squashing curve that asymptotically maps $(-\infty, +\infty)$ strictly into $[0, 1]$. Thresholded at $0.5$ ($z=0$) to classify binary decisions.</p>
+        </div>
+        <div class="card">
+          <div class="kicker">Evaluation Metric Contrast</div>
+          <h3 style="margin-top:2px;">Accuracy vs Precision/Recall</h3>
+          <p><strong>Accuracy ($\frac{TP+TN}{N}$):</strong> Misleading under class imbalance. In a $0.5\%$ fraud dataset, predicting 100% legitimate gives $99.5\%$ accuracy while missing every fraud case.</p>
+          <p><strong>Precision & Recall:</strong> Precision ($\frac{TP}{TP+FP}$) measures alarm trustworthiness; Recall ($\frac{TP}{TP+FN}$) measures event coverage. Harmonic balance via $F_1$ or recall-weighted $F_2$.</p>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Curve Evaluation</div>
+          <h3 style="margin-top:2px;">ROC-AUC vs PR-AUC</h3>
+          <p><strong>ROC-AUC ($\text{TPR}$ vs $\text{FPR}$):</strong> The $\text{FPR} = \frac{FP}{TN + FP}$ denominator contains the enormous majority class ($TN$). A flood of false positives barely moves $\text{FPR}$, artificially inflating ROC-AUC.</p>
+          <p><strong>PR-AUC (Precision vs Recall):</strong> Focuses exclusively on the positive minority class ($TP, FP, FN$). Excludes $TN$ entirely, exposing poor models on rare events.</p>
+        </div>
+        <div class="card">
+          <div class="kicker">Validation Strategy</div>
+          <h3 style="margin-top:2px;">Random K-Fold vs Stratified K-Fold</h3>
+          <p><strong>Standard Random K-Fold:</strong> Can produce validation folds containing zero positive churn/fraud instances due to random sampling.</p>
+          <p><strong>Stratified K-Fold:</strong> Strictly preserves class proportion across every training and validation fold (e.g., exactly $15\%$ churners in each fold).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: Sigmoid Derivation -->
+    <section id="math">
+      <h2>02. Derivation of Logistic Regression from Linear Regression</h2>
+      <p class="lead"><strong>Guaranteed University Question (8-10 Marks).</strong> Deriving the Sigmoid formula step-by-step from the linear log-odds (logit).</p>
+
+      <div class="formula-banner">
+        <div><strong>The Governing Logistic Form</strong></div>
+        $$P(Y = 1 \mid \mathbf{x}) = p = \sigma(z) = \frac{1}{1 + e^{-z}} = \frac{1}{1 + e^{-(\mathbf{w}^T\mathbf{x} + b)}}$$
+        <small>Where $z = \ln\left(\frac{p}{1-p}\right)$ is the Log-Odds (Logit).</small>
+      </div>
+
+      <div class="card">
+        <h3>Step-by-Step Derivation Protocol:</h3>
+        <p><strong>Step 1: The Probability Dilemma</strong><br>
+        Let $p = P(Y = 1 \mid \mathbf{x})$ denote the posterior probability of class 1. A linear equation $z = \mathbf{w}^T\mathbf{x} + b$ produces outputs $z \in (-\infty, +\infty)$, whereas probabilities must be bounded $p \in [0, 1]$.</p>
+
+        <p><strong>Step 2: Odds Ratio Formulation</strong><br>
+        Define the Odds of an event as the ratio of probability of occurrence to probability of non-occurrence:</p>
+        $$\text{Odds} = \frac{p}{1 - p} \in [0, +\infty)$$
+
+        <p><strong>Step 3: The Log-Odds (Logit Transformation)</strong><br>
+        Taking the natural logarithm of the odds maps the range to the full real line $(-\infty, +\infty)$, matching the linear regression hypothesis:</p>
+        $$\ln\left(\frac{p}{1 - p}\right) = z = \mathbf{w}^T\mathbf{x} + b \in (-\infty, +\infty)$$
+
+        <p><strong>Step 4: Algebraic Inversion to Recover Probability ($p$)</strong><br>
+        Exponentiate both sides:</p>
+        $$\frac{p}{1 - p} = e^z$$
+        $$p = e^z (1 - p) = e^z - p e^z$$
+        $$p + p e^z = e^z \implies p(1 + e^z) = e^z$$
+        $$p = \frac{e^z}{1 + e^z}$$
+        <p>Divide numerator and denominator by $e^z$:</p>
+        $$\mathbf{p = \sigma(z) = \frac{1}{1 + e^{-z}}} \quad \text{Q.E.D.}$$
+      </div>
+
+      <div class="note good">
+        <strong>Binary Cross-Entropy Loss (Log-Loss):</strong><br>
+        $$\mathcal{L}(\mathbf{w}, b) = -\frac{1}{n}\sum_{i=1}^n \left[ y_i \ln(\hat{p}_i) + (1 - y_i)\ln(1 - \hat{p}_i) \right]$$
+        Unlike MSE which is non-convex when combined with sigmoid, Cross-Entropy ensures a smooth, convex bowl with a guaranteed global minimum.
+      </div>
+    </section>
+
+    <!-- Section 03: Multi-Class Classification -->
+    <section id="multiclass">
+      <h2>03. Adapting to Multi-Class Classification (OvR vs Softmax)</h2>
+      <p class="lead">Exam questions often ask how to classify customers into 3 categories: "low", "moderate", and "high spender".</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Heuristic Decomposition</div>
+          <h3 style="margin-top:2px;">1. One-vs-Rest (OvR / One-vs-All)</h3>
+          <ul>
+            <li>Trains $K$ independent binary logistic classifiers for $K$ classes.</li>
+            <li><strong>Classifier 1:</strong> High Spender vs. [Low + Moderate]</li>
+            <li><strong>Classifier 2:</strong> Moderate Spender vs. [Low + High]</li>
+            <li><strong>Classifier 3:</strong> Low Spender vs. [Moderate + High]</li>
+            <li><strong>Inference Rule:</strong> Assign sample to class with highest posterior:
+            $$\hat{y} = \arg\max_{k \in \{1, \dots, K\}} \sigma(\mathbf{w}_k^T\mathbf{x} + b_k)$$</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="kicker">True Multinomial Model</div>
+          <h3 style="margin-top:2px;">2. Softmax Regression (Multinomial Logistic)</h3>
+          <ul>
+            <li>Directly models joint categorical distribution across all $K$ classes simultaneously.</li>
+            <li>Computes linear score $z_k = \mathbf{w}_k^T\mathbf{x} + b_k$ for each class, then normalizes using the Softmax operator:
+            $$P(Y = k \mid \mathbf{x}) = \frac{e^{z_k}}{\sum_{j=1}^K e^{z_j}}$$</li>
+            <li>Guarantees all probabilities are positive and strictly sum to $1.0$: $\sum_{k=1}^K P(Y=k \mid \mathbf{x}) = 1$.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 04: Confusion Matrix Metrics -->
+    <section id="metrics">
+      <h2>04. Complete Confusion Matrix Metrics Suite</h2>
+      <p class="lead">Essential formulas and definitions required for the 15-mark numericals on rare-event detection.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Formula</th>
+              <th>Plain-English Interpretation</th>
+              <th>Exam Context (Rare Events)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>True Positives (TP)</strong></td>
+              <td>Correctly flagged positives</td>
+              <td>Model predicts positive, actual is positive</td>
+              <td>Correctly identified defective components ($7$)</td>
+            </tr>
+            <tr>
+              <td><strong>False Positives (FP)</strong></td>
+              <td>Type I Error ($\alpha$)</td>
+              <td>Model predicts positive, actual is negative</td>
+              <td>False alarms: normal parts flagged defective ($25$)</td>
+            </tr>
+            <tr>
+              <td><strong>False Negatives (FN)</strong></td>
+              <td>Type II Error ($\beta$)</td>
+              <td>Model predicts negative, actual is positive</td>
+              <td>Defect escapes: missed defective components ($3$)</td>
+            </tr>
+            <tr>
+              <td><strong>True Negatives (TN)</strong></td>
+              <td>Correctly cleared negatives</td>
+              <td>Model predicts negative, actual is negative</td>
+              <td>Correctly cleared benign parts ($965$)</td>
+            </tr>
+            <tr>
+              <td><strong>Accuracy</strong></td>
+              <td>$\frac{TP + TN}{TP + TN + FP + FN}$</td>
+              <td>Overall fraction of correct predictions</td>
+              <td>Severely skewed by majority class ($97.2\%$)</td>
+            </tr>
+            <tr>
+              <td><strong>Precision (PPV)</strong></td>
+              <td>$\frac{TP}{TP + FP}$</td>
+              <td>When model flags positive, how often is it right?</td>
+              <td>$\frac{7}{7+25} = 21.875\%$</td>
+            </tr>
+            <tr>
+              <td><strong>Recall (Sensitivity)</strong></td>
+              <td>$\frac{TP}{TP + FN}$</td>
+              <td>What fraction of actual positive events did we find?</td>
+              <td>$\frac{7}{7+3} = 70.0\%$ (Critical for defect prevention)</td>
+            </tr>
+            <tr>
+              <td><strong>$F_1$-Score</strong></td>
+              <td>$2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}}$</td>
+              <td>Harmonic mean giving equal weight to Precision and Recall</td>
+              <td>$33.33\%$ (Exposes poor precision)</td>
+            </tr>
+            <tr>
+              <td><strong>$F_2$-Score</strong></td>
+              <td>$\frac{5 \times \text{Precision} \times \text{Recall}}{4\text{Precision} + \text{Recall}}$</td>
+              <td>Recall-weighted harmonic mean (Recall is $2\times$ more important)</td>
+              <td>$48.61\%$ (Optimal metric for safety/defects)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 05: The Accuracy Paradox & Class Imbalance -->
+    <section id="imbalance">
+      <h2>05. The Accuracy Paradox & Extreme Imbalance Remediation</h2>
+      <p class="lead"><strong>Jan 2025 & Nov 2025 Recurring Question (20 Marks).</strong> Why $99.5\%$ accuracy fails and how to engineer robust solutions.</p>
+
+      <div class="note danger">
+        <strong>The Accuracy Paradox Mathematical Proof:</strong><br>
+        Suppose a network dataset has $N = 10,000$ packets where only $0.5\%$ ($50$ packets) are malicious intrusions, and $9,950$ are benign.<br>
+        A dumb <strong>Null Model</strong> that classifies every single packet as benign ($\hat{Y} = 0$) achieves:
+        $$TP = 0, \quad FN = 50, \quad FP = 0, \quad TN = 9,950$$
+        $$\text{Accuracy} = \frac{0 + 9,950}{10,000} = \mathbf{99.50\%}, \qquad \text{Recall} = \frac{0}{0 + 50} = \mathbf{0.00\%}$$
+        <em>Conclusion:</em> The model has $99.5\%$ accuracy while missing $100\%$ of security attacks. Accuracy is completely useless here.
+      </div>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Strategy 1: Algorithm-Level</div>
+          <h3 style="margin-top:2px;">Cost-Sensitive Balanced Class Weights</h3>
+          <p>Modify the binary cross-entropy loss to weight minority errors inversely proportional to frequency:</p>
+          $$\mathcal{L} = -\sum_{i=1}^n \left[ w_1 y_i \ln \hat{p}_i + w_0 (1 - y_i)\ln(1 - \hat{p}_i) \right]$$
+          $$w_1 = \frac{N}{2 \times N_1} = \frac{10,000}{2 \times 50} = \mathbf{100}, \quad w_0 = \frac{10,000}{2 \times 9,950} \approx \mathbf{0.5025}$$
+          <p>Missing a single intrusion is penalized $200\times$ more heavily than a false alarm.</p>
+        </div>
+        <div class="card">
+          <div class="kicker">Strategy 2: Data-Level</div>
+          <h3 style="margin-top:2px;">SMOTE Combined with Tomek Links</h3>
+          <p><strong>SMOTE (Synthetic Minority Over-sampling):</strong> Generates synthetic minority examples along feature-space line segments connecting $k$-nearest minority neighbors:
+          $$\mathbf{x}_{\text{synthetic}} = \mathbf{x}_i + \lambda (\mathbf{x}_{zi} - \mathbf{x}_i), \quad \lambda \sim \mathcal{U}(0, 1)$$</p>
+          <p><strong>Tomek Links:</strong> Identifies mutually nearest pairs from opposite classes and cleans borderline majority points, creating crisp decision separation.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 06: Notation Matrix -->
+    <section id="notation">
+      <h2>06. Notation Decoding Matrix</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Formal Name</th>
+              <th>Plain-English Meaning</th>
+              <th>Exam Context</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$p = P(Y=1 \mid \mathbf{x})$</td>
+              <td>Posterior Probability</td>
+              <td>Estimated likelihood of event occurring</td>
+              <td>Probability customer is a High Spender</td>
+            </tr>
+            <tr>
+              <td>$z = \mathbf{w}^T\mathbf{x} + b$</td>
+              <td>Logit / Log-Odds</td>
+              <td>Unbounded linear score before sigmoid</td>
+              <td>$z > 0 \implies p > 0.5 \implies \text{Class 1}$</td>
+            </tr>
+            <tr>
+              <td>$\sigma(z)$</td>
+              <td>Sigmoid Function</td>
+              <td>Logistic activation squashing $\mathbb{R} \to [0, 1]$</td>
+              <td>$\sigma(0) = 0.5$, $\sigma(\infty) = 1$, $\sigma(-\infty) = 0$</td>
+            </tr>
+            <tr>
+              <td>$F_\beta$</td>
+              <td>General $F$-Score</td>
+              <td>Weighted harmonic mean of Precision and Recall</td>
+              <td>$\beta=1$ (balanced), $\beta=2$ (recall weighted)</td>
+            </tr>
+            <tr>
+              <td>$K$</td>
+              <td>Class Count / Folds</td>
+              <td>Number of classes or number of CV folds</td>
+              <td>$K=3$ spending tiers; $K=5$ or $10$ folds</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 07: Solving Protocol -->
+    <section id="steps">
+      <h2>07. Repeatable Step-by-Step Solving Protocol</h2>
+      <p class="lead">Execute this 5-step protocol for confusion matrix numerical problems:</p>
+
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>Step 1: Extract Given Counts & Total ($N$)</strong>
+            <p>Identify Total Instances ($N$), Total Actual Positives ($P$), and Total Actual Negatives ($N_0 = N - P$).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 2: Solve the 4 Fundamental Quadrants</strong>
+            $$\begin{aligned}
+            TP &= \text{Correctly predicted positives} \\[2pt]
+            FN &= P - TP \quad (\text{Actual positives missed}) \\[2pt]
+            FP &= \text{False alarms flagged by model} \\[2pt]
+            TN &= N_0 - FP \quad (\text{Actual negatives cleared})
+            \end{aligned}$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 3: Compute Basic Rates (Accuracy, Precision, Recall)</strong>
+            $$\text{Acc} = \frac{TP + TN}{N}, \quad \text{Prec} = \frac{TP}{TP + FP}, \quad \text{Rec} = \frac{TP}{TP + FN}$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 4: Compute Harmonic Means ($F_1$ and $F_2$)</strong>
+            $$F_1 = \frac{2 \cdot \text{Prec} \cdot \text{Rec}}{\text{Prec} + \text{Rec}}, \quad F_2 = \frac{5 \cdot \text{Prec} \cdot \text{Rec}}{4\text{Prec} + \text{Rec}}$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 5: Write Contextual Justification</strong>
+            <p>Explain why Recall / $F_2$ is preferred over Accuracy (cost of missed defects $FN$ exceeds cost of false alarms $FP$).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 08: 6 Exam Traps -->
+    <section id="traps">
+      <h2>08. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+      <div class="grid">
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 01: Swapping FP and FN</div>
+          <h3>Confusing Type I Error with Type II Error</h3>
+          <p>$\text{False Positive} = \text{Type I}$ (False alarm: healthy called sick). $\text{False Negative} = \text{Type II}$ (Dangerous miss: sick called healthy). Swapping these ruins both Precision and Recall.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 02: Arithmetic Inversion</div>
+          <h3>Writing $\sigma(z) = \frac{1}{1 - e^{-z}}$</h3>
+          <p>The denominator <strong>MUST have a plus sign</strong>: $\frac{1}{1 + e^{-z}}$. Writing a minus sign causes division by zero at $z=0$ ($\frac{1}{1-1}$) and completely invalidates the derivation.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 03: Recommending ROC-AUC on Imbalanced Data</div>
+          <h3>Ignoring FPR Denominator Dilution</h3>
+          <p>Students recommend ROC-AUC for fraud/intrusion. Examiners deduct marks! You must state that <strong>ROC-AUC is artificially inflated by large $TN$</strong> in the FPR denominator, and <strong>PR-AUC is mandatory</strong>.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 04: Denominator Flips in Metrics</div>
+          <h3>Putting Total $N$ in Precision Denominator</h3>
+          <p>Precision denominator is $(TP + FP)$ (all positive predictions). Recall denominator is $(TP + FN)$ (all actual ground-truth positives). Never divide Precision by $N$.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 05: Data Leakage in Cross-Validation</div>
+          <h3>Scaling Data Before Splitting into Folds</h3>
+          <p>If you compute mean and standard deviation on the entire dataset before $K$-fold split, test fold statistics leak into training. <strong>Preprocessing must be fitted ONLY inside the training folds.</strong></p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 06: Multi-Class Probability Sums</div>
+          <h3>Assuming OvR Output Sums to 1.0</h3>
+          <p>One-vs-Rest trains independent binary classifiers; their sigmoid outputs <strong>do not sum to $1.0$</strong>. Only <strong>Softmax regression</strong> enforces $\sum P(Y=k) = 1.0$.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 09: Complete Solved University PYQs -->
+    <section id="pyqs">
+      <h2>09. Complete University Question Bank (All Past PYQs Solved)</h2>
+      <div class="controls">
+        <button onclick="toggleAllDetails(true)">Expand All Solutions</button>
+        <button class="secondary" onclick="toggleAllDetails(false)">Collapse All</button>
+      </div>
+
+      <!-- Question 1: Nov 2025 Q2 Rare Event (20 Marks) -->
+      <div class="details-box">
+        <details id="q1">
+          <summary>
+            <span><span class="pyq-badge nov">Nov 2025 · Question 2</span> Manufacturing Rare Event Metric Calculations (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            A company predicts a rare event in manufacturing with a test set of $1,000$ points where only $10$ are positive events. Model correctly identifies $7$ of the $10$ positive events, and incorrectly flags $25$ negative events as positive.<br>
+            1. Calculate $TP, TN, FP, FN$ (15 Marks)<br>
+            2. Calculate Accuracy, Precision, Recall, F1-score.<br>
+            3. Analyze which metric is most suitable and explain why. (5 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Derivation of Confusion Matrix Parameters (15 Marks)</h5>
+          <ul>
+            <li><strong>Total Test Instances ($N$):</strong> $1,000$</li>
+            <li><strong>Actual Positives ($P$):</strong> $10$</li>
+            <li><strong>Actual Negatives ($N_0$):</strong> $1000 - 10 = 990$</li>
+            <li><strong>True Positives ($TP$):</strong> $7$ (correctly identified positive events)</li>
+            <li><strong>False Negatives ($FN$):</strong> $P - TP = 10 - 7 = \mathbf{3}$ (missed positive events)</li>
+            <li><strong>False Positives ($FP$):</strong> $\mathbf{25}$ (negative events incorrectly flagged as positive)</li>
+            <li><strong>True Negatives ($TN$):</strong> $N_0 - FP = 990 - 25 = \mathbf{965}$ (correctly cleared negative events)</li>
+          </ul>
+
+          <h5>Metric Calculations:</h5>
+          $$\begin{aligned}
+          \text{Accuracy} &= \frac{TP + TN}{N} = \frac{7 + 965}{1,000} = \frac{972}{1,000} = \mathbf{97.20\%} \\[8pt]
+          \text{Precision} &= \frac{TP}{TP + FP} = \frac{7}{7 + 25} = \frac{7}{32} = \mathbf{0.21875 \quad (21.88\%)} \\[8pt]
+          \text{Recall} &= \frac{TP}{TP + FN} = \frac{7}{7 + 3} = \frac{7}{10} = \mathbf{0.7000 \quad (70.00\%)} \\[8pt]
+          F_1\text{-score} &= 2 \times \frac{\text{Precision} \times \text{Recall}}{\text{Precision} + \text{Recall}} = 2 \times \frac{0.21875 \times 0.70}{0.21875 + 0.70} \\[4pt]
+          &= 2 \times \frac{0.153125}{0.91875} = \frac{0.30625}{0.91875} = \mathbf{0.3333 \quad (33.33\%)}
+          \end{aligned}$$
+
+          <h5>2. Metric Suitability Analysis (5 Marks)</h5>
+          <p><strong>Accuracy ($97.20\%$) is completely misleading</strong> because a useless null model predicting all parts as negative would achieve $99.0\%$ accuracy while catching zero defects.</p>
+          <p><strong>Most Suitable Metric: Recall (or $F_2$-Score)</strong></p>
+          <ul>
+            <li>In manufacturing, a **False Negative** means releasing a defective component to customers, causing warranty recalls, safety hazards, and massive brand damage.</li>
+            <li>A **False Positive** merely triggers secondary manual reinspection of a good part, incurring minor operational labor cost.</li>
+            <li>Therefore, **Recall ($70.0\%$)** or the **$F_2$-score ($48.61\%$)** (which places twice the emphasis on Recall over Precision) is the optimal metric.</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- Question 2: Jan 2025 Q2 Logistic & Spender Categories (20 Marks) -->
+      <div class="details-box">
+        <details id="q2">
+          <summary>
+            <span><span class="pyq-badge">Jan 2025 · Question 2</span> Customer Spending Tiers via Logistic & Multi-Class Softmax (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            A retail analytics company classifies customers into 3 categories: "low spender", "moderate spender", "high spender" using monthly income, purchases, average purchase value. Explain how Logistic Regression estimates probability of "high spender". Describe converting linear equation into sigmoid and interpreting probability. Explain adapting for multi-class via OvR and Softmax Regression. (20 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. High Spender Estimation & Linear to Sigmoid Conversion (10 Marks)</h5>
+          <p>Let $\mathbf{x} = [x_{\text{income}}, x_{\text{purchases}}, x_{\text{value}}]^T$. Formulate binary target $Y = 1$ if High Spender, $0$ otherwise.</p>
+          <p>Compute linear combination $z = w_1 x_{\text{income}} + w_2 x_{\text{purchases}} + w_3 x_{\text{value}} + b$.</p>
+          <p>Apply Sigmoid mapping:</p>
+          $$P(Y=1 \mid \mathbf{x}) = \sigma(z) = \frac{1}{1 + e^{-z}}$$
+          <p><strong>Interpretation:</strong> If $\sigma(z) = 0.85$, the model predicts an $85\%$ chance of being a High Spender. At standard decision threshold $\tau = 0.5$, any customer with $z > 0$ is classified as High Spender.</p>
+
+          <h5>2. Multi-Class Adaptation: OvR vs Softmax (10 Marks)</h5>
+          <p><strong>A. One-vs-Rest (OvR):</strong> Train 3 independent binary models:</p>
+          <ol>
+            <li>$P(\text{High} \mid \mathbf{x}) = \sigma(\mathbf{w}_{\text{high}}^T\mathbf{x} + b_{\text{high}})$</li>
+            <li>$P(\text{Moderate} \mid \mathbf{x}) = \sigma(\mathbf{w}_{\text{mod}}^T\mathbf{x} + b_{\text{mod}})$</li>
+            <li>$P(\text{Low} \mid \mathbf{x}) = \sigma(\mathbf{w}_{\text{low}}^T\mathbf{x} + b_{\text{low}})$</li>
+          </ol>
+          <p>Assign customer to category with highest probability: $\hat{y} = \arg\max_{k} P(C_k \mid \mathbf{x})$.</p>
+
+          <p><strong>B. Softmax Regression (Multinomial):</strong> Preferred approach. Directly normalizes scores so that probabilities sum to $1.0$:</p>
+          $$P(Y = k \mid \mathbf{x}) = \frac{e^{\mathbf{w}_k^T\mathbf{x} + b_k}}{\sum_{j \in \{\text{low}, \text{mod}, \text{high}\}} e^{\mathbf{w}_j^T\mathbf{x} + b_j}}$$
+          <p>Softmax accounts for mutual exclusivity among customer tiers and prevents uncalibrated probability drift.</p>
+        </details>
+      </div>
+
+      <!-- Question 3: Nov 2025 Q6 Intrusion Detection & Imbalance (20 Marks) -->
+      <div class="details-box">
+        <details id="q3">
+          <summary>
+            <span><span class="pyq-badge nov">Nov 2025 · Question 6</span> Network Intrusion 99.5% Accuracy Paradox & SMOTE (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            A cybersecurity model has 99.5% accuracy but misses nearly all 0.5% intrusion events.<br>
+            i) Evaluate misleading nature of accuracy. (6 Marks)<br>
+            ii) Recommend two alternative metrics and justify. (6 Marks)<br>
+            iii) Suggest two strategies to handle class imbalance. (8 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>(i) Misleading Nature of Accuracy (6 Marks)</h5>
+          <p>The Accuracy Paradox occurs because the majority benign class ($99.5\%$) swamps the metric. A trivial classifier predicting zero intrusions scores $99.5\%$ accuracy while achieving zero security value.</p>
+
+          <h5>(ii) Two Recommended Alternative Metrics (6 Marks)</h5>
+          <ol>
+            <li><strong>PR-AUC (Precision-Recall AUC):</strong> Excludes True Negatives from the calculation entirely, evaluating performance strictly on True Positives and False Alarms. ROC-AUC is misleading due to $TN$ dilution in $\text{FPR} = \frac{FP}{TN + FP}$.</li>
+            <li><strong>$F_2$-Score:</strong> Penalizes missed intrusions twice as heavily as false alarms via $\beta = 2$, ensuring high sensitivity to attacks.</li>
+          </ol>
+
+          <h5>(iii) Two Strategies to Handle Imbalance (8 Marks)</h5>
+          <ol>
+            <li><strong>Cost-Sensitive Balanced Weights:</strong> Weight cross-entropy loss by inverse class frequencies ($w_{\text{intrusion}} = \frac{10000}{2 \times 50} = 100$). A missed attack is penalized $200\times$ more than a false alarm.</li>
+            <li><strong>SMOTE with Tomek Links:</strong> Synthesize new minority intrusions in feature space via neighbor interpolation, then remove ambiguous boundary points using Tomek links.</li>
+          </ol>
+        </details>
+      </div>
+
+      <!-- Question 4: Jan 2025 Q3 Cross-Validation (20 Marks) -->
+      <div class="details-box">
+        <details id="q4">
+          <summary>
+            <span><span class="pyq-badge">Jan 2025 · Question 3</span> Cross-Validation Architecture & Generalization in Churn (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            A telecom company builds a model to predict churn. Explain how cross-validation assesses performance, prevents overfitting, and improves model generalization to unseen data. (20 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Purpose of Cross-Validation (6 Marks)</h5>
+          <p>Standard holdout splits suffer from high estimator variance (metrics depend on which specific samples fall into test set). CV rotates data systematically across $K$ folds, ensuring every sample serves as a test instance exactly once, yielding an unbiased estimate of generalization error.</p>
+
+          <h5>2. Stratified K-Fold CV Protocol (8 Marks)</h5>
+          <p>In customer churn (e.g., $15\%$ churn, $85\%$ retain), standard random $K$-fold can produce test folds with zero churners. <strong>Stratified K-Fold</strong> enforces identical $15:85$ proportions in every single fold.</p>
+
+          <h5>3. Preventing Data Leakage in Preprocessing (6 Marks)</h5>
+          <p>All feature normalization, imputation, and encoding must be fit <strong>strictly on the $K-1$ training folds</strong> and only applied to the $k$-th validation fold. Fitting scalers on the entire dataset before splitting causes data leakage, providing overly optimistic validation scores.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Section 10: Interactive Confusion Matrix Solver -->
+    <section id="calculator">
+      <h2>10. Interactive Offline Confusion Matrix & Metrics Calculator</h2>
+      <p class="lead">Input test set parameters to calculate all performance metrics, $F_1$, $F_2$, and test for the Accuracy Paradox.</p>
+
+      <div class="tool-box">
+        <div class="tool-grid">
+          <div class="tool-group">
+            <label>True Positives (TP)</label>
+            <input type="number" id="tpIn" value="7">
+          </div>
+          <div class="tool-group">
+            <label>False Positives (FP)</label>
+            <input type="number" id="fpIn" value="25">
+          </div>
+          <div class="tool-group">
+            <label>False Negatives (FN)</label>
+            <input type="number" id="fnIn" value="3">
+          </div>
+          <div class="tool-group">
+            <label>True Negatives (TN)</label>
+            <input type="number" id="tnIn" value="965">
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <button onclick="calculateConfusion()">Compute All Metrics</button>
+        </div>
+
+        <div class="tool-result" id="metricOutput">
+          Click button to compute classification metrics.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 11: Self-Test Active Recall Quiz -->
+    <section id="quiz">
+      <h2>11. Active Recall Self-Test Quiz</h2>
+      <div class="progress-wrap"><div class="progress" id="quizBar"></div></div>
+      <div id="quizScore" style="font-size:12.5px;font-weight:700;color:var(--muted);margin-top:4px;">Answer the questions below to evaluate progress (0/4 answered).</div>
+
+      <div class="quiz-q" id="qz1">
+        <strong>1. Why does standard linear regression fail for classification tasks?</strong>
+        <label><input type="radio" name="q1" value="a" onclick="checkQ(1,'a','Linear outputs are unbounded (-inf, +inf)')"> Its linear combination produces unbounded values in $(-\infty, +\infty)$ that violate probability constraints</label>
+        <label><input type="radio" name="q1" value="b" onclick="checkQ(1,'a','Linear outputs are unbounded (-inf, +inf)')"> It cannot be trained with gradient descent</label>
+        <label><input type="radio" name="q1" value="c" onclick="checkQ(1,'a','Linear outputs are unbounded (-inf, +inf)')"> It requires categorical targets rather than continuous targets</label>
+        <div class="feedback" id="fb1"></div>
+        <div class="answer" id="ans1"><strong>Correct: (a)</strong> Linear regression produces unbounded values, whereas probabilities must be strictly bounded in $[0, 1]$.</div>
+      </div>
+
+      <div class="quiz-q" id="qz2">
+        <strong>2. In a rare fraud detection problem with 10 positive cases out of 1,000, a model detects 7 positives and triggers 25 false alarms. What is its Precision?</strong>
+        <label><input type="radio" name="q2" value="a" onclick="checkQ(2,'b','Precision = 7 / (7 + 25) = 21.875%')"> $70.0\%$</label>
+        <label><input type="radio" name="q2" value="b" onclick="checkQ(2,'b','Precision = 7 / (7 + 25) = 21.875%')"> $21.88\%$ ($7 / 32$)</label>
+        <label><input type="radio" name="q2" value="c" onclick="checkQ(2,'b','Precision = 7 / (7 + 25) = 21.875%')"> $97.20\%$</label>
+        <div class="feedback" id="fb2"></div>
+        <div class="answer" id="ans2"><strong>Correct: (b)</strong> $\text{Precision} = \frac{TP}{TP + FP} = \frac{7}{7 + 25} = \frac{7}{32} = \mathbf{21.875\%}$.</div>
+      </div>
+
+      <div class="quiz-q" id="qz3">
+        <strong>3. Why is PR-AUC preferred over ROC-AUC in extreme class imbalance?</strong>
+        <label><input type="radio" name="q3" value="a" onclick="checkQ(3,'c','ROC-AUC FPR denominator contains massive TN count')"> ROC-AUC cannot be calculated for continuous models</label>
+        <label><input type="radio" name="q3" value="b" onclick="checkQ(3,'c','ROC-AUC FPR denominator contains massive TN count')"> PR-AUC is faster to compute in Python</label>
+        <label><input type="radio" name="q3" value="c" onclick="checkQ(3,'c','ROC-AUC FPR denominator contains massive TN count')"> ROC-AUC's FPR denominator contains huge TN counts, masking large numbers of false positives</label>
+        <div class="feedback" id="fb3"></div>
+        <div class="answer" id="ans3"><strong>Correct: (c)</strong> $\text{FPR} = \frac{FP}{TN + FP}$. When $TN$ is tens of thousands, large false alarms create tiny FPRs, falsely inflating ROC-AUC. PR-AUC excludes $TN$ entirely.</div>
+      </div>
+
+      <div class="quiz-q" id="qz4">
+        <strong>4. How does Softmax regression differ from One-vs-Rest (OvR) in multi-class classification?</strong>
+        <label><input type="radio" name="q4" value="a" onclick="checkQ(4,'a','Softmax probabilities strictly sum to 1.0')"> Softmax directly normalizes joint outputs so probabilities across all classes sum to exactly 1.0</label>
+        <label><input type="radio" name="q4" value="b" onclick="checkQ(4,'a','Softmax probabilities strictly sum to 1.0')"> Softmax only works for binary 2-class problems</label>
+        <label><input type="radio" name="q4" value="c" onclick="checkQ(4,'a','Softmax probabilities strictly sum to 1.0')"> OvR uses decision trees while Softmax uses sigmoid</label>
+        <div class="feedback" id="fb4"></div>
+        <div class="answer" id="ans4"><strong>Correct: (a)</strong> Softmax normalizes exponents via $\frac{e^{z_k}}{\sum e^{z_j}}$, guaranteeing a valid probability distribution summing to $1.0$.</div>
+      </div>
+    </section>
+
+    <!-- Section 12: Answer Sheet Checklist -->
+    <section id="checklist">
+      <h2>12. Exam Hall Answer Sheet Presentation Checklist</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>1. Draw the 2x2 Confusion Matrix Table Explicitly</strong>
+            <p>Always draw the grid labeled with Actual Pos/Neg on rows and Predicted Pos/Neg on columns with numerical counts inside.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>2. State Governing Formulas Before Plugging in Numbers</strong>
+            <p>Write $\text{Acc} = \frac{TP+TN}{N}$, $\text{Prec} = \frac{TP}{TP+FP}$, $\text{Rec} = \frac{TP}{TP+FN}$, $F_1 = \frac{2PR}{P+R}$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>3. Show Exact Fraction Before Decimal Conversion</strong>
+            <p>Write: $\text{Precision} = \frac{7}{32} = 0.21875 = 21.88\%$. Examiners look for the unreduced fraction.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>4. Call Out the "Accuracy Paradox" by Name</strong>
+            <p>Always cite the term "Accuracy Paradox" and compare the model's accuracy against the baseline "Null Model" ($99.0\%$).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>5. For Logistic Derivation, Show All 4 Steps</strong>
+            <p>Start with linear $z = \mathbf{w}^T\mathbf{x} + b$, write odds $\frac{p}{1-p}$, write log-odds $\ln(\frac{p}{1-p}) = z$, and show the algebraic steps isolating $p$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>6. Contrast OvR vs Softmax with Normalization Formula</strong>
+            <p>Provide the Softmax equation $\frac{e^{z_k}}{\sum e^{z_j}}$ and state that $\sum P_k = 1.0$, whereas OvR outputs do not sum to 1.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+// Mobile Drawer Toggle
+function toggleDrawer() {
+  const drawer = document.getElementById('drawer');
+  const backdrop = document.getElementById('backdrop');
+  drawer.classList.toggle('open');
+  backdrop.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+}
+
+function toggleAllDetails(open) {
+  document.querySelectorAll('details').forEach(d => d.open = open);
+}
+
+// Confusion Calculator
+function calculateConfusion() {
+  const tp = parseFloat(document.getElementById('tpIn').value) || 0;
+  const fp = parseFloat(document.getElementById('fpIn').value) || 0;
+  const fn = parseFloat(document.getElementById('fnIn').value) || 0;
+  const tn = parseFloat(document.getElementById('tnIn').value) || 0;
+
+  const total = tp + fp + fn + tn;
+  if (total === 0) {
+    document.getElementById('metricOutput').innerHTML = '<span style="color:var(--red);">Error: Total count cannot be zero.</span>';
+    return;
+  }
+
+  const acc = (tp + tn) / total;
+  const prec = (tp + fp) > 0 ? (tp / (tp + fp)) : 0;
+  const rec = (tp + fn) > 0 ? (tp / (tp + fn)) : 0;
+  const spec = (tn + fp) > 0 ? (tn / (tn + fp)) : 0;
+  const fpr = (tn + fp) > 0 ? (fp / (tn + fp)) : 0;
+  const f1 = (prec + rec) > 0 ? (2 * prec * rec / (prec + rec)) : 0;
+  const f2 = (4 * prec + rec) > 0 ? (5 * prec * rec / (4 * prec + rec)) : 0;
+
+  const actualPos = tp + fn;
+  const actualNeg = tn + fp;
+  const nullAcc = Math.max(actualPos, actualNeg) / total;
+
+  let out = '<strong>Computed Classification Metrics:</strong><br>';
+  out += '• Total Sample Size ($N$): ' + total + ' (Actual Pos: ' + actualPos + ', Actual Neg: ' + actualNeg + ')<br>';
+  out += '• <strong>Accuracy: ' + (acc * 100).toFixed(2) + '%</strong> (' + (tp + tn) + '/' + total + ')<br>';
+  out += '• <strong>Precision: ' + (prec * 100).toFixed(2) + '%</strong> (' + tp + '/' + (tp + fp) + ')<br>';
+  out += '• <strong>Recall (Sensitivity): ' + (rec * 100).toFixed(2) + '%</strong> (' + tp + '/' + (tp + fn) + ')<br>';
+  out += '• Specificity: ' + (spec * 100).toFixed(2) + '% | False Positive Rate (FPR): ' + (fpr * 100).toFixed(2) + '%<br>';
+  out += '• <strong>$F_1$-Score: ' + (f1 * 100).toFixed(2) + '%</strong><br>';
+  out += '• <strong>$F_2$-Score (Recall-Weighted): ' + (f2 * 100).toFixed(2) + '%</strong><br>';
+
+  if (Math.abs(acc - nullAcc) < 0.03 && actualPos / total < 0.05) {
+    out += '<div style="margin-top:8px;padding:8px;background:var(--red-soft);border-radius:6px;color:var(--red);font-weight:700;">' +
+           '⚠️ Accuracy Paradox Detected! High accuracy (' + (acc * 100).toFixed(2) + '%) is driven purely by the majority negative class. Rely on Recall and F2-Score.</div>';
+  }
+
+  document.getElementById('metricOutput').innerHTML = out;
+  if (window.renderMathInElement) {
+    renderMathInElement(document.getElementById('metricOutput'), {delimiters: [{left: '$', right: '$', display: false}]});
+  }
+}
+
+// Quiz Interactive Evaluation
+const answeredQ = {};
+function checkQ(qNum, correctVal, reason) {
+  const selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+  const fb = document.getElementById('fb' + qNum);
+  const ans = document.getElementById('ans' + qNum);
+
+  answeredQ[qNum] = true;
+
+  if (selected.value === correctVal) {
+    fb.innerHTML = '<span style="color:var(--teal);">&#10003; Correct! ' + reason + '</span>';
+  } else {
+    fb.innerHTML = '<span style="color:var(--red);">&#10007; Incorrect. ' + reason + '</span>';
+  }
+  ans.classList.add('show');
+
+  const answeredCount = Object.keys(answeredQ).length;
+  const pct = (answeredCount / 4) * 100;
+  document.getElementById('quizBar').style.width = pct + '%';
+  document.getElementById('quizScore').innerText = 'Completed ' + answeredCount + ' of 4 questions (' + pct.toFixed(0) + '%).';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  calculateConfusion();
+});
+</script>
+
+</body>
+</html>

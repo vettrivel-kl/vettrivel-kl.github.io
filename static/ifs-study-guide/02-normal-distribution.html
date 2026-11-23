@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Normal Distribution, Z-Scores & CLT | Complete Exam Question Bank & Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#2563eb;--brand-soft:#eff6ff;--teal:#059669;--teal-soft:#ecfdf5;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#0f172a;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:800}
+aside h2{font-size:19px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.12em;margin:20px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#cbd5e1;font-size:13px}
+nav a:hover,nav a.active{background:#1e293b;color:#38bdf8;text-decoration:none}
+.module-hub-link{background:#1e293b;border:1px solid #334155;color:#38bdf8;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:24px;padding:14px;border:1px solid #334155;border-radius:12px;color:#cbd5e1;font-size:12px;background:#131d35}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#047857;color:#ecfdf5}
+
+/* Mobile Sticky Topbar (iPhone 13 Notch Friendly) */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#0f172a;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{
+  font-size:14.5px;
+  font-weight:800;
+  color:#f8fafc;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.mobile-topbar-actions{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.mobile-btn{
+  background:#1e293b;
+  border:1px solid #334155;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  cursor:pointer;
+  min-height:36px;
+}
+
+/* Horizontal Swipeable Pill Nav for iPhone 13 */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer Menu Overlay */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#0f172a;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #1e293b;
+  padding-bottom:12px;
+}
+.drawer-close{
+  background:none;
+  border:none;
+  color:#94a3b8;
+  font-size:24px;
+  cursor:pointer;
+  padding:4px 8px;
+}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#059669 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"N(μ,σ²)";position:absolute;right:20px;bottom:-28px;font-size:96px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#a7f3d0;font-weight:800}
+h1{font-size:clamp(24px,4.5vw,42px);line-height:1.15;margin:10px 0}
+.hero p{max-width:680px;color:#e0e7ff;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+.formula-banner{
+  background:#0f172a;
+  color:#f8fafc;
+  padding:16px 14px;
+  border-radius:12px;
+  text-align:center;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+.formula-banner .katex-display{margin:6px 0}
+.formula-banner small{display:block;font-size:11px;color:#94a3b8;margin-top:6px}
+
+/* KaTeX Horizontal Scrollbar Removal & Vertical Headroom (No Clipping) */
+.katex-display{
+  font-size:clamp(13px, 3.6vw, 15.5px) !important;
+  margin:12px 0 !important;
+  padding:12px 4px 8px !important; /* Ample top and bottom headroom so numerators/brackets never get sliced */
+  overflow-x:auto !important;
+  overflow-y:visible !important; /* Never clip ascenders */
+  scrollbar-width:none !important; /* Hide Firefox scrollbars */
+  -ms-overflow-style:none !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+.katex-display::-webkit-scrollbar{
+  display:none !important; /* Hide Safari & Chrome scrollbars */
+}
+.katex-display > .katex{
+  display:block !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  padding-top:4px !important; /* Extra safety margin for tall numerators & superscripts */
+  padding-bottom:2px !important;
+}
+.katex{
+  font-size:1em !important;
+  line-height:normal !important;
+  text-rendering:auto !important;
+  white-space:normal !important;
+}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--teal-soft);border-color:var(--teal)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+.note.purple{background:var(--purple-soft);border-color:var(--purple)}
+
+/* Table Styling - Clean & No Cutoff */
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#dbeafe;color:#1e40af;margin-bottom:6px}
+.pyq-badge.ct{background:#e0e7ff;color:#3730a3}
+.pyq-badge.llt{background:#ecfdf5;color:#065f46}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+  -webkit-tap-highlight-color:transparent;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  transition:background .15s;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+button:hover{background:#1d4ed8}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+/* Quiz for iPhone 13 (Large Touch Targets) */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+  -webkit-tap-highlight-color:transparent;
+  transition:all .15s;
+}
+.quiz-q label:active{background:#eff6ff;border-color:#93c5fd}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--teal-soft);border-radius:8px;border-left:3px solid var(--teal);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Interactive Calculator (16px Input to Prevent iOS Auto-Zoom) */
+.tool-box{background:white;border:2px solid #a7f3d0;border-radius:12px;padding:16px;margin:16px 0}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:8px}
+.tool-group label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px}
+.tool-group input{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  font-size:16px; /* Prevents iOS Safari Zoom */
+  background:#f8fafc;
+  min-height:40px;
+}
+.tool-result{margin-top:12px;padding:10px 12px;background:#ecfdf5;border-radius:8px;border-left:4px solid var(--teal);font-size:13px}
+
+.footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+/* iPhone 13 & Mobile Responsive Tweaks */
+@media(max-width:880px){
+  .shell{display:block}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:14px 12px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr;gap:10px}
+  .hero{padding:20px 14px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  h2{font-size:18px}
+  .card{padding:14px}
+  .details-box{padding:12px 14px}
+  .tool-box{padding:14px}
+  button{width:100%;margin-bottom:6px}
+  .controls button{width:auto;flex:1}
+  table{font-size:12px}
+  th,td{padding:7px 8px}
+}
+
+@media print{
+  aside,.controls,button,.tool-box,.mobile-topbar,.mobile-pills-bar{display:none!important}
+  .shell{display:block}
+  main{padding:0}
+  .hero{background:#0f172a!important;color:#fff!important;print-color-adjust:exact}
+  .card,.step,.quiz-q,.details-box{break-inside:avoid;box-shadow:none}
+  .answer,details[open] div,details div{display:block!important}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Sticky Top Bar (iPhone 13 Notch Friendly) -->
+<header class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>Normal Dist & CLT</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/ifs-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="openDrawer()">&#9776; Menu</button>
+  </div>
+</header>
+
+<!-- Horizontal Quick-Jump Pill Bar (Flick with thumb on train) -->
+<nav class="mobile-pills-bar" aria-label="Quick jumps">
+  <a href="#overview" class="pill-link">01 · Concept</a>
+  <a href="#formula" class="pill-link">02 · Formula</a>
+  <a href="#z-table-rules" class="pill-link">03 · Z-Table</a>
+  <a href="#clt-framework" class="pill-link">04 · CLT Deep Dive</a>
+  <a href="#pitfalls" class="pill-link">05 · Traps</a>
+  <a href="#q1-theory" class="pill-link">Q1 · Theory & Grades</a>
+  <a href="#q2-marks" class="pill-link">Q2 · Marks (20M)</a>
+  <a href="#q3-clt-sample" class="pill-link">Q3 · CLT Deviation (8M)</a>
+  <a href="#q4-clt-coin" class="pill-link">Q4 · CLT Coin Toss (8M)</a>
+  <a href="#q5-electricity" class="pill-link">Q5 · Electricity Bill (6M)</a>
+  <a href="#q6-water" class="pill-link">Q6 · Water (5M)</a>
+  <a href="#q7-salary" class="pill-link">Q7 · Salary</a>
+  <a href="#interactive-tool" class="pill-link">Z-Calculator</a>
+  <a href="#practice" class="pill-link">Self-Test Quiz</a>
+</nav>
+
+<!-- Mobile Drawer Backdrop & Drawer -->
+<div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="drawer-header">
+    <div style="font-size:14px;font-weight:800;color:#38bdf8;">NAVIGATION MENU</div>
+    <button class="drawer-close" onclick="closeDrawer()">&times;</button>
+  </div>
+  <a href="/ifs-study-guide/index.html" class="module-hub-link" style="margin-bottom:14px;padding:8px 10px;border-radius:8px;">&larr; Return to All Guides Hub</a>
+  
+  <div class="nav-label">Core Concepts</div>
+  <nav>
+    <a href="#overview" onclick="closeDrawer()">01 · Intuition & Empirical Rule</a>
+    <a href="#formula" onclick="closeDrawer()">02 · Formula & 7 Properties</a>
+    <a href="#z-table-rules" onclick="closeDrawer()">03 · Reading Standard Normal Tables</a>
+    <a href="#clt-framework" onclick="closeDrawer()">04 · Central Limit Theorem (CLT)</a>
+    <a href="#pitfalls" onclick="closeDrawer()">05 · 6 Deadly Exam Traps</a>
+  </nav>
+
+  <div class="nav-label">All 7 Questions Solved</div>
+  <nav>
+    <a href="#q1-theory" onclick="closeDrawer()">Q1 · May 2025: Theory & Grade Model</a>
+    <a href="#q2-marks" onclick="closeDrawer()">Q2 · Nov 2025: Exam Marks (20M)</a>
+    <a href="#q3-clt-sample" onclick="closeDrawer()">Q3 · Dec 2024: CLT Deviation (8M)</a>
+    <a href="#q4-clt-coin" onclick="closeDrawer()">Q4 · Nov 2025: CLT Coin Toss (8M)</a>
+    <a href="#q5-electricity" onclick="closeDrawer()">Q5 · Dec 2024: Electricity Bill (6M)</a>
+    <a href="#q6-water" onclick="closeDrawer()">Q6 · CT-1 Set A: Water Usage (5M)</a>
+    <a href="#q7-salary" onclick="closeDrawer()">Q7 · LLT Unit 2: Salary Distribution</a>
+  </nav>
+
+  <div class="nav-label">Interactive Practice</div>
+  <nav>
+    <a href="#interactive-tool" onclick="closeDrawer()">Dynamic Z-Score Calculator</a>
+    <a href="#practice" onclick="closeDrawer()">Interactive Self-Test Quiz</a>
+    <a href="#checklist" onclick="closeDrawer()">Exam Hall Checklist</a>
+  </nav>
+</div>
+
+<div class="shell">
+
+<!-- Desktop Sidebar (Hidden on mobile) -->
+<aside>
+  <div class="brand">M.Tech · Inferential Statistics</div>
+  <h2>Normal Distribution<br>& Central Limit Theorem</h2>
+  
+  <a href="/ifs-study-guide/index.html" class="module-hub-link">&larr; Return to All Guides Hub</a>
+
+  <div class="nav-label">Core Pedagogy</div>
+  <nav>
+    <a href="#overview">01 · Intuition & Empirical Rule</a>
+    <a href="#formula">02 · Formula & 7 Properties</a>
+    <a href="#z-table-rules">03 · Reading Z-Tables</a>
+    <a href="#clt-framework">04 · Central Limit Theorem (CLT)</a>
+    <a href="#pitfalls">05 · 6 Deadly Exam Traps</a>
+  </nav>
+
+  <div class="nav-label">Complete Question Bank (7 PYQs)</div>
+  <nav>
+    <a href="#q1-theory">Q1 · May 2025: Theory & Grade Model</a>
+    <a href="#q2-marks">Q2 · Nov 2025: Exam Marks (20M)</a>
+    <a href="#q3-clt-sample">Q3 · Dec 2024: CLT Deviation (8M)</a>
+    <a href="#q4-clt-coin">Q4 · Nov 2025: CLT Coin Toss (8M)</a>
+    <a href="#q5-electricity">Q5 · Dec 2024: Electricity Bill (6M)</a>
+    <a href="#q6-water">Q6 · CT-1 Set A: Water Usage (5M)</a>
+    <a href="#q7-salary">Q7 · LLT Unit 2: Salary Distribution</a>
+  </nav>
+
+  <div class="nav-label">Interactive Practice</div>
+  <nav>
+    <a href="#interactive-tool">Dynamic Z-Score Calculator</a>
+    <a href="#practice">Interactive Self-Test Quiz</a>
+    <a href="#checklist">Exam Hall Checklist</a>
+  </nav>
+
+  <div class="side-note">
+    <strong>Semester Exam Targets</strong><br>
+    Internal score: <strong>48 / 60</strong><br>
+    Min Sem score for A: <strong>58 / 100</strong><br>
+    Target with margin: <strong>65 / 100</strong><br>
+    <span class="status-pill pill-target">Priority 2 Unit 2 Topic</span>
+    <p style="margin-top:8px;color:#94a3b8;font-size:11px">Carries 20+ marks across every reviewed question paper.</p>
+  </div>
+</aside>
+
+<!-- Main Body -->
+<main>
+
+<header class="hero" id="overview">
+  <div class="eyebrow">Unit 2 & 3 · Continuous Distributions & CLT · Priority 2</div>
+  <h1>Normal Distribution, Z-Scores & CLT</h1>
+  <p>The definitive master guide covering Gaussian density properties, standard normal standardization, Central Limit Theorem sampling error, continuity correction, and all 7 past exam questions fully solved.</p>
+  <div class="pills">
+    <span class="pill">Empirical 68-95-99.7 Rule</span>
+    <span class="pill">Z-Table Lookup Logic</span>
+    <span class="pill">Central Limit Theorem</span>
+    <span class="pill">Nov 2025 (20M Solved)</span>
+    <span class="pill">Dec 2024 (CLT Solved)</span>
+    <span class="pill">Zero-Scroll Math</span>
+  </div>
+</header>
+
+<div style="margin:14px 0;display:flex;gap:8px;flex-wrap:wrap;">
+  <button class="secondary" style="font-size:12.5px;padding:6px 12px;min-height:36px;" onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All Solutions</button>
+  <button class="secondary" style="font-size:12.5px;padding:6px 12px;min-height:36px;" onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All Solutions</button>
+</div>
+
+<!-- Section 1 -->
+<section>
+  <h2>01. Intuition & Concept Contrast: Population vs Sample Mean</h2>
+  <p class="lead">The Normal distribution is the foundation of parametric inference. When analyzing single observations ($X$), dispersion is governed by $\sigma$. When analyzing sample means ($\bar{X}$), dispersion shrinks by $\sqrt{n}$ due to the <strong>Central Limit Theorem</strong>.</p>
+
+  <div class="grid">
+    <div class="card">
+      <div class="kicker">Individual Observation · Raw Variate</div>
+      <h3>$X \sim \mathcal{N}(\mu, \sigma^2)$</h3>
+      <p>Measures single units (e.g., one student's mark, one household's water usage). Standardized using the population standard deviation:</p>
+      $$\begin{aligned}
+      Z = \frac{X - \mu}{\sigma}
+      \end{aligned}$$
+    </div>
+    <div class="card">
+      <div class="kicker">Sample Mean · Sampling Distribution</div>
+      <h3>$\bar{X} \sim \mathcal{N}\left(\mu, \frac{\sigma^2}{n}\right)$</h3>
+      <p>Measures averages across sample size $n \ge 30$. By CLT, dispersion contracts to the <strong>Standard Error</strong> $\sigma_{\bar{X}} = \frac{\sigma}{\sqrt{n}}$:</p>
+      $$\begin{aligned}
+      Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}}
+      \end{aligned}$$
+    </div>
+  </div>
+
+  <div class="note good">
+    <strong>The Empirical 68–95–99.7 Rule:</strong><br>
+    &bull; $P(\mu \pm 1\sigma) \approx \mathbf{68.27\%}$ of all observations fall within 1 SD.<br>
+    &bull; $P(\mu \pm 2\sigma) \approx \mathbf{95.45\%}$ fall within 2 SD (approximately $Z = \pm 1.96$ for $95.0\%$).<br>
+    &bull; $P(\mu \pm 3\sigma) \approx \mathbf{99.73\%}$ fall within 3 SD (industrial Six Sigma boundary).
+  </div>
+</section>
+
+<!-- Section 2 -->
+<section id="formula">
+  <h2>02. Mathematical Formulation & 7 Key Properties</h2>
+  <p>A continuous random variable $X$ is normally distributed with mean $\mu \in (-\infty, \infty)$ and variance $\sigma^2 > 0$ if its Probability Density Function (PDF) is:</p>
+
+  <div class="formula-banner">
+    $$\begin{aligned}
+    f(x) = \frac{1}{\sigma \sqrt{2\pi}} \exp\left(-\frac{1}{2}\left(\frac{x - \mu}{\sigma}\right)^2\right), \quad -\infty < x < \infty
+    \end{aligned}$$
+    <small>Standard Normal Variate: $Z = \frac{X - \mu}{\sigma} \sim \mathcal{N}(0, 1)$ with PDF $\phi(z) = \frac{1}{\sqrt{2\pi}} e^{-z^2/2}$</small>
+  </div>
+
+  <div class="card">
+    <h3>7 Compulsory Theoretical Properties (University Rubric)</h3>
+    <ol style="margin-left:18px;line-height:1.75;font-size:13.5px;">
+      <li><strong>Perfect Symmetry:</strong> Bell-shaped curve perfectly symmetric around the mean $x = \mu$.</li>
+      <li><strong>Equivalence of Averages:</strong> $\text{Mean} = \text{Median} = \text{Mode} = \mu$.</li>
+      <li><strong>Total Area Under Curve:</strong> $\int_{-\infty}^{\infty} f(x)\,dx = 1.00$ ($50\%$ on left of $\mu$, $50\%$ on right).</li>
+      <li><strong>Points of Inflection:</strong> The curvature shifts from concave down to concave up at exactly $x = \mu \pm \sigma$.</li>
+      <li><strong>Zero Skewness ($\beta_1 = 0$):</strong> Moment ratio $\beta_1 = \frac{\mu_3^2}{\mu_2^3} = 0 \implies \gamma_1 = 0$.</li>
+      <li><strong>Mesokurtic Peak ($\beta_2 = 3$):</strong> Kurtosis ratio $\beta_2 = \frac{\mu_4}{\mu_2^2} = 3 \implies \text{Excess kurtosis } \gamma_2 = 0$.</li>
+      <li><strong>Asymptotic Tails:</strong> The curve approaches the horizontal axis asymptotically as $x \to \pm\infty$ but never touches it.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- Section 3 -->
+<section id="z-table-rules">
+  <h2>03. Reading the Standard Normal $Z$-Table (The 4 Rules)</h2>
+  <p>Standard normal tables tabulate the cumulative distribution function $\Phi(z) = P(Z \le z)$ for non-negative values of $z$. Use these 4 mathematical rules:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Desired Area / Probability</th>
+          <th>Mathematical Rule</th>
+          <th>Example ($z = 1.50$)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Left-Tail: $P(Z \le z)$</strong></td>
+          <td>Direct lookup: $\Phi(z)$</td>
+          <td>$P(Z \le 1.50) = 0.9332$</td>
+        </tr>
+        <tr>
+          <td><strong>Right-Tail: $P(Z > z)$</strong></td>
+          <td>Complement rule: $1 - \Phi(z)$</td>
+          <td>$P(Z > 1.50) = 1 - 0.9332 = \mathbf{0.0668}$</td>
+        </tr>
+        <tr>
+          <td><strong>Negative $Z$: $P(Z \le -z)$</strong></td>
+          <td>Symmetry rule: $1 - \Phi(z)$</td>
+          <td>$P(Z \le -1.50) = 1 - 0.9332 = \mathbf{0.0668}$</td>
+        </tr>
+        <tr>
+          <td><strong>Between: $P(z_1 \le Z \le z_2)$</strong></td>
+          <td>Difference: $\Phi(z_2) - \Phi(z_1)$</td>
+          <td>$P(-1 \le Z \le 1.5) = 0.9332 - 0.1587 = \mathbf{0.7745}$</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note purple">
+    <strong>Key Critical Z-Values to Memorize:</strong><br>
+    &bull; $90\%$ Confidence (Two-tailed): $Z_{\alpha/2} = \mathbf{\pm 1.645}$<br>
+    &bull; $95\%$ Confidence (Two-tailed): $Z_{\alpha/2} = \mathbf{\pm 1.960}$<br>
+    &bull; $99\%$ Confidence (Two-tailed): $Z_{\alpha/2} = \mathbf{\pm 2.576}$
+  </div>
+</section>
+
+<!-- Section 4 -->
+<section id="clt-framework">
+  <h2>04. Central Limit Theorem (CLT) Deep Dive</h2>
+  <p class="lead">The Central Limit Theorem explains why the Normal distribution dominates statistical science. It connects arbitrary parent populations to Gaussian inference.</p>
+
+  <div class="card">
+    <h3>Formal CLT Theorem Statement</h3>
+    <p>Let $X_1, X_2, \dots, X_n$ be a sequence of independent and identically distributed (i.i.d.) random variables sampled from <em>any</em> population distribution with finite mean $\mu$ and finite variance $\sigma^2$. As sample size $n \to \infty$ (in practice, $n \ge 30$):</p>
+    $$\begin{aligned}
+    \bar{X} \xrightarrow{d} \mathcal{N}\left(\mu, \frac{\sigma^2}{n}\right) \implies Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \sim \mathcal{N}(0, 1)
+    \end{aligned}$$
+  </div>
+
+  <div class="grid">
+    <div class="card">
+      <div class="kicker">Application 1 · Sample Mean Bounds</div>
+      <h3>Sample Error Bound</h3>
+      <p>To assert that the sample mean does not differ from population mean $\mu$ by more than margin $E$ ($P(|\bar{X} - \mu| \le E)$):</p>
+      $$\begin{aligned}
+      Z = \frac{E}{\sigma / \sqrt{n}}
+      \end{aligned}$$
+    </div>
+    <div class="card">
+      <div class="kicker">Application 2 · Binomial Approximation</div>
+      <h3>Continuity Correction ($\pm 0.5$)</h3>
+      <p>When approximating discrete Binomial counts ($n \ge 30, np \ge 5$): $\mu = np, \sigma = \sqrt{npq}$.</p>
+      $$\begin{aligned}
+      P(a \le X \le b) \approx P(a - 0.5 \le X \le b + 0.5)
+      \end{aligned}$$
+    </div>
+  </div>
+</section>
+
+<!-- Section 5: Deadly Traps -->
+<section id="pitfalls">
+  <h2>05. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 1 · Forgetting $\sqrt{n}$ on Sample Means</div>
+      <h3>Dividing by $\sigma$ instead of $\sigma / \sqrt{n}$</h3>
+      <p>If the question says <em>"a sample of size 100"</em> and asks about the sample mean $\bar{X}$, you MUST divide by the standard error $\sigma/\sqrt{n}$, not $\sigma$!</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 2 · Variance vs Standard Deviation</div>
+      <h3>Using $\sigma^2 = 400$ directly as 400</h3>
+      <p>If the problem gives <em>"variance 400"</em>, take the square root immediately: $\sigma = \sqrt{400} = 20$. Dividing by 400 destroys the entire derivation.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 3 · Probability vs Student Count</div>
+      <h3>Leaving the answer as $0.8185$ instead of 82 students</h3>
+      <p>When asked for <em>"the number of students"</em> out of $N = 100$, multiply: $\text{Count} = N \times P = 100 \times 0.8185 \approx \mathbf{82 \text{ students}}$.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 4 · Reversed Tail in "More Than"</div>
+      <h3>Reporting $\Phi(z)$ instead of $1 - \Phi(z)$</h3>
+      <p>For $P(X > x)$, the area is in the upper right tail. Always subtract: $P(X > x) = 1 - \Phi(z)$.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 5 · Missing Continuity Correction</div>
+      <h3>Neglecting $\pm 0.5$ in Discrete Coin / Count CLT</h3>
+      <p>For discrete integer intervals like $120 \le X \le 140$, always expand to $119.5 \le X \le 140.5$ to capture the full integer bin.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 6 · Symmetry Sign Confusion</div>
+      <h3>Evaluating $\Phi(-1.43)$ as $\Phi(1.43)$</h3>
+      <p>Standard tables only show positive $z$. By symmetry: $\Phi(-z) = 1 - \Phi(z) = 1 - 0.9236 = \mathbf{0.0764}$.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================== -->
+<!-- COMPLETE QUESTION BANK: ALL 7 QUESTIONS    -->
+<!-- ========================================== -->
+<section id="question-bank">
+  <h2>06. The Complete University Question Bank (All 7 Questions Solved)</h2>
+  <p class="lead">Every Normal Distribution and Central Limit Theorem problem from past semester exams (Nov 2025, May 2025, Dec 2024), class tests (CT-1), and LLT assignments:</p>
+
+  <!-- QUESTION 1: May 2025 / Dec 2024 (Theory & Grades) -->
+  <div id="q1-theory" class="details-box">
+    <span class="pyq-badge">Semester Exam Paper · Dec 2024 (Q2 Part i) &middot; 10 Marks</span>
+    <span class="pyq-badge ct">Also in May 2025 Q3 (20 Marks)</span>
+    <h3 style="margin:6px 0 10px;">Question 1: Normal Distribution Properties & Class Grade Modeling (10 Marks)</h3>
+    <p><strong>Question Statement (Verbatim):</strong><br>
+    <em>"Explain the normal distribution in detail with the help of mark or grade distribution of the class with some data. Discuss its properties, significance in statistics, and applications in real-life data analysis. (10 Marks)"</em></p>
+
+    <details open>
+      <summary>View Complete Model Solution & Grade Distribution Walkthrough</summary>
+      <div style="margin-top:12px;">
+        <p><strong>Part 1: Academic Example (Class Grade Distribution Modeling)</strong></p>
+        <p>Consider an exam cohort of $N = 500$ students where marks follow $X \sim \mathcal{N}(\mu = 70, \sigma = 10)$:</p>
+        <ul>
+          <li><strong>Grade A ($X \ge 85$):</strong>
+            $$\begin{aligned}
+            Z &= \frac{85 - 70}{10} = +1.50 \\[3pt]
+            P(X \ge 85) &= 1 - \Phi(1.50) = 1 - 0.9332 = \mathbf{0.0668 \ (6.68\%)} \\[3pt]
+            \text{Students} &= 500 \times 0.0668 \approx \mathbf{33 \text{ students}}
+            \end{aligned}$$
+          </li>
+          <li><strong>Grade B ($70 \le X < 85$):</strong>
+            $$\begin{aligned}
+            P(0 \le Z < 1.50) &= \Phi(1.50) - 0.5000 = 0.9332 - 0.5000 = \mathbf{0.4332 \ (43.32\%)} \\[3pt]
+            \text{Students} &= 500 \times 0.4332 \approx \mathbf{217 \text{ students}}
+            \end{aligned}$$
+          </li>
+          <li><strong>Grade C ($55 \le X < 70$):</strong>
+            $$\begin{aligned}
+            Z &= \frac{55 - 70}{10} = -1.50 \implies P(-1.50 \le Z < 0) = \mathbf{0.4332} \\[3pt]
+            \text{Students} &= 500 \times 0.4332 \approx \mathbf{217 \text{ students}}
+            \end{aligned}$$
+          </li>
+          <li><strong>Grade F ($X < 55$):</strong>
+            $$\begin{aligned}
+            P(X < 55) &= \Phi(-1.50) = 1 - 0.9332 = \mathbf{0.0668 \ (6.68\%)} \\[3pt]
+            \text{Students} &= 500 \times 0.0668 \approx \mathbf{33 \text{ students}}
+            \end{aligned}$$
+          </li>
+        </ul>
+
+        <div class="note good">
+          <strong>Significance in Statistics:</strong> Serves as the central limiting model of empirical data, enables standardization via $Z$-scores, and provides the baseline for inferential hypothesis testing ($Z, t, F, \chi^2$).
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 2: November 2025 Paper Q7 (20 Marks) -->
+  <div id="q2-marks" class="details-box">
+    <span class="pyq-badge">Semester Exam Paper · November 2025 (Question 7) &middot; 20 Marks</span>
+    <h3 style="margin:6px 0 10px;">Question 2: Student Marks Estimation & Practical Applications (20 Marks)</h3>
+    <p><strong>Question Statement (Verbatim):</strong><br>
+    <em>"The marks of 100 students in an exam are found to be normally distributed with mean 70 and S.D. 5. Estimate the number of students whose marks will be: (i) between 60 and 75, (ii) more than 75 marks, (iii) less than 65 marks. Also explain the uses of normal distribution briefly. (20 Marks)"</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution & 5 Practical Uses</summary>
+      <div style="margin-top:12px;">
+        <p><strong>Given Parameters:</strong> Total students $N = 100$; Distribution $X \sim \mathcal{N}(\mu = 70, \sigma = 5)$. Standardized transformation: $Z = \frac{X - 70}{5}$.</p>
+
+        <p style="margin-top:8px;"><strong>(i) Marks Between 60 and 75 (4 Marks)</strong></p>
+        $$\begin{aligned}
+        z_1 &= \frac{60 - 70}{5} = \mathbf{-2.0}, \quad z_2 = \frac{75 - 70}{5} = \mathbf{+1.0} \\[4pt]
+        P(60 \le X \le 75) &= \Phi(1.0) - \Phi(-2.0) = 0.8413 - (1 - 0.9772) \\[4pt]
+        &= 0.8413 - 0.0228 = \mathbf{0.8185 \ (81.85\%)} \\[4pt]
+        \text{Expected Count} &= 100 \times 0.8185 = \mathbf{81.85 \approx 82 \text{ students}}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>(ii) Marks More Than 75 (4 Marks)</strong></p>
+        $$\begin{aligned}
+        z &= \frac{75 - 70}{5} = \mathbf{+1.0} \\[4pt]
+        P(X > 75) &= 1 - \Phi(1.0) = 1 - 0.8413 = \mathbf{0.1587 \ (15.87\%)} \\[4pt]
+        \text{Expected Count} &= 100 \times 0.1587 = \mathbf{15.87 \approx 16 \text{ students}}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>(iii) Marks Less Than 65 (4 Marks)</strong></p>
+        $$\begin{aligned}
+        z &= \frac{65 - 70}{5} = \mathbf{-1.0} \\[4pt]
+        P(X < 65) &= \Phi(-1.0) = 1 - \Phi(1.0) = 1 - 0.8413 = \mathbf{0.1587 \ (15.87\%)} \\[4pt]
+        \text{Expected Count} &= 100 \times 0.1587 = \mathbf{15.87 \approx 16 \text{ students}}
+        \end{aligned}$$
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:12px 0;">
+
+        <p><strong>Part 2: 5 Practical Uses of Normal Distribution (8 Marks)</strong></p>
+        <ol style="margin-left:18px;line-height:1.75;font-size:13.5px;">
+          <li><strong>Parametric Inference:</strong> Serves as the mathematical basis for $Z$-tests, $t$-tests, ANOVA, and linear regression residual testing.</li>
+          <li><strong>Vehicle for Central Limit Theorem:</strong> Ensures sample averages converge to normality regardless of the underlying population shape.</li>
+          <li><strong>Statistical Quality Control (Six Sigma):</strong> Establishes industrial control charts with upper/lower action limits at $\mu \pm 3\sigma$ ($99.73\%$ tolerance).</li>
+          <li><strong>Grading on a Curve & Psychometrics:</strong> Scales exam grades, standardized SAT/GRE percentiles, and IQ metrics (mean 100, SD 15).</li>
+          <li><strong>Financial Risk Modeling:</strong> Calculates portfolio Value-at-Risk (VaR) under log-normal asset return assumptions.</li>
+        </ol>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 3: December 2024 Paper Q4(ii) (CLT Sample Mean Deviation) -->
+  <div id="q3-clt-sample" class="details-box">
+    <span class="pyq-badge">Semester Exam Paper · December 2024 (Question 4 Part ii) &middot; 8 Marks</span>
+    <h3 style="margin:6px 0 10px;">Question 3: CLT Estimation of Sample Mean Deviation (8 Marks)</h3>
+    <p><strong>Question Statement (Verbatim):</strong><br>
+    <em>"A random sample of size 100 is taken from a population whose mean is 60 and variance 400. Estimate using central limit theorem, with what probability can we assert that mean of the sample will not differ from $\mu = 60$ by more than 4. (8 Marks)"</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Identify Population & Sample Parameters:</strong></p>
+        <ul>
+          <li>Sample size: $n = 100$</li>
+          <li>Population mean: $\mu = 60$</li>
+          <li>Population variance: $\sigma^2 = 400 \implies \sigma = \sqrt{400} = \mathbf{20}$</li>
+        </ul>
+
+        <p style="margin-top:8px;"><strong>2. Apply Central Limit Theorem:</strong></p>
+        <p>Since $n = 100 \ge 30$, by CLT the sample mean $\bar{X}$ is normally distributed:</p>
+        $$\begin{aligned}
+        \bar{X} \sim \mathcal{N}\left(\mu, \sigma_{\bar{X}}^2\right), \quad \text{where } \sigma_{\bar{X}} = \frac{\sigma}{\sqrt{n}} = \frac{20}{\sqrt{100}} = \frac{20}{10} = \mathbf{2.0}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>3. Formulate Probability Statement:</strong></p>
+        <p>We want the probability that $\bar{X}$ does not differ from $60$ by more than $4$:</p>
+        $$\begin{aligned}
+        P(|\bar{X} - 60| \le 4) &= P(60 - 4 \le \bar{X} \le 60 + 4) \\[4pt]
+        &= P(56 \le \bar{X} \le 64)
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>4. Standardize to $Z$-Scores:</strong></p>
+        $$\begin{aligned}
+        z_1 &= \frac{56 - 60}{2.0} = \frac{-4}{2.0} = \mathbf{-2.0} \\[4pt]
+        z_2 &= \frac{64 - 60}{2.0} = \frac{+4}{2.0} = \mathbf{+2.0}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>5. Compute Probability from $Z$-Table:</strong></p>
+        $$\begin{aligned}
+        P(-2.0 \le Z \le +2.0) &= \Phi(2.0) - \Phi(-2.0) \\[4pt]
+        &= 0.9772 - (1 - 0.9772) \\[4pt]
+        &= 0.9772 - 0.0228 = \mathbf{0.9544 \ (95.44\%)}
+        \end{aligned}$$
+
+        <div class="note good">
+          <strong>Conclusion:</strong> Using the Central Limit Theorem, we can assert with <strong>95.44% probability</strong> that the sample mean will lie within 4 units of the true population mean.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 4: November 2025 Paper Q3(i) (CLT Coin Tossing) -->
+  <div id="q4-clt-coin" class="details-box">
+    <span class="pyq-badge">Semester Exam Paper · November 2025 (Question 3 Part i) &middot; 8 Marks</span>
+    <h3 style="margin:6px 0 10px;">Question 4: CLT Normal Approximation for Coin Tossing (8 Marks)</h3>
+    <p><strong>Question Statement (Verbatim):</strong><br>
+    <em>"A fair coin is tossed 250 times. Find the probability that heads will appear between 120 and 140 times using CLT. (8 Marks)"</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution & Continuity Correction</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Establish Parameters:</strong></p>
+        <p>Let $X$ denote the number of heads in $n = 250$ independent coin tosses ($p = 0.5, q = 0.5$):</p>
+        $$\begin{aligned}
+        \text{Mean: } \mu &= np = 250 \times 0.5 = \mathbf{125} \\[3pt]
+        \text{Variance: } \sigma^2 &= npq = 250 \times 0.5 \times 0.5 = \mathbf{62.5} \\[3pt]
+        \text{Standard Deviation: } \sigma &= \sqrt{62.5} \approx \mathbf{7.9057}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>2. Continuity Correction for $120 \le X \le 140$:</strong></p>
+        <p>Because Binomial counts are discrete integers, apply continuity correction ($\pm 0.5$):</p>
+        $$\begin{aligned}
+        P(120 \le X \le 140) \approx P(119.5 \le X \le 140.5)
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>3. Standardize to $Z$-Scores:</strong></p>
+        $$\begin{aligned}
+        z_1 &= \frac{119.5 - 125}{7.9057} = \frac{-5.5}{7.9057} \approx \mathbf{-0.70} \\[4pt]
+        z_2 &= \frac{140.5 - 125}{7.9057} = \frac{15.5}{7.9057} \approx \mathbf{+1.96}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>4. Area Computation:</strong></p>
+        $$\begin{aligned}
+        P(-0.70 \le Z \le 1.96) &= \Phi(1.96) - \Phi(-0.70) \\[4pt]
+        &= 0.9750 - (1 - 0.7580) \\[4pt]
+        &= 0.9750 - 0.2420 = \mathbf{0.7330 \ (73.30\%)}
+        \end{aligned}$$
+
+        <div class="note purple">
+          <strong>Examiner's Note:</strong> Without continuity correction, $z_1 = \frac{120-125}{7.9057} = -0.63$ and $z_2 = \frac{140-125}{7.9057} = 1.90 \implies P = \Phi(1.90) - \Phi(-0.63) = 0.9713 - 0.2643 = \mathbf{0.7070}$. State both to demonstrate comprehensive competence!
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 5: December 2024 Paper Q3(iii) (Electricity Bill) -->
+  <div id="q5-electricity" class="details-box">
+    <span class="pyq-badge">Semester Exam Paper · December 2024 (Question 3 Part iii) &middot; 6 Marks</span>
+    <h3 style="margin:6px 0 10px;">Question 5: Household Electricity Bill Normal Probability (6 Marks)</h3>
+    <p><strong>Question Statement (Verbatim):</strong><br>
+    <em>"The monthly electricity bill of households in a city follows a normal distribution, with a mean of $120 and a variance of $49. What is the probability that a randomly selected household has a monthly bill less than $110? (6 Marks)"</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Identify Distribution:</strong></p>
+        <p>Let $X$ denote the monthly electricity bill in dollars:</p>
+        $$\begin{aligned}
+        X \sim \mathcal{N}(\mu = 120, \sigma^2 = 49) \implies \sigma = \sqrt{49} = \mathbf{7}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>2. Standard Normal Transformation:</strong></p>
+        $$\begin{aligned}
+        Z &= \frac{X - \mu}{\sigma} = \frac{110 - 120}{7} = \frac{-10}{7} \approx \mathbf{-1.43}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>3. Probability Computation via Symmetry:</strong></p>
+        $$\begin{aligned}
+        P(X < 110) &= P(Z < -1.43) = \Phi(-1.43) \\[4pt]
+        &= 1 - \Phi(1.43) \\[4pt]
+        &= 1 - 0.9236 = \mathbf{0.0764 \ (7.64\%)}
+        \end{aligned}$$
+
+        <div class="note good">
+          <strong>Conclusion:</strong> The probability that a randomly selected household's monthly electricity bill is less than $110 is <strong>0.0764 (or 7.64%)</strong>.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 6: CT-1 Set A Q3C (Water Consumption) -->
+  <div id="q6-water" class="details-box">
+    <span class="pyq-badge ct">CT-1 Exam · Set A (Question 3 Part C) &middot; 5 Marks</span>
+    <h3 style="margin:6px 0 10px;">Question 6: Household Daily Water Consumption (5 Marks)</h3>
+    <p><strong>Question Statement:</strong><br>
+    <em>"Household daily water consumption follows a normal distribution with mean 180 litres and variance 400 litres². What is the probability that a randomly selected household consumes more than 215 litres in a day? (Given: $P(Z \le 1.75) = 0.9599$) (5 Marks)"</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Given Parameters:</strong> $\mu = 180 \text{ L}, \; \sigma^2 = 400 \implies \sigma = \sqrt{400} = \mathbf{20 \text{ L}}$. Threshold $x = 215 \text{ L}$.</p>
+
+        <p style="margin-top:8px;"><strong>2. Compute $Z$-Score:</strong></p>
+        $$\begin{aligned}
+        Z = \frac{X - \mu}{\sigma} = \frac{215 - 180}{20} = \frac{35}{20} = \mathbf{+1.75}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>3. Compute Right-Tail Probability:</strong></p>
+        $$\begin{aligned}
+        P(X > 215) &= P(Z > 1.75) = 1 - P(Z \le 1.75) \\[4pt]
+        &= 1 - 0.9599 = \mathbf{0.0401 \ (4.01\%)}
+        \end{aligned}$$
+
+        <div class="note good">
+          <strong>Conclusion:</strong> The probability of consuming more than 215 litres is <strong>0.0401 (or 4.01%)</strong>.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 7: LLT Assignment Unit 2 Q8 (Salary Distribution) -->
+  <div id="q7-salary" class="details-box">
+    <span class="pyq-badge llt">LLT Assignment · Unit 2 (Question 8)</span>
+    <h3 style="margin:6px 0 10px;">Question 7: Corporate Salary Normal Distribution</h3>
+    <p><strong>Question Statement:</strong><br>
+    <em>"Annual salaries in a corporation follow a normal distribution with mean $75,000 and variance $4,000,000. Find: (i) Probability a salary exceeds $78,000, (ii) Probability a salary is less than $73,000."</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Distribution Parameters:</strong> $\mu = 75,000, \; \sigma = \sqrt{4,000,000} = \mathbf{2,000}$. Transformation: $Z = \frac{X - 75000}{2000}$.</p>
+
+        <p style="margin-top:8px;"><strong>(i) Salary Exceeding $78,000 ($P(X > 78,000)$):</strong></p>
+        $$\begin{aligned}
+        Z &= \frac{78,000 - 75,000}{2,000} = \frac{3,000}{2,000} = \mathbf{+1.50} \\[4pt]
+        P(X > 78,000) &= 1 - \Phi(1.50) = 1 - 0.9332 = \mathbf{0.0668 \ (6.68\%)}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>(ii) Salary Less than $73,000 ($P(X < 73,000)$):</strong></p>
+        $$\begin{aligned}
+        Z &= \frac{73,000 - 75,000}{2,000} = \frac{-2,000}{2,000} = \mathbf{-1.00} \\[4pt]
+        P(X < 73,000) &= \Phi(-1.00) = 1 - \Phi(1.00) = 1 - 0.8413 = \mathbf{0.1587 \ (15.87\%)}
+        \end{aligned}$$
+
+        <div class="note good">
+          <strong>Summary:</strong> Probability $> \$78\text{k} = \mathbf{6.68\%}$; Probability $< \$73\text{k} = \mathbf{15.87\%}$.
+        </div>
+      </div>
+    </details>
+  </div>
+
+</section>
+
+<!-- Section 7: Interactive Z-Score Calculator -->
+<section id="interactive-tool" class="tool-box">
+  <div class="eyebrow" style="color:var(--teal)">Interactive Study Tool</div>
+  <h2 style="border:none;margin-top:4px;">Dynamic Z-Score & Normal Probability Calculator</h2>
+  <p style="font-size:13px;color:var(--muted)">Compute Z-scores and tail probabilities for any raw value $X$ or sample mean $\bar{X}$:</p>
+
+  <div class="tool-grid">
+    <div class="tool-group">
+      <label>Mean ($\mu$)</label>
+      <input type="number" id="inp-mu" value="70" step="1" oninput="calculateZ()">
+    </div>
+    <div class="tool-group">
+      <label>Std Dev ($\sigma$)</label>
+      <input type="number" id="inp-sigma" value="5" step="0.5" min="0.001" oninput="calculateZ()">
+    </div>
+    <div class="tool-group">
+      <label>Sample Size ($n$) [1 for single $X$]</label>
+      <input type="number" id="inp-n" value="1" step="1" min="1" oninput="calculateZ()">
+    </div>
+    <div class="tool-group">
+      <label>Target Value ($X$ or $\bar{X}$)</label>
+      <input type="number" id="inp-x" value="75" step="1" oninput="calculateZ()">
+    </div>
+  </div>
+
+  <div class="tool-result" id="z-output">
+    Loading normal probability calculations...
+  </div>
+</section>
+
+<!-- Section 8: Interactive Self-Test Quiz -->
+<section id="practice">
+  <h2>07. Interactive Self-Test Quiz (Active Recall)</h2>
+  <p class="lead">Test your Z-table, CLT, and area calculation skills before moving to ANOVA. Attempt all 4 questions:</p>
+
+  <div class="quiz-q" data-answer="c">
+    <strong>Question 1 — Standard Error Calculation</strong>
+    <p>A population has standard deviation $\sigma = 20$. If a random sample of $n = 100$ is drawn, what is the standard error of the sample mean $\sigma_{\bar{X}}$?</p>
+    <label><input type="radio" name="q1" value="a"> $20.0$</label>
+    <label><input type="radio" name="q1" value="b"> $0.20$</label>
+    <label><input type="radio" name="q1" value="c"> $2.00$</label>
+    <label><input type="radio" name="q1" value="d"> $4.00$</label>
+    <div class="feedback" id="f1"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(1)">Check Answer</button>
+      <button onclick="toggleAnswer('a1')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a1">
+      <strong>Correct: $\sigma_{\bar{X}} = 2.00$</strong>.<br>
+      $\sigma_{\bar{X}} = \frac{\sigma}{\sqrt{n}} = \frac{20}{\sqrt{100}} = \frac{20}{10} = 2.00$. This is the exact denominator required for the December 2024 CLT question.
+    </div>
+  </div>
+
+  <div class="quiz-q" data-answer="b">
+    <strong>Question 2 — Symmetry of Standard Normal Distribution</strong>
+    <p>If $\Phi(1.43) = 0.9236$, what is the left-tail probability $P(Z < -1.43)$?</p>
+    <label><input type="radio" name="q2" value="a"> $0.9236$</label>
+    <label><input type="radio" name="q2" value="b"> $1 - 0.9236 = 0.0764$</label>
+    <label><input type="radio" name="q2" value="c"> $-0.9236$</label>
+    <label><input type="radio" name="q2" value="d"> $0.5000$</label>
+    <div class="feedback" id="f2"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(2)">Check Answer</button>
+      <button onclick="toggleAnswer('a2')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a2">
+      <strong>Correct: $0.0764$ ($7.64\%$)</strong>.<br>
+      By symmetry, the left tail below $-z$ equals the right tail above $+z$: $P(Z < -1.43) = 1 - \Phi(1.43) = 1 - 0.9236 = 0.0764$.
+    </div>
+  </div>
+
+  <div class="quiz-q" data-answer="a">
+    <strong>Question 3 — Kurtosis & Skewness of Normal Distribution</strong>
+    <p>What are the theoretical values of skewness ($\beta_1$) and kurtosis ($\beta_2$) for any true normal distribution?</p>
+    <label><input type="radio" name="q3" value="a"> Skewness $\beta_1 = 0$, Kurtosis $\beta_2 = 3$</label>
+    <label><input type="radio" name="q3" value="b"> Skewness $\beta_1 = 1$, Kurtosis $\beta_2 = 0$</label>
+    <label><input type="radio" name="q3" value="c"> Skewness $\beta_1 = 0$, Kurtosis $\beta_2 = 0$</label>
+    <label><input type="radio" name="q3" value="d"> Skewness $\beta_1 = 3$, Kurtosis $\beta_2 = 0$</label>
+    <div class="feedback" id="f3"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(3)">Check Answer</button>
+      <button onclick="toggleAnswer('a3')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a3">
+      <strong>Correct: $\beta_1 = 0$, $\beta_2 = 3$</strong>.<br>
+      A normal curve is mesokurtic ($\beta_2 = 3$ or excess kurtosis $\gamma_2 = \beta_2 - 3 = 0$) and perfectly symmetric ($\beta_1 = 0$).
+    </div>
+  </div>
+
+  <div class="quiz-q" data-answer="d">
+    <strong>Question 4 — Continuity Correction Application</strong>
+    <p>When approximating a discrete count $X \in [120, 140]$ using a continuous Normal curve under CLT, what adjusted bounds should be standardized?</p>
+    <label><input type="radio" name="q4" value="a"> $[120.0, 140.0]$</label>
+    <label><input type="radio" name="q4" value="b"> $[120.5, 139.5]$</label>
+    <label><input type="radio" name="q4" value="c"> $[121.0, 139.0]$</label>
+    <label><input type="radio" name="q4" value="d"> $[119.5, 140.5]$</label>
+    <div class="feedback" id="f4"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(4)">Check Answer</button>
+      <button onclick="toggleAnswer('a4')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a4">
+      <strong>Correct: $[119.5, 140.5]$</strong>.<br>
+      To encompass the full integer bins for 120 and 140 inclusive, subtract $0.5$ from the lower limit and add $0.5$ to the upper limit.
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <h3>Self-Test Progress</h3>
+    <div class="small" id="scoreText">0 of 4 correct</div>
+    <div class="progress-wrap"><div class="progress" id="scoreBar"></div></div>
+  </div>
+</section>
+
+<!-- Section 9: Exam Checklist -->
+<section id="checklist">
+  <h2>08. Exam Hall Answer Sheet Presentation Checklist</h2>
+  
+  <div class="card">
+    <p>When solving Normal Distribution & CLT questions in the semester exam, follow this exact structure to guarantee maximum marks:</p>
+    <ol style="margin-left:18px;line-height:1.75;font-size:13.5px;">
+      <li><strong>State the Distribution & Parameters:</strong> State $X \sim \mathcal{N}(\mu, \sigma^2)$ or $\bar{X} \sim \mathcal{N}(\mu, \sigma^2/n)$. If variance $\sigma^2$ is given, write $\sigma = \sqrt{\sigma^2}$ explicitly.</li>
+      <li><strong>State the $Z$-Score Formula:</strong> Write $Z = \frac{X - \mu}{\sigma}$ (or $Z = \frac{\bar{X} - \mu}{\sigma/\sqrt{n}}$ for CLT sample averages).</li>
+      <li><strong>Transform Bounds:</strong> Calculate $z_1$ and $z_2$ to 2 decimal places.</li>
+      <li><strong>Write Probability Statement:</strong> Express $P(X \dots) = P(Z \dots) = \Phi(z_2) - \Phi(z_1)$.</li>
+      <li><strong>Substitute Table Values:</strong> Show the cumulative $\Phi(z)$ values.</li>
+      <li><strong>Multiply for Counts (if requested):</strong> If asked for student/unit counts, show $\text{Count} = N \times P$ and round appropriately.</li>
+      <li><strong>State Final Conclusion:</strong> Provide both percentage and plain-text interpretation.</li>
+    </ol>
+  </div>
+
+  <div class="controls" style="margin-top:16px;">
+    <button onclick="window.print()">Print / Save as PDF</button>
+    <button class="secondary" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to Top &uarr;</button>
+    <a href="/ifs-study-guide/03-one-way-anova.html" class="btn" style="background:#059669;color:#fff;padding:8px 14px;border-radius:8px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;min-height:40px;">Proceed to Next: 03 &middot; One-Way ANOVA &rarr;</a>
+  </div>
+</section>
+
+<div class="footer">
+  <div><strong>Inferential Statistics (21CSC529T)</strong> &middot; Module 02: Normal Distribution & CLT</div>
+  <div>Next Topic in 2-Day Plan: <strong>One-Way ANOVA & F-Test</strong></div>
+</div>
+
+</main>
+</div>
+
+<script>
+// Mobile Drawer open/close for iPhone 13
+function openDrawer(){
+  document.getElementById('mobileDrawer').classList.add('open');
+  document.getElementById('drawerBackdrop').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer(){
+  document.getElementById('mobileDrawer').classList.remove('open');
+  document.getElementById('drawerBackdrop').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Toggle solution explanations
+function toggleAnswer(id){
+  document.getElementById(id).classList.toggle('show');
+}
+
+// Quiz evaluation logic
+function checkQuiz(n){
+  const q = document.querySelectorAll('.quiz-q')[n-1];
+  const chosen = q.querySelector('input:checked');
+  const feedback = document.getElementById('f'+n);
+  
+  if(!chosen){
+    feedback.textContent = 'Please select an option first.';
+    feedback.style.color = '#b45309';
+    return;
+  }
+  
+  const isCorrect = chosen.value === q.dataset.answer;
+  if(isCorrect){
+    feedback.textContent = 'Correct! Outstanding precision.';
+    feedback.style.color = '#059669';
+    q.dataset.done = 'yes';
+  } else {
+    feedback.textContent = 'Incorrect. Check the explanation and try again.';
+    feedback.style.color = '#dc2626';
+    q.dataset.done = 'no';
+  }
+  
+  const completed = [...document.querySelectorAll('.quiz-q')].filter(el => el.dataset.done === 'yes').length;
+  document.getElementById('scoreText').textContent = `${completed} of 4 correct`;
+  document.getElementById('scoreBar').style.width = `${(completed / 4) * 100}%`;
+}
+
+// Error function approximation for high precision standard normal CDF
+function erf(x) {
+  const a1 =  0.254829592;
+  const a2 = -0.284496736;
+  const a3 =  1.421413741;
+  const a4 = -1.453152027;
+  const a5 =  1.061405429;
+  const p  =  0.3275911;
+
+  const sign = x < 0 ? -1 : 1;
+  const absX = Math.abs(x);
+  const t = 1.0 / (1.0 + p * absX);
+  const y = 1.0 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-absX * absX);
+  return sign * y;
+}
+
+function normalCDF(z) {
+  return 0.5 * (1.0 + erf(z / Math.sqrt(2.0)));
+}
+
+// Interactive Z calculation engine
+function calculateZ(){
+  const mu = parseFloat(document.getElementById('inp-mu').value) || 0;
+  const sigma = parseFloat(document.getElementById('inp-sigma').value) || 1;
+  const n = parseInt(document.getElementById('inp-n').value) || 1;
+  const x = parseFloat(document.getElementById('inp-x').value) || 0;
+
+  const se = sigma / Math.sqrt(n);
+  const z = (x - mu) / se;
+  const pLess = normalCDF(z);
+  const pGreater = 1.0 - pLess;
+
+  document.getElementById('z-output').innerHTML = `
+    <div><strong>Standard Error (SE):</strong> ${se.toFixed(4)}</div>
+    <div style="margin-top:4px;"><strong>Computed Z-Score:</strong> <span style="color:#059669;font-weight:800;">Z = ${z.toFixed(4)}</span></div>
+    <div style="margin-top:6px;line-height:1.6;">
+      &bull; <strong>P(Val &le; ${x}):</strong> ${(pLess * 100).toFixed(2)}% (fraction: ${pLess.toFixed(4)})<br>
+      &bull; <strong>P(Val &gt; ${x}):</strong> ${(pGreater * 100).toFixed(2)}% (fraction: ${pGreater.toFixed(4)})
+    </div>
+  `;
+}
+
+// Highlight sidebar item on click
+document.querySelectorAll('nav a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.querySelectorAll('nav a').forEach(el => el.classList.remove('active'));
+    a.classList.add('active');
+  });
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  calculateZ();
+});
+</script>
+</body>
+</html>

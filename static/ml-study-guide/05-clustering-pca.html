@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Clustering & Dimensionality Reduction | Complete Exam Question Bank & Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#2563eb;--brand-soft:#eff6ff;--teal:#059669;--teal-soft:#ecfdf5;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#0f172a;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:800}
+aside h2{font-size:18px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.12em;margin:18px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#cbd5e1;font-size:13px}
+nav a:hover,nav a.active{background:#1e293b;color:#38bdf8;text-decoration:none}
+.module-hub-link{background:#1e293b;border:1px solid #334155;color:#38bdf8;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:20px;padding:12px;border:1px solid #334155;border-radius:12px;color:#cbd5e1;font-size:12px;background:#131d35}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#047857;color:#ecfdf5}
+
+/* Mobile Sticky Topbar */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#0f172a;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{
+  font-size:14.5px;
+  font-weight:800;
+  color:#f8fafc;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.mobile-topbar-actions{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.mobile-btn{
+  background:#1e293b;
+  border:1px solid #334155;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  cursor:pointer;
+  min-height:36px;
+}
+
+/* Horizontal Swipeable Pill Nav */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer Menu Overlay */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#0f172a;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #1e293b;
+  padding-bottom:12px;
+}
+.drawer-close{
+  background:none;
+  border:none;
+  color:#94a3b8;
+  font-size:24px;
+  cursor:pointer;
+  padding:4px 8px;
+}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#2563eb 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"X=USVᵀ";position:absolute;right:20px;bottom:-30px;font-size:96px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#93c5fd;font-weight:800}
+h1{font-size:clamp(22px,4.5vw,38px);line-height:1.15;margin:10px 0}
+.hero p{max-width:700px;color:#e0e7ff;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+.formula-banner{
+  background:#0f172a;
+  color:#f8fafc;
+  padding:16px 14px;
+  border-radius:12px;
+  text-align:center;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+.formula-banner .katex-display{margin:6px 0}
+.formula-banner small{display:block;font-size:11px;color:#94a3b8;margin-top:6px}
+
+/* KaTeX Horizontal Scrollbar Removal & Vertical Headroom */
+.katex-display{
+  font-size:clamp(13px, 3.6vw, 15.5px) !important;
+  margin:12px 0 !important;
+  padding:12px 4px 8px !important;
+  overflow-x:auto !important;
+  overflow-y:visible !important;
+  scrollbar-width:none !important;
+  -ms-overflow-style:none !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+.katex-display::-webkit-scrollbar{display:none !important;}
+.katex-display > .katex{
+  display:block !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  padding-top:4px !important;
+  padding-bottom:2px !important;
+}
+.katex{
+  font-size:1em !important;
+  line-height:normal !important;
+  text-rendering:auto !important;
+  white-space:normal !important;
+}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--teal-soft);border-color:var(--teal)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+.note.purple{background:var(--purple-soft);border-color:var(--purple)}
+
+/* Table Styling */
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#dbeafe;color:#1e40af;margin-bottom:6px}
+.pyq-badge.nov{background:#fef3c7;color:#92400e}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+  -webkit-tap-highlight-color:transparent;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  transition:background .15s;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+button:hover{background:#1d4ed8}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+
+/* Quiz for iPhone 13 */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+  -webkit-tap-highlight-color:transparent;
+  transition:all .15s;
+}
+.quiz-q label:active{background:#eff6ff;border-color:#93c5fd}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--teal-soft);border-radius:8px;border-left:3px solid var(--teal);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Interactive Calculator */
+.tool-box{background:white;border:2px solid #93c5fd;border-radius:12px;padding:16px;margin:16px 0}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:8px}
+.tool-group label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px}
+.tool-group input{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  font-size:16px;
+  background:#f8fafc;
+  min-height:40px;
+}
+.tool-result{margin-top:12px;padding:12px;background:#eff6ff;border-radius:8px;border-left:4px solid var(--brand);font-size:13px}
+
+/* Mobile Responsiveness */
+@media(max-width:880px){
+  .shell{grid-template-columns:1fr}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:16px 14px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr}
+  .hero{padding:22px 16px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  .card{padding:14px}
+  .tool-box{padding:12px}
+  .tool-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Drawer Backdrop -->
+<div class="drawer-backdrop" id="backdrop" onclick="toggleDrawer()"></div>
+
+<!-- Slide-Out Mobile Navigation Drawer -->
+<div class="mobile-drawer" id="drawer">
+  <div class="drawer-header">
+    <div style="font-weight:800;font-size:13px;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;">ML Study Hub</div>
+    <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+  </div>
+  <a href="/ml-study-guide/index.html" class="module-hub-link" style="display:block;padding:8px 12px;border-radius:8px;font-size:13px;">&larr; Back to Study Hub</a>
+  <div class="nav-label">Sections</div>
+  <nav>
+    <a href="#intuition" onclick="toggleDrawer()">01. Intuition & Contrast</a>
+    <a href="#kmeans" onclick="toggleDrawer()">02. K-Means Objective & WCSS</a>
+    <a href="#pca" onclick="toggleDrawer()">03. PCA Dual SVD for p &gg; n</a>
+    <a href="#biomarkers" onclick="toggleDrawer()">04. Biomarker Translation</a>
+    <a href="#notation" onclick="toggleDrawer()">05. Notation Matrix</a>
+    <a href="#steps" onclick="toggleDrawer()">06. Solving Protocol</a>
+    <a href="#traps" onclick="toggleDrawer()">07. 6 Exam Traps</a>
+    <a href="#pyqs" onclick="toggleDrawer()">08. All Solved PYQs</a>
+    <a href="#calculator" onclick="toggleDrawer()">09. WCSS Calculator</a>
+    <a href="#quiz" onclick="toggleDrawer()">10. Active Recall Quiz</a>
+    <a href="#checklist" onclick="toggleDrawer()">11. Presentation Template</a>
+  </nav>
+  <div class="nav-label">Modules</div>
+  <nav>
+    <a href="/ml-study-guide/01-linear-regression-optimization.html">01. Linear Regression</a>
+    <a href="/ml-study-guide/02-logistic-regression-metrics.html">02. Logistic & Metrics</a>
+    <a href="/ml-study-guide/03-naive-bayes-knn.html">03. Naive Bayes & KNN</a>
+    <a href="/ml-study-guide/04-decision-trees-ensembles.html">04. Decision Trees & RF</a>
+    <a href="/ml-study-guide/05-clustering-pca.html" class="active">05. K-Means & PCA</a>
+  </nav>
+</div>
+
+<!-- Mobile Sticky Topbar -->
+<div class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>Module 05 · Clustering & PCA</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/ml-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="toggleDrawer()">&#9776; Menu</button>
+  </div>
+</div>
+
+<!-- Mobile Horizontal Pill Nav -->
+<div class="mobile-pills-bar">
+  <a href="#intuition" class="pill-link">Intuition</a>
+  <a href="#kmeans" class="pill-link">K-Means</a>
+  <a href="#pca" class="pill-link">PCA Dual SVD</a>
+  <a href="#biomarkers" class="pill-link">Biomarkers</a>
+  <a href="#traps" class="pill-link">Traps</a>
+  <a href="#pyqs" class="pill-link">Past Papers</a>
+  <a href="#calculator" class="pill-link">WCSS Tool</a>
+  <a href="#quiz" class="pill-link">Quiz</a>
+  <a href="#checklist" class="pill-link">Checklist</a>
+</div>
+
+<div class="shell">
+
+  <!-- Desktop Sidebar -->
+  <aside>
+    <div class="brand">21CSC555J · Exam Prep</div>
+    <h2>Clustering & PCA</h2>
+    <a href="/ml-study-guide/index.html" class="module-hub-link" style="padding:8px 12px;border-radius:8px;font-size:12.5px;">&larr; Back to Study Hub</a>
+
+    <div class="nav-label">Sections</div>
+    <nav>
+      <a href="#intuition">01. Intuition & Contrast</a>
+      <a href="#kmeans">02. K-Means Objective & WCSS</a>
+      <a href="#pca">03. PCA Dual SVD for $p \gg n$</a>
+      <a href="#biomarkers">04. Biomarker Translation</a>
+      <a href="#notation">05. Notation Decoding Matrix</a>
+      <a href="#steps">06. Step-by-Step Protocol</a>
+      <a href="#traps">07. 6 Deadly Exam Traps</a>
+      <a href="#pyqs">08. Complete University PYQs</a>
+      <a href="#calculator">09. Interactive WCSS Tool</a>
+      <a href="#quiz">10. Self-Test Active Recall</a>
+      <a href="#checklist">11. Answer Sheet Checklist</a>
+    </nav>
+
+    <div class="side-note">
+      <strong>Exam Weightage: 20 Marks</strong><br>
+      Internal Score: <strong>51.60 / 60</strong><br>
+      Target Sem Mark: <strong>49 / 100</strong> (Safe: 56)<br>
+      <span class="status-pill pill-target">Priority 5 High-Yield</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="eyebrow">Module 05 · Unsupervised Learning & Manifold Discovery</div>
+      <h1>Clustering (K-Means) & Dimensionality Reduction (PCA)</h1>
+      <p>Master unsupervised manifold discovery. K-Means WCSS objective minimization, the Elbow method vs Silhouette score, handling the $p \gg n$ high-dimensional regime via Dual SVD, and translating abstract principal components into actionable biological driver biomarkers.</p>
+      <div class="pills">
+        <span class="pill">Jan 2025 (Q7 20M)</span>
+        <span class="pill">Nov 2025 (Q5 20M)</span>
+        <span class="pill">Dual SVD in O(n²p)</span>
+        <span class="pill">WCSS Minimization</span>
+        <span class="pill">Biomarker Loadings</span>
+      </div>
+    </div>
+
+    <!-- Section 01: Intuition & Contrast -->
+    <section id="intuition">
+      <h2>01. Intuition & Concept Contrast</h2>
+      <p class="lead">Unsupervised learning operates without ground-truth target labels ($y$). Clustering groups similar samples together in feature space, while dimensionality reduction compresses thousands of correlated features into a few orthogonal axes.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Unsupervised Goal</div>
+          <h3 style="margin-top:2px;">Clustering vs Dimensionality Reduction</h3>
+          <p><strong>Clustering (Grouping Samples):</strong> Finds natural discrete groupings among rows ($\mathbf{x}_i \in \mathbb{R}^p$). Assigns each observation to one of $K$ distinct clusters (e.g. disease subtypes).</p>
+          <p><strong>Dimensionality Reduction (Compressing Columns):</strong> Finds a continuous lower-dimensional subspace ($k \ll p$) that preserves maximum sample variance, eliminating redundant assay noise.</p>
+        </div>
+        <div class="card">
+          <div class="kicker">Algorithmic Trade-off</div>
+          <h3 style="margin-top:2px;">Covariance Eigendecomposition vs Dual SVD</h3>
+          <p><strong>Full Covariance Method:</strong> Computes $p \times p$ covariance matrix $\mathbf{\Sigma} = \frac{1}{n-1}\mathbf{X}^T\mathbf{X}$. Requires $O(p^3)$ time ($1.25 \times 10^{11}$ operations for $5,000$ genes) $\implies$ <em>Computationally Intractable</em>.</p>
+          <p><strong>Dual SVD Method:</strong> Decomposes centered data matrix $\tilde{\mathbf{X}} \in \mathbb{R}^{n \times p}$ directly into $\mathbf{U}\mathbf{S}\mathbf{V}^T$ in $O(n^2 p)$ time ($10^8$ operations) $\implies$ <em>Instant & Numerically Stable</em>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: K-Means Objective & WCSS -->
+    <section id="kmeans">
+      <h2>02. K-Means Clustering Mathematical Formulation</h2>
+      <p class="lead"><strong>Jan 2025 (Q7) Core Theory (20 Marks).</strong> Minimizing Within-Cluster Sum of Squares (WCSS).</p>
+
+      <div class="formula-banner">
+        <div><strong>The K-Means Optimization Objective</strong></div>
+        $$\arg\min_{\mathcal{C}} \operatorname{WCSS}(\mathcal{C}) = \sum_{k=1}^K \sum_{\mathbf{x} \in C_k} \|\mathbf{x} - \boldsymbol{\mu}_k\|^2$$
+        <small>Where $\boldsymbol{\mu}_k = \frac{1}{|C_k|}\sum_{\mathbf{x} \in C_k}\mathbf{x}$ is the centroid of cluster $C_k$.</small>
+      </div>
+
+      <div class="card">
+        <h3>Lloyd's 2-Step Iterative Algorithm:</h3>
+        <ol>
+          <li><strong>Step 1: Assignment Step</strong><br>
+          Assign each data vector $\mathbf{x}_i$ to its nearest cluster centroid in Euclidean distance:
+          $$c_i^{(t)} = \arg\min_{k \in \{1, \dots, K\}} \|\mathbf{x}_i - \boldsymbol{\mu}_k^{(t)}\|^2$$</li>
+          <li><strong>Step 2: Update Step</strong><br>
+          Recompute the centroid of each cluster as the center of mass of all assigned points:
+          $$\boldsymbol{\mu}_k^{(t+1)} = \frac{1}{|C_k^{(t)}|} \sum_{\mathbf{x}_i \in C_k^{(t)}} \mathbf{x}_i$$</li>
+          <li><strong>Convergence:</strong> Repeat Steps 1 and 2 until centroid coordinates stop changing ($\|\boldsymbol{\mu}^{(t+1)} - \boldsymbol{\mu}^{(t)}\| < \epsilon$) or maximum iterations are reached.</li>
+        </ol>
+
+        <h3>Selecting Optimal $K$: The Elbow Method vs Silhouette Coefficient</h3>
+        <p><strong>1. The Elbow Method:</strong> Plot $\operatorname{WCSS}$ against candidate cluster counts $K \in [1, 10]$. As $K$ increases, WCSS monotonically decreases. Select the "Elbow" inflection point where adding another cluster yields diminishing returns in variance reduction.</p>
+        <p><strong>2. Silhouette Coefficient ($s(i)$):</strong> Evaluates cluster compactness vs separation:</p>
+        $$s(i) = \frac{b(i) - a(i)}{\max(a(i), b(i))} \in [-1, +1]$$
+        <ul>
+          <li>$a(i)$: Mean distance from point $i$ to all other points in its own cluster (intra-cluster compactness).</li>
+          <li>$b(i)$: Mean distance from point $i$ to points in the nearest neighboring cluster (inter-cluster separation).</li>
+          <li>$s \approx +1 \implies$ Excellent clustering; $s \approx 0 \implies$ Borderline overlap; $s < 0 \implies$ Assigned to wrong cluster.</li>
+        </ul>
+      </div>
+
+      <div class="note warn">
+        <strong>The K-Means Initialization Problem & K-Means++:</strong><br>
+        Standard random initialization can strand centroids in poor local minima. <strong>K-Means++</strong> seeds the first centroid uniformly at random, and selects each subsequent centroid with probability proportional to squared distance from the closest existing centroid:
+        $$P(\mathbf{x}) = \frac{D(\mathbf{x})^2}{\sum_{\mathbf{x}'} D(\mathbf{x}')^2}$$
+        This spreads initial centroids far apart across feature space, guaranteeing $O(\log K)$ competitive solutions.
+      </div>
+    </section>
+
+    <!-- Section 03: PCA Dual SVD for p >> n -->
+    <section id="pca">
+      <h2>03. Principal Component Analysis via Dual SVD ($p \gg n$)</h2>
+      <p class="lead"><strong>Nov 2025 (Q5) Bioinformatics Exam Problem (20 Marks).</strong> Gene expression dataset with $p = 5,000$ genes and $n = 100$ patient samples.</p>
+
+      <div class="note danger">
+        <strong>Why Dimensionality Reduction is Mandatory in $p \gg n$:</strong><br>
+        1. <strong>Distance Metric Concentration (Curse of Dimensionality):</strong> As dimensions $p \to \infty$, the relative contrast between the nearest and farthest neighbors vanishes:
+        $$\lim_{p \to \infty} \frac{\operatorname{dist}_{\max} - \operatorname{dist}_{\min}}{\operatorname{dist}_{\min}} \to 0$$
+        Every patient becomes equidistant from every other patient in $\mathbb{R}^{5000}$, rendering Euclidean clustering ineffective.<br>
+        2. <strong>Rank Deficiency:</strong> Data matrix $\mathbf{X} \in \mathbb{R}^{100 \times 5000}$ has maximum rank $\min(n-1, p) = 99$. The data lies entirely within a 99-dimensional hyperplane; the remaining 4,901 dimensions represent empty assay noise.
+      </div>
+
+      <div class="formula-banner">
+        <div><strong>Singular Value Decomposition (Dual SVD)</strong></div>
+        $$\tilde{\mathbf{X}} = \mathbf{U} \mathbf{S} \mathbf{V}^T$$
+        <small>$\mathbf{U} \in \mathbb{R}^{100 \times 100}$, $\mathbf{S} \in \mathbb{R}^{100 \times 100}$, $\mathbf{V} \in \mathbb{R}^{5000 \times 100}$.</small>
+      </div>
+
+      <div class="card">
+        <h3>Mathematical Derivation of the Dual SVD Shortcut:</h3>
+        <p>1. Center the data matrix: $\tilde{\mathbf{X}} = \mathbf{X} - \mathbf{1}\boldsymbol{\mu}^T \in \mathbb{R}^{100 \times 5000}$.</p>
+        <p>2. The sample covariance matrix is $\mathbf{\Sigma} = \frac{1}{n-1}\tilde{\mathbf{X}}^T\tilde{\mathbf{X}} \in \mathbb{R}^{5000 \times 5000}$. Computing its eigenvalues directly requires $O(p^3) = 5000^3 = 1.25 \times 10^{11}$ operations.</p>
+        <p>3. Instead, apply SVD directly to $\tilde{\mathbf{X}}$ or eigendecompose the smaller Gram matrix $\mathbf{K} = \frac{1}{n-1}\tilde{\mathbf{X}}\tilde{\mathbf{X}}^T \in \mathbb{R}^{100 \times 100}$ in $O(n^2 p) = 100^2 \times 5000 = 5 \times 10^7$ operations ($2500\times$ faster!).</p>
+        <p>4. The singular values $s_j$ relate directly to the covariance eigenvalues $\lambda_j$:</p>
+        $$\lambda_j = \frac{s_j^2}{n - 1}$$
+        <p>5. Project the 100 patient samples into the reduced $k$-dimensional principal subspace ($k \ll 100$):</p>
+        $$\mathbf{Z}_k = \tilde{\mathbf{X}}\mathbf{V}_k = \mathbf{U}_k \mathbf{S}_k \in \mathbb{R}^{100 \times k}$$
+        <p>We select $k$ using the cumulative explained variance ratio ($\ge 85\%$):</p>
+        $$\frac{\sum_{j=1}^k \lambda_j}{\sum_{m=1}^{n-1}\lambda_m} \ge 0.85$$
+      </div>
+    </section>
+
+    <!-- Section 04: Biomarker Translation -->
+    <section id="biomarkers">
+      <h2>04. Translating Latent Clusters to Biological Biomarkers</h2>
+      <p class="lead"><strong>Nov 2025 (Q5) Part (iii) Challenge & Solution (6 Marks).</strong></p>
+
+      <div class="card">
+        <h3>The Interpretation Barrier:</h3>
+        <p>K-Means identifies patient clusters in reduced space $\mathbf{Z}_k$ (e.g. $[\text{PC}_1, \text{PC}_2]$). However, principal components are mathematical linear combinations of all 5,000 genes: $\text{PC}_1 = v_{1,1}\text{Gene}_1 + \dots + v_{5000,1}\text{Gene}_{5000}$. Oncologists cannot treat patients based on eigenvectors; they need specific mutated driver genes.</p>
+
+        <h3>The 3-Step Methodological Solution:</h3>
+        <ol>
+          <li><strong>1. Factor Loading Deconvolution:</strong><br>
+          Inspect the right singular vectors (gene loadings) $\mathbf{V}_k$. Genes with the highest absolute loading coefficients $|v_{j, k}|$ contribute most to separating the patient cohorts.</li>
+          <li><strong>2. Differential Expression Analysis (DEA):</strong><br>
+          Map cluster labels back to the original 5,000-gene space. Conduct two-sample Welch's $t$-tests comparing cluster samples against the remaining cohort with Benjamini-Hochberg False Discovery Rate (FDR) correction:
+          $$q_j = P_j \times \frac{p}{\operatorname{rank}(P_j)} \le 0.05$$
+          Construct Volcano plots ($-\log_{10}(q)$ vs Fold Change) to isolate statistically significant up- and down-regulated biomarkers.</li>
+          <li><strong>3. Gene Ontology (GO) & Pathway Enrichment (GSEA):</strong><br>
+          Feed identified biomarker genes into KEGG or Gene Ontology pathway databases to translate mathematical clusters into biological disease mechanisms (e.g. *"Subtype 2 shows upregulation in DNA mismatch repair pathways"*).</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Section 05: Notation Matrix -->
+    <section id="notation">
+      <h2>05. Notation Decoding Matrix</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Formal Name</th>
+              <th>Plain-English Meaning</th>
+              <th>Bioinformatics Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$n, p$</td>
+              <td>Samples & Features</td>
+              <td>Number of patients ($n$) and genes ($p$)</td>
+              <td>$n = 100$ patients, $p = 5,000$ genes</td>
+            </tr>
+            <tr>
+              <td>$\operatorname{WCSS}$</td>
+              <td>Within-Cluster Sum of Squares</td>
+              <td>Total compactness of points around their centroid</td>
+              <td>Minimized by K-Means algorithm</td>
+            </tr>
+            <tr>
+              <td>$s(i)$</td>
+              <td>Silhouette Coefficient</td>
+              <td>Score measuring balance of cohesion vs separation</td>
+              <td>$s \in [-1, +1]$ (Higher is better)</td>
+            </tr>
+            <tr>
+              <td>$\mathbf{U}$</td>
+              <td>Left Singular Vectors</td>
+              <td>Orthonormal eigenvectors of patient Gram matrix</td>
+              <td>$\mathbf{U} \in \mathbb{R}^{100 \times 100}$</td>
+            </tr>
+            <tr>
+              <td>$\mathbf{S}$</td>
+              <td>Singular Values</td>
+              <td>Square roots of eigenvalues scaled by $n-1$</td>
+              <td>$\lambda_j = s_j^2 / (n-1)$</td>
+            </tr>
+            <tr>
+              <td>$\mathbf{V}$</td>
+              <td>Right Singular Vectors (Loadings)</td>
+              <td>Weights of each gene in forming principal components</td>
+              <td>$\mathbf{V} \in \mathbb{R}^{5000 \times 100}$</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 06: Solving Protocol -->
+    <section id="steps">
+      <h2>06. Repeatable Step-by-Step Solving Protocol</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>Step 1: Justify Dimensionality Reduction ($p \gg n$)</strong>
+            <p>State distance metric concentration ($\operatorname{dist}_{\max} \approx \operatorname{dist}_{\min}$) and rank deficiency ($\text{rank} \le 99$).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 2: Center Data Matrix</strong>
+            $$\tilde{\mathbf{X}} = \mathbf{X} - \mathbf{1}\boldsymbol{\mu}^T$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 3: State the Dual SVD Factorization</strong>
+            $$\tilde{\mathbf{X}} = \mathbf{U}\mathbf{S}\mathbf{V}^T, \qquad \lambda_j = \frac{s_j^2}{n - 1}$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 4: Select $k$ via Cumulative Variance Ratio</strong>
+            $$\frac{\sum_{j=1}^k \lambda_j}{\sum_{m=1}^{n-1}\lambda_m} \ge 0.85$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 5: Apply K-Means in Reduced Space ($\mathbf{Z}_k$)</strong>
+            <p>Iterate assignment and centroid update steps until WCSS reaches local minimum.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 6: Biological Deconvolution</strong>
+            <p>Inspect loadings $\mathbf{V}_k$, perform Differential Expression Analysis (FDR $q \le 0.05$), and pathway enrichment.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 07: 6 Exam Traps -->
+    <section id="traps">
+      <h2>07. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+      <div class="grid">
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 01: Full Covariance on $p \gg n$</div>
+          <h3>Writing $\mathbf{\Sigma} = \mathbf{X}^T\mathbf{X} \in \mathbb{R}^{5000 \times 5000}$</h3>
+          <p>Eigendecomposing a $5000 \times 5000$ matrix requires $O(p^3) = 1.25 \times 10^{11}$ operations. <strong>Always specify Dual SVD or $\mathbf{X}\mathbf{X}^T \in \mathbb{R}^{100 \times 100}$ in $O(n^2 p)$ operations.</strong></p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 02: Forgetting to Center Data</div>
+          <h3>Applying SVD to Raw Data Matrix</h3>
+          <p>PCA maximizes sample variance around the mean. If $\mathbf{X}$ is not centered ($\tilde{\mathbf{X}} = \mathbf{X} - \bar{\mathbf{X}}$), the first principal component points directly toward the dataset mean rather than direction of maximum variance.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 03: Assuming K-Means Finds Global Optimum</div>
+          <h3>Claiming K-Means Solves Convex Minimization</h3>
+          <p>WCSS has multiple local minima depending on initial seeds. K-Means is non-convex; you must mention <strong>K-Means++ initialization</strong> or multiple restarts (`n_init=10`).</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 04: Confusing Loadings with Scores</div>
+          <h3>Mixing Up $\mathbf{V}$ and $\mathbf{Z}$</h3>
+          <p>$\mathbf{Z} \in \mathbb{R}^{n \times k}$ are the <strong>Principal Component Scores</strong> (patient coordinates). $\mathbf{V} \in \mathbb{R}^{p \times k}$ are the <strong>Factor Loadings</strong> (gene weights). Biologists inspect loadings $\mathbf{V}$ to identify biomarkers.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 05: Skipping Feature Scaling Before K-Means</div>
+          <h3>Clustering Unstandardized Features</h3>
+          <p>Features with huge numerical ranges completely dominate the Euclidean distance metric. Z-score scaling is mandatory.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 06: Picking $K=N$ on WCSS</div>
+          <h3>Selecting $K$ where WCSS is Zero</h3>
+          <p>Setting $K = N$ makes every point its own centroid ($\text{WCSS} = 0$), which provides zero clustering value. Choose $K$ at the <strong>inflection elbow</strong> or peak Silhouette score.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 08: Complete Solved University PYQs -->
+    <section id="pyqs">
+      <h2>08. Complete University Question Bank (All Past PYQs Solved)</h2>
+      <div class="controls">
+        <button onclick="toggleAllDetails(true)">Expand All Solutions</button>
+        <button class="secondary" onclick="toggleAllDetails(false)">Collapse All</button>
+      </div>
+
+      <!-- Question 1: Nov 2025 Q5 Bioinformatics PCA & K-Means (20 Marks) -->
+      <div class="details-box">
+        <details id="q1">
+          <summary>
+            <span><span class="pyq-badge nov">Nov 2025 · Question 5</span> Bioinformatics Gene Expression PCA & K-Means (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            A bioinformatics dataset has 5,000 genes ($p$) and 100 samples ($n$). Goal is to discover disease subtypes.<br>
+            i) Justify need for dimensionality reduction in this specific scenario. (6 Marks)<br>
+            ii) Propose a suitable technique and explain its working principle. (8 Marks)<br>
+            iii) You apply K-Means to identify subtypes. Explain a key challenge when interpreting clusters and how to address it. (6 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>(i) Justification for Dimensionality Reduction ($p \gg n$) (6 Marks)</h5>
+          <ol>
+            <li><strong>Distance Metric Degeneration (Loss of Contrast):</strong> Pairwise Euclidean distances converge to a uniform scalar: $\lim_{p \to \infty} \frac{\text{dist}_{\max} - \text{dist}_{\min}}{\text{dist}_{\min}} \to 0$. In 5,000 dimensions, every patient becomes equidistant from every other patient.</li>
+            <li><strong>Rank Deficiency:</strong> The $100 \times 5000$ matrix has rank at most $\min(n-1, p) = 99$. The data lies entirely on a 99-dimensional manifold; the remaining 4,901 dimensions represent noise.</li>
+            <li><strong>Multicollinearity:</strong> Co-regulated genes contain massive redundancy that destabilizes distance calculations.</li>
+          </ol>
+
+          <h5>(ii) Proposed Technique: PCA via Dual SVD (8 Marks)</h5>
+          <p>1. Center the matrix: $\tilde{\mathbf{X}} = \mathbf{X} - \mathbf{1}\boldsymbol{\mu}^T \in \mathbb{R}^{100 \times 5000}$.</p>
+          <p>2. Avoid computing the $5000 \times 5000$ covariance matrix ($O(p^3) = 1.25 \times 10^{11}$ operations). Instead apply SVD directly to $\tilde{\mathbf{X}}$ in $O(n^2 p) = 5 \times 10^7$ operations:</p>
+          $$\tilde{\mathbf{X}} = \mathbf{U} \mathbf{S} \mathbf{V}^T$$
+          <p>3. Relate singular values to covariance eigenvalues: $\lambda_j = \frac{s_j^2}{n - 1}$.</p>
+          <p>4. Project samples to $k$ components based on cumulative explained variance: $\mathbf{Z}_k = \tilde{\mathbf{X}}\mathbf{V}_k \in \mathbb{R}^{100 \times k}$ with $\sum_{j=1}^k \lambda_j / \sum \lambda_m \ge 0.85$.</p>
+
+          <h5>(iii) Cluster Interpretation Challenge & Solution (6 Marks)</h5>
+          <p><strong>The Challenge:</strong> Principal components are abstract linear mixtures of all 5,000 genes ("Latent Space Barrier"). Clinicians cannot prescribe medicine based on eigenvalues; they need specific mutated driver genes.</p>
+          <p><strong>Methodological Solutions:</strong></p>
+          <ol>
+            <li><strong>Factor Loading Inspection:</strong> Identify genes with largest absolute weights $|v_{j,k}|$ in the right singular vectors $\mathbf{V}_k$.</li>
+            <li><strong>Differential Expression Analysis (DEA):</strong> Map clusters back to 5,000-gene space. Perform Welch's $t$-tests with Benjamini-Hochberg FDR correction ($q \le 0.05$) to isolate statistically significant driver biomarkers.</li>
+            <li><strong>Gene Ontology Enrichment:</strong> Match biomarkers against KEGG biological pathways to reveal treatable disease mechanisms.</li>
+          </ol>
+        </details>
+      </div>
+
+      <!-- Question 2: Jan 2025 Q7 K-Means & Elbow Method (20 Marks) -->
+      <div class="details-box">
+        <details id="q2">
+          <summary>
+            <span><span class="pyq-badge">Jan 2025 · Question 7</span> K-Means Clustering Mechanics, WCSS & Elbow Method (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Explain the working principle of the K-Means clustering algorithm. Formulate its mathematical objective function. Describe how the optimal number of clusters ($K$) is determined using the Elbow Method and Silhouette analysis. Discuss sensitivity to initialization and feature scaling. (20 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Objective Formulation (6 Marks)</h5>
+          $$\arg\min_{\mathcal{C}} \operatorname{WCSS}(\mathcal{C}) = \sum_{k=1}^K \sum_{\mathbf{x} \in C_k} \|\mathbf{x} - \boldsymbol{\mu}_k\|^2$$
+          <p>Iterates between Assignment Step ($c_i = \arg\min_k \|\mathbf{x}_i - \boldsymbol{\mu}_k\|^2$) and Update Step ($\boldsymbol{\mu}_k = \frac{1}{|C_k|}\sum \mathbf{x}_i$).</p>
+
+          <h5>2. Determining Optimal $K$ (6 Marks)</h5>
+          <ul>
+            <li><strong>Elbow Method:</strong> Plot WCSS vs $K$. Identify the sharp inflection "elbow" point where marginal variance explained decreases.</li>
+            <li><strong>Silhouette Analysis:</strong> $s(i) = \frac{b(i) - a(i)}{\max(a(i), b(i))}$. Choose $K$ that maximizes mean silhouette coefficient across all points.</li>
+          </ul>
+
+          <h5>3. Initialization & Scaling (8 Marks)</h5>
+          <ul>
+            <li><strong>K-Means++:</strong> Prevents poor local minima by selecting initial seeds with probability $P(\mathbf{x}) \propto D(\mathbf{x})^2$, spreading centroids across data space.</li>
+            <li><strong>Feature Scaling:</strong> Mandatory. Without Z-score standardization, features with larger magnitudes dominate the Euclidean distance calculation.</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+    <!-- Section 09: Interactive WCSS Solver -->
+    <section id="calculator">
+      <h2>09. Interactive Offline WCSS Calculator</h2>
+      <p class="lead">Test your understanding of Within-Cluster Sum of Squares. Calculate Euclidean distances from 1D points to candidate centroids.</p>
+
+      <div class="tool-box">
+        <div class="tool-grid">
+          <div class="tool-group">
+            <label>Points in Cluster 1 (comma-separated)</label>
+            <input type="text" id="pts1" value="2, 4, 6">
+          </div>
+          <div class="tool-group">
+            <label>Points in Cluster 2 (comma-separated)</label>
+            <input type="text" id="pts2" value="10, 12, 14">
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <button onclick="calculateWCSS()">Compute Centroids & WCSS</button>
+        </div>
+
+        <div class="tool-result" id="wcssOutput">
+          Click button to compute cluster centroids and WCSS.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 10: Self-Test Active Recall Quiz -->
+    <section id="quiz">
+      <h2>10. Active Recall Self-Test Quiz</h2>
+      <div class="progress-wrap"><div class="progress" id="quizBar"></div></div>
+      <div id="quizScore" style="font-size:12.5px;font-weight:700;color:var(--muted);margin-top:4px;">Answer the questions below to evaluate progress (0/4 answered).</div>
+
+      <div class="quiz-q" id="qz1">
+        <strong>1. Why is full covariance matrix eigendecomposition avoided when $p \gg n$ ($5000$ genes, $100$ samples)?</strong>
+        <label><input type="radio" name="q1" value="a" onclick="checkQ(1,'b','O(p^3) = 1.25 x 10^11 operations is computationally intractable')"> SVD cannot be calculated on centered matrices</label>
+        <label><input type="radio" name="q1" value="b" onclick="checkQ(1,'b','O(p^3) = 1.25 x 10^11 operations is computationally intractable')"> Eigendecomposing a $5000 \times 5000$ covariance matrix requires $O(p^3) \approx 10^{11}$ operations</label>
+        <label><input type="radio" name="q1" value="c" onclick="checkQ(1,'b','O(p^3) = 1.25 x 10^11 operations is computationally intractable')"> Covariance eigenvalues are always zero</label>
+        <div class="feedback" id="fb1"></div>
+        <div class="answer" id="ans1"><strong>Correct: (b)</strong> Dual SVD evaluates the $100 \times 100$ Gram matrix in $O(n^2 p) = 5 \times 10^7$ operations, which is $2500\times$ faster.</div>
+      </div>
+
+      <div class="quiz-q" id="qz2">
+        <strong>2. What is the mathematical relationship between SVD singular values ($s_j$) and covariance eigenvalues ($\lambda_j$)?</strong>
+        <label><input type="radio" name="q2" value="a" onclick="checkQ(2,'c','lambda_j = s_j^2 / (n - 1)')"> $\lambda_j = s_j \times (n - 1)$</label>
+        <label><input type="radio" name="q2" value="b" onclick="checkQ(2,'c','lambda_j = s_j^2 / (n - 1)')"> $\lambda_j = \sqrt{s_j}$</label>
+        <label><input type="radio" name="q2" value="c" onclick="checkQ(2,'c','lambda_j = s_j^2 / (n - 1)')"> $\lambda_j = \frac{s_j^2}{n - 1}$</label>
+        <div class="feedback" id="fb2"></div>
+        <div class="answer" id="ans2"><strong>Correct: (c)</strong> Because $\mathbf{\Sigma} = \frac{1}{n-1}\tilde{\mathbf{X}}^T\tilde{\mathbf{X}} = \frac{1}{n-1}\mathbf{V}\mathbf{S}^2\mathbf{V}^T$, $\lambda_j = \frac{s_j^2}{n-1}$.</div>
+      </div>
+
+      <div class="quiz-q" id="qz3">
+        <strong>3. How does K-Means++ improve upon standard random centroid initialization?</strong>
+        <label><input type="radio" name="q3" value="a" onclick="checkQ(3,'a','Probabilistically spreads centroids proportional to D(x)^2')"> It selects subsequent centroids with probability proportional to squared distance $D(\mathbf{x})^2$ from existing centroids</label>
+        <label><input type="radio" name="q3" value="b" onclick="checkQ(3,'a','Probabilistically spreads centroids proportional to D(x)^2')"> It automatically determines the optimal number of clusters K</label>
+        <label><input type="radio" name="q3" value="c" onclick="checkQ(3,'a','Probabilistically spreads centroids proportional to D(x)^2')"> It eliminates the need for computing Euclidean distances</label>
+        <div class="feedback" id="fb3"></div>
+        <div class="answer" id="ans3"><strong>Correct: (a)</strong> Spreading initial centroids far apart across feature space prevents getting trapped in poor local minima.</div>
+      </div>
+
+      <div class="quiz-q" id="qz4">
+        <strong>4. How do data scientists solve the "Latent Space Barrier" when translating PCA clusters into biological insights?</strong>
+        <label><input type="radio" name="q4" value="a" onclick="checkQ(4,'b','Inspect factor loadings and run Differential Expression Analysis')"> By deleting all genes with negative loadings</label>
+        <label><input type="radio" name="q4" value="b" onclick="checkQ(4,'b','Inspect factor loadings and run Differential Expression Analysis')"> By inspecting factor loadings $|v_{j,k}|$ and performing Differential Expression Analysis with FDR correction</label>
+        <label><input type="radio" name="q4" value="c" onclick="checkQ(4,'b','Inspect factor loadings and run Differential Expression Analysis')"> By running K-Means with K = 5000</label>
+        <div class="feedback" id="fb4"></div>
+        <div class="answer" id="ans4"><strong>Correct: (b)</strong> Deconvolving factor loadings and running Welch's $t$-tests with FDR correction isolates real biomarker genes.</div>
+      </div>
+    </section>
+
+    <!-- Section 11: Answer Sheet Checklist -->
+    <section id="checklist">
+      <h2>11. Exam Hall Answer Sheet Presentation Checklist</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>1. Cite the 3 Reasons for Dimensionality Reduction in $p \gg n$</strong>
+            <p>State: (1) Distance metric concentration, (2) Rank deficiency ($\le 99$), (3) High collinearity and visual intractability.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>2. Write the Centering Step Explicitly</strong>
+            <p>Always write $\tilde{\mathbf{X}} = \mathbf{X} - \mathbf{1}\boldsymbol{\mu}^T$. Mention that uncentered PCA distorts variance.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>3. State the Dual SVD Complexity Shortcut</strong>
+            <p>Highlight: $O(n^2 p) = 5 \times 10^7$ vs $O(p^3) = 1.25 \times 10^{11}$ operations ($2500\times$ speedup). Write $\lambda_j = \frac{s_j^2}{n-1}$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>4. Write the WCSS Objective Function Boxed</strong>
+            <p>Write $\arg\min \sum_{k=1}^K \sum_{\mathbf{x} \in C_k} \|\mathbf{x} - \boldsymbol{\mu}_k\|^2$. Detail assignment and update steps.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>5. For Cluster Interpretation, Mention DEA & Pathway Enrichment</strong>
+            <p>Cite: (1) Factor loadings $\mathbf{V}$, (2) Differential Expression Analysis with Benjamini-Hochberg FDR $q \le 0.05$, (3) Gene Ontology (GO) enrichment.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function toggleDrawer() {
+  const drawer = document.getElementById('drawer');
+  const backdrop = document.getElementById('backdrop');
+  drawer.classList.toggle('open');
+  backdrop.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+}
+
+function toggleAllDetails(open) {
+  document.querySelectorAll('details').forEach(d => d.open = open);
+}
+
+function calculateWCSS() {
+  const p1Str = document.getElementById('pts1').value.trim();
+  const p2Str = document.getElementById('pts2').value.trim();
+
+  const c1 = p1Str.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n));
+  const c2 = p2Str.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n));
+
+  if (c1.length === 0 || c2.length === 0) {
+    document.getElementById('wcssOutput').innerHTML = '<span style="color:var(--red);">Error: Both clusters must have at least 1 point.</span>';
+    return;
+  }
+
+  const mean1 = c1.reduce((a, b) => a + b, 0) / c1.length;
+  const mean2 = c2.reduce((a, b) => a + b, 0) / c2.length;
+
+  const wcss1 = c1.reduce((acc, val) => acc + Math.pow(val - mean1, 2), 0);
+  const wcss2 = c2.reduce((acc, val) => acc + Math.pow(val - mean2, 2), 0);
+  const totalWCSS = wcss1 + wcss2;
+
+  let out = '<strong>Computed Cluster Results:</strong><br>';
+  out += '• Cluster 1 Points: [' + c1.join(', ') + '] &rarr; <strong>Centroid $\\mu_1 = ' + mean1.toFixed(2) + '$</strong><br>';
+  out += '• Cluster 1 WCSS: <strong>' + wcss1.toFixed(2) + '</strong><br>';
+  out += '• Cluster 2 Points: [' + c2.join(', ') + '] &rarr; <strong>Centroid $\\mu_2 = ' + mean2.toFixed(2) + '$</strong><br>';
+  out += '• Cluster 2 WCSS: <strong>' + wcss2.toFixed(2) + '</strong><br>';
+  out += '• <strong>Total Within-Cluster Sum of Squares (WCSS): ' + totalWCSS.toFixed(2) + '</strong>';
+
+  document.getElementById('wcssOutput').innerHTML = out;
+  if (window.renderMathInElement) {
+    renderMathInElement(document.getElementById('wcssOutput'), {delimiters: [{left: '$', right: '$', display: false}]});
+  }
+}
+
+// Quiz Interactive Evaluation
+const answeredQ = {};
+function checkQ(qNum, correctVal, reason) {
+  const selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+  const fb = document.getElementById('fb' + qNum);
+  const ans = document.getElementById('ans' + qNum);
+
+  answeredQ[qNum] = true;
+
+  if (selected.value === correctVal) {
+    fb.innerHTML = '<span style="color:var(--teal);">&#10003; Correct! ' + reason + '</span>';
+  } else {
+    fb.innerHTML = '<span style="color:var(--red);">&#10007; Incorrect. ' + reason + '</span>';
+  }
+  ans.classList.add('show');
+
+  const answeredCount = Object.keys(answeredQ).length;
+  const pct = (answeredCount / 4) * 100;
+  document.getElementById('quizBar').style.width = pct + '%';
+  document.getElementById('quizScore').innerText = 'Completed ' + answeredCount + ' of 4 questions (' + pct.toFixed(0) + '%).';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  calculateWCSS();
+});
+</script>
+
+</body>
+</html>

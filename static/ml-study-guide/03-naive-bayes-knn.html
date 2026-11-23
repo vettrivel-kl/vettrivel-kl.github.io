@@ -1,0 +1,1146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Naïve Bayes & K-Nearest Neighbors | Complete Exam Question Bank & Study Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#2563eb;--brand-soft:#eff6ff;--teal:#059669;--teal-soft:#ecfdf5;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#0f172a;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:800}
+aside h2{font-size:18px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.12em;margin:18px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#cbd5e1;font-size:13px}
+nav a:hover,nav a.active{background:#1e293b;color:#38bdf8;text-decoration:none}
+.module-hub-link{background:#1e293b;border:1px solid #334155;color:#38bdf8;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:20px;padding:12px;border:1px solid #334155;border-radius:12px;color:#cbd5e1;font-size:12px;background:#131d35}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#047857;color:#ecfdf5}
+
+/* Mobile Sticky Topbar */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#0f172a;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{
+  font-size:14.5px;
+  font-weight:800;
+  color:#f8fafc;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.mobile-topbar-actions{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.mobile-btn{
+  background:#1e293b;
+  border:1px solid #334155;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  cursor:pointer;
+  min-height:36px;
+}
+
+/* Horizontal Swipeable Pill Nav */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer Menu Overlay */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#0f172a;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #1e293b;
+  padding-bottom:12px;
+}
+.drawer-close{
+  background:none;
+  border:none;
+  color:#94a3b8;
+  font-size:24px;
+  cursor:pointer;
+  padding:4px 8px;
+}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#2563eb 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"P(C|x)";position:absolute;right:20px;bottom:-30px;font-size:110px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#93c5fd;font-weight:800}
+h1{font-size:clamp(22px,4.5vw,38px);line-height:1.15;margin:10px 0}
+.hero p{max-width:700px;color:#e0e7ff;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+.formula-banner{
+  background:#0f172a;
+  color:#f8fafc;
+  padding:16px 14px;
+  border-radius:12px;
+  text-align:center;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+.formula-banner .katex-display{margin:6px 0}
+.formula-banner small{display:block;font-size:11px;color:#94a3b8;margin-top:6px}
+
+/* KaTeX Horizontal Scrollbar Removal & Headroom */
+.katex-display{
+  font-size:clamp(13px, 3.6vw, 15.5px) !important;
+  margin:12px 0 !important;
+  padding:12px 4px 8px !important;
+  overflow-x:auto !important;
+  overflow-y:visible !important;
+  scrollbar-width:none !important;
+  -ms-overflow-style:none !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+.katex-display::-webkit-scrollbar{display:none !important;}
+.katex-display > .katex{
+  display:block !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  padding-top:4px !important;
+  padding-bottom:2px !important;
+}
+.katex{
+  font-size:1em !important;
+  line-height:normal !important;
+  text-rendering:auto !important;
+  white-space:normal !important;
+}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--teal-soft);border-color:var(--teal)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+.note.purple{background:var(--purple-soft);border-color:var(--purple)}
+
+/* Table Styling */
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#dbeafe;color:#1e40af;margin-bottom:6px}
+.pyq-badge.ct{background:#e0e7ff;color:#3730a3}
+.pyq-badge.qb{background:#ecfdf5;color:#065f46}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+  -webkit-tap-highlight-color:transparent;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  transition:background .15s;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+button:hover{background:#1d4ed8}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+
+/* Quiz for iPhone 13 */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+  -webkit-tap-highlight-color:transparent;
+  transition:all .15s;
+}
+.quiz-q label:active{background:#eff6ff;border-color:#93c5fd}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--teal-soft);border-radius:8px;border-left:3px solid var(--teal);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Interactive Calculator */
+.tool-box{background:white;border:2px solid #93c5fd;border-radius:12px;padding:16px;margin:16px 0}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:8px}
+.tool-group label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px}
+.tool-group input, .tool-group select{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  font-size:16px;
+  background:#f8fafc;
+  min-height:40px;
+}
+.tool-result{margin-top:12px;padding:12px;background:#eff6ff;border-radius:8px;border-left:4px solid var(--brand);font-size:13px}
+
+/* Mobile Responsiveness */
+@media(max-width:880px){
+  .shell{grid-template-columns:1fr}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:16px 14px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr}
+  .hero{padding:22px 16px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  .card{padding:14px}
+  .tool-box{padding:12px}
+  .tool-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Drawer Backdrop -->
+<div class="drawer-backdrop" id="backdrop" onclick="toggleDrawer()"></div>
+
+<!-- Slide-Out Mobile Navigation Drawer -->
+<div class="mobile-drawer" id="drawer">
+  <div class="drawer-header">
+    <div style="font-weight:800;font-size:13px;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;">ML Study Hub</div>
+    <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+  </div>
+  <a href="/ml-study-guide/index.html" class="module-hub-link" style="display:block;padding:8px 12px;border-radius:8px;font-size:13px;">&larr; Back to Study Hub</a>
+  <div class="nav-label">Sections</div>
+  <nav>
+    <a href="#intuition" onclick="toggleDrawer()">01. Intuition & Contrast</a>
+    <a href="#bayes-math" onclick="toggleDrawer()">02. Naïve Bayes Formulation</a>
+    <a href="#knn-math" onclick="toggleDrawer()">03. KNN Mechanics & Metrics</a>
+    <a href="#notation" onclick="toggleDrawer()">04. Notation Matrix</a>
+    <a href="#steps" onclick="toggleDrawer()">05. Solving Protocol</a>
+    <a href="#traps" onclick="toggleDrawer()">06. 6 Exam Traps</a>
+    <a href="#pyqs" onclick="toggleDrawer()">07. All Solved PYQs</a>
+    <a href="#calculator" onclick="toggleDrawer()">08. Interactive Tool</a>
+    <a href="#quiz" onclick="toggleDrawer()">09. Active Recall Quiz</a>
+    <a href="#checklist" onclick="toggleDrawer()">10. Presentation Template</a>
+  </nav>
+  <div class="nav-label">Modules</div>
+  <nav>
+    <a href="/ml-study-guide/01-linear-regression-optimization.html">01. Linear Regression</a>
+    <a href="/ml-study-guide/02-logistic-regression-metrics.html">02. Logistic & Metrics</a>
+    <a href="/ml-study-guide/03-naive-bayes-knn.html" class="active">03. Naive Bayes & KNN</a>
+    <a href="/ml-study-guide/04-decision-trees-ensembles.html">04. Decision Trees & RF</a>
+    <a href="/ml-study-guide/05-clustering-pca.html">05. K-Means & PCA</a>
+  </nav>
+</div>
+
+<!-- Mobile Sticky Topbar -->
+<div class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>Module 03 · Bayes & KNN</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/ml-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="toggleDrawer()">&#9776; Menu</button>
+  </div>
+</div>
+
+<!-- Mobile Horizontal Pill Nav -->
+<div class="mobile-pills-bar">
+  <a href="#intuition" class="pill-link">Intuition</a>
+  <a href="#bayes-math" class="pill-link">Bayes Math</a>
+  <a href="#knn-math" class="pill-link">KNN Distances</a>
+  <a href="#k-tradeoff" class="pill-link">K-Tradeoff</a>
+  <a href="#traps" class="pill-link">Traps</a>
+  <a href="#pyqs" class="pill-link">Past Papers</a>
+  <a href="#calculator" class="pill-link">Calculator</a>
+  <a href="#quiz" class="pill-link">Quiz</a>
+  <a href="#checklist" class="pill-link">Checklist</a>
+</div>
+
+<div class="shell">
+
+  <!-- Desktop Sidebar -->
+  <aside>
+    <div class="brand">21CSC555J · Exam Prep</div>
+    <h2>Naïve Bayes & KNN</h2>
+    <a href="/ml-study-guide/index.html" class="module-hub-link" style="padding:8px 12px;border-radius:8px;font-size:12.5px;">&larr; Back to Study Hub</a>
+
+    <div class="nav-label">Sections</div>
+    <nav>
+      <a href="#intuition">01. Intuition & Contrast</a>
+      <a href="#bayes-math">02. Naïve Bayes Formulation</a>
+      <a href="#knn-math">03. KNN Distance Metrics</a>
+      <a href="#k-tradeoff">04. K Parameter Trade-off</a>
+      <a href="#notation">05. Notation Decoding Matrix</a>
+      <a href="#steps">06. Step-by-Step Protocol</a>
+      <a href="#traps">07. 6 Deadly Exam Traps</a>
+      <a href="#pyqs">08. Complete University PYQs</a>
+      <a href="#calculator">09. Interactive KNN Solver</a>
+      <a href="#quiz">10. Self-Test Active Recall</a>
+      <a href="#checklist">11. Answer Sheet Checklist</a>
+    </nav>
+
+    <div class="side-note">
+      <strong>Exam Weightage: 20-40 Marks</strong><br>
+      Internal Score: <strong>51.60 / 60</strong><br>
+      Target Sem Mark: <strong>49 / 100</strong> (Safe: 56)<br>
+      <span class="status-pill pill-target">Priority 3 High-Yield</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="eyebrow">Module 03 · Generative & Instance-Based Learning</div>
+      <h1>Naïve Bayes & K-Nearest Neighbors (KNN)</h1>
+      <p>High-yield numerical guarantees. Complete step-by-step verified solutions for the 10-row Car Theft problem, 4-row Email Spam filtering with Laplace smoothing, KNN distance metrics ($L_1$ vs $L_2$), and the bias-variance trade-off of $K$.</p>
+      <div class="pills">
+        <span class="pill">Jan 2025 (Q4 20M, Q5 20M)</span>
+        <span class="pill">CT-2 (Q1.a 15M, Q2 20M)</span>
+        <span class="pill">Car Theft 10-Row</span>
+        <span class="pill">Spam Filtering</span>
+        <span class="pill">Euclidean vs Manhattan</span>
+      </div>
+    </div>
+
+    <!-- Section 01: Intuition & Contrast -->
+    <section id="intuition">
+      <h2>01. Intuition & Concept Contrast</h2>
+      <p class="lead">Two fundamental paradigms: Naïve Bayes models how data is generated per class ($P(\mathbf{x} \mid C)$), while KNN defers all computation until query time by finding geometric neighbors.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Learning Strategy</div>
+          <h3 style="margin-top:2px;">Generative vs Lazy Instance-Based</h3>
+          <p><strong>Naïve Bayes (Generative Model):</strong> Learns the joint probability $P(\mathbf{x}, C) = P(C)P(\mathbf{x} \mid C)$ via Bayes' theorem. Compact parameter footprint ($O(d)$); exceptionally fast inference.</p>
+          <p><strong>KNN (Lazy Instance-Based Learner):</strong> Zero training time ($O(1)$). Stores entire dataset and scans all $N$ observations during query inference ($O(N \cdot d)$ time).</p>
+        </div>
+        <div class="card">
+          <div class="kicker">Geometry vs Independence</div>
+          <h3 style="margin-top:2px;">Metric Space vs Conditional Independence</h3>
+          <p><strong>Naïve Bayes Assumption:</strong> Assumes all attributes $X_1, \dots, X_d$ are mutually independent given class label $C$. Robust in high-dimensional text.</p>
+          <p><strong>KNN Metric Assumption:</strong> Assumes points close in Euclidean/Manhattan space share the same class label. Requires feature standardization to prevent scale dominance.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: Naïve Bayes Formulation -->
+    <section id="bayes-math">
+      <h2>02. Naïve Bayes Mathematical Formulation</h2>
+      <p class="lead">Applying Bayes' Rule with the Conditional Independence Assumption.</p>
+
+      <div class="formula-banner">
+        <div><strong>The Master Naïve Bayes Equation</strong></div>
+        $$P(C = c \mid \mathbf{x}) = \frac{P(C = c) \prod_{j=1}^d P(x_j \mid C = c)}{P(\mathbf{x})}$$
+        <small>Where $P(\mathbf{x}) = \sum_{k} P(C_k) \prod_{j=1}^d P(x_j \mid C_k)$ is the normalising evidence.</small>
+      </div>
+
+      <div class="card">
+        <h3>1. The Conditional Independence Assumption</h3>
+        <p>In full Bayesian modeling, calculating $P(x_1, x_2, \dots, x_d \mid C)$ requires joint probability tables of size $O(2^d)$, which is intractable. Naïve Bayes assumes:</p>
+        $$P(x_1, x_2, \dots, x_d \mid C) = P(x_1 \mid C) \cdot P(x_2 \mid C) \cdots P(x_d \mid C) = \prod_{j=1}^d P(x_j \mid C)$$
+        <p>This collapses parameter estimation from exponential $O(2^d)$ to linear $O(d)$.</p>
+
+        <h3>2. Maximum A Posteriori (MAP) Decision Rule</h3>
+        <p>Because evidence $P(\mathbf{x})$ is constant across all candidate classes, the classification decision is determined solely by the unnormalized joint score:</p>
+        $$\hat{y} = \arg\max_{c} \left[ P(C = c) \prod_{j=1}^d P(x_j \mid C = c) \right]$$
+
+        <h3>3. Laplace Smoothing (Add-1 Smoothing for Zero Frequencies)</h3>
+        <p>If a feature value $x_j$ never appeared with class $c$ in training, $P(x_j \mid C = c) = 0$. In a multiplicative product, this single zero wipes out all other evidence: $\prod P = 0$.</p>
+        <div class="note warn">
+          <strong>Laplace Smoothing Formula:</strong><br>
+          $$P(x_j \mid C = c) = \frac{\operatorname{Count}(x_j \text{ and } c) + \alpha}{\operatorname{Count}(c) + \alpha \cdot K}$$
+          Where $\alpha = 1$ is the pseudo-count, and $K$ is the number of distinct values attribute $X_j$ can take.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 03: KNN Distance Metrics -->
+    <section id="knn-math">
+      <h2>03. K-Nearest Neighbors Distance Metrics</h2>
+      <p class="lead">KNN relies on geometric distance between a query vector $\mathbf{q} = [q_1, \dots, q_d]^T$ and stored vectors $\mathbf{x}_i = [x_{i1}, \dots, x_{id}]^T$.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Metric</th>
+              <th>Formula</th>
+              <th>Geometric Meaning</th>
+              <th>When Preferred in Exams</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Euclidean Distance ($L_2$ Norm)</strong></td>
+              <td>$d_E(\mathbf{q}, \mathbf{x}_i) = \sqrt{\sum_{j=1}^d (q_j - x_{ij})^2}$</td>
+              <td>Straight-line "as the crow flies" physical distance</td>
+              <td>Default metric for isotropic physical features</td>
+            </tr>
+            <tr>
+              <td><strong>Manhattan Distance ($L_1$ Norm)</strong></td>
+              <td>$d_M(\mathbf{q}, \mathbf{x}_i) = \sum_{j=1}^d |q_j - x_{ij}|$</td>
+              <td>Grid-based "taxicab" street navigation distance</td>
+              <td>City layouts (food delivery), high dimensions, robust to outliers</td>
+            </tr>
+            <tr>
+              <td><strong>Minkowski Distance ($L_p$ Norm)</strong></td>
+              <td>$d_p(\mathbf{q}, \mathbf{x}_i) = \left(\sum_{j=1}^d |q_j - x_{ij}|^p\right)^{1/p}$</td>
+              <td>Generalized distance metric parameterised by $p$</td>
+              <td>$p=1 \implies L_1$ (Manhattan), $p=2 \implies L_2$ (Euclidean)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note danger">
+        <strong>Mandatory Preprocessing: Why Feature Scaling is Essential in KNN!</strong><br>
+        Suppose $x_1 = \text{Income in ₹} \in [20000, 60000]$ and $x_2 = \text{Years Experience} \in [1, 10]$.<br>
+        In Euclidean distance: $(\Delta x_1)^2 = (20,000)^2 = 400,000,000$, whereas $(\Delta x_2)^2 = (5)^2 = 25$.<br>
+        The income feature completely dominates the distance metric by a factor of 16 million, making experience irrelevant. <strong>Z-Score Standardization ($z = \frac{x - \mu}{\sigma}$) or Min-Max Scaling ($[0, 1]$) is strictly mandatory before KNN.</strong>
+      </div>
+    </section>
+
+    <!-- Section 04: K Parameter Trade-off -->
+    <section id="k-tradeoff">
+      <h2>04. The Bias-Variance Trade-off of Parameter $K$</h2>
+      <p class="lead"><strong>Jan 2025 (Q4) & CT-2 (Q2) Core Theory Question (5 Marks).</strong></p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Small K ($K=1$)</div>
+          <h3 style="margin-top:2px;">Overfitting (High Variance, Low Bias)</h3>
+          <ul>
+            <li>Model fits every individual training point perfectly ($0\%$ training error).</li>
+            <li>Decision boundaries are complex, jagged, and fragmented into tiny islands.</li>
+            <li><strong>Severe Failure:</strong> A single mislabeled noise outlier will create an entire false classification zone around itself.</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="kicker">Large K ($K \to N$)</div>
+          <h3 style="margin-top:2px;">Underfitting (High Bias, Low Variance)</h3>
+          <ul>
+            <li>Neighborhood includes almost the entire dataset.</li>
+            <li>Decision boundaries become overly smooth and rigid.</li>
+            <li><strong>Severe Failure:</strong> Collapses into global majority voting. Every query point is assigned to whichever class has more samples in the training set.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="note good">
+        <strong>Golden Rule for Selecting $K$:</strong><br>
+        1. Set $K \approx \sqrt{N}$ (e.g., if $N = 100$, start around $K = 9$ or $11$).<br>
+        2. Always choose an <strong>odd integer</strong> for binary classification to guarantee no tied votes.<br>
+        3. Optimize $K$ via Stratified K-Fold Cross-Validation on validation error.
+      </div>
+    </section>
+
+    <!-- Section 05: Notation Decoding Matrix -->
+    <section id="notation">
+      <h2>05. Notation Decoding Matrix</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Formal Name</th>
+              <th>Plain-English Meaning</th>
+              <th>Applied Exam Example</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$P(C)$</td>
+              <td>Class Prior Probability</td>
+              <td>Baseline proportion of class in historical data</td>
+              <td>$P(\text{Stolen}=\text{Yes}) = 5/10 = 0.5$</td>
+            </tr>
+            <tr>
+              <td>$P(x_j \mid C)$</td>
+              <td>Conditional Likelihood</td>
+              <td>Probability of observing feature $x_j$ given class $C$</td>
+              <td>$P(\text{Color}=\text{Red} \mid \text{Yes}) = 3/5 = 0.6$</td>
+            </tr>
+            <tr>
+              <td>$P(C \mid \mathbf{x})$</td>
+              <td>Posterior Probability</td>
+              <td>Updated belief of class after observing features</td>
+              <td>$P(\text{Stolen}=\text{Yes} \mid \text{Red SUV}) = 0.25$</td>
+            </tr>
+            <tr>
+              <td>$\mathbf{q}$</td>
+              <td>Query Point</td>
+              <td>Unseen test instance to be classified</td>
+              <td>$\mathbf{q} = (\text{Income}=40, \text{Spending}=15)$</td>
+            </tr>
+            <tr>
+              <td>$\mathcal{N}_K(\mathbf{q})$</td>
+              <td>K-Neighborhood</td>
+              <td>Set of $K$ training samples with smallest distance to $\mathbf{q}$</td>
+              <td>$\{C_3, C_5, C_4\}$ when $K=3$</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 06: Solving Protocol -->
+    <section id="steps">
+      <h2>06. Repeatable Step-by-Step Solving Protocol</h2>
+
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>Step 1: Compute Class Priors $P(C_k)$</strong>
+            $$P(C_k) = \frac{\text{Count}(C_k)}{N}$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 2: Construct Conditional Frequency Tables</strong>
+            <p>Count occurrences of each attribute value for each class: $P(x_j \mid C_k) = \frac{\text{Count}(x_j \text{ and } C_k)}{\text{Count}(C_k)}$. Check for zeros (apply Laplace if needed).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 3: Calculate Unnormalized Joint Scores</strong>
+            $$\mathcal{L}(C_k) = P(C_k) \times \prod_{j=1}^d P(x_j \mid C_k)$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 4: Compute Evidence & Normalized Posteriors</strong>
+            $$P(\mathbf{x}) = \sum_k \mathcal{L}(C_k), \qquad P(C_k \mid \mathbf{x}) = \frac{\mathcal{L}(C_k)}{P(\mathbf{x})}$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 5: Apply MAP Decision Rule & Interpret</strong>
+            <p>Select $\hat{y} = \arg\max_k P(C_k \mid \mathbf{x})$. State which features contributed most to the decision.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 07: 6 Exam Traps -->
+    <section id="traps">
+      <h2>07. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+      <div class="grid">
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 01: Forgetting Class Prior</div>
+          <h3>Multiplying Only Likelihoods</h3>
+          <p>Students compute $\prod P(x_j \mid C)$ but forget to multiply by prior $P(C)$. If class proportions are unequal (e.g. $90\%$ benign vs $10\%$ spam), omitting $P(C)$ ruins the prediction.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 02: Laplace Denominator Mistake</div>
+          <h3>Adding $+1$ Instead of $+K$ in Denominator</h3>
+          <p>In Laplace smoothing, students write $\frac{\text{count}+1}{\text{total}+1}$. The denominator <strong>MUST add $+K$</strong> (number of distinct levels of feature): $\frac{\text{count}+1}{\text{total}+K}$, otherwise probabilities won't sum to 1.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 03: Skipping Feature Scaling in KNN</div>
+          <h3>Computing Raw Distances on Mixed Units</h3>
+          <p>Distance metrics without normalization mean features with big numbers (like Annual Income) dwarf features with small numbers (like Age). Examiners deduct marks if scaling is not mentioned.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 04: Even $K$ in Binary KNN</div>
+          <h3>Choosing $K=2$ or $K=4$</h3>
+          <p>Even $K$ values allow tied votes (1 High vs 1 Low). In exam questions, always explicitly specify that <strong>$K$ should be odd to break ties</strong>.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 05: Unnormalized Posterior Scores</div>
+          <h3>Reporting $\mathcal{L}(C)$ as Final Probability</h3>
+          <p>Writing "Probability of Stolen is $0.024$" is incorrect. $0.024$ is the unnormalized joint likelihood. The posterior probability is $\frac{0.024}{0.024 + 0.072} = \mathbf{0.25 \ (25\%)}$.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 06: Independent vs Conditionally Independent</div>
+          <h3>Confusing $P(A, B) = P(A)P(B)$ with $P(A, B \mid C) = P(A \mid C)P(B \mid C)$</h3>
+          <p>Naïve Bayes features are <strong>NOT unconditionally independent</strong>. They are only independent <em>conditional upon the class label $C$</em>.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 08: Complete Solved University PYQs -->
+    <section id="pyqs">
+      <h2>08. Complete University Question Bank (All Past PYQs Solved)</h2>
+      <div class="controls">
+        <button onclick="toggleAllDetails(true)">Expand All Solutions</button>
+        <button class="secondary" onclick="toggleAllDetails(false)">Collapse All</button>
+      </div>
+
+      <!-- Question 1: Jan 2025 Q5 Car Theft (20 Marks) -->
+      <div class="details-box">
+        <details id="q1">
+          <summary>
+            <span><span class="pyq-badge">Jan 2025 · Question 5</span> The 10-Row Car Theft Naïve Bayes Classification (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Consider a 10-row dataset with attributes Color (Red, Yellow), Type (Sports, SUV), Origin (Domestic, Imported), and target Stolen (Yes, No).<br>
+            Assume no pair of features are dependent, and each feature has equal influence.<br>
+            Predict whether a car with <strong>[Color = Red, Type = SUV, Origin = Domestic]</strong> is stolen or not. Explain prediction and interpret result. (20 Marks)
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>No.</th><th>Color</th><th>Type</th><th>Origin</th><th>Stolen?</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>Red</td><td>Sports</td><td>Domestic</td><td>Yes</td></tr>
+                <tr><td>2</td><td>Red</td><td>Sports</td><td>Domestic</td><td>No</td></tr>
+                <tr><td>3</td><td>Red</td><td>Sports</td><td>Domestic</td><td>Yes</td></tr>
+                <tr><td>4</td><td>Yellow</td><td>Sports</td><td>Domestic</td><td>No</td></tr>
+                <tr><td>5</td><td>Yellow</td><td>Sports</td><td>Imported</td><td>Yes</td></tr>
+                <tr><td>6</td><td>Yellow</td><td>SUV</td><td>Imported</td><td>No</td></tr>
+                <tr><td>7</td><td>Yellow</td><td>SUV</td><td>Imported</td><td>Yes</td></tr>
+                <tr><td>8</td><td>Yellow</td><td>SUV</td><td>Domestic</td><td>No</td></tr>
+                <tr><td>9</td><td>Red</td><td>SUV</td><td>Imported</td><td>No</td></tr>
+                <tr><td>10</td><td>Red</td><td>Sports</td><td>Imported</td><td>Yes</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Priors and Frequency Tables ($N = 10$):</h5>
+          <p>Total Stolen = Yes: $5 \implies P(\text{Yes}) = \frac{5}{10} = 0.5$</p>
+          <p>Total Stolen = No: $5 \implies P(\text{No}) = \frac{5}{10} = 0.5$</p>
+
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Attribute</th><th>Value</th><th>$P(\text{Feature} \mid \text{Yes})$</th><th>$P(\text{Feature} \mid \text{No})$</th></tr></thead>
+              <tbody>
+                <tr><td><strong>Color</strong></td><td>Red</td><td>$3/5 = \mathbf{0.6}$</td><td>$2/5 = \mathbf{0.4}$</td></tr>
+                <tr><td></td><td>Yellow</td><td>$2/5 = \mathbf{0.4}$</td><td>$3/5 = \mathbf{0.6}$</td></tr>
+                <tr><td><strong>Type</strong></td><td>Sports</td><td>$4/5 = \mathbf{0.8}$</td><td>$2/5 = \mathbf{0.4}$</td></tr>
+                <tr><td></td><td>SUV</td><td>$1/5 = \mathbf{0.2}$</td><td>$3/5 = \mathbf{0.6}$</td></tr>
+                <tr><td><strong>Origin</strong></td><td>Domestic</td><td>$2/5 = \mathbf{0.4}$</td><td>$3/5 = \mathbf{0.6}$</td></tr>
+                <tr><td></td><td>Imported</td><td>$3/5 = \mathbf{0.6}$</td><td>$2/5 = \mathbf{0.4}$</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h5>2. Calculate Unnormalized Likelihoods for Test Car:</h5>
+          $$\begin{aligned}
+          \mathcal{L}(\text{Yes}) &= P(\text{Yes}) \cdot P(\text{Red}\mid\text{Yes}) \cdot P(\text{SUV}\mid\text{Yes}) \cdot P(\text{Domestic}\mid\text{Yes}) \\[4pt]
+          &= 0.5 \times 0.6 \times 0.2 \times 0.4 = \mathbf{0.024} \\[8pt]
+          \mathcal{L}(\text{No}) &= P(\text{No}) \cdot P(\text{Red}\mid\text{No}) \cdot P(\text{SUV}\mid\text{No}) \cdot P(\text{Domestic}\mid\text{No}) \\[4pt]
+          &= 0.5 \times 0.4 \times 0.6 \times 0.6 = \mathbf{0.072}
+          \end{aligned}$$
+
+          <h5>3. Evidence and Normalized Posteriors:</h5>
+          $$P(\mathbf{x}) = 0.024 + 0.072 = \mathbf{0.096}$$
+          $$P(\text{Yes} \mid \mathbf{x}) = \frac{0.024}{0.096} = \mathbf{0.25 \quad (25\%)}$$
+          $$P(\text{No} \mid \mathbf{x}) = \frac{0.072}{0.096} = \mathbf{0.75 \quad (75\%)}$$
+
+          <h5>4. Final Decision & Interpretation:</h5>
+          <p><strong>Decision:</strong> The test car is classified as <strong>NOT STOLEN ($\hat{y} = \text{No}$)</strong>.</p>
+          <p><strong>Interpretation:</strong> Even though Red cars are stolen more often ($60\%$ vs $40\%$), both the car being an <strong>SUV</strong> ($P=0.60$ for No vs $0.20$ for Yes) and being <strong>Domestic</strong> ($P=0.60$ for No vs $0.40$ for Yes) strongly tilt toward non-theft, outvoting color by a $3:1$ margin ($75\%$ to $25\%$).</p>
+        </details>
+      </div>
+
+      <!-- Question 2: CT-2 Q1.a Spam Classification (15 Marks) -->
+      <div class="details-box">
+        <details id="q2">
+          <summary>
+            <span><span class="pyq-badge ct">CT-2 · Question 1.a</span> Email Spam Filtering with Naïve Bayes (15 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            4 training emails with Offer (Yes/No), Win (Yes/No), and Spam (Yes/No).<br>
+            E1: Offer=Yes, Win=Yes, Spam=Yes | E2: Offer=No, Win=Yes, Spam=Yes<br>
+            E3: Offer=Yes, Win=No, Spam=No | E4: Offer=No, Win=No, Spam=No<br>
+            i) Calculate conditional probabilities (5M)<br>
+            ii) For new email "Offer = Yes, Win = Yes", compute posteriors (5M)<br>
+            iii) Predict class and explain independence assumption (5M)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>(i) Conditional Probabilities (5 Marks)</h5>
+          <ul>
+            <li>$P(\text{Offer} = \text{Yes} \mid \text{Spam}) = 1/2 = \mathbf{0.5}$</li>
+            <li>$P(\text{Win} = \text{Yes} \mid \text{Spam}) = 2/2 = \mathbf{1.0}$</li>
+            <li>$P(\text{Offer} = \text{Yes} \mid \text{NotSpam}) = 1/2 = \mathbf{0.5}$</li>
+            <li>$P(\text{Win} = \text{Yes} \mid \text{NotSpam}) = 0/2 = \mathbf{0.0}$</li>
+          </ul>
+
+          <h5>(ii) New Email Posteriors: $\mathbf{X}_{\text{new}} = (\text{Offer} = \text{Yes}, \text{Win} = \text{Yes})$ (5 Marks)</h5>
+          $$\begin{aligned}
+          P(\text{Spam}) &= 2/4 = 0.5, \qquad P(\text{NotSpam}) = 2/4 = 0.5 \\[4pt]
+          \mathcal{L}(\text{Spam}) &= 0.5 \times 0.5 \times 1.0 = \mathbf{0.25} \\[4pt]
+          \mathcal{L}(\text{NotSpam}) &= 0.5 \times 0.5 \times 0.0 = \mathbf{0.0} \\[4pt]
+          P(\text{Spam} \mid \text{Email}) &= \frac{0.25}{0.25 + 0.0} = \mathbf{1.0 \quad (100\%)} \\[4pt]
+          P(\text{NotSpam} \mid \text{Email}) &= \frac{0.0}{0.25 + 0.0} = \mathbf{0.0 \quad (0\%)}
+          \end{aligned}$$
+
+          <h5>(iii) Decision & Independence (5 Marks)</h5>
+          <p><strong>Prediction:</strong> Classified as <strong>Spam</strong>.</p>
+          <p><strong>Independence Assumption:</strong> Assumes the presence of the word "Offer" gives zero information about "Win" once class is known ($P(\text{Offer}, \text{Win} \mid C) = P(\text{Offer} \mid C)P(\text{Win} \mid C)$). In reality words co-occur, but Naïve Bayes provides optimal ranking.</p>
+        </details>
+      </div>
+
+      <!-- Question 3: CT-2 Q2 KNN Spending (20 Marks) -->
+      <div class="details-box">
+        <details id="q3">
+          <summary>
+            <span><span class="pyq-badge ct">CT-2 · Question 2</span> KNN Customer Spending (Euclidean vs Manhattan) (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Given 5 training customers: C1(20,5,Low), C2(25,7,Low), C3(50,20,High), C4(55,22,High), C5(30,10,Low).<br>
+            Query point: $\mathbf{X} = (40, 15)$.<br>
+            (a) Compute Euclidean distances (5M)<br>
+            (b) Predict class for $K=3$ (5M)<br>
+            (c) Recalculate with Manhattan metric and compare (5M)<br>
+            (d) Explain feature scaling and $K$ choice (3M)<br>
+            (e) Real-world application of KNN (2M)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>(a) Euclidean Distance to Query $(40, 15)$ (5 Marks)</h5>
+          <ul>
+            <li>$d_E(C1) = \sqrt{(40-20)^2 + (15-5)^2} = \sqrt{400 + 100} = \sqrt{500} \approx \mathbf{22.36}$</li>
+            <li>$d_E(C2) = \sqrt{(40-25)^2 + (15-7)^2} = \sqrt{225 + 64} = \sqrt{289} = \mathbf{17.00}$</li>
+            <li>$d_E(C3) = \sqrt{(40-50)^2 + (15-20)^2} = \sqrt{100 + 25} = \sqrt{125} \approx \mathbf{11.18}$</li>
+            <li>$d_E(C4) = \sqrt{(40-55)^2 + (15-22)^2} = \sqrt{225 + 49} = \sqrt{274} \approx \mathbf{16.55}$</li>
+            <li>$d_E(C5) = \sqrt{(40-30)^2 + (15-10)^2} = \sqrt{100 + 25} = \sqrt{125} \approx \mathbf{11.18}$</li>
+          </ul>
+
+          <h5>(b) Predict Class for $K=3$ (5 Marks)</h5>
+          <p>Ascending rank of Euclidean distances:</p>
+          <ol>
+            <li><strong>C3:</strong> $d_E = 11.18 \implies \text{Class: High}$</li>
+            <li><strong>C5:</strong> $d_E = 11.18 \implies \text{Class: Low}$</li>
+            <li><strong>C4:</strong> $d_E = 16.55 \implies \text{Class: High}$</li>
+          </ol>
+          <p><strong>Vote Tally:</strong> $2 \text{ High}$ vs $1 \text{ Low} \implies$ Predicted Class: <strong>High Spender</strong>.</p>
+
+          <h5>(c) Manhattan Distance Recalculation (5 Marks)</h5>
+          <ul>
+            <li>$d_M(C1) = |40-20| + |15-5| = 20 + 10 = \mathbf{30}$</li>
+            <li>$d_M(C2) = |40-25| + |15-7| = 15 + 8 = \mathbf{23}$</li>
+            <li>$d_M(C3) = |40-50| + |15-20| = 10 + 5 = \mathbf{15}$</li>
+            <li>$d_M(C4) = |40-55| + |15-22| = 15 + 7 = \mathbf{22}$</li>
+            <li>$d_M(C5) = |40-30| + |15-10| = 10 + 5 = \mathbf{15}$</li>
+          </ul>
+          <p>Top 3 neighbors under Manhattan: $\{C3, C5, C4\}$. Vote tally is still $2 \text{ High}$ vs $1 \text{ Low}$. Prediction is invariant: <strong>High Spender</strong>.</p>
+        </details>
+      </div>
+
+      <!-- Question 4: Jan 2025 Q4 KNN Recommendation (20 Marks) -->
+      <div class="details-box">
+        <details id="q4">
+          <summary>
+            <span><span class="pyq-badge">Jan 2025 · Question 4</span> Restaurant Recommendation System via KNN (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            A food delivery app recommends restaurants using KNN based on cuisine, user ratings, cost, and proximity. Explain how KNN works, effect of K, compare Euclidean vs Manhattan distances, and suggest evaluation metrics. (20 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. How KNN Operates in Recommendation (4 Marks)</h5>
+          <p>KNN represents each restaurant as an encoded feature vector $\mathbf{x} = [x_{\text{cuisine}}, x_{\text{rating}}, x_{\text{cost}}, x_{\text{distance}}]^T$. Given user preference query $\mathbf{q}$, it calculates pairwise distance to all restaurants, selects $K$ nearest neighbors, and ranks by distance-weighted ratings: $w_i = \frac{1}{d(\mathbf{q}, \mathbf{x}_i) + \epsilon}$.</p>
+
+          <h5>2. Choice of $K$ (5 Marks)</h5>
+          <ul>
+            <li><strong>Small $K$ ($K=1$):</strong> Highly volatile recommendations; can suggest a terrible restaurant just because one idiosyncratic user rated it 5 stars.</li>
+            <li><strong>Large $K$ ($K \to N$):</strong> Recommends generic popular fast-food chains to all users, ignoring individual niche taste.</li>
+          </ul>
+
+          <h5>3. Euclidean vs Manhattan Distance in Food Delivery (5 Marks)</h5>
+          <p><strong>Manhattan Distance ($L_1$) is superior:</strong> Delivery routes follow city street grid networks (taxicab geometry), not straight-line flight paths. Furthermore, $L_1$ is less distorted by luxury restaurants with outlier cost values.</p>
+
+          <h5>4. Evaluation Metrics for Recommendations (6 Marks)</h5>
+          <ol>
+            <li><strong>Precision@K:</strong> Proportion of top-$K$ recommended restaurants that the user actually clicked or ordered from.</li>
+            <li><strong>Mean Reciprocal Rank (MRR):</strong> Evaluates where the first relevant restaurant appears in the list ($1/\text{rank}$).</li>
+            <li><strong>Normalized Discounted Cumulative Gain (NDCG@K):</strong> Weights highly relevant recommendations higher up in the list.</li>
+          </ol>
+        </details>
+      </div>
+    </section>
+
+    <!-- Section 09: Interactive KNN Solver -->
+    <section id="calculator">
+      <h2>09. Interactive Offline KNN & Distance Calculator</h2>
+      <p class="lead">Compute distances between a query point and training points to verify neighborhood ranking under Euclidean and Manhattan norms.</p>
+
+      <div class="tool-box">
+        <div class="tool-grid">
+          <div class="tool-group">
+            <label>Query Point (X, Y)</label>
+            <input type="text" id="knnQuery" value="40, 15">
+          </div>
+          <div class="tool-group">
+            <label>Distance Metric</label>
+            <select id="knnMetric">
+              <option value="euclidean">Euclidean (L2)</option>
+              <option value="manhattan">Manhattan (L1)</option>
+            </select>
+          </div>
+          <div class="tool-group">
+            <label>K Neighbors</label>
+            <input type="number" id="knnK" value="3" min="1" max="5">
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <button onclick="calculateKNN()">Evaluate KNN Classification</button>
+        </div>
+
+        <div class="tool-result" id="knnOutput">
+          Click button to run KNN classification on training dataset.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 10: Self-Test Active Recall Quiz -->
+    <section id="quiz">
+      <h2>10. Active Recall Self-Test Quiz</h2>
+      <div class="progress-wrap"><div class="progress" id="quizBar"></div></div>
+      <div id="quizScore" style="font-size:12.5px;font-weight:700;color:var(--muted);margin-top:4px;">Answer the questions below to evaluate progress (0/4 answered).</div>
+
+      <div class="quiz-q" id="qz1">
+        <strong>1. What does the "Naïve" in Naïve Bayes refer to?</strong>
+        <label><input type="radio" name="q1" value="a" onclick="checkQ(1,'b','Assumption of conditional feature independence given class')"> The algorithm is too simple to model non-linear boundaries</label>
+        <label><input type="radio" name="q1" value="b" onclick="checkQ(1,'b','Assumption of conditional feature independence given class')"> The assumption that all features are mutually independent given the class label</label>
+        <label><input type="radio" name="q1" value="c" onclick="checkQ(1,'b','Assumption of conditional feature independence given class')"> The algorithm assumes training data has zero label errors</label>
+        <div class="feedback" id="fb1"></div>
+        <div class="answer" id="ans1"><strong>Correct: (b)</strong> It assumes $P(\mathbf{x} \mid C) = \prod P(x_j \mid C)$, which is rarely true in nature but drastically simplifies parameter estimation.</div>
+      </div>
+
+      <div class="quiz-q" id="qz2">
+        <strong>2. Why is Laplace smoothing used in Naïve Bayes text classification?</strong>
+        <label><input type="radio" name="q2" value="a" onclick="checkQ(2,'c','Prevents zero-frequency terms from zeroing the whole posterior')"> To reduce the variance of Gaussian continuous features</label>
+        <label><input type="radio" name="q2" value="b" onclick="checkQ(2,'c','Prevents zero-frequency terms from zeroing the whole posterior')"> To speed up matrix inversion during inference</label>
+        <label><input type="radio" name="q2" value="c" onclick="checkQ(2,'c','Prevents zero-frequency terms from zeroing the whole posterior')"> To prevent unseen words ($P=0$) from multiplying the entire class posterior to zero</label>
+        <div class="feedback" id="fb2"></div>
+        <div class="answer" id="ans2"><strong>Correct: (c)</strong> Adding pseudo-counts ($\frac{\text{count}+1}{\text{total}+K}$) eliminates catastrophic zero-probability multipliers.</div>
+      </div>
+
+      <div class="quiz-q" id="qz3">
+        <strong>3. What happens to a KNN classifier when $K=1$?</strong>
+        <label><input type="radio" name="q3" value="a" onclick="checkQ(3,'a','Low bias, high variance, overfits and sensitive to noise')"> High variance and low bias: overfits by memorizing individual training noise</label>
+        <label><input type="radio" name="q3" value="b" onclick="checkQ(3,'a','Low bias, high variance, overfits and sensitive to noise')"> High bias: underfits by predicting the majority class everywhere</label>
+        <label><input type="radio" name="q3" value="c" onclick="checkQ(3,'a','Low bias, high variance, overfits and sensitive to noise')"> It requires feature scaling while larger K does not</label>
+        <div class="feedback" id="fb3"></div>
+        <div class="answer" id="ans3"><strong>Correct: (a)</strong> $K=1$ forms Voronoi cells around every training sample, creating jagged boundaries vulnerable to outliers.</div>
+      </div>
+
+      <div class="quiz-q" id="qz4">
+        <strong>4. Why is Manhattan distance preferred over Euclidean distance in urban food delivery apps?</strong>
+        <label><input type="radio" name="q4" value="a" onclick="checkQ(4,'b','City routes follow grid-based street networks')"> Euclidean distance requires continuous gradient descent</label>
+        <label><input type="radio" name="q4" value="b" onclick="checkQ(4,'b','City routes follow grid-based street networks')"> Delivery drivers travel along street grids (taxicab geometry), not straight-line diagonal paths</label>
+        <label><input type="radio" name="q4" value="c" onclick="checkQ(4,'b','City routes follow grid-based street networks')"> Manhattan distance is always smaller than Euclidean distance</label>
+        <div class="feedback" id="fb4"></div>
+        <div class="answer" id="ans4"><strong>Correct: (b)</strong> Manhattan ($L_1$) measures orthogonal grid traversal $|x_1 - x_2| + |y_1 - y_2|$, matching actual street travel.</div>
+      </div>
+    </section>
+
+    <!-- Section 11: Answer Sheet Checklist -->
+    <section id="checklist">
+      <h2>11. Exam Hall Answer Sheet Presentation Checklist</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>1. State Bayes' Formula & Class Priors Explicitly</strong>
+            <p>Write $P(C_k \mid \mathbf{x}) \propto P(C_k)\prod P(x_j \mid C_k)$. Write $P(\text{Yes}) = 5/10$, $P(\text{No}) = 5/10$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>2. Draw Complete Conditional Likelihood Table</strong>
+            <p>Draw the table showing counts and fractions for every attribute value before multiplying.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>3. Show Both Joint Likelihood and Normalized Posterior</strong>
+            <p>Do not stop at $0.024$ and $0.072$. Always calculate evidence $P(\mathbf{x}) = 0.096$ and state final posteriors: $25\%$ vs $75\%$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>4. Provide Real-World Intuition for the Decision</strong>
+            <p>Explain WHY the car was predicted Not Stolen: SUV and Domestic outweighed Red by 3 to 1.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>5. For KNN, Show Square Roots and Sorted Rank Table</strong>
+            <p>Write $\sqrt{500} \approx 22.36$, $\sqrt{125} \approx 11.18$. Draw an explicit table sorting neighbors from Rank 1 to Rank 5.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>6. Call Out Bias-Variance for Choice of $K$</strong>
+            <p>Mention that $K=1 \implies$ High Variance (Overfitting) and $K \to N \implies$ High Bias (Underfitting).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function toggleDrawer() {
+  const drawer = document.getElementById('drawer');
+  const backdrop = document.getElementById('backdrop');
+  drawer.classList.toggle('open');
+  backdrop.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+}
+
+function toggleAllDetails(open) {
+  document.querySelectorAll('details').forEach(d => d.open = open);
+}
+
+// Training dataset for KNN
+const knnData = [
+  { id: 'C1', income: 20, spending: 5, label: 'Low' },
+  { id: 'C2', income: 25, spending: 7, label: 'Low' },
+  { id: 'C3', income: 50, spending: 20, label: 'High' },
+  { id: 'C4', income: 55, spending: 22, label: 'High' },
+  { id: 'C5', income: 30, spending: 10, label: 'Low' }
+];
+
+function calculateKNN() {
+  const qStr = document.getElementById('knnQuery').value.trim();
+  const metric = document.getElementById('knnMetric').value;
+  const k = parseInt(document.getElementById('knnK').value, 10) || 3;
+
+  const parts = qStr.split(',').map(s => parseFloat(s.trim()));
+  if (parts.length !== 2 || isNaN(parts[0]) || isNaN(parts[1])) {
+    document.getElementById('knnOutput').innerHTML = '<span style="color:var(--red);">Error: Query must be two numbers (e.g. 40, 15).</span>';
+    return;
+  }
+
+  const [qx, qy] = parts;
+  const scored = knnData.map(c => {
+    let dist = 0;
+    if (metric === 'euclidean') {
+      dist = Math.sqrt(Math.pow(qx - c.income, 2) + Math.pow(qy - c.spending, 2));
+    } else {
+      dist = Math.abs(qx - c.income) + Math.abs(qy - c.spending);
+    }
+    return { ...c, dist };
+  });
+
+  scored.sort((a, b) => a.dist - b.dist);
+
+  const neighbors = scored.slice(0, k);
+  let highVotes = 0, lowVotes = 0;
+  neighbors.forEach(n => {
+    if (n.label === 'High') highVotes++;
+    else lowVotes++;
+  });
+
+  const pred = highVotes > lowVotes ? 'High Spender' : (lowVotes > highVotes ? 'Low Spender' : 'Tie');
+
+  let out = '<strong>KNN Results for Query (' + qx + ', ' + qy + ') with K = ' + k + ' (' + metric.toUpperCase() + '):</strong><br>';
+  out += '<div style="margin:8px 0;"><strong>Neighbor Distances:</strong><br>';
+  scored.forEach((s, idx) => {
+    const isK = idx < k ? ' <strong style="color:var(--brand);">(Selected in K=' + k + ')</strong>' : '';
+    out += '• ' + s.id + ' (' + s.income + ', ' + s.spending + ') [' + s.label + ']: Distance = <strong>' + s.dist.toFixed(2) + '</strong>' + isK + '<br>';
+  });
+  out += '</div>';
+  out += '• Vote Tally: <strong>' + highVotes + ' High</strong> vs <strong>' + lowVotes + ' Low</strong><br>';
+  out += '• <strong>Predicted Class: ' + pred + '</strong>';
+
+  document.getElementById('knnOutput').innerHTML = out;
+}
+
+// Quiz Interactive Evaluation
+const answeredQ = {};
+function checkQ(qNum, correctVal, reason) {
+  const selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+  const fb = document.getElementById('fb' + qNum);
+  const ans = document.getElementById('ans' + qNum);
+
+  answeredQ[qNum] = true;
+
+  if (selected.value === correctVal) {
+    fb.innerHTML = '<span style="color:var(--teal);">&#10003; Correct! ' + reason + '</span>';
+  } else {
+    fb.innerHTML = '<span style="color:var(--red);">&#10007; Incorrect. ' + reason + '</span>';
+  }
+  ans.classList.add('show');
+
+  const answeredCount = Object.keys(answeredQ).length;
+  const pct = (answeredCount / 4) * 100;
+  document.getElementById('quizBar').style.width = pct + '%';
+  document.getElementById('quizScore').innerText = 'Completed ' + answeredCount + ' of 4 questions (' + pct.toFixed(0) + '%).';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  calculateKNN();
+});
+</script>
+
+</body>
+</html>

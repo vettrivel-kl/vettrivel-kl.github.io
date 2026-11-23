@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Inferential Statistics -- All-in-One Master Reference & Formula Handbook</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --primary-accent: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #eff6ff;
+      --success-accent: #059669;
+      --success-light: #ecfdf5;
+      --warning-accent: #b45309;
+      --warning-light: #fffbeb;
+      --danger-accent: #dc2626;
+      --danger-light: #fef2f2;
+      --purple: #7c3aed;
+      --purple-light: #f5f3ff;
+      --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+      --card-shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --sidebar-width: 280px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-tertiary: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --primary-accent: #3b82f6;
+      --primary-dark: #60a5fa;
+      --primary-light: #1e3a8a33;
+      --success-accent: #10b981;
+      --success-light: #064e3b33;
+      --warning-accent: #f59e0b;
+      --warning-light: #78350f33;
+      --danger-accent: #ef4444;
+      --danger-light: #7f1d1d33;
+      --purple: #a78bfa;
+      --purple-light: #581c8733;
+      --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+      --card-shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-size: 15px;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-left: var(--safe-left);
+      padding-right: var(--safe-right);
+    }
+
+    /* Desktop Sidebar Navigation */
+    .sidebar {
+      width: var(--sidebar-width);
+      background-color: var(--bg-primary);
+      border-right: 1px solid var(--border-color);
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      padding-top: var(--safe-top);
+      flex-shrink: 0;
+    }
+
+    .sidebar-header {
+      padding: 20px 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar-header h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary-accent);
+      margin-bottom: 4px;
+    }
+
+    .sidebar-header p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .sidebar-nav {
+      padding: 12px 8px;
+      flex: 1;
+    }
+
+    .nav-section-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 10px 12px 4px;
+    }
+
+    .sidebar-nav a {
+      display: block;
+      padding: 7px 12px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.86rem;
+      border-radius: 6px;
+      margin-bottom: 2px;
+      transition: all 0.15s ease;
+    }
+
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      background-color: var(--primary-light);
+      color: var(--primary-accent);
+      font-weight: 600;
+    }
+
+    .sidebar-footer {
+      padding: 16px;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Mobile Sticky Topbar (Shown on iPhone 13 & Mobile) */
+    .mobile-topbar {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      background: #0f172a;
+      color: #fff;
+      padding: calc(10px + var(--safe-top)) 14px 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mobile-topbar-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mobile-topbar-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .mobile-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #f8fafc;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      min-height: 36px;
+      text-decoration: none;
+    }
+
+    /* Horizontal Swipeable Pill Nav for iPhone 13 */
+    .mobile-pills-bar {
+      display: none;
+      overflow-x: auto;
+      white-space: nowrap;
+      padding: 8px 12px;
+      background: var(--bg-primary);
+      border-bottom: 1px solid var(--border-color);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      position: sticky;
+      top: calc(54px + var(--safe-top));
+      z-index: 850;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    }
+
+    .mobile-pills-bar::-webkit-scrollbar { display: none; }
+
+    .pill-link {
+      display: inline-block;
+      padding: 5px 11px;
+      margin-right: 5px;
+      border-radius: 99px;
+      background: var(--bg-tertiary);
+      color: var(--text-secondary);
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--border-color);
+      text-decoration: none;
+    }
+
+    .pill-link:active {
+      background: var(--primary-light);
+      color: var(--primary-accent);
+      border-color: var(--primary-accent);
+    }
+
+    /* Mobile Drawer Menu Overlay */
+    .drawer-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      z-index: 998;
+      backdrop-filter: blur(3px);
+      -webkit-backdrop-filter: blur(3px);
+    }
+
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 85%;
+      max-width: 320px;
+      height: 100vh;
+      background: #0f172a;
+      color: #e2e8f0;
+      z-index: 999;
+      padding: calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+      overflow-y: auto;
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
+      transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .mobile-drawer.open { left: 0; }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 12px;
+    }
+
+    .drawer-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    /* Main Content Area */
+    .main-wrapper {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+    }
+
+    .top-navbar {
+      background-color: var(--bg-primary);
+      border-bottom: 1px solid var(--border-color);
+      padding: 12px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 90;
+    }
+
+    .search-container {
+      position: relative;
+      width: 300px;
+      max-width: 100%;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 8px 12px 8px 32px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 16px; /* Prevents Safari Zoom */
+      outline: none;
+      min-height: 40px;
+    }
+
+    .search-input:focus {
+      border-color: var(--primary-accent);
+      box-shadow: 0 0 0 2px var(--primary-light);
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      pointer-events: none;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 8px 14px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      transition: all 0.15s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+      min-height: 40px;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .btn:hover { background-color: var(--bg-tertiary); }
+
+    .btn-primary {
+      background-color: var(--primary-accent);
+      color: #ffffff;
+      border-color: var(--primary-accent);
+    }
+
+    .btn-primary:hover { background-color: var(--primary-dark); }
+
+    .content-container {
+      max-width: 1060px;
+      margin: 0 auto;
+      padding: 32px 20px calc(80px + var(--safe-bottom));
+      width: 100%;
+    }
+
+    /* Cards & Callouts */
+    .card {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 22px;
+      margin-bottom: 22px;
+      box-shadow: var(--card-shadow);
+      scroll-margin-top: calc(100px + var(--safe-top));
+    }
+
+    .card:hover { box-shadow: var(--card-shadow-hover); }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--primary-light);
+      padding-bottom: 8px;
+    }
+
+    .card-subtitle {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin: 16px 0 8px;
+    }
+
+    .deep-dive-banner {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: #ffffff;
+      border-radius: 10px;
+      padding: 14px 18px;
+      margin: 14px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+    }
+
+    .deep-dive-text {
+      font-size: 0.88rem;
+      line-height: 1.5;
+    }
+
+    .deep-dive-text strong {
+      font-size: 0.95rem;
+      color: #ffffff;
+    }
+
+    .deep-dive-btn {
+      background: #ffffff;
+      color: #1e40af;
+      padding: 7px 14px;
+      border-radius: 6px;
+      font-weight: 700;
+      font-size: 0.82rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      white-space: nowrap;
+      min-height: 36px;
+    }
+
+    .callout {
+      border-radius: 8px;
+      padding: 14px 16px;
+      margin: 14px 0;
+      border-left: 4px solid;
+      background-color: var(--bg-secondary);
+      font-size: 0.9rem;
+    }
+
+    .callout-info { border-color: var(--primary-accent); background-color: var(--primary-light); }
+    .callout-success { border-color: var(--success-accent); background-color: var(--success-light); }
+    .callout-warning { border-color: var(--warning-accent); background-color: var(--warning-light); }
+    .callout-danger { border-color: var(--danger-accent); background-color: var(--danger-light); }
+
+    .callout-title {
+      font-weight: 700;
+      font-size: 0.92rem;
+      margin-bottom: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* Target Status Badge Strip */
+    .target-strip {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 14px;
+      margin-bottom: 22px;
+    }
+
+    .target-box {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 16px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .target-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    .target-val {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--primary-accent);
+      margin: 4px 0 2px;
+    }
+
+    .target-desc {
+      font-size: 0.78rem;
+      color: var(--text-secondary);
+    }
+
+    /* Tables (Clean & No Cutoff) */
+    .table-container {
+      overflow-x: auto;
+      margin: 14px 0;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .table-container::-webkit-scrollbar { display: none; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+      text-align: left;
+    }
+
+    th, td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    th {
+      background-color: var(--bg-tertiary);
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) { background-color: var(--bg-secondary); }
+
+    /* KaTeX Horizontal Scrollbar Removal & Vertical Headroom (No Clipping) */
+    .katex-display {
+      font-size: clamp(13px, 3.6vw, 15.5px) !important;
+      margin: 12px 0 !important;
+      padding: 12px 4px 8px !important; /* Ample vertical headroom so numerators/brackets never get sliced */
+      overflow-x: auto !important;
+      overflow-y: visible !important; /* Never clip ascenders vertically */
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+      -webkit-overflow-scrolling: touch !important;
+    }
+
+    .katex-display::-webkit-scrollbar { display: none !important; }
+
+    .katex-display > .katex {
+      display: block !important;
+      text-align: center !important;
+      white-space: nowrap !important;
+      padding-top: 4px !important;
+      padding-bottom: 2px !important;
+    }
+
+    .katex {
+      font-size: 1em !important;
+      line-height: normal !important;
+      text-rendering: auto !important;
+      white-space: normal !important;
+    }
+
+    /* Solved Problems Details */
+    details {
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 12px 14px;
+      margin: 12px 0;
+      background-color: var(--bg-secondary);
+    }
+
+    details[open] {
+      background-color: var(--bg-primary);
+      border-color: var(--primary-accent);
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 600;
+      color: var(--primary-accent);
+      outline: none;
+      user-select: none;
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .details-content {
+      padding-top: 12px;
+      border-top: 1px dashed var(--border-color);
+      margin-top: 8px;
+    }
+
+    .step-badge {
+      display: inline-block;
+      background-color: var(--primary-accent);
+      color: #ffffff;
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 10px;
+      margin-right: 6px;
+    }
+
+    code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size: 0.88em;
+      background-color: var(--bg-tertiary);
+      padding: 2px 5px;
+      border-radius: 4px;
+      color: var(--text-primary);
+    }
+
+    .formula-box {
+      background-color: var(--bg-tertiary);
+      border-left: 4px solid var(--primary-accent);
+      padding: 12px 14px;
+      margin: 12px 0;
+      font-size: 0.92rem;
+      border-radius: 0 6px 6px 0;
+    }
+
+    /* Interactive Calculator Card */
+    .calc-card {
+      background-color: var(--bg-primary);
+      border: 2px solid var(--primary-accent);
+      border-radius: 10px;
+      padding: 18px;
+      margin: 18px 0;
+    }
+
+    .input-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin-bottom: 4px;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      font-size: 16px; /* Prevents Safari Zoom */
+      min-height: 40px;
+    }
+
+    .result-display {
+      background-color: var(--primary-light);
+      border-radius: 6px;
+      padding: 12px 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-top: 10px;
+      font-size: 0.88rem;
+    }
+
+    /* iPhone 13 & Mobile Responsive Tweaks */
+    @media(max-width: 880px) {
+      .sidebar { display: none; }
+      .top-navbar { display: none; }
+      .mobile-topbar { display: flex; }
+      .mobile-pills-bar { display: block; }
+      .content-container { padding: 14px 12px calc(60px + var(--safe-bottom)); }
+      .target-strip { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .target-box { padding: 12px; }
+      .target-val { font-size: 1.3rem; }
+      .card { padding: 14px; border-radius: 10px; margin-bottom: 14px; }
+      .card-title { font-size: 1.1rem; }
+      table { font-size: 0.8rem; }
+      th, td { padding: 7px 8px; }
+    }
+
+    @media print {
+      .sidebar, .top-navbar, .calc-card, .btn, .mobile-topbar, .mobile-pills-bar {
+        display: none !important;
+      }
+      body { background-color: #ffffff; color: #000000; }
+      .content-container { max-width: 100%; padding: 0; }
+      .card { border: 1px solid #ccc; box-shadow: none; break-inside: avoid; margin-bottom: 14px; }
+      details[open] .details-content, details .details-content { display: block !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Mobile Sticky Top Bar (iPhone 13 Notch Friendly) -->
+  <header class="mobile-topbar">
+    <div class="mobile-topbar-title">
+      <span>Master Syllabus Guide</span>
+    </div>
+    <div class="mobile-topbar-actions">
+      <a href="/ifs-study-guide/index.html" class="mobile-btn">&larr; Modules Hub</a>
+      <button class="mobile-btn" onclick="openDrawer()">&#9776; Menu</button>
+    </div>
+  </header>
+
+  <!-- Horizontal Quick-Jump Pill Bar (Flick with thumb on train) -->
+  <nav class="mobile-pills-bar" aria-label="Quick jumps">
+    <a href="#overview" class="pill-link">01 · Targets</a>
+    <a href="#decision-matrix" class="pill-link">02 · Test Matrix</a>
+    <a href="#bayes-theorem" class="pill-link">03 · Bayes</a>
+    <a href="#normal-distribution" class="pill-link">04 · Normal & CLT</a>
+    <a href="#one-way-anova" class="pill-link">05 · ANOVA</a>
+    <a href="#chi-square" class="pill-link">06 · Chi-Square</a>
+    <a href="#t-z-tests" class="pill-link">07 · Means & Prop</a>
+    <a href="#descriptive-stats" class="pill-link">08 · Descriptive</a>
+    <a href="#hypothesis-concepts" class="pill-link">09 · H0 Concepts</a>
+    <a href="#discrete-distributions" class="pill-link">10 · Binomial/Poisson</a>
+    <a href="#critical-tables" class="pill-link">11 · Critical Tables</a>
+  </nav>
+
+  <!-- Mobile Drawer Backdrop & Drawer -->
+  <div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
+  <div class="mobile-drawer" id="mobileDrawer">
+    <div class="drawer-header">
+      <div style="font-size:14px;font-weight:800;color:#38bdf8;">NAVIGATION MENU</div>
+      <button class="drawer-close" onclick="closeDrawer()">&times;</button>
+    </div>
+    <a href="/ifs-study-guide/index.html" class="module-hub-link" style="margin-bottom:14px;padding:8px 10px;border-radius:8px;color:#38bdf8;text-decoration:none;display:block;background:#1e293b;">&larr; Return to All 5 Modules Hub</a>
+    
+    <div class="nav-label">Core Roadmap & Tests</div>
+    <nav>
+      <a href="#overview" onclick="closeDrawer()">01 · Score Target & Strategy</a>
+      <a href="#decision-matrix" onclick="closeDrawer()">02 · Master Test Selection Matrix</a>
+    </nav>
+
+    <div class="nav-label">Priority Modules</div>
+    <nav>
+      <a href="#bayes-theorem" onclick="closeDrawer()">03 · Bayes' Theorem & Total Prob</a>
+      <a href="#normal-distribution" onclick="closeDrawer()">04 · Normal Distribution & CLT</a>
+      <a href="#one-way-anova" onclick="closeDrawer()">05 · One-Way ANOVA & F-Test</a>
+      <a href="#chi-square" onclick="closeDrawer()">06 · Chi-Square Tests (&chi;&sup2;)</a>
+      <a href="#t-z-tests" onclick="closeDrawer()">07 · Tests of Means & Proportions</a>
+    </nav>
+
+    <div class="nav-label">Foundations & Reference</div>
+    <nav>
+      <a href="#descriptive-stats" onclick="closeDrawer()">08 · Descriptive Statistics & Moments</a>
+      <a href="#hypothesis-concepts" onclick="closeDrawer()">09 · Hypothesis Testing Framework</a>
+      <a href="#discrete-distributions" onclick="closeDrawer()">10 · Binomial & Poisson Distributions</a>
+      <a href="#critical-tables" onclick="closeDrawer()">11 · Critical Values Quick Tables</a>
+      <a href="#interactive-bayes" onclick="closeDrawer()">Interactive Bayes Calculator</a>
+    </nav>
+  </div>
+
+  <!-- Desktop Sidebar Navigation -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <h2>Inferential Statistics</h2>
+      <p>M.Tech 21CSC529T Master Handbook</p>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="/ifs-study-guide/index.html" style="background:#1e293b;color:#38bdf8;font-weight:700;margin-bottom:8px;">&larr; Open 5 Modules Hub</a>
+
+      <div class="nav-section-title">Strategic Overview</div>
+      <a href="#overview">Score Target & Roadmap</a>
+      <a href="#decision-matrix">Master Test Selection Matrix</a>
+
+      <div class="nav-section-title">Priority High-Yield Modules</div>
+      <a href="#bayes-theorem">Bayes' Theorem & Total Probability</a>
+      <a href="#normal-distribution">Normal & Sampling Distributions</a>
+      <a href="#one-way-anova">One-Way ANOVA & F-Test</a>
+      <a href="#chi-square">Chi-Square Tests (Fit & Independence)</a>
+      <a href="#t-z-tests">Tests of Means & Proportions (t & Z)</a>
+
+      <div class="nav-section-title">Foundations & Theory</div>
+      <a href="#descriptive-stats">Descriptive Statistics & Moments</a>
+      <a href="#hypothesis-concepts">Hypothesis Testing Concepts</a>
+      <a href="#discrete-distributions">Binomial & Poisson Distributions</a>
+      <a href="#critical-tables">Critical Values Reference Tables</a>
+
+      <div class="nav-section-title">Interactive Tool</div>
+      <a href="#interactive-bayes">Bayes Solver Widget</a>
+    </nav>
+    <div class="sidebar-footer">
+      <span>Exam Prep</span>
+      <button class="btn" id="theme-toggle" onclick="toggleTheme()" style="min-height:32px;padding:4px 8px;">Theme</button>
+    </div>
+  </aside>
+
+  <!-- Main Content Wrapper -->
+  <div class="main-wrapper">
+    <header class="top-navbar">
+      <div style="display: flex; align-items: center; gap: 12px;">
+        <a href="/ifs-study-guide/index.html" class="btn" style="background:var(--primary-light);color:var(--primary-accent);font-weight:700;">&larr; All 5 Modules Hub</a>
+        <div class="search-container">
+          <span class="search-icon">&#128269;</span>
+          <input type="text" id="search-input" class="search-input" placeholder="Search formulas, tests, terms..." onkeyup="filterContent()">
+        </div>
+      </div>
+      <div class="btn-group">
+        <button class="btn" onclick="expandAll()">Expand All</button>
+        <button class="btn" onclick="collapseAll()">Collapse</button>
+        <button class="btn btn-primary" onclick="window.print()">Print / Save PDF</button>
+      </div>
+    </header>
+
+    <div class="content-container">
+
+      <!-- Target Strip -->
+      <section id="overview">
+        <div class="target-strip">
+          <div class="target-box">
+            <div class="target-label">Current Internal Score</div>
+            <div class="target-val">48 / 60</div>
+            <div class="target-desc">Carries 48.0 direct marks into final 100-mark grade.</div>
+          </div>
+          <div class="target-box">
+            <div class="target-label">Min Sem Score for Grade A</div>
+            <div class="target-val" style="color:var(--success-accent)">58 / 100</div>
+            <div class="target-desc">48 + (58 &times; 0.40) = 71.2 &ge; 71.0 (A-grade cut-off).</div>
+          </div>
+          <div class="target-box">
+            <div class="target-label">Preparation Target</div>
+            <div class="target-val" style="color:var(--primary-accent)">65 / 100</div>
+            <div class="target-desc">Yields 74.0 final score (comfortable 7-mark buffer).</div>
+          </div>
+          <div class="target-box">
+            <div class="target-label">5 High-Yield Modules</div>
+            <div class="target-val" style="font-size: 1.1rem; line-height: 1.4; color:var(--purple);">
+              Bayes &bull; Normal &bull; ANOVA &bull; &chi;&sup2; &bull; t/Z
+            </div>
+            <div class="target-desc">All 5 dedicated guides are 100% complete and mobile-optimized.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Master Test Selection Matrix -->
+      <section id="decision-matrix" class="card">
+        <h2 class="card-title">02. Master Test Selection Matrix: "Which Test Do I Use?"</h2>
+        <p>In the semester examination, marks depend first on selecting the correct statistical test. Use this decision reference based on sample sizes, known variances, and data types:</p>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Scenario / Data Type</th>
+                <th>Conditions & Constraints</th>
+                <th>Selected Test</th>
+                <th>Test Statistic Formula</th>
+                <th>Degrees of Freedom ($df$)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>One Sample Mean ($\mu$)</strong></td>
+                <td>Population $\sigma$ known OR $n \ge 30$</td>
+                <td><strong>One-Sample Z-Test</strong></td>
+                <td>$Z = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}}$</td>
+                <td>N/A (Standard Normal)</td>
+              </tr>
+              <tr>
+                <td><strong>One Sample Mean ($\mu$)</strong></td>
+                <td>Population $\sigma$ unknown AND $n < 30$ (Normal pop)</td>
+                <td><strong>One-Sample t-Test</strong></td>
+                <td>$t = \frac{\bar{x} - \mu_0}{s / \sqrt{n}}$</td>
+                <td>$df = n - 1$</td>
+              </tr>
+              <tr>
+                <td><strong>Two Independent Means ($\mu_1 - \mu_2$)</strong></td>
+                <td>$\sigma_1, \sigma_2$ known OR $n_1, n_2 \ge 30$</td>
+                <td><strong>Two-Sample Z-Test</strong></td>
+                <td>$Z = \frac{\bar{x}_1 - \bar{x}_2}{\sqrt{\frac{\sigma_1^2}{n_1} + \frac{\sigma_2^2}{n_2}}}$</td>
+                <td>N/A (Standard Normal)</td>
+              </tr>
+              <tr>
+                <td><strong>Two Independent Means ($\mu_1 - \mu_2$)</strong></td>
+                <td>$\sigma_1 = \sigma_2$ unknown, $n_1, n_2 < 30$</td>
+                <td><strong>Independent Pooled t-Test</strong></td>
+                <td>$t = \frac{\bar{x}_1 - \bar{x}_2}{s_p \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}$</td>
+                <td>$df = n_1 + n_2 - 2$</td>
+              </tr>
+              <tr>
+                <td><strong>Paired Samples (Before & After)</strong></td>
+                <td>Same subjects measured twice; differences $d_i = x_{1i} - x_{2i}$</td>
+                <td><strong>Paired t-Test</strong></td>
+                <td>$t = \frac{\bar{d}}{s_d / \sqrt{n}}$</td>
+                <td>$df = n - 1$</td>
+              </tr>
+              <tr>
+                <td><strong>One Proportion ($P$)</strong></td>
+                <td>Single categorical sample, testing against hypothesized $P_0$</td>
+                <td><strong>One-Proportion Z-Test</strong></td>
+                <td>$Z = \frac{p - P_0}{\sqrt{\frac{P_0(1-P_0)}{n}}}$</td>
+                <td>N/A (Standard Normal)</td>
+              </tr>
+              <tr>
+                <td><strong>Two Independent Proportions ($P_1 - P_2$)</strong></td>
+                <td>Two independent categorical groups</td>
+                <td><strong>Two-Proportion Z-Test</strong></td>
+                <td>$Z = \frac{p_1 - p_2}{\sqrt{\bar{p}\bar{q}\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}}$</td>
+                <td>$\bar{p} = \frac{x_1 + x_2}{n_1 + n_2}$ (pooled)</td>
+              </tr>
+              <tr>
+                <td><strong>Comparing $\ge 3$ Independent Group Means</strong></td>
+                <td>One categorical factor with $k \ge 3$ levels on continuous metric</td>
+                <td><strong>One-Way ANOVA (F-Test)</strong></td>
+                <td>$F = \frac{\text{MSB}}{\text{MSW}} = \frac{\text{SSB} / (k-1)}{\text{SSW} / (N-k)}$</td>
+                <td>Numerator: $k-1$<br>Denominator: $N-k$</td>
+              </tr>
+              <tr>
+                <td><strong>Categorical vs Categorical (Association)</strong></td>
+                <td>Contingency table ($r \times c$)</td>
+                <td><strong>$\chi^2$ Test of Independence</strong></td>
+                <td>$\chi^2 = \sum \frac{(O - E)^2}{E}$</td>
+                <td>$df = (r-1)(c-1)$</td>
+              </tr>
+              <tr>
+                <td><strong>Observed vs Theoretical Frequency</strong></td>
+                <td>Goodness of fit to uniform, Poisson, or binomial</td>
+                <td><strong>$\chi^2$ Goodness-of-Fit</strong></td>
+                <td>$\chi^2 = \sum \frac{(O - E)^2}{E}$</td>
+                <td>$df = k - 1 - m$<br>($m$: estimated params)</td>
+              </tr>
+              <tr>
+                <td><strong>Comparing Two Population Variances</strong></td>
+                <td>Testing $H_0: \sigma_1^2 = \sigma_2^2$</td>
+                <td><strong>F-Test for Variances</strong></td>
+                <td>$F = \frac{S_1^2}{S_2^2} \quad (S_1^2 > S_2^2)$</td>
+                <td>$df_1 = n_1 - 1$, $df_2 = n_2 - 1$</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Topic 1: Bayes' Theorem -->
+      <section id="bayes-theorem" class="card">
+        <h2 class="card-title">03. Priority 1: Bayes' Theorem & Total Probability</h2>
+        
+        <div class="deep-dive-banner">
+          <div class="deep-dive-text">
+            <strong>Dedicated Deep Dive Available: Module 01</strong><br>
+            Contains all 7 past university exam problems fully solved, 6 deadly exam traps, and an interactive 4-question active recall quiz.
+          </div>
+          <a href="/ifs-study-guide/01-bayes-theorem.html" class="deep-dive-btn">Open Module 01 Guide &rarr;</a>
+        </div>
+
+        <p><strong>Core Concept:</strong> Bayes' Theorem performs an <em>inversion of conditional probability</em>. It computes the posterior probability of a hidden cause $B_i$ given that an observable event / symptom $A$ has occurred.</p>
+
+        <div class="formula-box">
+          $$\begin{aligned}
+          P(B_i \mid A) &= \frac{P(B_i) \cdot P(A \mid B_i)}{P(A)} \\[4pt]
+          &= \frac{P(B_i) \cdot P(A \mid B_i)}{\sum_{j=1}^k P(B_j) \cdot P(A \mid B_j)}
+          \end{aligned}$$
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-title">The 4 Standard Terms:</div>
+          <ul>
+            <li><strong>Prior Probability $P(B_i)$:</strong> Initial probability of machine/source $B_i$ before observing evidence.</li>
+            <li><strong>Likelihood $P(A \mid B_i)$:</strong> Probability that source $B_i$ generates defective item $A$.</li>
+            <li><strong>Total Probability $P(A)$:</strong> Marginal probability of observing $A$ across all sources: $P(A) = \sum P(B_j) P(A \mid B_j)$.</li>
+            <li><strong>Posterior Probability $P(B_i \mid A)$:</strong> Updated probability that source $B_i$ was the origin of defective item $A$.</li>
+          </ul>
+        </div>
+
+        <!-- Solved May 2025 Question -->
+        <details open>
+          <summary>Solved Sem Exam Question 1 (May 2025, Q2 - 20 Marks): Box Bulb Defect Problem</summary>
+          <div class="details-content">
+            <p><strong>Problem Statement:</strong> Box 1 contains 1000 bulbs of which 10% are defective. Box 2 contains 2000 bulbs of which 5% are defective. Two bulbs are drawn (without replacement) from a randomly selected box.<br>
+            (i) Find the probability that both bulbs are defective.<br>
+            (ii) Assuming that both are defective, find the probability that they came from Box 1.</p>
+
+            <div class="callout callout-success">
+              <p><strong>Step 1: Event Definitions & Priors:</strong> $P(B_1) = 0.5, P(B_2) = 0.5$.</p>
+              <p><strong>Step 2: Likelihoods (Sampling Without Replacement):</strong></p>
+              <ul>
+                <li>Box 1 ($N_1 = 1000$, Def = $100$):
+                  $$\begin{aligned}
+                  P(D \mid B_1) &= \frac{\binom{100}{2}}{\binom{1000}{2}} = \frac{100 \times 99}{1000 \times 999} = \frac{11}{1110} \approx \mathbf{0.009910}
+                  \end{aligned}$$
+                </li>
+                <li>Box 2 ($N_2 = 2000$, Def = $100$):
+                  $$\begin{aligned}
+                  P(D \mid B_2) &= \frac{\binom{100}{2}}{\binom{2000}{2}} = \frac{100 \times 99}{2000 \times 1999} = \frac{99}{39980} \approx \mathbf{0.002476}
+                  \end{aligned}$$
+                </li>
+              </ul>
+              <p><strong>Step 3: Part (i) Total Probability $P(D)$:</strong></p>
+              $$\begin{aligned}
+              P(D) &= 0.5(0.009910) + 0.5(0.002476) = 0.004955 + 0.001238 = \mathbf{0.006193 \ (0.6193\%)}
+              \end{aligned}$$
+              <p><strong>Step 4: Part (ii) Posterior Probability $P(B_1 \mid D)$:</strong></p>
+              $$\begin{aligned}
+              P(B_1 \mid D) &= \frac{0.004955}{0.006193} = \frac{3,998}{4,997} \approx \mathbf{0.8001 \ (80.01\%)}
+              \end{aligned}$$
+            </div>
+          </div>
+        </details>
+      </section>
+
+      <!-- Topic 2: Normal Distribution & Sampling Distributions -->
+      <section id="normal-distribution" class="card">
+        <h2 class="card-title">04. Priority 2: Normal Distribution & Central Limit Theorem</h2>
+
+        <div class="deep-dive-banner" style="background: linear-gradient(135deg, #065f46 0%, #059669 100%);">
+          <div class="deep-dive-text">
+            <strong>Dedicated Deep Dive Available: Module 02</strong><br>
+            Contains all 7 Normal & CLT past exam problems (Nov 2025 20M, Dec 2024 CLT 8M, Coin CLT), Z-table lookup rules, and interactive Z-calculator.
+          </div>
+          <a href="/ifs-study-guide/02-normal-distribution.html" class="deep-dive-btn" style="color:#065f46;">Open Module 02 Guide &rarr;</a>
+        </div>
+        
+        <p><strong>Key Properties of Gaussian Curve:</strong></p>
+        <ul style="margin-left: 18px; margin-bottom: 12px; font-size:0.9rem;">
+          <li>PDF: $f(x) = \frac{1}{\sigma \sqrt{2\pi}} e^{-\frac{1}{2}\left(\frac{x-\mu}{\sigma}\right)^2}, \quad -\infty < x < \infty$.</li>
+          <li>Symmetric bell curve centered at $\mu = \text{median} = \text{mode}$. Total area $= 1.0$.</li>
+          <li>Inflection points occur at $x = \mu \pm \sigma$. Skewness $\beta_1 = 0$; Kurtosis $\beta_2 = 3$ (mesokurtic).</li>
+          <li><strong>Empirical Rule:</strong> $P(\mu \pm 1\sigma) \approx 68.27\%$, $P(\mu \pm 2\sigma) \approx 95.45\%$, $P(\mu \pm 3\sigma) \approx 99.73\%$.</li>
+        </ul>
+
+        <div class="formula-box">
+          Standard Normal Transformation: $\quad Z = \frac{X - \mu}{\sigma} \sim \mathcal{N}(0, 1)$
+        </div>
+
+        <h3 class="card-subtitle">Central Limit Theorem (CLT)</h3>
+        <p>If independent random variables $X_1, X_2, \dots, X_n$ are drawn from <em>any</em> population with mean $\mu$ and finite variance $\sigma^2$, then as $n \ge 30$, sample mean $\bar{X}$ approaches normality:</p>
+        <div class="formula-box">
+          $$\begin{aligned}
+          \bar{X} \sim \mathcal{N}\left(\mu, \frac{\sigma^2}{n}\right) \implies Z = \frac{\bar{X} - \mu}{\sigma / \sqrt{n}} \sim \mathcal{N}(0, 1)
+          \end{aligned}$$
+        </div>
+      </section>
+
+      <!-- Topic 3: One-Way ANOVA -->
+      <section id="one-way-anova" class="card">
+        <h2 class="card-title">05. Priority 3: One-Way ANOVA & F-Test</h2>
+
+        <div class="deep-dive-banner" style="background: linear-gradient(135deg, #4c1d95 0%, #7c3aed 100%);">
+          <div class="deep-dive-text">
+            <strong>Dedicated Deep Dive Available: Module 03</strong><br>
+            Contains all 5 ANOVA exam problems (May 2025 20M Iron Fe, Dec 2024 15M Technicians, Two-Way ANOVA), Family-Wise error proofs, and F-calculator.
+          </div>
+          <a href="/ifs-study-guide/03-one-way-anova.html" class="deep-dive-btn" style="color:#4c1d95;">Open Module 03 Guide &rarr;</a>
+        </div>
+        
+        <p><strong>Purpose:</strong> Tests equality of $k \ge 3$ independent group means simultaneously without inflating the Family-Wise Type I error rate ($\alpha_{\text{FW}} = 1 - (1-\alpha)^C$).</p>
+        <p><strong>Hypotheses:</strong> $H_0: \mu_1 = \mu_2 = \dots = \mu_k$ vs $H_1: \text{At least two means differ}$.</p>
+
+        <h3 class="card-subtitle">The 6 Computational Steps:</h3>
+        <ol style="margin-left: 18px; margin-bottom: 12px; font-size:0.9rem;">
+          <li><strong>Correction Factor (CF):</strong> $\text{CF} = \frac{G^2}{N}$, where $G = \sum \sum x_{ij}$ (Grand Total) and $N = \sum n_j$.</li>
+          <li><strong>Total Sum of Squares (TSS):</strong> $\text{TSS} = \sum \sum X_{ij}^2 - \text{CF}$ ($df = N - 1$).</li>
+          <li><strong>Between Treatments SS (SSB):</strong> $\text{SSB} = \sum_{j=1}^k \frac{T_j^2}{n_j} - \text{CF}$ ($df = k - 1$).</li>
+          <li><strong>Within Groups Error SS (SSW):</strong> $\text{SSW} = \text{TSS} - \text{SSB}$ ($df = N - k$).</li>
+          <li><strong>Mean Squares:</strong> $\text{MSB} = \frac{\text{SSB}}{k - 1}$ and $\text{MSW} = \frac{\text{SSW}}{N - k}$.</li>
+          <li><strong>F-Ratio:</strong> $F_{\text{calc}} = \frac{\text{MSB}}{\text{MSW}}$ with degrees of freedom $\nu_1 = k - 1$ and $\nu_2 = N - k$.</li>
+        </ol>
+
+        <div class="callout callout-warning">
+          <div class="callout-title">Decision Rule:</div>
+          If $F_{\text{calc}} > F_{\text{critical}}(k-1, N-k, \alpha)$, <strong>Reject $H_0$</strong> and conclude there is a statistically significant difference between group means.
+        </div>
+      </section>
+
+      <!-- Topic 4: Chi-Square Tests -->
+      <section id="chi-square" class="card">
+        <h2 class="card-title">06. Priority 4: Chi-Square ($\chi^2$) Tests</h2>
+
+        <div class="deep-dive-banner" style="background: linear-gradient(135deg, #78350f 0%, #d97706 100%);">
+          <div class="deep-dive-text">
+            <strong>Dedicated Deep Dive Available: Module 04</strong><br>
+            Contains all 5 Chi-Square exam problems (Dec 2024 10M Epidemic 2x2, Nov 2025 20M Poisson Fit & Pooling), Yates' formula, and interactive 2x2 solver.
+          </div>
+          <a href="/ifs-study-guide/04-chi-square-tests.html" class="deep-dive-btn" style="color:#78350f;">Open Module 04 Guide &rarr;</a>
+        </div>
+        
+        <div class="formula-box">
+          $$\begin{aligned}
+          \chi^2 = \sum \frac{(O - E)^2}{E} \sim \chi^2(df)
+          \end{aligned}$$
+        </div>
+
+        <h3 class="card-subtitle">1. Test of Independence (Contingency Table $r \times c$)</h3>
+        <ul style="margin-left: 18px; font-size:0.9rem;">
+          <li>Expected frequency: $E_{ij} = \frac{(\text{Row } i \text{ Total}) \times (\text{Column } j \text{ Total})}{\text{Grand Total } N}$</li>
+          <li>Degrees of freedom: $df = (r - 1)(c - 1)$.</li>
+        </ul>
+
+        <div class="callout callout-danger">
+          <div class="callout-title">Yates' Correction for Continuity ($2 \times 2$ Contingency Table):</div>
+          $$\begin{aligned}
+          \chi_{\text{Yates}}^2 = \frac{N \left(|ad - bc| - \frac{N}{2}\right)^2}{(a + b)(c + d)(a + c)(b + d)}, \quad df = 1
+          \end{aligned}$$
+        </div>
+
+        <h3 class="card-subtitle">2. Goodness-of-Fit Test</h3>
+        <p style="font-size:0.9rem;">Degrees of freedom: $df = k - 1 - m$, where $k$ is number of classes after pooling small cells ($E_i \ge 5$), and $m$ is estimated parameters.</p>
+      </section>
+
+      <!-- Topic 5: Tests of Means & Proportions -->
+      <section id="t-z-tests" class="card">
+        <h2 class="card-title">07. Priority 5: Tests of Means & Proportions (t-test & Z-test)</h2>
+
+        <div class="deep-dive-banner" style="background: linear-gradient(135deg, #0369a1 0%, #0284c7 100%);">
+          <div class="deep-dive-text">
+            <strong>Dedicated Deep Dive Available: Module 05</strong><br>
+            Contains all 6 exam problems (Dec 2024 12M Quality Proportion Test & CI, Dec 2024 8M One-Sample t-Test, Paired t-tests, Pooled variance).
+          </div>
+          <a href="/ifs-study-guide/05-tests-of-means-proportions.html" class="deep-dive-btn" style="color:#0369a1;">Open Module 05 Guide &rarr;</a>
+        </div>
+
+        <h3 class="card-subtitle">Core Test Formulas:</h3>
+        <ul style="margin-left: 18px; font-size:0.9rem; line-height:1.7;">
+          <li><strong>One-Sample Z-Test:</strong> $Z = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}}$ (when $\sigma$ known or $n \ge 30$).</li>
+          <li><strong>One-Sample t-Test:</strong> $t = \frac{\bar{x} - \mu_0}{s / \sqrt{n}}$ with $df = n - 1$.</li>
+          <li><strong>Two-Sample Pooled t-Test:</strong> $t = \frac{\bar{x}_1 - \bar{x}_2}{s_p \sqrt{1/n_1 + 1/n_2}}$ where $s_p^2 = \frac{(n_1-1)s_1^2 + (n_2-1)s_2^2}{n_1+n_2-2}$ ($df = n_1 + n_2 - 2$).</li>
+          <li><strong>Paired t-Test:</strong> $t = \frac{\bar{d}}{s_d / \sqrt{n}}$ with $df = n - 1$ where $d_i = x_{1i} - x_{2i}$.</li>
+          <li><strong>One-Sample Proportion Z-Test:</strong> $Z = \frac{p - P_0}{\sqrt{\frac{P_0(1-P_0)}{n}}}$.</li>
+          <li><strong>Two-Sample Proportion Z-Test:</strong> $Z = \frac{p_1 - p_2}{\sqrt{\bar{p}\bar{q}(1/n_1 + 1/n_2)}}$ where $\bar{p} = \frac{x_1 + x_2}{n_1 + n_2}$.</li>
+        </ul>
+      </section>
+
+      <!-- Topic 6: Descriptive Statistics, Moments, Skewness & Correlation -->
+      <section id="descriptive-stats" class="card">
+        <h2 class="card-title">08. Descriptive Statistics, Moments, Skewness & Correlation</h2>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Measure</th>
+                <th>Standard Formula</th>
+                <th>Interpretation & Notes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Sample Variance ($s^2$)</strong></td>
+                <td>$s^2 = \frac{\sum (x_i - \bar{x})^2}{n - 1} = \frac{\sum x_i^2 - \frac{(\sum x_i)^2}{n}}{n - 1}$</td>
+                <td>Bessel's correction ($n-1$) ensures unbiased estimator.</td>
+              </tr>
+              <tr>
+                <td><strong>Coefficient of Variation ($CV$)</strong></td>
+                <td>$CV = \frac{s}{\bar{x}} \times 100\%$</td>
+                <td>Relative dispersion; lower $CV$ indicates higher consistency.</td>
+              </tr>
+              <tr>
+                <td><strong>Quartile Deviation ($QD$)</strong></td>
+                <td>$QD = \frac{Q_3 - Q_1}{2}, \quad \text{Coeff of } QD = \frac{Q_3 - Q_1}{Q_3 + Q_1}$</td>
+                <td>Semi-interquartile range; robust against extreme outliers.</td>
+              </tr>
+              <tr>
+                <td><strong>Moment Conversions</strong></td>
+                <td>
+                  $\mu_2 = \mu_2' - (\mu_1')^2$<br>
+                  $\mu_3 = \mu_3' - 3\mu_2'\mu_1' + 2(\mu_1')^3$<br>
+                  $\mu_4 = \mu_4' - 4\mu_3'\mu_1' + 6\mu_2'(\mu_1')^2 - 3(\mu_1')^4$
+                </td>
+                <td>Converts raw moments about origin ($\mu_r'$) to central moments ($\mu_r$).</td>
+              </tr>
+              <tr>
+                <td><strong>Skewness ($\beta_1, \gamma_1$)</strong></td>
+                <td>$\beta_1 = \frac{\mu_3^2}{\mu_2^3}, \quad \gamma_1 = \frac{\mu_3}{\sigma^3}$</td>
+                <td>$\gamma_1 > 0$: Right/positive skew; $\gamma_1 < 0$: Left/negative skew.</td>
+              </tr>
+              <tr>
+                <td><strong>Kurtosis ($\beta_2, \gamma_2$)</strong></td>
+                <td>$\beta_2 = \frac{\mu_4}{\mu_2^2}, \quad \gamma_2 = \beta_2 - 3$</td>
+                <td>$\beta_2 = 3$: Mesokurtic; $\beta_2 > 3$: Leptokurtic; $\beta_2 < 3$: Platykurtic.</td>
+              </tr>
+              <tr>
+                <td><strong>Pearson Correlation ($r$)</strong></td>
+                <td>$r = \frac{\sum (x - \bar{x})(y - \bar{y})}{\sqrt{\sum (x - \bar{x})^2 \sum (y - \bar{y})^2}} = \frac{\operatorname{Cov}(X, Y)}{\sigma_X \sigma_Y}$</td>
+                <td>Bounded: $-1 \le r \le +1$. Measures linear association.</td>
+              </tr>
+              <tr>
+                <td><strong>Spearman Rank Correlation ($r_s$)</strong></td>
+                <td>$r_s = 1 - \frac{6 \sum d_i^2}{n(n^2 - 1)}$</td>
+                <td>$d_i = R_{1i} - R_{2i}$. For tied ranks, add $\frac{m(m^2-1)}{12}$ to $\sum d^2$.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Topic 7: Hypothesis Testing Concepts -->
+      <section id="hypothesis-concepts" class="card">
+        <h2 class="card-title">09. Hypothesis Testing Theoretical Framework</h2>
+        
+        <h3 class="card-subtitle">Type I vs Type II Error Decision Matrix</h3>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Statistical Decision</th>
+                <th>$H_0$ is Actually True</th>
+                <th>$H_0$ is Actually False ($H_1$ is True)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>Reject $H_0$</strong></td>
+                <td style="background-color: var(--danger-light); color: var(--danger-accent); font-weight: 700;">
+                  Type I Error ($\alpha$)<br>(False Positive)
+                </td>
+                <td style="background-color: var(--success-light); color: var(--success-accent); font-weight: 700;">
+                  Correct Decision ($1 - \beta$)<br>(Power of the Test)
+                </td>
+              </tr>
+              <tr>
+                <td><strong>Fail to Reject $H_0$</strong></td>
+                <td style="background-color: var(--success-light); color: var(--success-accent); font-weight: 700;">
+                  Correct Decision ($1 - \alpha$)<br>(Confidence Level)
+                </td>
+                <td style="background-color: var(--warning-light); color: var(--warning-accent); font-weight: 700;">
+                  Type II Error ($\beta$)<br>(False Negative)
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="callout callout-info">
+          <div class="callout-title">Power of the Test ($1 - \beta$):</div>
+          The probability of correctly rejecting a false null hypothesis. Power increases when:
+          (1) Sample size $n$ increases, (2) Effect size $|\mu - \mu_0|$ increases, or (3) Significance level $\alpha$ is relaxed.
+        </div>
+      </section>
+
+      <!-- Topic 8: Discrete Distributions -->
+      <section id="discrete-distributions" class="card">
+        <h2 class="card-title">10. Discrete Distributions (Binomial & Poisson)</h2>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Property</th>
+                <th>Binomial Distribution: $B(n, p)$</th>
+                <th>Poisson Distribution: $P(\lambda)$</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>PMF $P(X = k)$</strong></td>
+                <td>$\binom{n}{k} p^k (1-p)^{n-k}, \quad k \in \{0, 1, \dots, n\}$</td>
+                <td>$\frac{e^{-\lambda} \lambda^k}{k!}, \quad k \in \{0, 1, 2, \dots\}$</td>
+              </tr>
+              <tr>
+                <td><strong>Mean ($\mathbb{E}[X]$)</strong></td>
+                <td>$\mu = np$</td>
+                <td>$\mu = \lambda$</td>
+              </tr>
+              <tr>
+                <td><strong>Variance ($\operatorname{Var}(X)$)</strong></td>
+                <td>$\sigma^2 = np(1-p) = npq$ (always $< \text{Mean}$)</td>
+                <td>$\sigma^2 = \lambda$ (Equidispersion: $\text{Mean} = \text{Variance}$)</td>
+              </tr>
+              <tr>
+                <td><strong>Conditions for Applicability</strong></td>
+                <td>Fixed $n$ independent trials, binary outcomes, constant success probability $p$.</td>
+                <td>Count of rare events occurring at a constant average rate $\lambda$ in continuous space/time.</td>
+              </tr>
+              <tr>
+                <td><strong>Poisson as Limit of Binomial</strong></td>
+                <td colspan="2" style="text-align: center; font-weight: 600;">
+                  When $n \to \infty$ and $p \to 0$ such that $np = \lambda$ remains finite and constant.
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- Statistical Critical Tables -->
+      <section id="critical-tables" class="card">
+        <h2 class="card-title">11. Critical Values Quick Reference Card</h2>
+        <p>Memorise these standard critical cutoff values for rapid exam decision making:</p>
+
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Significance Level ($\alpha$)</th>
+                <th>Z Critical (Two-Tailed)</th>
+                <th>Z Critical (Right-Tailed)</th>
+                <th>Z Critical (Left-Tailed)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>10% ($\alpha = 0.10$)</strong></td>
+                <td>$\pm 1.645$</td>
+                <td>$+1.282$</td>
+                <td>$-1.282$</td>
+              </tr>
+              <tr>
+                <td><strong>5% ($\alpha = 0.05$)</strong></td>
+                <td><strong>$\pm 1.960$</strong></td>
+                <td><strong>$+1.645$</strong></td>
+                <td><strong>$-1.645$</strong></td>
+              </tr>
+              <tr>
+                <td><strong>1% ($\alpha = 0.01$)</strong></td>
+                <td><strong>$\pm 2.576$</strong></td>
+                <td><strong>$+2.326$</strong></td>
+                <td><strong>$-2.326$</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3 class="card-subtitle">Key $\chi^2$ Critical Values at $\alpha = 0.05$:</h3>
+        <p><code>df=1: 3.841</code> &bull; <code>df=2: 5.991</code> &bull; <code>df=3: 7.815</code> &bull; <code>df=4: 9.488</code> &bull; <code>df=5: 11.070</code> &bull; <code>df=6: 12.592</code></p>
+      </section>
+
+      <!-- Interactive Bayes Solver Widget -->
+      <section id="interactive-bayes" class="calc-card">
+        <h2 class="card-title" style="border-bottom: none; color: var(--primary-accent);">
+          Interactive Bayes Theorem Practice Calculator
+        </h2>
+        <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 14px;">
+          Test any 3-source production defect problem. Enter production shares (Priors) and defect percentages (Likelihoods):
+        </p>
+
+        <div class="input-grid">
+          <div class="input-group">
+            <label>Machine 1 Share ($P(M_1)$)</label>
+            <input type="number" id="p1" value="0.30" step="0.05" min="0" max="1" oninput="calculateBayes()">
+          </div>
+          <div class="input-group">
+            <label>Machine 1 Defect ($P(D \mid M_1)$)</label>
+            <input type="number" id="d1" value="0.02" step="0.01" min="0" max="1" oninput="calculateBayes()">
+          </div>
+        </div>
+
+        <div class="input-grid">
+          <div class="input-group">
+            <label>Machine 2 Share ($P(M_2)$)</label>
+            <input type="number" id="p2" value="0.45" step="0.05" min="0" max="1" oninput="calculateBayes()">
+          </div>
+          <div class="input-group">
+            <label>Machine 2 Defect ($P(D \mid M_2)$)</label>
+            <input type="number" id="d2" value="0.03" step="0.01" min="0" max="1" oninput="calculateBayes()">
+          </div>
+        </div>
+
+        <div class="input-grid">
+          <div class="input-group">
+            <label>Machine 3 Share ($P(M_3)$)</label>
+            <input type="number" id="p3" value="0.25" step="0.05" min="0" max="1" oninput="calculateBayes()">
+          </div>
+          <div class="input-group">
+            <label>Machine 3 Defect ($P(D \mid M_3)$)</label>
+            <input type="number" id="d3" value="0.04" step="0.01" min="0" max="1" oninput="calculateBayes()">
+          </div>
+        </div>
+
+        <div class="result-display" id="bayes-result">
+          Calculation results will appear here...
+        </div>
+      </section>
+
+    </div>
+  </div>
+
+  <script>
+    // Theme Toggle
+    function toggleTheme() {
+      const current = document.body.getAttribute('data-theme');
+      const target = current === 'dark' ? 'light' : 'dark';
+      document.body.setAttribute('data-theme', target);
+      localStorage.setItem('theme', target);
+    }
+
+    // Mobile Drawer Navigation for iPhone 13
+    function openDrawer(){
+      document.getElementById('mobileDrawer').classList.add('open');
+      document.getElementById('drawerBackdrop').style.display = 'block';
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeDrawer(){
+      document.getElementById('mobileDrawer').classList.remove('open');
+      document.getElementById('drawerBackdrop').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+
+    // Expand / Collapse Details
+    function expandAll() {
+      document.querySelectorAll('details').forEach(d => d.open = true);
+    }
+
+    function collapseAll() {
+      document.querySelectorAll('details').forEach(d => d.open = false);
+    }
+
+    // Real-time Search Filter
+    function filterContent() {
+      const q = document.getElementById('search-input').value.toLowerCase();
+      const cards = document.querySelectorAll('.card');
+      cards.forEach(card => {
+        const text = card.innerText.toLowerCase();
+        if (text.includes(q)) {
+          card.style.display = 'block';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    // Bayes Calculation Engine
+    function calculateBayes() {
+      const p1 = parseFloat(document.getElementById('p1').value) || 0;
+      const d1 = parseFloat(document.getElementById('d1').value) || 0;
+      const p2 = parseFloat(document.getElementById('p2').value) || 0;
+      const d2 = parseFloat(document.getElementById('d2').value) || 0;
+      const p3 = parseFloat(document.getElementById('p3').value) || 0;
+      const d3 = parseFloat(document.getElementById('d3').value) || 0;
+
+      const prod1 = p1 * d1;
+      const prod2 = p2 * d2;
+      const prod3 = p3 * d3;
+      const totalPD = prod1 + prod2 + prod3;
+
+      if (totalPD === 0) {
+        document.getElementById('bayes-result').innerHTML = "Total defect probability is 0.";
+        return;
+      }
+
+      const post1 = (prod1 / totalPD) * 100;
+      const post2 = (prod2 / totalPD) * 100;
+      const post3 = (prod3 / totalPD) * 100;
+
+      let mostLikely = "Machine 1";
+      let maxPost = post1;
+      if (post2 > maxPost) { mostLikely = "Machine 2"; maxPost = post2; }
+      if (post3 > maxPost) { mostLikely = "Machine 3"; maxPost = post3; }
+
+      document.getElementById('bayes-result').innerHTML = `
+        <div><strong>Total Defect Probability P(D):</strong> ${totalPD.toFixed(5)} (${(totalPD * 100).toFixed(3)}%)</div>
+        <div style="margin-top: 6px;">
+          <strong>Posterior Probabilities:</strong><br>
+          &bull; P(M₁ | D) = ${post1.toFixed(2)}%<br>
+          &bull; P(M₂ | D) = ${post2.toFixed(2)}%<br>
+          &bull; P(M₃ | D) = ${post3.toFixed(2)}%
+        </div>
+        <div style="margin-top: 6px; color: var(--success-accent);">
+          &rarr; <strong>Most Likely Defect Origin:</strong> ${mostLikely} (${maxPost.toFixed(2)}%)
+        </div>
+      `;
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      const saved = localStorage.getItem('theme');
+      if (saved) document.body.setAttribute('data-theme', saved);
+      calculateBayes();
+    });
+  </script>
+</body>
+</html>

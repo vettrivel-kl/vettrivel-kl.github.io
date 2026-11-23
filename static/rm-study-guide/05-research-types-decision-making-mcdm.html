@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Research Types & Decision Making (MCDM) | Complete Exam Question Bank</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#059669;--brand-soft:#ecfdf5;--blue:#2563eb;--blue-soft:#eff6ff;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#064e3b;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#a7f3d0;font-weight:800}
+aside h2{font-size:18px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#6ee7b7;text-transform:uppercase;letter-spacing:.12em;margin:18px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#d1fae5;font-size:13px}
+nav a:hover,nav a.active{background:#047857;color:#ffffff;text-decoration:none}
+.module-hub-link{background:#047857;border:1px solid #059669;color:#ffffff;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:20px;padding:12px;border:1px solid #059669;border-radius:12px;color:#d1fae5;font-size:12px;background:#022c22}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#10b981;color:#022c22}
+
+/* Mobile Topbar */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#064e3b;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{font-size:14.5px;font-weight:800;color:#f8fafc;display:flex;align-items:center;gap:6px;}
+.mobile-topbar-actions{display:flex;gap:6px;align-items:center;}
+.mobile-btn{
+  background:#047857;
+  border:1px solid #059669;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  min-height:36px;
+  display:inline-flex;
+  align-items:center;
+}
+
+/* Horizontal Swipeable Pill Nav */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#064e3b;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #047857;
+  padding-bottom:12px;
+}
+.drawer-close{background:none;border:none;color:#a7f3d0;font-size:24px;cursor:pointer;padding:4px 8px;}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#064e3b 0%,#0f766e 60%,#047857 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"MCDM";position:absolute;right:20px;bottom:-25px;font-size:90px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#a7f3d0;font-weight:800}
+h1{font-size:clamp(22px,4.5vw,38px);line-height:1.15;margin:10px 0}
+.hero p{max-width:700px;color:#d1fae5;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+/* Flowchart Box */
+.flow-box{background:#0f172a;color:#f8fafc;padding:16px;border-radius:12px;font-family:monospace;font-size:13px;line-height:1.5;overflow-x:auto;margin:12px 0}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--brand-soft);border-color:var(--brand)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#d1fae5;color:#065f46;margin-bottom:6px}
+.pyq-badge.nov{background:#fef3c7;color:#92400e}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+button:hover{background:#047857}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+
+/* Quiz for iPhone 13 */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--brand-soft);border-left:3px solid var(--brand);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Interactive Calculator */
+.tool-box{background:white;border:2px solid #a7f3d0;border-radius:12px;padding:16px;margin:16px 0}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:8px}
+.tool-group label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px}
+.tool-group input{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  font-size:16px;
+  background:#f8fafc;
+  min-height:40px;
+}
+.tool-result{margin-top:12px;padding:12px;background:#ecfdf5;border-radius:8px;border-left:4px solid var(--brand);font-size:13px}
+
+/* Mobile Responsiveness */
+@media(max-width:880px){
+  .shell{grid-template-columns:1fr}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:16px 14px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr}
+  .hero{padding:22px 16px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  .card{padding:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Drawer Backdrop -->
+<div class="drawer-backdrop" id="backdrop" onclick="toggleDrawer()"></div>
+
+<!-- Slide-Out Mobile Navigation Drawer -->
+<div class="mobile-drawer" id="drawer">
+  <div class="drawer-header">
+    <div style="font-weight:800;font-size:13px;color:#a7f3d0;letter-spacing:.1em;text-transform:uppercase;">RM Study Hub</div>
+    <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+  </div>
+  <a href="/rm-study-guide/index.html" class="module-hub-link" style="display:block;padding:8px 12px;border-radius:8px;font-size:13px;">&larr; Back to Study Hub</a>
+  <div class="nav-label">Sections</div>
+  <nav>
+    <a href="#intuition" onclick="toggleDrawer()">01. Intuition & Contrast</a>
+    <a href="#types-matrix" onclick="toggleDrawer()">02. Research Typologies Matrix</a>
+    <a href="#mcdm-framework" onclick="toggleDrawer()">03. MCDM ₹24,999 Smartphone</a>
+    <a href="#critical-creative" onclick="toggleDrawer()">04. Critical vs Creative Thinking</a>
+    <a href="#ipr-engineering" onclick="toggleDrawer()">05. IPR for Inventions</a>
+    <a href="#notation" onclick="toggleDrawer()">06. Notation Matrix</a>
+    <a href="#steps" onclick="toggleDrawer()">07. Solving Protocol</a>
+    <a href="#traps" onclick="toggleDrawer()">08. 6 Exam Traps</a>
+    <a href="#pyqs" onclick="toggleDrawer()">09. All Solved PYQs</a>
+    <a href="#calculator" onclick="toggleDrawer()">10. Interactive MCDM Tool</a>
+    <a href="#quiz" onclick="toggleDrawer()">11. Active Recall Quiz</a>
+    <a href="#checklist" onclick="toggleDrawer()">12. Presentation Template</a>
+  </nav>
+  <div class="nav-label">Modules</div>
+  <nav>
+    <a href="/rm-study-guide/01-doe-crd-rbd-taguchi.html">01. DoE & Taguchi</a>
+    <a href="/rm-study-guide/02-research-ethics-misconduct-publishing.html">02. Ethics & Misconduct</a>
+    <a href="/rm-study-guide/03-statistical-analysis-hypothesis-testing.html">03. Stats, Correlation & χ²</a>
+    <a href="/rm-study-guide/04-scientific-communication-thesis-citations.html">04. Dissemination & Thesis</a>
+    <a href="/rm-study-guide/05-research-types-decision-making-mcdm.html" class="active">05. Research Types & MCDM</a>
+  </nav>
+</div>
+
+<!-- Mobile Sticky Topbar -->
+<div class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>Module 05 · Types & MCDM</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/rm-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="toggleDrawer()">&#9776; Menu</button>
+  </div>
+</div>
+
+<!-- Mobile Horizontal Pill Nav -->
+<div class="mobile-pills-bar">
+  <a href="#intuition" class="pill-link">Intuition</a>
+  <a href="#types-matrix" class="pill-link">Research Types</a>
+  <a href="#mcdm-framework" class="pill-link">MCDM Case</a>
+  <a href="#critical-creative" class="pill-link">Critical vs Creative</a>
+  <a href="#ipr-engineering" class="pill-link">IPR Inventions</a>
+  <a href="#traps" class="pill-link">Traps</a>
+  <a href="#pyqs" class="pill-link">Past Papers</a>
+  <a href="#calculator" class="pill-link">MCDM Tool</a>
+  <a href="#quiz" class="pill-link">Quiz</a>
+  <a href="#checklist" class="pill-link">Checklist</a>
+</div>
+
+<div class="shell">
+
+  <!-- Desktop Sidebar -->
+  <aside>
+    <div class="brand">21IPC501J · Exam Prep</div>
+    <h2>Research Types & Decision Making</h2>
+    <a href="/rm-study-guide/index.html" class="module-hub-link" style="padding:8px 12px;border-radius:8px;font-size:12.5px;">&larr; Back to Study Hub</a>
+
+    <div class="nav-label">Sections</div>
+    <nav>
+      <a href="#intuition">01. Intuition & Contrast</a>
+      <a href="#types-matrix">02. Research Typologies Matrix</a>
+      <a href="#mcdm-framework">03. MCDM ₹24,999 Smartphone</a>
+      <a href="#critical-creative">04. Critical vs Creative Thinking</a>
+      <a href="#ipr-engineering">05. IPR for Inventions</a>
+      <a href="#notation">06. Notation Decoding Matrix</a>
+      <a href="#steps">07. Step-by-Step Protocol</a>
+      <a href="#traps">08. 6 Deadly Exam Traps</a>
+      <a href="#pyqs">09. Complete University PYQs</a>
+      <a href="#calculator">10. Interactive MCDM Tool</a>
+      <a href="#quiz">11. Self-Test Active Recall</a>
+      <a href="#checklist">12. Answer Sheet Checklist</a>
+    </nav>
+
+    <div class="side-note">
+      <strong>Exam Weightage: 20 Marks</strong><br>
+      Internal Score: <strong>51.00 / 60</strong><br>
+      Target Sem Mark: <strong>50 / 100</strong> (Safe: 57)<br>
+      <span class="status-pill pill-target">Priority 5 High-Yield</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="eyebrow">Module 05 · Methodological Foundations & Decision Optimization</div>
+      <h1>Research Types & Decision Making (MCDM)</h1>
+      <p>Master methodological foundations and structured engineering decision analysis. Major research taxonomies (Exploratory, Diagnostic, Causal), Multi-Criteria Decision Making (MCDM) for the ₹24,999 smartphone purchasing case, balancing Critical vs. Creative Thinking in research anomalies, and Intellectual Property Rights (IPR).</p>
+      <div class="pills">
+        <span class="pill">Nov 2025 (Q1 20M, Q2 20M)</span>
+        <span class="pill">Jan 2025 (Q1 20M)</span>
+        <span class="pill">MCDM ₹24,999 Phone</span>
+        <span class="pill">Critical vs Creative</span>
+        <span class="pill">IPR for Engineers</span>
+      </div>
+    </div>
+
+    <!-- Section 01: Intuition & Contrast -->
+    <section id="intuition">
+      <h2>01. Intuition & Concept Contrast</h2>
+      <p class="lead">Research methodology provides the formal compass for systematic discovery, while decision-making frameworks ensure empirical choices are transparent and reproducible.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Inquiry Purpose</div>
+          <h3 style="margin-top:2px;">Exploratory vs Causal Research</h3>
+          <p><strong>Exploratory Research:</strong> Conducted when the problem is poorly understood or novel. Flexible and qualitative; formulates questions and working hypotheses.</p>
+          <p><strong>Causal (Hypothesis-Testing):</strong> Conducted under controlled experimental conditions to prove whether variable $X$ directly causes changes in response $Y$.</p>
+        </div>
+        <div class="card">
+          <div class="kicker">Cognitive Balance</div>
+          <h3 style="margin-top:2px;">Critical Thinking vs Creative Thinking</h3>
+          <p><strong>Critical Thinking (Auditing):</strong> Rigorous, analytical verification. Audits sensor calibration, controls for confounding variables, checks statistical power.</p>
+          <p><strong>Creative Thinking (Reframing):</strong> Lateral, generative hypothesis formulation. Envisions novel mechanisms, non-linear interactions, and new conceptual models.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: Research Typologies Matrix -->
+    <section id="types-matrix">
+      <h2>02. Comprehensive Research Typologies Matrix</h2>
+      <p class="lead"><strong>Jan 2025 (Q1) Guaranteed 20-Mark Question.</strong> Classifying research across 5 primary dimensions.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Classification Dimension</th>
+              <th>Type A</th>
+              <th>Type B</th>
+              <th>Key Distinguishing Feature</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>By Primary Purpose</strong></td>
+              <td><strong>Exploratory</strong></td>
+              <td><strong>Hypothesis-Testing (Causal)</strong></td>
+              <td>Exploratory develops insights into vague domains; Causal proves causal linkages ($X \implies Y$).</td>
+            </tr>
+            <tr>
+              <td><strong>By Practical Utility</strong></td>
+              <td><strong>Fundamental (Pure)</strong></td>
+              <td><strong>Applied</strong></td>
+              <td>Pure expands universal scientific laws (e.g. quantum mechanics); Applied solves immediate industrial problems.</td>
+            </tr>
+            <tr>
+              <td><strong>By Methodological Approach</strong></td>
+              <td><strong>Quantitative</strong></td>
+              <td><strong>Qualitative</strong></td>
+              <td>Quantitative relies on numerical measurement and statistics; Qualitative investigates subjective experiences.</td>
+            </tr>
+            <tr>
+              <td><strong>By Epistemology</strong></td>
+              <td><strong>Conceptual</strong></td>
+              <td><strong>Empirical</strong></td>
+              <td>Conceptual analyzes abstract philosophical frameworks; Empirical tests observable, experimental data.</td>
+            </tr>
+            <tr>
+              <td><strong>By Time Horizon</strong></td>
+              <td><strong>Cross-Sectional</strong></td>
+              <td><strong>Longitudinal</strong></td>
+              <td>Cross-sectional observes population at a single snapshot; Longitudinal tracks a cohort over extended intervals.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 03: MCDM ₹24,999 Smartphone -->
+    <section id="mcdm-framework">
+      <h2>03. Multi-Criteria Decision Making: The ₹24,999 Smartphone Case</h2>
+      <p class="lead"><strong>Nov 2025 (Q1) Guaranteed 20-Mark Case Study.</strong></p>
+
+      <div class="card">
+        <h3>1. Multi-Attribute Utility Weighting Matrix ($\sum w_i = 1.0$):</h3>
+        <ul>
+          <li>Processor / SoC Performance ($w_1 = 0.30$)</li>
+          <li>Camera Sensor & OIS Pipeline ($w_2 = 0.25$)</li>
+          <li>Display Refresh Rate & Battery Endurance ($w_3 = 0.20$)</li>
+          <li>Software Support & Update Longevity ($w_4 = 0.15$)</li>
+          <li>Warranty & Resale Value ($w_5 = 0.10$)</li>
+        </ul>
+
+        <h3>2. Decision-Making Flowchart:</h3>
+        <div class="flow-box">
+[1. User Needs Identification] (Daily driver, 5G, gaming, ₹24,999 budget)
+       ↓
+[2. Technical Criteria Formulation] (4nm SoC, AMOLED 120Hz, 5000mAh+, OIS)
+       ↓
+[3. Empirical Data Collection] (Spec sheets, AnTuTu benchmarks, buyer reviews)
+       ↓
+[4. Weighted Comparison Matrix] (OnePlus Nord CE4 vs iQOO Z9s Pro vs Nothing 2a)
+       ↓
+[5. Platform / Dealer Evaluation] (Amazon bank discounts vs Offline retail inspection)
+       ↓
+[6. Final Selection & Purchase] (Optimal Total Cost of Ownership: OnePlus Nord CE4)
+        </div>
+
+        <h3>3. Empirical Comparison Table of 3 Phones Under ₹24,999:</h3>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Specification</th><th>OnePlus Nord CE4</th><th>iQOO Z9s Pro</th><th>Nothing Phone (2a)</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Processor (SoC)</strong></td><td>Snapdragon 7 Gen 3 (4nm)</td><td>Snapdragon 7 Gen 3 (4nm)</td><td>Dimensity 7200 Pro (4nm)</td></tr>
+              <tr><td><strong>Display</strong></td><td>6.7" Fluid AMOLED, 120Hz</td><td>6.77" Curved AMOLED, 120Hz</td><td>6.7" Flexible AMOLED, 120Hz</td></tr>
+              <tr><td><strong>Rear Cameras</strong></td><td>50MP (Sony LYT-600, OIS) + 8MP</td><td>50MP (Sony IMX882, OIS) + 8MP</td><td>50MP (OIS) + 50MP Ultra-wide</td></tr>
+              <tr><td><strong>Battery & Charging</strong></td><td><strong>5500 mAh, 100W SuperVOOC</strong></td><td>5500 mAh, 80W FlashCharge</td><td>5000 mAh, 45W Fast Charging</td></tr>
+              <tr><td><strong>Software Support</strong></td><td>2 OS + 3 Years Security</td><td>2 OS + 3 Years Security</td><td><strong>3 OS + 4 Years Security</strong></td></tr>
+              <tr><td><strong>Base Price</strong></td><td><strong>₹24,999</strong> (8GB/128GB)</td><td><strong>₹24,999</strong> (8GB/128GB)</td><td><strong>₹23,999</strong> (8GB/128GB)</td></tr>
+              <tr><td><strong>User Rating</strong></td><td><strong>4.3 / 5.0</strong> (12k reviews)</td><td><strong>4.3 / 5.0</strong> (8k reviews)</td><td><strong>4.4 / 5.0</strong> (18k reviews)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h3>4. Final Choice Justification:</h3>
+        <p><strong>Selected Model:</strong> **OnePlus Nord CE4 at ₹24,999** via **Amazon India (Authorized Seller)**.</p>
+        <p><strong>Rationale:</strong> Best balance of thermal efficiency (Snapdragon 7 Gen 3), unmatched battery charging ($100\text{W}$, $1-100\%$ in 29 mins), clean OxygenOS interface, and active bank card discount reducing net acquisition price to **₹22,999**.</p>
+      </div>
+    </section>
+
+    <!-- Section 04: Critical vs Creative Thinking -->
+    <section id="critical-creative">
+      <h2>04. Balancing Critical vs. Creative Thinking in Research Anomaly</h2>
+      <p class="lead"><strong>Nov 2025 (Q2.i) 10-Mark Question.</strong> Resolving empirical divergence from established literature.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Auditing & Rigor</div>
+          <h3 style="margin-top:2px;">Critical Thinking Protocol</h3>
+          <ul>
+            <li><strong>Audit Instrument Validity:</strong> Check questionnaire reliability (Cronbach's $\alpha \ge 0.70$) and sensor calibration drift.</li>
+            <li><strong>Check Sampling Bias:</strong> Confirm sample is representative and not skewed by volunteer selection effects.</li>
+            <li><strong>Examine Confounders:</strong> Identify unmeasured moderators (socioeconomic status, device access, digital literacy).</li>
+          </ul>
+        </div>
+        <div class="card">
+          <div class="kicker">Hypothesis Reframing</div>
+          <h3 style="margin-top:2px;">Creative Thinking Protocol</h3>
+          <ul>
+            <li><strong>Formulate Novel Hypotheses:</strong> Could post-pandemic screen fatigue or cognitive overload explain the divergence?</li>
+            <li><strong>Explore Non-Linear Models:</strong> Look for U-shaped or threshold interaction dynamics rather than simple linear trends.</li>
+            <li><strong>Mixed-Methods Expansion:</strong> Conduct follow-up qualitative focus group interviews to capture unrecorded nuances.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 05: IPR for Inventions -->
+    <section id="ipr-engineering">
+      <h2>05. Intellectual Property Rights (IPR) for Engineering Inventions</h2>
+      <p class="lead"><strong>Nov 2025 (Q2.ii) 10-Mark Question.</strong> Strategic value of protecting green eco-friendly products.</p>
+
+      <div class="card">
+        <h3>Strategic Advantages for Student Innovators:</h3>
+        <ol>
+          <li><strong>20-Year Legal Market Monopoly:</strong> A utility patent grants exclusive rights to make, use, and sell the invention, preventing corporate competitors from copying the green product.</li>
+          <li><strong>Venture Capital & Investor Leverage:</strong> Institutional VC funds and angel investors rarely invest in unpatented hardware due to risk of instant reverse-engineering.</li>
+          <li><strong>Commercial Licensing & Royalties:</strong> Enables licensing the technology to manufacturing multinationals for recurring revenue without owning factories.</li>
+          <li><strong>Academic & Career Prestige:</strong> Granted patents dramatically accelerate postgraduate fellowship applications, PhD admissions, and international mobility.</li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Section 06: Notation Matrix -->
+    <section id="notation">
+      <h2>06. Notation & Terminological Matrix</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Term</th>
+              <th>Full Form</th>
+              <th>Plain-English Meaning</th>
+              <th>Context</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>MCDM</strong></td>
+              <td>Multi-Criteria Decision Making</td>
+              <td>Evaluating multiple conflicting criteria to pick the optimal alternative</td>
+              <td>Smartphone case study</td>
+            </tr>
+            <tr>
+              <td><strong>IPR</strong></td>
+              <td>Intellectual Property Rights</td>
+              <td>Legal protections granted to creators of intellectual assets</td>
+              <td>Patents, Copyrights, Trademarks</td>
+            </tr>
+            <tr>
+              <td><strong>TCO</strong></td>
+              <td>Total Cost of Ownership</td>
+              <td>Complete acquisition cost plus operational maintenance and depreciation</td>
+              <td>Purchasing decisions</td>
+            </tr>
+            <tr>
+              <td><strong>Cronbach's $\alpha$</strong></td>
+              <td>Internal Consistency Coefficient</td>
+              <td>Statistical measure of survey questionnaire reliability</td>
+              <td>$\alpha \ge 0.70$ required</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 07: 6 Exam Traps -->
+    <section id="traps">
+      <h2>07. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+      <div class="grid">
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 01: Unweighted MCDM Tables</div>
+          <h3>Treating All Criteria as Equal</h3>
+          <p>In MCDM, processor performance cannot have the same weight as warranty. Always assign explicit normalized weights ($\sum w_i = 1.0$) to show analytical maturity.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 02: Missing Flowchart in Decision Making</div>
+          <h3>Writing Only Paragraphs for Question 1.c</h3>
+          <p>Question 1.c explicitly asks to <strong>"Draw a flowchart showing your decision-making steps"</strong>. Omitting the flowchart loses 4 marks automatically.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 03: Confusing Pure with Applied Research</div>
+          <h3>Claiming Pure Research Solves Immediate Problems</h3>
+          <p>Pure (Fundamental) research expands theoretical laws of nature without immediate commercial application. Applied research solves specific practical problems.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 04: One-Sided Response in Empirical Divergence</div>
+          <h3>Focusing Only on Critical or Only on Creative Thinking</h3>
+          <p>The prompt asks to <strong>balance both</strong>. You must show the auditing phase (Critical) and the reframing phase (Creative).</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 05: Exceeding Budget Constraint</div>
+          <h3>Recommending Phones Above ₹24,999</h3>
+          <p>Recommending a ₹26,000 phone fails the primary budget constraint. All compared phones must be strictly $\le \text{₹24,999}$.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 06: Treating Patents as Eternal</div>
+          <h3>Claiming Patents Last Forever</h3>
+          <p>Utility patents expire after **20 years** from filing date, after which the invention enters the public domain. Trademarks can be renewed perpetually.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 08: Complete Solved University PYQs -->
+    <section id="pyqs">
+      <h2>08. Complete University Question Bank (All Past PYQs Solved)</h2>
+      <div class="controls">
+        <button onclick="toggleAllDetails(true)">Expand All Solutions</button>
+        <button class="secondary" onclick="toggleAllDetails(false)">Collapse All</button>
+      </div>
+
+      <!-- Question 1: Nov 2025 Q1 Smartphone MCDM (20 Marks) -->
+      <div class="details-box">
+        <details id="q1">
+          <summary>
+            <span><span class="pyq-badge nov">Nov 2025 · Question 1</span> The ₹24,999 Smartphone Purchasing MCDM Case Study (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Budget of ₹24,999 to purchase a new smartphone. Plan and justify decision:<br>
+            a) Data collection & analysis (4M)<br>
+            b) Platform selection factors (online vs offline) (4M)<br>
+            c) Decision-making flowchart (4M)<br>
+            d) Comparison table of 3 phones (4M)<br>
+            e) Justify final choice of phone and seller (4M)
+          </div>
+
+          <h4>Solution:</h4>
+          <ul>
+            <li><strong>a) Multi-Attribute Matrix:</strong> Collect spec sheets, AnTuTu scores, buyer reviews; assign normalized weights ($w_{\text{SoC}}=0.30, w_{\text{Cam}}=0.25, w_{\text{Batt}}=0.20, w_{\text{OS}}=0.15, w_{\text{Resale}}=0.10$).</li>
+            <li><strong>b) Platform Trade-Offs:</strong> Online gives aggressive bank card cashbacks and coupons; Offline gives physical unboxing and instant dead-pixel verification.</li>
+            <li><strong>c) Flowchart:</strong> Needs $\to$ Technical Criteria $\to$ Empirical Data $\to$ Comparison Matrix $\to$ Dealer Evaluation $\to$ Final Choice.</li>
+            <li><strong>d) Comparison:</strong> Compare OnePlus Nord CE4, iQOO Z9s Pro, Nothing Phone (2a) across SoC, battery, charging speed, update longevity, and user ratings.</li>
+            <li><strong>e) Final Choice:</strong> OnePlus Nord CE4 via Amazon India for thermal efficiency, $100\text{W}$ charging, and effective net price of ₹22,999 with card discount.</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- Question 2: Nov 2025 Q2 Critical/Creative & IPR (20 Marks) -->
+      <div class="details-box">
+        <details id="q2">
+          <summary>
+            <span><span class="pyq-badge nov">Nov 2025 · Question 2</span> Balancing Critical vs Creative Thinking & IPR for Student Innovator (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            i) Online learning study results diverge from literature. Balance critical and creative thinking. (10 Marks)<br>
+            ii) Engineering student creates unique eco-friendly product. Analyze importance of IPR. (10 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>(i) Critical vs Creative Balance (10 Marks):</h5>
+          <p>Critical thinking audits data integrity, controls for confounding variables, and checks statistical power. Creative thinking reformulates novel hypotheses (e.g. post-pandemic digital fatigue), models non-linear interactions, and designs qualitative focus groups.</p>
+
+          <h5>(ii) IPR Strategic Value (10 Marks):</h5>
+          <p>Grants a 20-year legal monopoly preventing corporate copycats, provides essential IP leverage to secure venture capital investment, opens licensing royalty revenue streams, and establishes academic prestige.</p>
+        </details>
+      </div>
+
+      <!-- Question 3: Jan 2025 Q1 Research Types (20 Marks) -->
+      <div class="details-box">
+        <details id="q3">
+          <summary>
+            <span><span class="pyq-badge">Jan 2025 · Question 1</span> Objectives & Major Classifications of Research (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Discuss the objectives of research and explain major types of research with suitable examples. (20 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Objectives of Research (6 Marks):</h5>
+          <p>Discovery of new facts, verification of existing laws, development of theoretical models, and solving real-world industrial problems.</p>
+          <h5>2. Major Classifications (14 Marks):</h5>
+          <ul>
+            <li><strong>Exploratory vs Causal:</strong> Exploratory explores vague domains; Causal proves cause-and-effect relationships.</li>
+            <li><strong>Pure vs Applied:</strong> Pure advances fundamental scientific knowledge; Applied solves immediate commercial challenges.</li>
+            <li><strong>Quantitative vs Qualitative:</strong> Quantitative uses numerical metrics; Qualitative explores subjective human experiences.</li>
+            <li><strong>Cross-Sectional vs Longitudinal:</strong> Cross-sectional observes at one point in time; Longitudinal tracks a cohort over years.</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+    <!-- Section 10: Interactive Tool -->
+    <section id="calculator">
+      <h2>10. Interactive Offline Weighted MCDM Calculator</h2>
+      <p class="lead">Simulate Multi-Criteria Decision Making scores for candidate purchasing options.</p>
+
+      <div class="tool-box">
+        <div class="tool-grid">
+          <div class="tool-group">
+            <label>Processor Score (1-10) [w=0.30]</label>
+            <input type="number" id="sProc" value="8.5" min="1" max="10" step="0.5">
+          </div>
+          <div class="tool-group">
+            <label>Camera Score (1-10) [w=0.25]</label>
+            <input type="number" id="sCam" value="8.0" min="1" max="10" step="0.5">
+          </div>
+          <div class="tool-group">
+            <label>Battery Score (1-10) [w=0.20]</label>
+            <input type="number" id="sBatt" value="9.5" min="1" max="10" step="0.5">
+          </div>
+          <div class="tool-group">
+            <label>Software Score (1-10) [w=0.15]</label>
+            <input type="number" id="sSoft" value="8.0" min="1" max="10" step="0.5">
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <button onclick="calculateMCDM()">Compute Weighted Utility Score</button>
+        </div>
+
+        <div class="tool-result" id="mcdmOutput">
+          Click button to compute weighted score.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 11: Active Recall Quiz -->
+    <section id="quiz">
+      <h2>11. Active Recall Self-Test Quiz</h2>
+      <div class="progress-wrap"><div class="progress" id="quizBar"></div></div>
+      <div id="quizScore" style="font-size:12.5px;font-weight:700;color:var(--muted);margin-top:4px;">Answer the questions below to evaluate progress (0/4 answered).</div>
+
+      <div class="quiz-q" id="qz1">
+        <strong>1. In Multi-Criteria Decision Making (MCDM), what must the sum of all attribute weights equal?</strong>
+        <label><input type="radio" name="q1" value="a" onclick="checkQ(1,'b','Sum of weights must strictly equal 1.0')"> Exactly 0</label>
+        <label><input type="radio" name="q1" value="b" onclick="checkQ(1,'b','Sum of weights must strictly equal 1.0')"> Strictly equal to $1.0$ ($\sum w_i = 1.0$)</label>
+        <label><input type="radio" name="q1" value="c" onclick="checkQ(1,'b','Sum of weights must strictly equal 1.0')"> Equal to the number of alternatives</label>
+        <div class="feedback" id="fb1"></div>
+        <div class="answer" id="ans1"><strong>Correct: (b)</strong> In weighted linear utility models, attribute weights are normalized so their sum strictly equals $1.0$.</div>
+      </div>
+
+      <div class="quiz-q" id="qz2">
+        <strong>2. How long does a standard utility patent grant exclusive commercial rights to an inventor from filing date?</strong>
+        <label><input type="radio" name="q2" value="a" onclick="checkQ(2,'c','20 years')"> 50 years</label>
+        <label><input type="radio" name="q2" value="b" onclick="checkQ(2,'c','20 years')"> In perpetuity (forever)</label>
+        <label><input type="radio" name="q2" value="c" onclick="checkQ(2,'c','20 years')"> 20 years</label>
+        <div class="feedback" id="fb2"></div>
+        <div class="answer" id="ans2"><strong>Correct: (c)</strong> Under international patent law (TRIPS), utility patents grant exclusive rights for **20 years** from the date of filing.</div>
+      </div>
+
+      <div class="quiz-q" id="qz3">
+        <strong>3. When research results diverge from established scientific consensus, what is the role of Critical Thinking?</strong>
+        <label><input type="radio" name="q3" value="a" onclick="checkQ(3,'a','To systematically audit data integrity, confounders, and instrument calibration')"> To systematically audit data integrity, check confounders, and verify calibration</label>
+        <label><input type="radio" name="q3" value="b" onclick="checkQ(3,'a','To systematically audit data integrity, confounders, and instrument calibration')"> To immediately discard the anomalous data</label>
+        <label><input type="radio" name="q3" value="c" onclick="checkQ(3,'a','To systematically audit data integrity, confounders, and instrument calibration')"> To alter data points until they match earlier studies</label>
+        <div class="feedback" id="fb3"></div>
+        <div class="answer" id="ans3"><strong>Correct: (a)</strong> Critical thinking acts as an investigative audit, ensuring the anomaly is not caused by experimental error or sampling bias.</div>
+      </div>
+
+      <div class="quiz-q" id="qz4">
+        <strong>4. What distinguishes Longitudinal research from Cross-Sectional research?</strong>
+        <label><input type="radio" name="q4" value="a" onclick="checkQ(4,'c','Longitudinal tracks a cohort over extended periods; Cross-sectional takes a single snapshot')"> Longitudinal uses only qualitative interviews</label>
+        <label><input type="radio" name="q4" value="b" onclick="checkQ(4,'c','Longitudinal tracks a cohort over extended periods; Cross-sectional takes a single snapshot')"> Cross-sectional research is strictly experimental</label>
+        <label><input type="radio" name="q4" value="c" onclick="checkQ(4,'c','Longitudinal tracks a cohort over extended periods; Cross-sectional takes a single snapshot')"> Longitudinal tracks the same subject cohort repeatedly over extended intervals, while Cross-sectional observes at a single point in time</label>
+        <div class="feedback" id="fb4"></div>
+        <div class="answer" id="ans4"><strong>Correct: (c)</strong> Cross-sectional takes an instantaneous snapshot; longitudinal tracks temporal trajectories over months or years.</div>
+      </div>
+    </section>
+
+    <!-- Section 12: Answer Sheet Checklist -->
+    <section id="checklist">
+      <h2>12. Exam Hall Answer Sheet Presentation Checklist</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>1. Provide Weighted Multi-Attribute Matrix in MCDM</strong>
+            <p>List criteria with weights summing to 1.0 ($w_1 + w_2 + \dots = 1.0$).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>2. Draw the Decision-Making Process Flowchart</strong>
+            <p>Draw boxed steps: Needs $\to$ Criteria $\to$ Data $\to$ Comparison $\to$ Dealer $\to$ Final Choice.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>3. Draw Comprehensive 3-Phone Comparison Table</strong>
+            <p>Compare SoC, Display, Cameras, Battery/Charging, and Prices $\le \text{₹24,999}$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>4. Address Both Critical and Creative Thinking</strong>
+            <p>Show how auditing (Critical) works dialectically with hypothesis reframing (Creative).</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function toggleDrawer() {
+  const drawer = document.getElementById('drawer');
+  const backdrop = document.getElementById('backdrop');
+  drawer.classList.toggle('open');
+  backdrop.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+}
+
+function toggleAllDetails(open) {
+  document.querySelectorAll('details').forEach(d => d.open = open);
+}
+
+function calculateMCDM() {
+  const sP = parseFloat(document.getElementById('sProc').value) || 0;
+  const sC = parseFloat(document.getElementById('sCam').value) || 0;
+  const sB = parseFloat(document.getElementById('sBatt').value) || 0;
+  const sS = parseFloat(document.getElementById('sSoft').value) || 0;
+
+  // Weights: Proc=0.30, Cam=0.25, Batt=0.20, Soft=0.15, Warranty=0.10 (assume 8.0)
+  const sW = 8.0;
+  const total = (sP * 0.30) + (sC * 0.25) + (sB * 0.20) + (sS * 0.15) + (sW * 0.10);
+
+  let out = '<strong>Computed Weighted Utility Score:</strong><br>';
+  out += '• Processor (0.30 &times; ' + sP + ') = ' + (sP * 0.30).toFixed(2) + '<br>';
+  out += '• Camera (0.25 &times; ' + sC + ') = ' + (sC * 0.25).toFixed(2) + '<br>';
+  out += '• Battery/Charging (0.20 &times; ' + sB + ') = ' + (sB * 0.20).toFixed(2) + '<br>';
+  out += '• Software/Longevity (0.15 &times; ' + sS + ') = ' + (sS * 0.15).toFixed(2) + '<br>';
+  out += '• Warranty/Resale (0.10 &times; 8.0) = 0.80<br>';
+  out += '• <strong>Overall Weighted Score: ' + total.toFixed(2) + ' / 10.00</strong>';
+
+  document.getElementById('mcdmOutput').innerHTML = out;
+}
+
+// Quiz Interactive Evaluation
+const answeredQ = {};
+function checkQ(qNum, correctVal, reason) {
+  const selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+  const fb = document.getElementById('fb' + qNum);
+  const ans = document.getElementById('ans' + qNum);
+
+  answeredQ[qNum] = true;
+
+  if (selected.value === correctVal) {
+    fb.innerHTML = '<span style="color:var(--brand);">&#10003; Correct! ' + reason + '</span>';
+  } else {
+    fb.innerHTML = '<span style="color:var(--red);">&#10007; Incorrect. ' + reason + '</span>';
+  }
+  ans.classList.add('show');
+
+  const answeredCount = Object.keys(answeredQ).length;
+  const pct = (answeredCount / 4) * 100;
+  document.getElementById('quizBar').style.width = pct + '%';
+  document.getElementById('quizScore').innerText = 'Completed ' + answeredCount + ' of 4 questions (' + pct.toFixed(0) + '%).';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  calculateMCDM();
+});
+</script>
+
+</body>
+</html>

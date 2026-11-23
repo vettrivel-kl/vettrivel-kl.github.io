@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Machine Learning Algorithms -- All-in-One Master Reference & Formula Handbook (21CSC555J)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --primary-accent: #2563eb;
+      --primary-dark: #1d4ed8;
+      --primary-light: #eff6ff;
+      --success-accent: #059669;
+      --success-light: #ecfdf5;
+      --warning-accent: #b45309;
+      --warning-light: #fffbeb;
+      --danger-accent: #dc2626;
+      --danger-light: #fef2f2;
+      --purple: #7c3aed;
+      --purple-light: #f5f3ff;
+      --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+      --card-shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --sidebar-width: 280px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-tertiary: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --primary-accent: #3b82f6;
+      --primary-dark: #60a5fa;
+      --primary-light: #1e3a8a33;
+      --success-accent: #10b981;
+      --success-light: #064e3b33;
+      --warning-accent: #f59e0b;
+      --warning-light: #78350f33;
+      --danger-accent: #ef4444;
+      --danger-light: #7f1d1d33;
+      --purple: #a78bfa;
+      --purple-light: #581c8733;
+      --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+      --card-shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-size: 15px;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-left: var(--safe-left);
+      padding-right: var(--safe-right);
+    }
+
+    /* Desktop Sidebar Navigation */
+    .sidebar {
+      width: var(--sidebar-width);
+      background-color: var(--bg-primary);
+      border-right: 1px solid var(--border-color);
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      padding-top: var(--safe-top);
+      flex-shrink: 0;
+    }
+
+    .sidebar-header {
+      padding: 20px 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar-header h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary-accent);
+      margin-bottom: 4px;
+    }
+
+    .sidebar-header p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .sidebar-nav {
+      padding: 12px 8px;
+      flex: 1;
+    }
+
+    .nav-section-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 10px 12px 4px;
+    }
+
+    .sidebar-nav a {
+      display: block;
+      padding: 7px 12px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.86rem;
+      border-radius: 6px;
+      margin-bottom: 2px;
+      transition: all 0.15s ease;
+    }
+
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      background-color: var(--primary-light);
+      color: var(--primary-accent);
+      font-weight: 600;
+    }
+
+    .sidebar-footer {
+      padding: 16px;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Mobile Sticky Topbar (Shown on iPhone 13 & Mobile) */
+    .mobile-topbar {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      background: #0f172a;
+      color: #fff;
+      padding: calc(10px + var(--safe-top)) 14px 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mobile-topbar-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mobile-topbar-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .mobile-btn {
+      background: #1e293b;
+      border: 1px solid #334155;
+      color: #f8fafc;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      min-height: 36px;
+    }
+
+    /* Horizontal Swipeable Pill Nav for Mobile */
+    .mobile-pills-bar {
+      display: none;
+      overflow-x: auto;
+      white-space: nowrap;
+      padding: 8px 12px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      position: sticky;
+      top: calc(54px + var(--safe-top));
+      z-index: 850;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    }
+    .mobile-pills-bar::-webkit-scrollbar { display: none; }
+
+    .pill-link {
+      display: inline-block;
+      padding: 5px 11px;
+      margin-right: 5px;
+      border-radius: 99px;
+      background: #f1f5f9;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--border-color);
+      text-decoration: none;
+    }
+
+    /* Mobile Drawer Menu */
+    .drawer-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      z-index: 998;
+      backdrop-filter: blur(3px);
+    }
+
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 85%;
+      max-width: 320px;
+      height: 100vh;
+      background: #0f172a;
+      color: #e2e8f0;
+      z-index: 999;
+      padding: calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+      overflow-y: auto;
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
+      transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mobile-drawer.open { left: 0; }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #1e293b;
+      padding-bottom: 12px;
+    }
+
+    .drawer-close {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    /* Main Content Area */
+    .content-area {
+      flex: 1;
+      padding: 32px clamp(16px, 4vw, 48px) calc(60px + var(--safe-bottom));
+      max-width: 1180px;
+      min-width: 0;
+    }
+
+    /* Header */
+    .page-header {
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .badge-hub {
+      display: inline-block;
+      padding: 4px 10px;
+      background-color: var(--primary-light);
+      color: var(--primary-accent);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .page-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      max-width: 800px;
+    }
+
+    /* Score Target Banner */
+    .target-banner {
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%);
+      color: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
+    }
+    .target-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .target-box {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .target-num {
+      font-size: 24px;
+      font-weight: 800;
+      color: #93c5fd;
+    }
+
+    /* Content Cards & Sections */
+    section {
+      scroll-margin-top: calc(90px + var(--safe-top));
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--card-shadow);
+    }
+
+    /* Table Styling */
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 14px 0;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      scrollbar-width: none;
+    }
+    .table-container::-webkit-scrollbar { display: none; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-color);
+      text-align: left;
+    }
+    th {
+      background-color: var(--bg-tertiary);
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) { background-color: rgba(0, 0, 0, 0.015); }
+
+    /* KaTeX Optimization */
+    .katex-display {
+      font-size: clamp(13px, 3.4vw, 15px) !important;
+      margin: 10px 0 !important;
+      padding: 10px 4px 6px !important;
+      overflow-x: auto !important;
+      overflow-y: visible !important;
+      scrollbar-width: none !important;
+    }
+    .katex-display::-webkit-scrollbar { display: none !important; }
+
+    /* Theme Toggle */
+    .theme-toggle-btn {
+      background: none;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 880px) {
+      body { flex-direction: column; }
+      .sidebar { display: none; }
+      .mobile-topbar { display: flex; }
+      .mobile-pills-bar { display: block; }
+      .content-area { padding: 16px 14px calc(60px + var(--safe-bottom)); }
+      .target-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Mobile Drawer Backdrop -->
+  <div class="drawer-backdrop" id="backdrop" onclick="toggleDrawer()"></div>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-drawer" id="drawer">
+    <div class="drawer-header">
+      <div style="font-weight:800;font-size:13px;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;">ML Handbook</div>
+      <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+    </div>
+    <a href="/ml-study-guide/index.html" style="display:block;padding:8px 12px;border-radius:8px;font-size:13px;background:#1e293b;color:#38bdf8;text-decoration:none;margin-bottom:12px;">&larr; Open Study Guides Hub</a>
+    <div style="font-size:10px;color:#64748b;text-transform:uppercase;margin:12px 0 6px;font-weight:700;">Cheatsheet Sections</div>
+    <nav>
+      <a href="#targets" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#cbd5e1;text-decoration:none;">01. Score Target Matrix</a>
+      <a href="#regression" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#cbd5e1;text-decoration:none;">02. Regression & Optimization</a>
+      <a href="#classification" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#cbd5e1;text-decoration:none;">03. Classification & Metrics</a>
+      <a href="#bayes-knn" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#cbd5e1;text-decoration:none;">04. Naive Bayes & KNN</a>
+      <a href="#trees" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#cbd5e1;text-decoration:none;">05. Trees & Ensembles</a>
+      <a href="#unsupervised" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#cbd5e1;text-decoration:none;">06. Clustering & PCA</a>
+      <a href="#comparison" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#cbd5e1;text-decoration:none;">07. Master Comparison Matrix</a>
+    </nav>
+  </div>
+
+  <!-- Mobile Topbar -->
+  <div class="mobile-topbar">
+    <div class="mobile-topbar-title">
+      <span>ML Master Cheatsheet</span>
+    </div>
+    <div class="mobile-topbar-actions">
+      <a href="/ml-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+      <button class="mobile-btn" onclick="toggleDrawer()">&#9776; Menu</button>
+    </div>
+  </div>
+
+  <!-- Mobile Pills Bar -->
+  <div class="mobile-pills-bar">
+    <a href="#targets" class="pill-link">Targets</a>
+    <a href="#regression" class="pill-link">Regression</a>
+    <a href="#classification" class="pill-link">Classification</a>
+    <a href="#bayes-knn" class="pill-link">Bayes & KNN</a>
+    <a href="#trees" class="pill-link">Trees</a>
+    <a href="#unsupervised" class="pill-link">PCA / K-Means</a>
+    <a href="#comparison" class="pill-link">Comparison</a>
+  </div>
+
+  <!-- Desktop Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>ML Handbook</h2>
+      <p>Course Code 21CSC555J</p>
+    </div>
+    <div class="sidebar-nav">
+      <a href="/ml-study-guide/index.html" style="background:#1e293b;color:#38bdf8;font-weight:700;margin-bottom:12px;">&larr; Open Study Guides Hub</a>
+      <div class="nav-section-title">Handbook Navigation</div>
+      <a href="#targets">01. Strategic Targets</a>
+      <a href="#regression">02. Regression & Optimization</a>
+      <a href="#classification">03. Classification & Metrics</a>
+      <a href="#bayes-knn">04. Naive Bayes & KNN</a>
+      <a href="#trees">05. Trees & Ensembles</a>
+      <a href="#unsupervised">06. Clustering & PCA</a>
+      <a href="#comparison">07. Model Comparison Matrix</a>
+      <a href="#presentation">08. Answer Presentation</a>
+    </div>
+    <div class="sidebar-footer">
+      <button class="theme-toggle-btn" onclick="toggleTheme()">🌓 Dark Mode</button>
+      <span>Vettri's Notes</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="content-area">
+
+    <div class="page-header">
+      <span class="badge-hub">All-in-One Master Reference Sheet</span>
+      <h1 class="page-title">Machine Learning Algorithms Master Reference & Formula Handbook</h1>
+      <p class="page-subtitle">Consolidated mathematical formulas, loss functions, derivation paths, complexity matrices, and strategic grade targets for 21CSC555J.</p>
+    </div>
+
+    <!-- Section 01: Score Targets -->
+    <section id="targets">
+      <div class="target-banner">
+        <h2 style="font-size:1.2rem;margin-bottom:4px;">Strategic Score Target (60/40 University Rule)</h2>
+        <p style="font-size:0.88rem;opacity:0.9;">Total Score = Internal Assessment (60%) + [Semester Exam Score &times; 0.40]</p>
+        <div class="target-grid">
+          <div class="target-box">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.8;">Internal Score</div>
+            <div class="target-num">51.60 / 60</div>
+            <div style="font-size:11px;opacity:0.85;">86.0% internal carryover.</div>
+          </div>
+          <div class="target-box">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.8;">Min Sem Mark for Grade A</div>
+            <div class="target-num" style="color:#6ee7b7;">49 / 100</div>
+            <div style="font-size:11px;opacity:0.85;">(71.0 - 51.60) / 0.40 = 48.5.</div>
+          </div>
+          <div class="target-box">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.8;">Safe Target (+7 Buffer)</div>
+            <div class="target-num" style="color:#fde047;">56 / 100</div>
+            <div style="font-size:11px;opacity:0.85;">Final total = 74.00 (Grade A).</div>
+          </div>
+          <div class="target-box">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.8;">Target for Grade A+ / S</div>
+            <div class="target-num" style="color:#d8b4fe;">74 / 100</div>
+            <div style="font-size:11px;opacity:0.85;">Final total = 81.00 &ge; 81.0.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: Regression & Optimization -->
+    <section id="regression">
+      <h2 class="section-title">02. Linear Regression & Optimization Foundations</h2>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Ordinary Least Squares (OLS) Closed-Form</h3>
+        $$\hat{\beta}_1 = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sum_{i=1}^n (X_i - \bar{X})^2} = \frac{\operatorname{Cov}(X, Y)}{\operatorname{Var}(X)}, \qquad \hat{\beta}_0 = \bar{Y} - \hat{\beta}_1 \bar{X}$$
+        $$\text{Matrix Normal Equation: } \hat{\boldsymbol{\beta}} = \left(\mathbf{X}^T \mathbf{X}\right)^{-1} \mathbf{X}^T \mathbf{y}$$
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Regularization Penalties</h3>
+        <p><strong>Ridge Regression ($L_2$):</strong> $\min_{\mathbf{w}} \frac{1}{2n}\|\mathbf{y} - \mathbf{X}\mathbf{w}\|_2^2 + \lambda \|\mathbf{w}\|_2^2 \implies \hat{\mathbf{w}} = (\mathbf{X}^T\mathbf{X} + \lambda \mathbf{I})^{-1}\mathbf{X}^T\mathbf{y}$</p>
+        <p><strong>Lasso Regression ($L_1$):</strong> $\min_{\mathbf{w}} \frac{1}{2n}\|\mathbf{y} - \mathbf{X}\mathbf{w}\|_2^2 + \lambda \|\mathbf{w}\|_1$ (Produces exact sparse zeros for feature selection)</p>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Regression Metrics</h3>
+        $$\text{MSE} = \frac{1}{n}\sum (Y_i - \hat{Y}_i)^2, \quad \text{RMSE} = \sqrt{\text{MSE}}, \quad \text{MAE} = \frac{1}{n}\sum |Y_i - \hat{Y}_i|$$
+        $$R^2 = 1 - \frac{\sum (Y_i - \hat{Y}_i)^2}{\sum (Y_i - \bar{Y})^2}, \quad \text{Adjusted } R^2 = 1 - \left[\frac{(1 - R^2)(n - 1)}{n - p - 1}\right]$$
+      </div>
+    </section>
+
+    <!-- Section 03: Classification & Metrics -->
+    <section id="classification">
+      <h2 class="section-title">03. Logistic Regression & Classification Metrics</h2>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">The Sigmoid Mapping & Multi-Class Softmax</h3>
+        $$\text{Odds} = \frac{p}{1 - p}, \quad \ln\left(\frac{p}{1 - p}\right) = \mathbf{w}^T\mathbf{x} + b \implies p = \sigma(z) = \frac{1}{1 + e^{-z}}$$
+        $$\text{Softmax Multi-Class: } P(Y = k \mid \mathbf{x}) = \frac{e^{\mathbf{w}_k^T\mathbf{x} + b_k}}{\sum_{j=1}^K e^{\mathbf{w}_j^T\mathbf{x} + b_j}}$$
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Classification Metrics & Rare Events</h3>
+        $$\text{Accuracy} = \frac{TP + TN}{N}, \quad \text{Precision} = \frac{TP}{TP + FP}, \quad \text{Recall} = \frac{TP}{TP + FN}$$
+        $$F_1\text{-Score} = \frac{2 \cdot \text{Prec} \cdot \text{Rec}}{\text{Prec} + \text{Rec}}, \quad F_2\text{-Score} = \frac{5 \cdot \text{Prec} \cdot \text{Rec}}{4\text{Prec} + \text{Rec}}$$
+        <p style="margin-top:8px;font-size:0.85rem;color:var(--text-secondary);">
+          <strong>The Accuracy Paradox:</strong> On rare-event datasets (e.g. 0.5% fraud), a null model predicting 100% negative achieves 99.5% accuracy but 0% recall. <strong>PR-AUC</strong> and <strong>$F_2$-score</strong> are mandatory over ROC-AUC (which is inflated by massive $TN$).
+        </p>
+      </div>
+    </section>
+
+    <!-- Section 04: Bayes & KNN -->
+    <section id="bayes-knn">
+      <h2 class="section-title">04. Naïve Bayes & K-Nearest Neighbors (KNN)</h2>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Naïve Bayes Formulation</h3>
+        $$P(C = c \mid \mathbf{x}) = \frac{P(C = c) \prod_{j=1}^d P(x_j \mid C = c)}{P(\mathbf{x})}$$
+        $$\text{Laplace Add-1 Smoothing: } P(x_j \mid C = c) = \frac{\operatorname{Count}(x_j \text{ and } c) + 1}{\operatorname{Count}(c) + K}$$
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">K-Nearest Neighbors Geometry</h3>
+        $$d_{\text{Euclidean}}(\mathbf{q}, \mathbf{x}) = \sqrt{\sum (q_j - x_j)^2}, \qquad d_{\text{Manhattan}}(\mathbf{q}, \mathbf{x}) = \sum |q_j - x_j|$$
+        <p><strong>$K$ Tradeoff:</strong> $K=1 \implies$ High Variance (Overfitting, noisy boundaries). $K \to N \implies$ High Bias (Underfitting, majority class collapse). Optimal: $K \approx \sqrt{N}$ (odd number).</p>
+      </div>
+    </section>
+
+    <!-- Section 05: Decision Trees & Ensembles -->
+    <section id="trees">
+      <h2 class="section-title">05. Decision Trees & Ensemble Methods</h2>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Splitting Criteria (ID3 vs CART)</h3>
+        $$H(S) = -\sum p_i \log_2(p_i), \qquad \operatorname{Gain}(S, A) = H(S) - \sum \frac{|S_v|}{|S|}H(S_v)$$
+        $$\operatorname{Gini}(S) = 1 - \sum p_i^2, \qquad \operatorname{Gini}_{\text{split}}(S, A) = \sum \frac{|S_v|}{|S|}\operatorname{Gini}(S_v)$$
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Random Forest Variance Reduction Theorem</h3>
+        $$\operatorname{Var}\left(\hat{f}_{\text{RF}}\right) = \rho \sigma^2 + \frac{1 - \rho}{B}\sigma^2$$
+        <p>As trees $B \to \infty$, variance approaches $\rho \sigma^2$. Random feature subsampling ($m \approx \sqrt{p}$) decorrelates trees ($\rho \to 0$), driving total variance to zero.</p>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">AdaBoost Reweighting</h3>
+        $$\epsilon_t = \sum_{\text{misclassified}} w_t(i), \quad \alpha_t = \frac{1}{2}\ln\left(\frac{1 - \epsilon_t}{\epsilon_t}\right), \quad w_{t+1}(i) = \frac{w_t(i) e^{-\alpha_t y_i h_t(\mathbf{x}_i)}}{Z_t}$$
+      </div>
+    </section>
+
+    <!-- Section 06: Clustering & PCA -->
+    <section id="unsupervised">
+      <h2 class="section-title">06. Clustering (K-Means) & Dimensionality Reduction (PCA)</h2>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">K-Means Objective & Silhouette Score</h3>
+        $$\arg\min_{\mathcal{C}} \operatorname{WCSS} = \sum_{k=1}^K \sum_{\mathbf{x} \in C_k} \|\mathbf{x} - \boldsymbol{\mu}_k\|^2, \qquad s(i) = \frac{b(i) - a(i)}{\max(a(i), b(i))}$$
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">PCA via Dual SVD ($p \gg n$)</h3>
+        $$\tilde{\mathbf{X}} = \mathbf{U} \mathbf{S} \mathbf{V}^T \in \mathbb{R}^{n \times p}, \qquad \lambda_j = \frac{s_j^2}{n - 1}$$
+        <p>Computes in $O(n^2 p)$ time instead of $O(p^3)$ covariance eigendecomposition ($2500\times$ faster). Translate latent PCs to biomarkers via factor loadings $\mathbf{V}_k$ and Differential Expression Analysis (FDR $q \le 0.05$).</p>
+      </div>
+    </section>
+
+    <!-- Section 07: Master Comparison Matrix -->
+    <section id="comparison">
+      <h2 class="section-title">07. Master Algorithm Comparison Matrix</h2>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Algorithm</th>
+              <th>Learning Type</th>
+              <th>Training Complexity</th>
+              <th>Inference Complexity</th>
+              <th>Primary Hyperparameter</th>
+              <th>Handling Outliers</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Linear Regression (OLS)</strong></td>
+              <td>Parametric</td>
+              <td>$O(d^2 n + d^3)$</td>
+              <td>$O(d)$</td>
+              <td>None (Closed-form)</td>
+              <td>Sensitive (Squared errors)</td>
+            </tr>
+            <tr>
+              <td><strong>Ridge / Lasso</strong></td>
+              <td>Parametric Regularized</td>
+              <td>$O(d^3)$ or Iterative</td>
+              <td>$O(d)$</td>
+              <td>$\lambda$ (Penalty strength)</td>
+              <td>More robust than OLS</td>
+            </tr>
+            <tr>
+              <td><strong>Logistic Regression</strong></td>
+              <td>Parametric Probabilistic</td>
+              <td>$O(\text{epochs} \cdot n \cdot d)$</td>
+              <td>$O(d)$</td>
+              <td>$\lambda$ / Regularization $C$</td>
+              <td>Robust with sigmoid</td>
+            </tr>
+            <tr>
+              <td><strong>K-Nearest Neighbors (KNN)</strong></td>
+              <td>Non-Parametric Lazy</td>
+              <td>$O(1)$</td>
+              <td>$O(n \cdot d)$</td>
+              <td>$K$ (Number of neighbors)</td>
+              <td>Sensitive when $K=1$</td>
+            </tr>
+            <tr>
+              <td><strong>Naïve Bayes</strong></td>
+              <td>Generative Probabilistic</td>
+              <td>$O(n \cdot d)$</td>
+              <td>$O(d)$</td>
+              <td>$\alpha$ (Laplace smoothing)</td>
+              <td>Highly robust</td>
+            </tr>
+            <tr>
+              <td><strong>Decision Trees (CART/ID3)</strong></td>
+              <td>Non-Parametric Tree</td>
+              <td>$O(n \cdot d \cdot \log n)$</td>
+              <td>$O(\text{depth}) \le O(\log n)$</td>
+              <td>`max_depth`, `min_samples_split`</td>
+              <td>Robust (Monotonic splits)</td>
+            </tr>
+            <tr>
+              <td><strong>Random Forest</strong></td>
+              <td>Bagged Ensemble</td>
+              <td>$O(B \cdot n \cdot d \log n)$</td>
+              <td>$O(B \cdot \log n)$</td>
+              <td>$B$ (trees), $m$ (features)</td>
+              <td>Highly robust</td>
+            </tr>
+            <tr>
+              <td><strong>AdaBoost</strong></td>
+              <td>Sequential Boosting</td>
+              <td>$O(T \cdot n \cdot d)$</td>
+              <td>$O(T)$</td>
+              <td>$T$ (Iterations), Learning Rate</td>
+              <td>Sensitive to noisy labels</td>
+            </tr>
+            <tr>
+              <td><strong>K-Means Clustering</strong></td>
+              <td>Unsupervised Partitional</td>
+              <td>$O(I \cdot K \cdot n \cdot d)$</td>
+              <td>$O(K \cdot d)$</td>
+              <td>$K$ (Clusters)</td>
+              <td>Sensitive to outliers</td>
+            </tr>
+            <tr>
+              <td><strong>PCA (Dual SVD)</strong></td>
+              <td>Unsupervised Projection</td>
+              <td>$O(n^2 p)$ for $p \gg n$</td>
+              <td>$O(k \cdot p)$</td>
+              <td>$k$ (Retained variance $\ge 85\%$)</td>
+              <td>Sensitive (variance maximized)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function toggleDrawer() {
+      const drawer = document.getElementById('drawer');
+      const backdrop = document.getElementById('backdrop');
+      drawer.classList.toggle('open');
+      backdrop.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    }
+
+    // Restore user theme
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+  </script>
+
+</body>
+</html>

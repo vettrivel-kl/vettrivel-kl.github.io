@@ -1,0 +1,1128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Decision Trees & Ensemble Methods | Complete Exam Question Bank & Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#2563eb;--brand-soft:#eff6ff;--teal:#059669;--teal-soft:#ecfdf5;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#0f172a;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:800}
+aside h2{font-size:18px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.12em;margin:18px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#cbd5e1;font-size:13px}
+nav a:hover,nav a.active{background:#1e293b;color:#38bdf8;text-decoration:none}
+.module-hub-link{background:#1e293b;border:1px solid #334155;color:#38bdf8;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:20px;padding:12px;border:1px solid #334155;border-radius:12px;color:#cbd5e1;font-size:12px;background:#131d35}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#047857;color:#ecfdf5}
+
+/* Mobile Sticky Topbar */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#0f172a;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{
+  font-size:14.5px;
+  font-weight:800;
+  color:#f8fafc;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.mobile-topbar-actions{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.mobile-btn{
+  background:#1e293b;
+  border:1px solid #334155;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  cursor:pointer;
+  min-height:36px;
+}
+
+/* Horizontal Swipeable Pill Nav */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer Menu Overlay */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#0f172a;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #1e293b;
+  padding-bottom:12px;
+}
+.drawer-close{
+  background:none;
+  border:none;
+  color:#94a3b8;
+  font-size:24px;
+  cursor:pointer;
+  padding:4px 8px;
+}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#2563eb 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"H(S)";position:absolute;right:20px;bottom:-30px;font-size:110px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#93c5fd;font-weight:800}
+h1{font-size:clamp(22px,4.5vw,38px);line-height:1.15;margin:10px 0}
+.hero p{max-width:700px;color:#e0e7ff;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+.formula-banner{
+  background:#0f172a;
+  color:#f8fafc;
+  padding:16px 14px;
+  border-radius:12px;
+  text-align:center;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+.formula-banner .katex-display{margin:6px 0}
+.formula-banner small{display:block;font-size:11px;color:#94a3b8;margin-top:6px}
+
+/* KaTeX Horizontal Scrollbar Removal & Vertical Headroom */
+.katex-display{
+  font-size:clamp(13px, 3.6vw, 15.5px) !important;
+  margin:12px 0 !important;
+  padding:12px 4px 8px !important;
+  overflow-x:auto !important;
+  overflow-y:visible !important;
+  scrollbar-width:none !important;
+  -ms-overflow-style:none !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+.katex-display::-webkit-scrollbar{display:none !important;}
+.katex-display > .katex{
+  display:block !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  padding-top:4px !important;
+  padding-bottom:2px !important;
+}
+.katex{
+  font-size:1em !important;
+  line-height:normal !important;
+  text-rendering:auto !important;
+  white-space:normal !important;
+}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--teal-soft);border-color:var(--teal)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+.note.purple{background:var(--purple-soft);border-color:var(--purple)}
+
+/* Table Styling */
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#dbeafe;color:#1e40af;margin-bottom:6px}
+.pyq-badge.ct{background:#e0e7ff;color:#3730a3}
+.pyq-badge.nov{background:#fef3c7;color:#92400e}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+  -webkit-tap-highlight-color:transparent;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  transition:background .15s;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+button:hover{background:#1d4ed8}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+
+/* Quiz for iPhone 13 */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+  -webkit-tap-highlight-color:transparent;
+  transition:all .15s;
+}
+.quiz-q label:active{background:#eff6ff;border-color:#93c5fd}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--teal-soft);border-radius:8px;border-left:3px solid var(--teal);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Interactive Calculator */
+.tool-box{background:white;border:2px solid #93c5fd;border-radius:12px;padding:16px;margin:16px 0}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:8px}
+.tool-group label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px}
+.tool-group input{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  font-size:16px;
+  background:#f8fafc;
+  min-height:40px;
+}
+.tool-result{margin-top:12px;padding:12px;background:#eff6ff;border-radius:8px;border-left:4px solid var(--brand);font-size:13px}
+
+/* Tree Diagram Container */
+.tree-diagram{background:#0f172a;color:#f8fafc;padding:16px;border-radius:12px;font-family:monospace;font-size:13px;line-height:1.5;overflow-x:auto;margin:12px 0}
+
+/* Mobile Responsiveness */
+@media(max-width:880px){
+  .shell{grid-template-columns:1fr}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:16px 14px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr}
+  .hero{padding:22px 16px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  .card{padding:14px}
+  .tool-box{padding:12px}
+  .tool-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Drawer Backdrop -->
+<div class="drawer-backdrop" id="backdrop" onclick="toggleDrawer()"></div>
+
+<!-- Slide-Out Mobile Navigation Drawer -->
+<div class="mobile-drawer" id="drawer">
+  <div class="drawer-header">
+    <div style="font-weight:800;font-size:13px;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;">ML Study Hub</div>
+    <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+  </div>
+  <a href="/ml-study-guide/index.html" class="module-hub-link" style="display:block;padding:8px 12px;border-radius:8px;font-size:13px;">&larr; Back to Study Hub</a>
+  <div class="nav-label">Sections</div>
+  <nav>
+    <a href="#intuition" onclick="toggleDrawer()">01. Intuition & Contrast</a>
+    <a href="#criteria" onclick="toggleDrawer()">02. ID3 vs CART Criteria</a>
+    <a href="#rf-proof" onclick="toggleDrawer()">03. Random Forest Proof</a>
+    <a href="#adaboost" onclick="toggleDrawer()">04. AdaBoost Mechanics</a>
+    <a href="#notation" onclick="toggleDrawer()">05. Notation Matrix</a>
+    <a href="#steps" onclick="toggleDrawer()">06. Solving Protocol</a>
+    <a href="#traps" onclick="toggleDrawer()">07. 6 Exam Traps</a>
+    <a href="#pyqs" onclick="toggleDrawer()">08. All Solved PYQs</a>
+    <a href="#calculator" onclick="toggleDrawer()">09. Entropy Calculator</a>
+    <a href="#quiz" onclick="toggleDrawer()">10. Active Recall Quiz</a>
+    <a href="#checklist" onclick="toggleDrawer()">11. Presentation Template</a>
+  </nav>
+  <div class="nav-label">Modules</div>
+  <nav>
+    <a href="/ml-study-guide/01-linear-regression-optimization.html">01. Linear Regression</a>
+    <a href="/ml-study-guide/02-logistic-regression-metrics.html">02. Logistic & Metrics</a>
+    <a href="/ml-study-guide/03-naive-bayes-knn.html">03. Naive Bayes & KNN</a>
+    <a href="/ml-study-guide/04-decision-trees-ensembles.html" class="active">04. Decision Trees & RF</a>
+    <a href="/ml-study-guide/05-clustering-pca.html">05. K-Means & PCA</a>
+  </nav>
+</div>
+
+<!-- Mobile Sticky Topbar -->
+<div class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>Module 04 · Trees & Ensembles</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/ml-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="toggleDrawer()">&#9776; Menu</button>
+  </div>
+</div>
+
+<!-- Mobile Horizontal Pill Nav -->
+<div class="mobile-pills-bar">
+  <a href="#intuition" class="pill-link">Intuition</a>
+  <a href="#criteria" class="pill-link">ID3 vs CART</a>
+  <a href="#rf-proof" class="pill-link">RF Proof</a>
+  <a href="#adaboost" class="pill-link">AdaBoost</a>
+  <a href="#traps" class="pill-link">Traps</a>
+  <a href="#pyqs" class="pill-link">Past Papers</a>
+  <a href="#calculator" class="pill-link">Entropy Tool</a>
+  <a href="#quiz" class="pill-link">Quiz</a>
+  <a href="#checklist" class="pill-link">Checklist</a>
+</div>
+
+<div class="shell">
+
+  <!-- Desktop Sidebar -->
+  <aside>
+    <div class="brand">21CSC555J · Exam Prep</div>
+    <h2>Decision Trees & Ensembles</h2>
+    <a href="/ml-study-guide/index.html" class="module-hub-link" style="padding:8px 12px;border-radius:8px;font-size:12.5px;">&larr; Back to Study Hub</a>
+
+    <div class="nav-label">Sections</div>
+    <nav>
+      <a href="#intuition">01. Intuition & Contrast</a>
+      <a href="#criteria">02. ID3 vs CART Splitting</a>
+      <a href="#rf-proof">03. Random Forest Proof</a>
+      <a href="#adaboost">04. AdaBoost Boosting</a>
+      <a href="#notation">05. Notation Decoding Matrix</a>
+      <a href="#steps">06. Step-by-Step Protocol</a>
+      <a href="#traps">07. 6 Deadly Exam Traps</a>
+      <a href="#pyqs">08. Complete University PYQs</a>
+      <a href="#calculator">09. Interactive Entropy Tool</a>
+      <a href="#quiz">10. Self-Test Active Recall</a>
+      <a href="#checklist">11. Answer Sheet Checklist</a>
+    </nav>
+
+    <div class="side-note">
+      <strong>Exam Weightage: 20-40 Marks</strong><br>
+      Internal Score: <strong>51.60 / 60</strong><br>
+      Target Sem Mark: <strong>49 / 100</strong> (Safe: 56)<br>
+      <span class="status-pill pill-target">Priority 1 High-Yield</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="eyebrow">Module 04 · Non-Parametric Partitions & Ensembles</div>
+      <h1>Decision Trees & Ensemble Methods</h1>
+      <p>The single most heavily tested subject area. Quinlan's ID3 Entropy and Information Gain on the 14-day Weather dataset, Breiman's CART Gini Index construction, the mathematical proof of Random Forest variance reduction, and AdaBoost reweighting.</p>
+      <div class="pills">
+        <span class="pill">Jan 2025 (Q6 20M)</span>
+        <span class="pill">Nov 2025 (Q4 20M, Q7 20M)</span>
+        <span class="pill">CT-2 (Q3 20M, Q4 20M)</span>
+        <span class="pill">Weather 14-Day ID3</span>
+        <span class="pill">Random Forest Proof</span>
+      </div>
+    </div>
+
+    <!-- Section 01: Intuition & Contrast -->
+    <section id="intuition">
+      <h2>01. Intuition & Concept Contrast</h2>
+      <p class="lead">Decision trees perform recursive greedy axis-aligned orthogonal partitions of feature space. A single tree suffers from high variance (overfitting); ensemble methods combine multiple trees to eliminate variance or bias.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Splitting Metric</div>
+          <h3 style="margin-top:2px;">Information Gain (ID3) vs Gini Index (CART)</h3>
+          <p><strong>Shannon Entropy (ID3):</strong> Measures thermodynamic disorder in bits: $H(S) = -\sum p_i \log_2(p_i)$. Computationally heavier due to $\log_2$. Supports multi-way splits.</p>
+          <p><strong>Gini Impurity (CART):</strong> Probability of incorrect classification under random labeling: $\text{Gini} = 1 - \sum p_i^2$. Computationally faster (pure squaring). Strictly binary splits.</p>
+        </div>
+        <div class="card">
+          <div class="kicker">Ensemble Architecture</div>
+          <h3 style="margin-top:2px;">Bagging (Random Forest) vs Boosting (AdaBoost)</h3>
+          <p><strong>Bagging (Parallel Variance Reduction):</strong> Trains unpruned deep trees independently on bootstrap samples. Reduces variance without changing bias.</p>
+          <p><strong>Boosting (Sequential Bias Reduction):</strong> Trains shallow trees (stumps) sequentially; each tree focuses on errors made by previous trees. Reduces bias and variance.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: ID3 vs CART Criteria -->
+    <section id="criteria">
+      <h2>02. Splitting Criteria Formulations (ID3 vs CART)</h2>
+
+      <div class="formula-banner">
+        <div><strong>Entropy & Information Gain (Quinlan's ID3)</strong></div>
+        $$H(S) = -\sum_{c=1}^C p_c \log_2(p_c), \qquad \operatorname{Gain}(S, A) = H(S) - \sum_{v \in \text{Values}(A)} \frac{|S_v|}{|S|} H(S_v)$$
+        <small>Select attribute $A$ that maximizes $\operatorname{Gain}(S, A)$.</small>
+      </div>
+
+      <div class="formula-banner" style="background:#1e293b;border:1px solid #475569;">
+        <div><strong>Gini Impurity & Gini Split (Breiman's CART)</strong></div>
+        $$\operatorname{Gini}(S) = 1 - \sum_{c=1}^C p_c^2, \qquad \operatorname{Gini}_{\text{split}}(S, A) = \sum_{v \in \text{Values}(A)} \frac{|S_v|}{|S|} \operatorname{Gini}(S_v)$$
+        <small>Select attribute $A$ that minimizes $\operatorname{Gini}_{\text{split}}(S, A)$ (or maximizes Gini Gain).</small>
+      </div>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Feature</th>
+              <th>Quinlan's ID3</th>
+              <th>Breiman's CART</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Splitting Metric</strong></td>
+              <td>Information Gain (Shannon Entropy)</td>
+              <td>Gini Impurity / Index</td>
+            </tr>
+            <tr>
+              <td><strong>Split Type</strong></td>
+              <td>Multi-way (branch per categorical level)</td>
+              <td>Strictly Binary ($A \le \theta$ or $A \in \{v\}$)</td>
+            </tr>
+            <tr>
+              <td><strong>Continuous Features</strong></td>
+              <td>Requires manual discretization</td>
+              <td>Native sorting and binary thresholds</td>
+            </tr>
+            <tr>
+              <td><strong>Pruning Strategy</strong></td>
+              <td>Reduced error pruning after growth</td>
+              <td>Cost-Complexity Pruning ($R_\alpha(T)$)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 03: Random Forest Variance Proof -->
+    <section id="rf-proof">
+      <h2>03. Random Forest Mathematical Variance Reduction Proof</h2>
+      <p class="lead"><strong>Nov 2025 (Q4) Guaranteed Exam Derivation (8 Marks).</strong> Mathematical derivation proving how Random Forests eliminate tree variance.</p>
+
+      <div class="formula-banner">
+        <div><strong>The Governing Ensemble Variance Theorem</strong></div>
+        $$\operatorname{Var}\left(\hat{f}_{\text{RF}}(\mathbf{x})\right) = \rho \sigma^2 + \frac{1 - \rho}{B}\sigma^2$$
+        <small>Where $B$ is number of trees, $\sigma^2$ is individual tree variance, and $\rho$ is pairwise tree correlation.</small>
+      </div>
+
+      <div class="card">
+        <h3>Step-by-Step Derivation:</h3>
+        <p>1. Let an ensemble of $B$ bootstrap regression trees be denoted $T_1(\mathbf{x}), \dots, T_B(\mathbf{x})$.</p>
+        <p>2. Assume each individual tree has identical variance: $\operatorname{Var}(T_b(\mathbf{x})) = \sigma^2$.</p>
+        <p>3. Assume pairwise correlation between any two distinct trees is $\operatorname{Corr}(T_j, T_k) = \rho$, so that covariance is $\operatorname{Cov}(T_j, T_k) = \rho \sigma^2$ for $j \neq k$.</p>
+        <p>4. The ensemble prediction is the arithmetic mean: $\bar{T} = \frac{1}{B}\sum_{b=1}^B T_b(\mathbf{x})$.</p>
+        <p>5. Expanding the variance of the sum:</p>
+        $$\begin{aligned}
+        \operatorname{Var}(\bar{T}) &= \operatorname{Var}\left(\frac{1}{B}\sum_{b=1}^B T_b\right) \\[6pt]
+        &= \frac{1}{B^2} \left[ \sum_{b=1}^B \operatorname{Var}(T_b) + \sum_{j \neq k} \operatorname{Cov}(T_j, T_k) \right] \\[6pt]
+        &= \frac{1}{B^2} \left[ B\sigma^2 + B(B-1)\rho \sigma^2 \right] \\[6pt]
+        &= \frac{\sigma^2}{B} + \frac{B - 1}{B}\rho \sigma^2 \\[6pt]
+        &= \mathbf{\rho \sigma^2 + \frac{1 - \rho}{B}\sigma^2} \quad \text{Q.E.D.}
+        \end{aligned}$$
+      </div>
+
+      <div class="note good">
+        <strong>The Two Essential Engineering Mechanisms:</strong><br>
+        1. <strong>As $B \to \infty$:</strong> The term $\frac{1-\rho}{B}\sigma^2 \to 0$, leaving residual variance $\rho \sigma^2$.<br>
+        2. <strong>Feature Subspace Randomization ($m \approx \sqrt{p}$ or $p/3$):</strong> If we only use Bagging, all trees split on the single strongest feature (e.g. house size), making trees highly correlated ($\rho \to 1$). By forcing trees to choose splits only from a randomly selected subset of $m$ features at each node, trees become de-correlated: $\boldsymbol{\rho \to 0}$.<br>
+        As $\rho \to 0$ and $B \to \infty$, <strong>ensemble variance approaches 0</strong>, producing a model with low bias and low variance.
+      </div>
+    </section>
+
+    <!-- Section 04: AdaBoost Boosting -->
+    <section id="adaboost">
+      <h2>04. AdaBoost Adaptive Boosting Mechanics</h2>
+      <p class="lead"><strong>Nov 2025 (Q7) & CT-2 (Q4) Core Theory (8-10 Marks).</strong></p>
+
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>Step 1: Uniform Weight Initialization</strong>
+            $$w_1(i) = \frac{1}{N}, \qquad \forall i \in \{1, \dots, N\}$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 2: Weighted Classification Error ($\epsilon_t$)</strong>
+            $$\epsilon_t = \sum_{i: h_t(\mathbf{x}_i) \neq y_i} w_t(i)$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 3: Learner Voting Weight ($\alpha_t$)</strong>
+            $$\alpha_t = \frac{1}{2}\ln\left(\frac{1 - \epsilon_t}{\epsilon_t}\right)$$
+            <p>If $\epsilon_t < 0.5 \implies \alpha_t > 0$. Accurate learners receive large positive voting power.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 4: Sample Weight Update</strong>
+            $$w_{t+1}(i) = \frac{w_t(i) \exp(-\alpha_t y_i h_t(\mathbf{x}_i))}{Z_t}$$
+            <p>Misclassified instances ($y_i h_t < 0$) have weights multiplied by $e^{+\alpha_t}$ (scaled up); correctly classified instances are multiplied by $e^{-\alpha_t}$ (scaled down).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 5: Final Strong Classifier</strong>
+            $$H(\mathbf{x}) = \operatorname{sign}\left(\sum_{t=1}^T \alpha_t h_t(\mathbf{x})\right)$$
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 05: Notation Matrix -->
+    <section id="notation">
+      <h2>05. Notation Decoding Matrix</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Formal Name</th>
+              <th>Plain-English Meaning</th>
+              <th>Exam Benchmark Value</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$H(S)$</td>
+              <td>Shannon Entropy</td>
+              <td>Impurity / disorder of set $S$ in bits</td>
+              <td>$H(9\text{Yes}, 5\text{No}) = \mathbf{0.9403}$ bits</td>
+            </tr>
+            <tr>
+              <td>$\operatorname{Gain}(S, A)$</td>
+              <td>Information Gain</td>
+              <td>Reduction in entropy achieved by splitting on $A$</td>
+              <td>$\text{Gain}(\text{Outlook}) = \mathbf{0.2467}$ (Highest)</td>
+            </tr>
+            <tr>
+              <td>$\operatorname{Gini}(S)$</td>
+              <td>Gini Impurity</td>
+              <td>Probability of misclassifying randomly picked item</td>
+              <td>$\text{Gini}(4\text{Yes}, 3\text{No}) = 1 - (16/49) - (9/49) = \mathbf{0.4898}$</td>
+            </tr>
+            <tr>
+              <td>$\rho$</td>
+              <td>Ensemble Tree Correlation</td>
+              <td>Degree to which individual trees make identical errors</td>
+              <td>Lowered toward $0$ via random feature sampling</td>
+            </tr>
+            <tr>
+              <td>$\alpha_t$</td>
+              <td>Learner Importance</td>
+              <td>Voting weight assigned to base stump $t$</td>
+              <td>$\alpha_t = \frac{1}{2}\ln(\frac{1-\epsilon_t}{\epsilon_t})$</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 06: Solving Protocol -->
+    <section id="steps">
+      <h2>06. Repeatable Step-by-Step Solving Protocol</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>Step 1: Compute Overall Dataset Impurity</strong>
+            $$H(S) = -p_+ \log_2(p_+) - p_- \log_2(p_-), \qquad \text{or} \quad \operatorname{Gini}(S) = 1 - p_+^2 - p_-^2$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 2: Partition Dataset for Every Candidate Attribute</strong>
+            <p>Count $(+, -)$ outcomes for each distinct category $v$ of attribute $A$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 3: Calculate Sub-Node Impurities & Weighted Average</strong>
+            $$\text{Weighted Impurity} = \sum_v \frac{|S_v|}{|S|} \cdot \text{Impurity}(S_v)$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 4: Determine Information Gain (or Gini Reduction)</strong>
+            $$\operatorname{Gain} = \text{Parent Impurity} - \text{Weighted Impurity}$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 5: Select Best Attribute for Root Node</strong>
+            <p>Choose attribute with <strong>Highest Information Gain</strong> (ID3) or <strong>Lowest Weighted Gini</strong> (CART).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 6: Expand Pure and Impure Branches</strong>
+            <p>If a branch contains only one class ($H = 0$), terminate as leaf. If impure, recurse on remaining attributes.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 07: 6 Exam Traps -->
+    <section id="traps">
+      <h2>07. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+      <div class="grid">
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 01: Natural Logarithm Confusion</div>
+          <h3>Computing $H(S)$ with $\ln$ Instead of $\log_2$</h3>
+          <p>Entropy in ID3 <strong>must be in base 2 (bits)</strong>. To compute with basic calculators: $\log_2(p) = \frac{\ln(p)}{\ln(2)} \approx \frac{\ln(p)}{0.69315}$. Using natural logs gives values in "nats" and loses marks.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 02: Missing Negative Sign in Entropy</div>
+          <h3>Forgetting $- \sum p \log_2(p)$</h3>
+          <p>Since $p_i \le 1$, $\log_2(p_i)$ is negative. Omitting the leading minus sign produces negative entropy values. <strong>Entropy is strictly non-negative ($H \ge 0$).</strong></p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 03: Inverting CART Criterion</div>
+          <h3>Picking the Highest Weighted Gini</h3>
+          <p>Higher Information Gain is better, but <strong>Lower Weighted Gini Impurity is better</strong>. If using Gini directly, pick the attribute that minimizes $\text{Gini}_{\text{split}}$.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 04: Random Forest Misconception</div>
+          <h3>Assuming RF is Just Bagging</h3>
+          <p>Bagging alone does not decorrelate trees ($\rho \approx 1$). <strong>Feature Subspace Sampling ($m \approx \sqrt{p}$)</strong> is the critical invention that decorrelates trees ($\rho \to 0$).</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 05: Unnormalized AdaBoost Weights</div>
+          <h3>Forgetting Normalization Constant $Z_t$</h3>
+          <p>After multiplying weights by $e^{\pm \alpha_t}$, you must divide each weight by $Z_t = \sum w_{t+1}(i)$ so that updated weights sum to $1.0$.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 06: Zero Entropy Leaves</div>
+          <h3>Splitting Pure Nodes</h3>
+          <p>When a branch has all Yes or all No ($H = 0$), do not attempt further splits! It is a terminal leaf.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 08: Complete Solved University PYQs -->
+    <section id="pyqs">
+      <h2>08. Complete University Question Bank (All Past PYQs Solved)</h2>
+      <div class="controls">
+        <button onclick="toggleAllDetails(true)">Expand All Solutions</button>
+        <button class="secondary" onclick="toggleAllDetails(false)">Collapse All</button>
+      </div>
+
+      <!-- Question 1: Jan 2025 Q6 Weather ID3 (20 Marks) -->
+      <div class="details-box">
+        <details id="q1">
+          <summary>
+            <span><span class="pyq-badge">Jan 2025 · Question 6</span> The 14-Day Weather Dataset Full ID3 Construction (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            A sports club has historical data on 14 days with attributes Outlook, Temperature, Humidity, Wind, and Decision (Play: 9 Yes, 5 No).<br>
+            Construct a complete decision tree model using Quinlan's ID3 algorithm. Describe attribute selection, splitting criteria, and build the tree. (20 Marks)
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Day</th><th>Outlook</th><th>Temperature</th><th>Humidity</th><th>Wind</th><th>Decision</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>sunny</td><td>hot</td><td>high</td><td>weak</td><td>No</td></tr>
+                <tr><td>2</td><td>sunny</td><td>hot</td><td>high</td><td>strong</td><td>No</td></tr>
+                <tr><td>3</td><td>overcast</td><td>hot</td><td>high</td><td>weak</td><td>Yes</td></tr>
+                <tr><td>4</td><td>rainfall</td><td>mild</td><td>high</td><td>weak</td><td>Yes</td></tr>
+                <tr><td>5</td><td>rainfall</td><td>cool</td><td>normal</td><td>weak</td><td>Yes</td></tr>
+                <tr><td>6</td><td>rainfall</td><td>cool</td><td>normal</td><td>strong</td><td>No</td></tr>
+                <tr><td>7</td><td>overcast</td><td>cool</td><td>normal</td><td>strong</td><td>Yes</td></tr>
+                <tr><td>8</td><td>sunny</td><td>mild</td><td>high</td><td>weak</td><td>No</td></tr>
+                <tr><td>9</td><td>sunny</td><td>cool</td><td>normal</td><td>weak</td><td>Yes</td></tr>
+                <tr><td>10</td><td>rainfall</td><td>mild</td><td>normal</td><td>weak</td><td>Yes</td></tr>
+                <tr><td>11</td><td>sunny</td><td>mild</td><td>normal</td><td>strong</td><td>Yes</td></tr>
+                <tr><td>12</td><td>overcast</td><td>mild</td><td>high</td><td>strong</td><td>Yes</td></tr>
+                <tr><td>13</td><td>overcast</td><td>hot</td><td>normal</td><td>weak</td><td>Yes</td></tr>
+                <tr><td>14</td><td>rainfall</td><td>mild</td><td>high</td><td>strong</td><td>No</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Root Node Entropy of Entire Dataset ($S$):</h5>
+          <p>Total: $N = 14$, Positive ($p_+ = 9/14$), Negative ($p_- = 5/14$):</p>
+          $$H(S) = -\left(\frac{9}{14}\log_2\frac{9}{14} + \frac{5}{14}\log_2\frac{5}{14}\right) \approx -(-0.4087 - 0.5316) = \mathbf{0.9403 \text{ bits}}$$
+
+          <h5>2. Information Gain for Candidate Attributes:</h5>
+          <p><strong>A. Outlook:</strong></p>
+          <ul>
+            <li>Sunny ($5$ days: $2$ Yes, $3$ No): $H(S_{\text{sunny}}) = -\frac{2}{5}\log_2\frac{2}{5} - \frac{3}{5}\log_2\frac{3}{5} = \mathbf{0.9710}$</li>
+            <li>Overcast ($4$ days: $4$ Yes, $0$ No): $H(S_{\text{overcast}}) = 0.0000$ (Pure Node!)</li>
+            <li>Rainfall ($5$ days: $3$ Yes, $2$ No): $H(S_{\text{rainfall}}) = -\frac{3}{5}\log_2\frac{3}{5} - \frac{2}{5}\log_2\frac{2}{5} = \mathbf{0.9710}$</li>
+          </ul>
+          $$\operatorname{Gain}(S, \text{Outlook}) = 0.9403 - \left[\frac{5}{14}(0.9710) + \frac{4}{14}(0) + \frac{5}{14}(0.9710)\right] = 0.9403 - 0.6936 = \mathbf{0.2467}$$
+
+          <p><strong>B. Humidity:</strong> High ($3$ Yes, $4$ No; $H=0.9852$), Normal ($6$ Yes, $1$ No; $H=0.5917$):</p>
+          $$\operatorname{Gain}(S, \text{Humidity}) = 0.9403 - \left[\frac{7}{14}(0.9852) + \frac{7}{14}(0.5917)\right] = 0.9403 - 0.7885 = \mathbf{0.1518}$$
+
+          <p><strong>C. Wind:</strong> Weak ($6$ Yes, $2$ No; $H=0.8113$), Strong ($3$ Yes, $3$ No; $H=1.0000$):</p>
+          $$\operatorname{Gain}(S, \text{Wind}) = 0.9403 - \left[\frac{8}{14}(0.8113) + \frac{6}{14}(1.0000)\right] = 0.9403 - 0.8922 = \mathbf{0.0481}$$
+
+          <p><strong>D. Temperature:</strong> Hot ($2$ Yes, $2$ No), Mild ($4$ Yes, $2$ No), Cool ($3$ Yes, $1$ No):</p>
+          $$\operatorname{Gain}(S, \text{Temperature}) = 0.9403 - 0.9111 = \mathbf{0.0292}$$
+
+          <h5>3. Root Node Selection:</h5>
+          <p>$\operatorname{Gain}(\text{Outlook}) = \mathbf{0.2467}$ is the highest. Therefore, <strong>Outlook is selected as the Root Node</strong>.</p>
+
+          <h5>4. Expanding Branches:</h5>
+          <ul>
+            <li><strong>Branch 1 (Outlook = Overcast):</strong> All $4$ examples (Days 3, 7, 12, 13) are "Yes". $\implies$ <strong>Leaf: Play = Yes</strong>.</li>
+            <li><strong>Branch 2 (Outlook = Sunny):</strong> Contains Days 1, 2, 8, 9, 11 (2 Yes, 3 No). Evaluating Humidity:
+              <ul>
+                <li>Humidity = High (Days 1, 2, 8): All 3 are "No" $\implies$ <strong>Leaf: Play = No</strong>.</li>
+                <li>Humidity = Normal (Days 9, 11): Both are "Yes" $\implies$ <strong>Leaf: Play = Yes</strong>.</li>
+              </ul>
+            </li>
+            <li><strong>Branch 3 (Outlook = Rainfall):</strong> Contains Days 4, 5, 6, 10, 14 (3 Yes, 2 No). Evaluating Wind:
+              <ul>
+                <li>Wind = Weak (Days 4, 5, 10): All 3 are "Yes" $\implies$ <strong>Leaf: Play = Yes</strong>.</li>
+                <li>Wind = Strong (Days 6, 14): Both are "No" $\implies$ <strong>Leaf: Play = No</strong>.</li>
+              </ul>
+            </li>
+          </ul>
+
+          <div class="tree-diagram">
+[Outlook]
+   ├── (Overcast) ─────────────> [YES]
+   ├── (Sunny) ──────> [Humidity]
+   │                      ├── (High) ───> [NO]
+   │                      └── (Normal) ─> [YES]
+   └── (Rainfall) ───> [Wind]
+                          ├── (Weak) ───> [YES]
+                          └── (Strong) ─> [NO]
+          </div>
+        </details>
+      </div>
+
+      <!-- Question 2: CT-2 Q3 CART Customer Tree (20 Marks) -->
+      <div class="details-box">
+        <details id="q2">
+          <summary>
+            <span><span class="pyq-badge ct">CT-2 · Question 3</span> CART Customer Purchase Decision Tree Construction (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            7 customers with Age Group (Young, Middle, Senior), Income Level (Low, Med, High), and Buy (4 Yes, 3 No).<br>
+            C1: Young, Low, No | C2: Young, Med, No | C3: Middle, Low, Yes | C4: Middle, High, Yes<br>
+            C5: Senior, Med, Yes | C6: Senior, High, Yes | C7: Senior, Low, No<br>
+            (a) Gini Index at root (4M)<br>
+            (b) Gini Index for Age Group and Income Level splits (8M)<br>
+            (c) Best attribute to split (4M)<br>
+            (d) What happens if Gini values tie (2M)<br>
+            (e) Advantages of CART over ID3 (2M)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>(a) Root Gini Index (4 Marks)</h5>
+          $$\operatorname{Gini}(S) = 1 - \left(\frac{4}{7}\right)^2 - \left(\frac{3}{7}\right)^2 = 1 - \frac{16}{49} - \frac{9}{49} = 1 - \frac{25}{49} = \frac{24}{49} \approx \mathbf{0.4898}$$
+
+          <h5>(b) Split Gini Computations (8 Marks)</h5>
+          <p><strong>1. Attribute: Age Group</strong></p>
+          <ul>
+            <li>Young ($2$ customers: $0$ Yes, $2$ No): $\operatorname{Gini} = 1 - 0^2 - 1^2 = \mathbf{0.0}$ (Pure)</li>
+            <li>Middle ($2$ customers: $2$ Yes, $0$ No): $\operatorname{Gini} = 1 - 1^2 - 0^2 = \mathbf{0.0}$ (Pure)</li>
+            <li>Senior ($3$ customers: $2$ Yes, $1$ No): $\operatorname{Gini} = 1 - (2/3)^2 - (1/3)^2 = 1 - 5/9 = 4/9 \approx \mathbf{0.4444}$</li>
+          </ul>
+          $$\operatorname{Gini}_{\text{split}}(\text{Age}) = \frac{2}{7}(0) + \frac{2}{7}(0) + \frac{3}{7}\left(\frac{4}{9}\right) = \frac{12}{63} = \frac{4}{21} \approx \mathbf{0.1905}$$
+
+          <p><strong>2. Attribute: Income Level</strong></p>
+          <ul>
+            <li>Low ($3$ customers: $1$ Yes, $2$ No): $\operatorname{Gini} = 1 - (1/3)^2 - (2/3)^2 = 4/9 \approx \mathbf{0.4444}$</li>
+            <li>Medium ($2$ customers: $1$ Yes, $1$ No): $\operatorname{Gini} = 1 - (1/2)^2 - (1/2)^2 = 1/2 = \mathbf{0.5000}$</li>
+            <li>High ($2$ customers: $2$ Yes, $0$ No): $\operatorname{Gini} = 1 - 1^2 = \mathbf{0.0}$</li>
+          </ul>
+          $$\operatorname{Gini}_{\text{split}}(\text{Income}) = \frac{3}{7}\left(\frac{4}{9}\right) + \frac{2}{7}\left(\frac{1}{2}\right) + \frac{2}{7}(0) = \frac{4}{21} + \frac{1}{7} = \frac{4+3}{21} = \frac{7}{21} \approx \mathbf{0.3333}$$
+
+          <h5>(c) Best Attribute to Split (4 Marks)</h5>
+          <p>Since $\operatorname{Gini}_{\text{split}}(\text{Age Group}) = 0.1905 < \operatorname{Gini}_{\text{split}}(\text{Income}) = 0.3333$, <strong>Age Group</strong> produces much purer sub-nodes and is chosen as the Best Split.</p>
+
+          <h5>(d) Tie-Breaking Protocol (2 Marks)</h5>
+          <p>If two attributes have identical Gini values, the algorithm breaks the tie by: (1) selecting the split that produces more balanced child node sample counts, (2) selecting the attribute with lower computation cost, or (3) using arbitrary programmatic indexing order.</p>
+
+          <h5>(e) Advantages of CART over ID3 (2 Marks)</h5>
+          <ol>
+            <li><strong>Binary Splits:</strong> Avoids fragmented over-partitioning caused by multi-way splits.</li>
+            <li><strong>No Logarithms:</strong> Computationally faster since $1 - \sum p_i^2$ avoids expensive transcendental $\log_2$ evaluations.</li>
+          </ol>
+        </details>
+      </div>
+
+      <!-- Question 3: Nov 2025 Q4 Random Forest Variance Proof (20 Marks) -->
+      <div class="details-box">
+        <details id="q3">
+          <summary>
+            <span><span class="pyq-badge nov">Nov 2025 · Question 4</span> Housing Price Decision Tree Overfitting & Random Forest Variance Proof (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            A single Decision Tree model to predict housing prices has zero training error but poor test performance.<br>
+            i) Diagnose the problem with the model. (6 Marks)<br>
+            ii) Propose a solution using Ensembling. (6 Marks)<br>
+            iii) Explain in detail how Random Forest addresses this through mathematical proof. (8 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>(i) Diagnosis (6 Marks)</h5>
+          <p>The model suffers from **Overfitting** driven by **High Variance and Low Bias** in the Bias-Variance decomposition: $\mathbb{E}[(y - \hat{f})^2] = \text{Bias}^2 + \text{Var} + \sigma_\epsilon^2$. Greedy unpruned recursive splitting memorizes training noise.</p>
+
+          <h5>(ii) Proposed Solution: Random Forest Regression (6 Marks)</h5>
+          <p>Deploy a Random Forest ensemble combining Bootstrap Aggregation (Bagging) with Feature Subspace Randomization.</p>
+
+          <h5>(iii) Mathematical Variance Reduction Proof (8 Marks)</h5>
+          $$\operatorname{Var}\left(\frac{1}{B}\sum_{b=1}^B T_b\right) = \mathbf{\rho \sigma^2 + \frac{1 - \rho}{B}\sigma^2}$$
+          <p>As $B \to \infty$, the term $\frac{1-\rho}{B}\sigma^2 \to 0$, leaving residual variance $\rho \sigma^2$.</p>
+          <p>Standard Bagging trees are highly correlated ($\rho \approx 1$). Random Forests restrict feature splits to a random subset of $m \approx p/3$ features, de-correlating the trees ($\rho \to 0$) and driving total ensemble variance to near zero.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Section 09: Interactive Entropy Tool -->
+    <section id="calculator">
+      <h2>09. Interactive Offline Entropy & Information Gain Calculator</h2>
+      <p class="lead">Enter positive and negative sample counts to calculate Shannon Entropy in bits ($H$) and verify your homework or exam numericals.</p>
+
+      <div class="tool-box">
+        <div class="tool-grid">
+          <div class="tool-group">
+            <label>Positive Samples (e.g. Yes)</label>
+            <input type="number" id="posCount" value="9" min="0">
+          </div>
+          <div class="tool-group">
+            <label>Negative Samples (e.g. No)</label>
+            <input type="number" id="negCount" value="5" min="0">
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <button onclick="calculateEntropy()">Compute Shannon Entropy & Gini</button>
+        </div>
+
+        <div class="tool-result" id="entOutput">
+          Click button to compute node impurities.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 10: Self-Test Active Recall Quiz -->
+    <section id="quiz">
+      <h2>10. Active Recall Self-Test Quiz</h2>
+      <div class="progress-wrap"><div class="progress" id="quizBar"></div></div>
+      <div id="quizScore" style="font-size:12.5px;font-weight:700;color:var(--muted);margin-top:4px;">Answer the questions below to evaluate progress (0/4 answered).</div>
+
+      <div class="quiz-q" id="qz1">
+        <strong>1. What is the Shannon Entropy of a node containing 4 'Yes' and 0 'No' instances?</strong>
+        <label><input type="radio" name="q1" value="a" onclick="checkQ(1,'c','A completely pure node has exactly 0 entropy')"> $1.0000$ bit</label>
+        <label><input type="radio" name="q1" value="b" onclick="checkQ(1,'c','A completely pure node has exactly 0 entropy')"> $0.5000$ bit</label>
+        <label><input type="radio" name="q1" value="c" onclick="checkQ(1,'c','A completely pure node has exactly 0 entropy')"> $0.0000$ bit (Completely Pure)</label>
+        <div class="feedback" id="fb1"></div>
+        <div class="answer" id="ans1"><strong>Correct: (c)</strong> $H(S) = -1\log_2(1) - 0 = 0$. Pure leaves have zero impurity.</div>
+      </div>
+
+      <div class="quiz-q" id="qz2">
+        <strong>2. In the 14-day Weather dataset, which attribute has the highest Information Gain and is chosen as the root node?</strong>
+        <label><input type="radio" name="q2" value="a" onclick="checkQ(2,'a','Gain(Outlook) = 0.2467 bits')"> Outlook (Gain = 0.2467)</label>
+        <label><input type="radio" name="q2" value="b" onclick="checkQ(2,'a','Gain(Outlook) = 0.2467 bits')"> Humidity (Gain = 0.1518)</label>
+        <label><input type="radio" name="q2" value="c" onclick="checkQ(2,'a','Gain(Outlook) = 0.2467 bits')"> Wind (Gain = 0.0481)</label>
+        <div class="feedback" id="fb2"></div>
+        <div class="answer" id="ans2"><strong>Correct: (a)</strong> Outlook reduces entropy most ($0.2467$ bits) and forms the root split.</div>
+      </div>
+
+      <div class="quiz-q" id="qz3">
+        <strong>3. As the number of trees $B \to \infty$ in a Random Forest, what is the asymptotic ensemble variance?</strong>
+        <label><input type="radio" name="q3" value="a" onclick="checkQ(3,'b','Var converges to rho * sigma^2')"> Exactly $0$</label>
+        <label><input type="radio" name="q3" value="b" onclick="checkQ(3,'b','Var converges to rho * sigma^2')"> $\rho \sigma^2$ (pairwise tree correlation times individual variance)</label>
+        <label><input type="radio" name="q3" value="c" onclick="checkQ(3,'b','Var converges to rho * sigma^2')"> $\sigma^2 / B$</label>
+        <div class="feedback" id="fb3"></div>
+        <div class="answer" id="ans3"><strong>Correct: (b)</strong> $\operatorname{Var}(\bar{T}) = \rho \sigma^2 + \frac{1-\rho}{B}\sigma^2 \to \mathbf{\rho \sigma^2}$.</div>
+      </div>
+
+      <div class="quiz-q" id="qz4">
+        <strong>4. How does AdaBoost update sample weights after training a weak classifier?</strong>
+        <label><input type="radio" name="q4" value="a" onclick="checkQ(4,'c','Increases weights of misclassified instances')"> It gives equal weights to all samples</label>
+        <label><input type="radio" name="q4" value="b" onclick="checkQ(4,'c','Increases weights of misclassified instances')"> It discards misclassified samples from subsequent iterations</label>
+        <label><input type="radio" name="q4" value="c" onclick="checkQ(4,'c','Increases weights of misclassified instances')"> It increases the weights of misclassified samples and decreases weights of correctly classified samples</label>
+        <div class="feedback" id="fb4"></div>
+        <div class="answer" id="ans4"><strong>Correct: (c)</strong> Multiplies weights by $e^{-\alpha_t y_i h_t}$, focusing subsequent stumps on hard mistakes.</div>
+      </div>
+    </section>
+
+    <!-- Section 11: Answer Sheet Checklist -->
+    <section id="checklist">
+      <h2>11. Exam Hall Answer Sheet Presentation Checklist</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>1. State Both Impurity Formulas with Log Bases</strong>
+            <p>Write $H(S) = -\sum p_i \log_2(p_i)$ and $\operatorname{Gini}(S) = 1 - \sum p_i^2$ with base 2 highlighted.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>2. Compute Root Node Impurity First</strong>
+            <p>Write $H(9, 5) = \mathbf{0.9403 \text{ bits}}$. Draw a box around this benchmark.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>3. Construct a Clean Information Gain Table</strong>
+            <p>List Outlook ($0.2467$), Humidity ($0.1518$), Wind ($0.0481$), Temperature ($0.0292$) side-by-side.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>4. Draw the Final Tree Graphically</strong>
+            <p>Draw boxed nodes for attributes, labeled arrows for categories, and double-lined boxes for terminal leaf predictions.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>5. For Random Forest, Derive the Full Variance Equation</strong>
+            <p>Show $\frac{1}{B^2}[B\sigma^2 + B(B-1)\rho\sigma^2] = \rho\sigma^2 + \frac{1-\rho}{B}\sigma^2$. Mention feature subsampling ($m \approx \sqrt{p}$).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>6. State CART Advantages</strong>
+            <p>Always mention: (1) Binary splits prevent over-fragmentation, (2) Avoids transcendental $\log_2$ evaluations.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function toggleDrawer() {
+  const drawer = document.getElementById('drawer');
+  const backdrop = document.getElementById('backdrop');
+  drawer.classList.toggle('open');
+  backdrop.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+}
+
+function toggleAllDetails(open) {
+  document.querySelectorAll('details').forEach(d => d.open = open);
+}
+
+function calculateEntropy() {
+  const pos = parseFloat(document.getElementById('posCount').value) || 0;
+  const neg = parseFloat(document.getElementById('negCount').value) || 0;
+  const total = pos + neg;
+
+  if (total === 0) {
+    document.getElementById('entOutput').innerHTML = '<span style="color:var(--red);">Error: Total count must be > 0.</span>';
+    return;
+  }
+
+  const p1 = pos / total;
+  const p2 = neg / total;
+
+  let ent = 0;
+  if (p1 > 0) ent -= p1 * Math.log2(p1);
+  if (p2 > 0) ent -= p2 * Math.log2(p2);
+
+  const gini = 1 - Math.pow(p1, 2) - Math.pow(p2, 2);
+
+  let out = '<strong>Computed Impurity Metrics for (' + pos + ' Positive, ' + neg + ' Negative):</strong><br>';
+  out += '• Total Sample Size ($N$): ' + total + '<br>';
+  out += '• Probability $p_+ = ' + pos + '/' + total + ' = ' + p1.toFixed(4) + '$<br>';
+  out += '• Probability $p_- = ' + neg + '/' + total + ' = ' + p2.toFixed(4) + '$<br>';
+  out += '• <strong>Shannon Entropy ($H$): ' + ent.toFixed(4) + ' bits</strong><br>';
+  out += '• <strong>Gini Impurity: ' + gini.toFixed(4) + '</strong><br>';
+
+  if (ent === 0) {
+    out += '<span style="color:var(--teal);font-weight:700;">Node is 100% Pure (Terminal Leaf).</span>';
+  } else if (Math.abs(ent - 1.0) < 0.001) {
+    out += '<span style="color:var(--amber);font-weight:700;">Maximum Impurity (Perfect 50/50 split).</span>';
+  }
+
+  document.getElementById('entOutput').innerHTML = out;
+  if (window.renderMathInElement) {
+    renderMathInElement(document.getElementById('entOutput'), {delimiters: [{left: '$', right: '$', display: false}]});
+  }
+}
+
+// Quiz Interactive Evaluation
+const answeredQ = {};
+function checkQ(qNum, correctVal, reason) {
+  const selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+  const fb = document.getElementById('fb' + qNum);
+  const ans = document.getElementById('ans' + qNum);
+
+  answeredQ[qNum] = true;
+
+  if (selected.value === correctVal) {
+    fb.innerHTML = '<span style="color:var(--teal);">&#10003; Correct! ' + reason + '</span>';
+  } else {
+    fb.innerHTML = '<span style="color:var(--red);">&#10007; Incorrect. ' + reason + '</span>';
+  }
+  ans.classList.add('show');
+
+  const answeredCount = Object.keys(answeredQ).length;
+  const pct = (answeredCount / 4) * 100;
+  document.getElementById('quizBar').style.width = pct + '%';
+  document.getElementById('quizScore').innerText = 'Completed ' + answeredCount + ' of 4 questions (' + pct.toFixed(0) + '%).';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  calculateEntropy();
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Research Methodology -- Study Guides Hub (21IPC501J)</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f8fafc;--surface:#ffffff;--ink:#0f172a;--muted:#64748b;--line:#e2e8f0;
+  --brand:#059669;--brand-soft:#ecfdf5;--blue:#2563eb;--blue-soft:#eff6ff;
+  --amber:#b45309;--amber-soft:#fffbeb;--purple:#7c3aed;--purple-soft:#f5f3ff;
+  --rose:#e11d48;--rose-soft:#fff1f2;
+  --shadow:0 10px 30px rgba(15,23,42,.06);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:inherit;text-decoration:none;-webkit-tap-highlight-color:transparent}
+.container{
+  max-width:1120px;
+  margin:0 auto;
+  padding:calc(24px + var(--safe-top)) 18px calc(60px + var(--safe-bottom));
+}
+
+/* Hero */
+.hero{
+  background:linear-gradient(135deg,#064e3b 0%,#0f766e 50%,#047857 100%);
+  color:white;
+  border-radius:22px;
+  padding:36px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+  margin-bottom:28px;
+}
+.hero:after{content:"Y_ij=μ+τ_i+β_j+ε";position:absolute;right:15px;bottom:-35px;font-size:75px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11.5px;text-transform:uppercase;letter-spacing:.14em;color:#a7f3d0;font-weight:800}
+h1{font-size:clamp(26px,4.5vw,42px);line-height:1.15;margin:10px 0}
+.hero p{max-width:720px;color:#d1fae5;font-size:15px;margin:0;line-height:1.6}
+
+/* Targets */
+.targets-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px;margin-bottom:30px}
+.target-card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 2px 8px rgba(0,0,0,.03)}
+.target-label{font-size:10.5px;text-transform:uppercase;font-weight:800;color:var(--muted);letter-spacing:.08em}
+.target-val{font-size:26px;font-weight:800;color:var(--brand);margin:4px 0}
+.target-sub{font-size:12px;color:var(--muted)}
+
+/* Module Grid */
+h2{font-size:20px;color:#0f172a;margin:28px 0 14px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.module-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.module-card{
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:22px;
+  box-shadow:var(--shadow);
+  transition:transform .2s,border-color .2s;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+  position:relative;
+  min-height:230px;
+}
+.module-card:hover{transform:translateY(-3px);border-color:var(--brand);box-shadow:0 14px 30px rgba(5,150,105,.12)}
+.module-card:active{transform:scale(0.99)}
+.module-badge{display:inline-block;padding:3px 10px;border-radius:99px;font-size:10.5px;font-weight:800;text-transform:uppercase;margin-bottom:10px}
+.badge-ready{background:var(--brand-soft);color:var(--brand)}
+.badge-blue{background:var(--blue-soft);color:var(--blue)}
+.module-title{font-size:18px;font-weight:700;color:#0f172a;margin-bottom:6px}
+.module-desc{font-size:13.5px;color:var(--muted);margin-bottom:16px;flex:1;line-height:1.55}
+.module-tags{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:16px}
+.tag{background:#f1f5f9;color:#475569;padding:3px 8px;border-radius:6px;font-size:11px;font-weight:600}
+.module-action{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:13.5px;
+  font-weight:700;
+  color:var(--brand);
+  min-height:36px;
+}
+
+/* Strategic Roadmap Card */
+.strategy-card{background:linear-gradient(135deg,#ecfdf5 0%,#d1fae5 100%);border:1px solid #a7f3d0;border-radius:16px;padding:22px;margin-top:30px;color:#065f46}
+.strategy-title{font-size:15px;font-weight:800;display:flex;align-items:center;gap:8px;margin-bottom:8px}
+
+/* Footer */
+.footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);font-size:12px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+
+/* iPhone 13 & Mobile Viewport Tweaks */
+@media(max-width:880px){
+  .container{padding:calc(16px + var(--safe-top)) 14px calc(50px + var(--safe-bottom))}
+  .hero{padding:22px 16px;border-radius:18px;margin-bottom:20px}
+  .hero:after{display:none}
+  h1{font-size:24px}
+  .targets-row{grid-template-columns:1fr 1fr;gap:10px}
+  .target-card{padding:14px}
+  .target-val{font-size:22px}
+  .module-grid{grid-template-columns:1fr;gap:14px}
+  .module-card{padding:18px;min-height:auto}
+  .module-action{min-height:44px}
+}
+
+@media(max-width:380px){
+  .targets-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Hero Header -->
+  <header class="hero">
+    <div style="margin-bottom:12px;">
+      <a href="/" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:8px;background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.25);color:#fff;font-size:12.5px;font-weight:700;text-decoration:none;">&larr; Back to Vettri's Notes (Site Home)</a>
+    </div>
+    <div class="eyebrow">M.Tech · Course Code 21IPC501J</div>
+    <h1>Research Methodology Study Hub</h1>
+    <p>High-yield, standalone micro-learning study guides engineered for university semester examination preparation. Designed for 100% offline study on mobile screens with unclipped KaTeX mathematics, experimental design ANOVA tables, research ethics case studies, and complete verified solutions for every past paper question.</p>
+  </header>
+
+  <!-- Strategic Score Targets -->
+  <div class="targets-row">
+    <div class="target-card">
+      <div class="target-label">Current Internal Score</div>
+      <div class="target-val">51.00 / 60</div>
+      <div class="target-sub">Carries 51.00 direct marks into 100-mark final (85.00%).</div>
+    </div>
+    <div class="target-card">
+      <div class="target-label">Min Sem Score for Grade A</div>
+      <div class="target-val" style="color:#059669">50 / 100</div>
+      <div class="target-sub">51.00 + (50.00 &times; 0.40) = 71.00 &ge; 71.0 (A cut-off).</div>
+    </div>
+    <div class="target-card">
+      <div class="target-label">Safe Target (+7 Buffer)</div>
+      <div class="target-val" style="color:#2563eb">57 / 100</div>
+      <div class="target-sub">51.00 + (57 &times; 0.40) = 73.80 &ge; 71.0 (comfortable cushion).</div>
+    </div>
+    <div class="target-card">
+      <div class="target-label">Grade A+ / S Target</div>
+      <div class="target-val" style="color:#7c3aed">75 / 100</div>
+      <div class="target-sub">51.00 + (75.00 &times; 0.40) = 81.00 &ge; 81.0 (A+ cutoff).</div>
+    </div>
+  </div>
+
+  <!-- Priority Modules -->
+  <h2>
+    <span>Priority High-Yield Modules</span>
+    <span style="font-size:12.5px;font-weight:600;color:var(--muted)">Top 5 Recurring Topics (&ge; 85% Exam Marks)</span>
+  </h2>
+
+  <div class="module-grid">
+
+    <!-- Module 1 -->
+    <a href="/rm-study-guide/01-doe-crd-rbd-taguchi.html" class="module-card">
+      <div>
+        <span class="module-badge badge-ready">Module 01 · Priority 1 · 20-30 Marks</span>
+        <div class="module-title">Design of Experiments (DoE) & Taguchi Optimization</div>
+        <div class="module-desc">Completely Randomized Design (CRD, One-Way ANOVA) vs Randomized Block Design (RBD, Two-Way ANOVA), full field study layout with 3 fertilizers across 4 soil fertility blocks (N=12, df=2, 3, 6), complete ANOVA partition tables, and Taguchi L9(3⁴) orthogonal array with S/N ratio formulas.</div>
+        <div class="module-tags">
+          <span class="tag">Jan 2025 (Q4 20M)</span>
+          <span class="tag">Nov 2025 (Q6 20M)</span>
+          <span class="tag">CRD vs RBD Models</span>
+          <span class="tag">Fertilizer Field Layout</span>
+          <span class="tag">Taguchi L9 Array</span>
+          <span class="tag">S/N Ratios</span>
+        </div>
+      </div>
+      <div class="module-action">Open Module Guide &rarr;</div>
+    </a>
+
+    <!-- Module 2 -->
+    <a href="/rm-study-guide/02-research-ethics-misconduct-publishing.html" class="module-card">
+      <div>
+        <span class="module-badge badge-ready">Module 02 · Priority 2 · 20-30 Marks</span>
+        <div class="module-title">Research Ethics, Integrity & Predatory Publishing</div>
+        <div class="module-desc">The core FFP violations (Fabrication, Falsification, Plagiarism), comprehensive case analysis of Dr. Rajesh Kumar (water purification fraud, institutional sanctions, raw data archiving), Salami Slicing (LPUs) vs Duplicate Publications, predatory publisher characteristics (Jeffrey Beall), and Singapore Statement.</div>
+        <div class="module-tags">
+          <span class="tag">Jan 2025 (Q3 20M, Q6 20M)</span>
+          <span class="tag">Nov 2025 (Q5 20M)</span>
+          <span class="tag">FFP Violations</span>
+          <span class="tag">Dr. Rajesh Kumar Case</span>
+          <span class="tag">Salami Slicing vs LPU</span>
+          <span class="tag">Predatory Journals</span>
+        </div>
+      </div>
+      <div class="module-action">Open Module Guide &rarr;</div>
+    </a>
+
+    <!-- Module 3 -->
+    <a href="/rm-study-guide/03-statistical-analysis-hypothesis-testing.html" class="module-card">
+      <div>
+        <span class="module-badge badge-ready">Module 03 · Priority 3 · 20 Marks</span>
+        <div class="module-title">Statistical Analysis & Hypothesis Testing (Pearson r & Chi-Square)</div>
+        <div class="module-desc">Complete verified numerical solution for Karl Pearson's correlation coefficient on Father & Son heights (r = 2/√11 ≈ +0.6030), Chi-Square goodness-of-fit test for uniform distribution of aircraft accidents across weekdays (χ² = 15/7 ≈ 2.1429 &lt; 11.070, fail to reject H₀), and One-Way ANOVA interpretation.</div>
+        <div class="module-tags">
+          <span class="tag">Jan 2025 (Q5 20M)</span>
+          <span class="tag">Nov 2025 (Q7 20M)</span>
+          <span class="tag">Pearson r = 0.6030</span>
+          <span class="tag">Chi-Square χ² = 2.14</span>
+          <span class="tag">Accident Uniformity</span>
+          <span class="tag">Interactive r Solver</span>
+        </div>
+      </div>
+      <div class="module-action">Open Module Guide &rarr;</div>
+    </a>
+
+    <!-- Module 4 -->
+    <a href="/rm-study-guide/04-scientific-communication-thesis-citations.html" class="module-card">
+      <div>
+        <span class="module-badge badge-ready">Module 04 · Priority 4 · 20 Marks</span>
+        <div class="module-title">Scientific Dissemination, Citation Styles & Thesis Architecture</div>
+        <div class="module-desc">Oral vs Poster presentation comparative features and limitations, 10-minute conference presentation architecture (1-slide-per-minute rule), converting journal references into APA 7th, IEEE, and Chicago styles, and the comprehensive Master Blueprint of a Postgraduate Thesis (Chapters 1 to 6).</div>
+        <div class="module-tags">
+          <span class="tag">Jan 2025 (Q2 20M, Q7 20M)</span>
+          <span class="tag">Nov 2025 (Q3 20M, Q4 20M)</span>
+          <span class="tag">Oral vs Poster</span>
+          <span class="tag">APA vs IEEE vs Chicago</span>
+          <span class="tag">Thesis Blueprint (Ch 1-6)</span>
+          <span class="tag">Citation Converter</span>
+        </div>
+      </div>
+      <div class="module-action">Open Module Guide &rarr;</div>
+    </a>
+
+    <!-- Module 5 -->
+    <a href="/rm-study-guide/05-research-types-decision-making-mcdm.html" class="module-card">
+      <div>
+        <span class="module-badge badge-ready">Module 05 · Priority 5 · 20 Marks</span>
+        <div class="module-title">Research Foundations, Types & Decision Making (MCDM)</div>
+        <div class="module-desc">Fundamental objectives and types of research (Exploratory, Descriptive, Diagnostic, Causal), Multi-Criteria Decision Making (MCDM) framework for ₹24,999 smartphone purchasing problem with weighted criteria matrix and decision flowchart, and balancing Critical Thinking vs Creative Thinking when empirical data diverges.</div>
+        <div class="module-tags">
+          <span class="tag">Jan 2025 (Q1 20M)</span>
+          <span class="tag">Nov 2025 (Q1 20M, Q2 20M)</span>
+          <span class="tag">Research Types</span>
+          <span class="tag">MCDM ₹24,999 Phone</span>
+          <span class="tag">Critical vs Creative</span>
+          <span class="tag">Decision Flowchart</span>
+        </div>
+      </div>
+      <div class="module-action">Open Module Guide &rarr;</div>
+    </a>
+
+    <!-- Unified Master Reference -->
+    <a href="/research-methodology-study-guide.html" class="module-card" style="background:#f8fafc;border:2px dashed #cbd5e1;">
+      <div>
+        <span class="module-badge" style="background:#e2e8f0;color:#334155;">Comprehensive Reference</span>
+        <div class="module-title">All-in-One Master Reference & Formula Handbook</div>
+        <div class="module-desc">Consolidated experimental design linear models, ANOVA formulas, statistical hypothesis tests, ethics charters (Singapore Statement), citation style rules, and exam presentation checklist in a single document.</div>
+        <div class="module-tags">
+          <span class="tag">DoE Models</span>
+          <span class="tag">ANOVA Tables</span>
+          <span class="tag">Ethics Charters</span>
+          <span class="tag">Citation Rules</span>
+        </div>
+      </div>
+      <div class="module-action">Open Master Reference &rarr;</div>
+    </a>
+
+  </div>
+
+  <!-- Strategic Study Plan -->
+  <div class="strategy-card">
+    <div class="strategy-title">
+      <span>High-Yield Strategic Preparation Plan (Target: 57+ Marks for Grade 'A')</span>
+    </div>
+    <p style="margin:0;font-size:13.5px;line-height:1.65;">
+      <strong>Score Objective:</strong> With an internal score of <strong>51.00 / 60 (85.00%)</strong>, you need exactly <strong>50 marks</strong> (safe target: <strong>57 marks</strong>) on the 100-mark semester paper to secure a guaranteed <strong>'A' Grade</strong>.<br>
+      <strong>Step 1 (First 40 Marks Guaranteed):</strong> Master the <strong>DoE CRD vs RBD & Taguchi L9 Design</strong> (Module 01) and the <strong>Father-Son Correlation (r=0.6030) & Chi-Square Accident Uniformity (χ²=2.14)</strong> (Module 03). These two numerical/analytical problems yield 40 marks with zero ambiguity.<br>
+      <strong>Step 2 (Reaching 60–75 Marks):</strong> Master the <strong>Research Ethics & Case Study of Dr. Rajesh Kumar</strong> (Module 02) and the <strong>Thesis Blueprint & Citation Conversions</strong> (Module 04) to cross 75 marks into <strong>'A+' / 'S' Grade</strong> distinction!
+    </p>
+  </div>
+
+  <div class="footer">
+    <div><strong>Vettri's Handbook</strong> · Research Methodology (21IPC501J) Exam Preparation</div>
+    <div>Local Files: <code>static/rm-study-guide/</code> · Standalone Offline Mobile-Optimized</div>
+  </div>
+
+</div>
+
+</body>
+</html>

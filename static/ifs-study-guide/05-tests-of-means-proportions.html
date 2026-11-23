@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tests of Means & Proportions (t & Z Tests) | Complete Exam Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#2563eb;--brand-soft:#eff6ff;--teal:#059669;--teal-soft:#ecfdf5;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#0f172a;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:800}
+aside h2{font-size:19px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.12em;margin:20px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#cbd5e1;font-size:13px}
+nav a:hover,nav a.active{background:#1e293b;color:#38bdf8;text-decoration:none}
+.module-hub-link{background:#1e293b;border:1px solid #334155;color:#38bdf8;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:24px;padding:14px;border:1px solid #334155;border-radius:12px;color:#cbd5e1;font-size:12px;background:#131d35}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#047857;color:#ecfdf5}
+
+/* Mobile Sticky Topbar (iPhone 13 Notch Friendly) */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#0f172a;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{
+  font-size:14.5px;
+  font-weight:800;
+  color:#f8fafc;
+  display:flex;
+  align-items:center;
+  gap:6px;
+}
+.mobile-topbar-actions{
+  display:flex;
+  gap:6px;
+  align-items:center;
+}
+.mobile-btn{
+  background:#1e293b;
+  border:1px solid #334155;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  cursor:pointer;
+  min-height:36px;
+}
+
+/* Horizontal Swipeable Pill Nav for iPhone 13 */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer Menu Overlay */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+  -webkit-backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#0f172a;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #1e293b;
+  padding-bottom:12px;
+}
+.drawer-close{
+  background:none;
+  border:none;
+  color:#94a3b8;
+  font-size:24px;
+  cursor:pointer;
+  padding:4px 8px;
+}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#0284c7 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"t=(x̄-μ)/(s/√n)";position:absolute;right:16px;bottom:-28px;font-size:70px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#bae6fd;font-weight:800}
+h1{font-size:clamp(24px,4.5vw,42px);line-height:1.15;margin:10px 0}
+.hero p{max-width:680px;color:#e0e7ff;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+.formula-banner{
+  background:#0f172a;
+  color:#f8fafc;
+  padding:16px 14px;
+  border-radius:12px;
+  text-align:center;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+.formula-banner .katex-display{margin:6px 0}
+.formula-banner small{display:block;font-size:11px;color:#94a3b8;margin-top:6px}
+
+/* KaTeX Horizontal Scrollbar Removal & Vertical Headroom (No Clipping) */
+.katex-display{
+  font-size:clamp(13px, 3.6vw, 15.5px) !important;
+  margin:12px 0 !important;
+  padding:12px 4px 8px !important; /* Ample vertical headroom so numerators/brackets never get sliced */
+  overflow-x:auto !important;
+  overflow-y:visible !important; /* Never clip ascenders */
+  scrollbar-width:none !important; /* Hide Firefox scrollbars */
+  -ms-overflow-style:none !important;
+  -webkit-overflow-scrolling:touch !important;
+}
+.katex-display::-webkit-scrollbar{
+  display:none !important; /* Hide Safari & Chrome scrollbars */
+}
+.katex-display > .katex{
+  display:block !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  padding-top:4px !important; /* Extra safety margin for tall numerators & superscripts */
+  padding-bottom:2px !important;
+}
+.katex{
+  font-size:1em !important;
+  line-height:normal !important;
+  text-rendering:auto !important;
+  white-space:normal !important;
+}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--teal-soft);border-color:var(--teal)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+.note.purple{background:var(--purple-soft);border-color:var(--purple)}
+
+/* Table Styling - Clean & No Cutoff */
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#dbeafe;color:#1e40af;margin-bottom:6px}
+.pyq-badge.ct{background:#e0e7ff;color:#3730a3}
+.pyq-badge.llt{background:#ecfdf5;color:#065f46}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+  -webkit-tap-highlight-color:transparent;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  transition:background .15s;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  -webkit-tap-highlight-color:transparent;
+}
+button:hover{background:#1d4ed8}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+
+/* Quiz for iPhone 13 (Large Touch Targets) */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+  -webkit-tap-highlight-color:transparent;
+  transition:all .15s;
+}
+.quiz-q label:active{background:#eff6ff;border-color:#93c5fd}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--teal-soft);border-radius:8px;border-left:3px solid var(--teal);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Interactive Calculator (16px Input to Prevent iOS Auto-Zoom) */
+.tool-box{background:white;border:2px solid #bae6fd;border-radius:12px;padding:16px;margin:16px 0}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:8px;margin-top:8px}
+.tool-group label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px}
+.tool-group input{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  font-size:16px; /* Prevents iOS Safari Zoom */
+  background:#f8fafc;
+  min-height:40px;
+}
+.tool-result{margin-top:12px;padding:10px 12px;background:#f0f9ff;border-radius:8px;border-left:4px solid var(--brand);font-size:13px}
+
+.footer{margin-top:40px;padding-top:18px;border-top:1px solid var(--line);color:var(--muted);font-size:11.5px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px}
+
+/* iPhone 13 & Mobile Responsive Tweaks */
+@media(max-width:880px){
+  .shell{display:block}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:14px 12px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr;gap:10px}
+  .hero{padding:20px 14px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  h2{font-size:18px}
+  .card{padding:14px}
+  .details-box{padding:12px 14px}
+  .tool-box{padding:14px}
+  button{width:100%;margin-bottom:6px}
+  .controls button{width:auto;flex:1}
+  table{font-size:12px}
+  th,td{padding:7px 8px}
+}
+
+@media print{
+  aside,.controls,button,.tool-box,.mobile-topbar,.mobile-pills-bar{display:none!important}
+  .shell{display:block}
+  main{padding:0}
+  .hero{background:#0f172a!important;color:#fff!important;print-color-adjust:exact}
+  .card,.step,.quiz-q,.details-box{break-inside:avoid;box-shadow:none}
+  .answer,details[open] div,details div{display:block!important}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Sticky Top Bar (iPhone 13 Notch Friendly) -->
+<header class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>Means & Proportions</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/ifs-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="openDrawer()">&#9776; Menu</button>
+  </div>
+</header>
+
+<!-- Horizontal Quick-Jump Pill Bar (Flick with thumb on train) -->
+<nav class="mobile-pills-bar" aria-label="Quick jumps">
+  <a href="#overview" class="pill-link">01 · Matrix</a>
+  <a href="#formulas" class="pill-link">02 · Formulas</a>
+  <a href="#method" class="pill-link">03 · 5 Steps</a>
+  <a href="#pitfalls" class="pill-link">04 · Traps</a>
+  <a href="#q1-prop-ci" class="pill-link">Q1 · Proportion (12M)</a>
+  <a href="#q2-onesample-t" class="pill-link">Q2 · 1-Sample t (8M)</a>
+  <a href="#q3-twoprop" class="pill-link">Q3 · 2 Proportions</a>
+  <a href="#q4-paired-t" class="pill-link">Q4 · Paired t-Test</a>
+  <a href="#q5-pooled-t" class="pill-link">Q5 · Pooled t-Test</a>
+  <a href="#q6-large-z" class="pill-link">Q6 · Large Z-Test</a>
+  <a href="#interactive-tool" class="pill-link">Test Calculator</a>
+  <a href="#practice" class="pill-link">Quiz</a>
+</nav>
+
+<!-- Mobile Drawer Backdrop & Drawer -->
+<div class="drawer-backdrop" id="drawerBackdrop" onclick="closeDrawer()"></div>
+<div class="mobile-drawer" id="mobileDrawer">
+  <div class="drawer-header">
+    <div style="font-size:14px;font-weight:800;color:#38bdf8;">NAVIGATION MENU</div>
+    <button class="drawer-close" onclick="closeDrawer()">&times;</button>
+  </div>
+  <a href="/ifs-study-guide/index.html" class="module-hub-link" style="margin-bottom:14px;padding:8px 10px;border-radius:8px;">&larr; Return to All Guides Hub</a>
+  
+  <div class="nav-label">Core Concepts</div>
+  <nav>
+    <a href="#overview" onclick="closeDrawer()">01 · Master Test Selection Matrix</a>
+    <a href="#formulas" onclick="closeDrawer()">02 · Formulas & Standard Errors</a>
+    <a href="#method" onclick="closeDrawer()">03 · 5-Step Hypothesis Protocol</a>
+    <a href="#pitfalls" onclick="closeDrawer()">04 · 6 Deadly Exam Traps</a>
+  </nav>
+
+  <div class="nav-label">All Solved Exam Problems</div>
+  <nav>
+    <a href="#q1-prop-ci" onclick="closeDrawer()">Q1 · Dec 2024: Quality Prop & CI (12M)</a>
+    <a href="#q2-onesample-t" onclick="closeDrawer()">Q2 · Dec 2024: 1-Sample t-Test Theory (8M)</a>
+    <a href="#q3-twoprop" onclick="closeDrawer()">Q3 · LLT: Two-Proportion Smokers Test</a>
+    <a href="#q4-paired-t" onclick="closeDrawer()">Q4 · LLT: Paired t-Test (Weight Loss)</a>
+    <a href="#q5-pooled-t" onclick="closeDrawer()">Q5 · LLT: Two-Sample Pooled t-Test</a>
+    <a href="#q6-large-z" onclick="closeDrawer()">Q6 · Module 3: Large Sample Mean Z-Test</a>
+  </nav>
+
+  <div class="nav-label">Interactive Practice</div>
+  <nav>
+    <a href="#interactive-tool" onclick="closeDrawer()">Dynamic Test Statistic Solver</a>
+    <a href="#practice" onclick="closeDrawer()">Interactive Self-Test Quiz</a>
+    <a href="#checklist" onclick="closeDrawer()">Exam Hall Checklist</a>
+  </nav>
+</div>
+
+<div class="shell">
+
+<!-- Desktop Sidebar (Hidden on mobile) -->
+<aside>
+  <div class="brand">M.Tech · Inferential Statistics</div>
+  <h2>Tests of Means<br>& Proportions (t & Z)</h2>
+  
+  <a href="/ifs-study-guide/index.html" class="module-hub-link">&larr; Return to All Guides Hub</a>
+
+  <div class="nav-label">Core Pedagogy</div>
+  <nav>
+    <a href="#overview">01 · Master Test Selection Matrix</a>
+    <a href="#formulas">02 · Formulas & Standard Errors</a>
+    <a href="#method">03 · 5-Step Hypothesis Protocol</a>
+    <a href="#pitfalls">04 · 6 Deadly Exam Traps</a>
+  </nav>
+
+  <div class="nav-label">Complete Question Bank</div>
+  <nav>
+    <a href="#q1-prop-ci">Q1 · Dec 2024: Quality Prop & CI (12M)</a>
+    <a href="#q2-onesample-t">Q2 · Dec 2024: 1-Sample t-Test Theory (8M)</a>
+    <a href="#q3-twoprop">Q3 · LLT: Two-Proportion Smokers Test</a>
+    <a href="#q4-paired-t">Q4 · LLT: Paired t-Test (Weight Loss)</a>
+    <a href="#q5-pooled-t">Q5 · LLT: Two-Sample Pooled t-Test</a>
+    <a href="#q6-large-z">Q6 · Module 3: Large Sample Mean Z-Test</a>
+  </nav>
+
+  <div class="nav-label">Interactive Practice</div>
+  <nav>
+    <a href="#interactive-tool">Dynamic Test Statistic Solver</a>
+    <a href="#practice">Interactive Self-Test Quiz</a>
+    <a href="#checklist">Exam Hall Checklist</a>
+  </nav>
+
+  <div class="side-note">
+    <strong>Semester Exam Targets</strong><br>
+    Internal score: <strong>48 / 60</strong><br>
+    Min Sem score for A: <strong>58 / 100</strong><br>
+    Target with margin: <strong>65 / 100</strong><br>
+    <span class="status-pill pill-target">Priority 5 Unit 4 Topic</span>
+    <p style="margin-top:8px;color:#94a3b8;font-size:11px">Covers core parametric hypothesis tests across semester papers.</p>
+  </div>
+</aside>
+
+<!-- Main Body -->
+<main>
+
+<header class="hero" id="overview">
+  <div class="eyebrow">Unit 4 · Parametric Hypothesis Testing · Priority 5</div>
+  <h1>Tests of Means & Proportions ($t$ and $Z$)</h1>
+  <p>The definitive master guide covering one-sample and two-sample means testing, Student's $t$ with pooled variance, paired sample differences, and single/two-proportion $Z$-tests with confidence intervals.</p>
+  <div class="pills">
+    <span class="pill">Test Selection Matrix</span>
+    <span class="pill">Dec 2024 (12M Prop Solved)</span>
+    <span class="pill">Dec 2024 (8M t-Test Solved)</span>
+    <span class="pill">Paired Differences</span>
+    <span class="pill">Pooled Proportions</span>
+    <span class="pill">Zero-Scroll Math</span>
+  </div>
+</header>
+
+<div style="margin:14px 0;display:flex;gap:8px;flex-wrap:wrap;">
+  <button class="secondary" style="font-size:12.5px;padding:6px 12px;min-height:36px;" onclick="document.querySelectorAll('details').forEach(d=>d.open=true)">Expand All Solutions</button>
+  <button class="secondary" style="font-size:12.5px;padding:6px 12px;min-height:36px;" onclick="document.querySelectorAll('details').forEach(d=>d.open=false)">Collapse All Solutions</button>
+</div>
+
+<!-- Section 1 -->
+<section>
+  <h2>01. Master Test Selection Matrix: "Which Test Do I Use?"</h2>
+  <p class="lead">Selecting the correct test statistic earns the first 2-3 marks on every hypothesis testing question. Match your problem data against this decision matrix:</p>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Target Parameter</th>
+          <th>Sample Size & Conditions</th>
+          <th>Chosen Test</th>
+          <th>Test Statistic Formula</th>
+          <th>Degrees of Freedom</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>One Mean ($\mu$)</strong></td>
+          <td>$\sigma$ known OR $n \ge 30$</td>
+          <td><strong>1-Sample Z-Test</strong></td>
+          <td>$Z = \frac{\bar{x} - \mu_0}{\sigma / \sqrt{n}}$</td>
+          <td>N/A (Standard Normal)</td>
+        </tr>
+        <tr>
+          <td><strong>One Mean ($\mu$)</strong></td>
+          <td>$\sigma$ unknown AND $n < 30$ (Normal pop)</td>
+          <td><strong>1-Sample t-Test</strong></td>
+          <td>$t = \frac{\bar{x} - \mu_0}{s / \sqrt{n}}$</td>
+          <td>$df = n - 1$</td>
+        </tr>
+        <tr>
+          <td><strong>Two Independent Means ($\mu_1 - \mu_2$)</strong></td>
+          <td>$\sigma_1 = \sigma_2$ unknown, $n_1, n_2 < 30$</td>
+          <td><strong>Pooled Two-Sample t-Test</strong></td>
+          <td>$t = \frac{\bar{x}_1 - \bar{x}_2}{s_p \sqrt{\frac{1}{n_1} + \frac{1}{n_2}}}$</td>
+          <td>$df = n_1 + n_2 - 2$</td>
+        </tr>
+        <tr>
+          <td><strong>Paired Means (Before vs After)</strong></td>
+          <td>Same subjects measured twice ($d_i = x_{1i} - x_{2i}$)</td>
+          <td><strong>Paired t-Test</strong></td>
+          <td>$t = \frac{\bar{d}}{s_d / \sqrt{n}}$</td>
+          <td>$df = n - 1$</td>
+        </tr>
+        <tr>
+          <td><strong>One Proportion ($P$)</strong></td>
+          <td>Single sample, $np_0 \ge 5, nq_0 \ge 5$</td>
+          <td><strong>1-Proportion Z-Test</strong></td>
+          <td>$Z = \frac{p - P_0}{\sqrt{\frac{P_0(1-P_0)}{n}}}$</td>
+          <td>N/A (Standard Normal)</td>
+        </tr>
+        <tr>
+          <td><strong>Two Proportions ($P_1 - P_2$)</strong></td>
+          <td>Two independent samples</td>
+          <td><strong>2-Proportion Z-Test</strong></td>
+          <td>$Z = \frac{p_1 - p_2}{\sqrt{\bar{p}\bar{q}\left(\frac{1}{n_1} + \frac{1}{n_2}\right)}}$</td>
+          <td>$\bar{p} = \frac{x_1 + x_2}{n_1 + n_2}$</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- Section 2 -->
+<section id="formulas">
+  <h2>02. Formulas & Standard Error Architecture</h2>
+  
+  <div class="grid">
+    <div class="card">
+      <div class="kicker">Means · Independent Pooled Variance</div>
+      <h3>Pooled Variance ($s_p^2$)</h3>
+      <p>When assuming equal variances ($\sigma_1^2 = \sigma_2^2$), pool the sample variances:</p>
+      $$\begin{aligned}
+      s_p^2 = \frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2}
+      \end{aligned}$$
+    </div>
+    <div class="card">
+      <div class="kicker">Proportions · Pooled Success Rate</div>
+      <h3>Pooled Proportion ($\bar{p}$)</h3>
+      <p>Under $H_0: P_1 = P_2$, combine successes across both samples:</p>
+      $$\begin{aligned}
+      \bar{p} = \frac{x_1 + x_2}{n_1 + n_2}, \quad \bar{q} = 1 - \bar{p}
+      \end{aligned}$$
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Paired Differences Formulation</h3>
+    <p>Convert paired observations $(X_{1i}, X_{2i})$ into a single sample of differences $d_i = X_{1i} - X_{2i}$:</p>
+    $$\begin{aligned}
+    \bar{d} &= \frac{\sum d_i}{n}, \quad s_d = \sqrt{\frac{\sum (d_i - \bar{d})^2}{n - 1}} \\[6pt]
+    t_{\text{calc}} &= \frac{\bar{d} - 0}{s_d / \sqrt{n}}, \quad df = n - 1
+    \end{aligned}$$
+  </div>
+</section>
+
+<!-- Section 3 -->
+<section id="method">
+  <h2>03. The Standard 5-Step Hypothesis Testing Workflow</h2>
+  <div class="steps">
+    <div class="step">
+      <div>
+        <h3>State Null ($H_0$) and Alternative ($H_1$) Hypotheses</h3>
+        <p>State $H_0: \mu = \mu_0$ (or $P = P_0$). Determine tail direction from keywords: <em>"is different"</em> $\implies \ne$ (two-tailed); <em>"is greater / has increased"</em> $\implies >$ (right-tailed); <em>"is less / reduced"</em> $\implies <$ (left-tailed).</p>
+      </div>
+    </div>
+    <div class="step">
+      <div>
+        <h3>Fix Significance Level ($\alpha$) & Critical Value</h3>
+        <p>State $\alpha$ (e.g. $0.05$ or $0.01$). Look up $Z_{\text{crit}}$ or $t_{\text{crit}}(df)$.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div>
+        <h3>Select & Calculate Test Statistic</h3>
+        <p>Write formula with parameters, substitute sample statistics, and evaluate $Z_{\text{calc}}$ or $t_{\text{calc}}$.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div>
+        <h3>Apply Decision Rule</h3>
+        <p>If $|Z_{\text{calc}}| > Z_{\text{crit}}$ (two-tailed) or falls in rejection region, **Reject $H_0$**; otherwise **Fail to Reject $H_0$**.</p>
+      </div>
+    </div>
+    <div class="step">
+      <div>
+        <h3>Write Contextual Conclusion</h3>
+        <p>State the conclusion in the plain language of the problem (e.g., <em>"The fitness program resulted in statistically significant weight loss."</em>).</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 4: Deadly Traps -->
+<section id="pitfalls">
+  <h2>04. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+  <div class="grid">
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 1 · Wrong Denominator in Proportion Test</div>
+      <h3>Using $\hat{p}$ instead of $P_0$ in the test statistic</h3>
+      <p>In a hypothesis test, evaluate under $H_0$: $\text{SE} = \sqrt{\frac{P_0(1-P_0)}{n}}$. Use sample $\hat{p}$ ONLY for Confidence Intervals: $\sqrt{\frac{\hat{p}(1-\hat{p})}{n}}$!</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 2 · Unpooled Two-Proportion Test</div>
+      <h3>Failing to calculate pooled $\bar{p}$</h3>
+      <p>Under $H_0: P_1 = P_2$, you MUST pool: $\bar{p} = \frac{x_1 + x_2}{n_1 + n_2}$. Using separate sample variances in the test denominator loses 2 marks.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 3 · Paired vs Independent Confusion</div>
+      <h3>Using independent $t$-test on Before/After data</h3>
+      <p>If the same individuals are tested twice (Before vs After), the observations are correlated! You MUST compute differences $d_i$ and run a Paired $t$-test.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 4 · Degrees of Freedom Mix-up</div>
+      <h3>Using $df = n - 2$ on a paired test</h3>
+      <p>Paired $t$-test has $df = n_{\text{pairs}} - 1$. Independent two-sample $t$-test has $df = n_1 + n_2 - 2$. Do not confuse them.</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 5 · One-Tailed vs Two-Tailed Critical Z</div>
+      <h3>Using $\pm 1.96$ for a directional claim</h3>
+      <p>For a right-tailed test at $\alpha = 0.05$ (e.g. <em>"greater than 4 kg"</em>), the critical value is $+1.645$, NOT $+1.96$!</p>
+    </div>
+    <div class="card">
+      <div class="kicker" style="color:var(--red);">Trap 6 · Missing Sign on Negative Differences</div>
+      <h3>Inverting $d_i = \text{After} - \text{Before}$</h3>
+      <p>If weight decreased, $d = \text{Before} - \text{After} > 0$ represents weight loss. Consistently define $d_i$ before writing $H_1$.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========================================== -->
+<!-- COMPLETE QUESTION BANK: ALL 6 PROBLEMS     -->
+<!-- ========================================== -->
+<section id="question-bank">
+  <h2>05. The Complete University Question Bank (All Problems Solved)</h2>
+  <p class="lead">Every test of means and proportions from past semester exams (Dec 2024, Nov 2025) and core assignment archetypes:</p>
+
+  <!-- QUESTION 1: Dec 2024 Q5(ii) (12 Marks) -->
+  <div id="q1-prop-ci" class="details-box">
+    <span class="pyq-badge">Semester Exam Paper · December 2024 (Question 5 Part ii) &middot; 12 Marks</span>
+    <h3 style="margin:6px 0 10px;">Question 1: Quality Proportion Test & 95% Confidence Interval (12 Marks)</h3>
+    <p><strong>Question Statement (Verbatim):</strong><br>
+    <em>"A random sample of 500 pineapples was taken from a large consignment and 120 were found to be of top quality. Test the hypothesis that the consignment had 20% of top quality pineapples at $\alpha = 0.05$. Also find the 95% confidence limits for the proportion of top quality pineapples in the consignment. (12 Marks)"</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution & CI Derivation</summary>
+      <div style="margin-top:12px;">
+        <p><strong>Part 1: Hypothesis Test for Population Proportion (6 Marks)</strong></p>
+        <ul>
+          <li>Sample size: $n = 500$; Top-quality count: $x = 120$</li>
+          <li>Sample proportion: $p = \frac{120}{500} = \mathbf{0.24}$</li>
+          <li>Hypothesized proportion: $P_0 = 0.20 \implies Q_0 = 1 - 0.20 = 0.80$</li>
+          <li>Hypotheses: $H_0: P = 0.20$ versus $H_1: P \neq 0.20$ (Two-tailed test, $\alpha = 0.05$)</li>
+        </ul>
+
+        <p style="margin-top:8px;"><strong>Standard Error under $H_0$:</strong></p>
+        $$\begin{aligned}
+        \text{SE}_{P_0} &= \sqrt{\frac{P_0 Q_0}{n}} = \sqrt{\frac{0.20 \times 0.80}{500}} \\[4pt]
+        &= \sqrt{\frac{0.16}{500}} = \sqrt{0.00032} \approx \mathbf{0.017889}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>Test Statistic:</strong></p>
+        $$\begin{aligned}
+        Z_{\text{calc}} &= \frac{p - P_0}{\text{SE}_{P_0}} = \frac{0.24 - 0.20}{0.017889} = \frac{0.04}{0.017889} \approx \mathbf{+2.236}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>Decision:</strong> Critical value for two-tailed test at $\alpha = 0.05$ is $Z_{\text{crit}} = \mathbf{\pm 1.96}$.<br>
+        Since $|Z_{\text{calc}}| = 2.236 > 1.96$, we **reject $H_0$** ($p = 0.0254 < 0.05$). The true proportion of top-quality pineapples differs significantly from 20%.</p>
+
+        <hr style="border:0;border-top:1px solid var(--line);margin:12px 0;">
+
+        <p><strong>Part 2: 95% Confidence Interval for True Proportion (6 Marks)</strong></p>
+        <p>Using the sample proportion $p = 0.24$:</p>
+        $$\begin{aligned}
+        \text{SE}_p &= \sqrt{\frac{p(1 - p)}{n}} = \sqrt{\frac{0.24 \times 0.76}{500}} = \sqrt{\frac{0.1824}{500}} \approx \mathbf{0.01910} \\[6pt]
+        \text{Margin of Error} &= 1.96 \times 0.01910 = \mathbf{0.0374} \\[6pt]
+        \text{95% CI} &= p \pm 1.96 \cdot \text{SE}_p = 0.24 \pm 0.0374 \\[4pt]
+        &= [\mathbf{0.2026, \ 0.2774}] \quad (\mathbf{20.26\% \text{ to } 27.74\%})
+        \end{aligned}$$
+        <div class="note good">
+          <strong>Conclusion:</strong> We are 95% confident that the true percentage of top quality pineapples in the consignment lies between <strong>20.26% and 27.74%</strong>. Since 20% lies outside this interval, this confirms our rejection of $H_0$.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 2: Dec 2024 Q5(i) One-Sample t-Test Theory (8 Marks) -->
+  <div id="q2-onesample-t" class="details-box">
+    <span class="pyq-badge">Semester Exam Paper · December 2024 (Question 5 Part i) &middot; 8 Marks</span>
+    <h3 style="margin:6px 0 10px;">Question 2: Conduct & Interpretation of One-Sample Student's t-Test (8 Marks)</h3>
+    <p><strong>Question Statement (Verbatim):</strong><br>
+    <em>"Explain how to conduct a one sample t-test. Provide an example scenario and interpret the results of the test. (8 Marks)"</em></p>
+
+    <details open>
+      <summary>View Complete Theory & Worked Numerical Scenario</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Theoretical Foundations:</strong></p>
+        <ul>
+          <li><strong>Purpose:</strong> Tests whether a sample mean $\bar{x}$ differs significantly from a hypothesized population mean $\mu_0$ when population standard deviation $\sigma$ is **unknown** and sample size is small ($n < 30$).</li>
+          <li><strong>Underlying Assumption:</strong> The underlying parent population is normally distributed.</li>
+          <li><strong>Test Statistic:</strong>
+            $$\begin{aligned}
+            t = \frac{\bar{x} - \mu_0}{s / \sqrt{n}}, \quad df = n - 1
+            \end{aligned}$$
+            where $s = \sqrt{\frac{\sum (x - \bar{x})^2}{n - 1}}$ is the sample standard deviation (Bessel's correction).
+        </li>
+        </ul>
+
+        <p style="margin-top:8px;"><strong>2. Worked Example Scenario (Fitness Weight Loss Program):</strong></p>
+        <p>A fitness coach claims participants lose an average of at least 4 kg in a month ($H_0: \mu = 4$ vs $H_1: \mu > 4$). A sample of $n = 12$ participants yields $\bar{x} = 5.5\text{ kg}$ and $s = 1.5\text{ kg}$. Test at $\alpha = 0.05$.</p>
+        $$\begin{aligned}
+        t_{\text{calc}} &= \frac{\bar{x} - \mu_0}{s / \sqrt{n}} = \frac{5.5 - 4.0}{1.5 / \sqrt{12}} = \frac{1.5}{0.4330} \approx \mathbf{+3.464} \\[6pt]
+        df &= 12 - 1 = \mathbf{11}
+        \end{aligned}$$
+        <p>From the $t$-distribution table for right-tailed test at $\alpha = 0.05$ with $df = 11$:</p>
+        $$\begin{aligned}
+        t_{0.05, 11} = \mathbf{+1.796}
+        \end{aligned}$$
+        <div class="note good">
+          <strong>Decision & Interpretation:</strong> Since $t_{\text{calc}} = 3.464 > +1.796$, we **reject $H_0$** ($p < 0.005$). There is overwhelming statistical evidence to support the coach's claim that average weight loss significantly exceeds 4 kg.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 3: Two-Proportion Test (City A vs City B Smokers) -->
+  <div id="q3-twoprop" class="details-box">
+    <span class="pyq-badge llt">LLT Assignment Unit 4 Archetype &middot; Two-Sample Proportion Test</span>
+    <h3 style="margin:6px 0 10px;">Question 3: Two-Sample Proportion Z-Test (Smokers in City A vs City B)</h3>
+    <p><strong>Question Statement:</strong><br>
+    <em>"A survey in City A finds 80 smokers out of 200 residents. In City B, 50 smokers are found out of 250 residents. At $\alpha = 0.05$, test whether the proportion of smokers in City A is significantly higher than in City B."</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution & Pooled Proportion</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Sample Proportions:</strong></p>
+        $$\begin{aligned}
+        p_1 &= \frac{80}{200} = \mathbf{0.40}, \quad p_2 = \frac{50}{250} = \mathbf{0.20}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>2. Pooled Proportion ($\bar{p}$):</strong></p>
+        $$\begin{aligned}
+        \bar{p} &= \frac{x_1 + x_2}{n_1 + n_2} = \frac{80 + 50}{200 + 250} = \frac{130}{450} \approx \mathbf{0.2889} \\[4pt]
+        \bar{q} &= 1 - \bar{p} = 1 - 0.2889 = \mathbf{0.7111}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>3. Standard Error of Difference:</strong></p>
+        $$\begin{aligned}
+        \text{SE} &= \sqrt{\bar{p}\bar{q}\left(\frac{1}{n_1} + \frac{1}{n_2}\right)} = \sqrt{(0.2889)(0.7111)\left(\frac{1}{200} + \frac{1}{250}\right)} \\[4pt]
+        &= \sqrt{0.20543 \times 0.009} = \sqrt{0.0018489} \approx \mathbf{0.0430}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>4. Test Statistic:</strong></p>
+        $$\begin{aligned}
+        Z_{\text{calc}} &= \frac{p_1 - p_2}{\text{SE}} = \frac{0.40 - 0.20}{0.0430} = \frac{0.20}{0.0430} \approx \mathbf{+4.65}
+        \end{aligned}$$
+
+        <div class="note good">
+          <strong>Decision:</strong> For a right-tailed test at $\alpha = 0.05$, $Z_{\text{crit}} = \mathbf{+1.645}$.<br>
+          Since $Z_{\text{calc}} = +4.65 \gg +1.645$, we **reject $H_0$** ($p < 0.0001$). The smoking rate in City A is significantly higher than in City B.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 4: Paired t-Test (Weight Loss Program) -->
+  <div id="q4-paired-t" class="details-box">
+    <span class="pyq-badge llt">LLT Assignment Unit 4 Archetype &middot; Paired t-Test</span>
+    <h3 style="margin:6px 0 10px;">Question 4: Paired Sample t-Test (Before vs After Weight Loss Intervention)</h3>
+    <p><strong>Question Statement:</strong><br>
+    <em>"A medical clinic tests a lifestyle program on 10 individuals. Weight (kg) was recorded Before and After the program. Test at $\alpha = 0.05$ whether the program resulted in significant weight loss."</em></p>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr><th>Subject</th><th>1</th><th>2</th><th>3</th><th>4</th><th>5</th><th>6</th><th>7</th><th>8</th><th>9</th><th>10</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Before</td><td>78</td><td>85</td><td>92</td><td>80</td><td>88</td><td>79</td><td>95</td><td>84</td><td>90</td><td>82</td></tr>
+          <tr><td>After</td><td>75</td><td>82</td><td>87</td><td>78</td><td>83</td><td>76</td><td>91</td><td>80</td><td>85</td><td>79</td></tr>
+          <tr style="font-weight:700;background:#f1f5f9;">
+            <td>Diff ($d_i$)</td><td>3</td><td>3</td><td>5</td><td>2</td><td>5</td><td>3</td><td>4</td><td>4</td><td>5</td><td>3</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Calculate Mean Difference & Sample Standard Deviation:</strong></p>
+        $$\begin{aligned}
+        \sum d_i &= 3+3+5+2+5+3+4+4+5+3 = \mathbf{37} \\[4pt]
+        \bar{d} &= \frac{37}{10} = \mathbf{3.70 \text{ kg}}
+        \end{aligned}$$
+        $$\begin{aligned}
+        \sum (d_i - \bar{d})^2 &= 0.49 + 0.49 + 1.69 + 2.89 + 1.69 + 0.49 + 0.09 + 0.09 + 1.69 + 0.49 = \mathbf{10.10} \\[4pt]
+        s_d &= \sqrt{\frac{10.10}{10 - 1}} = \sqrt{\frac{10.10}{9}} \approx \mathbf{1.0593 \text{ kg}}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>2. Test Statistic & Degrees of Freedom:</strong></p>
+        $$\begin{aligned}
+        \text{SE}_{\bar{d}} &= \frac{s_d}{\sqrt{n}} = \frac{1.0593}{\sqrt{10}} = \frac{1.0593}{3.1623} \approx \mathbf{0.3350} \\[6pt]
+        t_{\text{calc}} &= \frac{\bar{d} - 0}{\text{SE}_{\bar{d}}} = \frac{3.70}{0.3350} \approx \mathbf{+11.045} \\[4pt]
+        df &= 10 - 1 = \mathbf{9}
+        \end{aligned}$$
+
+        <div class="note good">
+          <strong>Decision:</strong> For right-tailed test at $\alpha = 0.05$ with $df = 9$, $t_{0.05, 9} = \mathbf{+1.833}$.<br>
+          Since $t_{\text{calc}} = 11.045 \gg 1.833$, we **reject $H_0$** ($p < 0.0001$). The program produces highly significant weight loss.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 5: Two-Sample Independent Pooled t-Test -->
+  <div id="q5-pooled-t" class="details-box">
+    <span class="pyq-badge llt">LLT Assignment Unit 4 Archetype &middot; Pooled Two-Sample t-Test</span>
+    <h3 style="margin:6px 0 10px;">Question 5: Two-Sample Independent t-Test with Pooled Variance</h3>
+    <p><strong>Question Statement:</strong><br>
+    <em>"Two independent groups of students were tested under two teaching methods: Group 1 ($n_1 = 5, \bar{x}_1 = 20, s_1 = 5$) and Group 2 ($n_2 = 5, \bar{x}_2 = 15, s_2 = 2.5$). Assuming equal population variances, test at $\alpha = 0.05$ whether Method 1 yields significantly higher test scores."</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Calculate Pooled Variance ($s_p^2$):</strong></p>
+        $$\begin{aligned}
+        s_p^2 &= \frac{(n_1 - 1)s_1^2 + (n_2 - 1)s_2^2}{n_1 + n_2 - 2} \\[6pt]
+        &= \frac{(4)(5^2) + (4)(2.5^2)}{5 + 5 - 2} = \frac{4(25) + 4(6.25)}{8} = \frac{100 + 25}{8} = \frac{125}{8} = \mathbf{15.625} \\[6pt]
+        s_p &= \sqrt{15.625} \approx \mathbf{3.9528}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>2. Standard Error of Difference:</strong></p>
+        $$\begin{aligned}
+        \text{SE} &= s_p \sqrt{\frac{1}{n_1} + \frac{1}{n_2}} = 3.9528 \sqrt{\frac{1}{5} + \frac{1}{5}} = 3.9528 \sqrt{0.40} \\[4pt]
+        &= 3.9528 \times 0.632456 = \mathbf{2.5000}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>3. Test Statistic & Degrees of Freedom:</strong></p>
+        $$\begin{aligned}
+        t_{\text{calc}} &= \frac{\bar{x}_1 - \bar{x}_2}{\text{SE}} = \frac{20 - 15}{2.5000} = \frac{5}{2.5} = \mathbf{+2.000} \\[4pt]
+        df &= 5 + 5 - 2 = \mathbf{8}
+        \end{aligned}$$
+
+        <div class="note good">
+          <strong>Decision:</strong> For right-tailed test at $\alpha = 0.05$ with $df = 8$, $t_{0.05, 8} = \mathbf{+1.860}$.<br>
+          Since $t_{\text{calc}} = 2.000 > 1.860$, we **reject $H_0$**. Teaching Method 1 yields significantly higher scores.
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <!-- QUESTION 6: Large Sample Z-Test for Means -->
+  <div id="q6-large-z" class="details-box">
+    <span class="pyq-badge ct">Module 3 / Semester Archetype &middot; Large Sample Mean Z-Test</span>
+    <h3 style="margin:6px 0 10px;">Question 6: Two-Tailed Large Sample Z-Test for Mean ($n \ge 30$)</h3>
+    <p><strong>Question Statement:</strong><br>
+    <em>"A manufacturer claims that the average fuel mileage of a car model is 20.0 km/L. A consumer agency tests a random sample of 45 cars, finding an average of 19.2 km/L with a standard deviation of 1.8 km/L. Test at $\alpha = 0.05$ whether the manufacturer's claim holds."</em></p>
+
+    <details open>
+      <summary>View Complete Step-by-Step Solution</summary>
+      <div style="margin-top:12px;">
+        <p><strong>1. Parameters:</strong> $n = 45 \ge 30$ (Large sample $\implies Z$-test by CLT), $\mu_0 = 20.0, \bar{x} = 19.2, s = 1.8$.</p>
+
+        <p style="margin-top:8px;"><strong>2. Standard Error of the Mean:</strong></p>
+        $$\begin{aligned}
+        \text{SE} = \frac{s}{\sqrt{n}} = \frac{1.8}{\sqrt{45}} = \frac{1.8}{6.7082} \approx \mathbf{0.2683}
+        \end{aligned}$$
+
+        <p style="margin-top:8px;"><strong>3. Test Statistic:</strong></p>
+        $$\begin{aligned}
+        Z_{\text{calc}} = \frac{\bar{x} - \mu_0}{\text{SE}} = \frac{19.2 - 20.0}{0.2683} = \frac{-0.80}{0.2683} \approx \mathbf{-2.98}
+        \end{aligned}$$
+
+        <div class="note good">
+          <strong>Decision:</strong> For two-tailed test at $\alpha = 0.05$, $Z_{\text{crit}} = \mathbf{\pm 1.96}$.<br>
+          Since $|Z_{\text{calc}}| = 2.98 > 1.96$, we **reject $H_0$** ($p = 0.0028$). The true average mileage is significantly lower than claimed.
+        </div>
+      </div>
+    </details>
+  </div>
+
+</section>
+
+<!-- Section 7: Interactive Test Statistic Solver -->
+<section id="interactive-tool" class="tool-box">
+  <div class="eyebrow" style="color:var(--brand)">Interactive Study Tool</div>
+  <h2 style="border:none;margin-top:4px;">Dynamic One-Sample Test Statistic Solver (Z or t)</h2>
+  <p style="font-size:13px;color:var(--muted)">Compute test statistics, standard errors, and evaluate decisions offline:</p>
+
+  <div class="tool-grid">
+    <div class="tool-group">
+      <label>Hypothesized Mean ($\mu_0$)</label>
+      <input type="number" id="ts-mu" value="20" step="0.5" oninput="solveTestStat()">
+    </div>
+    <div class="tool-group">
+      <label>Sample Mean ($\bar{x}$)</label>
+      <input type="number" id="ts-xbar" value="19.2" step="0.1" oninput="solveTestStat()">
+    </div>
+    <div class="tool-group">
+      <label>Std Dev ($s$ or $\sigma$)</label>
+      <input type="number" id="ts-sd" value="1.8" step="0.1" min="0.001" oninput="solveTestStat()">
+    </div>
+    <div class="tool-group">
+      <label>Sample Size ($n$)</label>
+      <input type="number" id="ts-n" value="45" step="1" min="2" oninput="solveTestStat()">
+    </div>
+  </div>
+
+  <div class="tool-result" id="ts-output">
+    Loading test calculations...
+  </div>
+</section>
+
+<!-- Section 8: Interactive Self-Test Quiz -->
+<section id="practice">
+  <h2>06. Interactive Self-Test Quiz (Active Recall)</h2>
+  <p class="lead">Test your test-selection, standard errors, and rejection rules before concluding your exam prep. Attempt all 4 questions:</p>
+
+  <div class="quiz-q" data-answer="b">
+    <strong>Question 1 — Standard Error in Proportion Hypothesis Testing</strong>
+    <p>When testing $H_0: P = 0.20$ versus $H_1: P \ne 0.20$ using a sample of $n = 500$ with sample proportion $p = 0.24$, what standard error formula MUST be used in the test denominator?</p>
+    <label><input type="radio" name="q1" value="a"> $\sqrt{\frac{p(1-p)}{n}} = \sqrt{\frac{0.24 \times 0.76}{500}}$</label>
+    <label><input type="radio" name="q1" value="b"> $\sqrt{\frac{P_0(1-P_0)}{n}} = \sqrt{\frac{0.20 \times 0.80}{500}}$</label>
+    <label><input type="radio" name="q1" value="c"> $\frac{P_0}{\sqrt{n}} = \frac{0.20}{\sqrt{500}}$</label>
+    <label><input type="radio" name="q1" value="d"> $\sqrt{n P_0 (1-P_0)}$</label>
+    <div class="feedback" id="f1"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(1)">Check Answer</button>
+      <button onclick="toggleAnswer('a1')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a1">
+      <strong>Correct: Option B</strong>.<br>
+      In hypothesis testing, all calculations assume the null hypothesis is true, so the standard error uses the hypothesized value $P_0$. The sample proportion $p$ is only used when constructing Confidence Intervals.
+    </div>
+  </div>
+
+  <div class="quiz-q" data-answer="c">
+    <strong>Question 2 — Degrees of Freedom in Two-Sample Pooled t-Test</strong>
+    <p>An independent two-sample $t$-test is conducted with $n_1 = 12$ and $n_2 = 14$ participants. What are the degrees of freedom for the pooled $t$-test?</p>
+    <label><input type="radio" name="q2" value="a"> 25</label>
+    <label><input type="radio" name="q2" value="b"> 26</label>
+    <label><input type="radio" name="q2" value="c"> 24</label>
+    <label><input type="radio" name="q2" value="d"> 11</label>
+    <div class="feedback" id="f2"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(2)">Check Answer</button>
+      <button onclick="toggleAnswer('a2')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a2">
+      <strong>Correct: $df = n_1 + n_2 - 2 = 12 + 14 - 2 = \mathbf{24}$</strong>.
+    </div>
+  </div>
+
+  <div class="quiz-q" data-answer="a">
+    <strong>Question 3 — Test Selection for Before and After Study</strong>
+    <p>A clinic records blood pressure for 15 patients before and after taking a drug. What test is appropriate?</p>
+    <label><input type="radio" name="q3" value="a"> Paired sample $t$-test with $df = 14$</label>
+    <label><input type="radio" name="q3" value="b"> Independent two-sample $t$-test with $df = 28$</label>
+    <label><input type="radio" name="q3" value="c"> One-sample $Z$-test</label>
+    <label><input type="radio" name="q3" value="d"> Chi-Square test of independence</label>
+    <div class="feedback" id="f3"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(3)">Check Answer</button>
+      <button onclick="toggleAnswer('a3')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a3">
+      <strong>Correct: Option A</strong>.<br>
+      Because measurements come from the same individuals, the pairs are correlated. Convert to differences $d_i$ and test with $df = 15 - 1 = 14$.
+    </div>
+  </div>
+
+  <div class="quiz-q" data-answer="d">
+    <strong>Question 4 — Two-Proportion Pooled Estimate</strong>
+    <p>In a test comparing two proportions, Sample 1 has 40 successes out of 100, and Sample 2 has 60 successes out of 100. What is the pooled proportion $\bar{p}$?</p>
+    <label><input type="radio" name="q4" value="a"> 0.40</label>
+    <label><input type="radio" name="q4" value="b"> 0.60</label>
+    <label><input type="radio" name="q4" value="c"> 0.48</label>
+    <label><input type="radio" name="q4" value="d"> 0.50</label>
+    <div class="feedback" id="f4"></div>
+    <div class="controls">
+      <button class="secondary" onclick="checkQuiz(4)">Check Answer</button>
+      <button onclick="toggleAnswer('a4')">Toggle Explanation</button>
+    </div>
+    <div class="answer" id="a4">
+      <strong>Correct: $\bar{p} = \frac{40 + 60}{100 + 100} = \frac{100}{200} = \mathbf{0.50}$</strong>.
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px;">
+    <h3>Self-Test Progress</h3>
+    <div class="small" id="scoreText">0 of 4 correct</div>
+    <div class="progress-wrap"><div class="progress" id="scoreBar"></div></div>
+  </div>
+</section>
+
+<!-- Section 9: Exam Checklist -->
+<section id="checklist">
+  <h2>07. Exam Hall Answer Sheet Presentation Checklist</h2>
+  
+  <div class="card">
+    <p>When solving any hypothesis testing problem in the semester exam, follow this exact structure to guarantee maximum marks:</p>
+    <ol style="margin-left:18px;line-height:1.75;font-size:13.5px;">
+      <li><strong>State the Hypotheses:</strong> Explicitly write $H_0$ and $H_1$, defining parameters ($\mu, P$). State whether one-tailed or two-tailed.</li>
+      <li><strong>Identify Test & Conditions:</strong> State why the test is valid (e.g. <em>"Since $n = 500 \ge 30$, Z-test is applicable by CLT"</em> or <em>"$\sigma$ unknown and $n < 30 \implies$ Student's t-test with $df = n-1$"</em>).</li>
+      <li><strong>State the Standard Error Formula:</strong> Write out the SE formula before substituting values.</li>
+      <li><strong>Compute the Test Statistic:</strong> Show the fraction, intermediate decimals, and final calculated $Z$ or $t$.</li>
+      <li><strong>State the Critical Value:</strong> State $Z_{\text{crit}}$ or $t_{\alpha, df}$ with its sign ($\pm$ for two-tailed).</li>
+      <li><strong>Statistical Decision:</strong> State clearly whether the test statistic falls in the rejection region ($|Z_{\text{calc}}| > Z_{\text{crit}} \implies$ Reject $H_0$).</li>
+      <li><strong>Plain English Conclusion:</strong> Answer the specific real-world question posed by the examiner.</li>
+    </ol>
+  </div>
+
+  <div class="controls" style="margin-top:16px;">
+    <button onclick="window.print()">Print / Save as PDF</button>
+    <button class="secondary" onclick="window.scrollTo({top:0,behavior:'smooth'})">Back to Top &uarr;</button>
+    <a href="/ifs-study-guide/index.html" class="btn" style="background:#2563eb;color:#fff;padding:8px 14px;border-radius:8px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;min-height:40px;">&larr; Return to Master Study Hub</a>
+  </div>
+</section>
+
+<div class="footer">
+  <div><strong>Inferential Statistics (21CSC529T)</strong> &middot; Module 05: Tests of Means & Proportions</div>
+  <div>All 5 Priority Modules in 2-Day Plan Are Now <strong>100% Complete & Solved</strong></div>
+</div>
+
+</main>
+</div>
+
+<script>
+// Mobile Drawer open/close for iPhone 13
+function openDrawer(){
+  document.getElementById('mobileDrawer').classList.add('open');
+  document.getElementById('drawerBackdrop').style.display = 'block';
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDrawer(){
+  document.getElementById('mobileDrawer').classList.remove('open');
+  document.getElementById('drawerBackdrop').style.display = 'none';
+  document.body.style.overflow = '';
+}
+
+// Toggle solution explanations
+function toggleAnswer(id){
+  document.getElementById(id).classList.toggle('show');
+}
+
+// Quiz evaluation logic
+function checkQuiz(n){
+  const q = document.querySelectorAll('.quiz-q')[n-1];
+  const chosen = q.querySelector('input:checked');
+  const feedback = document.getElementById('f'+n);
+  
+  if(!chosen){
+    feedback.textContent = 'Please select an option first.';
+    feedback.style.color = '#b45309';
+    return;
+  }
+  
+  const isCorrect = chosen.value === q.dataset.answer;
+  if(isCorrect){
+    feedback.textContent = 'Correct! Outstanding precision.';
+    feedback.style.color = '#059669';
+    q.dataset.done = 'yes';
+  } else {
+    feedback.textContent = 'Incorrect. Check the explanation and try again.';
+    feedback.style.color = '#dc2626';
+    q.dataset.done = 'no';
+  }
+  
+  const completed = [...document.querySelectorAll('.quiz-q')].filter(el => el.dataset.done === 'yes').length;
+  document.getElementById('scoreText').textContent = `${completed} of 4 correct`;
+  document.getElementById('scoreBar').style.width = `${(completed / 4) * 100}%`;
+}
+
+// Dynamic Test Statistic Solver
+function solveTestStat(){
+  const mu = parseFloat(document.getElementById('ts-mu').value) || 0;
+  const xbar = parseFloat(document.getElementById('ts-xbar').value) || 0;
+  const s = parseFloat(document.getElementById('ts-sd').value) || 1;
+  const n = parseInt(document.getElementById('ts-n').value) || 1;
+
+  const se = s / Math.sqrt(n);
+  const diff = xbar - mu;
+  const stat = diff / se;
+  const isZ = n >= 30;
+
+  document.getElementById('ts-output').innerHTML = `
+    <div><strong>Standard Error (SE):</strong> ${se.toFixed(4)}</div>
+    <div style="margin-top:4px;">
+      &bull; <strong>Test Type:</strong> ${isZ ? 'One-Sample Z-Test (n &ge; 30)' : 'One-Sample t-Test (df = ' + (n - 1) + ')'}<br>
+      &bull; <strong>Calculated Statistic:</strong> <span style="font-weight:800;color:var(--brand);">${isZ ? 'Z' : 't'} = ${stat.toFixed(4)}</span>
+    </div>
+    <div style="margin-top:6px;font-size:12.5px;color:var(--muted);">
+      Two-tailed 5% critical cutoff: ${isZ ? '&plusmn;1.96' : '&plusmn;t(0.025, ' + (n-1) + ')'}.
+      ${Math.abs(stat) > 1.96 ? '<span style="color:#dc2626;font-weight:700;">&rarr; Significant Difference (Reject H₀)</span>' : '<span style="color:#059669;font-weight:700;">&rarr; Not Significant (Fail to Reject H₀)</span>'}
+    </div>
+  `;
+}
+
+// Highlight sidebar item on click
+document.querySelectorAll('nav a').forEach(a => {
+  a.addEventListener('click', () => {
+    document.querySelectorAll('nav a').forEach(el => el.classList.remove('active'));
+    a.classList.add('active');
+  });
+});
+
+window.addEventListener('DOMContentLoaded', () => {
+  solveTestStat();
+});
+</script>
+</body>
+</html>

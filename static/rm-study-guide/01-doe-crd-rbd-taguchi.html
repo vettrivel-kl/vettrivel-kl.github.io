@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Design of Experiments & Taguchi | Complete Exam Question Bank & Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#059669;--brand-soft:#ecfdf5;--blue:#2563eb;--blue-soft:#eff6ff;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#064e3b;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#a7f3d0;font-weight:800}
+aside h2{font-size:18px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#6ee7b7;text-transform:uppercase;letter-spacing:.12em;margin:18px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#d1fae5;font-size:13px}
+nav a:hover,nav a.active{background:#047857;color:#ffffff;text-decoration:none}
+.module-hub-link{background:#047857;border:1px solid #059669;color:#ffffff;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:20px;padding:12px;border:1px solid #059669;border-radius:12px;color:#d1fae5;font-size:12px;background:#022c22}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#10b981;color:#022c22}
+
+/* Mobile Sticky Topbar */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#064e3b;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{font-size:14.5px;font-weight:800;color:#f8fafc;display:flex;align-items:center;gap:6px;}
+.mobile-topbar-actions{display:flex;gap:6px;align-items:center;}
+.mobile-btn{
+  background:#047857;
+  border:1px solid #059669;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  min-height:36px;
+  display:inline-flex;
+  align-items:center;
+}
+
+/* Horizontal Swipeable Pill Nav */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#064e3b;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #047857;
+  padding-bottom:12px;
+}
+.drawer-close{background:none;border:none;color:#a7f3d0;font-size:24px;cursor:pointer;padding:4px 8px;}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#064e3b 0%,#0f766e 60%,#047857 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"Y_ij=μ+τ+β+ε";position:absolute;right:20px;bottom:-25px;font-size:80px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#a7f3d0;font-weight:800}
+h1{font-size:clamp(22px,4.5vw,38px);line-height:1.15;margin:10px 0}
+.hero p{max-width:700px;color:#d1fae5;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+.formula-banner{
+  background:#064e3b;
+  color:#f8fafc;
+  padding:16px 14px;
+  border-radius:12px;
+  text-align:center;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+.formula-banner .katex-display{margin:6px 0}
+.formula-banner small{display:block;font-size:11px;color:#a7f3d0;margin-top:6px}
+
+/* KaTeX Headroom */
+.katex-display{
+  font-size:clamp(13px, 3.6vw, 15.5px) !important;
+  margin:12px 0 !important;
+  padding:12px 4px 8px !important;
+  overflow-x:auto !important;
+  overflow-y:visible !important;
+  scrollbar-width:none !important;
+}
+.katex-display::-webkit-scrollbar{display:none !important;}
+.katex-display > .katex{
+  display:block !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  padding-top:4px !important;
+  padding-bottom:2px !important;
+}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--brand-soft);border-color:var(--brand)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#d1fae5;color:#065f46;margin-bottom:6px}
+.pyq-badge.nov{background:#fef3c7;color:#92400e}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+button:hover{background:#047857}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+
+/* Quiz for iPhone 13 */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--brand-soft);border-radius:8px;border-left:3px solid var(--brand);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Field Layout Grid */
+.field-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:12px 0}
+.field-card{background:#f8fafc;border:1px solid var(--line);border-radius:8px;padding:12px}
+.field-title{font-size:12px;font-weight:800;color:var(--brand);margin-bottom:6px}
+.plot-row{display:flex;gap:6px}
+.plot-box{flex:1;background:white;border:1px solid var(--line);border-radius:4px;padding:6px;text-align:center;font-weight:700;font-size:12px}
+
+/* Interactive Calculator */
+.tool-box{background:white;border:2px solid #a7f3d0;border-radius:12px;padding:16px;margin:16px 0}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:8px}
+.tool-group label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px}
+.tool-group input, .tool-group select{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  font-size:16px;
+  background:#f8fafc;
+  min-height:40px;
+}
+.tool-result{margin-top:12px;padding:12px;background:#ecfdf5;border-radius:8px;border-left:4px solid var(--brand);font-size:13px}
+
+/* Mobile Responsiveness */
+@media(max-width:880px){
+  .shell{grid-template-columns:1fr}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:16px 14px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr}
+  .hero{padding:22px 16px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  .card{padding:14px}
+  .tool-box{padding:12px}
+  .tool-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Drawer Backdrop -->
+<div class="drawer-backdrop" id="backdrop" onclick="toggleDrawer()"></div>
+
+<!-- Slide-Out Mobile Navigation Drawer -->
+<div class="mobile-drawer" id="drawer">
+  <div class="drawer-header">
+    <div style="font-weight:800;font-size:13px;color:#a7f3d0;letter-spacing:.1em;text-transform:uppercase;">RM Study Hub</div>
+    <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+  </div>
+  <a href="/rm-study-guide/index.html" class="module-hub-link" style="display:block;padding:8px 12px;border-radius:8px;font-size:13px;">&larr; Back to Study Hub</a>
+  <div class="nav-label">Sections</div>
+  <nav>
+    <a href="#intuition" onclick="toggleDrawer()">01. Intuition & Contrast</a>
+    <a href="#crd-rbd-math" onclick="toggleDrawer()">02. CRD vs RBD Linear Models</a>
+    <a href="#taguchi-math" onclick="toggleDrawer()">03. Taguchi L9 & S/N Ratios</a>
+    <a href="#notation" onclick="toggleDrawer()">04. Notation Matrix</a>
+    <a href="#steps" onclick="toggleDrawer()">05. Solving Protocol</a>
+    <a href="#traps" onclick="toggleDrawer()">06. 6 Exam Traps</a>
+    <a href="#pyqs" onclick="toggleDrawer()">07. All Solved PYQs</a>
+    <a href="#calculator" onclick="toggleDrawer()">08. Interactive Tool</a>
+    <a href="#quiz" onclick="toggleDrawer()">09. Active Recall Quiz</a>
+    <a href="#checklist" onclick="toggleDrawer()">10. Presentation Template</a>
+  </nav>
+  <div class="nav-label">Modules</div>
+  <nav>
+    <a href="/rm-study-guide/01-doe-crd-rbd-taguchi.html" class="active">01. DoE & Taguchi</a>
+    <a href="/rm-study-guide/02-research-ethics-misconduct-publishing.html">02. Ethics & Misconduct</a>
+    <a href="/rm-study-guide/03-statistical-analysis-hypothesis-testing.html">03. Stats, Correlation & χ²</a>
+    <a href="/rm-study-guide/04-scientific-communication-thesis-citations.html">04. Dissemination & Thesis</a>
+    <a href="/rm-study-guide/05-research-types-decision-making-mcdm.html">05. Research Types & MCDM</a>
+  </nav>
+</div>
+
+<!-- Mobile Sticky Topbar -->
+<div class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>Module 01 · DoE & Taguchi</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/rm-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="toggleDrawer()">&#9776; Menu</button>
+  </div>
+</div>
+
+<!-- Mobile Horizontal Pill Nav -->
+<div class="mobile-pills-bar">
+  <a href="#intuition" class="pill-link">Intuition</a>
+  <a href="#crd-rbd-math" class="pill-link">CRD vs RBD</a>
+  <a href="#taguchi-math" class="pill-link">Taguchi L9</a>
+  <a href="#traps" class="pill-link">Traps</a>
+  <a href="#pyqs" class="pill-link">Past Papers</a>
+  <a href="#calculator" class="pill-link">S/N Calculator</a>
+  <a href="#quiz" class="pill-link">Quiz</a>
+  <a href="#checklist" class="pill-link">Checklist</a>
+</div>
+
+<div class="shell">
+
+  <!-- Desktop Sidebar -->
+  <aside>
+    <div class="brand">21IPC501J · Exam Prep</div>
+    <h2>DoE & Taguchi Optimization</h2>
+    <a href="/rm-study-guide/index.html" class="module-hub-link" style="padding:8px 12px;border-radius:8px;font-size:12.5px;">&larr; Back to Study Hub</a>
+
+    <div class="nav-label">Sections</div>
+    <nav>
+      <a href="#intuition">01. Intuition & Contrast</a>
+      <a href="#crd-rbd-math">02. CRD vs RBD Linear Models</a>
+      <a href="#taguchi-math">03. Taguchi L9 & S/N Ratios</a>
+      <a href="#notation">04. Notation Decoding Matrix</a>
+      <a href="#steps">05. Step-by-Step Protocol</a>
+      <a href="#traps">06. 6 Deadly Exam Traps</a>
+      <a href="#pyqs">07. Complete University PYQs</a>
+      <a href="#calculator">08. Interactive S/N Tool</a>
+      <a href="#quiz">09. Self-Test Active Recall</a>
+      <a href="#checklist">10. Answer Sheet Checklist</a>
+    </nav>
+
+    <div class="side-note">
+      <strong>Exam Weightage: 20-30 Marks</strong><br>
+      Internal Score: <strong>51.00 / 60</strong><br>
+      Target Sem Mark: <strong>50 / 100</strong> (Safe: 57)<br>
+      <span class="status-pill pill-target">Priority 1 High-Yield</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="eyebrow">Module 01 · Experimental Design & Robust Engineering</div>
+      <h1>Design of Experiments (DoE) & Taguchi Optimization</h1>
+      <p>Master statistical experimental architecture. Linear mathematical models and complete ANOVA tables for Completely Randomized Design (CRD) vs. Randomized Block Design (RBD), field layouts with soil fertility blocks, and Taguchi $L_9(3^4)$ robust design with S/N ratios.</p>
+      <div class="pills">
+        <span class="pill">Jan 2025 (Q4 20M)</span>
+        <span class="pill">Nov 2025 (Q6 20M)</span>
+        <span class="pill">CRD vs RBD ANOVA</span>
+        <span class="pill">Taguchi L9 (9 vs 27 runs)</span>
+        <span class="pill">Signal-to-Noise Ratios</span>
+      </div>
+    </div>
+
+    <!-- Section 01: Intuition & Contrast -->
+    <section id="intuition">
+      <h2>01. Intuition & Concept Contrast</h2>
+      <p class="lead">Design of Experiments (DoE) manipulates input variables systematically to identify causal mechanisms while minimizing the confounding impact of environmental noise.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Unit Homogeneity</div>
+          <h3 style="margin-top:2px;">CRD vs RBD Experimental Units</h3>
+          <p><strong>Completely Randomized Design (CRD):</strong> Assumes experimental units are <em>strictly homogeneous</em> (e.g., identical test tubes in a laboratory). Assigns treatments purely at random across all units.</p>
+          <p><strong>Randomized Block Design (RBD):</strong> Used when units are <em>heterogeneous</em> across an identifiable nuisance gradient (e.g. soil fertility, operator skill). Groups units into homogeneous <strong>blocks</strong> to isolate and subtract nuisance variance.</p>
+        </div>
+        <div class="card">
+          <div class="kicker">Matrix Efficiency</div>
+          <h3 style="margin-top:2px;">Full Factorial vs Taguchi Orthogonal Array</h3>
+          <p><strong>Full Factorial ($3^3 = 27$ runs):</strong> Tests every possible combination of 3 factors at 3 levels. Expensive and time-consuming in physical manufacturing.</p>
+          <p><strong>Taguchi Orthogonal Array ($L_9$):</strong> Balances levels pairwise across columns. Tests all main factor effects in just **9 runs** ($67\%$ reduction in experimental cost).</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: CRD vs RBD Math -->
+    <section id="crd-rbd-math">
+      <h2>02. Linear Models & ANOVA Partitioning (CRD vs RBD)</h2>
+
+      <div class="formula-banner">
+        <div><strong>Completely Randomized Design (One-Way ANOVA)</strong></div>
+        $$Y_{ij} = \mu + \tau_i + \epsilon_{ij}, \qquad \epsilon_{ij} \sim \text{i.i.d. } \mathcal{N}(0, \sigma^2)$$
+        <small>$Y_{ij}$: Observation of $j$-th replicate under $i$-th treatment. $\tau_i$: Treatment effect ($\sum \tau_i = 0$).</small>
+      </div>
+
+      <div class="formula-banner" style="background:#022c22;border:1px solid #059669;">
+        <div><strong>Randomized Block Design (Two-Way ANOVA Without Replication)</strong></div>
+        $$Y_{ij} = \mu + \tau_i + \beta_j + \epsilon_{ij}, \qquad \epsilon_{ij} \sim \text{i.i.d. } \mathcal{N}(0, \sigma^2)$$
+        <small>$\beta_j$: True block effect ($\sum \beta_j = 0$). Residual error $df = (k - 1)(b - 1)$.</small>
+      </div>
+
+      <div class="card">
+        <h3>Master ANOVA Partitioning Comparison Tables:</h3>
+        
+        <h4>1. CRD ANOVA Table ($N$ total units, $k$ treatments):</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Source</th><th>Degrees of Freedom ($df$)</th><th>Sum of Squares</th><th>Mean Square</th><th>$F$-Statistic</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Treatments</strong></td><td>$k - 1$</td><td>$\text{SST}$</td><td>$\text{MST} = \frac{\text{SST}}{k - 1}$</td><td>$F = \frac{\text{MST}}{\text{MSE}}$</td></tr>
+              <tr><td><strong>Error (Residual)</strong></td><td>$N - k$</td><td>$\text{SSE}$</td><td>$\text{MSE} = \frac{\text{SSE}}{N - k}$</td><td>-</td></tr>
+              <tr><td><strong>Total</strong></td><td>$N - 1$</td><td>$\text{Total SS}$</td><td>-</td><td>-</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h4>2. RBD ANOVA Table ($k$ treatments, $b$ blocks, $N = kb$ total units):</h4>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Source</th><th>Degrees of Freedom ($df$)</th><th>Sum of Squares</th><th>Mean Square</th><th>$F$-Statistic</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Treatments</strong></td><td>$k - 1$</td><td>$\text{SST}$</td><td>$\text{MST} = \frac{\text{SST}}{k - 1}$</td><td>$F_{\text{Tr}} = \frac{\text{MST}}{\text{MSE}}$</td></tr>
+              <tr><td><strong>Blocks (Nuisance)</strong></td><td>$b - 1$</td><td>$\text{SSB}$</td><td>$\text{MSB} = \frac{\text{SSB}}{b - 1}$</td><td>$F_{\text{Bl}} = \frac{\text{MSB}}{\text{MSE}}$</td></tr>
+              <tr><td><strong>Error (Residual)</strong></td><td>$\mathbf{(k - 1)(b - 1)}$</td><td>$\text{SSE}$</td><td>$\text{MSE} = \frac{\text{SSE}}{(k - 1)(b - 1)}$</td><td>-</td></tr>
+              <tr><td><strong>Total</strong></td><td>$N - 1 = kb - 1$</td><td>$\text{Total SS}$</td><td>-</td><td>-</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 03: Taguchi L9 & S/N Ratios -->
+    <section id="taguchi-math">
+      <h2>03. Taguchi Robust Parameter Design & S/N Analysis</h2>
+      <p class="lead"><strong>Nov 2025 (Q6.ii) Guaranteed 10-Mark Question.</strong> Optimizing 3 factors at 3 levels.</p>
+
+      <div class="card">
+        <h3>1. Selection of the $L_9(3^4)$ Orthogonal Array:</h3>
+        <p>Full factorial testing requires $3^3 = \mathbf{27 \text{ runs}}$.</p>
+        <p>Minimum required degrees of freedom:</p>
+        $$\text{DoF} = 1 + \sum_{i=1}^3 (\text{Levels}_i - 1) = 1 + 3 \times (3 - 1) = 1 + 6 = \mathbf{7}$$
+        <p>The standard **Taguchi $L_9(3^4)$ Orthogonal Array** provides 8 degrees of freedom in only **9 runs**, perfectly accommodating 3 factors at 3 levels!</p>
+
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Run #</th><th>Factor A</th><th>Factor B</th><th>Factor C</th></tr></thead>
+            <tbody>
+              <tr><td><strong>1</strong></td><td>Level 1</td><td>Level 1</td><td>Level 1</td></tr>
+              <tr><td><strong>2</strong></td><td>Level 1</td><td>Level 2</td><td>Level 2</td></tr>
+              <tr><td><strong>3</strong></td><td>Level 1</td><td>Level 3</td><td>Level 3</td></tr>
+              <tr><td><strong>4</strong></td><td>Level 2</td><td>Level 1</td><td>Level 2</td></tr>
+              <tr><td><strong>5</strong></td><td>Level 2</td><td>Level 2</td><td>Level 3</td></tr>
+              <tr><td><strong>6</strong></td><td>Level 2</td><td>Level 3</td><td>Level 1</td></tr>
+              <tr><td><strong>7</strong></td><td>Level 3</td><td>Level 1</td><td>Level 3</td></tr>
+              <tr><td><strong>8</strong></td><td>Level 3</td><td>Level 2</td><td>Level 1</td></tr>
+              <tr><td><strong>9</strong></td><td>Level 3</td><td>Level 3</td><td>Level 2</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="formula-banner">
+        <div><strong>The 3 Taguchi Signal-to-Noise (S/N) Ratio Formulas</strong></div>
+        $$\begin{aligned}
+        \text{Larger-the-Better (Efficiency, Yield):} & \quad \eta = -10 \log_{10}\left( \frac{1}{n} \sum_{i=1}^n \frac{1}{y_i^2} \right) \\[6pt]
+        \text{Smaller-the-Better (Defects, Errors):} & \quad \eta = -10 \log_{10}\left( \frac{1}{n} \sum_{i=1}^n y_i^2 \right) \\[6pt]
+        \text{Nominal-the-Best (Precision Dimensions):} & \quad \eta = 10 \log_{10}\left( \frac{\bar{y}^2}{s^2} \right)
+        \end{aligned}$$
+        <small>Rule: Irrespective of objective type, <strong>HIGHER S/N ratio always indicates optimal performance</strong>.</small>
+      </div>
+    </section>
+
+    <!-- Section 04: Notation Matrix -->
+    <section id="notation">
+      <h2>04. Notation Decoding Matrix</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Formal Name</th>
+              <th>Plain-English Meaning</th>
+              <th>Fertilizer Study Benchmark</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$k$</td>
+              <td>Treatments Count</td>
+              <td>Number of experimental conditions being compared</td>
+              <td>$k = 3$ Fertilizers (A, B, C)</td>
+            </tr>
+            <tr>
+              <td>$b$</td>
+              <td>Blocks Count</td>
+              <td>Number of homogeneous groups created across nuisance gradient</td>
+              <td>$b = 4$ Fields (Soil Fertility tiers)</td>
+            </tr>
+            <tr>
+              <td>$N$</td>
+              <td>Total Units</td>
+              <td>Total number of plots or experimental runs</td>
+              <td>$N = k \times b = 3 \times 4 = \mathbf{12 \text{ plots}}$</td>
+            </tr>
+            <tr>
+              <td>$df_{\text{Error}}$</td>
+              <td>Residual Degrees of Freedom</td>
+              <td>Degrees of freedom left to estimate pure error</td>
+              <td>$(3 - 1)(4 - 1) = 2 \times 3 = \mathbf{6}$</td>
+            </tr>
+            <tr>
+              <td>$\eta$</td>
+              <td>Signal-to-Noise Ratio (dB)</td>
+              <td>Logarithmic metric quantifying response relative to noise</td>
+              <td>Maximized to find robust operating point</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 05: Solving Protocol -->
+    <section id="steps">
+      <h2>05. Repeatable Step-by-Step Solving Protocol</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>Step 1: Identify Nuisance Factor & Select Design</strong>
+            <p>If experimental units have a known gradient (e.g. soil fertility, machines), choose **Randomized Block Design (RBD)**.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 2: Draw Physical Layout Matrix</strong>
+            <p>Draw $b$ blocks. Inside each block, assign all $k$ treatments at random: $N = k \times b$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 3: State the Mathematical Linear Model</strong>
+            <p>Write $Y_{ij} = \mu + \tau_i + \beta_j + \epsilon_{ij}$ with assumptions $\epsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$ and $\sum \tau_i = \sum \beta_j = 0$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 4: Compute ANOVA Degrees of Freedom</strong>
+            $$df_{\text{Total}} = kb - 1, \quad df_{\text{Treat}} = k - 1, \quad df_{\text{Blocks}} = b - 1, \quad df_{\text{Error}} = (k-1)(b-1)$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 5: For Taguchi Optimization, Select Orthogonal Array</strong>
+            <p>Compute minimum $\text{DoF} = 1 + \sum (L_i - 1)$. Recommend $L_9(3^4)$ and state the appropriate S/N formula.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 06: 6 Exam Traps -->
+    <section id="traps">
+      <h2>06. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+      <div class="grid">
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 01: Error Degrees of Freedom Confusion</div>
+          <h3>Writing $df_{\text{Error}} = N - k$ in RBD</h3>
+          <p>In CRD, error $df$ is $N - k$. In RBD, **block degrees of freedom ($b - 1$) are subtracted**, leaving $\mathbf{(k - 1)(b - 1)}$. Writing $N - k$ in RBD loses 4 marks.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 02: Inverting S/N Ratio Selection</div>
+          <h3>Picking Lower S/N for "Smaller-the-Better"</h3>
+          <p>Students assume that for defects (smaller-the-better), they should look for a lower S/N ratio. <strong>FALSE!</strong> The negative sign ($-10 \log_{10}$) in the formula inverts it. **HIGHER S/N ratio is ALWAYS better.**</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 03: Recommending CRD for Field Studies</div>
+          <h3>Ignoring Soil Fertility Differences</h3>
+          <p>Soil fertility is never uniform across fields. Recommending CRD allows fertile plots to confound fertilizer results. RBD is strictly mandatory.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 04: Full Factorial Run Exaggeration</div>
+          <h3>Running 27 Runs Instead of 9</h3>
+          <p>In the Taguchi question, failing to recommend the $L_9$ array and writing code for 27 full-factorial runs misses the entire purpose of Taguchi optimization.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 05: Omitting Linear Model Assumptions</div>
+          <h3>Writing Just the ANOVA Table</h3>
+          <p>Examiners require the linear model equations ($Y_{ij} = \mu + \dots$) and error assumptions ($\epsilon_{ij} \sim \text{i.i.d. } \mathcal{N}(0, \sigma^2)$).</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 06: Missing Interaction Caveat in Taguchi</div>
+          <h3>Assuming L9 Resolves Heavy Interactions</h3>
+          <p>Standard $L_9$ orthogonal arrays assume factor interactions are negligible. If interactions are severe, full factorial or fractional factorial resolution IV is required.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 07: Complete Solved University PYQs -->
+    <section id="pyqs">
+      <h2>07. Complete University Question Bank (All Past PYQs Solved)</h2>
+      <div class="controls">
+        <button onclick="toggleAllDetails(true)">Expand All Solutions</button>
+        <button class="secondary" onclick="toggleAllDetails(false)">Collapse All</button>
+      </div>
+
+      <!-- Question 1: Nov 2025 Q6 Fertilizer RBD & Taguchi (20 Marks) -->
+      <div class="details-box">
+        <details id="q1">
+          <summary>
+            <span><span class="pyq-badge nov">Nov 2025 · Question 6</span> Fertilizer Field Layout in RBD & Taguchi L9 Optimization (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            i) A researcher studies the effect of 3 fertilizers (A, B, C) on crop yield across 4 fields with differing soil fertility levels. Design an appropriate experimental layout and explain suitability. (10 Marks)<br>
+            ii) Optimize 3 factors (A, B, C) each at 3 levels: explain Taguchi method, suggest suitable orthogonal array, and describe S/N ratio calculation/interpretation. (10 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>(i) Fertilizer Field Layout via Randomized Block Design (RBD) (10 Marks):</h5>
+          <p>1. <strong>Design Selection:</strong> **Randomized Block Design (RBD)** with $k = 3$ treatments (Fertilizers A, B, C) and $b = 4$ blocks (Fields 1 to 4).</p>
+          <p>2. <strong>Justification:</strong> Soil fertility is a known nuisance variable. If CRD were used, Fertilizer A could land on the most fertile field by chance. RBD groups plots into 4 homogeneous blocks; within each block, all 3 fertilizers are assigned at random. Field-to-field variance is explicitly removed from residual error.</p>
+          <p>3. <strong>Experimental Layout:</strong> Total plots $N = 3 \times 4 = \mathbf{12}$.</p>
+          
+          <div class="field-grid">
+            <div class="field-card">
+              <div class="field-title">Field 1 (High Fertility)</div>
+              <div class="plot-row"><div class="plot-box">Plot 1: B</div><div class="plot-box">Plot 2: A</div><div class="plot-box">Plot 3: C</div></div>
+            </div>
+            <div class="field-card">
+              <div class="field-title">Field 2 (Medium Fertility)</div>
+              <div class="plot-row"><div class="plot-box">Plot 1: C</div><div class="plot-box">Plot 2: B</div><div class="plot-box">Plot 3: A</div></div>
+            </div>
+            <div class="field-card">
+              <div class="field-title">Field 3 (Low Fertility)</div>
+              <div class="plot-row"><div class="plot-box">Plot 1: A</div><div class="plot-box">Plot 2: C</div><div class="plot-box">Plot 3: B</div></div>
+            </div>
+            <div class="field-card">
+              <div class="field-title">Field 4 (Arid Soil)</div>
+              <div class="plot-row"><div class="plot-box">Plot 1: B</div><div class="plot-box">Plot 2: A</div><div class="plot-box">Plot 3: C</div></div>
+            </div>
+          </div>
+
+          <p>4. <strong>ANOVA Partitioning & Degrees of Freedom:</strong></p>
+          <ul>
+            <li>$df_{\text{Fertilizer}} = k - 1 = 3 - 1 = \mathbf{2}$</li>
+            <li>$df_{\text{Fields (Blocks)}} = b - 1 = 4 - 1 = \mathbf{3}$</li>
+            <li>$df_{\text{Error}} = (k - 1)(b - 1) = 2 \times 3 = \mathbf{6}$</li>
+            <li>$df_{\text{Total}} = kb - 1 = 12 - 1 = \mathbf{11}$</li>
+          </ul>
+
+          <h5>(ii) Taguchi Parameter Optimization & S/N Ratios (10 Marks):</h5>
+          <p>1. <strong>Taguchi Concept:</strong> Maximizes robustness against noise without expensive component tolerance costs.</p>
+          <p>2. <strong>Suitable Orthogonal Array:</strong> 3 factors at 3 levels requires 27 runs in full factorial. Minimum degrees of freedom is $1 + 3 \times 2 = 7$. The **Taguchi $L_9(3^4)$ Orthogonal Array** executes this in just **9 runs**.</p>
+          <p>3. <strong>S/N Ratios:</strong></p>
+          <ul>
+            <li>Larger-the-Better (Yield): $\eta = -10 \log_{10}\left(\frac{1}{n}\sum \frac{1}{y^2}\right)$</li>
+            <li>Smaller-the-Better (Defects): $\eta = -10 \log_{10}\left(\frac{1}{n}\sum y^2\right)$</li>
+            <li>Nominal-the-Best: $\eta = 10 \log_{10}\left(\frac{\bar{y}^2}{s^2}\right)$</li>
+          </ul>
+          <p><strong>Interpretation:</strong> A higher S/N ratio always corresponds to lower variability and superior quality.</p>
+        </details>
+      </div>
+
+      <!-- Question 2: Jan 2025 Q4 CRD vs RBD (20 Marks) -->
+      <div class="details-box">
+        <details id="q2">
+          <summary>
+            <span><span class="pyq-badge">Jan 2025 · Question 4</span> CRD vs RBD Linear Models, ANOVA Tables & Industrial Examples (20 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Explain completely randomized design and randomized block design with suitable examples. (20 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Completely Randomized Design (CRD) (10 Marks):</h5>
+          <ul>
+            <li><strong>Prerequisite:</strong> Homogeneous experimental units (e.g. uniform laboratory test tubes).</li>
+            <li><strong>Linear Model:</strong> $Y_{ij} = \mu + \tau_i + \epsilon_{ij}$, where $\epsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$.</li>
+            <li><strong>Example:</strong> Testing 3 neural network optimizers (SGD, Adam, RMSprop) across 15 runs on identical cloud GPUs ($k = 3, N = 15$).</li>
+            <li><strong>ANOVA Table:</strong> Treatments $df = 2$, Error $df = 12$, Total $df = 14$.</li>
+          </ul>
+
+          <h5>2. Randomized Block Design (RBD) (10 Marks):</h5>
+          <ul>
+            <li><strong>Prerequisite:</strong> Heterogeneous units across a known gradient. Units grouped into homogeneous blocks.</li>
+            <li><strong>Linear Model:</strong> $Y_{ij} = \mu + \tau_i + \beta_j + \epsilon_{ij}$, where $\beta_j$ is block effect and $\epsilon_{ij} \sim \mathcal{N}(0, \sigma^2)$.</li>
+            <li><strong>Example:</strong> Testing 4 lathe tool coatings across 3 machinists with varying skill levels ($k = 4, b = 3, N = 12$).</li>
+            <li><strong>ANOVA Table:</strong> Treatments $df = 3$, Blocks $df = 2$, Error $df = (4-1)(3-1) = 6$, Total $df = 11$.</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+    <!-- Section 08: Interactive Calculator -->
+    <section id="calculator">
+      <h2>08. Interactive Offline Taguchi S/N Ratio Calculator</h2>
+      <p class="lead">Enter experimental output values to calculate Signal-to-Noise ratios across all 3 Taguchi optimization objectives.</p>
+
+      <div class="tool-box">
+        <div class="tool-grid">
+          <div class="tool-group">
+            <label>Measured Response Runs (e.g. y1, y2, y3)</label>
+            <input type="text" id="snInputs" value="10.2, 10.5, 9.8">
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <button onclick="calculateSN()">Compute Taguchi S/N Ratios</button>
+        </div>
+
+        <div class="tool-result" id="snOutput">
+          Click button to compute S/N ratios.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 09: Active Recall Quiz -->
+    <section id="quiz">
+      <h2>09. Active Recall Self-Test Quiz</h2>
+      <div class="progress-wrap"><div class="progress" id="quizBar"></div></div>
+      <div id="quizScore" style="font-size:12.5px;font-weight:700;color:var(--muted);margin-top:4px;">Answer the questions below to evaluate progress (0/4 answered).</div>
+
+      <div class="quiz-q" id="qz1">
+        <strong>1. In an agricultural study evaluating 3 fertilizers across 4 soil fertility fields, what are the residual error degrees of freedom in RBD?</strong>
+        <label><input type="radio" name="q1" value="a" onclick="checkQ(1,'b','df = (3-1)(4-1) = 6')"> $df = 9$</label>
+        <label><input type="radio" name="q1" value="b" onclick="checkQ(1,'b','df = (3-1)(4-1) = 6')"> $df = (3 - 1)(4 - 1) = 6$</label>
+        <label><input type="radio" name="q1" value="c" onclick="checkQ(1,'b','df = (3-1)(4-1) = 6')"> $df = 11$</label>
+        <div class="feedback" id="fb1"></div>
+        <div class="answer" id="ans1"><strong>Correct: (b)</strong> In RBD, $df_{\text{Error}} = (k - 1)(b - 1) = (3 - 1)(4 - 1) = 2 \times 3 = \mathbf{6}$.</div>
+      </div>
+
+      <div class="quiz-q" id="qz2">
+        <strong>2. How many experimental runs does a Taguchi $L_9(3^4)$ array require compared to a full factorial experiment for 3 factors at 3 levels?</strong>
+        <label><input type="radio" name="q2" value="a" onclick="checkQ(2,'c','9 runs vs 27 full factorial runs')"> 18 runs vs 27 runs</label>
+        <label><input type="radio" name="q2" value="b" onclick="checkQ(2,'c','9 runs vs 27 full factorial runs')"> 3 runs vs 9 runs</label>
+        <label><input type="radio" name="q2" value="c" onclick="checkQ(2,'c','9 runs vs 27 full factorial runs')"> 9 runs vs 27 runs ($67\%$ reduction in runs)</label>
+        <div class="feedback" id="fb2"></div>
+        <div class="answer" id="ans2"><strong>Correct: (c)</strong> Full factorial requires $3^3 = 27$ runs; Taguchi $L_9$ tests all main factor effects in just **9 runs**.</div>
+      </div>
+
+      <div class="quiz-q" id="qz3">
+        <strong>3. In Taguchi analysis, what does a HIGHER Signal-to-Noise (S/N) ratio indicate?</strong>
+        <label><input type="radio" name="q3" value="a" onclick="checkQ(3,'a','Superior performance and lower sensitivity to noise across all objective types')"> Superior performance and lower sensitivity to noise across all objective types</label>
+        <label><input type="radio" name="q3" value="b" onclick="checkQ(3,'a','Superior performance and lower sensitivity to noise across all objective types')"> High noise and poor product quality</label>
+        <label><input type="radio" name="q3" value="c" onclick="checkQ(3,'a','Superior performance and lower sensitivity to noise across all objective types')"> Only desirable for Larger-the-Better objectives</label>
+        <div class="feedback" id="fb3"></div>
+        <div class="answer" id="ans3"><strong>Correct: (a)</strong> In Taguchi methods, the formulas are constructed so that a **higher S/N ratio always corresponds to optimal performance**.</div>
+      </div>
+
+      <div class="quiz-q" id="qz4">
+        <strong>4. What is the fundamental prerequisite condition for using a Completely Randomized Design (CRD)?</strong>
+        <label><input type="radio" name="q4" value="a" onclick="checkQ(4,'b','Experimental units must be strictly homogeneous')"> Experimental units must be grouped by operator</label>
+        <label><input type="radio" name="q4" value="b" onclick="checkQ(4,'b','Experimental units must be strictly homogeneous')"> Experimental units must be completely homogeneous</label>
+        <label><input type="radio" name="q4" value="c" onclick="checkQ(4,'b','Experimental units must be strictly homogeneous')"> There must be more blocks than treatments</label>
+        <div class="feedback" id="fb4"></div>
+        <div class="answer" id="ans4"><strong>Correct: (b)</strong> CRD assumes units are uniform. If units are heterogeneous, nuisance factors confound treatment effects, requiring RBD.</div>
+      </div>
+    </section>
+
+    <!-- Section 10: Answer Sheet Checklist -->
+    <section id="checklist">
+      <h2>10. Exam Hall Answer Sheet Presentation Checklist</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>1. Write Both Linear Mathematical Models Explicitly</strong>
+            <p>Write $Y_{ij} = \mu + \tau_i + \epsilon_{ij}$ for CRD and $Y_{ij} = \mu + \tau_i + \beta_j + \epsilon_{ij}$ for RBD.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>2. Draw the Physical 4-Field Layout Grid</strong>
+            <p>Draw 4 boxes labeled Field 1 to 4 with randomized plot assignments (e.g., $[B, A, C]$).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>3. Show the Full RBD ANOVA Source Table with Degrees of Freedom</strong>
+            <p>Box: Fertilizers $df = 2$, Fields $df = 3$, Error $df = 6$, Total $df = 11$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>4. State Taguchi Run Savings (9 vs 27 Runs)</strong>
+            <p>Highlight the $L_9(3^4)$ array and show $\text{DoF} = 1 + 3(2) = 7 \le 8$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>5. Write All 3 S/N Formulas Boxed</strong>
+            <p>Provide formulas for Larger-the-Better, Smaller-the-Better, and Nominal-the-Best.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function toggleDrawer() {
+  const drawer = document.getElementById('drawer');
+  const backdrop = document.getElementById('backdrop');
+  drawer.classList.toggle('open');
+  backdrop.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+}
+
+function toggleAllDetails(open) {
+  document.querySelectorAll('details').forEach(d => d.open = open);
+}
+
+function calculateSN() {
+  const inputStr = document.getElementById('snInputs').value.trim();
+  const vals = inputStr.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n) && n > 0);
+
+  if (vals.length === 0) {
+    document.getElementById('snOutput').innerHTML = '<span style="color:var(--red);">Error: Please enter positive numeric values.</span>';
+    return;
+  }
+
+  const n = vals.length;
+  const mean = vals.reduce((a, b) => a + b, 0) / n;
+  const variance = vals.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / (n - 1);
+  const std = Math.sqrt(variance);
+
+  // S/N Larger-the-Better: -10 log10 (1/n * sum(1/y^2))
+  const sumInvSq = vals.reduce((acc, y) => acc + (1 / Math.pow(y, 2)), 0);
+  const snLarger = -10 * Math.log10(sumInvSq / n);
+
+  // S/N Smaller-the-Better: -10 log10 (1/n * sum(y^2))
+  const sumSq = vals.reduce((acc, y) => acc + Math.pow(y, 2), 0);
+  const snSmaller = -10 * Math.log10(sumSq / n);
+
+  // S/N Nominal-the-Best: 10 log10 (mean^2 / std^2)
+  const snNominal = std > 0 ? 10 * Math.log10(Math.pow(mean, 2) / Math.pow(std, 2)) : 0;
+
+  let out = '<strong>Computed Taguchi Results for [' + vals.join(', ') + ']:</strong><br>';
+  out += '• Mean: <strong>' + mean.toFixed(3) + '</strong> | Std Dev: ' + std.toFixed(3) + '<br>';
+  out += '• <strong>Larger-the-Better S/N: ' + snLarger.toFixed(2) + ' dB</strong> (Maximize for Yield/Efficiency)<br>';
+  out += '• <strong>Smaller-the-Better S/N: ' + snSmaller.toFixed(2) + ' dB</strong> (Maximize for Defects/Wear)<br>';
+  if (std > 0) {
+    out += '• <strong>Nominal-the-Best S/N: ' + snNominal.toFixed(2) + ' dB</strong> (Maximize for Precision)';
+  }
+
+  document.getElementById('snOutput').innerHTML = out;
+}
+
+// Quiz Interactive Evaluation
+const answeredQ = {};
+function checkQ(qNum, correctVal, reason) {
+  const selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+  const fb = document.getElementById('fb' + qNum);
+  const ans = document.getElementById('ans' + qNum);
+
+  answeredQ[qNum] = true;
+
+  if (selected.value === correctVal) {
+    fb.innerHTML = '<span style="color:var(--brand);">&#10003; Correct! ' + reason + '</span>';
+  } else {
+    fb.innerHTML = '<span style="color:var(--red);">&#10007; Incorrect. ' + reason + '</span>';
+  }
+  ans.classList.add('show');
+
+  const answeredCount = Object.keys(answeredQ).length;
+  const pct = (answeredCount / 4) * 100;
+  document.getElementById('quizBar').style.width = pct + '%';
+  document.getElementById('quizScore').innerText = 'Completed ' + answeredCount + ' of 4 questions (' + pct.toFixed(0) + '%).';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  calculateSN();
+});
+</script>
+
+</body>
+</html>

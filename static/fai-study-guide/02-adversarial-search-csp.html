@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Adversarial Search & CSP | Complete Exam Question Bank & Study Guide</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#2563eb;--brand-soft:#eff6ff;--teal:#059669;--teal-soft:#ecfdf5;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#0f172a;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#94a3b8;font-weight:800}
+aside h2{font-size:18px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#64748b;text-transform:uppercase;letter-spacing:.12em;margin:18px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#cbd5e1;font-size:13px}
+nav a:hover,nav a.active{background:#1e293b;color:#38bdf8;text-decoration:none}
+.module-hub-link{background:#1e293b;border:1px solid #334155;color:#38bdf8;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:20px;padding:12px;border:1px solid #334155;border-radius:12px;color:#cbd5e1;font-size:12px;background:#131d35}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#047857;color:#ecfdf5}
+
+/* Mobile Topbar */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#0f172a;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{font-size:14.5px;font-weight:800;color:#f8fafc;display:flex;align-items:center;gap:6px;}
+.mobile-topbar-actions{display:flex;gap:6px;align-items:center;}
+.mobile-btn{
+  background:#1e293b;
+  border:1px solid #334155;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  min-height:36px;
+  display:inline-flex;
+  align-items:center;
+}
+
+/* Horizontal Swipeable Pill Nav */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#0f172a;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #1e293b;
+  padding-bottom:12px;
+}
+.drawer-close{background:none;border:none;color:#94a3b8;font-size:24px;cursor:pointer;padding:4px 8px;}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#0f172a 0%,#1e1b4b 60%,#312e81 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"α ≥ β";position:absolute;right:20px;bottom:-25px;font-size:90px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#a5b4fc;font-weight:800}
+h1{font-size:clamp(22px,4.5vw,38px);line-height:1.15;margin:10px 0}
+.hero p{max-width:700px;color:#e0e7ff;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+.formula-banner{
+  background:#0f172a;
+  color:#f8fafc;
+  padding:16px 14px;
+  border-radius:12px;
+  text-align:center;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+.formula-banner .katex-display{margin:6px 0}
+.formula-banner small{display:block;font-size:11px;color:#94a3b8;margin-top:6px}
+
+/* KaTeX Headroom */
+.katex-display{
+  font-size:clamp(13px, 3.6vw, 15.5px) !important;
+  margin:12px 0 !important;
+  padding:12px 4px 8px !important;
+  overflow-x:auto !important;
+  overflow-y:visible !important;
+  scrollbar-width:none !important;
+}
+.katex-display::-webkit-scrollbar{display:none !important;}
+.katex-display > .katex{
+  display:block !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  padding-top:4px !important;
+  padding-bottom:2px !important;
+}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--teal-soft);border-color:var(--teal)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#dbeafe;color:#1e40af;margin-bottom:6px}
+.pyq-badge.nov{background:#fef3c7;color:#92400e}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+button:hover{background:#1d4ed8}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+
+/* Quiz for iPhone 13 */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--teal-soft);border-radius:8px;border-left:3px solid var(--teal);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Tree Visual Diagram */
+.tree-box{background:#0f172a;color:#f8fafc;padding:16px;border-radius:12px;font-family:monospace;font-size:13px;line-height:1.5;overflow-x:auto;margin:12px 0}
+
+/* Cryptarithmetic Column Table */
+.crypto-table{display:inline-table;border-collapse:collapse;margin:10px 0;font-family:monospace;font-size:18px;font-weight:700;letter-spacing:4px}
+.crypto-table td{padding:4px 8px;border:none;text-align:right}
+.crypto-table tr.total td{border-top:2px solid #0f172a}
+
+/* Interactive Calculator */
+.tool-box{background:white;border:2px solid #93c5fd;border-radius:12px;padding:16px;margin:16px 0}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:8px}
+.tool-group label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px}
+.tool-group input{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  font-size:16px;
+  background:#f8fafc;
+  min-height:40px;
+}
+.tool-result{margin-top:12px;padding:12px;background:#eff6ff;border-radius:8px;border-left:4px solid var(--brand);font-size:13px}
+
+/* Mobile Responsiveness */
+@media(max-width:880px){
+  .shell{grid-template-columns:1fr}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:16px 14px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr}
+  .hero{padding:22px 16px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  .card{padding:14px}
+  .tool-box{padding:12px}
+  .tool-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Drawer Backdrop -->
+<div class="drawer-backdrop" id="backdrop" onclick="toggleDrawer()"></div>
+
+<!-- Slide-Out Mobile Navigation Drawer -->
+<div class="mobile-drawer" id="drawer">
+  <div class="drawer-header">
+    <div style="font-weight:800;font-size:13px;color:#94a3b8;letter-spacing:.1em;text-transform:uppercase;">FAI Study Hub</div>
+    <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+  </div>
+  <a href="/fai-study-guide/index.html" class="module-hub-link" style="display:block;padding:8px 12px;border-radius:8px;font-size:13px;">&larr; Back to Study Hub</a>
+  <div class="nav-label">Sections</div>
+  <nav>
+    <a href="#intuition" onclick="toggleDrawer()">01. Intuition & Contrast</a>
+    <a href="#minimax-math" onclick="toggleDrawer()">02. Minimax Formulation</a>
+    <a href="#alphabeta-math" onclick="toggleDrawer()">03. Alpha-Beta Pruning Protocol</a>
+    <a href="#csp-math" onclick="toggleDrawer()">04. Cryptarithmetic CSP</a>
+    <a href="#notation" onclick="toggleDrawer()">05. Notation Matrix</a>
+    <a href="#steps" onclick="toggleDrawer()">06. Solving Protocol</a>
+    <a href="#traps" onclick="toggleDrawer()">07. 6 Exam Traps</a>
+    <a href="#pyqs" onclick="toggleDrawer()">08. All Solved PYQs</a>
+    <a href="#calculator" onclick="toggleDrawer()">09. Interactive Tool</a>
+    <a href="#quiz" onclick="toggleDrawer()">10. Active Recall Quiz</a>
+    <a href="#checklist" onclick="toggleDrawer()">11. Presentation Template</a>
+  </nav>
+  <div class="nav-label">Modules</div>
+  <nav>
+    <a href="/fai-study-guide/01-informed-search-astar-ao.html">01. Informed Search (A* & AO*)</a>
+    <a href="/fai-study-guide/02-adversarial-search-csp.html" class="active">02. Game Playing & CSP</a>
+    <a href="/fai-study-guide/03-uninformed-search-traversal.html">03. Uninformed Search</a>
+    <a href="/fai-study-guide/04-knowledge-representation-bayesian-networks.html">04. Bayes Nets & KR</a>
+    <a href="/fai-study-guide/05-python-pandas-visualization.html">05. Python, Pandas & Plots</a>
+  </nav>
+</div>
+
+<!-- Mobile Sticky Topbar -->
+<div class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>Module 02 · Game & CSP</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/fai-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="toggleDrawer()">&#9776; Menu</button>
+  </div>
+</div>
+
+<!-- Mobile Horizontal Pill Nav -->
+<div class="mobile-pills-bar">
+  <a href="#intuition" class="pill-link">Intuition</a>
+  <a href="#minimax-math" class="pill-link">Minimax</a>
+  <a href="#alphabeta-math" class="pill-link">Alpha-Beta</a>
+  <a href="#csp-math" class="pill-link">Cryptarithmetic</a>
+  <a href="#traps" class="pill-link">Traps</a>
+  <a href="#pyqs" class="pill-link">Past Papers</a>
+  <a href="#calculator" class="pill-link">Simulator</a>
+  <a href="#quiz" class="pill-link">Quiz</a>
+  <a href="#checklist" class="pill-link">Checklist</a>
+</div>
+
+<div class="shell">
+
+  <!-- Desktop Sidebar -->
+  <aside>
+    <div class="brand">21CSC569J · Exam Prep</div>
+    <h2>Adversarial Search & CSP</h2>
+    <a href="/fai-study-guide/index.html" class="module-hub-link" style="padding:8px 12px;border-radius:8px;font-size:12.5px;">&larr; Back to Study Hub</a>
+
+    <div class="nav-label">Sections</div>
+    <nav>
+      <a href="#intuition">01. Intuition & Contrast</a>
+      <a href="#minimax-math">02. Minimax Formulation</a>
+      <a href="#alphabeta-math">03. Alpha-Beta Pruning</a>
+      <a href="#csp-math">04. Cryptarithmetic CSP</a>
+      <a href="#notation">05. Notation Decoding Matrix</a>
+      <a href="#steps">06. Step-by-Step Protocol</a>
+      <a href="#traps">07. 6 Deadly Exam Traps</a>
+      <a href="#pyqs">08. Complete University PYQs</a>
+      <a href="#calculator">09. Interactive Game Tool</a>
+      <a href="#quiz">10. Self-Test Active Recall</a>
+      <a href="#checklist">11. Answer Sheet Checklist</a>
+    </nav>
+
+    <div class="side-note">
+      <strong>Exam Weightage: 20-30 Marks</strong><br>
+      Internal Score: <strong>56.79 / 60</strong><br>
+      Target Sem Mark: <strong>36 / 100</strong> (Safe: 43)<br>
+      <span class="status-pill pill-target">Priority 2 High-Yield</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="eyebrow">Module 02 · Adversarial Games & Constraint Reasoning</div>
+      <h1>Adversarial Search & Constraint Satisfaction</h1>
+      <p>Master multi-agent decision trees and combinatorial constraint networks. Step-by-step verified solutions for Minimax bottom-up utility propagation, Alpha-Beta $[\alpha, \beta]$ branch pruning, and the classic SEND + MORE = MONEY cryptarithmetic puzzle.</p>
+      <div class="pills">
+        <span class="pill">May 2025 (Q4 20M)</span>
+        <span class="pill">Nov 2025 (Q5 20M)</span>
+        <span class="pill">Alpha-Beta (α ≥ β)</span>
+        <span class="pill">Minimax (Root=5)</span>
+        <span class="pill">SEND+MORE=MONEY (23)</span>
+      </div>
+    </div>
+
+    <!-- Section 01: Intuition & Contrast -->
+    <section id="intuition">
+      <h2>01. Intuition & Concept Contrast</h2>
+      <p class="lead">Unlike classical pathfinding where an agent acts in a passive environment, game playing features an active rational opponent whose goal is to minimize your outcome.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Adversarial Paradigm</div>
+          <h3 style="margin-top:2px;">Single-Agent vs Zero-Sum Game</h3>
+          <p><strong>Single-Agent Search (A*):</strong> Environment is deterministic and static. The agent plans a sequence of actions that reach the goal with minimal path cost.</p>
+          <p><strong>Two-Player Zero-Sum (Minimax):</strong> Two players with diametrically opposed utility functions ($\text{Utility}_{\text{Max}} = -\text{Utility}_{\text{Min}}$). MAX maximizes score; MIN minimizes score.</p>
+        </div>
+        <div class="card">
+          <div class="kicker">Problem Solving Paradigm</div>
+          <h3 style="margin-top:2px;">State-Space Search vs CSP</h3>
+          <p><strong>State-Space Search:</strong> States are black boxes. Focuses on the sequence of actions that transforms Start into Goal.</p>
+          <p><strong>Constraint Satisfaction (CSP):</strong> States have structured variables with finite domains. Focuses on assigning valid values to all variables that satisfy explicit constraints.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: Minimax Formulation -->
+    <section id="minimax-math">
+      <h2>02. Minimax Mathematical Formulation</h2>
+
+      <div class="formula-banner">
+        <div><strong>The Minimax Recursive Value Function</strong></div>
+        $$\operatorname{Minimax}(s) = \begin{cases} \operatorname{Utility}(s), & \text{if } \operatorname{Terminal}(s) \\ \max_{a \in \text{Actions}(s)} \operatorname{Minimax}(\operatorname{Result}(s, a)), & \text{if } \operatorname{Player}(s) = \text{MAX} \\ \min_{a \in \text{Actions}(s)} \operatorname{Minimax}(\operatorname{Result}(s, a)), & \text{if } \operatorname{Player}(s) = \text{MIN} \end{cases}$$
+      </div>
+
+      <div class="card">
+        <h3>Properties of the Minimax Algorithm:</h3>
+        <ul>
+          <li><strong>Completeness:</strong> Yes, if the game tree is finite.</li>
+          <li><strong>Optimality:</strong> Yes, against an optimal opponent. If the opponent plays sub-optimally, Minimax still guarantees at least the minimax score.</li>
+          <li><strong>Time Complexity:</strong> $O(b^m)$, where $b$ is the legal branching factor and $m$ is the maximum depth of the tree.</li>
+          <li><strong>Space Complexity:</strong> $O(bm)$ using depth-first search traversal.</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Section 03: Alpha-Beta Pruning -->
+    <section id="alphabeta-math">
+      <h2>03. Alpha-Beta Pruning Algorithm</h2>
+      <p class="lead">Alpha-Beta pruning computes the exact Minimax decision without exploring branches that cannot influence the final root outcome.</p>
+
+      <div class="formula-banner">
+        <div><strong>The Governing Alpha-Beta Pruning Invariant</strong></div>
+        $$\alpha \ge \beta \implies \text{Prune Remaining Child Branches!}$$
+        <small>$\alpha$: Best (highest) score MAX can guarantee so far ($\alpha = -\infty$). $\beta$: Best (lowest) score MIN can guarantee so far ($\beta = +\infty$).</small>
+      </div>
+
+      <div class="card">
+        <h3>How Alpha and Beta Update at Tree Levels:</h3>
+        <p><strong>1. At MAX Nodes:</strong></p>
+        <ul>
+          <li>MAX tries to push the score as high as possible: $v = \max(v, \operatorname{ChildValue})$.</li>
+          <li>Update $\alpha$: $\alpha = \max(\alpha, v)$.</li>
+          <li>Pruning check: If $\alpha \ge \beta$, stop exploring remaining siblings. Prune!</li>
+        </ul>
+        <p><strong>2. At MIN Nodes:</strong></p>
+        <ul>
+          <li>MIN tries to push the score as low as possible: $v = \min(v, \operatorname{ChildValue})$.</li>
+          <li>Update $\beta$: $\beta = \min(\beta, v)$.</li>
+          <li>Pruning check: If $\beta \le \alpha$ (i.e., $\alpha \ge \beta$), stop exploring remaining siblings. Prune!</li>
+        </ul>
+      </div>
+
+      <div class="note good">
+        <strong>Computational Advantage of Alpha-Beta Pruning:</strong><br>
+        * With perfect move ordering (evaluating best moves first), time complexity drops from $O(b^m)$ to $O(b^{m/2}) = O((\sqrt{b})^m)$.<br>
+        * This effectively **doubles the search horizon depth** in games like Chess and Checkers within the same computing time!
+      </div>
+    </section>
+
+    <!-- Section 04: Cryptarithmetic CSP -->
+    <section id="csp-math">
+      <h2>04. Constraint Satisfaction & Cryptarithmetic Puzzles</h2>
+      <p class="lead"><strong>May 2025 (Q4.i) Guaranteed 10-Mark Question.</strong> The famous SEND + MORE = MONEY puzzle.</p>
+
+      <div class="card">
+        <h3>Formal CSP Problem Definition:</h3>
+        <ul>
+          <li><strong>Variables:</strong> $\mathcal{V} = \{S, E, N, D, M, O, R, Y\}$ and column carries $\{C_1, C_2, C_3, C_4\} \in \{0, 1\}$.</li>
+          <li><strong>Domains:</strong> $\mathcal{D} = \{0, 1, 2, 3, 4, 5, 6, 7, 8, 9\}$ with leading letter constraints $S \neq 0, M \neq 0$.</li>
+          <li><strong>Global Constraint:</strong> $\operatorname{Alldifferent}(S, E, N, D, M, O, R, Y)$.</li>
+          <li><strong>Column Addition Constraints (Right to Left):</strong>
+          $$\begin{aligned}
+          \text{Col 1 (Units):} & \quad D + E = Y + 10 \cdot C_1 \\[3pt]
+          \text{Col 2 (Tens):} & \quad N + R + C_1 = E + 10 \cdot C_2 \\[3pt]
+          \text{Col 3 (Hundreds):} & \quad E + O + C_2 = N + 10 \cdot C_3 \\[3pt]
+          \text{Col 4 (Thousands):} & \quad S + M + C_3 = O + 10 \cdot C_4 \\[3pt]
+          \text{Col 5 (Ten-Thousands):} & \quad C_4 = M
+          \end{aligned}$$</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Section 05: Notation Matrix -->
+    <section id="notation">
+      <h2>05. Notation Decoding Matrix</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Formal Name</th>
+              <th>Plain-English Meaning</th>
+              <th>Exam Benchmark</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$\alpha$</td>
+              <td>Alpha Value</td>
+              <td>Highest score guaranteed to MAX player along current path</td>
+              <td>Initialized to $-\infty$; increases only at MAX nodes</td>
+            </tr>
+            <tr>
+              <td>$\beta$</td>
+              <td>Beta Value</td>
+              <td>Lowest score guaranteed to MIN player along current path</td>
+              <td>Initialized to $+\infty$; decreases only at MIN nodes</td>
+            </tr>
+            <tr>
+              <td>$C_i$</td>
+              <td>Carry Bit</td>
+              <td>Integer carry forwarded to subsequent column in addition</td>
+              <td>$C_i \in \{0, 1\}$</td>
+            </tr>
+            <tr>
+              <td>$\operatorname{Alldifferent}$</td>
+              <td>Global Constraint</td>
+              <td>Enforces every letter must represent a unique decimal digit</td>
+              <td>No two letters share the same integer</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 06: Solving Protocol -->
+    <section id="steps">
+      <h2>06. Repeatable Step-by-Step Solving Protocol</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>Step 1: Isolate the Leading Carry Digit ($M = 1$)</strong>
+            <p>The sum of two single-digit numbers plus a carry is at most $9 + 9 + 1 = 19$. Therefore, the leftmost carry digit $M$ must equal $1$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 2: Solve the Thousands Column ($S + 1 + C_3 = O + 10$)</strong>
+            <p>Since $M = 1$, $O$ cannot be $1$. Because $S \le 9$, the sum $S + 1 + C_3 \le 11$. This forces $O = 0$ and $S = 9$ (with $C_3 = 0$).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 3: Solve the Hundreds Column ($E + 0 + C_2 = N$)</strong>
+            <p>Because $E \neq N$, carry $C_2$ must be $1$, so $N = E + 1$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 4: Solve Tens & Units via Elimination</strong>
+            <p>Substitute $N = E + 1$ into tens column. Deduce $R = 8$, $E = 5$, $N = 6$, $D = 7$, and $Y = 2$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 5: Verify the Arithmetic Sum & Target Equation</strong>
+            <p>Confirm $9567 + 1085 = 10652$. Compute $N + E + E + D = 6 + 5 + 5 + 7 = 23$.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 07: 6 Exam Traps -->
+    <section id="traps">
+      <h2>07. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+      <div class="grid">
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 01: Updating Alpha at Min Nodes</div>
+          <h3>Modifying $\alpha$ During MIN Player Turns</h3>
+          <p>$\alpha$ belongs to MAX. At a MIN node, you <strong>only update $\beta$</strong> ($\beta = \min(\beta, v)$). Updating $\alpha$ at a MIN node completely corrupts the pruning logic.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 02: Missing Equality Pruning</div>
+          <h3>Pruning Only When $\alpha > \beta$</h3>
+          <p>The standard pruning condition is **$\alpha \ge \beta$ (greater than OR EQUAL)**. If $\alpha = 4$ and $\beta = 4$, the opponent already has an equal alternative; remaining branches <strong>must be pruned</strong>.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 03: Overlooking $M = 1$ Direct Deduction</div>
+          <h3>Brute Forcing Cryptarithmetic Digits</h3>
+          <p>Trying arbitrary numbers wastes 20 minutes in the exam. Always start with the ten-thousands carry: $M = 1$ is instantaneous and immediately forces $O = 0$.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 04: Duplicate Digit Assignments</div>
+          <h3>Assigning the Same Digit to Two Letters</h3>
+          <p>If $O = 0$ and $M = 1$, no other letter can be assigned $0$ or $1$. Always maintain a crossed-off list of remaining digits $\{2, 3, 4, 5, 6, 7, 8, 9\}$.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 05: Not Stating Root Player Move</div>
+          <h3>Reporting Only the Minimax Value</h3>
+          <p>Writing "Optimal Value = 5" gets only half marks. You must state the action: <strong>"Optimal move for MAX is to choose Node B"</strong>.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 06: Swapping Level Types</div>
+          <h3>Confusing MAX and MIN Layers</h3>
+          <p>Check the problem definition carefully. Root is almost always MAX, Level 1 is MIN, Level 2 is MAX. Taking $\min$ at a MAX layer inverts the entire tree.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 08: Complete Solved University PYQs -->
+    <section id="pyqs">
+      <h2>08. Complete University Question Bank (All Past PYQs Solved)</h2>
+      <div class="controls">
+        <button onclick="toggleAllDetails(true)">Expand All Solutions</button>
+        <button class="secondary" onclick="toggleAllDetails(false)">Collapse All</button>
+      </div>
+
+      <!-- Question 1: May 2025 Q4.i Cryptarithmetic (10 Marks) -->
+      <div class="details-box">
+        <details id="q1">
+          <summary>
+            <span><span class="pyq-badge">May 2025 · Question 4.i</span> SEND + MORE = MONEY Cryptarithmetic Resolution (10 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Solve the following crypt arithmetic problem step-by-step. Find the value of $N + E + E + D$ if:<br>
+            $$\begin{matrix} & S & E & N & D \\ + & M & O & R & E \\ \hline M & O & N & E & Y \end{matrix}$$
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Step-by-Step Deduction:</h5>
+          <ul>
+            <li><strong>Deduce $M = 1$:</strong> Column 5 is the carry from Column 4 ($S + M + C_3$). The maximum sum of two single digits plus carry is $9 + 9 + 1 = 19$, so carry $C_4$ can only be $1$. Thus, $\mathbf{M = 1}$.</li>
+            <li><strong>Deduce $O = 0$:</strong> In Column 4, $S + 1 + C_3 = 10 \cdot C_4 + O = 10 + O$. Since $S \le 9$, $S + 1 + C_3 \le 11$. $O$ cannot be $1$ (already taken by $M$). Therefore, $\mathbf{O = 0}$.</li>
+            <li><strong>Deduce $S = 9$:</strong> With $O = 0$, $S + 1 + C_3 = 10 \implies S + C_3 = 9$. If $C_3 = 1$, $S = 8$. But if $S = 8$, Column 3 would require a carry $C_3 = 1$ from $E + 0 = N$, which is impossible because $E \neq N$ means $E + C_2 = N \le 9$, so $C_3 = 0$. Therefore, $C_3 = 0$ and $\mathbf{S = 9}$.</li>
+            <li><strong>Deduce $C_2 = 1$ and $N = E + 1$:</strong> In Column 3, $E + 0 + C_2 = N$. Since all letters are distinct, $E \neq N$, so carry $C_2$ must be $1$. Hence, $\mathbf{N = E + 1}$.</li>
+            <li><strong>Deduce $R = 8$ and $E = 5$:</strong> In Column 2, $N + R + C_1 = E + 10 \cdot C_2 = E + 10$. Substitute $N = E + 1$:
+            $$(E + 1) + R + C_1 = E + 10 \implies R + C_1 = 9$$
+            Since $S = 9$ is already assigned, $R$ cannot be $9$. Thus $C_1$ must be $1$, which forces $\mathbf{R = 8}$.</li>
+            <li><strong>Deduce $D, E, Y$:</strong> In Column 1, $D + E = Y + 10$. Remaining unassigned digits: $\{2, 3, 4, 5, 6, 7\}$.
+            To produce a carry $C_1 = 1$, $D + E \ge 12$.
+            If $E = 5$, then $N = E + 1 = 6$.
+            Then $D + 5 = Y + 10 \implies D - Y = 5$.
+            From remaining digits $\{2, 3, 4, 7\}$, the only pair with difference 5 is $D = 7, Y = 2$.
+            Therefore, $\mathbf{D = 7, \ Y = 2, \ E = 5, \ N = 6}$.</li>
+          </ul>
+
+          <h5>2. Arithmetic Verification:</h5>
+          <div class="table-wrap">
+            <table class="crypto-table" style="max-width:240px;margin:auto;">
+              <tr><td></td><td>9</td><td>5</td><td>6</td><td>7</td></tr>
+              <tr><td>+</td><td>1</td><td>0</td><td>8</td><td>5</td></tr>
+              <tr class="total"><td>1</td><td>0</td><td>6</td><td>5</td><td>2</td></tr>
+            </table>
+          </div>
+          <p style="text-align:center;font-size:12px;color:var(--teal);font-weight:700;">$9567 + 1085 = 10652 \quad \checkmark \text{ Exact Match!}$</p>
+
+          <h5>3. Calculation of Target Expression:</h5>
+          $$\mathbf{N + E + E + D = 6 + 5 + 5 + 7 = 23}$$
+          <p><strong>Final Answer:</strong> $\mathbf{23}$</p>
+        </details>
+      </div>
+
+      <!-- Question 2: Nov 2025 Q5.b Minimax 8-Leaf (10 Marks) -->
+      <div class="details-box">
+        <details id="q2">
+          <summary>
+            <span><span class="pyq-badge nov">Nov 2025 · Question 5.b</span> Minimax Game Tree Resolution (10 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Consider a 3-level game tree where Root A is MAX, Level 1 (B, C) is MIN, Level 2 (D, E, F, G) is MAX.<br>
+            Leaves under D: 3, 5 | Leaves under E: 6, 9<br>
+            Leaves under F: 1, 2 | Leaves under G: 0, -1<br>
+            Determine optimal value for root node A and identify optimal move for MAX. (10 Marks)
+          </div>
+
+          <div class="tree-box">
+Level 0 (MAX):                      A = ?
+                                 /     \
+Level 1 (MIN):                  B       C
+                              /   \   /   \
+Level 2 (MAX):               D     E F     G
+                            / \   / \ / \ / \
+Level 3 (Leaves):          3   5 6  9 1  2 0 -1
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Bottom-Up Evaluation (Level 2: MAX Nodes)</h5>
+          <ul>
+            <li>$\text{Value}(D) = \max(3, 5) = \mathbf{5}$</li>
+            <li>$\text{Value}(E) = \max(6, 9) = \mathbf{9}$</li>
+            <li>$\text{Value}(F) = \max(1, 2) = \mathbf{2}$</li>
+            <li>$\text{Value}(G) = \max(0, -1) = \mathbf{0}$</li>
+          </ul>
+
+          <h5>2. Evaluation at Level 1 (MIN Nodes)</h5>
+          <ul>
+            <li>$\text{Value}(B) = \min(\text{Value}(D), \text{Value}(E)) = \min(5, 9) = \mathbf{5}$</li>
+            <li>$\text{Value}(C) = \min(\text{Value}(F), \text{Value}(G)) = \min(2, 0) = \mathbf{0}$</li>
+          </ul>
+
+          <h5>3. Evaluation at Root (Level 0: MAX Node A)</h5>
+          $$\text{Value}(A) = \max(\text{Value}(B), \text{Value}(C)) = \max(5, 0) = \mathbf{5}$$
+
+          <h5>Final Decision:</h5>
+          <ul>
+            <li><strong>Optimal Value for Root Node A:</strong> $\mathbf{5}$</li>
+            <li><strong>Optimal Move for MAX Player:</strong> Move to **Node B** (guarantees a payoff of at least 5).</li>
+          </ul>
+        </details>
+      </div>
+
+      <!-- Question 3: Nov 2025 Q5.a Alpha-Beta Pruning (10 Marks) -->
+      <div class="details-box">
+        <details id="q3">
+          <summary>
+            <span><span class="pyq-badge nov">Nov 2025 · Question 5.a</span> Procedural Alpha-Beta Pruning Walkthrough (10 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Explain in detail the procedure of Alpha-Beta pruning applied to a Minimax search tree using an example tree of your choice. Clearly indicate the order of node evaluation, alpha and beta values at each step, and nodes pruned. (10 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Concrete Example Tree:</h5>
+          <p>Root MAX has Left Child (MIN) and Right Child (MIN). Left child has leaves $\{4, 7\}$. Right child has leaves $\{2, 8\}$.</p>
+
+          <h5>2. Traversal Trace with $[\alpha, \beta]$ Intervals:</h5>
+          <ol>
+            <li><strong>Root Node:</strong> Initialized with $\alpha = -\infty, \beta = +\infty$. Calls Left Child (MIN).</li>
+            <li><strong>Left MIN Node:</strong> Inherits $\alpha = -\infty, \beta = +\infty$.
+              <ul>
+                <li>Evaluates first leaf $4$: $v = \min(+\infty, 4) = 4$. Updates $\beta = \min(+\infty, 4) = 4$.</li>
+                <li>Evaluates second leaf $7$: $v = \min(4, 7) = 4$. Updates $\beta = 4$.</li>
+                <li>Returns value $4$ to Root.</li>
+              </ul>
+            </li>
+            <li><strong>Back at Root MAX:</strong>
+              <ul>
+                <li>Updates $v = \max(-\infty, 4) = 4$.</li>
+                <li>Updates $\alpha = \max(-\infty, 4) = \mathbf{4}$.</li>
+                <li>Calls Right Child (MIN) passing $\boldsymbol{\alpha = 4, \beta = +\infty}$.</li>
+              </ul>
+            </li>
+            <li><strong>Right MIN Node:</strong>
+              <ul>
+                <li>Evaluates first leaf $2$: $v = \min(+\infty, 2) = 2$. Updates $\beta = \min(+\infty, 2) = \mathbf{2}$.</li>
+                <li><strong>Test Pruning Invariant:</strong> Is $\alpha \ge \beta$?
+                $$\alpha = 4 \ge \beta = 2 \quad \implies \mathbf{\text{PRUNE!}}$$</li>
+                <li><strong>Result:</strong> Branch to leaf $8$ is <strong>never evaluated / pruned</strong>! MIN returns $2$ to Root.</li>
+              </ul>
+            </li>
+            <li><strong>Root MAX Final Decision:</strong> $\max(4, 2) = \mathbf{4}$. Optimal move is Left.</li>
+          </ol>
+        </details>
+      </div>
+
+      <!-- Question 4: May 2025 Q4.ii Alpha-Beta 11-Leaf Tree (10 Marks) -->
+      <div class="details-box">
+        <details id="q4">
+          <summary>
+            <span><span class="pyq-badge">May 2025 · Question 4.ii</span> Alpha-Beta Pruning on 3-Ply 11-Leaf Tree (10 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Find the pruned part of the search tree given below using Alpha-Beta Pruning:<br>
+            Level 0 (MAX): A<br>
+            Level 1 (MIN): B, C, D<br>
+            Level 2 (MAX): E(2, 3), F(5, 9), G(0), H(7, 4), I(2, 1), J(5, 6)
+          </div>
+
+          <h4>Solution:</h4>
+          <h5>1. Subtree under Node B (MIN):</h5>
+          <ul>
+            <li>Node E (MAX): $\max(2, 3) = 3 \implies \beta_B = 3$.</li>
+            <li>Node F (MAX): Evaluates leaf $5$. Since $5 > 3$, at node B, $\beta = 3 \le \alpha_F = 5 \implies$ **Leaf 9 is PRUNED**!</li>
+            <li>Value of Node B = $3$. Root A updates $\alpha = 3$.</li>
+          </ul>
+
+          <h5>2. Subtree under Node C (MIN) with $\alpha = 3$:</h5>
+          <ul>
+            <li>Node G (MAX): Evaluates leaf $0 \implies \text{Value}(G) = 0$. Node C updates $\beta = \min(+\infty, 0) = 0$.</li>
+            <li>Now at Node C: $\alpha = 3 \ge \beta = 0 \implies$ **Entire Subtree under Node H (Leaves 7 and 4) is PRUNED**!</li>
+          </ul>
+
+          <h5>3. Subtree under Node D (MIN) with $\alpha = 3$:</h5>
+          <ul>
+            <li>Node I (MAX): $\max(2, 1) = 2 \implies$ Node D updates $\beta = 2$.</li>
+            <li>Now at Node D: $\alpha = 3 \ge \beta = 2 \implies$ **Entire Subtree under Node J (Leaves 5 and 6) is PRUNED**!</li>
+          </ul>
+
+          <h5>Summary of Pruned Nodes:</h5>
+          <p>$\mathbf{\text{Pruned Nodes: Leaf 9, Entire Node H (Leaves 7, 4), and Entire Node J (Leaves 5, 6)}}$.</p>
+          <p>Alpha-Beta pruning evaluated only 6 out of 11 leaves, cutting search effort by nearly $50\%$.</p>
+        </details>
+      </div>
+    </section>
+
+    <!-- Section 09: Interactive Tool -->
+    <section id="calculator">
+      <h2>09. Interactive Offline Minimax Tree Simulator</h2>
+      <p class="lead">Simulate a 2-ply Minimax game tree. Enter candidate leaf values to instantly calculate bottom-up node evaluations and find the optimal root move.</p>
+
+      <div class="tool-box">
+        <div class="tool-grid">
+          <div class="tool-group">
+            <label>Leaves under Left MIN (e.g. D1, D2)</label>
+            <input type="text" id="leftLeaves" value="3, 5">
+          </div>
+          <div class="tool-group">
+            <label>Leaves under Right MIN (e.g. E1, E2)</label>
+            <input type="text" id="rightLeaves" value="6, 9">
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <button onclick="simulateMinimax()">Compute Minimax & Alpha-Beta</button>
+        </div>
+
+        <div class="tool-result" id="gameOutput">
+          Click button to compute game tree solution.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 10: Active Recall Quiz -->
+    <section id="quiz">
+      <h2>10. Active Recall Self-Test Quiz</h2>
+      <div class="progress-wrap"><div class="progress" id="quizBar"></div></div>
+      <div id="quizScore" style="font-size:12.5px;font-weight:700;color:var(--muted);margin-top:4px;">Answer the questions below to evaluate progress (0/4 answered).</div>
+
+      <div class="quiz-q" id="qz1">
+        <strong>1. In Alpha-Beta pruning, what condition triggers a branch cutoff?</strong>
+        <label><input type="radio" name="q1" value="a" onclick="checkQ(1,'c','alpha >= beta triggers pruning')"> $\alpha < \beta$</label>
+        <label><input type="radio" name="q1" value="b" onclick="checkQ(1,'c','alpha >= beta triggers pruning')"> $\alpha = 0$</label>
+        <label><input type="radio" name="q1" value="c" onclick="checkQ(1,'c','alpha >= beta triggers pruning')"> $\alpha \ge \beta$ (Alpha is greater than or equal to Beta)</label>
+        <div class="feedback" id="fb1"></div>
+        <div class="answer" id="ans1"><strong>Correct: (c)</strong> When $\alpha \ge \beta$, the opponent can already force a worse outcome for the player elsewhere, making the current branch irrelevant.</div>
+      </div>
+
+      <div class="quiz-q" id="qz2">
+        <strong>2. In the cryptarithmetic puzzle SEND + MORE = MONEY, what is the value of the leading carry letter M?</strong>
+        <label><input type="radio" name="q2" value="a" onclick="checkQ(2,'b','M = 1 because sum of two single digits plus carry <= 19')"> $M = 0$</label>
+        <label><input type="radio" name="q2" value="b" onclick="checkQ(2,'b','M = 1 because sum of two single digits plus carry <= 19')"> $M = 1$</label>
+        <label><input type="radio" name="q2" value="c" onclick="checkQ(2,'b','M = 1 because sum of two single digits plus carry <= 19')"> $M = 2$</label>
+        <div class="feedback" id="fb2"></div>
+        <div class="answer" id="ans2"><strong>Correct: (b)</strong> Because $S + M + C_3 \le 9 + 9 + 1 = 19$, the carry $C_4 = M$ must strictly equal $1$.</div>
+      </div>
+
+      <div class="quiz-q" id="qz3">
+        <strong>3. In the May 2025 exam question, what is the calculated value of $N + E + E + D$?</strong>
+        <label><input type="radio" name="q3" value="a" onclick="checkQ(3,'a','6 + 5 + 5 + 7 = 23')"> $23$</label>
+        <label><input type="radio" name="q3" value="b" onclick="checkQ(3,'a','6 + 5 + 5 + 7 = 23')"> $20$</label>
+        <label><input type="radio" name="q3" value="c" onclick="checkQ(3,'a','6 + 5 + 5 + 7 = 23')"> $27$</label>
+        <div class="feedback" id="fb3"></div>
+        <div class="answer" id="ans3"><strong>Correct: (a)</strong> With $N = 6, E = 5, D = 7$, we have $6 + 5 + 5 + 7 = \mathbf{23}$.</div>
+      </div>
+
+      <div class="quiz-q" id="qz4">
+        <strong>4. In the November 2025 Minimax exam tree with 8 leaves, what is the optimal root value and move for MAX?</strong>
+        <label><input type="radio" name="q4" value="a" onclick="checkQ(4,'b','Root value is 5 and optimal move is Node B')"> Root value is 9; Move to Node C</label>
+        <label><input type="radio" name="q4" value="b" onclick="checkQ(4,'b','Root value is 5 and optimal move is Node B')"> Root value is 5; Move to Node B</label>
+        <label><input type="radio" name="q4" value="c" onclick="checkQ(4,'b','Root value is 5 and optimal move is Node B')"> Root value is 0; Move to Node B</label>
+        <div class="feedback" id="fb4"></div>
+        <div class="answer" id="ans4"><strong>Correct: (b)</strong> Bottom-up evaluation yields $B = \min(5, 9) = 5$ and $C = \min(2, 0) = 0$. MAX chooses $\max(5, 0) = \mathbf{5}$ by moving to **Node B**.</div>
+      </div>
+    </section>
+
+    <!-- Section 11: Answer Sheet Checklist -->
+    <section id="checklist">
+      <h2>11. Exam Hall Answer Sheet Presentation Checklist</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>1. Draw the Game Tree with Labeled Level Roles</strong>
+            <p>Write explicitly beside the tree: Level 0 (MAX), Level 1 (MIN), Level 2 (MAX).</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>2. Show Bottom-Up Evaluation Equations Level by Level</strong>
+            <p>Write $D = \max(3, 5) = 5$, then $B = \min(5, 9) = 5$, then $A = \max(5, 0) = 5$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>3. State Both Root Value and Move Direction</strong>
+            <p>Box the answer: "Optimal Root Value = 5; Optimal Move = Move to Node B."</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>4. For Cryptarithmetic, Write Down Carry Variables ($C_1, C_2, C_3, C_4$)</strong>
+            <p>Set up column equations with carry bits explicitly before solving.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>5. Show Final Substitution Grid for Verification</strong>
+            <p>Write $9567 + 1085 = 10652$ with checkmark to prove correctness.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function toggleDrawer() {
+  const drawer = document.getElementById('drawer');
+  const backdrop = document.getElementById('backdrop');
+  drawer.classList.toggle('open');
+  backdrop.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+}
+
+function toggleAllDetails(open) {
+  document.querySelectorAll('details').forEach(d => d.open = open);
+}
+
+function simulateMinimax() {
+  const leftStr = document.getElementById('leftLeaves').value.trim();
+  const rightStr = document.getElementById('rightLeaves').value.trim();
+
+  const leftVals = leftStr.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n));
+  const rightVals = rightStr.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n));
+
+  if (leftVals.length === 0 || rightVals.length === 0) {
+    document.getElementById('gameOutput').innerHTML = '<span style="color:var(--red);">Error: Please enter numbers for both left and right subtrees.</span>';
+    return;
+  }
+
+  // Assume Level 1 is MIN, Level 2 is leaf
+  const minLeft = Math.min(...leftVals);
+  const minRight = Math.min(...rightVals);
+  const rootMax = Math.max(minLeft, minRight);
+  const bestMove = minLeft >= minRight ? 'Left Branch (Child 1)' : 'Right Branch (Child 2)';
+
+  let out = '<strong>Simulated Minimax Results:</strong><br>';
+  out += '• Left MIN Node Value: $\\min(' + leftVals.join(', ') + ') = <strong>' + minLeft + '</strong>$<br>';
+  out += '• Right MIN Node Value: $\\min(' + rightVals.join(', ') + ') = <strong>' + minRight + '</strong>$<br>';
+  out += '• <strong>Root MAX Node Value: $\\max(' + minLeft + ', ' + minRight + ') = ' + rootMax + '$</strong><br>';
+  out += '• <strong>Optimal Move for MAX: ' + bestMove + '</strong>';
+
+  document.getElementById('gameOutput').innerHTML = out;
+  if (window.renderMathInElement) {
+    renderMathInElement(document.getElementById('gameOutput'), {delimiters: [{left: '$', right: '$', display: false}]});
+  }
+}
+
+// Quiz Interactive Evaluation
+const answeredQ = {};
+function checkQ(qNum, correctVal, reason) {
+  const selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+  const fb = document.getElementById('fb' + qNum);
+  const ans = document.getElementById('ans' + qNum);
+
+  answeredQ[qNum] = true;
+
+  if (selected.value === correctVal) {
+    fb.innerHTML = '<span style="color:var(--teal);">&#10003; Correct! ' + reason + '</span>';
+  } else {
+    fb.innerHTML = '<span style="color:var(--red);">&#10007; Incorrect. ' + reason + '</span>';
+  }
+  ans.classList.add('show');
+
+  const answeredCount = Object.keys(answeredQ).length;
+  const pct = (answeredCount / 4) * 100;
+  document.getElementById('quizBar').style.width = pct + '%';
+  document.getElementById('quizScore').innerText = 'Completed ' + answeredCount + ' of 4 questions (' + pct.toFixed(0) + '%).';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  simulateMinimax();
+});
+</script>
+
+</body>
+</html>

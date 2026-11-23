@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Research Methodology -- All-in-One Master Reference & Formula Handbook (21IPC501J)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+  <style>
+    :root {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f8fafc;
+      --bg-tertiary: #f1f5f9;
+      --text-primary: #0f172a;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --border-color: #e2e8f0;
+      --primary-accent: #059669;
+      --primary-dark: #047857;
+      --primary-light: #ecfdf5;
+      --blue: #2563eb;
+      --blue-light: #eff6ff;
+      --amber: #b45309;
+      --amber-light: #fffbeb;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --purple: #7c3aed;
+      --purple-light: #f5f3ff;
+      --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+      --card-shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --sidebar-width: 280px;
+      --safe-top: env(safe-area-inset-top, 0px);
+      --safe-bottom: env(safe-area-inset-bottom, 0px);
+      --safe-left: env(safe-area-inset-left, 0px);
+      --safe-right: env(safe-area-inset-right, 0px);
+    }
+
+    [data-theme="dark"] {
+      --bg-primary: #0f172a;
+      --bg-secondary: #1e293b;
+      --bg-tertiary: #334155;
+      --text-primary: #f8fafc;
+      --text-secondary: #cbd5e1;
+      --text-muted: #94a3b8;
+      --border-color: #334155;
+      --primary-accent: #10b981;
+      --primary-dark: #34d399;
+      --primary-light: #064e3b33;
+      --blue: #3b82f6;
+      --blue-light: #1e3a8a33;
+      --amber: #f59e0b;
+      --amber-light: #78350f33;
+      --danger: #ef4444;
+      --danger-light: #7f1d1d33;
+      --purple: #a78bfa;
+      --purple-light: #581c8733;
+      --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+      --card-shadow-hover: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background-color: var(--bg-secondary);
+      color: var(--text-primary);
+      line-height: 1.6;
+      font-size: 15px;
+      display: flex;
+      min-height: 100vh;
+      overflow-x: hidden;
+      padding-left: var(--safe-left);
+      padding-right: var(--safe-right);
+    }
+
+    .sidebar {
+      width: var(--sidebar-width);
+      background-color: var(--bg-primary);
+      border-right: 1px solid var(--border-color);
+      height: 100vh;
+      position: sticky;
+      top: 0;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      z-index: 100;
+      padding-top: var(--safe-top);
+      flex-shrink: 0;
+    }
+
+    .sidebar-header {
+      padding: 20px 16px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .sidebar-header h2 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--primary-accent);
+      margin-bottom: 4px;
+    }
+
+    .sidebar-header p {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .sidebar-nav {
+      padding: 12px 8px;
+      flex: 1;
+    }
+
+    .nav-section-title {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-weight: 700;
+      color: var(--text-muted);
+      padding: 10px 12px 4px;
+    }
+
+    .sidebar-nav a {
+      display: block;
+      padding: 7px 12px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 0.86rem;
+      border-radius: 6px;
+      margin-bottom: 2px;
+      transition: all 0.15s ease;
+    }
+
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      background-color: var(--primary-light);
+      color: var(--primary-accent);
+      font-weight: 600;
+    }
+
+    .sidebar-footer {
+      padding: 16px;
+      border-top: 1px solid var(--border-color);
+      font-size: 0.8rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Mobile Sticky Topbar */
+    .mobile-topbar {
+      display: none;
+      position: sticky;
+      top: 0;
+      z-index: 900;
+      background: #064e3b;
+      color: #fff;
+      padding: calc(10px + var(--safe-top)) 14px 10px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .mobile-topbar-title {
+      font-size: 14.5px;
+      font-weight: 800;
+      color: #f8fafc;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mobile-topbar-actions {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .mobile-btn {
+      background: #047857;
+      border: 1px solid #059669;
+      color: #f8fafc;
+      font-size: 12.5px;
+      font-weight: 700;
+      padding: 6px 10px;
+      border-radius: 8px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      cursor: pointer;
+      min-height: 36px;
+    }
+
+    /* Mobile Pills Bar */
+    .mobile-pills-bar {
+      display: none;
+      overflow-x: auto;
+      white-space: nowrap;
+      padding: 8px 12px;
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-color);
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      position: sticky;
+      top: calc(54px + var(--safe-top));
+      z-index: 850;
+      box-shadow: 0 1px 4px rgba(0, 0, 0, 0.03);
+    }
+    .mobile-pills-bar::-webkit-scrollbar { display: none; }
+
+    .pill-link {
+      display: inline-block;
+      padding: 5px 11px;
+      margin-right: 5px;
+      border-radius: 99px;
+      background: #f1f5f9;
+      color: #334155;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--border-color);
+      text-decoration: none;
+    }
+
+    /* Mobile Drawer */
+    .drawer-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.6);
+      z-index: 998;
+      backdrop-filter: blur(3px);
+    }
+
+    .mobile-drawer {
+      position: fixed;
+      top: 0;
+      left: -100%;
+      width: 85%;
+      max-width: 320px;
+      height: 100vh;
+      background: #064e3b;
+      color: #e2e8f0;
+      z-index: 999;
+      padding: calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+      overflow-y: auto;
+      box-shadow: 4px 0 24px rgba(0, 0, 0, 0.3);
+      transition: left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mobile-drawer.open { left: 0; }
+
+    .drawer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      border-bottom: 1px solid #047857;
+      padding-bottom: 12px;
+    }
+
+    .drawer-close {
+      background: none;
+      border: none;
+      color: #a7f3d0;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 4px 8px;
+    }
+
+    /* Main Content Area */
+    .content-area {
+      flex: 1;
+      padding: 32px clamp(16px, 4vw, 48px) calc(60px + var(--safe-bottom));
+      max-width: 1180px;
+      min-width: 0;
+    }
+
+    .page-header {
+      margin-bottom: 28px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .badge-hub {
+      display: inline-block;
+      padding: 4px 10px;
+      background-color: var(--primary-light);
+      color: var(--primary-accent);
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .page-title {
+      font-size: clamp(1.6rem, 3.5vw, 2.3rem);
+      font-weight: 800;
+      color: var(--text-primary);
+      line-height: 1.2;
+      margin-bottom: 8px;
+    }
+
+    .page-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      max-width: 800px;
+    }
+
+    /* Target Banner */
+    .target-banner {
+      background: linear-gradient(135deg, #064e3b 0%, #047857 100%);
+      color: white;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 30px;
+      box-shadow: 0 10px 25px rgba(5, 150, 105, 0.2);
+    }
+    .target-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .target-box {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 12px;
+      padding: 14px;
+    }
+    .target-num {
+      font-size: 24px;
+      font-weight: 800;
+      color: #a7f3d0;
+    }
+
+    section {
+      scroll-margin-top: calc(90px + var(--safe-top));
+      margin-bottom: 40px;
+    }
+
+    .section-title {
+      font-size: 1.35rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      padding-bottom: 6px;
+      border-bottom: 2px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card {
+      background-color: var(--bg-primary);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: var(--card-shadow);
+    }
+
+    .table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      margin: 14px 0;
+      border-radius: 10px;
+      border: 1px solid var(--border-color);
+      background: var(--bg-primary);
+      scrollbar-width: none;
+    }
+    .table-container::-webkit-scrollbar { display: none; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+    th, td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border-color);
+      text-align: left;
+    }
+    th {
+      background-color: var(--bg-tertiary);
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:nth-child(even) { background-color: rgba(0, 0, 0, 0.015); }
+
+    .katex-display {
+      font-size: clamp(13px, 3.4vw, 15px) !important;
+      margin: 10px 0 !important;
+      padding: 10px 4px 6px !important;
+      overflow-x: auto !important;
+      overflow-y: visible !important;
+      scrollbar-width: none !important;
+    }
+    .katex-display::-webkit-scrollbar { display: none !important; }
+
+    .theme-toggle-btn {
+      background: none;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 880px) {
+      body { flex-direction: column; }
+      .sidebar { display: none; }
+      .mobile-topbar { display: flex; }
+      .mobile-pills-bar { display: block; }
+      .content-area { padding: 16px 14px calc(60px + var(--safe-bottom)); }
+      .target-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Mobile Drawer Backdrop -->
+  <div class="drawer-backdrop" id="backdrop" onclick="toggleDrawer()"></div>
+
+  <!-- Mobile Drawer -->
+  <div class="mobile-drawer" id="drawer">
+    <div class="drawer-header">
+      <div style="font-weight:800;font-size:13px;color:#a7f3d0;letter-spacing:.1em;text-transform:uppercase;">RM Handbook</div>
+      <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+    </div>
+    <a href="/rm-study-guide/index.html" style="display:block;padding:8px 12px;border-radius:8px;font-size:13px;background:#047857;color:#ffffff;text-decoration:none;margin-bottom:12px;">&larr; Open Study Guides Hub</a>
+    <div style="font-size:10px;color:#a7f3d0;text-transform:uppercase;margin:12px 0 6px;font-weight:700;">Cheatsheet Sections</div>
+    <nav>
+      <a href="#targets" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#d1fae5;text-decoration:none;">01. Score Target Matrix</a>
+      <a href="#doe" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#d1fae5;text-decoration:none;">02. DoE & Taguchi Optimization</a>
+      <a href="#ethics" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#d1fae5;text-decoration:none;">03. Research Ethics & Misconduct</a>
+      <a href="#stats" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#d1fae5;text-decoration:none;">04. Statistical Testing (r & χ²)</a>
+      <a href="#dissemination" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#d1fae5;text-decoration:none;">05. Citations & Thesis Blueprint</a>
+      <a href="#types" onclick="toggleDrawer()" style="display:block;padding:6px 0;color:#d1fae5;text-decoration:none;">06. Research Types & MCDM</a>
+    </nav>
+  </div>
+
+  <!-- Mobile Topbar -->
+  <div class="mobile-topbar">
+    <div class="mobile-topbar-title">
+      <span>RM Master Cheatsheet</span>
+    </div>
+    <div class="mobile-topbar-actions">
+      <a href="/rm-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+      <button class="mobile-btn" onclick="toggleDrawer()">&#9776; Menu</button>
+    </div>
+  </div>
+
+  <!-- Mobile Pills Bar -->
+  <div class="mobile-pills-bar">
+    <a href="#targets" class="pill-link">Targets</a>
+    <a href="#doe" class="pill-link">DoE / Taguchi</a>
+    <a href="#ethics" class="pill-link">Ethics (FFP)</a>
+    <a href="#stats" class="pill-link">Pearson & χ²</a>
+    <a href="#dissemination" class="pill-link">Citations & Thesis</a>
+    <a href="#types" class="pill-link">Types & MCDM</a>
+  </div>
+
+  <!-- Desktop Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <h2>RM Handbook</h2>
+      <p>Course Code 21IPC501J</p>
+    </div>
+    <div class="sidebar-nav">
+      <a href="/rm-study-guide/index.html" style="background:#047857;color:#ffffff;font-weight:700;margin-bottom:12px;">&larr; Open Study Guides Hub</a>
+      <div class="nav-section-title">Handbook Navigation</div>
+      <a href="#targets">01. Strategic Targets</a>
+      <a href="#doe">02. DoE & Taguchi Optimization</a>
+      <a href="#ethics">03. Research Ethics & Misconduct</a>
+      <a href="#stats">04. Statistical Analysis (r & χ²)</a>
+      <a href="#dissemination">05. Citations & Thesis Blueprint</a>
+      <a href="#types">06. Research Types & MCDM</a>
+      <a href="#presentation">07. Answer Presentation</a>
+    </div>
+    <div class="sidebar-footer">
+      <button class="theme-toggle-btn" onclick="toggleTheme()">🌓 Dark Mode</button>
+      <span>Vettri's Notes</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="content-area">
+
+    <div class="page-header">
+      <span class="badge-hub">All-in-One Master Reference Sheet</span>
+      <h1 class="page-title">Research Methodology Master Reference & Formula Handbook</h1>
+      <p class="page-subtitle">Consolidated linear models, ANOVA formulas, research integrity frameworks, statistical hypothesis tests, citation conversions, and thesis architecture for 21IPC501J.</p>
+    </div>
+
+    <!-- Section 01: Score Targets -->
+    <section id="targets">
+      <div class="target-banner">
+        <h2 style="font-size:1.2rem;margin-bottom:4px;">Strategic Score Target (60/40 University Rule)</h2>
+        <p style="font-size:0.88rem;opacity:0.9;">Total Score = Internal Assessment (60%) + [Semester Exam Score &times; 0.40]</p>
+        <div class="target-grid">
+          <div class="target-box">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.8;">Internal Score</div>
+            <div class="target-num">51.00 / 60</div>
+            <div style="font-size:11px;opacity:0.85;">85.00% internal carryover.</div>
+          </div>
+          <div class="target-box">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.8;">Min Sem Mark for Grade A</div>
+            <div class="target-num" style="color:#6ee7b7;">50 / 100</div>
+            <div style="font-size:11px;opacity:0.85;">(71.0 - 51.00) / 0.40 = 50.00.</div>
+          </div>
+          <div class="target-box">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.8;">Safe Target (+7 Buffer)</div>
+            <div class="target-num" style="color:#fde047;">57 / 100</div>
+            <div style="font-size:11px;opacity:0.85;">Final total = 73.80 (Grade A).</div>
+          </div>
+          <div class="target-box">
+            <div style="font-size:11px;text-transform:uppercase;letter-spacing:0.08em;opacity:0.8;">Target for Grade A+ / S</div>
+            <div class="target-num" style="color:#d8b4fe;">75 / 100</div>
+            <div style="font-size:11px;opacity:0.85;">Final total = 81.00 &ge; 81.0.</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: DoE & Taguchi -->
+    <section id="doe">
+      <h2 class="section-title">02. Design of Experiments (DoE) & Taguchi Optimization</h2>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Linear Models: CRD vs. RBD</h3>
+        <p><strong>Completely Randomized Design (CRD):</strong> $Y_{ij} = \mu + \tau_i + \epsilon_{ij}, \quad df_{\text{Error}} = N - k$ (Homogeneous units)</p>
+        <p><strong>Randomized Block Design (RBD):</strong> $Y_{ij} = \mu + \tau_i + \beta_j + \epsilon_{ij}, \quad df_{\text{Error}} = (k - 1)(b - 1)$ (Heterogeneous units grouped into $b$ blocks)</p>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Taguchi Robust Design & S/N Ratios</h3>
+        <p>• <strong>$L_9(3^4)$ Array:</strong> Optimizes 3 factors at 3 levels in just <strong>9 runs</strong> (instead of $3^3 = 27$ runs).</p>
+        $$\text{Larger-the-Better (Yield): } \eta = -10 \log_{10}\left( \frac{1}{n} \sum \frac{1}{y_i^2} \right), \quad \text{Smaller-the-Better (Defects): } \eta = -10 \log_{10}\left( \frac{1}{n} \sum y_i^2 \right)$$
+        <p><em>Rule:</em> Higher S/N ratio always indicates optimal robust performance.</p>
+      </div>
+    </section>
+
+    <!-- Section 03: Research Ethics -->
+    <section id="ethics">
+      <h2 class="section-title">03. Research Ethics, Misconduct & Predatory Journals</h2>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">The FFP Triad & Misconduct Case</h3>
+        <p>• <strong>Fabrication:</strong> Making up raw data out of whole cloth.</p>
+        <p>• <strong>Falsification:</strong> Altering genuine experimental readings or cherry-picking data points.</p>
+        <p>• <strong>Plagiarism:</strong> Appropriating ideas, code, or text without attribution.</p>
+        <p style="font-size:0.86rem;color:var(--text-secondary);margin-top:6px;">
+          <em>Dr. Rajesh Kumar Case:</em> Fabricated water purification data $\to$ paper retracted, fellowship cancelled, 3-5 year funding ban, university NAAC points docked. Prevention: mandatory raw data archiving.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Salami Slicing & Jeffrey Beall's Criteria</h3>
+        <p>• <strong>Salami Slicing:</strong> Chapping a study into Least Publishable Units (LPUs) $\to$ distorts meta-analyses.</p>
+        <p>• <strong>Predatory Journals:</strong> Guaranteed rapid acceptance (&lt; 72h), fake metrics (Universal Impact Factor), hidden APCs, lack of digital preservation.</p>
+        <p>• <strong>Singapore Statement (2010):</strong> Honesty, Accountability, Professional Courtesy, Good Stewardship.</p>
+      </div>
+    </section>
+
+    <!-- Section 04: Statistical Testing -->
+    <section id="stats">
+      <h2 class="section-title">04. Statistical Analysis & Hypothesis Testing (r & χ²)</h2>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Karl Pearson's Correlation (Father/Son Heights)</h3>
+        $$r = \frac{\sum (X - \bar{X})(Y - \bar{Y})}{\sqrt{\sum (X - \bar{X})^2 \sum (Y - \bar{Y})^2}} = \frac{24}{\sqrt{36 \times 44}} = \frac{2}{\sqrt{11}} \approx \mathbf{+0.6030}$$
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Chi-Square Goodness-of-Fit (Aircraft Accidents)</h3>
+        $$\chi^2 = \sum_{i=1}^k \frac{(O_i - E_i)^2}{E_i} = \frac{30}{14} = \frac{15}{7} \approx \mathbf{2.1429}$$
+        <p>Degrees of freedom: $df = 6 - 1 = 5$. Since $\chi^2_{\text{calc}} = 2.1429 < \chi^2_{0.05, 5} = 11.070 \implies$ <strong>Fail to reject $H_0$</strong> (Uniform distribution confirmed).</p>
+      </div>
+    </section>
+
+    <!-- Section 05: Citations & Thesis -->
+    <section id="dissemination">
+      <h2 class="section-title">05. Scientific Dissemination, Citations & Thesis Blueprint</h2>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Citation Style Conversion Rules</h3>
+        <p><strong>APA 7th:</strong> `Gupta, R. K., & Mehta, S. (2021). Solar PV efficiency improvements in India. Journal of Renewable Energy Research, 12(3), 145–158.` (All inverted, year after author in parens, title sentence case unquoted)</p>
+        <p><strong>IEEE:</strong> `R. K. Gupta and S. Mehta, "Solar PV efficiency improvements in India," J. Renew. Energy Res., vol. 12, no. 3, pp. 145–158, 2021.` (No inversion, year at very end, title in quotes)</p>
+        <p><strong>Chicago:</strong> `Gupta, R. K., and S. Mehta. 2021. "Solar PV Efficiency Improvements in India." Journal of Renewable Energy Research 12 (3): 145–158.` (Only first author inverted, year after authors without parens)</p>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Postgraduate Thesis Chapters 1 to 6</h3>
+        <p>Preliminary Matter $\to$ Ch 1: Intro $\to$ Ch 2: Lit Review (Gap) $\to$ Ch 3: Methodology $\to$ Ch 4: Implementation $\to$ Ch 5: Results & Discussion $\to$ Ch 6: Conclusion $\to$ Back Matter (References, Appendices).</p>
+      </div>
+    </section>
+
+    <!-- Section 06: Types & MCDM -->
+    <section id="types">
+      <h2 class="section-title">06. Research Typologies & Multi-Criteria Decision Making (MCDM)</h2>
+
+      <div class="card">
+        <h3 style="font-size:1rem;color:var(--primary-accent);margin-bottom:8px;">Research Taxonomies & MCDM Smartphone Case</h3>
+        <p>• <strong>Types:</strong> Exploratory (insights), Descriptive (profiling), Diagnostic (frequency), Causal (cause-and-effect).</p>
+        <p>• <strong>MCDM ₹24,999 Smartphone:</strong> Multi-attribute weights ($\sum w_i = 1.0$) $\to$ Flowchart (Needs $\to$ Criteria $\to$ Data $\to$ Comparison $\to$ Dealer $\to$ Final Choice) $\to$ OnePlus Nord CE4 justified via Snapdragon 7 Gen 3 and 100W charging.</p>
+        <p>• <strong>IPR:</strong> 20-year legal market monopoly, VC leverage, and commercial licensing.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <script>
+    function toggleDrawer() {
+      const drawer = document.getElementById('drawer');
+      const backdrop = document.getElementById('backdrop');
+      drawer.classList.toggle('open');
+      backdrop.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+    }
+
+    function toggleTheme() {
+      const currentTheme = document.documentElement.getAttribute('data-theme');
+      const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+    }
+
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    }
+  </script>
+
+</body>
+</html>

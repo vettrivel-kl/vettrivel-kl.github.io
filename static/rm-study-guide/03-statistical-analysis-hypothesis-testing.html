@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Statistical Analysis & Hypothesis Testing | Complete Exam Question Bank</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js" onload="renderMathInElement(document.body, {delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}]});"></script>
+<style>
+:root{
+  --bg:#f4f7fb;--surface:#fff;--ink:#172033;--muted:#627087;--line:#e2e8f0;
+  --brand:#059669;--brand-soft:#ecfdf5;--blue:#2563eb;--blue-soft:#eff6ff;
+  --amber:#b45309;--amber-soft:#fffbeb;--red:#dc2626;--red-soft:#fef2f2;
+  --purple:#7c3aed;--purple-soft:#f5f3ff;
+  --shadow:0 12px 34px rgba(24,39,75,.08);
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--ink);
+  font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+  overflow-x:hidden;
+  padding-left:var(--safe-left);
+  padding-right:var(--safe-right);
+}
+a{color:var(--brand);text-decoration:none;-webkit-tap-highlight-color:transparent}
+a:hover{text-decoration:underline}
+.shell{display:grid;grid-template-columns:280px minmax(0,1fr);max-width:1440px;margin:auto;min-height:100vh}
+
+/* Desktop Sidebar */
+aside{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow-y:auto;
+  padding:calc(26px + var(--safe-top)) 18px 26px;
+  background:#064e3b;
+  color:#e2e8f0;
+}
+.brand{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#a7f3d0;font-weight:800}
+aside h2{font-size:18px;line-height:1.25;margin:10px 0 20px;color:#f8fafc}
+.nav-label{font-size:10px;color:#6ee7b7;text-transform:uppercase;letter-spacing:.12em;margin:18px 10px 6px;font-weight:700}
+nav a{display:block;padding:8px 11px;margin:2px 0;border-radius:8px;color:#d1fae5;font-size:13px}
+nav a:hover,nav a.active{background:#047857;color:#ffffff;text-decoration:none}
+.module-hub-link{background:#047857;border:1px solid #059669;color:#ffffff;font-weight:700;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.side-note{margin-top:20px;padding:12px;border:1px solid #059669;border-radius:12px;color:#d1fae5;font-size:12px;background:#022c22}
+.side-note strong{color:#f8fafc}
+.status-pill{display:inline-block;padding:2px 8px;border-radius:99px;font-size:10px;font-weight:800;text-transform:uppercase;margin-top:6px}
+.pill-target{background:#10b981;color:#022c22}
+
+/* Mobile Topbar */
+.mobile-topbar{
+  display:none;
+  position:sticky;
+  top:0;
+  z-index:900;
+  background:#064e3b;
+  color:#fff;
+  padding:calc(10px + var(--safe-top)) 14px 10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.15);
+  align-items:center;
+  justify-content:space-between;
+}
+.mobile-topbar-title{font-size:14.5px;font-weight:800;color:#f8fafc;display:flex;align-items:center;gap:6px;}
+.mobile-topbar-actions{display:flex;gap:6px;align-items:center;}
+.mobile-btn{
+  background:#047857;
+  border:1px solid #059669;
+  color:#f8fafc;
+  font-size:12.5px;
+  font-weight:700;
+  padding:6px 10px;
+  border-radius:8px;
+  cursor:pointer;
+  min-height:36px;
+  display:inline-flex;
+  align-items:center;
+}
+
+/* Horizontal Swipeable Pill Nav */
+.mobile-pills-bar{
+  display:none;
+  overflow-x:auto;
+  white-space:nowrap;
+  padding:8px 12px;
+  background:#ffffff;
+  border-bottom:1px solid var(--line);
+  -webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  position:sticky;
+  top:calc(54px + var(--safe-top));
+  z-index:850;
+  box-shadow:0 1px 4px rgba(0,0,0,0.03);
+}
+.mobile-pills-bar::-webkit-scrollbar{display:none}
+.pill-link{
+  display:inline-block;
+  padding:5px 11px;
+  margin-right:5px;
+  border-radius:99px;
+  background:#f1f5f9;
+  color:#334155;
+  font-size:12px;
+  font-weight:700;
+  border:1px solid var(--line);
+  text-decoration:none;
+}
+.pill-link:active{background:var(--brand-soft);color:var(--brand);border-color:var(--brand)}
+
+/* Mobile Drawer */
+.drawer-backdrop{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(15,23,42,0.6);
+  z-index:998;
+  backdrop-filter:blur(3px);
+}
+.mobile-drawer{
+  position:fixed;
+  top:0;
+  left:-100%;
+  width:85%;
+  max-width:320px;
+  height:100vh;
+  background:#064e3b;
+  color:#e2e8f0;
+  z-index:999;
+  padding:calc(20px + var(--safe-top)) 18px calc(24px + var(--safe-bottom));
+  overflow-y:auto;
+  box-shadow:4px 0 24px rgba(0,0,0,0.3);
+  transition:left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.mobile-drawer.open{left:0}
+.drawer-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:16px;
+  border-bottom:1px solid #047857;
+  padding-bottom:12px;
+}
+.drawer-close{background:none;border:none;color:#a7f3d0;font-size:24px;cursor:pointer;padding:4px 8px;}
+
+/* Main Content Area */
+main{
+  padding:40px clamp(14px,4vw,64px) calc(80px + var(--safe-bottom));
+  max-width:1120px;
+  min-width:0;
+}
+.hero{
+  background:linear-gradient(135deg,#064e3b 0%,#0f766e 60%,#047857 100%);
+  color:white;
+  border-radius:18px;
+  padding:32px;
+  box-shadow:var(--shadow);
+  position:relative;
+  overflow:hidden;
+}
+.hero:after{content:"r=0.6030";position:absolute;right:20px;bottom:-25px;font-size:80px;font-weight:900;color:rgba(255,255,255,.05);pointer-events:none}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.14em;color:#a7f3d0;font-weight:800}
+h1{font-size:clamp(22px,4.5vw,38px);line-height:1.15;margin:10px 0}
+.hero p{max-width:700px;color:#d1fae5;margin:0;font-size:14px;line-height:1.6}
+.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:14px}
+.pill{font-size:11px;border:1px solid rgba(255,255,255,.28);border-radius:999px;padding:3px 10px;color:#f8fafc;background:rgba(255,255,255,.06)}
+
+section{scroll-margin-top:calc(96px + var(--safe-top));margin-top:32px}
+h2{font-size:21px;line-height:1.25;margin:0 0 12px;color:#0f172a;border-bottom:2px solid #e2e8f0;padding-bottom:6px}
+h3{font-size:16px;margin:14px 0 8px;color:#1e293b}
+.lead{font-size:14.5px;color:#334155;max-width:840px;line-height:1.6}
+
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px;box-shadow:0 3px 12px rgba(24,39,75,.03);margin-bottom:12px}
+.card p:last-child{margin-bottom:0}
+.kicker{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+
+.formula-banner{
+  background:#064e3b;
+  color:#f8fafc;
+  padding:16px 14px;
+  border-radius:12px;
+  text-align:center;
+  margin:14px 0;
+  box-shadow:var(--shadow);
+}
+.formula-banner .katex-display{margin:6px 0}
+.formula-banner small{display:block;font-size:11px;color:#a7f3d0;margin-top:6px}
+
+/* KaTeX Headroom */
+.katex-display{
+  font-size:clamp(13px, 3.6vw, 15.5px) !important;
+  margin:12px 0 !important;
+  padding:12px 4px 8px !important;
+  overflow-x:auto !important;
+  overflow-y:visible !important;
+  scrollbar-width:none !important;
+}
+.katex-display::-webkit-scrollbar{display:none !important;}
+.katex-display > .katex{
+  display:block !important;
+  text-align:center !important;
+  white-space:nowrap !important;
+  padding-top:4px !important;
+  padding-bottom:2px !important;
+}
+
+.note{padding:12px 14px;border-radius:10px;background:var(--brand-soft);border-left:4px solid var(--brand);margin:12px 0;font-size:13.5px;line-height:1.55}
+.note.good{background:var(--brand-soft);border-color:var(--brand)}
+.note.warn{background:var(--amber-soft);border-color:var(--amber)}
+.note.danger{background:var(--red-soft);border-color:var(--red)}
+
+.table-wrap{
+  overflow-x:auto;
+  -webkit-overflow-scrolling:touch;
+  margin:12px 0;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:white;
+  scrollbar-width:none;
+}
+.table-wrap::-webkit-scrollbar{display:none}
+table{border-collapse:collapse;width:100%;font-size:13px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+th{background:#f1f5f9;color:#1e293b;font-weight:700}
+tr:last-child td{border-bottom:0}
+tr:nth-child(even){background:#fafafa}
+
+.steps{counter-reset:step;display:grid;gap:10px;margin:14px 0}
+.step{counter-increment:step;display:grid;grid-template-columns:30px 1fr;gap:10px;background:white;border:1px solid var(--line);border-radius:10px;padding:12px}
+.step:before{content:counter(step);display:grid;place-items:center;width:28px;height:28px;background:var(--brand-soft);color:var(--brand);font-weight:800;border-radius:6px;font-size:12px}
+
+.pyq-badge{display:inline-block;padding:2px 7px;border-radius:5px;font-size:10px;font-weight:800;background:#d1fae5;color:#065f46;margin-bottom:6px}
+.pyq-badge.nov{background:#fef3c7;color:#92400e}
+
+.details-box{border:1px solid var(--line);background:white;border-radius:12px;padding:14px 16px;margin:14px 0;box-shadow:0 2px 6px rgba(0,0,0,.02)}
+details summary{
+  font-weight:700;
+  color:var(--brand);
+  cursor:pointer;
+  outline:none;
+  font-size:14px;
+  min-height:38px;
+  display:flex;
+  align-items:center;
+}
+details[open] summary{margin-bottom:10px;border-bottom:1px dashed var(--line);padding-bottom:6px}
+
+button{
+  border:0;
+  background:var(--brand);
+  color:#fff;
+  padding:8px 14px;
+  border-radius:8px;
+  font-weight:700;
+  cursor:pointer;
+  font-size:13.5px;
+  min-height:40px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+}
+button:hover{background:#047857}
+button.secondary{background:#e2e8f0;color:#1e293b}
+button.secondary:hover{background:#cbd5e1}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+
+/* Quiz for iPhone 13 */
+.quiz-q{padding:14px;background:white;border:1px solid var(--line);border-radius:12px;margin:12px 0}
+.quiz-q strong{font-size:14px;color:#0f172a;display:block;margin-bottom:6px}
+.quiz-q label{
+  display:flex;
+  align-items:center;
+  padding:9px 12px;
+  margin:6px 0;
+  border-radius:8px;
+  background:#f8fafc;
+  cursor:pointer;
+  border:1px solid var(--line);
+  font-size:13.5px;
+  min-height:42px;
+}
+.quiz-q input{margin-right:10px;width:18px;height:18px;accent-color:var(--brand)}
+.feedback{font-size:13px;font-weight:700;margin-top:8px}
+.answer{display:none;margin-top:10px;padding:12px;background:var(--brand-soft);border-left:3px solid var(--brand);font-size:13px}
+.answer.show{display:block}
+
+.progress-wrap{height:7px;background:#e2e8f0;border-radius:99px;overflow:hidden;margin-top:8px}
+.progress{height:100%;width:0;background:#059669;transition:width .25s ease}
+
+/* Interactive Calculator */
+.tool-box{background:white;border:2px solid #a7f3d0;border-radius:12px;padding:16px;margin:16px 0}
+.tool-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-top:8px}
+.tool-group label{display:block;font-size:11px;font-weight:700;color:#475569;margin-bottom:3px}
+.tool-group input{
+  width:100%;
+  padding:8px 10px;
+  border-radius:6px;
+  border:1px solid var(--line);
+  font-size:16px;
+  background:#f8fafc;
+  min-height:40px;
+}
+.tool-result{margin-top:12px;padding:12px;background:#ecfdf5;border-radius:8px;border-left:4px solid var(--brand);font-size:13px}
+
+/* Mobile Responsiveness */
+@media(max-width:880px){
+  .shell{grid-template-columns:1fr}
+  aside{display:none}
+  .mobile-topbar{display:flex}
+  .mobile-pills-bar{display:block}
+  main{padding:16px 14px calc(60px + var(--safe-bottom))}
+  .grid{grid-template-columns:1fr}
+  .hero{padding:22px 16px;border-radius:14px}
+  .hero:after{display:none}
+  h1{font-size:22px}
+  .card{padding:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- Mobile Drawer Backdrop -->
+<div class="drawer-backdrop" id="backdrop" onclick="toggleDrawer()"></div>
+
+<!-- Slide-Out Mobile Navigation Drawer -->
+<div class="mobile-drawer" id="drawer">
+  <div class="drawer-header">
+    <div style="font-weight:800;font-size:13px;color:#a7f3d0;letter-spacing:.1em;text-transform:uppercase;">RM Study Hub</div>
+    <button class="drawer-close" onclick="toggleDrawer()">&times;</button>
+  </div>
+  <a href="/rm-study-guide/index.html" class="module-hub-link" style="display:block;padding:8px 12px;border-radius:8px;font-size:13px;">&larr; Back to Study Hub</a>
+  <div class="nav-label">Sections</div>
+  <nav>
+    <a href="#intuition" onclick="toggleDrawer()">01. Intuition & Contrast</a>
+    <a href="#pearson-math" onclick="toggleDrawer()">02. Karl Pearson Correlation</a>
+    <a href="#chisquare-math" onclick="toggleDrawer()">03. Chi-Square Goodness-of-Fit</a>
+    <a href="#anova-math" onclick="toggleDrawer()">04. One-Way ANOVA Decoupling</a>
+    <a href="#notation" onclick="toggleDrawer()">05. Notation Matrix</a>
+    <a href="#steps" onclick="toggleDrawer()">06. Solving Protocol</a>
+    <a href="#traps" onclick="toggleDrawer()">07. 6 Exam Traps</a>
+    <a href="#pyqs" onclick="toggleDrawer()">08. All Solved PYQs</a>
+    <a href="#calculator" onclick="toggleDrawer()">09. Interactive Tool</a>
+    <a href="#quiz" onclick="toggleDrawer()">10. Active Recall Quiz</a>
+    <a href="#checklist" onclick="toggleDrawer()">11. Presentation Template</a>
+  </nav>
+  <div class="nav-label">Modules</div>
+  <nav>
+    <a href="/rm-study-guide/01-doe-crd-rbd-taguchi.html">01. DoE & Taguchi</a>
+    <a href="/rm-study-guide/02-research-ethics-misconduct-publishing.html">02. Ethics & Misconduct</a>
+    <a href="/rm-study-guide/03-statistical-analysis-hypothesis-testing.html" class="active">03. Stats, Correlation & χ²</a>
+    <a href="/rm-study-guide/04-scientific-communication-thesis-citations.html">04. Dissemination & Thesis</a>
+    <a href="/rm-study-guide/05-research-types-decision-making-mcdm.html">05. Research Types & MCDM</a>
+  </nav>
+</div>
+
+<!-- Mobile Sticky Topbar -->
+<div class="mobile-topbar">
+  <div class="mobile-topbar-title">
+    <span>Module 03 · Stats & Tests</span>
+  </div>
+  <div class="mobile-topbar-actions">
+    <a href="/rm-study-guide/index.html" class="mobile-btn">&larr; Hub</a>
+    <button class="mobile-btn" onclick="toggleDrawer()">&#9776; Menu</button>
+  </div>
+</div>
+
+<!-- Mobile Horizontal Pill Nav -->
+<div class="mobile-pills-bar">
+  <a href="#intuition" class="pill-link">Intuition</a>
+  <a href="#pearson-math" class="pill-link">Pearson r</a>
+  <a href="#chisquare-math" class="pill-link">Chi-Square χ²</a>
+  <a href="#anova-math" class="pill-link">ANOVA</a>
+  <a href="#traps" class="pill-link">Traps</a>
+  <a href="#pyqs" class="pill-link">Past Papers</a>
+  <a href="#calculator" class="pill-link">Calculator</a>
+  <a href="#quiz" class="pill-link">Quiz</a>
+  <a href="#checklist" class="pill-link">Checklist</a>
+</div>
+
+<div class="shell">
+
+  <!-- Desktop Sidebar -->
+  <aside>
+    <div class="brand">21IPC501J · Exam Prep</div>
+    <h2>Statistical Analysis & Tests</h2>
+    <a href="/rm-study-guide/index.html" class="module-hub-link" style="padding:8px 12px;border-radius:8px;font-size:12.5px;">&larr; Back to Study Hub</a>
+
+    <div class="nav-label">Sections</div>
+    <nav>
+      <a href="#intuition">01. Intuition & Contrast</a>
+      <a href="#pearson-math">02. Karl Pearson Correlation</a>
+      <a href="#chisquare-math">03. Chi-Square Goodness-of-Fit</a>
+      <a href="#anova-math">04. One-Way ANOVA Decoupling</a>
+      <a href="#notation">05. Notation Decoding Matrix</a>
+      <a href="#steps">06. Step-by-Step Protocol</a>
+      <a href="#traps">07. 6 Deadly Exam Traps</a>
+      <a href="#pyqs">08. Complete University PYQs</a>
+      <a href="#calculator">09. Interactive Correlation Tool</a>
+      <a href="#quiz">10. Self-Test Active Recall</a>
+      <a href="#checklist">11. Answer Sheet Checklist</a>
+    </nav>
+
+    <div class="side-note">
+      <strong>Exam Weightage: 20 Marks</strong><br>
+      Internal Score: <strong>51.00 / 60</strong><br>
+      Target Sem Mark: <strong>50 / 100</strong> (Safe: 57)<br>
+      <span class="status-pill pill-target">Priority 3 High-Yield</span>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main>
+
+    <!-- Hero -->
+    <div class="hero">
+      <div class="eyebrow">Module 03 · Bivariate Analysis & Hypothesis Verification</div>
+      <h1>Statistical Analysis & Hypothesis Testing</h1>
+      <p>High-yield mathematical problem solving. Complete verified numerical solutions for Karl Pearson's correlation coefficient on Father & Son heights ($r = 2/\sqrt{11} \approx +0.6030$), Chi-Square test of uniformity on aircraft accidents ($\chi^2 = 2.1429 < 11.070$), and ANOVA diet vs exercise decoupling.</p>
+      <div class="pills">
+        <span class="pill">Jan 2025 (Q5 20M)</span>
+        <span class="pill">Nov 2025 (Q7 20M)</span>
+        <span class="pill">Pearson r = +0.6030</span>
+        <span class="pill">Chi-Square χ² = 2.1429</span>
+        <span class="pill">One-Way ANOVA</span>
+      </div>
+    </div>
+
+    <!-- Section 01: Intuition & Contrast -->
+    <section id="intuition">
+      <h2>01. Intuition & Concept Contrast</h2>
+      <p class="lead">Statistical inference separates genuine experimental signals from random sampling fluctuations.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Analysis Scale</div>
+          <h3 style="margin-top:2px;">Correlation vs Chi-Square Test</h3>
+          <p><strong>Pearson Correlation ($r$):</strong> Evaluates the strength and direction of a linear relationship between two <em>continuous numerical variables</em> ($X, Y \in \mathbb{R}$). $r \in [-1, +1]$.</p>
+          <p><strong>Chi-Square Goodness-of-Fit ($\chi^2$):</strong> Tests whether observed frequency counts across <em>discrete categorical bins</em> conform to a theoretical distribution (e.g. uniform distribution).</p>
+        </div>
+        <div class="card">
+          <div class="kicker">Causality Caution</div>
+          <h3 style="margin-top:2px;">Association vs Causation</h3>
+          <p><strong>Correlation ($r = 0.99$):</strong> Measures co-movement. Does NOT prove that $X$ causes $Y$ (could be driven by a lurking confounding variable $Z$).</p>
+          <p><strong>ANOVA Experimentation ($F = 57.15$):</strong> When treatments are assigned randomly under experimental control, significant differences prove direct causality.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 02: Karl Pearson Correlation -->
+    <section id="pearson-math">
+      <h2>02. Karl Pearson's Correlation Coefficient ($r$)</h2>
+      <p class="lead"><strong>Jan 2025 (Q5.i) Guaranteed 10-Mark Numerical.</strong> Father ($X$) and Son ($Y$) heights.</p>
+
+      <div class="formula-banner">
+        <div><strong>The Product-Moment Correlation Formula</strong></div>
+        $$r = \frac{\sum_{i=1}^n (X_i - \bar{X})(Y_i - \bar{Y})}{\sqrt{\sum_{i=1}^n (X_i - \bar{X})^2 \sum_{i=1}^n (Y_i - \bar{Y})^2}}$$
+        <small>Where $\bar{X} = \frac{1}{n}\sum X_i$ and $\bar{Y} = \frac{1}{n}\sum Y_i$.</small>
+      </div>
+
+      <div class="card">
+        <h3>Step-by-Step Verified Arithmetic ($n = 8$ pairs):</h3>
+        <p>1. Means: $\sum X = 544 \implies \bar{X} = 68.0 \text{ inches}$. $\sum Y = 552 \implies \bar{Y} = 69.0 \text{ inches}$.</p>
+        <p>2. Sum of squared deviations:</p>
+        $$\sum (X_i - \bar{X})^2 = (-3)^2 + (-2)^2 + (-1)^2 + (-1)^2 + 0^2 + 1^2 + 2^2 + 4^2 = 9+4+1+1+0+1+4+16 = \mathbf{36}$$
+        $$\sum (Y_i - \bar{Y})^2 = (-2)^2 + (-1)^2 + (-4)^2 + (-1)^2 + 3^2 + 3^2 + 0^2 + 2^2 = 4+1+16+1+9+9+0+4 = \mathbf{44}$$
+        <p>3. Sum of cross products:</p>
+        $$\sum (X_i - \bar{X})(Y_i - \bar{Y}) = 6 + 2 + 4 + 1 + 0 + 3 + 0 + 8 = \mathbf{24}$$
+        <p>4. Exact algebraic resolution:</p>
+        $$r = \frac{24}{\sqrt{36 \times 44}} = \frac{24}{6 \sqrt{44}} = \frac{4}{2\sqrt{11}} = \mathbf{\frac{2}{\sqrt{11}} \approx +0.6030}$$
+        <p><strong>Interpretation:</strong> A moderate-to-strong positive linear correlation ($r = +0.6030$). Taller fathers tend to have taller sons.</p>
+      </div>
+    </section>
+
+    <!-- Section 03: Chi-Square Test -->
+    <section id="chisquare-math">
+      <h2>03. Chi-Square Goodness-of-Fit Test ($\chi^2$)</h2>
+      <p class="lead"><strong>Jan 2025 (Q5.ii) Guaranteed 10-Mark Problem.</strong> Uniform distribution of aircraft accidents.</p>
+
+      <div class="formula-banner">
+        <div><strong>The Chi-Square Test Statistic</strong></div>
+        $$\chi^2 = \sum_{i=1}^k \frac{(O_i - E_i)^2}{E_i}, \qquad df = k - 1$$
+        <small>$O_i$: Observed frequency. $E_i$: Expected frequency under $H_0$.</small>
+      </div>
+
+      <div class="card">
+        <h3>Step-by-Step Verified Resolution ($k = 6$ days):</h3>
+        <p>1. Total Accidents: $N = 14 + 18 + 12 + 11 + 15 + 14 = \mathbf{84}$.</p>
+        <p>2. Expected frequency under null hypothesis $H_0$ (uniform distribution):</p>
+        $$E_i = \frac{N}{k} = \frac{84}{6} = \mathbf{14.0 \text{ accidents per day}}$$
+        <p>3. Deviations squared $(O_i - E_i)^2$:</p>
+        <ul>
+          <li>Mon: $(14 - 14)^2 = 0$</li>
+          <li>Tue: $(18 - 14)^2 = 16$</li>
+          <li>Wed: $(12 - 14)^2 = 4$</li>
+          <li>Thu: $(11 - 14)^2 = 9$</li>
+          <li>Fri: $(15 - 14)^2 = 1$</li>
+          <li>Sat: $(14 - 14)^2 = 0$</li>
+          <li>Sum of squared deviations $= 0 + 16 + 4 + 9 + 1 + 0 = \mathbf{30}$</li>
+        </ul>
+        <p>4. Test statistic calculation:</p>
+        $$\chi^2_{\text{calc}} = \frac{30}{14} = \frac{15}{7} \approx \mathbf{2.1429}$$
+        <p>5. Critical value comparison: $df = 6 - 1 = 5$. At $\alpha = 0.05$, critical table value $\chi^2_{0.05, 5} = \mathbf{11.070}$.</p>
+        $$\mathbf{\chi^2_{\text{calc}} = 2.1429 < \chi^2_{\text{table}} = 11.070 \implies \text{Fail to Reject } H_0}$$
+        <p><strong>Conclusion:</strong> Empirical data confirms accidents are <strong>uniformly distributed over the week</strong> ($p \approx 0.829$).</p>
+      </div>
+    </section>
+
+    <!-- Section 04: ANOVA Decoupling -->
+    <section id="anova-math">
+      <h2>04. Decoupling Treatment ANOVA vs. Correlation</h2>
+      <p class="lead"><strong>Nov 2025 (Q7.i) 10-Mark Interpretation Question.</strong> Weight loss study with diets and exercise.</p>
+
+      <div class="grid">
+        <div class="card">
+          <div class="kicker">Categorical Factor</div>
+          <h3 style="margin-top:2px;">Diet Comparison (ANOVA)</h3>
+          <p><strong>Result:</strong> $F = 57.15, \quad p = 7.36 \times 10^{-7} \lll 0.001$.</p>
+          <p><strong>Interpretation:</strong> Extremely significant difference among the 3 diets. Because $p < 0.001$, the probability that differences are due to random sampling noise is less than 1 in a million. Diet choice has a decisive causal impact on weight loss.</p>
+        </div>
+        <div class="card">
+          <div class="kicker">Continuous Covariate</div>
+          <h3 style="margin-top:2px;">Exercise Correlation</h3>
+          <p><strong>Result:</strong> Pearson $r = 0.9877, \quad p = 7.2 \times 10^{-12}$.</p>
+          <p><strong>Interpretation:</strong> Near-perfect positive linear relationship ($r \approx 0.99$). Daily exercise hours directly scale weight loss. Explains $r^2 \approx 97.5\%$ of variance.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 05: Notation Matrix -->
+    <section id="notation">
+      <h2>05. Notation Decoding Matrix</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Symbol</th>
+              <th>Formal Name</th>
+              <th>Plain-English Meaning</th>
+              <th>Exam Benchmark</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>$r$</td>
+              <td>Pearson's Correlation</td>
+              <td>Strength and direction of linear association</td>
+              <td>$r = \frac{2}{\sqrt{11}} \approx +0.6030$</td>
+            </tr>
+            <tr>
+              <td>$O_i$</td>
+              <td>Observed Frequency</td>
+              <td>Empirical count recorded in sample data</td>
+              <td>Tue accidents: $O = 18$</td>
+            </tr>
+            <tr>
+              <td>$E_i$</td>
+              <td>Expected Frequency</td>
+              <td>Theoretical count predicted under null hypothesis</td>
+              <td>Uniform expected: $E = 84 / 6 = \mathbf{14.0}$</td>
+            </tr>
+            <tr>
+              <td>$\chi^2_{\text{calc}}$</td>
+              <td>Calculated Chi-Square</td>
+              <td>Total standardized squared divergence from expectation</td>
+              <td>$\chi^2 = 15/7 \approx \mathbf{2.1429}$</td>
+            </tr>
+            <tr>
+              <td>$df$</td>
+              <td>Degrees of Freedom</td>
+              <td>Number of values free to vary in statistic</td>
+              <td>Chi-square: $k - 1 = 5$</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- Section 06: Solving Protocol -->
+    <section id="steps">
+      <h2>06. Repeatable Step-by-Step Solving Protocol</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>Step 1: Compute Means $\bar{X}$ and $\bar{Y}$</strong>
+            <p>Ensure means are exact. In the exam problem, $\bar{X} = 68.0$ and $\bar{Y} = 69.0$ are exact integers.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 2: Construct Direct Deviation Columns</strong>
+            <p>Create columns $(X - \bar{X})$, $(Y - \bar{Y})$, squared deviations, and cross products. Verify sums of deviations equal zero.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 3: Simplify Fraction to Surd Form</strong>
+            $$r = \frac{24}{\sqrt{36 \times 44}} = \frac{4}{2\sqrt{11}} = \frac{2}{\sqrt{11}} \approx \mathbf{+0.6030}$$
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 4: For Chi-Square, State Hypotheses Explicitly</strong>
+            <p>Write $H_0$: Accidents are uniformly distributed; $H_1$: Accidents are not uniformly distributed.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>Step 5: Compute $\chi^2$ and Compare with Critical Table Value</strong>
+            <p>Show $\chi^2_{\text{calc}} = 2.14 < \chi^2_{0.05, 5} = 11.070 \implies$ **Fail to reject $H_0$**.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 07: 6 Exam Traps -->
+    <section id="traps">
+      <h2>07. 6 Deadly Exam Traps & Common Student Mistakes</h2>
+      <div class="grid">
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 01: Degrees of Freedom in Chi-Square</div>
+          <h3>Using $df = k$ Instead of $k - 1$</h3>
+          <p>Degrees of freedom for a goodness-of-fit test is **$k - 1$**. For 6 days, $df = 6 - 1 = \mathbf{5}$. Using $df = 6$ uses the wrong critical value.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 02: Denominator in Chi-Square</div>
+          <h3>Dividing by $O_i$ Instead of $E_i$</h3>
+          <p>The denominator <strong>must be the expected frequency $E_i$</strong> ($\frac{(O-E)^2}{E}$). Dividing by $O_i$ invalidates the statistic.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 03: Inverting Hypothesis Decision Rule</div>
+          <h3>Rejecting $H_0$ When $\chi^2_{\text{calc}} < \chi^2_{\text{table}}$</h3>
+          <p>We reject $H_0$ only when calculated value **EXCEEDS** table value ($\chi^2_{\text{calc}} > \chi^2_{\text{table}}$). Since $2.14 < 11.07$, we **fail to reject $H_0$**.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 04: Correlation Denominator Radical</div>
+          <h3>Forgetting Square Root in $r$ Denominator</h3>
+          <p>The denominator is $\sqrt{\sum dx^2 \sum dy^2}$. Writing $\sum dx^2 \sum dy^2$ yields an absurd number like $0.015$.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 05: Sunday Omission in Accident Data</div>
+          <h3>Assuming 7 Days When Table Gives 6</h3>
+          <p>Read the table carefully! The exam table lists **6 days (Mon to Sat)**, with total 84 accidents. Dividing by 7 gives $E=12$, which is incorrect. Divide by 6 to get $E = 14.0$.</p>
+        </div>
+        <div class="card" style="border-left:4px solid var(--red);">
+          <div class="kicker" style="color:var(--red);">Trap 06: Stating Correlation Proves Causation</div>
+          <h3>Claiming Exercise Directly Causes Diet Weight Loss</h3>
+          <p>Correlation indicates linear association, not mechanistic causality. Only controlled experimental designs prove causality.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 08: Complete Solved University PYQs -->
+    <section id="pyqs">
+      <h2>08. Complete University Question Bank (All Past PYQs Solved)</h2>
+      <div class="controls">
+        <button onclick="toggleAllDetails(true)">Expand All Solutions</button>
+        <button class="secondary" onclick="toggleAllDetails(false)">Collapse All</button>
+      </div>
+
+      <!-- Question 1: Jan 2025 Q5.i Heights Correlation (10 Marks) -->
+      <div class="details-box">
+        <details id="q1">
+          <summary>
+            <span><span class="pyq-badge">Jan 2025 · Question 5.i</span> Karl Pearson's Correlation for Father & Son Heights (10 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Calculate correlation coefficient for heights of fathers (X) and sons (Y):<br>
+            X: [65, 66, 67, 67, 68, 69, 70, 72] | Y: [67, 68, 65, 68, 72, 72, 69, 71] (10 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>$i$</th><th>$X$</th><th>$Y$</th><th>$X - \bar{X}$</th><th>$Y - \bar{Y}$</th><th>$(X - \bar{X})^2$</th><th>$(Y - \bar{Y})^2$</th><th>$(X - \bar{X})(Y - \bar{Y})$</th></tr></thead>
+              <tbody>
+                <tr><td>1</td><td>65</td><td>67</td><td>-3</td><td>-2</td><td>9</td><td>4</td><td>+6</td></tr>
+                <tr><td>2</td><td>66</td><td>68</td><td>-2</td><td>-1</td><td>4</td><td>1</td><td>+2</td></tr>
+                <tr><td>3</td><td>67</td><td>65</td><td>-1</td><td>-4</td><td>1</td><td>16</td><td>+4</td></tr>
+                <tr><td>4</td><td>67</td><td>68</td><td>-1</td><td>-1</td><td>1</td><td>1</td><td>+1</td></tr>
+                <tr><td>5</td><td>68</td><td>72</td><td>0</td><td>+3</td><td>0</td><td>9</td><td>0</td></tr>
+                <tr><td>6</td><td>69</td><td>72</td><td>+1</td><td>+3</td><td>1</td><td>9</td><td>+3</td></tr>
+                <tr><td>7</td><td>70</td><td>69</td><td>+2</td><td>0</td><td>4</td><td>0</td><td>0</td></tr>
+                <tr><td>8</td><td>72</td><td>71</td><td>+4</td><td>+2</td><td>16</td><td>4</td><td>+8</td></tr>
+                <tr><td><strong>Sum</strong></td><td><strong>544</strong></td><td><strong>552</strong></td><td><strong>0</strong></td><td><strong>0</strong></td><td><strong>36</strong></td><td><strong>44</strong></td><td><strong>24</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>$\bar{X} = 544 / 8 = 68.0$, $\bar{Y} = 552 / 8 = 69.0$</p>
+          $$r = \frac{24}{\sqrt{36 \times 44}} = \frac{24}{6 \times \sqrt{44}} = \frac{4}{2\sqrt{11}} = \frac{2}{\sqrt{11}} \approx \mathbf{+0.6030}$$
+          <p><strong>Conclusion:</strong> Moderate-to-strong positive linear correlation ($r \approx +0.6030$).</p>
+        </details>
+      </div>
+
+      <!-- Question 2: Jan 2025 Q5.ii Accidents Chi-Square (10 Marks) -->
+      <div class="details-box">
+        <details id="q2">
+          <summary>
+            <span><span class="pyq-badge">Jan 2025 · Question 5.ii</span> Chi-Square Test for Uniform Distribution of Aircraft Accidents (10 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Test whether aircraft accidents are uniformly distributed across days of week:<br>
+            Mon(14), Tue(18), Wed(12), Thu(11), Fri(15), Sat(14). (10 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <p>1. Total: $N = 84$, Days $k = 6 \implies E_i = 84 / 6 = \mathbf{14.0}$.</p>
+          <p>2. Calculation Table:</p>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Day</th><th>$O_i$</th><th>$E_i$</th><th>$O_i - E_i$</th><th>$(O_i - E_i)^2$</th><th>$(O_i - E_i)^2 / E_i$</th></tr></thead>
+              <tbody>
+                <tr><td>Mon</td><td>14</td><td>14.0</td><td>0</td><td>0</td><td>0.0000</td></tr>
+                <tr><td>Tue</td><td>18</td><td>14.0</td><td>+4</td><td>16</td><td>1.1429</td></tr>
+                <tr><td>Wed</td><td>12</td><td>14.0</td><td>-2</td><td>4</td><td>0.2857</td></tr>
+                <tr><td>Thu</td><td>11</td><td>14.0</td><td>-3</td><td>9</td><td>0.6429</td></tr>
+                <tr><td>Fri</td><td>15</td><td>14.0</td><td>+1</td><td>1</td><td>0.0714</td></tr>
+                <tr><td>Sat</td><td>14</td><td>14.0</td><td>0</td><td>0</td><td>0.0000</td></tr>
+                <tr><td><strong>Total</strong></td><td><strong>84</strong></td><td><strong>84.0</strong></td><td><strong>0</strong></td><td><strong>30</strong></td><td><strong>2.1429</strong></td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          $$\chi^2_{\text{calc}} = \frac{30}{14} = \frac{15}{7} \approx \mathbf{2.1429}$$
+          <p>Degrees of freedom: $df = 6 - 1 = 5$. Critical value: $\chi^2_{0.05, 5} = \mathbf{11.070}$.</p>
+          <p>Since $\chi^2_{\text{calc}} = 2.1429 < 11.070$, we **fail to reject $H_0$**. Accidents are uniformly distributed over the week.</p>
+        </details>
+      </div>
+
+      <!-- Question 3: Nov 2025 Q7.i ANOVA & Correlation (10 Marks) -->
+      <div class="details-box">
+        <details id="q3">
+          <summary>
+            <span><span class="pyq-badge nov">Nov 2025 · Question 7.i</span> Diet ANOVA ($F = 57.15$) & Exercise Correlation ($r = 0.9877$) Interpretation (10 Marks)</span>
+          </summary>
+          <div class="note">
+            <strong>Question Statement:</strong><br>
+            Nutrition study on 3 diets on weight loss: ANOVA $F = 57.15, p = 7.36 \times 10^{-7}$; Exercise correlation $r = 0.9877, p = 7.2 \times 10^{-12}$. Interpret findings. (10 Marks)
+          </div>
+
+          <h4>Solution:</h4>
+          <ul>
+            <li><strong>Diet ANOVA:</strong> $p < 0.001$ proves that weight loss differences between the three diets are statistically significant, not caused by chance.</li>
+            <li><strong>Exercise Correlation:</strong> $r = 0.9877$ shows an almost perfect linear relationship between exercise hours and weight loss ($R^2 = 97.5\%$).</li>
+            <li><strong>Synthesis:</strong> Diet establishes the baseline metabolic environment, while daily exercise acts as a powerful continuous linear multiplier.</li>
+          </ul>
+        </details>
+      </div>
+    </section>
+
+    <!-- Section 09: Interactive Calculator -->
+    <section id="calculator">
+      <h2>09. Interactive Offline Pearson Correlation & Chi-Square Calculator</h2>
+      <p class="lead">Test your calculations. Enter paired $(X, Y)$ values or frequency counts to verify statistical test results live.</p>
+
+      <div class="tool-box">
+        <div class="tool-grid">
+          <div class="tool-group">
+            <label>Observed Frequencies (e.g. 14, 18, 12, 11, 15, 14)</label>
+            <input type="text" id="chiObs" value="14, 18, 12, 11, 15, 14">
+          </div>
+        </div>
+
+        <div style="margin-top:10px;">
+          <button onclick="calculateChiSquare()">Compute Chi-Square Uniformity Test</button>
+        </div>
+
+        <div class="tool-result" id="chiOutput">
+          Click button to compute Chi-Square statistic.
+        </div>
+      </div>
+    </section>
+
+    <!-- Section 10: Active Recall Quiz -->
+    <section id="quiz">
+      <h2>10. Active Recall Self-Test Quiz</h2>
+      <div class="progress-wrap"><div class="progress" id="quizBar"></div></div>
+      <div id="quizScore" style="font-size:12.5px;font-weight:700;color:var(--muted);margin-top:4px;">Answer the questions below to evaluate progress (0/4 answered).</div>
+
+      <div class="quiz-q" id="qz1">
+        <strong>1. What is Karl Pearson's correlation coefficient for the father and son heights in the January 2025 exam?</strong>
+        <label><input type="radio" name="q1" value="a" onclick="checkQ(1,'c','r = 2 / sqrt(11) = 0.6030')"> $r = 0.1500$</label>
+        <label><input type="radio" name="q1" value="b" onclick="checkQ(1,'c','r = 2 / sqrt(11) = 0.6030')"> $r = 0.9877$</label>
+        <label><input type="radio" name="q1" value="c" onclick="checkQ(1,'c','r = 2 / sqrt(11) = 0.6030')"> $r = \frac{2}{\sqrt{11}} \approx +0.6030$</label>
+        <div class="feedback" id="fb1"></div>
+        <div class="answer" id="ans1"><strong>Correct: (c)</strong> $\sum dxdy = 24$, $\sum dx^2 = 36$, $\sum dy^2 = 44 \implies r = \frac{24}{\sqrt{36 \times 44}} = \frac{2}{\sqrt{11}} \approx \mathbf{+0.6030}$.</div>
+      </div>
+
+      <div class="quiz-q" id="qz2">
+        <strong>2. In the aircraft accident uniform distribution problem, what is the calculated Chi-Square statistic $\chi^2_{\text{calc}}$?</strong>
+        <label><input type="radio" name="q2" value="a" onclick="checkQ(2,'b','chi^2 = 15/7 = 2.1429')"> $\chi^2 = 11.070$</label>
+        <label><input type="radio" name="q2" value="b" onclick="checkQ(2,'b','chi^2 = 15/7 = 2.1429')"> $\chi^2 = \frac{30}{14} = \frac{15}{7} \approx 2.1429$</label>
+        <label><input type="radio" name="q2" value="c" onclick="checkQ(2,'b','chi^2 = 15/7 = 2.1429')"> $\chi^2 = 84.0$</label>
+        <div class="feedback" id="fb2"></div>
+        <div class="answer" id="ans2"><strong>Correct: (b)</strong> Total accidents $= 84$, $E = 14.0$, $\sum (O-E)^2 = 30 \implies \chi^2 = \frac{30}{14} \approx \mathbf{2.1429}$.</div>
+      </div>
+
+      <div class="quiz-q" id="qz3">
+        <strong>3. What is the statistical decision for the aircraft accidents test at $\alpha = 0.05$ with $df = 5$ ($\chi^2_{\text{table}} = 11.070$)?</strong>
+        <label><input type="radio" name="q3" value="a" onclick="checkQ(3,'a','Fail to reject H0: accidents are uniformly distributed')"> Fail to reject $H_0$: accidents are uniformly distributed over the week</label>
+        <label><input type="radio" name="q3" value="b" onclick="checkQ(3,'a','Fail to reject H0: accidents are uniformly distributed')"> Reject $H_0$: accidents occur significantly more on Tuesdays</label>
+        <label><input type="radio" name="q3" value="c" onclick="checkQ(3,'a','Fail to reject H0: accidents are uniformly distributed')"> Inconclusive test</label>
+        <div class="feedback" id="fb3"></div>
+        <div class="answer" id="ans3"><strong>Correct: (a)</strong> Because $\chi^2_{\text{calc}} = 2.1429 < 11.070$, the observed variation is well within expected chance variation. We fail to reject $H_0$.</div>
+      </div>
+
+      <div class="quiz-q" id="qz4">
+        <strong>4. In the nutrition study with 3 diets, an ANOVA result of $F = 57.15, p < 0.001$ indicates:</strong>
+        <label><input type="radio" name="q4" value="a" onclick="checkQ(4,'c','Significant causal differences exist between diet treatments')"> That diet has no effect on weight loss</label>
+        <label><input type="radio" name="q4" value="b" onclick="checkQ(4,'c','Significant causal differences exist between diet treatments')"> That exercise is the only factor influencing weight loss</label>
+        <label><input type="radio" name="q4" value="c" onclick="checkQ(4,'c','Significant causal differences exist between diet treatments')"> Highly significant differences between diet groups, proving diet has a causal impact on weight loss</label>
+        <div class="feedback" id="fb4"></div>
+        <div class="answer" id="ans4"><strong>Correct: (c)</strong> A very large $F$-ratio ($57.15$) and tiny $p$-value confirm that diet treatments cause significant differences in weight loss.</div>
+      </div>
+    </section>
+
+    <!-- Section 11: Answer Sheet Checklist -->
+    <section id="checklist">
+      <h2>11. Exam Hall Answer Sheet Presentation Checklist</h2>
+      <div class="steps">
+        <div class="step">
+          <div>
+            <strong>1. Draw the Full 8-Row Deviation Table for Correlation</strong>
+            <p>Show $X, Y, (X - \bar{X}), (Y - \bar{Y}), dx^2, dy^2, dxdy$ with exact column totals.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>2. Box the Exact Fraction and Surd Representation</strong>
+            <p>Write $r = \frac{24}{\sqrt{36 \times 44}} = \frac{2}{\sqrt{11}} \approx \mathbf{+0.6030}$.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>3. State Null and Alternative Hypotheses in Words</strong>
+            <p>Write $H_0$: Accidents are uniformly distributed; $H_1$: Accidents are not uniformly distributed.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div>
+            <strong>4. Show Degrees of Freedom and Critical Comparison</strong>
+            <p>Write $df = 6 - 1 = 5$, $\chi^2_{\text{calc}} = 2.14 < \chi^2_{0.05, 5} = 11.070 \implies$ Fail to reject $H_0$.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+function toggleDrawer() {
+  const drawer = document.getElementById('drawer');
+  const backdrop = document.getElementById('backdrop');
+  drawer.classList.toggle('open');
+  backdrop.style.display = drawer.classList.contains('open') ? 'block' : 'none';
+}
+
+function toggleAllDetails(open) {
+  document.querySelectorAll('details').forEach(d => d.open = open);
+}
+
+function calculateChiSquare() {
+  const obsStr = document.getElementById('chiObs').value.trim();
+  const obs = obsStr.split(',').map(s => parseFloat(s.trim())).filter(n => !isNaN(n));
+
+  if (obs.length < 2) {
+    document.getElementById('chiOutput').innerHTML = '<span style="color:var(--red);">Error: Please enter at least 2 frequency counts.</span>';
+    return;
+  }
+
+  const k = obs.length;
+  const total = obs.reduce((a, b) => a + b, 0);
+  const exp = total / k;
+
+  let sumSqDiff = 0;
+  for (let i = 0; i < k; i++) {
+    sumSqDiff += Math.pow(obs[i] - exp, 2);
+  }
+
+  const chi2 = sumSqDiff / exp;
+  const df = k - 1;
+
+  let out = '<strong>Computed Chi-Square Uniformity Test:</strong><br>';
+  out += '• Total Sample Size ($N$): ' + total + ' across ' + k + ' categories<br>';
+  out += '• Expected Frequency per category ($E_i$): <strong>' + exp.toFixed(2) + '</strong><br>';
+  out += '• Sum of Squared Deviations $\\sum (O_i - E_i)^2 = <strong>' + sumSqDiff.toFixed(2) + '</strong>$<br>';
+  out += '• <strong>Calculated $\\chi^2$: ' + chi2.toFixed(4) + '</strong> ($df = ' + df + '$)<br>';
+  out += '• Critical Value at $\\alpha = 0.05$: <strong>11.070</strong> (for $df=5$)<br>';
+  if (chi2 < 11.070) {
+    out += '<span style="color:var(--brand);font-weight:700;">Decision: Fail to Reject H₀. Data is uniformly distributed!</span>';
+  } else {
+    out += '<span style="color:var(--red);font-weight:700;">Decision: Reject H₀. Significant non-uniform distribution.</span>';
+  }
+
+  document.getElementById('chiOutput').innerHTML = out;
+}
+
+// Quiz Interactive Evaluation
+const answeredQ = {};
+function checkQ(qNum, correctVal, reason) {
+  const selected = document.querySelector('input[name="q' + qNum + '"]:checked');
+  const fb = document.getElementById('fb' + qNum);
+  const ans = document.getElementById('ans' + qNum);
+
+  answeredQ[qNum] = true;
+
+  if (selected.value === correctVal) {
+    fb.innerHTML = '<span style="color:var(--brand);">&#10003; Correct! ' + reason + '</span>';
+  } else {
+    fb.innerHTML = '<span style="color:var(--red);">&#10007; Incorrect. ' + reason + '</span>';
+  }
+  ans.classList.add('show');
+
+  const answeredCount = Object.keys(answeredQ).length;
+  const pct = (answeredCount / 4) * 100;
+  document.getElementById('quizBar').style.width = pct + '%';
+  document.getElementById('quizScore').innerText = 'Completed ' + answeredCount + ' of 4 questions (' + pct.toFixed(0) + '%).';
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  calculateChiSquare();
+});
+</script>
+
+</body>
+</html>
